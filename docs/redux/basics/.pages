@@ -1,0 +1,9 @@
+title: Основы Redux
+nav:
+    - index.md
+    - Actions.md
+    - Reducers.md
+    - Store.md
+    - DataFlow.md
+    - UsageWithReact.md
+    - ExampleTodoList.md

@@ -1,0 +1,10 @@
+title: Redux
+nav:
+    - index.md
+    - basics
+    - advanced
+    - recipes
+    - faq
+    - Glossary.md
+    - api
+    - react-redux

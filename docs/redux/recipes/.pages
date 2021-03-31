@@ -1,0 +1,8 @@
+title: Рецепты Redux
+nav:
+    - index.md
+    - MigratingToRedux.md
+    - UsingObjectSpreadOperator.md
+    - ReducingBoilerplate.md
+    - ComputingDerivedData.md
+    - IsolatingSubapps.md

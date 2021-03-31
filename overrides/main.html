@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+<!-- Page title -->
+{% block htmltitle %} {% if page and page.meta and page.meta.title %}
+<title>
+	{{ page.meta.title }} | React с примерами кода
+</title>
+{% elif page and page.title and not page.is_homepage %}
+<title>
+	{{ page.title }} | React с примерами кода
+</title>
+{% else %}
+<title>Справочник web-разработчика React с примерами кода</title>
+{% endif %} {% endblock %}
+
+<!-- Link to source file -->
+{% block source %} {% if page and page.meta and page.meta.source %} {% include
+"partials/source-link.html" %} {% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+Click
+Jinja2
+livereload
+Markdown
+MarkupSafe
+mkdocs
+pymdown-extensions
+mkdocs-material
+mkdocs-awesome-pages-plugin
+mkdocs-minify-plugin
+mkdocs-section-index
+PyYAML
+six
+tornado

@@ -1,0 +1,15 @@
+title: React Redux
+nav:
+    - index.md
+    - osnovi-redux-teoriya.md
+    - tochka-vhoda.md
+    - redyuseri-i-connect.md
+    - kombinirovanie-redyuserov.md
+    - konteineri-i-komponenti.md
+    - sozdanie-actions.md
+    - konstanti.md
+    - navodim-poryadok.md
+    - middleware-usiliteli.md
+    - asinhronnie-actions.md
+    - vzaimodeistvuem-s-vk.md
+    - optimizatsiya-refaktoring.md

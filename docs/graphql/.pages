@@ -1,0 +1,15 @@
+title: GraphQL
+nav:
+    - index.md
+    - basics
+    - queries-and-mutations.md
+    - schemas-and-types.md
+    - validation.md
+    - execution.md
+    - introspection.md
+    - best_practices.md
+    - thinking-in-graphs.md
+    - serving-over-http.md
+    - authorization.md
+    - pagination.md
+    - caching.md
