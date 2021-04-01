@@ -132,6 +132,7 @@ h3 {
 	display: grid;
 	align-items: flex-start;
 	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 2rem;
 }
 @media (min-width: 60rem) {
 	.layout4 {
