@@ -40,7 +40,9 @@ hide:
 
 !!!abstract "Справочники"
 
-    [XSLT](https://xsltdev.ru) &nbsp;&nbsp;&nbsp;
+    [![HTML](html.svg){: style="height:16px;width:16px;vertical-align:middle;"} HTML](https://hcdev.ru/html/) &nbsp;&nbsp;&nbsp;
+    [![CSS](css.svg){: style="height:16px;width:16px;vertical-align:middle;"} CSS](https://hcdev.ru/css/) &nbsp;&nbsp;&nbsp;
     [![Angular](angular.svg){: style="height:16px;width:16px;vertical-align:middle;"} Angular](https://angdev.ru/) &nbsp;&nbsp;&nbsp;
     **[![React](react.svg){: style="height:16px;width:16px;vertical-align:middle;"} React](https://reactdev.ru/)** &nbsp;&nbsp;&nbsp;
-    [![Node.js](nodejs.svg){: style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/)
+    [![Node.js](nodejs.svg){: style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;
+    [XSLT](https://xsltdev.ru/)
