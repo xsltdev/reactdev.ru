@@ -25,9 +25,12 @@ theme:
 
 extra:
     social:
-        - icon: fontawesome/solid/code
-          link: 'https://xsltdev.ru/'
-          name: XSLT docs
+        - icon: fontawesome/brands/html5
+          link: 'https://hcdev.ru/'
+          name: HTML and CSS docs
+        - icon: fontawesome/brands/js
+          link: 'https://scriptdev.ru/'
+          name: Javascript
         - icon: fontawesome/brands/angular
           link: 'https://angdev.ru/'
           name: Angular docs
@@ -37,6 +40,9 @@ extra:
         - icon: fontawesome/brands/node-js
           link: 'https://nodejsdev.ru/'
           name: Node.js docs
+        - icon: fontawesome/solid/code
+          link: 'https://xsltdev.ru/'
+          name: XSLT docs
 
 #google_analytics:
 #    - UA-34215161-1
