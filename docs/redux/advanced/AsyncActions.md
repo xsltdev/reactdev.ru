@@ -398,7 +398,7 @@ export function fetchPosts(subreddit) {
 
 !!!note "Примечание по `fetch`"
 
-    Мы используем [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) в примерах. Это новое API для создания тевых запросов, которое заменяет `XMLHttpRequest` в большинстве стандартных случаев. Поскольку большинство браузеров до сих р не поддерживают его нативно, мы полагаем, что вы для этого используете библиотеку [`cross-fetch`](https://github.com/uixada/cross-fetch):
+    Мы используем [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) в примерах. Это новое API для создания тевых запросов, которое заменяет `XMLHttpRequest` в большинстве стандартных случаев. Поскольку большинство браузеров до сих р не поддерживают его нативно, мы полагаем, что вы для этого используете библиотеку [`cross-fetch`](https://github.com/lquixada/cross-fetch):
 
     ```js
     // Добавьте это в каждый файл, где вы используете `fetch`

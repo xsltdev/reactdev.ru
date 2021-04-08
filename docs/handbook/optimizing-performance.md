@@ -124,7 +124,7 @@ plugins: [
   require('rollup-plugin-commonjs')(),
   require('rollup-plugin-uglify')(),
   // ...
-]
+];
 ```
 
 Полный пример настройки можно [посмотреть здесь](https://gist.github.com/Rich-Harris/cb14f4bc0670c47d00d191565be36bf0).
@@ -144,7 +144,7 @@ plugins: [
 new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify('production'),
 }),
-  new webpack.optimize.UglifyJsPlugin()
+  new webpack.optimize.UglifyJsPlugin();
 ```
 
 Вы можете узнать об этом больше в [документации webpack](https://webpack.js.org/guides/production/).
@@ -155,7 +155,7 @@ new webpack.DefinePlugin({
 
 В режиме **разработки** вы можете видеть как компоненты монтируются, обновляются и размонтируются с помощью инструментов производительности в браузерах, которые их поддерживают. Например:
 
-<center><img src="../images/blog/react-perf-chrome-timeline.png" style="max-width:100%" alt="Компоненты React в графике времени Chrome" /></center>
+![Компоненты React в графике времени Chrome](react-perf-chrome-timeline.png)
 
 Для того, чтобы сделать это в Chrome:
 
@@ -257,18 +257,18 @@ shouldComponentUpdate(nextProps, nextState) {
 ```javascript
 class CounterButton extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { count: 1 }
+    super(props);
+    this.state = { count: 1 };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (this.props.color !== nextProps.color) {
-      return true
+      return true;
     }
     if (this.state.count !== nextState.count) {
-      return true
+      return true;
     }
-    return false
+    return false;
   }
 
   render() {
@@ -283,7 +283,7 @@ class CounterButton extends React.Component {
       >
         Счётчик: {this.state.count}
       </button>
-    )
+    );
   }
 }
 ```
@@ -293,8 +293,8 @@ class CounterButton extends React.Component {
 ```js
 class CounterButton extends React.PureComponent {
   constructor(props) {
-    super(props)
-    this.state = { count: 1 }
+    super(props);
+    this.state = { count: 1 };
   }
 
   render() {
@@ -309,7 +309,7 @@ class CounterButton extends React.PureComponent {
       >
         Счётчик: {this.state.count}
       </button>
-    )
+    );
   }
 }
 ```
@@ -321,24 +321,24 @@ class CounterButton extends React.PureComponent {
 ```javascript
 class ListOfWords extends React.PureComponent {
   render() {
-    return <div>{this.props.words.join(',')}</div>
+    return <div>{this.props.words.join(',')}</div>;
   }
 }
 
 class WordAdder extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       words: ['словцо'],
-    }
-    this.handleClick = this.handleClick.bind(this)
+    };
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
     // Данная секция содержит плохой код и приводит к багам
-    const words = this.state.words
-    words.push('словцо')
-    this.setState({ words: words })
+    const words = this.state.words;
+    words.push('словцо');
+    this.setState({ words: words });
   }
 
   render() {
@@ -347,7 +347,7 @@ class WordAdder extends React.Component {
         <button onClick={this.handleClick} />
         <ListOfWords words={this.state.words} />
       </div>
-    )
+    );
   }
 }
 ```
@@ -380,7 +380,7 @@ handleClick() {
 
 ```js
 function updateColorMap(colormap) {
-  colormap.right = 'blue'
+  colormap.right = 'blue';
 }
 ```
 
@@ -388,7 +388,7 @@ function updateColorMap(colormap) {
 
 ```js
 function updateColorMap(colormap) {
-  return Object.assign({}, colormap, { right: 'blue' })
+  return Object.assign({}, colormap, { right: 'blue' });
 }
 ```
 
@@ -398,7 +398,7 @@ JavaScript рассматривает предложение добавить [�
 
 ```js
 function updateColorMap(colormap) {
-  return { ...colormap, right: 'blue' }
+  return { ...colormap, right: 'blue' };
 }
 ```
 
@@ -415,21 +415,21 @@ function updateColorMap(colormap) {
 Иммутабельность делает отслеживание изменений дешёвым. Изменение всегда приведёт к созданию нового объекта, поэтому нам нужно только проверить, изменилась ли ссылка на объект. Например, в этом обычном JavaScript коде:
 
 ```javascript
-const x = { foo: 'bar' }
-const y = x
-y.foo = 'baz'
-x === y // true
+const x = { foo: 'bar' };
+const y = x;
+y.foo = 'baz';
+x === y; // true
 ```
 
 Несмотря на то, что `y` был изменён, поскольку это ссылка на тот же объект, что и `x`, сравнение вернёт `true`. Вы можете написать аналогичный код с помощью immutable.js:
 
 ```javascript
-const SomeRecord = Immutable.Record({ foo: null })
-const x = new SomeRecord({ foo: 'bar' })
-const y = x.set('foo', 'baz')
-const z = x.set('foo', 'bar')
-x === y // false
-x === z // true
+const SomeRecord = Immutable.Record({ foo: null });
+const x = new SomeRecord({ foo: 'bar' });
+const y = x.set('foo', 'baz');
+const z = x.set('foo', 'bar');
+x === y; // false
+x === z; // true
 ```
 
 В этом случае, поскольку после мутирования `x` возвращается новая ссылка, мы можем использовать строгое сравнение (в данном случае по ссылке) `(x === y)` для того, чтобы убедиться, что новое значение хранящееся в `y` отличается от исходного значения, хранящегося в `x`.
