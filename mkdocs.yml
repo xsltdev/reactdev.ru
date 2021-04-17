@@ -40,6 +40,9 @@ extra:
         - icon: fontawesome/brands/node-js
           link: 'https://nodejsdev.ru/'
           name: Node.js docs
+        - icon: fontawesome/brands/python
+          link: 'https://py3dev.ru/'
+          name: Python 3 docs
         - icon: fontawesome/solid/code
           link: 'https://xsltdev.ru/'
           name: XSLT docs
