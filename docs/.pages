@@ -2,6 +2,5 @@ nav:
     - index.md
     - handbook
     - types
-    - router
-    - redux
     - graphql
+    - libs
