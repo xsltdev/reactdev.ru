@@ -1,3 +1,7 @@
+---
+description: Вы можете использовать встроенный в браузер метод window.fetch или любую AJAX-библиотеку, например Axios или jQuery AJAX
+---
+
 # AJAX и обращение к API
 
 ## Как выполнить AJAX-запрос к серверу? {#how-can-i-make-an-ajax-call}
