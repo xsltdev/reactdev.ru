@@ -1,3 +1,7 @@
+---
+description: Как React, так и ReactDOM доступны через CDN
+---
+
 # Ссылки на CDN
 
 Как React, так и ReactDOM доступны через CDN.
