@@ -1,0 +1,10 @@
+title: Пакеты XState
+nav:
+    - xstate-react.md
+    - xstate-vue.md
+    - xstate-graph.md
+    - xstate-fsm.md
+    - xstate-test.md
+    - xstate-immer.md
+    - xstate-inspect.md
+    - xstate-svelte.md

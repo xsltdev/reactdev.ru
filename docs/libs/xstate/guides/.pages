@@ -1,0 +1,28 @@
+title: Справочник
+nav:
+    - start.md
+    - installation.md
+    - introduction-to-state-machines-and-statecharts.md
+    - machines.md
+    - states.md
+    - statenodes.md
+    - events.md
+    - transitions.md
+    - hierarchical.md
+    - parallel.md
+    - final.md
+    - effects.md
+    - actions.md
+    - guards.md
+    - context.md
+    - models.md
+    - activities.md
+    - communication.md
+    - actors.md
+    - delays.md
+    - history.md
+    - ids.md
+    - interpretation.md
+    - testing.md
+    - typescript.md
+    - scxml.md

@@ -1,0 +1,6 @@
+title: Примеры
+nav:
+    - counter.md
+    - todomvc.md
+    - calculator.md
+    - covid-tracker.md
