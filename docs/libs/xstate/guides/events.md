@@ -1,10 +1,10 @@
-# Events
+# События
 
-An event is what causes a state machine to [transition](./transitions.md) from its current [state](./states.md) to its next state. To learn more, read [the events section in our introduction to statecharts](./introduction-to-state-machines-and-statecharts.md#transitions-and-events).
+**Событие** - это то, что заставляет конечный автомат [переходить](./transitions.md) из текущего [состояния](./states.md) в следующее состояние.
 
 ## API
 
-An event is an object with a `type` property, signifying what type of event it is:
+Событие - это объект со свойством `type`, указывающим, к какому типу оно относится:
 
 ```js
 const timerEvent = {
@@ -12,14 +12,14 @@ const timerEvent = {
 };
 ```
 
-In XState, events that only have a `type` can be represented by just their string type, as a shorthand:
+В XState события, которые имеют только `type`, могут быть представлены только их строковым типом, как сокращение:
 
 ```js
 // equivalent to { type: 'TIMER' }
 const timerEvent = 'TIMER';
 ```
 
-Event objects can also have other properties, which represent data associated with the event:
+Объекты событий также могут иметь другие свойства, которые представляют данные, связанные с событием:
 
 ```js
 const keyDownEvent = {
@@ -28,9 +28,9 @@ const keyDownEvent = {
 };
 ```
 
-## Sending events
+## Отправка событий
 
-As explained in the [transitions guide](./transitions.md), a transition defines what the next state will be, given the current state and the event, defined on its `on: { ... }` property. This can be observed by passing an event into the [transition method](./transitions.md#machine-transition-method):
+Переход определяет, каким будет следующее состояние, учитывая текущее состояние и событие, определенные в его свойстве `on: {...}`. Это можно увидеть, передав событие в [метод перехода](./transitions.md#machine-transition-method):
 
 ```js
 import { createMachine } from 'xstate';
@@ -55,7 +55,7 @@ console.log(nextState.value);
 // => 'red'
 ```
 
-Many native events, such as DOM events, are compatible and can be used directly with XState, by specifying the event type on the `type` property:
+Многие нативные события, такие как события DOM, совместимы и могут использоваться напрямую с XState, указав тип события в свойстве `type`:
 
 ```js
 import { createMachine, interpret } from 'xstate';
@@ -80,13 +80,13 @@ window.addEventListener('mousemove', (event) => {
 });
 ```
 
-## Null events
+## Безусловные события
 
-::: warning
-The null event syntax `({ on: { '': ... } })` will be deprecated in version 5. The new [always](./transitions.md#eventless-always-transitions) syntax should be used instead.
-:::
+!!!warning "Внимание"
 
-A null event is an event that has no type, and occurs immediately once a state is entered. In transitions, it is represented by an empty string (`''`):
+    Синтаксис безусловного события `({on: {'': ...}})` будет устаревшим в версии 5. Вместо него следует использовать новый синтаксис [`always`](./transitions.md#eventless-always-transitions).
+
+Безусловное событие - это событие, которое не имеет типа и происходит сразу после входа в состояние. В переходах оно представлено пустой строкой (`''`):
 
 ```js
 // contrived example
@@ -118,9 +118,11 @@ console.log(nextState.value);
 // => 'three'
 ```
 
-<iframe src="https://stately.ai/viz/embed?gist=f8b1c6470371b13eb2838b84194ca428"></iframe>
+---
 
-There are many use cases for null events, especially when defining [transient transitions](./transitions.md#transient-transitions), where a (potentially [transient](./statenodes.md#transient-state-nodes)) state immediately determines what the next state should be based on [conditions](./guards.md):
+<iframe src="https://stately.ai/viz/embed?gist=f8b1c6470371b13eb2838b84194ca428" width="100%" height="280"></iframe>
+
+Существует много вариантов использования безусловных событий, особенно при определении [переходов](./transitions.md#transient-transitions), когда (потенциально [переходное](./statenodes.md#transient-state-nodes)) состояние сразу определяет, какое следующее состояние должно быть основано на [условиях](./guards.md):
 
 ```js
 const isAdult = ({ age }) => age >= 18;
@@ -157,4 +159,6 @@ console.log(personMachine.initialState.value);
 // => 'adult'
 ```
 
-<iframe src="https://stately.ai/viz/embed?gist=2f9f2f4bd5dcd5ff262c7f2a7e9199aa"></iframe>
+---
+
+<iframe src="https://stately.ai/viz/embed?gist=2f9f2f4bd5dcd5ff262c7f2a7e9199aa" width="100%" height="280"></iframe>

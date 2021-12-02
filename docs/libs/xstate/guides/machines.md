@@ -1,10 +1,10 @@
-# Machines
+# Конечные автоматы
 
-A state machine is a finite set of states that can transition to each other deterministically due to events. To learn more, read our [introduction to statecharts](./introduction-to-state-machines-and-statecharts.md).
+**Конечный автомат** - это конечный набор состояний, которые могут детерминированно переходить друг в друга из-за событий. Чтобы узнать больше, прочитайте наше [введение в диаграммы состояний](./introduction-to-state-machines-and-statecharts.md).
 
-## Configuration
+## Конфигурация
 
-State machines and statecharts alike are defined using the `createMachine()` factory function:
+И конечные автоматы, и диаграммы состояний определяются с помощью фабричной функции `createMachine()`:
 
 ```js
 import { createMachine } from 'xstate';
@@ -37,13 +37,13 @@ const lightMachine = createMachine({
 });
 ```
 
-The machine config is the same as the [state node config](./statenodes.md), with the addition of the context property:
+Конфигурация машины такая же, как [конфигурация узла состояния](./statenodes.md), с добавлением свойства контекста:
 
-- `context` - represents the local "extended state" for all of the machine's nested states. See [the docs for context](./context.md) for more details.
+- `context` - представляет локальное «расширенное состояние» для всех вложенных состояний машины. См. [контекст](./context.md) для получения более подробной информации.
 
-## Options
+## Параметры
 
-Implementations for [actions](./actions.md), [activities](./activities.md), [delays](./delays.md), [guards](./guards.md), and [services](./communication.md) can be referenced in the machine config as a string, and then specified as an object in the 2nd argument to `createMachine()`:
+Реализации для [действий](./actions.md), [видов деятельности](./activities.md), [задержек](./delays.md), [охранников](./guards.md) и [сервисов](./communication.md) могут быть указаны в конфигурации машины в виде строки, а затем указаны как объект во втором аргументе `createMachine()`:
 
 ```js
 const lightMachine = createMachine(
@@ -52,14 +52,14 @@ const lightMachine = createMachine(
     initial: 'green',
     states: {
       green: {
-        // action referenced via string
+        // ссылка на действие в виде строки
         entry: 'alertGreen',
       },
     },
   },
   {
     actions: {
-      // action implementation
+      // реализация действия
       alertGreen: (context, event) => {
         alert('Green!');
       },
@@ -80,17 +80,17 @@ const lightMachine = createMachine(
 );
 ```
 
-This object has 5 optional properties:
+У этого объекта есть 5 необязательных свойств:
 
-- `actions` - the mapping of action names to their implementation
-- `activities` - the mapping of activity names to their implementation
-- `delays` - the mapping of delay names to their implementation
-- `guards` - the mapping of transition guard (`cond`) names to their implementation
-- `services` - the mapping of invoked service (`src`) names to their implementation
+- `actions` - сопоставление действий с их реализацией
+- `activities` - сопоставление видов деятельности с их реализацией
+- `delays` - сопоставление задержек с их реализацией
+- `guards` - сопоставление охранников переходов с их реализацией
+- `services` - сопоставление сервисов с их реализацией
 
-## Extending Machines
+## Расширение автомата
 
-Existing machines can be extended using `.withConfig()`, which takes the same object structure as above:
+Существующие автоматы могут быть расширены с помощью метода `.withConfig()`, который принимает ту же структуру объекта, что и выше:
 
 ```js
 const lightMachine = // (same as above example)
@@ -104,9 +104,10 @@ const noAlertLightMachine = lightMachine.withConfig({
 });
 ```
 
-## Initial Context
+## Начальный контекст
 
 As shown in the first example, the `context` is defined directly in the configuration itself. If you want to extend an existing machine with a different initial `context`, you can use `.withContext()` and pass in the custom `context`:
+Как показано в первом примере, контекст определяется непосредственно в самой конфигурации. Если вы хотите расширить существующую машину с другим начальным контекстом, вы можете использовать `.withContext()` и передать свой `context`:
 
 ```js
 const lightMachine = // (same as first example)
@@ -117,15 +118,14 @@ const testLightMachine = lightMachine.withContext({
 });
 ```
 
-::: warning
-This will _not_ do a shallow merge of the original `context`, and will instead _replace_ the original `context` with the `context` provided to `.withContext(...)`. You can still "merge" contexts manually, by referencing `machine.context`:
+!!! warning "Внимание"
 
-```js
-const testLightMachine = lightMachine.withContext({
-  // merge with original context
-  ...lightMachine.context,
-  elapsed: 1000,
-});
-```
+    Это не приведет к слиянию с исходным контекстом, а заменит исходный контекст контекстом, предоставленным для `.withContext(...)`. Вы все еще можете «объединить» контексты вручную, указав `machine.context`:
 
-:::
+    ```js
+    const testLightMachine = lightMachine.withContext({
+      // merge with original context
+      ...lightMachine.context,
+      elapsed: 1000,
+    });
+    ```

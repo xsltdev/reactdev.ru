@@ -120,7 +120,7 @@ promiseService.send({ type: 'RESOLVE' });
 
 ### В React
 
-Если бы мы хотели использовать наш автомат внутри компонента React, мы могли бы использовать хук [`useMachine`](<(../packages/xstate-react.md#api)>):
+Если бы мы хотели использовать наш автомат внутри компонента React, мы могли бы использовать хук [`useMachine`](../packages/xstate-react.md):
 
 > Дополнительно нам нужно установить пакет `@xstate/react`
 

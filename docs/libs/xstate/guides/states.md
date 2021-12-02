@@ -1,12 +1,12 @@
-# States
+# Состояния
 
-A state is an abstract representation of a system (such as an application) at a specific point in time. To learn more, read the [section on states in our introduction to statecharts](./introduction-to-state-machines-and-statecharts.md#states).
+**Состояние** - это абстрактное представление системы (например, приложения) в определенный момент времени.
 
 ## API
 
-The current state of a machine is represented by a `State` instance:
+Текущее состояние машины представлено экземпляром `State`:
 
-```js {13-18,21-26}
+```js hl_lines="13-18 23-28"
 const lightMachine = createMachine({
   id: 'light',
   initial: 'green',
@@ -37,28 +37,28 @@ console.log(
 // }
 ```
 
-## State definition
+## Определение состояния
 
-A `State` object instance is JSON-serializable and has the following properties:
+Экземпляр объекта `State` является сериализуемым в формате JSON и имеет следующие свойства:
 
-- `value` - the current state value (e.g., `{red: 'walk'}`)
-- `context` - the current [context](./context.md) of this state
-- `event` - the event object that triggered the transition to this state
-- `actions` - an array of [actions](./actions.md) to be executed
-- `activities` - a mapping of [activities](./activities.md) to `true` if the activity started, or `false` if stopped.
-- `history` - the previous `State` instance
-- `meta` - any static meta data defined on the `meta` property of the [state node](./statenodes.md)
-- `done` - whether the state indicates a final state
+- `value` - текущее значение состояния (например, `{red: 'walk'}`)
+- `context` - текущее значение [контекста](./context.md) этого состояния
+- `event` - объект события, вызвавший переход в это состояние
+- `actions` - массив [действий](./actions.md), которые нужно выполнить
+- `activities` - отображение [видов деятельности](./activities.md) в `true`, если деятельность началась или в `false`, если остановлена.
+- `history` - предыдущее состояние `State`
+- `meta` - любая статичная метаинформация, определенная в свойстве `meta` [узла состояния](./statenodes.md)
+- `done` - признак конечного состояния
 
-The `State` object also contains other properties such as `historyValue`, `events`, `tree` and others that are generally not relevant and are used internally.
+Объект `State` также содержит другие свойства, такие как `historyValue`, `events`, `tree` и другие, которые обычно не имеют отношения к делу и предназначены для внутреннего использования.
 
-## State methods and properties
+## Методы и свойства состояния
 
-There are some helpful methods and properties you can use for a better development experience:
+Вот несколько полезных методов и свойств, которые можно использовать для улучшения процесса разработки:
 
-### `state.matches(parentStateValue)`
+### `state.matches()`
 
-The `state.matches(parentStateValue)` method determines whether the current `state.value` is a subset of the given `parentStateValue`. The method determines if the parent state value “matches” the state value. For example, assuming the current `state.value` is `{ red: 'stop' }`:
+Метод `state.matches(parentStateValue)` определяет, является ли текущее значение `state.value` подмножеством заданного `parentStateValue`. Метод определяет, «совпадает» ли значение родительского состояния со значением состояния. Например, если текущее значение `state.value` равно `{red: 'stop'}`:
 
 ```js
 console.log(state.value);
@@ -77,21 +77,20 @@ console.log(state.matches('green'));
 // => false
 ```
 
-::: tip
-If you want to match one of multiple states, you can use [`.some()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some) on an array of state values to accomplish this:
+!!!tip "Подсказка"
 
-```js
-const isMatch = [
-  { customer: 'deposit' },
-  { customer: 'withdrawal' },
-].some(state.matches);
-```
+    Если вы хотите сравнить одно из нескольких состояний, вы можете использовать [`.some()`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/some) для массива значений состояния, чтобы выполнить это:
 
-:::
+    ```js
+    const isMatch = [
+      { customer: 'deposit' },
+      { customer: 'withdrawal' },
+    ].some(state.matches);
+    ```
 
 ### `state.nextEvents`
 
-`state.nextEvents` specifies the next events that will cause a transition from the current state:
+`state.nextEvents` указывает следующие события, которые вызовут переход из текущего состояния:
 
 ```js
 const { initialState } = lightMachine;
@@ -100,16 +99,16 @@ console.log(initialState.nextEvents);
 // => ['TIMER', 'EMERGENCY']
 ```
 
-`state.nextEvents` is useful in determining which next events can be taken, and representing these potential events in the UI such as enabling/disabling certain buttons.
+`state.nextEvents` полезен для определения, какие следующие события могут быть выполнены, и представления этих потенциальных событий в пользовательском интерфейсе, таких как включение или отключение определенных кнопок.
 
 ### `state.changed`
 
-`state.changed` specifies if this `state` has changed from the previous state. A state is considered “changed” if:
+`state.changed` указывает, изменилось ли это состояние по сравнению с предыдущим состоянием. Состояние считается «измененным», если:
 
-- Its value is not equal to its previous value, or:
-- It has any new actions (side-effects) to execute.
+- Его значение не равно его предыдущему значению, или:
+- У него есть какие-либо новые действия (побочные эффекты) для выполнения.
 
-An initial state (with no history) will return `undefined`.
+Исходное состояние (без истории) вернет `undefined`.
 
 ```js
 const { initialState } = lightMachine;
@@ -134,7 +133,7 @@ console.log(unchangedState.changed);
 
 ### `state.done`
 
-`state.done` specifies whether the `state` is a [“final state”](./final.md) - a final state is a state that indicates that its machine has reached its final (terminal) state and can no longer transition to any other state.
+`state.done` указывает, является ли состояние [«конечным состоянием»](./final.md) - это состояние, которое указывает, что его автомат достиг своего конечного (терминального) состояния и больше не может переходить в какое-либо другое состояние.
 
 ```js
 const answeringMachine = createMachine({
@@ -165,7 +164,7 @@ answeredState.done; // true
 
 ### `state.toStrings()`
 
-The `state.toStrings()` method returns an array of strings that represent _all_ of the state value paths. For example, assuming the current `state.value` is `{ red: 'stop' }`:
+Метод `state.toStrings()` возвращает массив строк, представляющих _все_ пути значений состояния. Например, если текущее значение `state.value` равно `{red: 'stop'}`:
 
 ```js
 console.log(state.value);
@@ -175,13 +174,15 @@ console.log(state.toStrings());
 // => ['red', 'red.stop']
 ```
 
-The `state.toStrings()` method is useful for representing the current state in string-based environments, such as in CSS classes or data-attributes.
+Метод `state.toStrings()` полезен для представления текущего состояния в строковых средах, таких как классы CSS или атрибуты данных.
 
 ### `state.children`
 
 `state.children` is an object mapping spawned service/actor IDs to their instances. See [📖 Referencing Services](./communication.md#referencing-services) for more details.
 
-#### Example using `state.children`
+`state.children` - это объект, отображающий идентификаторы порожденных служб / акторов на их экземпляры. См. [📖 Referencing Services](./communication.md#referencing-services) для более подробной информации.
+
+Пример:
 
 ```js
 const machine = createMachine({
@@ -201,13 +202,13 @@ const service = invoke(machine)
   .start();
 ```
 
-### `state.hasTag(tag)`
+### `state.hasTag()`
 
-_Since 4.19.0_
+_С версии 4.19.0_
 
-The `state.hasTag(tag)` method determines whether the current state configuration has a state node with the given tag.
+Метод `state.hasTag(tag)` определяет, есть ли в текущей конфигурации состояния узел состояния с данным тегом.
 
-```js {5,8,11}
+```js hl_lines="5 8 11"
 const machine = createMachine({
   initial: 'green',
   states: {
@@ -224,18 +225,18 @@ const machine = createMachine({
 });
 ```
 
-For instance, if the above machine is in the `green` or `yellow` state, instead of matching the state directly using `state.matches('green') || state.matches('yellow')`, it is possible to use `state.hasTag('go')`:
+Например, если указанный выше автомат находится в зеленом или желтом состоянии, вместо прямого сопоставления состояния с помощью `state.matches('green') || state.matches('yellow')`, можно использовать `state.hasTag('go')`:
 
 ```js
 const canGo = state.hasTag('go');
 // => `true` if in 'green' or 'yellow' state
 ```
 
-### `state.can(event)`
+### `state.can()`
 
-_Since 4.25.0_
+_С версии 4.25.0_
 
-The `state.can(event)` method determines whether an `event` will cause a state change if sent to the interpreted machine. The method will return `true` if the state will change due to the `event` being sent; otherwise the method will return `false`:
+Метод `state.can(event)` определяет, вызовет ли событие изменение состояния, если оно будет отправлено на интерпретируемый автомат. Метод вернет истину, если состояние изменится из-за отправляемого события; иначе метод вернет `false`:
 
 ```js
 const machine = createMachine({
@@ -274,15 +275,15 @@ activeState.can('TOGGLE'); // false
 activeState.can('DO_SOMETHING'); // true, since an action will be executed
 ```
 
-A state is considered “changed” if [`state.changed`](#state-changed) is `true` and if any of the following are true:
+Состояние считается «измененным», если [`state.changed`](#state-changed) `true` и если выполняется любое из следующих условий:
 
-- its `state.value` changes
-- there are new `state.actions` to be executed
-- its `state.context` changes.
+- значение `state.value` изменилось
+- есть новые `state.actions`, которые нужно выполнить
+- значение `state.context` изменилось
 
-## Persisting state
+## Сохранение состояния
 
-As mentioned, a `State` object can be persisted by serializing it to a string JSON format:
+Как уже упоминалось, объект `State` можно сохранить, сериализовав его в строковый формат JSON:
 
 ```js
 const jsonState = JSON.stringify(currentState);
@@ -295,13 +296,14 @@ try {
 }
 ```
 
-State can be restored using the static `State.create(...)` method:
+Состояние можно восстановить с помощью статического метода `State.create(...)`:
 
 ```js
 import { State, interpret } from 'xstate';
 import { myMachine } from '../path/to/myMachine';
 
-// Retrieving the state definition from localStorage, if localStorage is empty use machine initial state
+// Retrieving the state definition from localStorage,
+// if localStorage is empty use machine initial state
 const stateDefinition =
   JSON.parse(localStorage.getItem('app-state')) ||
   myMachine.initialState;
@@ -310,7 +312,7 @@ const stateDefinition =
 const previousState = State.create(stateDefinition);
 ```
 
-You can then interpret the machine from this state by passing the `State` into the `.start(...)` method of the interpreted service:
+Затем вы можете интерпретировать автомат из этого состояния, передав `State` в метод `.start(...)` интерпретируемого сервиса:
 
 ```js
 // ...
@@ -319,17 +321,19 @@ You can then interpret the machine from this state by passing the `State` into t
 const service = interpret(myMachine).start(previousState);
 ```
 
-This will also maintain and restore previous [history states](./history.md) and ensures that `.events` and `.nextEvents` represent the correct values.
+This will also maintain and restore previous [history states]() and ensures that `.events` and `.nextEvents` represent the correct values.
 
-::: warning
-Persisting spawned [actors](./actors.md) isn't yet supported in XState.
-:::
+Это также будет поддерживать и восстанавливать предыдущие [состояния истории](./history.md) и гарантирует, что `.events` и `.nextEvents` представляют правильные значения.
 
-## State meta data
+!!!warning "Внимание"
 
-Meta data, which is static data that describes relevant properties of any [state node](./statenodes.md), can be specified on the `.meta` property of the state node:
+    Сохранение созданных [акторов](actors.md) еще не поддерживается в XState.
 
-```js {17-19,22-24,30-32,35-37,40-42}
+## Метаданные состояния
+
+Мета-данные, которые представляют собой статические данные, описывающие соответствующие свойства любого узла состояния, могут быть указаны в свойстве `.meta` узла состояния:
+
+```js hl_lines="17-19 22-24 30-32 35-37 40-42"
 const fetchMachine = createMachine({
   id: 'fetch',
   initial: 'idle',
@@ -377,14 +381,14 @@ const fetchMachine = createMachine({
 });
 ```
 
-The current state of the machine collects the `.meta` data of all of the state nodes, represented by the state value, and places them on an object where:
+Текущее состояние машины собирает `.meta` данные всех узлов состояния, представленные значением состояния, и помещает их в объект, где:
 
-- The keys are the [state node IDs](./ids.md)
-- The values are the state node `.meta` values
+- Ключи - это [идентификаторы узлов состояния](./ids.md).
+- Значения - это значения мета-узла состояния `.meta`.
 
-For instance, if the above machine is in the `failure.timeout` state (which is represented by two state nodes with IDs `"failure"` and `"failure.timeout"`), the `.meta` property will combine all `.meta` values as follows:
+Например, если вышеуказанный автомат находится в состоянии `failure.timeout` (которое представлено двумя узлами состояния с идентификаторами «`failure`» и «`failure.timeout`»), свойство `.meta` объединит все значения `.meta` следующим образом:
 
-```js {4-11}
+```js hl_lines="9-16"
 const failureTimeoutState = fetchMachine.transition(
   'loading',
   {
@@ -403,39 +407,38 @@ console.log(failureTimeoutState.meta);
 // }
 ```
 
-::: tip TIP: Aggregating meta data
-What you do with meta data is up to you. Ideally, meta data should contain JSON-serializable values _only_. Consider merging/aggregating the meta data differently. For example, the following function discards the state node ID keys (if they are irrelevant) and merges the meta data:
+!!!tip "Подсказка: Агрегирование метаданных"
 
-```js
-function mergeMeta(meta) {
-  return Object.keys(meta).reduce((acc, key) => {
-    const value = meta[key];
+    Что делать с метаданными - решать вам. В идеале метаданные должны содержать _только_ значения, сериализуемые в формате JSON. Рассмотрите возможность слияния / агрегирования метаданных иначе. Например, следующая функция отбрасывает ключи идентификатора узла состояния (если они неактуальны) и объединяет метаданные:
 
-    // Assuming each meta value is an object
-    Object.assign(acc, value);
+    ```js
+    function mergeMeta(meta) {
+    	return Object.keys(meta).reduce((acc, key) => {
+    		const value = meta[key];
 
-    return acc;
-  }, {});
-}
+    		// Assuming each meta value is an object
+    		Object.assign(acc, value);
 
-const failureTimeoutState = fetchMachine.transition(
-  'loading',
-  {
-    type: 'TIMEOUT',
-  }
-);
+    		return acc;
+    	}, {});
+    }
 
-console.log(mergeMeta(failureTimeoutState.meta));
-// => {
-//   alert: 'Uh oh.',
-//   message: 'The request timed out.'
-// }
-```
+    const failureTimeoutState = fetchMachine.transition(
+    	'loading',
+    	{
+    		type: 'TIMEOUT',
+    	}
+    );
 
-:::
+    console.log(mergeMeta(failureTimeoutState.meta));
+    // => {
+    //   alert: 'Uh oh.',
+    //   message: 'The request timed out.'
+    // }
+    ```
 
-## Notes
+## Примечания
 
-- You should never have to create a `State` instance manually. Treat `State` as a read-only object that _only_ comes from `machine.transition(...)` or `service.onTransition(...)`.
-- `state.history` will not retain its history in order to prevent memory leaks. `state.history.history === undefined`. Otherwise, you end up creating a huge linked list and reinventing blockchain, which we don't care to do.
-  - This behavior may be configurable in future versions.
+- Вам никогда не придется создавать экземпляр `State` вручную. Считайте `State` объектом, доступным только для чтения, который поступает _только_ от `machine.transition(...)` или `service.onTransition(...)`.
+- `state.history` не сохраняет свою историю во избежание утечек памяти. `state.history.history === undefined`. В противном случае вы создадите огромный связанный список и заново изобретете блокчейн, чего мы не собираемся делать.
+- Это поведение может быть изменено в будущих версиях.

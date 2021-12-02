@@ -1,4 +1,5 @@
 {
 	"spellright.language": [],
-	"spellright.documentTypes": ["latex"]
+	"spellright.documentTypes": ["latex"],
+	"svn.ignoreMissingSvnWarning": true
 }

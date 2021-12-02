@@ -1,6 +1,6 @@
-# State Nodes
+# Узлы состояния
 
-A state machine contains state nodes (explained below) that collectively describe the [overall state](./states.md) a machine can be in. In the `fetchMachine` described in the next section, there are **state nodes**, such as:
+Конечный автомат содержит узлы состояний (поясняемые ниже), которые в совокупности описывают [общее состояние](./states.md), в котором может находиться автомат. В автомате `fetchMachine`, описанном в следующем разделе, есть узлы состояний, такие как:
 
 ```js
 // ...
@@ -18,10 +18,12 @@ A state machine contains state nodes (explained below) that collectively describ
 }
 ```
 
-And the overall **state**, which is the return value of the `machine.transition()` function or the callback value of `service.onTransition()`:
+И общее **состояние**, которое является возвращаемым значением функции `machine.transition()` или значением обратного вызова `service.onTransition()`:
 
 ```js
-const nextState = fetchMachine.transition('pending', { type: 'FULFILL' });
+const nextState = fetchMachine.transition('pending', {
+  type: 'FULFILL',
+});
 // State {
 //   value: { success: 'items' },
 //   actions: [],
@@ -30,11 +32,11 @@ const nextState = fetchMachine.transition('pending', { type: 'FULFILL' });
 // }
 ```
 
-## What Are State Nodes?
+## Что такое узлы состояния?
 
-In XState, a **state node** specifies a state configuration. They are defined on the machine's `states` property. Likewise, sub-state nodes are hierarchically defined on the `states` property of a state node.
+В XState **узел состояния** определяет конфигурацию состояния. Они определены в свойстве `state` автомата. Точно так же узлы подсостояния иерархически определены в свойстве `states` узла состояния.
 
-The state determined from `machine.transition(state, event)` represents a combination of state nodes. For example, in the machine below, there's a `success` state node and an `items` substate node. The state value `{ success: 'items' }` represents the combination of those state nodes.
+Состояние, определенное из `machine.transition(state, event)`, представляет собой комбинацию узлов состояния. Например, в автомате ниже есть узел состояния `success` и узел подсостояния `items`. Значение состояния `{success: 'items'}` представляет комбинацию этих узлов состояния.
 
 ```js
 const fetchMachine = createMachine({
@@ -47,14 +49,14 @@ const fetchMachine = createMachine({
   states: {
     idle: {
       on: {
-        FETCH: { target: 'pending' }
-      }
+        FETCH: { target: 'pending' },
+      },
     },
     pending: {
       on: {
         FULFILL: { target: 'success' },
-        REJECT: { target: 'failure' }
-      }
+        REJECT: { target: 'failure' },
+      },
     },
     success: {
       // Initial child state
@@ -64,38 +66,40 @@ const fetchMachine = createMachine({
       states: {
         items: {
           on: {
-            'ITEM.CLICK': { target: 'item' }
-          }
+            'ITEM.CLICK': { target: 'item' },
+          },
         },
         item: {
           on: {
-            BACK: { target: 'items' }
-          }
-        }
-      }
+            BACK: { target: 'items' },
+          },
+        },
+      },
     },
     failure: {
       on: {
-        RETRY: { target: 'pending' }
-      }
-    }
-  }
+        RETRY: { target: 'pending' },
+      },
+    },
+  },
 });
 ```
 
-<iframe src="https://stately.ai/viz/embed/?gist=932f6d193fa9d51afe31b236acf291c9"></iframe>
+---
 
-## State Node Types
+<iframe src="https://stately.ai/viz/embed/?gist=932f6d193fa9d51afe31b236acf291c9" width="100%" height="360"></iframe>
 
-There are five different kinds of state nodes:
+## Типы узлов состояния
 
-- An **atomic** state node has no child states. (I.e., it is a leaf node.)
-- A **compound** state node contains one or more child `states`, and has an `initial` state, which is the key of one of those child states.
-- A **parallel** state node contains two or more child `states`, and has no initial state, since it represents being in all of its child states at the same time.
-- A **final** state node is a leaf node that represents an abstract "terminal" state.
-- A **history** state node is an abstract node that represents resolving to its parent node's most recent shallow or deep history state.
+Есть пять различных типов узлов состояния:
 
-The state node type can be explicitly defined on the state node:
+- Узел **атомарного** состояния не имеет дочерних состояний.
+- Узел **составного** состояния содержит одно или несколько дочерних состояний и имеет начальное состояние, которое является ключом одного из этих дочерних состояний.
+- Узел **параллельного** состояния содержит два или более дочерних состояния и не имеет начального состояния, так как он представляет нахождение во всех своих дочерних состояниях одновременно.
+- Узел **конечного** состояния - это конечный узел, который представляет абстрактное «конечное» состояние.
+- Узел состояния **истории** - это абстрактный узел, который представляет преобразование в самое последнее мелкое или глубокое состояние истории своего родительского узла.
+
+Тип узла состояния может быть явно определен на узле состояния:
 
 ```js
 const machine = createMachine({
@@ -105,8 +109,8 @@ const machine = createMachine({
     idle: {
       type: 'atomic',
       on: {
-        FETCH: { target: 'pending' }
-      }
+        FETCH: { target: 'pending' },
+      },
     },
     pending: {
       type: 'parallel',
@@ -117,13 +121,13 @@ const machine = createMachine({
           states: {
             pending: {
               on: {
-                'FULFILL.resource1': { target: 'success' }
-              }
+                'FULFILL.resource1': { target: 'success' },
+              },
             },
             success: {
-              type: 'final'
-            }
-          }
+              type: 'final',
+            },
+          },
         },
         resource2: {
           type: 'compound',
@@ -131,16 +135,16 @@ const machine = createMachine({
           states: {
             pending: {
               on: {
-                'FULFILL.resource2': { target: 'success' }
-              }
+                'FULFILL.resource2': { target: 'success' },
+              },
             },
             success: {
-              type: 'final'
-            }
-          }
-        }
+              type: 'final',
+            },
+          },
+        },
       },
-      onDone: 'success'
+      onDone: 'success',
     },
     success: {
       type: 'compound',
@@ -148,163 +152,172 @@ const machine = createMachine({
       states: {
         items: {
           on: {
-            'ITEM.CLICK': { target: 'item' }
-          }
+            'ITEM.CLICK': { target: 'item' },
+          },
         },
         item: {
           on: {
-            BACK: { target: 'items' }
-          }
+            BACK: { target: 'items' },
+          },
         },
         hist: {
           type: 'history',
-          history: 'shallow'
-        }
-      }
-    }
-  }
+          history: 'shallow',
+        },
+      },
+    },
+  },
 });
 ```
 
-<iframe src="https://stately.ai/viz/embed/?gist=75cc77b35e98744e8d10902147feb313"></iframe>
+---
 
-Explicitly specifying the `type` as `'atomic'`, `'compound'`, `'parallel'`, `'history'`, or `'final'` is helpful with regard to analysis and type-checking in TypeScript. However, it is only required for parallel, history, and final states.
+<iframe src="https://stately.ai/viz/embed/?gist=75cc77b35e98744e8d10902147feb313" width="100%" height="400"></iframe>
 
-## Transient State Nodes
+Явное указание `type` как `'atomic'`, `'compound'`, `'parallel'`, `'history'` или `'final'` полезно для анализа и проверки типов в TypeScript. Однако это требуется только для параллельного, исторического и конечного состояний.
 
-A transient state node is a "pass-through" state node that immediately transitions to another state node; that is, a machine does not stay in a transient state. Transient state nodes are useful for determining which state the machine should really go to from a previous state based on conditions. They are most similar to [choice pseudostates](https://www.uml-diagrams.org/state-machine-diagrams.html#choice-pseudostate) in UML.
+## Узлы переходного состояния
 
-The best way to define a transient state node is as an eventless state, and an `always` transition. This is a transition where the first condition that evaluates to true is immediately taken.
+**Узел переходного состояния** - это "проходной" узел состояния, который немедленно переходит к другому узлу состояния; то есть автомат не остается в переходном состоянии. Узлы переходного состояния полезны для определения того, в какое состояние автомат должен действительно перейти из предыдущего состояния на основе условий. Они больше всего похожи на [псевдосостояния выбора](https://www.uml-diagrams.org/state-machine-diagrams.html#choice-pseudostate) в UML.
 
-For example, this machine's initial transient state resolves to `'morning'`, `'afternoon'`, or `'evening'`, depending on what time it is (implementation details hidden):
+Лучший способ определить узел переходного состояния - это состояние без событий и постоянный переход `always`. Это переход, при котором немедленно выполняется первое условие, которое оценивается как истинное.
 
-```js{9-15}
-const timeOfDayMachine = createMachine({
-  id: 'timeOfDay',
-  initial: 'unknown',
-  context: {
-    time: undefined
-  },
-  states: {
-    // Transient state
-    unknown: {
-      always: [
-        { target: 'morning', cond: 'isBeforeNoon' },
-        { target: 'afternoon', cond: 'isBeforeSix' },
-        { target: 'evening' }
-      ]
+Например, начальное переходное состояние этого автомата преобразуется в `'morning'`, `'afternoon'` или `'evening'`, в зависимости от того, какое сейчас время (детали реализации скрыты):
+
+```js hl_lines="10-16"
+const timeOfDayMachine = createMachine(
+  {
+    id: 'timeOfDay',
+    initial: 'unknown',
+    context: {
+      time: undefined,
     },
-    morning: {},
-    afternoon: {},
-    evening: {}
+    states: {
+      // Transient state
+      unknown: {
+        always: [
+          { target: 'morning', cond: 'isBeforeNoon' },
+          { target: 'afternoon', cond: 'isBeforeSix' },
+          { target: 'evening' },
+        ],
+      },
+      morning: {},
+      afternoon: {},
+      evening: {},
+    },
+  },
+  {
+    guards: {
+      isBeforeNoon: {},
+      isBeforeSix: {},
+    },
   }
-}, {
-  guards: {
-    isBeforeNoon: // ...
-    isBeforeSix: // ...
-  }
-});
+);
 
-const timeOfDayService = interpret(timeOfDayMachine.withContext({ time: Date.now() }))
-  .onTransition(state => console.log(state.value))
+const timeOfDayService = interpret(
+  timeOfDayMachine.withContext({ time: Date.now() })
+)
+  .onTransition((state) => console.log(state.value))
   .start();
 
 // => 'morning' (assuming the time is before noon)
 ```
 
-<iframe src="https://stately.ai/viz/embed/?gist=ca6a3f84f585c3e9cd6aadc3ae00b886"></iframe>
+---
 
-## State Node Meta Data
+<iframe src="https://stately.ai/viz/embed/?gist=ca6a3f84f585c3e9cd6aadc3ae00b886" width="100%" height="360"></iframe>
 
-Meta data, which is static data that describes relevant properties of any [state node](./statenodes.md), can be specified on the `.meta` property of the state node:
+## Метаданные узла состояния
 
-```js {19-21,24-26,32-34,37-39,42-44}
+Мета-данные, которые представляют собой статические данные, описывающие соответствующие свойства любого [узла состояния](./statenodes.md), могут быть указаны в свойстве `.meta` узла состояния:
+
+```js hl_lines="19-21 24-26 32-34 37-39 42-44"
 const fetchMachine = createMachine({
   id: 'fetch',
   initial: 'idle',
   states: {
     idle: {
       on: {
-        FETCH: { target: 'loading' }
-      }
+        FETCH: { target: 'loading' },
+      },
     },
     loading: {
       after: {
-        3000: { target: 'failure.timeout' }
+        3000: { target: 'failure.timeout' },
       },
       on: {
         RESOLVE: { target: 'success' },
         REJECT: { target: 'failure' },
-        TIMEOUT: { target: 'failure.timeout' } // manual timeout
+        TIMEOUT: { target: 'failure.timeout' }, // manual timeout
       },
       meta: {
-        message: 'Loading...'
-      }
+        message: 'Loading...',
+      },
     },
     success: {
       meta: {
-        message: 'The request succeeded!'
-      }
+        message: 'The request succeeded!',
+      },
     },
     failure: {
       initial: 'rejection',
       states: {
         rejection: {
           meta: {
-            message: 'The request failed.'
-          }
+            message: 'The request failed.',
+          },
         },
         timeout: {
           meta: {
-            message: 'The request timed out.'
-          }
-        }
+            message: 'The request timed out.',
+          },
+        },
       },
       meta: {
-        alert: 'Uh oh.'
-      }
-    }
-  }
+        alert: 'Uh oh.',
+      },
+    },
+  },
 });
 ```
 
-The current state of the machine collects the `.meta` data of all of the state nodes represented by the state value, and places them on an object where:
+Текущее состояние машины собирает `.meta`-данные всех узлов состояния, представленных значением состояния, и помещает их в объект, где:
 
-- The keys are the [state node IDs](./ids.md)
-- The values are the state node `.meta` values
+- Ключи - это [идентификаторы узлов состояния](./ids.md).
+- Значения - это значения мета-узла состояния `.meta`.
 
-See [state meta data](./states.md#state-meta-data) for usage and more information.
+## Теги
 
-## Tags
+Узлы состояния могут иметь **теги**, которые представляют собой строковые термины, помогающие описать узел состояния. Теги - это метаданные, которые могут быть полезны при классификации узлов различных состояний. Например, вы можете указать, какие узлы состояния представляют состояния, в которых данные загружаются, с помощью тега `"loading"` и определить, содержит ли состояние эти тегированные узлы состояния с помощью `state.hasTag(tag)`:
 
-State nodes can have **tags**, which are string terms that help describe the state node. Tags are metadata that can be useful in categorizing different state nodes. For example, you can signify which state nodes represent states in which data is being loaded by using a `"loading"` tag, and determine if a state contains those tagged state nodes with `state.hasTag(tag)`:
-
-```js {10,14}
+```js hl_lines="10 14"
 const machine = createMachine({
   initial: 'idle',
   states: {
     idle: {
       on: {
-        FETCH: 'loadingUser'
-      }
+        FETCH: 'loadingUser',
+      },
     },
     loadingUser: {
-      tags: ['loading']
+      tags: ['loading'],
       // ...
     },
     loadingFriends: {
-      tags: ['loading']
+      tags: ['loading'],
       // ...
     },
     editing: {
       // ...
-    }
-  }
+    },
+  },
 });
 
 machine.initialState.hasTag('loading');
 // => false
 
-machine.transition(machine.initialState, 'FETCH').hasTag('loading');
+machine
+  .transition(machine.initialState, 'FETCH')
+  .hasTag('loading');
 // => true
 ```
