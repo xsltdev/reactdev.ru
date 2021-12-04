@@ -1,18 +1,18 @@
-# Actions
+# Действия
 
 Actions are fire-and-forget [effects](./effects.md). They can be declared in three ways:
 
-- `entry` actions are executed upon entering a state
-- `exit` actions are executed upon exiting a state
-- transition actions are executed when a transition is taken
+**Действия** (_actions_) - это эффект запустил и забыл». Их можно объявить тремя способами:
 
-To learn more, read about [actions in our introduction to statecharts](./introduction-to-state-machines-and-statecharts.md#actions).
+- `entry` действия выполняются при входе в состояние
+- `exit` действия выполняются при выходе из состояния
+- действия перехода выполняются при переходе
 
 ## API
 
-Actions can be added like so:
+Действия могут быть добавлены так:
 
-```js {10-11,16-19,27-41}
+```js hl_lines="10-11 16-19 27-41"
 const triggerMachine = createMachine(
   {
     id: 'trigger',
@@ -58,57 +58,53 @@ const triggerMachine = createMachine(
 );
 ```
 
-<details>
-  <summary>
-    When should I use transition vs. entry/exit actions?
-  </summary>
+???note "Когда мне следует использовать переход (transition),<br />а когда - входные и выходные действия (action)?"
 
-It depends! They mean different things:
+    Они означают разные вещи:
 
-- An entry/exit action means “execute this action **on any transition that enters/exits this state**”. Use entry/exit actions when the action is only dependent on the state node that it’s in, and not on previous/next state nodes or events.
+    Действие входа или выхода означает «выполнить это действие **при любом переходе, который входит или выходит из этого состояния**». Используйте действия входа или выхода, когда само действие зависит только от узла состояния, в котором оно находится, а не от узлов или событий предыдущего или следующего состояния.
 
-```js
-// ...
-{
-  idle: {
-    on: {
-      LOAD: 'loading'
-    }
-  },
-  loading: {
-    // this action is executed whenever the 'loading' state is entered
-    entry: 'fetchData'
-  }
-}
-// ...
-```
-
-- A transition action means “execute this action **only on this transition**”. Use transition actions when the action is dependent on the event and the state node that it is currently in.
-
-```js
-// ...
-{
-  idle: {
-    on: {
-      LOAD: {
-        target: 'loading',
-        // this action is executed only on this transition
-        actions: 'fetchData'
-    }
-  },
-  loading: {
+    ```js
     // ...
-  }
-}
-// ...
-```
+    {
+    	idle: {
+    		on: {
+    		LOAD: 'loading'
+    		}
+    	},
+    	loading: {
+    		// this action is executed whenever the 'loading' state is entered
+    		entry: 'fetchData'
+    	}
+    }
+    // ...
+    ```
 
-</details>
+    Действие перехода означает «выполнить это действие **только на этом переходе**». Используйте действия перехода, когда действие зависит от события и узла состояния, в котором оно находится в данный момент.
 
-::: tip
-Action implementations can be quickly prototyped by specifying the action function directly in the machine config:
+    ```js
+    // ...
+    {
+    	idle: {
+    		on: {
+    		LOAD: {
+    			target: 'loading',
+    			// this action is executed only on this transition
+    			actions: 'fetchData'
+    		}
+    	},
+    	loading: {
+    		// ...
+    	}
+    }
+    // ...
+    ```
 
-```js {4}
+!!!tip "Подсказка"
+
+Реализации действий можно быстро прототипировать, указав функцию действия непосредственно в конфигурации автомата:
+
+```js hl_lines="4"
 // ...
 TRIGGER: {
   target: 'active',
@@ -117,15 +113,13 @@ TRIGGER: {
 // ...
 ```
 
-Refactoring inline action implementations in the `actions` property of the machine options makes it easier to debug, serialize, test, and accurately visualize actions.
+Реорганизация встроенных реализаций действий в свойстве `actions` параметров автомата упрощает отладку, сериализацию, тестирование и точную визуализацию действий.
 
-:::
+## Декларативные действия
 
-## Declarative actions
+Экземпляр `State`, возвращаемый из `machine.transition(...)`, имеет свойство `.actions`, которое представляет собой массив объектов действия для выполнения интерпретатором:
 
-The `State` instance returned from `machine.transition(...)` has an `.actions` property, which is an array of action objects for the interpreter to execute:
-
-```js {4-9}
+```js hl_lines="6-11"
 const activeState = triggerMachine.transition('inactive', {
   type: 'TRIGGER',
 });
@@ -139,18 +133,18 @@ console.log(activeState.actions);
 // ]
 ```
 
-Each action object has two properties (and others, that you can specify):
+Каждый объект действия имеет два свойства (и другие, которые вы можете указать):
 
-- `type` - the action type
-- `exec` - the action implementation function
+- `type` - тип действия
+- `exec` - реализация функции действия
 
-The `exec` function takes three arguments:
+Функция `exec` принимает три параметра:
 
-| Argument     | Type         | Description                                                 |
-| ------------ | ------------ | ----------------------------------------------------------- |
-| `context`    | TContext     | The current machine context                                 |
-| `event`      | event object | The event that caused the transition                        |
-| `actionMeta` | meta object  | An object containing meta data about the action (see below) |
+| Параметр     | Тип          | Описание                                 |
+| ------------ | ------------ | ---------------------------------------- |
+| `context`    | TContext     | Текущий контекст автомата                |
+| `event`      | event object | Событие, вызвавшее переход               |
+| `actionMeta` | meta object  | Объект, содержащий метаданные о действии |
 
 The `actionMeta` object includes the following properties:
 

@@ -1,15 +1,15 @@
-# Effects
+# Эффекты
 
-In statecharts, "side-effects" can be grouped into two categories:
+В диаграммах состояний «побочные эффекты» можно разделить на две категории:
 
-**"Fire-and-forget" effects**, which execute a synchronous side-effect with no events sent back to the statechart, or _send an event synchronously_ back to the statechart:
+**Эффекты «запустил и забыл»** (_Fire-and-forget" effects_), которые выполняют синхронный побочный эффект без отправки событий обратно в диаграмму состояний или синхронно отправляют событие обратно в диаграмму состояний:
 
-- [Actions](./actions.md) - single, discrete effects
-- [Activities](./activities.md) - continuous effects that are disposed when the state they were started in is exited
+- [Действия](./actions.md) (actions) - одиночные, дискретные эффекты
+- [Деятельности](./activities.md) (activities) - непрерывные эффекты, которые удаляются при выходе из состояния, в котором они были запущены
 
-**Invoked effects**, which execute a side-effect that can send and receive events _asynchronously_:
+**Призываемые эффекты** (_Invoked effects_), которые выполняют побочный эффект, который может отправлять и получать события асинхронно:
 
-- [Invoked Promises](./communication.md#invoking-promises) - single, discrete effects over time that may `resolve` or `reject` once, which are sent as events to the parent machine
-- [Invoked Callbacks](./communication.md#invoking-callbacks) - continuous effects over time that may send multiple events, as well as listen for events sent directly to it, to/from the parent machine
-- [Invoked Observables](./communication.md#invoking-observables) - continuous effects over time that may send multiple events triggered by messages from the observed stream
-- [Invoked Machines](./communication.md#invoking-machines) - continuous effects represented by `Machine` instances that can send/receive events, but also notify the parent machine when it has reached its [final state](./final.md)
+- [Призываемые промисы](communication.md#invoking-promises) (Invoked Promises) - отдельные дискретные эффекты, которые с течением времени могут разрешаться или отклоняться один раз, и отправляются как события на родительский автомат.
+- [Призываемые функции обратного вызова](communication.md#invoking-callbacks) (Invoked Callbacks) - непрерывные эффекты с течением времени, которые могут отправлять несколько событий, а также прослушивать события, отправленные непосредственно ему, на / с родительского автомата
+- [Призываемые наблюдатели](communication.md#invoking-observables) (Invoked Observables) - непрерывные эффекты с течением времени, которые могут отправлять несколько событий, запускаемых сообщениями из наблюдаемого потока.
+- [Призываемые автоматы](communication.md#invoking-machines) (Invoked Machines) - непрерывные эффекты, представленные экземплярами `Machine`, которые могут отправлять / получать события, но также уведомлять родительский автомат, когда он достигает своего [конечного состояния](final.md).

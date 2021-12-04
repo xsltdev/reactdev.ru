@@ -1,6 +1,6 @@
 # Конечные автоматы
 
-**Конечный автомат** - это конечный набор состояний, которые могут детерминированно переходить друг в друга из-за событий. Чтобы узнать больше, прочитайте наше [введение в диаграммы состояний](./introduction-to-state-machines-and-statecharts.md).
+**Конечный автомат** (_state machine_) - это конечный набор состояний, которые могут детерминированно переходить друг в друга из-за событий. Чтобы узнать больше, прочитайте наше [введение в диаграммы состояний](./introduction-to-state-machines-and-statecharts.md).
 
 ## Конфигурация
 
@@ -106,7 +106,6 @@ const noAlertLightMachine = lightMachine.withConfig({
 
 ## Начальный контекст
 
-As shown in the first example, the `context` is defined directly in the configuration itself. If you want to extend an existing machine with a different initial `context`, you can use `.withContext()` and pass in the custom `context`:
 Как показано в первом примере, контекст определяется непосредственно в самой конфигурации. Если вы хотите расширить существующую машину с другим начальным контекстом, вы можете использовать `.withContext()` и передать свой `context`:
 
 ```js

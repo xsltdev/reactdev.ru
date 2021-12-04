@@ -1,14 +1,14 @@
-# Parallel State Nodes
+# Параллельные узлы состояний
 
-In statecharts, you can declare a state as a **parallel state**. This means that all its child states will run _at the same time_. To learn more, see the section in our [introduction to statecharts](./introduction-to-state-machines-and-statecharts.md#parallel-states).
+В диаграммах состояний вы можете объявить состояние как **параллельное состояние** (_parallel state_). Это означает, что все его дочерние состояния будут выполняться _одновременно_.
 
 ## API
 
-A parallel state node is specified on the machine and/or any nested compound state by setting `type: 'parallel'`.
+Узел параллельного состояния указывается на машине и / или в любом вложенном составном состоянии путем установки типа `type: 'parallel'`.
 
-For example, the machine below allows the `upload` and `download` compound states to be simultaneously active. Imagine that this represents an application where you can download and upload files at the same time:
+Например, автомат из примера ниже позволяет одновременно активировать составные состояния `upload` и `download`. Представьте, что это приложение, в котором вы можете скачивать и загружать файлы одновременно:
 
-```js {3,5,21}
+```js hl_lines="3 5 21"
 const fileMachine = createMachine({
   id: 'file',
   type: 'parallel',
@@ -55,9 +55,11 @@ console.log(fileMachine.initialState.value);
 // }
 ```
 
-<iframe src="https://stately.ai/viz/embed/?gist=ef808b0400ececa786ec17e20d62c1e0"></iframe>
+---
 
-A parallel state node's state value is represented as an object. This object state value can be used to further transition to different states in a parallel state node:
+<iframe src="https://stately.ai/viz/embed/?gist=ef808b0400ececa786ec17e20d62c1e0" width="100%" height="300"></iframe>
+
+Значение состояния узла параллельного состояния представлено как объект. Это значение состояния объекта можно использовать для дальнейшего перехода в разные состояния в узле параллельного состояния:
 
 ```js
 console.log(
@@ -75,7 +77,7 @@ console.log(
 // }
 ```
 
-A compound state node can contain parallel state nodes. The configuration is the same for nested state nodes:
+Узел составного состояния может содержать узлы параллельного состояния. Конфигурация такая же, как и для узлов вложенного состояния:
 
 ```js
 const lightMachine = createMachine({
@@ -147,6 +149,6 @@ console.log(
 // }
 ```
 
-<iframe src="https://stately.ai/viz/embed/?gist=3887dee1e2bb6e84c3b5a42c056984ad"></iframe>
+---
 
-<!-- TODO - maybe add something about onDone in a parallel state? -->
+<iframe src="https://stately.ai/viz/embed/?gist=3887dee1e2bb6e84c3b5a42c056984ad" width="100%" height="300"></iframe>

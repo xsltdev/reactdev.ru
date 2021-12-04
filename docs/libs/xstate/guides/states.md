@@ -1,6 +1,6 @@
 # Состояния
 
-**Состояние** - это абстрактное представление системы (например, приложения) в определенный момент времени.
+**Состояние** (_state_) - это абстрактное представление системы (например, приложения) в определенный момент времени.
 
 ## API
 
@@ -320,8 +320,6 @@ const previousState = State.create(stateDefinition);
 // This will start the service at the specified State
 const service = interpret(myMachine).start(previousState);
 ```
-
-This will also maintain and restore previous [history states]() and ensures that `.events` and `.nextEvents` represent the correct values.
 
 Это также будет поддерживать и восстанавливать предыдущие [состояния истории](./history.md) и гарантирует, что `.events` и `.nextEvents` представляют правильные значения.
 

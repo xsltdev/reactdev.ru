@@ -1,10 +1,10 @@
-# Hierarchical state nodes
+# Иерархические узлы состояния
 
-In statecharts, states can be nested _within other states_. These nested states are called **compound states**. To learn more, read the [compound states section in our introduction to statecharts](./introduction-to-state-machines-and-statecharts.md#compound-states).
+В диаграммах состояний состояния могут быть вложены в другие состояния. Эти вложенные состояния называются **составными состояниями** (_compound states_).
 
 ## API
 
-The following example is a traffic light machine with nested states:
+Следующий пример - конечный автомат светофора с вложенными состояниями:
 
 ```js
 const pedestrianStates = {
@@ -53,16 +53,18 @@ const lightMachine = createMachine({
 });
 ```
 
-<iframe src="https://stately.ai/viz/embed/?gist=e8af8924afe9352bf7d1e06f06407061"></iframe>
+---
 
-The `'green'` and `'yellow'` states are **simple states** - they have no child states. In contrast, the `'red'` state is a **compound state** since it is composed of **substates** (the `pedestrianStates`).
+<iframe src="https://stately.ai/viz/embed/?gist=e8af8924afe9352bf7d1e06f06407061" width="100%" height="300"></iframe>
 
-## Initial states
+`'green'` и `'yellow'` состояния - это **простые состояния** (_simple states_) - у них нет дочерних состояний. Напротив, `'red'` состояние является **составным состоянием** (_compound state_), поскольку оно состоит из **подсостояний** (_substates_) `pedestrianStates`.
 
-When a compound state is entered, its initial state is immediately entered as well. In the following traffic light machine example:
+## Начальные состояния
 
-- the `'red'` state is entered
-- since `'red'` has an initial state of `'walk'`, the `{ red: 'walk' }` state is ultimately entered.
+Когда вводится составное состояние, сразу же вводится и его начальное состояние. В следующем примере светофора:
+
+1. переход в состояние `'red'`
+2. поскольку `'red'` имеет начальное состояние `'walk'`, то переходим в состояние `{ red: 'walk' }`.
 
 ```js
 console.log(
@@ -73,12 +75,12 @@ console.log(
 // }
 ```
 
-## Events
+## События
 
-When a simple state does not handle an `event`, that `event` is propagated up to its parent state to be handled. In the following traffic light machine example:
+Когда простое состояние не обрабатывает `event`, это `event` распространяется до своего родительского состояния для обработки. В следующем примере светофора:
 
-- the `{ red: 'stop' }` state does _not_ handle the `'TIMER'` event
-- the `'TIMER'` event is sent to the `'red'` parent state, which handles the event.
+1. состояние `{red: 'stop'}` не обрабатывает событие `'TIMER'`
+2. событие `'TIMER'` отправляется в `'red'` родительское состояние, которое обрабатывает событие.
 
 ```js
 console.log(
@@ -90,7 +92,7 @@ console.log(
 // => 'green'
 ```
 
-If neither a state nor any of its ancestor (parent) states handle an event, no transition happens. In `strict` mode (specified in the [machine configuration](./machines.md#configuration)), this will throw an error.
+Если ни состояние, ни какое-либо из его предков (родительских) состояний не обрабатывают событие, переход не происходит. В `strict` режиме (указанном в [конфигурации](machines.md#configuration) автомата) это вызовет ошибку.
 
 ```js
 console.log(

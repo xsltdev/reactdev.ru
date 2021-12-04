@@ -1,10 +1,10 @@
-# Final states
+# Конечные состояния
 
-In statecharts, you can declare a state as a **final state**. The final state indicates that its parent state is “done”. To learn more, read the [final state section in our introduction to statecharts](./introduction-to-state-machines-and-statecharts.md#final-state).
+В диаграммах состояний вы можете объявить состояние как **конечное состояние** (_final state_). Конечное состояние указывает, что его родительское состояние «выполнено».
 
 ## API
 
-To indicate that a state node is final, set its `type` property to `'final'`:
+Чтобы указать, что узел состояния является конечным, установите для его свойства `type` значение `final`:
 
 ```js
 const lightMachine = createMachine({
@@ -75,13 +75,13 @@ const lightMachine = createMachine({
 });
 ```
 
-In a compound state, reaching a final child state node (with `{ type: 'final' }`) will internally raise a `done(...)` event for that compound state node (e.g., `"done.state.light.crosswalkEast"`). Using `onDone` is equivalent to defining a transition for this event.
+В составном состоянии достижение конечного дочернего узла состояния (с `{type: 'final'}`) вызовет внутреннее событие `done(...)` для этого узла составного состояния (например, `done.state.light.crosswalkEast`) . Использование `onDone` эквивалентно определению перехода для этого события.
 
-## Parallel states
+## Паралельные состояния
 
-When every child state node in a parallel state node is _done_, the parent parallel state node is also _done_. When every final state node in every child compound node is reached, the `done(...)` event will be raised for the parallel state node.
+Когда каждый дочерний узел состояния в узле параллельного состояния завершен, родительский узел параллельного состояния также становится завершенным. Когда достигается каждый узел конечного состояния в каждом дочернем составном узле, для узла параллельного состояния возникает событие `done(...)`.
 
-This is very useful in modeling parallel tasks. For example, below there is a shopping machine where `user` and `items` represent two parallel tasks of the `cart` state:
+Это очень полезно при моделировании параллельных задач. Например, ниже показан торговый автомат, где пользователь и товары представляют две параллельные задачи состояния корзины:
 
 ```js
 const shoppingMachine = createMachine({
@@ -129,17 +129,15 @@ const shoppingMachine = createMachine({
 });
 ```
 
-The `onDone` transition will only take place when all of the child states of `'cart'` (e.g., `'user'` and `'items'`) are in their final states. In the case of the shopping machine, once the `'shopping.cart.user.success'` and `'shopping.cart.items.success'` state nodes are reached, the machine will transition from the `'cart'` to the `'confirm'` state.
+Переход `onDone` будет иметь место только тогда, когда все дочерние состояния `'cart'` (например, `'user'` и `'items'`) находятся в своих конечных состояниях. В случае с автоматом для покупок, как только будут достигнуты узлы состояний `shopping.cart.user.success` и `shopping.cart.items.success`, автомат перейдет из состояния `'cart'` в состояние `'confirm'`.
 
-::: warning
+!!!warning "Внимание"
 
-The `onDone` transition cannot be defined on the root node of the machine. This is because `onDone` is a transition on a `'done.state.*'` event, and when a machine reaches its final state, it can no longer accept any events.
+    Переход `onDone` не может быть определен на корневом узле машины. Это связано с тем, что `onDone` - это переход к событию `done.state.*`, И когда машина достигает своего конечного состояния, она больше не может принимать какие-либо события.
 
-:::
+## Примечания
 
-## Notes
-
-- A final state node only indicates that its immediate parent is _done_. It does not affect the _done_ status of any higher parents, except with parallel state nodes which are _done_ when all of its child compound state nodes are _done_.
-- A parallel state that reaches a final substate does not stop receiving events until all its siblings are done. The final substate can still be exited with an event.
-- Final state nodes cannot have any children. They are atomic state nodes.
-- You can specify `entry` and `exit` actions on final state nodes.
+- Узел конечного состояния указывает только на то, что его непосредственный родитель готов. Это не влияет на статус выполнения каких-либо вышестоящих родителей, за исключением узлов параллельного состояния, которые выполняются, когда завершены все его дочерние узлы составного состояния.
+- Параллельное состояние, достигающее конечного подсостояния, не прекращает получать события, пока не будут выполнены все его одноуровневые состояния. Из последнего подсостояния все еще можно выйти с помощью события.
+- Узлы конечного состояния не могут иметь потомков. Это узлы атомарного состояния.
+- Вы можете указать действия входа и выхода на узлах конечного состояния.
