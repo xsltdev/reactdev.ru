@@ -1,35 +1,39 @@
-# Guarded Transitions
+# Защищенные переходы
 
-Many times, you'll want a transition between states to only take place if certain conditions on the state (finite or extended) or the event are met. For instance, let's say you're creating a machine for a search form, and you only want search to be allowed if:
+Часто вам нужно, чтобы переход между состояниями происходил только при соблюдении определенных условий состояния (конечных или расширенных) или события. Например, предположим, что вы создаете машину для формы поиска и хотите, чтобы поиск был разрешен только в том случае, если:
 
-- the user is allowed to search (`.canSearch` in this example)
-- the search event `query` is not empty.
+- пользователю разрешен поиск (`.canSearch` в этом примере)
+- поисковый запрос `query` не пустой
 
-This is a good use case for a "guarded transition", which is a transition that only occurs if some condition (`cond`) passes. A transition with condition(s) is called a **guarded transition**.
+Это хороший вариант использования для «защищенного перехода», который является переходом, который происходит только в том случае, если выполняется какое-то условие (`cond`). Переход с условием называется **защищенным переходом** (_guarded transition_).
 
-## Guards (Condition Functions)
+## Защитные функции
 
-A **condition function** (also known as a **guard**) specified on the `.cond` property of a transition, as a string or condition object with a `{ type: '...' }` property, and takes 3 arguments:
+**Защитная функция** (_condition function_) (также известная как **защитник** - _guard_), указанная в свойстве `.cond` перехода в виде строки или объекта условия со свойством `{type: '...'}` и принимает 3 параметра:
 
-| Argument   | Type   | Description                            |
-| ---------- | ------ | -------------------------------------- |
-| `context`  | object | the [machine context](./context.md)    |
-| `event`    | object | the event that triggered the condition |
-| `condMeta` | object | meta data (see below)                  |
+| Параметр   | Тип    | Описание                          |
+| ---------- | ------ | --------------------------------- |
+| `context`  | object | [Контекст](./context.md) автомата |
+| `event`    | object | сработавшее событие               |
+| `condMeta` | object | мета-данные                       |
 
-The `condMeta` object includes the following properties:
+Объект `condMeta` включает следующие свойства:
 
-- `cond` - the original condition object
-- `state` - the current machine state, before transition
-- `_event` - the SCXML event
+- `cond` - объект исходного состояния
+- `state` - состояние машины до перехода
+- `_event` - SCXML событие
 
-**Returns**
+**Возвращает**
 
-`true` or `false`, which determines whether the transition should be allowed to take place.
+`true` или `false`, что определяет, будет ли осуществлен переход.
 
-```js {15-16,30-34}
+```js hl_lines="19-20 35-39"
 const searchValid = (context, event) => {
-  return context.canSearch && event.query && event.query.length > 0;
+  return (
+    context.canSearch &&
+    event.query &&
+    event.query.length > 0
+  );
 };
 
 const searchMachine = createMachine(
@@ -37,7 +41,7 @@ const searchMachine = createMachine(
     id: 'search',
     initial: 'idle',
     context: {
-      canSearch: true
+      canSearch: true,
     },
     states: {
       idle: {
@@ -45,42 +49,43 @@ const searchMachine = createMachine(
           SEARCH: [
             {
               target: 'searching',
-              // Only transition to 'searching' if the guard (cond) evaluates to true
-              cond: searchValid // or { type: 'searchValid' }
+              // Only transition to 'searching'
+              // if the guard (cond) evaluates to true
+              cond: searchValid, // or { type: 'searchValid' }
             },
-            { target: '.invalid' }
-          ]
+            { target: '.invalid' },
+          ],
         },
         initial: 'normal',
         states: {
           normal: {},
-          invalid: {}
-        }
+          invalid: {},
+        },
       },
       searching: {
-        entry: 'executeSearch'
+        entry: 'executeSearch',
         // ...
       },
       searchError: {
         // ...
-      }
-    }
+      },
+    },
   },
   {
     guards: {
-      searchValid // optional, if the implementation doesn't change
-    }
+      searchValid, // optional, if the implementation doesn't change
+    },
   }
 );
 ```
 
-Click the _EVENTS_ tab and send an event like `{ "type": "SEARCH", "query": "something" }` below:
+Перейдите на вкладку _Events_ и отправьте событие типа `{"type": "SEARCH", "query": "something"}` в визуализаторе:
 
-<iframe src="https://stately.ai/viz/embed/?gist=09af23963bfa1767ce3900f2ae730029&tab=events"></iframe>
+[https://stately.ai/viz?gist=09af23963bfa1767ce3900f2ae730029](https://stately.ai/viz?gist=09af23963bfa1767ce3900f2ae730029)
 
-If the `cond` guard returns `false`, then the transition will not be selected, and no transition will take place from that state node. If all transitions in a child state have guards that evaluate to `false` and prevent them from being selected, the `event` will be propagated up to the parent state and handled there.
+Если `cond` возвращает `false`, то переход не будет выбран, и переход не будет происходить из этого узла состояния. Если все переходы в дочернем состоянии имеют защитные функции, которые возвращают `false` и позволяют их выбрать, то событие будет передано в родительское состояние и обработано там.
 
-Example of usage with `context`:
+Пример использования с контекстом `context`:
 
 ```js
 import { interpret } from 'xstate';
@@ -96,35 +101,30 @@ searchService.send({ type: 'SEARCH', query: 'something' });
 // => 'searching'
 ```
 
-::: tip
-Guard implementations can be quickly prototyped by specifying the guard `cond` function inline, directly in the machine config:
+!!!tip "Подсказка"
 
-```js {4}
-// ...
-SEARCH: {
-  target: 'searching',
-  cond: (context, event) => context.canSearch && event.query && event.query.length > 0
-}
-// ...
-```
+    Реализации защитных функций можно быстро прототипировать, задав свойство `cond` прямо в конфигурации автомата:
 
-Refactoring inline guard implementations in the `guards` property of the machine options makes it easier to debug, serialize, test, and accurately visualize guards.
+    ```js hl_lines="4"
+    // ...
+    SEARCH: {
+      target: 'searching',
+      cond: (context, event) => context.canSearch && event.query && event.query.length > 0
+    }
+    // ...
+    ```
 
-:::
+## Сериализация защитных функций
 
-## Serializing Guards
+Защитные функции могут (и должны) быть сериализованы как строка или объект со свойством `{type: '...'}`. Детали реализации защитной функции указаны в свойстве `guards` параметров автомата, где `key` - это тип `type` защитной функции (указанный как строка или объект), а значение - это функция, которая принимает три параметра:
 
-Guards can (and should) be serialized as a string or an object with the `{ type: '...' }` property. The implementation details of the guard are specified on the `guards` property of the machine options, where the `key` is the guard `type` (specified as a string or object) and the value is a function that takes three arguments:
+- `context` - текущий контекст автомата
+- `event` - событие, которое вызвало потенциальный переход
+- `guardMeta` - объект мета-данных о защитной функции и переходе: `cond` - исходный объект `cond`, `state` - состояние автомата то потенциального перехода
 
-- `context` - the current machine context
-- `event` - the event that triggered the (potential) transition
-- `guardMeta` - an object containing meta data about the guard and transition, including:
-  - `cond` - the original `cond` object
-  - `state` - the current machine state, before transition
+Рефакторинг приведенного выше примера:
 
-Refactoring the above example:
-
-```js {9-11,19-23}
+```js hl_lines="9-11 19-27"
 const searchMachine = createMachine(
   {
     // ...
@@ -135,28 +135,32 @@ const searchMachine = createMachine(
             target: 'searching',
             // The 'searchValid' guard implementation details are
             // specified in the machine config
-            cond: 'searchValid' // or { type: 'searchValid' }
-          }
-        }
-      }
+            cond: 'searchValid', // or { type: 'searchValid' }
+          },
+        },
+      },
       // ...
-    }
+    },
   },
   {
     guards: {
       searchValid: (context, event) => {
-        return context.canSearch && event.query && event.query.length > 0;
-      }
-    }
+        return (
+          context.canSearch &&
+          event.query &&
+          event.query.length > 0
+        );
+      },
+    },
   }
 );
 ```
 
 ## Custom Guards <Badge text="4.4+"/>
 
-Sometimes, it is preferable to not only serialize state transitions in JSON, but guard logic as well. This is where serializing guards as objects is helpful, as objects may contain relevant data:
+Иногда, предпочтительнее сериализовать в JSON не только состояние переходов, но и логику защитных функций, определив её как объект с соответствующими данными:
 
-```js {9-13,21-30}
+```js hl_lines="9-13 21-30"
 const searchMachine = createMachine(
   {
     // ...
@@ -168,13 +172,13 @@ const searchMachine = createMachine(
             // Custom guard object
             cond: {
               type: 'searchValid',
-              minQueryLength: 3
-            }
-          }
-        }
-      }
+              minQueryLength: 3,
+            },
+          },
+        },
+      },
       // ...
-    }
+    },
   },
   {
     guards: {
@@ -185,8 +189,8 @@ const searchMachine = createMachine(
           event.query &&
           event.query.length > cond.minQueryLength
         );
-      }
-    }
+      },
+    },
   }
 );
 ```
@@ -197,8 +201,13 @@ If you want to have a single event transition to different states in certain sit
 
 For example, you can model a door that listens for an `OPEN` event, goes to the `'opened'` state if you are an admin, or goes to the `'closed.error'` state if `alert`-ing is true, or goes to the `'closed.idle'` state otherwise.
 
-```js {25-27}
-import { createMachine, actions, interpret, assign } from 'xstate';
+```js hl_lines="25-27"
+import {
+  createMachine,
+  actions,
+  interpret,
+  assign,
+} from 'xstate';
 
 const doorMachine = createMachine(
   {
@@ -206,43 +215,43 @@ const doorMachine = createMachine(
     initial: 'closed',
     context: {
       level: 'user',
-      alert: false // alert when intrusions happen
+      alert: false, // alert when intrusions happen
     },
     states: {
       closed: {
         initial: 'idle',
         states: {
           idle: {},
-          error: {}
+          error: {},
         },
         on: {
           SET_ADMIN: {
-            actions: assign({ level: 'admin' })
+            actions: assign({ level: 'admin' }),
           },
           SET_ALARM: {
-            actions: assign({ alert: true })
+            actions: assign({ alert: true }),
           },
           OPEN: [
             // Transitions are tested one at a time.
             // The first valid transition will be taken.
             { target: 'opened', cond: 'isAdmin' },
             { target: '.error', cond: 'shouldAlert' },
-            { target: '.idle' }
-          ]
-        }
+            { target: '.idle' },
+          ],
+        },
       },
       opened: {
         on: {
-          CLOSE: { target: 'closed' }
-        }
-      }
-    }
+          CLOSE: { target: 'closed' },
+        },
+      },
+    },
   },
   {
     guards: {
       isAdmin: (context) => context.level === 'admin',
-      shouldAlert: (context) => context.alert === true
-    }
+      shouldAlert: (context) => context.alert === true,
+    },
   }
 );
 
@@ -284,20 +293,20 @@ Do _not_ overuse guard conditions. If something can be represented discretely as
 
 The `in` property takes a state ID as an argument and returns `true` if and only if that state node is active in the current state. For example, we can add a guard to the traffic light machine:
 
-```js {24}
+```js hl_lines="24"
 const lightMachine = createMachine({
   id: 'light',
   initial: 'green',
   states: {
     green: {
       on: {
-        TIMER: { target: 'yellow' }
-      }
+        TIMER: { target: 'yellow' },
+      },
     },
     yellow: {
       on: {
-        TIMER: { target: 'red' }
-      }
+        TIMER: { target: 'red' },
+      },
     },
     red: {
       initial: 'walk',
@@ -310,18 +319,18 @@ const lightMachine = createMachine({
         },
         stop: {
           /* ... */
-        }
+        },
       },
       on: {
         TIMER: [
           {
             target: 'green',
-            in: '#light.red.stop'
-          }
-        ]
-      }
-    }
-  }
+            in: '#light.red.stop',
+          },
+        ],
+      },
+    },
+  },
 });
 ```
 
