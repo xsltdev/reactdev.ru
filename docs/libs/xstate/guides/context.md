@@ -1,17 +1,15 @@
-# Context
+# Контекст
 
-[:rocket: Quick Reference](#quick-reference)
+Хотя _конечные_ состояния четко определены в конечных автоматах и ​​диаграммах состояний, состояние, которое представляет _количественные данные_ (например, произвольные строки, числа, объекты и т. д.), которые могут быть потенциально бесконечными, представлено как [расширенное состояние](https://en.wikipedia.org/wiki/UML_state_machine#Extended_states). Это делает диаграммы состояний более полезными для реальных приложений.
 
-While _finite_ states are well-defined in finite state machines and statecharts, state that represents _quantitative data_ (e.g., arbitrary strings, numbers, objects, etc.) that can be potentially infinite is represented as [extended state](https://en.wikipedia.org/wiki/UML_state_machine#Extended_states) instead. This makes statecharts much more useful for real-life applications.
-
-In XState, extended state is known as **context**. Below is an example of how `context` is used to simulate filling a glass of water:
+В XState расширенное состояние известно как **контекст** (_context_). Ниже приведен пример использования `context` для имитации наполнения стакана водой:
 
 ```js
 import { createMachine, assign } from 'xstate';
 
 // Action to increment the context amount
 const addWater = assign({
-  amount: (context, event) => context.amount + 1
+  amount: (context, event) => context.amount + 1,
 });
 
 // Guard to check if the glass is full
@@ -24,7 +22,7 @@ const glassMachine = createMachine(
     id: 'glass',
     // the initial context (extended state) of the statechart
     context: {
-      amount: 0
+      amount: 0,
     },
     initial: 'empty',
     states: {
@@ -32,47 +30,50 @@ const glassMachine = createMachine(
         on: {
           FILL: {
             target: 'filling',
-            actions: 'addWater'
-          }
-        }
+            actions: 'addWater',
+          },
+        },
       },
       filling: {
         // Transient transition
         always: {
           target: 'full',
-          cond: 'glassIsFull'
+          cond: 'glassIsFull',
         },
         on: {
           FILL: {
             target: 'filling',
-            actions: 'addWater'
-          }
-        }
+            actions: 'addWater',
+          },
+        },
       },
-      full: {}
-    }
+      full: {},
+    },
   },
   {
     actions: { addWater },
-    guards: { glassIsFull }
+    guards: { glassIsFull },
   }
 );
 ```
 
-The current context is referenced on the `State` as `state.context`:
+Текущий контекст ссылается на `State` как `state.context`:
 
 ```js
-const nextState = glassMachine.transition(glassMachine.initialState, {
-  type: 'FILL'
-});
+const nextState = glassMachine.transition(
+  glassMachine.initialState,
+  {
+    type: 'FILL',
+  }
+);
 
 nextState.context;
 // => { amount: 1 }
 ```
 
-## Initial Context
+## Начальный контекст
 
-The initial context is specified on the `context` property of the `Machine`:
+Начальный контекст указывается в свойстве `context` автомата:
 
 ```js
 const counterMachine = createMachine({
@@ -82,18 +83,18 @@ const counterMachine = createMachine({
     count: 0,
     message: 'Currently empty',
     user: {
-      name: 'David'
+      name: 'David',
     },
-    allowedToIncrement: true
+    allowedToIncrement: true,
     // ... etc.
   },
   states: {
     // ...
-  }
+  },
 });
 ```
 
-For dynamic `context` (that is, `context` whose initial value is retrieved or provided externally), you can use a machine factory function that creates the machine with the provided context values (implementation may vary):
+Для динамического контекста (то есть контекста, начальное значение которого задается извне) вы можете использовать фабричную функцию, которая создает автомат с предоставленными значениями контекста, например:
 
 ```js
 const createCounterMachine = (count, time) => {
@@ -102,8 +103,8 @@ const createCounterMachine = (count, time) => {
     // values provided from function arguments
     context: {
       count,
-      time
-    }
+      time,
+    },
     // ...
   });
 };
@@ -111,7 +112,7 @@ const createCounterMachine = (count, time) => {
 const counterMachine = createCounterMachine(42, Date.now());
 ```
 
-Or for existing machines, `machine.withContext(...)` should be used:
+Для существующих автоматов следует использовать `machine.withContext(...)`:
 
 ```js
 const counterMachine = createMachine({
@@ -121,27 +122,29 @@ const counterMachine = createMachine({
 // retrieved dynamically
 const someContext = { count: 42, time: Date.now() };
 
-const dynamicCounterMachine = counterMachine.withContext(someContext);
+const dynamicCounterMachine = counterMachine.withContext(
+  someContext
+);
 ```
 
-The initial context of a machine can be retrieved from its initial state:
+Исходный контекст машины можно получить из ее начального состояния:
 
 ```js
 dynamicCounterMachine.initialState.context;
 // => { count: 42, time: 1543687816981 }
 ```
 
-This is preferred to accessing `machine.context` directly, since the initial state is computed with initial `assign(...)` actions and transient transitions, if any.
+Этот способ предпочтительнее прямого доступа к `machine.context`, так как начальное состояние вычисляется с помощью начальных действий `assign(...)` и проходных переходов, если таковые имеются.
 
-## Assign Action
+## Действие assign()
 
-The `assign()` action is used to update the machine's `context`. It takes the context "assigner", which represents how values in the current context should be assigned.
+Действие `assign()` используется для обновления контекста автомата. Оно принимает контекст `assigner`, который указывает, как должны быть присвоены значения в текущем контексте.
 
-| Argument   | Type               | Description                                                                                |
-| ---------- | ------------------ | ------------------------------------------------------------------------------------------ |
-| `assigner` | object or function | The object assigner or function assigner which assigns values to the `context` (see below) |
+| Параметр   | Тип                  | Описание                                                   |
+| ---------- | -------------------- | ---------------------------------------------------------- |
+| `assigner` | object<br />function | Объект или функция, которые присваивают значения контексту |
 
-The "assigner" can be an object (recommended):
+`assigner` может быть объектом (рекомендовано):
 
 ```js
 import { createMachine, assign } from 'xstate';
@@ -158,7 +161,7 @@ import { createMachine, assign } from 'xstate';
 // ...
 ```
 
-Or it can be a function that returns the updated state:
+Или функция, которая возвращает обновленное состояние:
 
 ```js
 // example: context assigner
@@ -175,13 +178,13 @@ Or it can be a function that returns the updated state:
 // ...
 ```
 
-Both the property assigner and context assigner function signatures above are given 3 arguments: the `context`, `event`, and `meta`:
+Приведенная выше функция принимает три параметра: `context`, `event` и `meta`
 
-| Argument                     | Type        | Description                                         |
-| ---------------------------- | ----------- | --------------------------------------------------- |
-| `context`                    | TContext    | The current context (extended state) of the machine |
-| `event`                      | EventObject | The event that triggered the `assign` action        |
-| `meta` <Badge text="4.7+" /> | AssignMeta  | an object with meta data (see below)                |
+| Параметр  | Тип         | Описание                                          |
+| --------- | ----------- | ------------------------------------------------- |
+| `context` | TContext    | Текущий контекст (расширенное состояние) автомата |
+| `event`   | EventObject | Событие, вызвавшее действие `assign`              |
+| `meta`    | AssignMeta  | объект с мета-данными, _начиная с версии 4.7+_    |
 
 The `meta` object contains:
 
@@ -208,18 +211,26 @@ const counterMachine = createMachine({
       on: {
         INC_TWICE: {
           actions: [
-            (context) => console.log(`Before: ${context.count}`),
-            assign({ count: (context) => context.count + 1 }), // count === 1
-            assign({ count: (context) => context.count + 1 }), // count === 2
-            (context) => console.log(`After: ${context.count}`)
-          ]
-        }
-      }
-    }
-  }
+            (context) =>
+              console.log(`Before: ${context.count}`),
+            assign({
+              count: (context) => context.count + 1,
+            }), // count === 1
+            assign({
+              count: (context) => context.count + 1,
+            }), // count === 2
+            (context) =>
+              console.log(`After: ${context.count}`),
+          ],
+        },
+      },
+    },
+  },
 });
 
-interpret(counterMachine).start().send({ type: 'INC_TWICE' });
+interpret(counterMachine)
+  .start()
+  .send({ type: 'INC_TWICE' });
 // => "Before: 2"
 // => "After: 2"
 ```
@@ -240,21 +251,27 @@ const counterMachine = createMachine({
       on: {
         INC_TWICE: {
           actions: [
-            (context) => console.log(`Before: ${context.prevCount}`),
+            (context) =>
+              console.log(`Before: ${context.prevCount}`),
             assign({
               count: (context) => context.count + 1,
-              prevCount: (context) => context.count
+              prevCount: (context) => context.count,
             }), // count === 1, prevCount === 0
-            assign({ count: (context) => context.count + 1 }), // count === 2
-            (context) => console.log(`After: ${context.count}`)
-          ]
-        }
-      }
-    }
-  }
+            assign({
+              count: (context) => context.count + 1,
+            }), // count === 2
+            (context) =>
+              console.log(`After: ${context.count}`),
+          ],
+        },
+      },
+    },
+  },
 });
 
-interpret(counterMachine).start().send({ type: 'INC_TWICE' });
+interpret(counterMachine)
+  .start()
+  .send({ type: 'INC_TWICE' });
 // => "Before: 0"
 // => "After: 2"
 ```
@@ -337,8 +354,8 @@ const machine = createMachine<CounterContext>({
   // ...
   context: {
     count: 0,
-    user: undefined
-  }
+    user: undefined,
+  },
   // ...
 });
 ```
@@ -348,12 +365,12 @@ When applicable, you can also use `typeof ...` as a shorthand:
 ```ts
 const context = {
   count: 0,
-  user: { name: '' }
+  user: { name: '' },
 };
 
 const machine = createMachine<typeof context>({
   // ...
-  context
+  context,
   // ...
 });
 ```
@@ -398,7 +415,7 @@ on: {
       count: (context) => {
         // context: { count: number }
         return context.count + 1;
-      }
+      },
     });
   }
 }
@@ -414,9 +431,9 @@ const machine = createMachine({
   // ...
   context: {
     count: 0,
-    user: undefined
+    user: undefined,
     // ...
-  }
+  },
 });
 ```
 
@@ -429,9 +446,9 @@ const createSomeMachine = (count, user) => {
     // Provided from arguments; your implementation may vary
     context: {
       count,
-      user
+      user,
       // ...
-    }
+    },
   });
 };
 ```
@@ -444,16 +461,16 @@ const machine = createMachine({
   // Provided from arguments; your implementation may vary
   context: {
     count: 0,
-    user: undefined
+    user: undefined,
     // ...
-  }
+  },
 });
 
 const myMachine = machine.withContext({
   count: 10,
   user: {
-    name: 'David'
-  }
+    name: 'David',
+  },
 });
 ```
 
@@ -464,17 +481,17 @@ const machine = createMachine({
   // ...
   context: {
     count: 0,
-    user: undefined
+    user: undefined,
     // ...
   },
   // ...
   on: {
     INCREMENT: {
       actions: assign({
-        count: (context, event) => context.count + 1
-      })
-    }
-  }
+        count: (context, event) => context.count + 1,
+      }),
+    },
+  },
 });
 ```
 

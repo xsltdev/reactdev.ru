@@ -156,7 +156,9 @@ const searchMachine = createMachine(
 );
 ```
 
-## Custom Guards <Badge text="4.4+"/>
+## Кастомизированные защитные функции
+
+_Начиная с версии 4.4+_
 
 Иногда, предпочтительнее сериализовать в JSON не только состояние переходов, но и логику защитных функций, определив её как объект с соответствующими данными:
 
@@ -195,13 +197,13 @@ const searchMachine = createMachine(
 );
 ```
 
-## Multiple Guards
+## Несколько защитных функций
 
-If you want to have a single event transition to different states in certain situations you can supply an array of conditional transitions. Each transition will be tested in order, and the first transition whose `cond` guard evaluates to `true` will be taken.
+Если вы хотите, чтобы одно событие переходило в разные состояния в определенных ситуациях, вы можете предоставить массив условных переходов. Каждый переход будет проверяться по порядку, и будет выполнен первый переход, для которого защитная функция `cond` вернет `true`.
 
-For example, you can model a door that listens for an `OPEN` event, goes to the `'opened'` state if you are an admin, or goes to the `'closed.error'` state if `alert`-ing is true, or goes to the `'closed.idle'` state otherwise.
+Например, вы можете смоделировать дверь, которая прослушивает событие `OPEN`, переходит в состояние `'opened'`, если вы администратор, или переходит в состояние `'closed.error'`, если значение `alert` истинно, или переходит в состояние `'closed.idle'` в противном случае.
 
-```js hl_lines="25-27"
+```js hl_lines="30-32"
 import {
   createMachine,
   actions,
@@ -279,19 +281,21 @@ doorService.send({ type: 'OPEN' });
 // (since context.isAdmin === true)
 ```
 
-<iframe src="https://stately.ai/viz/embed/?gist=8526f72c3041b38f7d7ba808c812df06"></iframe>
+---
 
-::: warning
-The `cond` function must always be a **pure function** that only references the `context` and `event` arguments.
-:::
+<iframe src="https://stately.ai/viz/embed/?gist=8526f72c3041b38f7d7ba808c812df06" width="100%" height="400"></iframe>
 
-::: tip
-Do _not_ overuse guard conditions. If something can be represented discretely as two or more separate events instead of multiple `conds` on a single event, it is preferable to avoid `cond` and use multiple types of events instead.
-:::
+!!!warning "Внимание"
 
-## "In State" Guards
+    Функция `cond` всегда должна быть **чистой функцией**, которая ссылается только на параметры контекста `context` и события `event`.
 
-The `in` property takes a state ID as an argument and returns `true` if and only if that state node is active in the current state. For example, we can add a guard to the traffic light machine:
+!!!tip "Подсказка"
+
+    Не злоупотребляйте защитными условиями. Если что-то может быть представлено дискретно как два или более отдельных события вместо нескольких `conds` для одного события, предпочтительнее избегать `cond` и вместо этого использовать несколько типов событий.
+
+## Защитная функция `in`
+
+Свойство `in` принимает идентификатор состояния в качестве аргумента и возвращает `true` тогда и только тогда, когда этот узел состояния активен в текущем состоянии. Например, мы можем добавить защитную функцию к светофору:
 
 ```js hl_lines="24"
 const lightMachine = createMachine({
@@ -334,8 +338,8 @@ const lightMachine = createMachine({
 });
 ```
 
-When an `in`-state guard is present with other `cond` guards in the same transition, _all_ guards must evaluate to `true` for the transition to be taken.
+Когда защитная функция `in` присутствует с другими защитными функциями `cond` в том же переходе, все защитные функции должны вернуть `true`, чтобы переход был выполнен.
 
-::: tip
-Using "in state" guards is usually a sign that the machine can be refactored in a way that makes their usage unnecessary. Prefer avoiding "in state" guards when possible.
-:::
+!!!tip "Подсказка"
+
+    Использование защитных функций `in` обычно является признаком того, что автомат можно реорганизовать таким образом, чтобы в их использовании не было необходимости. По возможности избегайте защитных функций `in`.
