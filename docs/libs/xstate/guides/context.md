@@ -186,20 +186,20 @@ import { createMachine, assign } from 'xstate';
 | `event`   | EventObject | Событие, вызвавшее действие `assign`              |
 | `meta`    | AssignMeta  | объект с мета-данными, _начиная с версии 4.7+_    |
 
-The `meta` object contains:
+Объект мета-данных содержит:
 
-- `state` - the current state in a normal transition (`undefined` for the initial state transition)
-- `action` - the assign action
+- `state` - текущее состояние при нормальном переходе (`undefined` для перехода начального состояния)
+- `action` - связанное действие `assign`
 
-::: warning
-The `assign(...)` function is an **action creator**; it is a pure function that only returns an action object and does _not_ imperatively make assignments to the context.
-:::
+!!!warning "Внимание"
 
-## Action Order
+    Функция `assign(...)` является **создателем действия**; это чистая функция, которая возвращает только объект действия и *не делает* обязательных присваиваний контексту.
 
-Custom actions are always executed with regard to the _next state_ in the transition. When a state transition has `assign(...)` actions, those actions are always batched and computed _first_, to determine the next state. This is because a state is a combination of the finite state and the extended state (context).
+## Порядок действий
 
-For example, in this counter machine, the custom actions will not work as expected:
+Пользовательские действия всегда выполняются в отношении _следующего состояния_ в переходе. Когда переход состояния имеет действия `assign(...)`, эти действия всегда группируются и вычисляются _первыми_, чтобы определить следующее состояние. Так происходит потому, что состояние - это комбинация конечного состояния и расширенного состояния (контекста).
+
+Например, на этом счетчике пользовательские действия не будут работать должным образом:
 
 ```js
 const counterMachine = createMachine({
@@ -235,11 +235,11 @@ interpret(counterMachine)
 // => "After: 2"
 ```
 
-This is because both `assign(...)` actions are batched in order and executed first (in the microstep), so the next state `context` is `{ count: 2 }`, which is passed to both custom actions. Another way of thinking about this transition is reading it like:
+Это связано с тем, что оба действия `assign(...)` группируются по порядку и выполняются первыми (на микрошаге), поэтому следующим `context` состояния является `{count: 2}`, который передается обоим настраиваемым действиям. Другой способ думать об этом переходе - читать его так:
 
-> When in the `active` state and the `INC_TWICE` event occurs, the next state is the `active` state with `context.count` updated, and _then_ these custom actions are executed on that state.
+> Когда в состоянии `active` происходит событие `INC_TWICE`, следующее состояние - это состояние `active` с обновленным `context.count`, а затем _эти_ настраиваемые действия выполняются в этом состоянии.
 
-A good way to refactor this to get the desired result is modeling the `context` with explicit _previous_ values, if those are needed:
+Хороший способ рефакторинга этого для получения желаемого результата - моделирование `context` с явными _предыдущими_ значениями, если они необходимы:
 
 ```js
 const counterMachine = createMachine({
@@ -276,18 +276,18 @@ interpret(counterMachine)
 // => "After: 2"
 ```
 
-The benefits of this are:
+Преимущества от этого:
 
-1. The extended state (context) is modeled more explicitly
-2. There are no implicit intermediate states, preventing hard-to-catch bugs
-3. The action order is more independent (the "Before" log can even go after the "After" log!)
-4. Facilitates testing and examining the state
+1. Расширенное состояние (контекст) моделируется более явно
+2. Отсутствуют неявные промежуточные состояния, предотвращающие появление трудноуловимых ошибок.
+3. Порядок действий более независим (Логирование «До» может идти даже после логирования «После»!)
+4. Облегчает тестирование и изучение состояния
 
-## Notes
+## Примечания
 
-- 🚫 Never mutate the machine's `context` externally. Everything happens for a reason, and every context change should happen explicitly due to an event.
-- Prefer the object syntax of `assign({ ... })`. This makes it possible for future analysis tools to predict _how_ certain properties can change declaratively.
-- Assignments can be stacked, and will run sequentially:
+- 🚫 Никогда не изменяйте контекст `context` автомата извне. У всего есть причина, и каждое изменение контекста должно происходить явно из-за события.
+- Предпочтителен синтаксис объекта `assign({...})`. Это позволяет будущим инструментам анализа предсказывать, _как_ определенные свойства могут измениться декларативно.
+- Задания `assign` можно складывать, и они будут выполняться последовательно:
 
 ```js
 // ...
@@ -298,9 +298,9 @@ The benefits of this are:
 // ...
 ```
 
-- Just like with `actions`, it's best to represent `assign()` actions as strings or functions, and then reference them in the machine options:
+- Как и в случае с `actions`, лучше всего представлять действия `assign()` в виде строк или функций, а затем ссылаться на них в параметрах автомата:
 
-```js {5}
+```js hl_lines="6"
 const countMachine = createMachine({
   initial: 'start',
   context: { count: 0 }
@@ -317,9 +317,9 @@ const countMachine = createMachine({
 });
 ```
 
-Or as named functions (same result as above):
+Или через именованные функции:
 
-```js {9}
+```js hl_lines="9"
 const increment = assign({ count: context => context.count + 1 });
 const decrement = assign({ count: context => context.count - 1 });
 
@@ -335,12 +335,12 @@ const countMachine = createMachine({
 });
 ```
 
-- Ideally, the `context` should be representable as a plain JavaScript object; i.e., it should be serializable as JSON.
-- Since `assign()` actions are _raised_, the context is updated before other actions are executed. This means that other actions within the same step will get the _updated_ `context` rather than what it was before the `assign()` action was executed. You shouldn't rely on action order for your states, but keep this in mind. See [action order](#action-order) for more details.
+- В идеале `context` должен быть представлен как простой объект JavaScript, т. е. он должен быть сериализуемым как JSON.
+- Поскольку вызываются действия `assign()`, контекст обновляется перед выполнением других действий. Это означает, что другие действия на том же шаге получат обновленный контекст, а не тот, который был до выполнения действия `assign()`. Вы не должны полагаться на порядок действий для своих состояний, но имейте это в виду.
 
 ## TypeScript
 
-For proper type inference, add the context type as the first type parameter to `createMachine<TContext, ...>`:
+Для правильного вывода типа, добавьте тип контекста в качестве первого параметра типа в `createMachine<TContext, ...>`:
 
 ```ts
 interface CounterContext {
@@ -360,7 +360,7 @@ const machine = createMachine<CounterContext>({
 });
 ```
 
-When applicable, you can also use `typeof ...` as a shorthand:
+Если возможно, вы также можете использовать `typeof ...` как сокращение:
 
 ```ts
 const context = {
@@ -375,7 +375,7 @@ const machine = createMachine<typeof context>({
 });
 ```
 
-In most cases, the types for `context` and `event` in `assign(...)` actions will be automatically inferred from the type parameters passed into `createMachine<TContext, TEvent>`:
+В большинстве случаев типы контекста `context` и события `event` в действиях `assign(...)` будут автоматически выведены из параметров типа, переданных в `createMachine<TContext, TEvent>`:
 
 ```ts
 interface CounterContext {
@@ -404,9 +404,9 @@ const machine = createMachine<CounterContext>({
 });
 ```
 
-However, TypeScript inference isn't perfect, so the responsible thing to do is to add the context and event as generics into `assign<Context, Event>(...)`:
+Однако вывод TypeScript не идеален, поэтому можно добавить контекст и событие в качестве обобщений в `assign<Context, Event>(...)`:
 
-```ts {3}
+```ts hl_lines="3"
 // ...
 on: {
   INCREMENT: {
@@ -422,9 +422,9 @@ on: {
 // ...
 ```
 
-## Quick Reference
+## Краткий справочник
 
-**Set initial context**
+**Установка начального контекста**
 
 ```js
 const machine = createMachine({
@@ -437,7 +437,7 @@ const machine = createMachine({
 });
 ```
 
-**Set dynamic initial context**
+**Установка динамического начального контекста**
 
 ```js
 const createSomeMachine = (count, user) => {
@@ -453,7 +453,7 @@ const createSomeMachine = (count, user) => {
 };
 ```
 
-**Set custom initial context**
+**Установка пользовательского контекста автомату**
 
 ```js
 const machine = createMachine({
@@ -474,7 +474,7 @@ const myMachine = machine.withContext({
 });
 ```
 
-**Assign to context**
+**Связывание контекста**
 
 ```js
 const machine = createMachine({
@@ -495,7 +495,7 @@ const machine = createMachine({
 });
 ```
 
-**Assignment (static)**
+**Статичное связывание**
 
 ```js
 // ...
@@ -505,7 +505,7 @@ actions: assign({
 // ...
 ```
 
-**Assignment (property)**
+**Связывание через функцию**
 
 ```js
 // ...
@@ -517,7 +517,7 @@ actions: assign({
 // ...
 ```
 
-**Assignment (context)**
+**Связывание через контекст**
 
 ```js
 // ...
@@ -531,7 +531,7 @@ actions: assign((context, event) => {
 // ...
 ```
 
-**Assignment (multiple)**
+**Множественное связывание**
 
 ```js
 // ...

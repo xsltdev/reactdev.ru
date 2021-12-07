@@ -1,44 +1,44 @@
-# Models
+# Модели
 
-In XState, you can model a machine's `context` and `events` externally by using `createModel(...)`. This provides a convenient way to strongly type `context` and `events`, as well as helpers for event creation, assignment and other implementation details in the future.
+В XState вы можете моделировать контекст `context` и события `event` автомата извне, используя `createModel(...)`. Это обеспечивает удобный способ строгого ввода контекста и событий, а также помощников для создания, назначения событий и других деталей реализации в будущем.
 
-Using `createModel(...)` is _completely optional_, and is meant to improve the developer experience. The main reasons for using it are:
+Использование `createModel(...)` _совершенно необязательно_ и предназначено для улучшения взаимодействия с разработчиками. Основные причины его использования:
 
-- Separating and organizing `context` and `events` in a strongly-typed way
-- Preventing typing issues with `assign(...)`
-- Specifying event creators for easier and safer event creation
-- Potentially sharing the model with other machines
-- Future developer experience improvements, such as specifying actions, guards, etc.
+- Разделение и организация контекста и событий строго типизированным способом
+- Предотвращение проблем с вводом текста с помощью `assign(...)`
+- Указание создателей событий для более простого и безопасного создания событий
+- Возможность совместного использования модели с другими машинами
+- Будущие улучшения взаимодействия с разработчиками, такие как определение действий, защитных функций и т. д.
 
 ## `createModel(...)`
 
-The `createModel(...)` function takes
+Функция `createModel(...)` принимает:
 
-| Argument              | Type   | Description                                 |
-| --------------------- | ------ | ------------------------------------------- |
-| `initialContext`      | object | The initial `context` value                 |
-| `creators` (optional) | object | An object containing various event creators |
+| Параметр         | Тип    | Описание                                       |
+| ---------------- | ------ | ---------------------------------------------- |
+| `initialContext` | object | Начальное значение контекста                   |
+| `creators?`      | object | Объект, содержащий различные создатели событий |
 
-The `creators` object includes the following properties:
+Объект `creators` содержит свойства:
 
-| Argument | Type   | Description                         |
-| -------- | ------ | ----------------------------------- |
-| `events` | object | An object containing event creators |
+| Свойство | Тип    | Описание                             |
+| -------- | ------ | ------------------------------------ |
+| `events` | object | Объект, содержащий создатели событий |
 
-The keys of the `creators.events` object are event types, and the values are functions that accept any number of arguments and return the event payload.
+Ключи объекта `creators.events` - это типы событий, а значения - это функции, которые принимают любое количество аргументов и возвращают данные события.
 
-## Modeling context
+## Моделирование контекста
 
-Since the model defines the machine's `context`, the model can be used within the machine definition to set its initial `context` with `model.initialContext` and to update the machine's `context` with `model.assign`.
+Поскольку модель определяет контекст автомата, модель можно использовать для определении автомата, чтобы установить ее начальный контекст с помощью `model.initialContext` и обновить контекст автомата с помощью `model.assign`.
 
-The `model.assign` function is typed to the shape of the model's `context`, making it a convenient and type-safe replacement for the `assign` action.
+Функция `model.assign` типизирована в соответствии с формой контекста модели, что делает ее удобной и надежной заменой действия `assign`.
 
 ```js
 import { createModel } from 'xstate/lib/model';
 
 const userModel = createModel({
   name: 'Someone',
-  age: 0
+  age: 0,
 });
 
 // ...
@@ -46,16 +46,16 @@ const userModel = createModel({
 const machine = userModel.createMachine({
   context: userModel.initialContext,
   // ...
-  entry: userModel.assign({ name: '' })
+  entry: userModel.assign({ name: '' }),
 });
 ```
 
-## Modeling events
+## Моделирование событий
 
-Modeling machine events in a model gives two benefits:
+Моделирование событий автомата в модели дает два преимущества:
 
-- Events can be created by calling `model.events.eventName(...)`
-- Provides type information to the machine definition, providing event-specific type safety for action definitions
+- События можно создавать, вызывая `model.events.eventName(...)`
+- Предоставляет информацию о типе для определения автомата, обеспечивая безопасность типов для определений действий
 
 ```ts
 import { createModel } from 'xstate/lib/model';
@@ -64,15 +64,15 @@ const userModel = createModel(
   // Initial context
   {
     name: 'David',
-    age: 30
+    age: 30,
   },
   {
     // Event creators
     events: {
       updateName: (value) => ({ value }),
       updateAge: (value) => ({ value }),
-      anotherEvent: () => ({}) // no payload
-    }
+      anotherEvent: () => ({}), // no payload
+    },
   }
 );
 
@@ -85,22 +85,22 @@ const machine = userModel.createMachine(
         on: {
           updateName: {
             actions: userModel.assign({
-              name: (_, event) => event.value
-            })
+              name: (_, event) => event.value,
+            }),
           },
           updateAge: {
-            actions: 'assignAge'
-          }
-        }
-      }
-    }
+            actions: 'assignAge',
+          },
+        },
+      },
+    },
   },
   {
     actions: {
       assignAge: userModel.assign({
-        age: (_, event) => event.value // inferred
-      })
-    }
+        age: (_, event) => event.value, // inferred
+      }),
+    },
   }
 );
 
@@ -117,10 +117,10 @@ const nextState = machine.transition(
 
 ## TypeScript
 
-The `createModel(...)` function infers the following types:
+Функция `createModel(...)` определяет следующие типы:
 
-- `context` is inferred from the first argument in `createModel(initialContext, creators)`
-- `events` is inferred from `creators.events` in `createModel(initialContext, creators)`
+- `context` выводится из первого аргумента в `createModel(initialContext, creators)`
+- `event` выводятся из `creators.events` в `createModel(initialContext, creators)`
 
 ```ts
 import { createModel } from 'xstate/lib/model';
@@ -129,14 +129,14 @@ const userModel = createModel(
   {
     name: 'David', // inferred as `string`
     age: 30, // inferred as `number`
-    friends: [] as string[] // explicit type
+    friends: [] as string[], // explicit type
   },
   {
     events: {
       updateName: (value: string) => ({ value }),
       updateAge: (value: number) => ({ value }),
-      anotherEvent: () => ({}) // no payload
-    }
+      anotherEvent: () => ({}), // no payload
+    },
   }
 );
 
@@ -153,11 +153,11 @@ const userModel = createModel(
 // | { type: 'anotherEvent'; }
 ```
 
-### Creating a machine from a model
+### Создание автомата из модели
 
-Instead of specifying the type of `context` and `event` explicitly as type parameters in `createMachine<TContext, TEvent>(...)`, the `model.createMachine(...)` method should be used:
+Вместо того, чтобы явно указывать тип контекста и события как параметры типа в `createMachine<TContext, TEvent>(...)`, следует использовать метод `model.createMachine(...)`:
 
-```ts {0}
+```ts hl_lines="1"
 const machine = userModel.createMachine({
   context: userModel.initialContext,
   initial: 'active',
@@ -166,24 +166,24 @@ const machine = userModel.createMachine({
       on: {
         updateName: {
           actions: userModel.assign({
-            name: (_, event) => event.value // inferred
-          })
-        }
-      }
-    }
-  }
+            name: (_, event) => event.value, // inferred
+          }),
+        },
+      },
+    },
+  },
 });
 ```
 
-### Narrowing assign event types
+### Сужение типов события
 
-When an `assign()` action is referenced in `options.actions`, you can narrow the event type that the action accepts in the 2nd argument of `model.assign(assignments, eventType)`:
+Когда действие `assign()` упоминается в `options.actions`, вы можете сузить тип события, которое передается в действие вторым аргументом `model.assign(assignments, eventType)`:
 
 ```ts
 const assignAge = userModel.assign(
   {
     // The `event.type` here is restricted to "updateAge"
-    age: (_, event) => event.value // inferred as `number`
+    age: (_, event) => event.value, // inferred as `number`
   },
   'updateAge' // Restricts the `event` allowed by the "assignAge" action
 );
@@ -195,25 +195,25 @@ const machine = userModel.createMachine({
     active: {
       on: {
         updateAge: {
-          actions: assignAge
-        }
-      }
-    }
-  }
+          actions: assignAge,
+        },
+      },
+    },
+  },
 });
 ```
 
-::: warning
-Assign actions with narrowed event types _cannot_ be placed inside the `actions: {...}` property of machine options in `createMachine(configuration, options)`. This is because actions in `options.actions` should be assumed to potentially receive _any_ event, even if the machine configuration suggests otherwise.
-:::
+!!!warning "Внимание"
 
-### Extracting types from model
+    Назначенные действия с суженными типами событий _нельзя_ помещать в свойство `actions: {...}` параметров автомата в `createMachine(configuration, options)`. Это связано с тем, что действия в `options.actions` должны предполагать потенциально получение _любого_ события, даже если конфигурация машины предполагает иное.
 
-_Since 4.22.1_
+### Извлечение типов из модели
 
-You can extract `context` and `event` types from a model using the `ContextFrom<T>` and `EventFrom<T>` types:
+_Начиная с версии 4.22.1_
 
-```ts {1,15-16}
+Вы можете извлечь типы контекста и событий из модели, используя типы `ContextFrom<T>` и `EventFrom<T>`:
+
+```ts hl_lines="1 15-16"
 import { ContextFrom, EventFrom } from 'xstate';
 import { createModel } from 'xstate/lib/model';
 
@@ -224,7 +224,7 @@ const someModel = createModel(
   {
     events: {
       /* ... */
-    }
+    },
   }
 );
 

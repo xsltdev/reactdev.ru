@@ -1,10 +1,10 @@
-# Activities
+# Деятельность
 
-An activity is an action that occurs over time, and can be started and stopped. According to Harel's original statecharts paper:
+**Деятельность** (_activity_) - это действие, которое происходит с течением времени, и его можно запускать и останавливать. Согласно оригинальной бумаге с диаграммами состояний Харела:
 
-> An activity always takes a nonzero amount of time, like beeping, displaying, or executing lengthy computations.
+> Деятельности всегда занимают ненулевое количество времени, например звуковой сигнал, отображение или выполнение длительных вычислений.
 
-For example, a toggle that "beeps" when active can be represented by a `'beeping'` activity:
+Например, переключатель, который "подает звуковой сигнал", когда он активен, может быть представлен деятельностью `'beeping'`:
 
 ```js
 const toggleMachine = createMachine(
@@ -14,36 +14,39 @@ const toggleMachine = createMachine(
     states: {
       inactive: {
         on: {
-          TOGGLE: { target: 'active' }
-        }
+          TOGGLE: { target: 'active' },
+        },
       },
       active: {
         // The 'beeping' activity will take place as long as
         // the machine is in the 'active' state
         activities: ['beeping'],
         on: {
-          TOGGLE: { target: 'inactive' }
-        }
-      }
-    }
+          TOGGLE: { target: 'inactive' },
+        },
+      },
+    },
   },
   {
     activities: {
       beeping: () => {
         // Start the beeping activity
-        const interval = setInterval(() => console.log('BEEP!'), 1000);
+        const interval = setInterval(
+          () => console.log('BEEP!'),
+          1000
+        );
 
         // Return a function that stops the beeping activity
         return () => clearInterval(interval);
-      }
-    }
+      },
+    },
   }
 );
 ```
 
-In XState, activities are specified on the `activities` property of a state node. When a state node is entered, an interpreter should **start** its activities, and when it is exited, it should **stop** its activities.
+В XState деятельности указываются в свойстве `activity` узла состояния. При входе в узел состояния интерпретатор должен **начать** свои деятельности, а при выходе из него он должен **прекратить** свои деятельности.
 
-To determine which activities are currently active, the `State` has an `activities` property, which is a mapping of activity names to `true` if the activity is started (active), and `false` if it is stopped.
+Чтобы определить, какие деятельности в настоящее время активны, у `State` есть свойство `activities`, которое является отображением имен деятельностей в `true`, если деятельность запущена (активна), и `false`, если она остановлена.
 
 ```js
 const lightMachine = createMachine({
@@ -52,13 +55,13 @@ const lightMachine = createMachine({
   states: {
     green: {
       on: {
-        TIMER: { target: 'yellow' }
-      }
+        TIMER: { target: 'yellow' },
+      },
     },
     yellow: {
       on: {
-        TIMER: { target: 'red' }
-      }
+        TIMER: { target: 'red' },
+      },
     },
     red: {
       initial: 'walk',
@@ -66,13 +69,13 @@ const lightMachine = createMachine({
       // the 'light.red' state, and stopped upon exiting it.
       activities: ['activateCrosswalkLight'],
       on: {
-        TIMER: { target: 'green' }
+        TIMER: { target: 'green' },
       },
       states: {
         walk: {
           on: {
-            PED_WAIT: { target: 'wait' }
-          }
+            PED_WAIT: { target: 'wait' },
+          },
         },
         wait: {
           // the 'blinkCrosswalkLight' activity is started upon entering
@@ -80,20 +83,22 @@ const lightMachine = createMachine({
           // or its parent state.
           activities: ['blinkCrosswalkLight'],
           on: {
-            PED_STOP: { target: 'stop' }
-          }
+            PED_STOP: { target: 'stop' },
+          },
         },
-        stop: {}
-      }
-    }
-  }
+        stop: {},
+      },
+    },
+  },
 });
 ```
 
-In the above machine configuration, the `'activateCrosswalkLight'` will start when the `'light.red'` state is entered. It will also execute a special `'xstate.start'` action, letting the [service](./interpretation.md) know that it should start the activity:
+В приведенной выше конфигурации автомата `activateCrosswalkLight` запускается при переходе в состояние «`light.red`». Он также выполнит специальное действие `xstate.start`, сообщая [сервису](interpretation.md), что она должна начать деятельность:
 
 ```js
-const redState = lightMachine.transition('yellow', { type: 'TIMER' });
+const redState = lightMachine.transition('yellow', {
+  type: 'TIMER',
+});
 
 redState.activities;
 // => {
@@ -107,10 +112,12 @@ redState.actions;
 // ]
 ```
 
-Transitioning within the same parent state will _not_ restart its activities, although it might start new activities:
+Переход в том же родительском состоянии _не_ приведет к перезапуску его деятельностей, хотя он может начать новые деятельности:
 
 ```js
-const redWaitState = lightMachine.transition(redState, { type: 'PED_WAIT' });
+const redWaitState = lightMachine.transition(redState, {
+  type: 'PED_WAIT',
+});
 
 redWaitState.activities;
 // => {
@@ -126,11 +133,11 @@ redWaitState.actions;
 // ]
 ```
 
-Leaving a state will stop its activities:
+При выходе из состояния его деятельность прекратится:
 
 ```js
 const redStopState = lightMachine.transition(redWaitState, {
-  type: 'PED_STOP'
+  type: 'PED_STOP',
 });
 
 redStopState.activities;
@@ -147,10 +154,12 @@ redStopState.actions;
 // ]
 ```
 
-And any stopped activities will be stopped only once:
+И любая остановленная деятельность будет остановлена ​​только один раз:
 
 ```js
-const greenState = lightMachine.transition(redStopState, { type: 'TIMER' });
+const greenState = lightMachine.transition(redStopState, {
+  type: 'TIMER',
+});
 
 green.activities;
 // No active activities
@@ -167,7 +176,7 @@ green.actions;
 // ]
 ```
 
-## Interpretation
+## Интерпретация
 
 In the machine options, the "start" and "stop" behavior of the activity can be defined in the `activities` property. This is done by:
 
@@ -202,26 +211,26 @@ const toggleMachine = createMachine(
     id: 'toggle',
     initial: 'inactive',
     context: {
-      interval: 1000 // beep every second
+      interval: 1000, // beep every second
     },
     states: {
       inactive: {
         on: {
-          TOGGLE: { target: 'active' }
-        }
+          TOGGLE: { target: 'active' },
+        },
       },
       active: {
         activities: ['beeping'],
         on: {
-          TOGGLE: { target: 'inactive' }
-        }
-      }
-    }
+          TOGGLE: { target: 'inactive' },
+        },
+      },
+    },
   },
   {
     activities: {
-      beeping: createBeepingActivity
-    }
+      beeping: createBeepingActivity,
+    },
   }
 );
 ```
@@ -263,12 +272,16 @@ import { State, actions } from 'xstate';
 const restoredState = State.create(somePersistedStateJSON);
 
 // Select activities to be restarted
-Object.keys(restoredState.activities).forEach((activityKey) => {
-  if (restoredState.activities[activityKey]) {
-    // Filter activities, and then add the start() action to the restored state
-    restoredState.actions.push(actions.start(activityKey));
+Object.keys(restoredState.activities).forEach(
+  (activityKey) => {
+    if (restoredState.activities[activityKey]) {
+      // Filter activities, and then add the start() action to the restored state
+      restoredState.actions.push(
+        actions.start(activityKey)
+      );
+    }
   }
-});
+);
 
 // This will start someService
 // with the activities restarted.
