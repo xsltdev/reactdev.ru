@@ -1,10 +1,10 @@
-# Деятельности
+# Активности
 
-**Деятельность** (_activity_) - это действие, которое происходит с течением времени, и его можно запускать и останавливать. Согласно оригинальной бумаге с диаграммами состояний Харела:
+**Активность** (_activity_) - это действие, которое происходит с течением времени, и его можно запускать и останавливать. Согласно оригинальной бумаге с диаграммами состояний Харела:
 
-> Деятельности всегда занимают ненулевое количество времени, например звуковой сигнал, отображение или выполнение длительных вычислений.
+> Активности всегда занимают ненулевое количество времени, например звуковой сигнал, отображение или выполнение длительных вычислений.
 
-Например, переключатель, который "подает звуковой сигнал", когда он активен, может быть представлен деятельностью `'beeping'`:
+Например, переключатель, который "подает звуковой сигнал", когда он активен, может быть представлен активностью `'beeping'`:
 
 ```js
 const toggleMachine = createMachine(
@@ -44,9 +44,9 @@ const toggleMachine = createMachine(
 );
 ```
 
-В XState деятельности указываются в свойстве `activity` узла состояния. При входе в узел состояния интерпретатор должен **начать** свои деятельности, а при выходе из него он должен **прекратить** свои деятельности.
+В XState активности указываются в свойстве `activity` узла состояния. При входе в узел состояния интерпретатор должен **начать** свои активности, а при выходе из него он должен **прекратить** свои активности.
 
-Чтобы определить, какие деятельности в настоящее время активны, у `State` есть свойство `activities`, которое является отображением имен деятельностей в `true`, если деятельность запущена (активна), и `false`, если она остановлена.
+Чтобы определить, какие активности в настоящее время работают, у `State` есть свойство `activities`, которое является отображением имен активностей в `true`, если активность запущена (активна), и `false`, если она остановлена.
 
 ```js
 const lightMachine = createMachine({
@@ -93,7 +93,7 @@ const lightMachine = createMachine({
 });
 ```
 
-В приведенной выше конфигурации автомата `activateCrosswalkLight` запускается при переходе в состояние «`light.red`». Он также выполнит специальное действие `xstate.start`, сообщая [сервису](interpretation.md), что она должна начать деятельность:
+В приведенной выше конфигурации автомата `activateCrosswalkLight` запускается при переходе в состояние «`light.red`». Он также выполнит специальное действие `xstate.start`, сообщая [службе](interpretation.md), что она должна начать активность:
 
 ```js
 const redState = lightMachine.transition('yellow', {
@@ -112,7 +112,7 @@ redState.actions;
 // ]
 ```
 
-Переход в том же родительском состоянии _не_ приведет к перезапуску его деятельностей, хотя он может начать новые деятельности:
+Переход в том же родительском состоянии _не_ приведет к перезапуску его активностей, хотя он может запустить новые активности:
 
 ```js
 const redWaitState = lightMachine.transition(redState, {
@@ -133,7 +133,7 @@ redWaitState.actions;
 // ]
 ```
 
-При выходе из состояния его деятельность прекратится:
+При выходе из состояния его активность прекратится:
 
 ```js
 const redStopState = lightMachine.transition(redWaitState, {
@@ -154,7 +154,7 @@ redStopState.actions;
 // ]
 ```
 
-И любая остановленная деятельность будет остановлена ​​только один раз:
+И любая остановленная активность будет остановлена только один раз:
 
 ```js
 const greenState = lightMachine.transition(redStopState, {
@@ -178,12 +178,12 @@ green.actions;
 
 ## Интерпретация
 
-In the machine options, the "start" and "stop" behavior of the activity can be defined in the `activities` property. This is done by:
+В параметрах автомата поведение `start` и `stop` активности, может быть определено в свойстве `activities`. Это делают:
 
-- Passing in a function that **starts** the activity (as a side-effect)
-- From that function, returning another function that **stops** the activity (also as a side-effect).
+- Передача функции, запускающей активность (как побочный эффект)
+- Из этой функции возвращается другая функция, которая останавливает активность (также как побочный эффект).
 
-For example, here's how a `'beeping'` activity that logs `'BEEP!'` to the console every `context.interval` would be implemented:
+Например, вот как "пищит" активность, которая пишет "`BEEP!`" в консоль каждые `context.interval` миллисекунд:
 
 ```js
 function createBeepingActivity(context, activity) {
@@ -197,13 +197,12 @@ function createBeepingActivity(context, activity) {
 }
 ```
 
-The activity creator is always given two arguments:
+Создателю активности всегда передается два аргумента:
 
-- the current `context`
-- the defined `activity`
-  - e.g., `{ type: 'beeping' }`
+- текущий контекст `context`
+- определенная активность `activity`, например `{ type: 'beeping' }`
 
-Then you would pass this into the machine options (second argument) under the `activities` property:
+Затем вы должны передать их в параметры автомата (второй аргумент) в свойстве `activities`:
 
 ```js
 const toggleMachine = createMachine(
@@ -235,7 +234,7 @@ const toggleMachine = createMachine(
 );
 ```
 
-Using XState's [interpreter](./interpretation.md), every time an action occurs to start an activity, it will call that activity creator to start the activity, and use the returned "stopper" (if it is returned) to stop the activity:
+Используя [интерпретатор](interpretation.md) XState, каждый раз, когда происходит действие для запуска активности, он вызывает этого создателя активности, чтобы запустить действие, и возвращает функцию-стопор (если она возвращается), чтобы остановить активность:
 
 ```js
 import { interpret } from 'xstate';
@@ -260,9 +259,9 @@ service.send({ type: 'TOGGLE' });
 // no more beeps!
 ```
 
-## Restarting Activities
+## Перезапуск активностей
 
-When [restoring a persisted state](./states.md#persisting-state), activities that were previously running are _not restarted_ by default. This is to prevent undesirable and/or unexpected behavior. However, activities can be manually started by adding `start(...)` actions to the persisted state before restarting a service:
+При [восстановлении постоянного состояния](states.md#persisting-state) ранее запущенные активности _не перезапускаются_ по умолчанию. Это сделано для предотвращения нежелательного или неожиданного поведения. Однако активности можно запустить вручную, добавив действия `start(...)` в постоянное состояние перед перезапуском службы:
 
 ```js
 import { State, actions } from 'xstate';
@@ -275,7 +274,8 @@ const restoredState = State.create(somePersistedStateJSON);
 Object.keys(restoredState.activities).forEach(
   (activityKey) => {
     if (restoredState.activities[activityKey]) {
-      // Filter activities, and then add the start() action to the restored state
+      // Filter activities,
+      // and then add the start() action to the restored state
       restoredState.actions.push(
         actions.start(activityKey)
       );

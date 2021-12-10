@@ -1,6 +1,4 @@
-# Invoking Services
-
-[:rocket: Quick Reference](#quick-reference)
+# Вызов служб
 
 Expressing the entire app's behavior in a single machine can quickly become complex and unwieldy. It is natural (and encouraged!) to use multiple machines that communicate with each other to express complex logic instead. This closely resembles the [Actor model](https://www.brianstorti.com/the-actor-model/), where each machine instance is considered an "actor" that can send and receive events (messages) to and from other "actors" (such as Promises or other machines) and react to them.
 
@@ -13,7 +11,7 @@ You can invoke:
 - [Observables](#invoking-observables), which can send events to the parent machine, as well as a signal when it is completed
 - [Machines](#invoking-machines), which can also send/receive events, and also notify the parent machine when it reaches its [final state](./final.md)
 
-## The `invoke` Property
+## Свойство `invoke`
 
 An invocation is defined in a state node's configuration with the `invoke` property, whose value is an object that contains:
 
@@ -40,7 +38,7 @@ Don't get the `onDone` property on a state confused with `invoke.onDone` - they 
 - The `onDone` property on a [state node](./statenodes.md) refers to the compound state node reaching a [final state](./final.md).
 - The `invoke.onDone` property refers to the invocation (`invoke.src`) being done.
 
-```js {5,13}
+```js hl_lines="5 13"
 // ...
 loading: {
   invoke: {
@@ -74,7 +72,9 @@ If the state where the invoked promise is active is exited before the promise se
 // This promise might resolve with, e.g.,
 // { name: 'David', location: 'Florida' }
 const fetchUser = (userId) =>
-  fetch(`url/to/user/${userId}`).then((response) => response.json());
+  fetch(`url/to/user/${userId}`).then((response) =>
+    response.json()
+  );
 
 const userMachine = createMachine({
   id: 'user',
@@ -82,13 +82,13 @@ const userMachine = createMachine({
   context: {
     userId: 42,
     user: undefined,
-    error: undefined
+    error: undefined,
   },
   states: {
     idle: {
       on: {
-        FETCH: { target: 'loading' }
-      }
+        FETCH: { target: 'loading' },
+      },
     },
     loading: {
       invoke: {
@@ -96,21 +96,25 @@ const userMachine = createMachine({
         src: (context, event) => fetchUser(context.userId),
         onDone: {
           target: 'success',
-          actions: assign({ user: (context, event) => event.data })
+          actions: assign({
+            user: (context, event) => event.data,
+          }),
         },
         onError: {
           target: 'failure',
-          actions: assign({ error: (context, event) => event.data })
-        }
-      }
+          actions: assign({
+            error: (context, event) => event.data,
+          }),
+        },
+      },
     },
     success: {},
     failure: {
       on: {
-        RETRY: { target: 'loading' }
-      }
-    }
-  }
+        RETRY: { target: 'loading' },
+      },
+    },
+  },
 });
 ```
 
@@ -238,17 +242,17 @@ const pingPongMachine = createMachine({
               callback('PONG');
             }
           });
-        }
+        },
       },
       entry: send({ type: 'PING' }, { to: 'ponger' }),
       on: {
-        PONG: { target: 'done' }
-      }
+        PONG: { target: 'done' },
+      },
     },
     done: {
-      type: 'final'
-    }
-  }
+      type: 'final',
+    },
+  },
 });
 
 interpret(pingPongMachine)
@@ -279,17 +283,17 @@ const intervalMachine = createMachine({
             map((value) => ({ type: 'COUNT', value })),
             take(5)
           ),
-        onDone: 'finished'
+        onDone: 'finished',
       },
       on: {
         COUNT: { actions: 'notifyCount' },
-        CANCEL: { target: 'finished' }
-      }
+        CANCEL: { target: 'finished' },
+      },
     },
     finished: {
-      type: 'final'
-    }
-  }
+      type: 'final',
+    },
+  },
 });
 ```
 
@@ -307,13 +311,13 @@ const mouseMachine = createMachine({
   id: 'mouse',
   // ...
   invoke: {
-    src: (context, event) => mouseMove$
+    src: (context, event) => mouseMove$,
   },
   on: {
     mousemove: {
       /* ... */
-    }
-  }
+    },
+  },
 });
 ```
 
@@ -329,7 +333,12 @@ Machines communicate hierarchically, and invoked machines can communicate:
 If the state where the machine is invoked is exited, the machine is stopped.
 
 ```js
-import { createMachine, interpret, send, sendParent } from 'xstate';
+import {
+  createMachine,
+  interpret,
+  send,
+  sendParent,
+} from 'xstate';
 
 // Invoked child machine
 const minuteMachine = createMachine({
@@ -338,11 +347,11 @@ const minuteMachine = createMachine({
   states: {
     active: {
       after: {
-        60000: { target: 'finished' }
-      }
+        60000: { target: 'finished' },
+      },
     },
-    finished: { type: 'final' }
-  }
+    finished: { type: 'final' },
+  },
 });
 
 const parentMachine = createMachine({
@@ -354,13 +363,13 @@ const parentMachine = createMachine({
         src: minuteMachine,
         // The onDone transition will be taken when the
         // minuteMachine has reached its top-level final state.
-        onDone: 'timesUp'
-      }
+        onDone: 'timesUp',
+      },
     },
     timesUp: {
-      type: 'final'
-    }
-  }
+      type: 'final',
+    },
+  },
 });
 
 const service = interpret(parentMachine)
@@ -379,8 +388,8 @@ Child machines can be invoked with `context` that is derived from the parent mac
 const timerMachine = createMachine({
   id: 'timer',
   context: {
-    duration: 1000 // default duration
-  }
+    duration: 1000, // default duration
+  },
   /* ... */
 });
 
@@ -388,7 +397,7 @@ const parentMachine = createMachine({
   id: 'parent',
   initial: 'active',
   context: {
-    customDuration: 3000
+    customDuration: 3000,
   },
   states: {
     active: {
@@ -397,11 +406,12 @@ const parentMachine = createMachine({
         src: timerMachine,
         // Deriving child context from parent context
         data: {
-          duration: (context, event) => context.customDuration
-        }
-      }
-    }
-  }
+          duration: (context, event) =>
+            context.customDuration,
+        },
+      },
+    },
+  },
 });
 ```
 
@@ -436,28 +446,28 @@ const secretMachine = createMachine({
   id: 'secret',
   initial: 'wait',
   context: {
-    secret: '42'
+    secret: '42',
   },
   states: {
     wait: {
       after: {
-        1000: { target: 'reveal' }
-      }
+        1000: { target: 'reveal' },
+      },
     },
     reveal: {
       type: 'final',
       data: {
-        secret: (context, event) => context.secret
-      }
-    }
-  }
+        secret: (context, event) => context.secret,
+      },
+    },
+  },
 });
 
 const parentMachine = createMachine({
   id: 'parent',
   initial: 'pending',
   context: {
-    revealedSecret: undefined
+    revealedSecret: undefined,
   },
   states: {
     pending: {
@@ -471,15 +481,15 @@ const parentMachine = createMachine({
               // event is:
               // { type: 'done.invoke.secret', data: { secret: '42' } }
               return event.data.secret;
-            }
-          })
-        }
-      }
+            },
+          }),
+        },
+      },
     },
     success: {
-      type: 'final'
-    }
-  }
+      type: 'final',
+    },
+  },
 });
 
 const service = interpret(parentMachine)
@@ -507,7 +517,12 @@ describing what is to be sent, e.g., `{ type: 'xstate.send', event: ... }`. An
 Here is an example of two machines, `pingMachine` and `pongMachine`, communicating with each other:
 
 ```js
-import { createMachine, interpret, send, sendParent } from 'xstate';
+import {
+  createMachine,
+  interpret,
+  send,
+  sendParent,
+} from 'xstate';
 
 // Parent machine
 const pingMachine = createMachine({
@@ -517,17 +532,20 @@ const pingMachine = createMachine({
     active: {
       invoke: {
         id: 'pong',
-        src: pongMachine
+        src: pongMachine,
       },
       // Sends 'PING' event to child machine with ID 'pong'
       entry: send({ type: 'PING' }, { to: 'pong' }),
       on: {
         PONG: {
-          actions: send({ type: 'PING' }, { to: 'pong', delay: 1000 })
-        }
-      }
-    }
-  }
+          actions: send(
+            { type: 'PING' },
+            { to: 'pong', delay: 1000 }
+          ),
+        },
+      },
+    },
+  },
 });
 
 // Invoked child machine
@@ -540,12 +558,12 @@ const pongMachine = createMachine({
         PING: {
           // Sends 'PONG' event to parent machine
           actions: sendParent('PONG', {
-            delay: 1000
-          })
-        }
-      }
-    }
-  }
+            delay: 1000,
+          }),
+        },
+      },
+    },
+  },
 });
 
 const service = interpret(pingMachine).start();
@@ -578,11 +596,11 @@ const authServerMachine = createMachine({
     waitingForCode: {
       on: {
         CODE: {
-          actions: respond('TOKEN', { delay: 1000 })
-        }
-      }
-    }
-  }
+          actions: respond('TOKEN', { delay: 1000 }),
+        },
+      },
+    },
+  },
 });
 
 const authClientMachine = createMachine({
@@ -591,23 +609,23 @@ const authClientMachine = createMachine({
   states: {
     idle: {
       on: {
-        AUTH: { target: 'authorizing' }
-      }
+        AUTH: { target: 'authorizing' },
+      },
     },
     authorizing: {
       invoke: {
         id: 'auth-server',
-        src: authServerMachine
+        src: authServerMachine,
       },
       entry: send({ type: 'CODE' }, { to: 'auth-server' }),
       on: {
-        TOKEN: { target: 'authorized' }
-      }
+        TOKEN: { target: 'authorized' },
+      },
     },
     authorized: {
-      type: 'final'
-    }
-  }
+      type: 'final',
+    },
+  },
 });
 ```
 
@@ -669,21 +687,21 @@ const machine = createMachine(
         invoke: {
           src: {
             type: 'search',
-            endpoint: 'example.com'
-          }
+            endpoint: 'example.com',
+          },
           // ...
-        }
+        },
         // ...
-      }
-    }
+      },
+    },
   },
   {
     services: {
       search: (context, event, { src }) => {
         console.log(src);
         // => { endpoint: 'example.com' }
-      }
-    }
+      },
+    },
   }
 );
 ```
@@ -705,8 +723,8 @@ const mockFetchUser = async (userId) => {
 
 const testUserMachine = userMachine.withConfig({
   services: {
-    getUser: (context, event) => mockFetchUser(context.id)
-  }
+    getUser: (context, event) => mockFetchUser(context.id),
+  },
 });
 
 describe('userMachine', () => {
@@ -716,7 +734,7 @@ describe('userMachine', () => {
         if (state.matches('success')) {
           assert.deepEqual(state.context.user, {
             name: 'Test',
-            location: 'Anywhere'
+            location: 'Anywhere',
           });
 
           done();
@@ -736,8 +754,8 @@ const machine = createMachine({
   // ...
   invoke: [
     { id: 'notifier', src: createNotifier },
-    { id: 'logger', src: createLogger }
-  ]
+    { id: 'logger', src: createLogger },
+  ],
   // ...
 });
 

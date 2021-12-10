@@ -97,7 +97,7 @@ sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-ori
 
 ### В Node.js или Vanilla JS
 
-Чтобы [интерпретировать](./interpretation.md) автомат и заставить его работать, нам нужно добавить интерпретатор. Этот код создает сервис:
+Чтобы [интерпретировать](./interpretation.md) автомат и заставить его работать, нам нужно добавить интерпретатор. Этот код создает службу:
 
 ```js
 import { createMachine, interpret } from 'xstate';
