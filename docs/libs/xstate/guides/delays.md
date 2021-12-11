@@ -1,10 +1,10 @@
-# Delayed events and transitions
+# Отложенные события и переходы
 
-Delays and timeouts can be handled declaratively with statecharts. To learn more, see the section in our [introduction to statecharts](./introduction-to-state-machines-and-statecharts.md#delayed-transitions).
+Задержки и таймауты можно декларативно обрабатывать с помощью диаграмм состояний.
 
-## Delayed transitions
+## Отложенные переходы
 
-Transitions can be taken automatically after a delay. This is represented in a state definition in the `after` property, which maps millisecond delays to their transitions:
+Переходы могут выполняться автоматически после задержки. Это настраивается в состоянии в свойстве `after`, которое задает миллисекундные задержки на переходы:
 
 ```js
 const lightDelayMachine = createMachine({
@@ -33,7 +33,7 @@ const lightDelayMachine = createMachine({
 });
 ```
 
-Delayed transitions can be specified in the same way that you specify them on the `on: ...` property. They can be explicit:
+Отложенные переходы можно указать так же, как вы указываете их в свойстве `on: ...` Они могут быть явными:
 
 ```js
 // ...
@@ -47,7 +47,7 @@ states: {
 // ...
 ```
 
-Delayed transitions can also be conditional with regard to a single delay value:
+Отложенные переходы также могут быть условными по отношению к единственному значению задержки:
 
 ```js
 // ...
@@ -64,7 +64,7 @@ states: {
 // ...
 ```
 
-Or delayed transitions can be conditional for multiple delays. The first selected delayed transition will be taken, which will prevent later transitions from being taken. In the following example, if the `'trafficIsLight'` condition is `true`, then the later `2000: 'yellow'` transition will not be taken:
+Или отложенные переходы могут быть обусловлены несколькими задержками. Будет выполнен первый выбранный отложенный переход, который предотвратит выполнение последующих переходов. В следующем примере, если условие `trafficIsLight` истинно, то более поздний переход `2000: 'yellow'` не будет выполняться:
 
 ```js
 // ...
@@ -72,14 +72,15 @@ states: {
   green: {
     after: {
       1000: { target: 'yellow', cond: 'trafficIsLight' },
-      2000: { target: 'yellow' } // always transition to 'yellow' after 2 seconds
+	  // always transition to 'yellow' after 2 seconds
+      2000: { target: 'yellow' }
     }
   }
 }
 // ...
 ```
 
-Conditional delayed transitions can also be specified as an array:
+Условные отложенные переходы также можно указать в виде массива:
 
 ```js
 // ...
@@ -98,9 +99,11 @@ states: {
 // ...
 ```
 
-### Delay expressions on transitions <Badge text="4.4+" />
+### Вычисляемые задержки на переходах
 
-Delayed transitions specified on the `after: { ... }` property can have dynamic delays, specified either by a string delay reference:
+_Начиная с версии 4.4+_
+
+Отложенные переходы, указанные в свойстве `after: {...}`, могут иметь динамические задержки, задаваемые строковой ссылкой на задержку:
 
 ```js
 const lightDelayMachine = createMachine(
@@ -137,7 +140,7 @@ const lightDelayMachine = createMachine(
 );
 ```
 
-Or directly by a function, just like conditional delayed transitions:
+Или напрямую функцией, как условные отложенные переходы:
 
 ```js
 // ...
@@ -154,7 +157,7 @@ green: {
 // ...
 ```
 
-However, prefer using string delay references, just like the first example, or in the `delay` property:
+Однако предпочтительнее использовать строковые ссылки на задержку, как в первом примере, или в свойстве задержки:
 
 ```js
 // ...
@@ -169,9 +172,9 @@ green: {
 // ...
 ```
 
-## Delayed events
+## Отложенные события
 
-If you just want to send an event after a delay, you can specify the `delay` as an option in the second argument of the `send(...)` action creator:
+Если вы просто хотите отправить событие после задержки, вы можете указать `delay` в качестве опции во втором аргументе создателя действия `send(...)`:
 
 ```js
 import { actions } from 'xstate';
@@ -184,7 +187,7 @@ const sendTimerAfter1Second = send(
 );
 ```
 
-You can also prevent those delayed events from being sent by canceling them. This is done with the `cancel(...)` action creator:
+Вы также можете предотвратить отправку этих отложенных событий, отменив их. Это делается с помощью создателя действия `cancel(...)`:
 
 ```js
 import { actions } from 'xstate';
@@ -199,7 +202,8 @@ const sendTimerAfter1Second = send(
   }
 );
 
-const cancelTimer = cancel('oneSecondTimer'); // pass the ID of event to cancel
+// pass the ID of event to cancel
+const cancelTimer = cancel('oneSecondTimer');
 
 const toggleMachine = createMachine({
   id: 'toggle',
@@ -216,12 +220,15 @@ const toggleMachine = createMachine({
   },
 });
 
-// if the CANCEL event is sent before 1 second, the TIMER event will be canceled.
+// if the CANCEL event is sent before 1 second,
+// the TIMER event will be canceled.
 ```
 
-## Delay Expressions <Badge text="4.3+" />
+## Вычисляемые задержки
 
-The `delay` option can also be evaluated as a delay expression, which is a function that takes in the current `context` and `event` that triggered the `send()` action, and returns the resolved `delay` (in milliseconds):
+_Начиная с версии 4.3+_
+
+Параметр `delay` также может быть вычислен как выражение задержки, которое представляет собой функцию, которая принимает текущий контекст `context` и событие `event`, вызвавшее действие `send()`, и возвращает вычисленный `delay` (в миллисекундах):
 
 ```js
 const dynamicDelayMachine = createMachine({
@@ -267,9 +274,9 @@ dynamicDelayService.send({
 // => 'done!'
 ```
 
-## Interpretation
+## Интерпретация
 
-With the XState [interpreter](./interpretation.md), delayed actions will use the native`setTimeout` and `clearTimeout` functions:
+С [интерпретатором](interpretation.md) XState для отложенных действий будут использоваться собственные функции `setTimeout` и `clearTimeout`:
 
 ```js
 import { interpret } from 'xstate';
@@ -286,7 +293,7 @@ service.start();
 // => 'yellow'
 ```
 
-For testing, the XState interpreter provides a `SimulatedClock`:
+Для тестирования интерпретатор XState предоставляет `SimulatedClock`:
 
 ```js
 import { interpret } from 'xstate';
@@ -305,14 +312,14 @@ service.clock.increment(1000);
 // => 'yellow'
 ```
 
-You can create your own “clock” to provide to the interpreter. The clock interface is an object with two functions/methods:
+Вы можете создать свои собственные «часы», чтобы предоставить их интерпретатору. Интерфейс часов - это объект с двумя функциями / методами:
 
-- `setTimeout` - same arguments as `window.setTimeout(fn, timeout)`
-- `clearTimeout` - same arguments as `window.clearTimeout(id)`
+- `setTimeout` - те же аргументы, что и `window.setTimeout(fn, timeout)`
+- `clearTimeout` - те же аргументы, что и `window.clearTimeout(id)`
 
-## Behind the scenes
+## За кулисами
 
-The `after: ...` property does not introduce anything new to statechart semantics. Instead, it creates normal transitions that look like this:
+Свойство `after: ...` не вносит ничего нового в семантику диаграммы состояний. Вместо этого он создает обычные переходы, которые выглядят следующим образом:
 
 ```js
 // ...
@@ -340,4 +347,4 @@ states: {
 // ...
 ```
 
-The interpreted statechart will `send(...)` the `after(...)` events after their `delay`, unless the state node is exited, which will `cancel(...)` those delayed `send(...)` events.
+Интерпретируемая диаграмма состояний будет отправлять `send(...)` события `after(...)` после их задержки `delay`, если только узел состояния не будет закрыт, что отменит `cancel(...)` эти отложенные события `send(...)`.

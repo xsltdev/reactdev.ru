@@ -1,81 +1,77 @@
-# Actors <Badge text="4.6+"/>
+# Акторы
 
-[:rocket: Quick Reference](#quick-reference)
+_Начиная с версии 4.6+_
 
-[[toc]]
+[Модель актора](https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C_%D0%B0%D0%BA%D1%82%D0%BE%D1%80%D0%BE%D0%B2) - это математическая модель вычислений на основе сообщений, которая упрощает взаимодействие нескольких «сущностей» (или «акторов») друг с другом. Акторы общаются, отправляя друг другу сообщения (события). Локальное состояние актора является частным, если только он не хочет поделиться им с другим актором, отправив его как событие.
 
-The [Actor model](https://en.wikipedia.org/wiki/Actor_model) is a mathematical model of message-based computation that simplifies how multiple "entities" (or "actors") communicate with each other. Actors communicate by sending messages (events) to each other. An actor's local state is private, unless it wishes to share it with another actor, by sending it as an event.
+Когда актор получает событие, могут произойти три вещи:
 
-When an actor receives an event, three things can happen:
+- Конечное количество сообщений может быть **отправлено** другим участникам.
+- Может быть создано (или **создано**) конечное количество новых участников.
+- Локальное состояние актора может измениться (определяется его **поведением**)
 
-- A finite number of messages can be **sent** to other actors
-- A finite number of new actors can be created (or **spawned**)
-- The actor's local state may change (determined by its **behavior**)
+Конечные автоматы и диаграммы состояний очень хорошо работают с моделью акторов, поскольку они являются основанными на событиях моделями поведения и логики. Помните: когда конечный автомат переходит из-за события, следующее состояние содержит:
 
-State machines and statecharts work very well with the actor model, as they are event-based models of behavior and logic. Remember: when a state machine transitions due to an event, the next state contains:
+- Следующее значение `value` и контекст `context` (локальное состояние актора)
+- Следующие действия `actions`, которые должны быть выполнены (потенциально новые созданные акторы или сообщения, отправленные другим акторам)
 
-- The next `value` and `context` (an actor's local state)
-- The next `actions` to be executed (potentially newly spawned actors or messages sent to other actors)
+Акторов можно _создавать_ или [_вызывать_](communication.md). Созданные акторы имеют два основных отличия от вызванных:
 
-Actors can be _spawned_ or [_invoked_](./communication.md). Spawned actors have two major differences from invoked actors:
+- Они могут быть _созданы_ в любое время (через `spawn(...)` внутри действия `assign(...)`)
+- Их можно _остановить_ в любой момент (с помощью действия `stop(...)`)
 
-- They can be _spawned_ at any time (via `spawn(...)` inside of an `assign(...)` action)
-- They can be _stopped_ at any time (via a `stop(...)` action)
+## API акторов
 
-## Actor API
+Актор (как реализовано в XState) имеет интерфейс:
 
-An actor (as implemented in XState) has an interface of:
+- Свойство `id`, которое однозначно идентифицирует актора в локальной системе
+- Метод `.send(...)`, который используется для отправки событий этому актору
+- Метод `.getSnapshot()`, который синхронно возвращает последнее _переданное значение_ актора.
 
-- An `id` property, which uniquely identifies the actor in the local system
-- A `.send(...)` method, which is used to send events to this actor
-- A `.getSnapshot()` method, which synchronously returns the actor's last _emitted value_.
+У акторов могут быть дополнительные методы:
 
-They may have optional methods:
+- Метод `.stop()`, который останавливает актора и выполняет всю необходимую очистку
+- Метод `.subscribe(...)` для [наблюдаемых](https://github.com/tc39/proposal-observable) акторов.
 
-- A `.stop()` method which stops the actor and performs any necessary cleanup
-- A `.subscribe(...)` method for actors that are [Observable](https://github.com/tc39/proposal-observable).
+Все существующие шаблоны вызываемых сервисов подходят под этот интерфейс:
 
-All the existing invoked service patterns fit this interface:
+- [Вызванные промисы](communication.md#invoking-promises) - это акторы, которые игнорируют любые полученные события и отправляют не более одного события обратно родительскому объекту.
+- [Вызванные обратные вызовы](communication.md#invoking-callbacks) - это акторы, которые могут отправлять события родительскому объекту (первый аргумент `callback`), получать события (второй аргумент `onReceive`) и действовать в соответствии с ними.
+- [Вызываемые наблюдаемые объекты](communication.md#invoking-observables) - это акторы, чьи передаваемые значения представляют собой события, которые должны быть отправлены обратно родительскому объекту.
+- [Вызванные машины](communication.md#invoking-machines) - это акторы, которые могут отправлять события родительскому объекту (действие `sendParent(...)`) или другим субъектам, на которые он ссылается (действие `send(...)`), получать события, действовать на них (переходы между состояниями и действия), создавать новых акторов (функция `spawn(...)`) и останавливать их.
 
-- [Invoked promises](./communication.md#invoking-promises) are actors that ignore any received events and send at most one event back to the parent
-- [Invoked callbacks](./communication.md#invoking-callbacks) are actors that can send events to the parent (first `callback` argument), receive events (second `onReceive` argument), and act on them
-- [Invoked machines](./communication.md#invoking-machines) are actors that can send events to the parent (`sendParent(...)` action) or other actors it has references to (`send(...)` action), receive events, act on them (state transitions and actions), spawn new actors (`spawn(...)` function), and stop actors.
-- [Invoked observables](./communication.md#invoking-observables) are actors whose emitted values represent events to be sent back to the parent.
+!!!tip "Что такое эмитированное значение?"
 
-::: tip What is an emitted value?
+    **Эмитированное значение** (_emitted value_) актора - это значение, которое подписчики получают в методе актора `.subscribe(...)`.
 
-An actor's **emitted value** is the value that subscribers receive in the actor's `.subscribe(...)` method.
+    - Для служб передается текущее состояние.
+    - Для промисов - разрешенное значение (или `undefined`, если не выполнено).
+    - Для наблюдаемых объектов - последнее переданное значение.
+    - Для обратных вызовов ничего не эмитируется.
 
-- For services, the current state is emitted.
-- For promises, the resolved value (or `undefined` if unfulfilled) is emitted.
-- For observables, the latest emitted value is emitted.
-- For callbacks, nothing is emitted.
+## Создание акторов
 
-:::
+Так же, как в языках, основанных на модели акторов, таких как [Akka](https://doc.akka.io/docs/akka/current/guide/introduction.html) или [Erlang](http://www.erlang.org/docs), акторы создаются и на них ссылаются в контексте `context` (в результате действия `assign(...)`).
 
-## Spawning Actors
+1. Импортируйте функцию `spawn` из `xstate`
+2. В действии `assign(...)` создайте новую ссылку на актора с помощью `spawn(...)`
 
-Just as in Actor-model-based languages like [Akka](https://doc.akka.io/docs/akka/current/guide/introduction.html) or [Erlang](http://www.erlang.org/docs), actors are spawned and referenced in `context` (as the result of an `assign(...)` action).
+Функция `spawn(...)` создает **ссылку на актора**, запрашивая 1 или 2 аргумента:
 
-1. Import the `spawn` function from `'xstate'`
-2. In an `assign(...)` action, create a new actor reference with `spawn(...)`
+- `entity` - (реактивное) значение или автомат, который представляет поведение актора. Возможные типы `entity`:
+  : - [Автомат](./communication.md#invoking-machines)
+  : - [Промис](./communication.md#invoking-promises)
+  : - [Функция обратного вызова](./communication.md#invoking-callbacks)
+  : - [Наблюдаемый объект](./communication.md#invoking-observables)
+- `name` (необязательно) - строка, однозначно определяющая актора. Она должна быть уникальной для всех созданных акторов и вызванных служб.
 
-The `spawn(...)` function creates an **actor reference** by providing 1 or 2 arguments:
+В качестве альтернативы `spawn` принимает объект параметров в качестве второго аргумента, который может содержать следующие свойства:
 
-- `entity` - the (reactive) value or machine that represents the behavior of the actor. Possible types for `entity`:
-  - [Machine](./communication.md#invoking-machines)
-  - [Promise](./communication.md#invoking-promises)
-  - [Callback](./communication.md#invoking-callbacks)
-  - [Observable](./communication.md#invoking-observables)
-- `name` (optional) - a string uniquely identifying the actor. This should be unique for all spawned actors and invoked services.
+- `name` (необязательно) - строка, однозначно определяющая актора. Он должен быть уникальным для всех созданных акторов и вызванных служб.
+- `autoForward` - (необязательно) `true`, если все события, отправленные на этот автомат, также должны быть отправлены (или _перенаправлены_) вызванному дочернему элементу (по умолчанию `false`)
+- `sync` - (необязательно) `true`, если этот автомат должен автоматически подписываться на состояние порожденной дочерней машины, состояние будет сохранено как `.state` на дочерней машине `ref`.
 
-Alternatively `spawn` accepts an options object as the second argument which may contain the following options:
-
-- `name` (optional) - a string uniquely identifying the actor. This should be unique for all spawned actors and invoked services.
-- `autoForward` - (optional) `true` if all events sent to this machine should also be sent (or _forwarded_) to the invoked child (`false` by default)
-- `sync` - (optional) `true` if this machine should be automatically subscribed to the spawned child machine's state, the state will be stored as `.state` on the child machine ref
-
-```js {13-14}
+```js hl_lines="13-14"
 import { createMachine, spawn } from 'xstate';
 import { todoMachine } from './todoMachine';
 
@@ -89,104 +85,105 @@ const todosMachine = createMachine({
           {
             todo: event.todo,
             // add a new todoMachine actor with a unique name
-            ref: spawn(todoMachine, `todo-${event.id}`)
-          }
-        ]
-      })
-    }
+            ref: spawn(todoMachine, `todo-${event.id}`),
+          },
+        ],
+      }),
+    },
     // ...
-  }
+  },
 });
 ```
 
-If you do not provide a `name` argument to `spawn(...)`, a unique name will be automatically generated. This name will be nondeterministic :warning:.
+Если вы не предоставите аргумент `name` для `spawn(...)`, уникальное имя будет автоматически сгенерировано. Это имя будет недетерминированным.
 
-::: tip
-Treat `const actorRef = spawn(someMachine)` as just a normal value in `context`. You can place this `actorRef` anywhere within `context`, based on your logic requirements. As long as it's within an assignment function in `assign(...)`, it will be scoped to the service from where it was spawned.
-:::
+!!!tip "Подсказка"
 
-::: warning
-Do not call `spawn(...)` outside of an assignment function. This will produce an orphaned actor (without a parent) which will have no effect.
+    Рассматривайте `const actorRef = spawn(someMachine)` как обычное значение в `context`. Вы можете разместить этот `actorRef` где угодно в `context`, в зависимости от ваших логических требований. Пока он находится в функции присваивания в `assign(...)`, он будет привязан к службе, из которой он был создан.
 
-```js
-// ❌ Never call spawn(...) externally
-const someActorRef = spawn(someMachine);
+!!!warning "Внимание"
 
-// ❌ spawn(...) is not an action creator
-{
-  actions: spawn(someMachine);
-}
+    Не вызывайте `spawn(...)` вне функции присваивания. Это приведет к появлению осиротевшего актора (без родителя), который не будет иметь никакого эффекта.
 
-// ❌ Do not assign spawn(...) outside of an assignment function
-{
-  actions: assign({
-    // remember: this is called immediately, before a service starts
-    someActorRef: spawn(someMachine)
-  });
-}
+    ```js
+    // ❌ Never call spawn(...) externally
+    const someActorRef = spawn(someMachine);
 
-// ✅ Assign spawn(...) inside an assignment function
-{
-  actions: assign({
-    someActorRef: () => spawn(someMachine)
-  });
-}
-```
+    // ❌ spawn(...) is not an action creator
+    {
+    	actions: spawn(someMachine);
+    }
 
-:::
+    // ❌ Do not assign spawn(...) outside of an assignment function
+    {
+    	actions: assign({
+    		// remember: this is called immediately, before a service starts
+    		someActorRef: spawn(someMachine),
+    	});
+    }
 
-Different types of values can be spawned as actors.
+    // ✅ Assign spawn(...) inside an assignment function
+    {
+    	actions: assign({
+    		someActorRef: () => spawn(someMachine),
+    	});
+    }
+    ```
 
-## Sending Events to Actors
+В качестве акторов могут быть созданы различные типы значений.
 
-With the [`send()` action](./actions.md#send-action), events can be sent to actors via a [target expression](./actions.md#send-targets):
+## Отправка событий акторам
 
-```js {13}
+С помощью действия `send()` события можно отправлять акторам через [целевое выражение](actions.md#send-targets):
+
+```js hl_lines="13"
 const machine = createMachine({
   // ...
   states: {
     active: {
       entry: assign({
-        someRef: () => spawn(someMachine)
+        someRef: () => spawn(someMachine),
       }),
       on: {
         SOME_EVENT: {
           // Use a target expression to send an event
           // to the actor reference
-          actions: send({ type: 'PING' }, { to: (context) => context.someRef })
-        }
-      }
-    }
-  }
+          actions: send(
+            { type: 'PING' },
+            { to: (context) => context.someRef }
+          ),
+        },
+      },
+    },
+  },
 });
 ```
 
-::: tip
-If you provide an unique `name` argument to `spawn(...)`, you can reference it in the target expression:
+!!!tip "Подсказка"
 
-```js
-const loginMachine = createMachine({
-  // ...
-  entry: assign({
-    formRef: () => spawn(formMachine, 'form')
-  }),
-  states: {
-    idle: {
-      on: {
-        LOGIN: {
-          actions: send({ type: 'SUBMIT' }, { to: 'form' })
-        }
-      }
-    }
-  }
-});
-```
+    Если вы передаете аргумент с уникальным `name` для `spawn(...)`, вы можете ссылаться на него в целевом выражении:
 
-:::
+    ```js
+    const loginMachine = createMachine({
+    	// ...
+    	entry: assign({
+    		formRef: () => spawn(formMachine, 'form'),
+    	}),
+    	states: {
+    		idle: {
+    			on: {
+    				LOGIN: {
+    					actions: send({ type: 'SUBMIT' }, { to: 'form' }),
+    				},
+    			},
+    		},
+    	},
+    });
+    ```
 
-## Stopping Actors
+## Остановка акторов
 
-Actors are stopped using the `stop(...)` action creator:
+Акторы могут быть остановлены с помощью создателя действия `stop(...)`:
 
 ```js
 const someMachine = createMachine({
@@ -195,41 +192,41 @@ const someMachine = createMachine({
     // Stopping an actor by reference
     stop((context) => context.someActorRef),
     // Stopping an actor by ID
-    stop('some-actor')
-  ]
+    stop('some-actor'),
+  ],
 });
 ```
 
-## Spawning Promises
+## Создание промисов
 
-Just like [invoking promises](./communication.md#invoking-promises), promises can be spawned as actors. The event sent back to the machine will be a `'done.invoke.<ID>'` action with the promise response as the `data` property in the payload:
+Как и при [вызове промисов](communication.md#invoking-promises), промисы могут создаваться как акторы. Событие, отправленное обратно на автомат, будет действием `done.invoke.<ID>` с промисом в качестве свойства `data` в полезной нагрузке:
 
-```js {11}
+```js hl_lines="11"
 // Returns a promise
 const fetchData = (query) => {
-  return fetch(`http://example.com?query=${event.query}`).then((data) =>
-    data.json()
-  );
+  return fetch(
+    `http://example.com?query=${event.query}`
+  ).then((data) => data.json());
 };
 
 // ...
 {
   actions: assign({
-    ref: (_, event) => spawn(fetchData(event.query))
+    ref: (_, event) => spawn(fetchData(event.query)),
   });
 }
 // ...
 ```
 
-::: warning
-It is not recommended to spawn promise actors, as [invoking promises](./communication.md#invoking-promises) is a better pattern for this, since they are dependent on state (self-cancelling) and have more predictable behavior.
-:::
+!!!warning "Внимание"
 
-## Spawning Callbacks
+    Создавать акторы промисов не рекомендуется, поскольку [вызов промисов](communication.md#invoking-promises) - лучший паттерн для этого, т. к. они зависят от состояния (самоотменяемы) и имеют более предсказуемое поведение.
 
-Just like [invoking callbacks](./communication.md#invoking-callbacks), callbacks can be spawned as actors. This example models a counter-interval actor that increments its own count every second, but can also react to `{ type: 'INC' }` events.
+## Создание функций обратного вызова
 
-```js {22}
+Как и при [вызове функций обратного вызова](communication.md#invoking-callbacks), обратные вызовы могут быть созданы как акторы. В этом примере моделируется субъект счетчика интервалов, который увеличивает свой счет каждую секунду, а также может реагировать на события `{type: 'INC'}`.
+
+```js hl_lines="22"
 const counterInterval = (callback, receive) => {
   let count = 0;
 
@@ -258,25 +255,28 @@ const machine = createMachine({
 });
 ```
 
-Events can then be sent to the actor:
+Затем события могут быть отправлены актору:
 
-```js {5-7}
+```js hl_lines="5-7"
 const machine = createMachine({
   // ...
   on: {
     'COUNTER.INC': {
-      actions: send({ type: 'INC' }, { to: (context) => context.counterRef })
-    }
-  }
+      actions: send(
+        { type: 'INC' },
+        { to: (context) => context.counterRef }
+      ),
+    },
+  },
   // ...
 });
 ```
 
-## Spawning Observables
+## Создание "наблюдаемых"
 
-Just like [invoking observables](./communication.md#invoking-observables), observables can be spawned as actors:
+Как и при [вызове наблюдаемых объектов](communication.md#invoking-observables), наблюдаемые объекты могут быть созданы как акторы:
 
-```js {22}
+```js hl_lines="22"
 import { interval } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -298,50 +298,53 @@ const machine = createMachine({
 });
 ```
 
-## Spawning Machines
+## Создание автоматов
 
-Machines are the most effective way to use actors, since they offer the most capabilities. Spawning machines is just like [invoking machines](./communication.md#invoking-machines), where a `machine` is passed into `spawn(machine)`:
+Автоматы - это наиболее эффективный способ использования акторов, поскольку они предлагают наибольшие возможности. Создавать автоматы можно так же, как [вызывать автоматы](communication.md#invoking-machines), когда `machine` передается в `spawn(machine)`:
 
-```js {13,26,30-32}
+```js hl_lines="13 26 30-32"
 const remoteMachine = createMachine({
   id: 'remote',
   initial: 'offline',
   states: {
     offline: {
       on: {
-        WAKE: 'online'
-      }
+        WAKE: 'online',
+      },
     },
     online: {
       after: {
         1000: {
-          actions: sendParent('REMOTE.ONLINE')
-        }
-      }
-    }
-  }
+          actions: sendParent('REMOTE.ONLINE'),
+        },
+      },
+    },
+  },
 });
 
 const parentMachine = createMachine({
   id: 'parent',
   initial: 'waiting',
   context: {
-    localOne: null
+    localOne: null,
   },
   states: {
     waiting: {
       entry: assign({
-        localOne: () => spawn(remoteMachine)
+        localOne: () => spawn(remoteMachine),
       }),
       on: {
         'LOCAL.WAKE': {
-          actions: send({ type: 'WAKE' }, { to: (context) => context.localOne })
+          actions: send(
+            { type: 'WAKE' },
+            { to: (context) => context.localOne }
+          ),
         },
-        'REMOTE.ONLINE': { target: 'connected' }
-      }
+        'REMOTE.ONLINE': { target: 'connected' },
+      },
     },
-    connected: {}
-  }
+    connected: {},
+  },
 });
 
 const parentService = interpret(parentMachine)
@@ -354,25 +357,26 @@ parentService.send({ type: 'LOCAL.WAKE' });
 // => 'connected'
 ```
 
-## Syncing and Reading State <Badge text="4.6.1+"/>
+## Синхронизация и считывание состояния
 
-One of the main tenets of the Actor model is that actor state is _private_ and _local_ - it is never shared unless the actor chooses to share it, via message passing. Sticking with this model, an actor can _notify_ its parent whenever its state changes by sending it a special "update" event with its latest state. In other words, parent actors can subscribe to their child actors' states.
+_Начиная с версии 4.6.1+_
 
-To do this, set `{ sync: true }` as an option to `spawn(...)`:
+Один из основных принципов модели актора заключается в том, что состояние актора является _приватным_ и _локальным_ - оно никогда не передается, если актор не решает поделиться им посредством передачи сообщений. Придерживаясь этой модели, актор может _уведомлять_ своего родителя всякий раз, когда его состояние изменяется, отправляя ему специальное событие «`update`» с его последним состоянием. Другими словами, родительские акторы могут подписаться на состояния своих дочерних акторов.
 
-```js {4}
+Для этого установите `{sync: true}` в качестве опции для `srawn(...)`:
+
+```js hl_lines="4"
 // ...
 {
   actions: assign({
     // Actor will send update event to parent whenever its state changes
-    someRef: () => spawn(todoMachine, { sync: true })
+    someRef: () => spawn(todoMachine, { sync: true }),
   });
 }
 // ...
 ```
 
-This will automatically subscribe the machine to the spawned child machine's state, which is kept updated and can be accessed via `getSnapshot()`:
-
+Это автоматически подпишет автомат на состояние порожденного дочернего автомата, которое постоянно обновляется и может быть доступно через `getSnapshot()`:
 
 ```js
 someService.onTransition((state) => {
@@ -386,7 +390,6 @@ someService.onTransition((state) => {
 });
 ```
 
-
 ```js
 someService.onTransition((state) => {
   const { someRef } = state.context;
@@ -399,13 +402,15 @@ someService.onTransition((state) => {
 });
 ```
 
-::: warning
-By default, `sync` is set to `false`. Never read an actor's `.state` when `sync` is disabled; otherwise, you will end up referencing stale state.
-:::
+!!!warning "Внимание"
 
-## Sending Updates <Badge text="4.7+" />
+    По умолчанию для `sync` установлено значение `false`. Никогда не читайте `.state` актора, когда `sync` отключена; в противном случае вы получите ссылку на устаревшее состояние.
 
-For actors that are not synchronized with the parent, the actor can send an explicit event to its parent machine via `sendUpdate()`:
+## Отправка обновлений
+
+_Начиная с версии 4.7+_
+
+Для акторов, которые не синхронизированы с родительским, актор может отправить явное событие на свой родительский автомат через `sendUpdate()`:
 
 ```js
 import { createMachine, sendUpdate } from 'xstate';
@@ -417,38 +422,38 @@ const childMachine = createMachine({
       actions: [
         // ...
         // Creates an action that sends an update event to parent
-        sendUpdate()
-      ]
-    }
-  }
+        sendUpdate(),
+      ],
+    },
+  },
 });
 ```
 
-::: tip
-Prefer sending events to the parent explicitly (`sendUpdate()`) rather than subscribing to every state change. Syncing with spawned machines can result in "chatty" event logs, since every update from the child results in a new `"xstate.update"` event sent from the child to the parent.
-:::
+!!!tip "Подсказка"
 
-## Quick Reference
+    Предпочитайте явно отправлять события родительскому автомату (`sendUpdate()`), а не подписываться на каждое изменение состояния. Синхронизация с созданными машинами может привести к появлению «болтливых» журналов событий, поскольку каждое обновление от дочернего элемента приводит к новому событию `xstate.update`, отправляемому дочерним автоматом родительскому.
 
-**Import `spawn`** to spawn actors:
+## Краткий справочник
+
+**Импорт `spawn`** для вызова актора:
 
 ```js
 import { spawn } from 'xstate';
 ```
 
-**Spawn actors** in `assign` action creators:
+**Вызов акторов** в создателе действия `assign`:
 
 ```js
 // ...
 {
   actions: assign({
-    someRef: (context, event) => spawn(someMachine)
+    someRef: (context, event) => spawn(someMachine),
   });
 }
 // ...
 ```
 
-**Spawn different types** of actors:
+**Вызов различных типов** акторов:
 
 ```js
 // ...
@@ -489,25 +494,25 @@ import { spawn } from 'xstate';
         createMachine({
           // ...
         })
-      )
+      ),
   });
 }
 // ...
 ```
 
-**Sync state** with an actor:
+**Статус синхронизации** актора:
 
 ```js
 // ...
 {
   actions: assign({
-    someRef: () => spawn(someMachine, { sync: true })
+    someRef: () => spawn(someMachine, { sync: true }),
   });
 }
 // ...
 ```
 
-**Getting a snapshot** from an actor: <Badge text="4.20.0+"/>
+**Получение снапшота** актора (_4.20.0+_):
 
 ```js
 service.onTransition((state) => {
@@ -518,7 +523,7 @@ service.onTransition((state) => {
 });
 ```
 
-**Send event to actor** with `send` action creator:
+**Отправить событие актору** с помощью создателя действия `send`:
 
 ```js
 // ...
@@ -526,26 +531,29 @@ service.onTransition((state) => {
   actions: send(
     { type: 'SOME_EVENT' },
     {
-      to: (context) => context.someRef
+      to: (context) => context.someRef,
     }
   );
 }
 // ...
 ```
 
-**Send event with data to actor** using a `send` expression:
+**Отправить событие с данными актору**, используя выражение `send`:
 
 ```js
 // ...
 {
-  actions: send((context, event) => ({ ...event, type: 'SOME_EVENT' }), {
-    to: (context) => context.someRef
-  });
+  actions: send(
+    (context, event) => ({ ...event, type: 'SOME_EVENT' }),
+    {
+      to: (context) => context.someRef,
+    }
+  );
 }
 // ...
 ```
 
-**Send event from actor** to parent with `sendParent` action creator:
+**Отправить событие от актора** к родительскому автомату с создателем действия `sendParent`:
 
 ```js
 // ...
@@ -555,20 +563,20 @@ service.onTransition((state) => {
 // ...
 ```
 
-**Send event with data from actor** to parent using a `sendParent` expression:
+**Отправить событие с данными от актора** к родительскому автомату с помощью выражения `sendParent`:
 
 ```js
 // ...
 {
   actions: sendParent((context, event) => ({
     ...context,
-    type: 'ANOTHER_EVENT'
+    type: 'ANOTHER_EVENT',
   }));
 }
 // ...
 ```
 
-**Reference actors** from `context`:
+**Ссылка на акторов** из `context`:
 
 ```js
 someService.onTransition((state) => {

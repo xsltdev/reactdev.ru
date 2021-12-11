@@ -1,19 +1,19 @@
-# History
+# История
 
-A history [state node](./statenodes.md) is a special kind of state node that, when reached, tells the machine to go to the last state value of that region. There's two types of history states:
+[Узел состояния](statenodes.md) истории (_history_) - это особый вид узла состояния, который при достижении указывает машине перейти к последнему значению состояния этой области. Есть два типа состояний истории:
 
-- `'shallow'`, which specifies only the top-level history value, or
-- `'deep'`, which specifies the top-level and all child-level history values.
+- `'shallow'`, который указывает только значение истории верхнего уровня, или
+- `'deep'`, который определяет верхний уровень и все значения истории дочернего уровня.
 
-## History State Configuration
+## Конфигурация состояния истории
 
-The configuration for a history state is the same as an atomic state node, with some extra properties:
+Конфигурация для состояния истории такая же, как и для узла атомарного состояния, с некоторыми дополнительными свойствами:
 
-- `type: 'history'` to specify that this is a history state node
-- `history` ('shallow' | 'deep') - whether the history is shallow or deep. Defaults to 'shallow'.
-- `target` (StateValue) - the default target if no history exists. Defaults to the initial state value of the parent node.
+- `type: 'history'` чтобы указать, что это узел состояния истории
+- `history` (`shallow` | `deep`) - глубина истории. По-умолчанию `shallow`.
+- `target` (StateValue) - цель по умолчанию, если история не существует. По умолчанию используется значение начального состояния родительского узла.
 
-Consider the following (contrived) statechart:
+Рассмотрим следующую (надуманную) диаграмму состояний:
 
 ```js
 const fanMachine = createMachine({
@@ -24,63 +24,70 @@ const fanMachine = createMachine({
       on: {
         // transitions to history state
         POWER: { target: 'fanOn.hist' },
-        HIGH_POWER: { target: 'fanOn.highPowerHist' }
-      }
+        HIGH_POWER: { target: 'fanOn.highPowerHist' },
+      },
     },
     fanOn: {
       initial: 'first',
       states: {
         first: {
           on: {
-            SWITCH: { target: 'second' }
-          }
+            SWITCH: { target: 'second' },
+          },
         },
         second: {
           on: {
-            SWITCH: { target: 'third' }
-          }
+            SWITCH: { target: 'third' },
+          },
         },
         third: {},
 
         // shallow history state
         hist: {
           type: 'history',
-          history: 'shallow' // optional; default is 'shallow'
+          history: 'shallow', // optional; default is 'shallow'
         },
 
         // shallow history state with default
         highPowerHist: {
           type: 'history',
-          target: 'third'
-        }
+          target: 'third',
+        },
       },
       on: {
-        POWER: { target: 'fanOff' }
-      }
-    }
-  }
+        POWER: { target: 'fanOff' },
+      },
+    },
+  },
 });
 ```
 
-In the above machine, the transition from `'fanOff'` on the event `'POWER'` goes to the `'fanOn.hist'` state, which is defined as a shallow history state. This means that the machine should transition to the `'fanOn'` state and to whichever the previous substate of `'fanOn'` was. By default, `'fanOn'` will go to its initial state, `'first'`, if there is no history state.
+В приведенной выше машине переход от `fanOff` по событию `POWER` переходит в состояние `fanOn.hist`, которое определяется как состояние неглубокой истории. Это означает, что автомат должен перейти в состояние `fanOn` и в какое бы ни было предыдущее подсостояние `fanOn`. По умолчанию `fanOn` перейдет в исходное состояние `first`, если нет состояния истории.
 
 ```js
-const firstState = fanMachine.transition(fanMachine.initialState, {
-  type: 'POWER'
-});
+const firstState = fanMachine.transition(
+  fanMachine.initialState,
+  {
+    type: 'POWER',
+  }
+);
 console.log(firstState.value);
 // transitions to the initial state of 'fanOn' since there is no history
 // => {
 //   fanOn: 'first'
 // }
 
-const secondState = fanMachine.transition(firstState, { type: 'SWITCH' });
+const secondState = fanMachine.transition(firstState, {
+  type: 'SWITCH',
+});
 console.log(secondState.value);
 // => {
 //   fanOn: 'second'
 // }
 
-const thirdState = fanMachine.transition(secondState, { type: 'POWER' });
+const thirdState = fanMachine.transition(secondState, {
+  type: 'POWER',
+});
 console.log(thirdState.value);
 // => 'fanOff'
 
@@ -90,7 +97,9 @@ console.log(thirdState.history);
 //   actions: []
 // }
 
-const fourthState = fanMachine.transition(thirdState, { type: 'POWER' });
+const fourthState = fanMachine.transition(thirdState, {
+  type: 'POWER',
+});
 console.log(fourthState.value);
 // transitions to 'fanOn.second' from history
 // => {
@@ -98,12 +107,15 @@ console.log(fourthState.value);
 // }
 ```
 
-With a `target` specified, if no history exists for the state region the history state is defined in, it will go to the `target` state by default:
+Если задана цель `target`, и история не существует для региона состояния, в котором задано состояние истории, по умолчанию она перейдет в состояние `target`:
 
 ```js
-const firstState = fanMachine.transition(fanMachine.initialState, {
-  type: 'HIGH_POWER'
-});
+const firstState = fanMachine.transition(
+  fanMachine.initialState,
+  {
+    type: 'HIGH_POWER',
+  }
+);
 console.log(firstState.value);
 // transitions to the target state of 'fanOn.third' since there is no history
 // => {
@@ -111,6 +123,6 @@ console.log(firstState.value);
 // }
 ```
 
-## Notes
+## Примечания
 
-- History states can be directly accessed from `State` instances on `state.history`, but this is seldom necessary.
+- К состояниям истории можно получить прямой доступ из экземпляров `State` в `state.history`, но это редко бывает необходимо.

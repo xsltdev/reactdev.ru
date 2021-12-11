@@ -1,71 +1,70 @@
 # Вызов служб
 
-Expressing the entire app's behavior in a single machine can quickly become complex and unwieldy. It is natural (and encouraged!) to use multiple machines that communicate with each other to express complex logic instead. This closely resembles the [Actor model](https://www.brianstorti.com/the-actor-model/), where each machine instance is considered an "actor" that can send and receive events (messages) to and from other "actors" (such as Promises or other machines) and react to them.
+Выражение поведения всего приложения на одном автомате может быстро стать сложным и громоздким. Естественно (и поощряется!) использовать несколько автоматов, которые обмениваются данными друг с другом для реализации сложной логики. Это очень похоже на [модель актора](https://www.brianstorti.com/the-actor-model/), где каждый экземпляр автомата считается «актором», который может отправлять и получать события (сообщения) другим «акторам» (например, обещаниям или другим машинам) и реагировать на них.
 
-For machines to communicate with each other, the parent machine **invokes** a child machine and listens to events sent from the child machine via `sendParent(...)`, or waits for the child machine to reach its [final state](./final.md), which will then cause the `onDone` transition to be taken.
+Чтобы автоматы могли взаимодействовать друг с другом, родительский автомат **вызывает** дочерний и прослушивает события, отправленные с дочернего автомата через `sendParent(...)`, или ожидает, пока дочерний автомат достигнет своего [конечного состояния](final.md), что вызовет `onDone` переход.
 
-You can invoke:
+Вы можете вызвать:
 
-- [Promises](#invoking-promises), which will take the `onDone` transition on `resolve`, or the `onError` transition on `reject`
-- [Callbacks](#invoking-callbacks), which can send events to and receive events from the parent machine
-- [Observables](#invoking-observables), which can send events to the parent machine, as well as a signal when it is completed
-- [Machines](#invoking-machines), which can also send/receive events, and also notify the parent machine when it reaches its [final state](./final.md)
+- [Промисы](#invoking-promises), которые будут выполнять переход `onDone` при разрешении `resolve` или переход `onError` при отклонении `reject`.
+- [Функции обратного вызова](#invoking-callbacks), которые могут отправлять события и получать события от родительской машины
+- [Наблюдаемые](#invoking-observables), которые могут отправлять события на родительский автомат, а также сигнализировать о его завершении
+- [Автоматы](#invoking-machines), которые также могут отправлять и получать события, а также уведомлять родительский автомат, когда он достигает своего [конечного состояния](final.md).
 
 ## Свойство `invoke`
 
-An invocation is defined in a state node's configuration with the `invoke` property, whose value is an object that contains:
+Вызов определяется в конфигурации узла состояния с помощью свойства `invoke`, значением которого является объект, содержащий:
 
-- `src` - the source of the service to invoke, which can be:
-  - a machine
-  - a function that returns a `Promise`
-  - a function that returns a "callback handler"
-  - a function that returns an observable
-  - a string, which refers to any of the 4 listed options defined in this machine's `options.services`
-  - an invoke source object <Badge text="4.12" />, which contains the source string in `{ type: src }`, as well as any other metadata.
-- `id` - the unique identifier for the invoked service
-- `onDone` - (optional) the [transition](./transitions.md) to be taken when:
-  - the child machine reaches its [final state](./final.md), or
-  - the invoked promise resolves, or
-  - the invoked observable completes
-- `onError` - (optional) the transition to be taken when the invoked service encounters an execution error.
-- `autoForward` - (optional) `true` if all events sent to this machine should also be sent (or _forwarded_) to the invoked child (`false` by default)
-  - ⚠️ Avoid setting `autoForward` to `true`, as blindly forwarding all events may lead to unexpected behavior and/or infinite loops. Always prefer to explicitly send events, and/or use the `forward(...)` action creator to directly forward an event to an invoked child. (works currently for machines only! ⚠️)
-- `data` - (optional, used only when invoking machines) an object that maps properties of the child machine's [context](./context.md) to a function that returns the corresponding value from the parent machine's `context`.
+- `src` - источник вызываемой службы, который может быть:
+  : - автомат
+  : - функция, которая возвращает `Promise`
+  : - функция, которая возвращает "обработчик обратного вызова"
+  : - функция, которая возвращает "наблюдаемого"
+  : - строка, которая относится к любой из 4 перечисленных опций, определенных в `options.services` данного аппарата.
+  : - вызываемый объект источника (_начиная с версии 4.12+_), который содержит исходную строку в `{type: src}`, а также любые другие метаданные.
+- `id` - уникальный идентификатор вызванной службы
+- `onDone` - (необязательно) переход, выполняемый, когда:
+  : - дочерний автомат достигает своего конечного состояния, или
+  : - вызванное обещание `Promise` разрешается, или
+  : - вызываемый "наблюдаемый" завершается
+- `onError` - (необязательно) переход, выполняемый, когда вызываемая служба обнаруживает ошибку выполнения.
+- `autoForward` - (необязательно) `true`, если все события, отправленные на этот автомат, также должны быть отправлены (или перенаправлены) вызванному дочернему автомату (по умолчанию `false`)
+  : - Избегайте установки `autoForward` в значение `true`, так как слепая пересылка всех событий может привести к неожиданному поведению или бесконечным циклам. Всегда предпочитайте явно отправлять события или использовать создателя действия `forward(...)` для прямой пересылки события вызываемому дочернему элементу (в настоящее время работает только для автомата).
+- `data` - (необязательно, используется только при вызове автоматов) объект, который отображает свойства контекста дочернего автомата на функцию, которая возвращает соответствующее значение из контекста родительского автомата.
 
-::: warning
-Don't get the `onDone` property on a state confused with `invoke.onDone` - they are similar transitions, but refer to different things.
+!!!warning "Внимание"
 
-- The `onDone` property on a [state node](./statenodes.md) refers to the compound state node reaching a [final state](./final.md).
-- The `invoke.onDone` property refers to the invocation (`invoke.src`) being done.
+    Не путайте свойство `onDone` с состоянием `invoke.onDone` - они похожи на переходы, но относятся к разным вещам.
 
-```js hl_lines="5 13"
-// ...
-loading: {
-  invoke: {
-    src: someSrc,
-    onDone: {/* ... */} // refers to `someSrc` being done
-  },
-  initial: 'loadFoo',
-  states: {
-    loadFoo: {/* ... */},
-    loadBar: {/* ... */},
-    loadingComplete: { type: 'final' }
-  },
-  onDone: 'loaded' // refers to 'loading.loadingComplete' being reached
-}
-// ...
-```
+    - Свойство `onDone` на [узле состояния](statenodes.md) указывает на то, что узел составного состояния достигает [конечного состояния](final.md).
+    - Свойство `invoke.onDone` относится к выполняемому вызову (`invoke.src`).
 
-:::
+    ```js hl_lines="5 13"
+    // ...
+    loading: {
+    	invoke: {
+    		src: someSrc,
+    		onDone: {/* ... */} // refers to `someSrc` being done
+    	},
+    	initial: 'loadFoo',
+    	states: {
+    		loadFoo: {/* ... */},
+    		loadBar: {/* ... */},
+    		loadingComplete: { type: 'final' }
+    	},
+    	onDone: 'loaded' // refers to 'loading.loadingComplete' being reached
+    }
+    // ...
+    ```
 
-## Invoking Promises
+## Вызов промисов
 
-Since every promise can be modeled as a state machine, XState can invoke promises as-is. Promises can either:
+Поскольку каждый промис можно смоделировать как конечный автомат, XState может вызывать промисы "как есть". Промисы могут:
 
-- `resolve()`, which will take the `onDone` transition
-- `reject()` (or throw an error), which will take the `onError` transition
+- `resolve()`, который примет переход `onDone`
+- `reject()` (или выбросить ошибку), который примет переход `onError`
 
-If the state where the invoked promise is active is exited before the promise settles, the result of the promise is discarded.
+Если состояние, в котором активирован вызываемый промис, выходит до того, как промис разрешается, то результат промиса отбрасывается.
 
 ```js
 // Function that returns a promise
@@ -118,7 +117,7 @@ const userMachine = createMachine({
 });
 ```
 
-The resolved data is placed into a `'done.invoke.<id>'` event, under the `data` property, e.g.:
+Разрешенные данные помещаются в событие `done.invoke.<id>` в свойстве `data`, например:
 
 ```js
 {
@@ -130,9 +129,9 @@ The resolved data is placed into a `'done.invoke.<id>'` event, under the `data` 
 }
 ```
 
-### Promise Rejection
+### Отклонение промиса
 
-If a Promise rejects, the `onError` transition will be taken with a `{ type: 'error.platform' }` event. The error data is available on the event's `data` property:
+Если промис отклоняется (reject), переход `onError` будет выполнен с событием `{type: 'error.platform'}`. Данные об ошибках доступны в свойстве `data` события:
 
 ```js
 const search = (context, event) => new Promise((resolve, reject) => {
@@ -185,20 +184,18 @@ const searchMachine = createMachine({
 });
 ```
 
-::: warning
+!!!warning "Внимание"
 
-If the `onError` transition is missing and the Promise is rejected, the error will be ignored unless you have specified [strict mode](./machines.md#configuration) for the machine. Strict mode will stop the machine and throw an error in this case.
+    Если переход `onError` отсутствует и промис отклонен, то ошибка будет проигнорирована, если не указан [строгий режим](machines.md#configuration) для автомата. В противном случае строгий режим остановит автомат и выдаст ошибку.
 
-:::
+## Вызов функций обратного вызова
 
-## Invoking Callbacks
+Потоки событий, отправляемых на родительский автомат, можно моделировать с помощью обработчика обратного вызова, который представляет собой функцию, которая принимает два аргумента:
 
-Streams of events sent to the parent machine can be modeled via a callback handler, which is a function that takes in two arguments:
+- `callback` - вызывается с отправляемым событием
+- `onReceive` - вызывается с помощью слушателя, который прослушивает события от родителя
 
-- `callback` - called with the event to be sent
-- `onReceive` - called with a listener that [listens to events from the parent](#listening-to-parent-events)
-
-The (optional) return value should be a function that performs cleanup (i.e., unsubscribing, preventing memory leaks, etc.) on the invoked service when the current state is exited. Callbacks **cannot** use `async/await` syntax because it automatically wraps the return value in a `Promise`.
+Возвращаемое (необязательное) значение должно быть функцией, которая выполняет очистку (т. е. отмену подписки, предотвращение утечек памяти и т. д.) для вызванной службы при выходе из текущего состояния. Обратные вызовы **не могут** использовать синтаксис `async / await`, поскольку он автоматически помещает возвращаемое значение в `Promise`.
 
 ```js
 // ...
@@ -220,11 +217,11 @@ counting: {
 // ...
 ```
 
-### Listening to Parent Events
+### Прослушивание родительских событий
 
-Invoked callback handlers are also given a second argument, `onReceive`, which registers listeners for events sent to the callback handler from the parent. This allows for parent-child communication between the parent machine and the invoked callback service.
+Вызванным обработчикам обратного вызова также предоставляется второй аргумент `onReceive`, который регистрирует прослушиватели для событий, отправляемых обработчику обратного вызова от родителя. Это обеспечивает связь между родительским и дочерним автоматами и вызванной службой обратного вызова.
 
-For example, the parent machine sends the child `'ponger'` service a `'PING'` event. The child service can listen for that event using `onReceive(listener)`, and send a `'PONG'` event back to the parent in response:
+Например, родительский автомат отправляет дочерней службе `ponger` событие `PING`. Дочерняя служба может прослушивать это событие с помощью `onReceive` (прослушиватель) и в ответ отправить событие `PONG` обратно родительскому автомату:
 
 ```js
 const pingPongMachine = createMachine({
@@ -260,11 +257,13 @@ interpret(pingPongMachine)
   .start();
 ```
 
-## Invoking Observables <Badge text="4.6"/>
+## Вызов "наблюдаемых"
 
-[Observables](https://github.com/tc39/proposal-observable) are streams of values emitted over time. Think of them as an array/collection whose values are emitted asynchronously, instead of all at once. There are many implementations of observables in JavaScript; the most popular one is [RxJS](https://github.com/ReactiveX/rxjs).
+_С версии 4.6+_
 
-Observables can be invoked, which is expected to send events (strings or objects) to the parent machine, yet not receive events (uni-directional). An observable invocation is a function that takes `context` and `event` as arguments and returns an observable stream of events. The observable is unsubscribed when the state where it is invoked is exited.
+[Наблюдаемые объекты](https://github.com/tc39/proposal-observable) - это потоки значений, эмитированных с течением времени. Думайте о них как о массиве / коллекции, значения которой передаются асинхронно, а не все сразу. В JavaScript существует множество реализаций наблюдаемых объектов; самый популярный - [RxJS](https://angdev.ru/rxjs/observable/).
+
+"Наблюдаемые" будут отправлять события (строки или объекты) на родительский автомат, но не получать события (однонаправленные). Наблюдаемый вызов - это функция, которая принимает контекст `context` и событие `event` в качестве аргументов и возвращает наблюдаемый поток событий. Подписка на наблюдаемый объект отменяется при выходе из состояния, в котором он был вызван.
 
 ```js
 import { createMachine, interpret } from 'xstate';
@@ -297,40 +296,39 @@ const intervalMachine = createMachine({
 });
 ```
 
-The above `intervalMachine` will receive the events from `interval(...)` mapped to event objects, until the observable is "completed" (done emitting values). If the `"CANCEL"` event happens, the observable will be disposed (`.unsubscribe()` will be called internally).
+Вышеупомянутый `intervalMachine` будет получать события из `interval(...)`, сопоставленные с объектами событий, до тех пор, пока наблюдаемый объект не будет «завершен» (не завершится выдача значений). Если произойдет событие `CANCEL`, наблюдаемый будет удален (`.unsubscribe()` будет вызываться изнутри).
 
-::: tip
-Observables don't necessarily need to be created for every invocation. A "hot observable" can be referenced instead:
+!!!tip "Подсказка"
 
-```js
-import { fromEvent } from 'rxjs';
+    Наблюдаемые объекты необязательно создавать для каждого вызова. Вместо этого можно сослаться на «горячую наблюдаемую»:
 
-const mouseMove$ = fromEvent(document.body, 'mousemove');
+    ```js
+    import { fromEvent } from 'rxjs';
 
-const mouseMachine = createMachine({
-  id: 'mouse',
-  // ...
-  invoke: {
-    src: (context, event) => mouseMove$,
-  },
-  on: {
-    mousemove: {
-      /* ... */
-    },
-  },
-});
-```
+    const mouseMove$ = fromEvent(document.body, 'mousemove');
 
-:::
+    const mouseMachine = createMachine({
+    	id: 'mouse',
+    	// ...
+    	invoke: {
+    		src: (context, event) => mouseMove$,
+    	},
+    	on: {
+    		mousemove: {
+    		/* ... */
+    		},
+    	},
+    });
+    ```
 
-## Invoking Machines
+## Вызов автоматов
 
-Machines communicate hierarchically, and invoked machines can communicate:
+Автоматы обмениваются данными иерархически, а вызванные автоматы могут обмениваться данными:
 
-- Parent-to-child via the `send(EVENT, { to: 'someChildId' })` action
-- Child-to-parent via the `sendParent(EVENT)` action.
+- От родителя к потомку — через действие `send(EVENT, {to: 'someChildId'})`
+- От потомка к родителю — через действие `sendParent(EVENT)`.
 
-If the state where the machine is invoked is exited, the machine is stopped.
+При выходе из состояния, в котором автомат был вызван — автомат останавливается.
 
 ```js
 import {
@@ -380,9 +378,9 @@ const service = interpret(parentMachine)
 // => 'timesUp'
 ```
 
-### Invoking with Context
+### Вызов с контекстом
 
-Child machines can be invoked with `context` that is derived from the parent machine's `context` with the `data` property. For example, the `parentMachine` below will invoke a new `timerMachine` service with initial context of `{ duration: 3000 }`:
+Дочерние автоматы могут быть вызваны с контекстом `context`, который является производным от контекста родительского автомата `context` с помощью свойства `data`. Например, `parentMachine` ниже вызовет новую службу `timerMachine` с начальным контекстом `{duration: 3000}`:
 
 ```js
 const timerMachine = createMachine({
@@ -415,7 +413,7 @@ const parentMachine = createMachine({
 });
 ```
 
-Just like [`assign(...)`](./context.md), child context can be mapped as an object (preferred) or a function:
+Как и [`assign(...)`](context.md), дочерний контекст может быть отображен как объект (предпочтительно) или как функция:
 
 ```js
 // Object (per-property):
@@ -433,13 +431,13 @@ data: (context, event) => ({
 })
 ```
 
-::: warning
-The `data` _replaces_ the default `context` defined on the machine; it is not merged. This behavior will change in the next major version.
-:::
+!!!warning "Внимание"
 
-### Done Data
+    Данные `data` *заменяют* контекст по-умолчанию `context`, определенный в автомате — они не объединяются. Это поведение изменится в следующей мажорной версии.
 
-When a child machine reaches its top-level [final state](./final.md), it can send data in the "done" event (e.g., `{ type: 'done.invoke.someId', data: ... }`). This "done data" is specified on the final state's `data` property:
+### Конечные данные
+
+Когда дочерний автомат достигает своего [конечного состояния](final.md), он может отправлять данные в событии `done` (например, `{type: 'done.invoke.someId', data: ...}`). Эти "конечные данные" указываются в свойстве `data` конечного состояния:
 
 ```js
 const secretMachine = createMachine({
@@ -500,21 +498,18 @@ const service = interpret(parentMachine)
 // => { revealedSecret: '42' }
 ```
 
-### Sending Events
+### Отправка событий
 
-- To send from a **child** machine to a **parent** machine, use `sendParent(event)` (takes the same arguments as `send(...)`)
-- To send from a **parent** machine to a **child** machine, use `send(event, { to: <child ID> })`
+- Чтобы отправить событие с дочернего автомата на родительский, используйте `sendParent(event)` (принимает те же аргументы, что и `send(...)`)
+- Чтобы отправить событие с родительского автомата на дочерний, используйте `send(event, {to: <child ID>})`
 
-::: warning
-The `send(...)` and `sendParent(...)` action creators do _not_ imperatively send
-events to machines. They are pure functions that return an action object
-describing what is to be sent, e.g., `{ type: 'xstate.send', event: ... }`. An
-[interpreter](./interpretation.md) will read these objects and then send them.
+!!!warning "Внимание"
 
-[Read more about `send`](/guides/actions.html#send-action)
-:::
+    Создатели действий `send(...)` и `sendParent(...)` не обязательно отправляют события на машины. Это чистые функции, которые возвращают объект действия, описывающий, что нужно отправить, например `{type: 'xstate.send', event: ...}`. [Интерпретатор](interpretation.md) прочитает эти объекты, а затем отправит их.
 
-Here is an example of two machines, `pingMachine` and `pongMachine`, communicating with each other:
+    [Подробнее о `send`](actions.html#send-action)
+
+Вот пример двух машин, `pingMachine` и `pongMachine`, которые обмениваются данными друг с другом:
 
 ```js
 import {
@@ -578,11 +573,13 @@ const service = interpret(pingMachine).start();
 // ...
 ```
 
-## Sending Responses <Badge text="4.7+" />
+## Отправка ответов
 
-An invoked service (or [spawned actor](./actors.md)) can _respond_ to another service/actor; i.e., it can send an event _in response to_ an event sent by another service/actor. This is done with the `respond(...)` action creator.
+_Начиная с версии 4.7+_
 
-For example, the `'client'` machine below sends the `'CODE'` event to the invoked `'auth-server'` service, which then responds with a `'TOKEN'` event after 1 second.
+Вызванная служба (или [порожденный актор](actors.md)) может _отвечать_ другой службе / субъекту; то есть он может отправлять событие _в ответ на_ событие, отправленное другой службой / актором. Это делается с помощью создателя действия `response(...)`.
+
+Например, «клиентский» автомат `client` ниже отправляет событие `CODE` в вызванную службу `auth-server`, которая затем отвечает событием `TOKEN` через 1 секунду.
 
 ```js
 import { createMachine, send, actions } from 'xstate';
@@ -629,11 +626,11 @@ const authClientMachine = createMachine({
 });
 ```
 
-This specific example can use `sendParent(...)` for the same effect; the difference is that `respond(...)` will send an event back to the received event's origin, which might not necessarily be the parent machine.
+Этот конкретный пример может использовать `sendParent(...)` для того же эффекта; разница в том, что `response(...)` отправит событие обратно источнику полученного события, который не обязательно может быть родительским автоматом.
 
-## Multiple Services
+## Множественные службы
 
-You can invoke multiple services by specifying each in an array:
+Вы можете вызвать несколько служб, указав каждую в массиве:
 
 ```js
 // ...
@@ -645,11 +642,11 @@ invoke: [
 // ...
 ```
 
-Each invocation will create a _new_ instance of that service, so even if the `src` of multiple services are the same (e.g., `'someService'` above), multiple instances of `'someService'` will be invoked.
+Каждый вызов будет создавать _новый_ экземпляр этой службы, поэтому даже если `src` нескольких служб одинаковы (например, `someService` выше), будут вызываться несколько экземпляров `someService`.
 
-## Configuring Services
+## Настройка служб
 
-The invocation sources (services) can be configured similar to how actions, guards, etc. are configured -- by specifying the `src` as a string and defining them in the `services` property of the Machine options:
+Источники вызова (службы) могут быть настроены аналогично тому, как настраиваются действия, защитные функции и т. д. - путем указания `src` в виде строки и определения их в свойстве `services` в параметрах автомата:
 
 ```js
 const fetchUser = // (same as the above example)
@@ -676,7 +673,7 @@ const userMachine = createMachine(
 );
 ```
 
-The invoke `src` can also be specified as an object <Badge text="4.12" /> that describes the invoke source with its `type` and other related metadata. This can be read from the `services` option in the `meta.src` argument:
+Вызов `src` также можно указать как объект (_начиная с версии 4.12+_), который описывает источник вызова с его типом `type` и другими связанными метаданными. Это можно прочитать в параметре `services` в аргументе `meta.src`:
 
 ```js
 const machine = createMachine(
@@ -706,9 +703,9 @@ const machine = createMachine(
 );
 ```
 
-## Testing
+## Тестирование
 
-By specifying services as strings above, "mocking" services can be done by specifying an alternative implementation with `.withConfig()`:
+Указав службы в виде строк выше, "замоканные" службы можно выполнить, указав альтернативную реализацию с помощью `.withConfig()`:
 
 ```js
 import { interpret } from 'xstate';
@@ -745,9 +742,11 @@ describe('userMachine', () => {
 });
 ```
 
-## Referencing Services <Badge text="4.7+" />
+## Ссылка на службы
 
-Services (and [actors](./actors.md), which are spawned services) can be referenced directly on the [state object](./states.md) from the `.children` property. The `state.children` object is a mapping of service IDs (keys) to those service instances (values):
+_Начиная с версии 4.7+_
+
+На службы (и [акторов](actors.md), которые являются порожденными службами) можно ссылаться непосредственно в [объекте состояния](states.md) из свойства `.children`. Объект `state.children` представляет собой сопоставление идентификаторов (ключей) службы с этими экземплярами (значениями) службы:
 
 ```js
 const machine = createMachine({
@@ -767,11 +766,11 @@ const service = interpret(machine)
   .start();
 ```
 
-When JSON serialized, the `state.children` object is a mapping of service IDs (keys) to objects containing meta data about that service.
+При сериализации JSON объект `state.children` представляет собой сопоставление идентификаторов (ключей) службы с объектами, содержащими метаданные об этой службе.
 
-## Quick Reference
+## Краткий справочник
 
-**The `invoke` property**
+**Свойство `invoke`**
 
 ```js
 const machine = createMachine({
@@ -789,11 +788,14 @@ const machine = createMachine({
           // - an observable
         },
         id: 'some-id',
-        // (optional) forward machine events to invoked service (currently for machines only!)
+        // (optional) forward machine events to invoked service
+		// (currently for machines only!)
         autoForward: true,
-        // (optional) the transition when the invoked promise/observable/machine is done
+        // (optional) the transition when the invoked
+		// promise/observable/machine is done
         onDone: { target: /* ... */ },
-        // (optional) the transition when an error from the invoked service occurs
+        // (optional) the transition when an error
+		// from the invoked service occurs
         onError: { target: /* ... */ }
       }
     }
@@ -801,7 +803,7 @@ const machine = createMachine({
 });
 ```
 
-**Invoking Promises**
+**Вызов промисов**
 
 ```js
 // Function that returns a promise
@@ -828,7 +830,7 @@ const getDataFromAPI = () => fetch(/* ... */)
 // ...
 ```
 
-**Invoking Callbacks**
+**Вызов функций обратного вызова**
 
 ```js
 // ...
@@ -856,7 +858,7 @@ on: {
 }
 ```
 
-**Invoking Observables**
+**Вызов "наблюдаемых"**
 
 ```js
 import { map } from 'rxjs/operators';
@@ -876,7 +878,7 @@ on: {
 // ...
 ```
 
-**Invoking Machines**
+**Вызов автоматов**
 
 ```js
 const someMachine = createMachine({ /* ... */ });

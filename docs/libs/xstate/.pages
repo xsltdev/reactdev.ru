@@ -3,9 +3,9 @@ nav:
     - index.md
     - about
     - guides
-    - tutorials
-    - recipes
-    - packages
-    - patterns
-    - examples
-    - visualizer
+    # - tutorials
+    # - recipes
+    # - packages
+    # - patterns
+    # - examples
+    # - visualizer

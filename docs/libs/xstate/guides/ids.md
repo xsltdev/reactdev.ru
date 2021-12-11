@@ -1,8 +1,6 @@
-# Identifying State Nodes
+# Идентификация узлов состояния
 
-[:rocket: Quick Reference](#quick-reference)
-
-By default, a state node's `id` is its delimited full path. You can use this default `id` to specify a state node:
+По-умолчанию идентификатором `id` узла состояния является его полный путь с разделителями. Вы можете использовать этот идентификатор `id` по-умолчанию, чтобы указать узел состояния:
 
 ```js
 const lightMachine = createMachine({
@@ -14,47 +12,47 @@ const lightMachine = createMachine({
       on: {
         // You can target state nodes by their default ID.
         // This is the same as TIMER: 'yellow'
-        TIMER: { target: '#light.yellow' }
-      }
+        TIMER: { target: '#light.yellow' },
+      },
     },
     yellow: {
       on: {
-        TIMER: { target: 'red' }
-      }
+        TIMER: { target: 'red' },
+      },
     },
     red: {
       on: {
-        TIMER: { target: 'green' }
-      }
-    }
-  }
+        TIMER: { target: 'green' },
+      },
+    },
+  },
 });
 ```
 
-## Relative Targets
+## Относительные цели
 
-Child state nodes can be targeted relative to their parent by specifying a dot (`'.'`) followed by their key:
+Узлы дочернего состояния могут быть нацелены относительно их родительских, указав точку ('`.`'), За которой следует их ключ:
 
-```js {10-12}
+```js hl_lines="10-12"
 const optionsMachine = createMachine({
   id: 'options',
   initial: 'first',
   states: {
     first: {},
     second: {},
-    third: {}
+    third: {},
   },
   on: {
     SELECT_FIRST: { target: '.first' }, // resolves to 'options.first'
     SELECT_SECOND: { target: '.second' }, // 'options.second'
-    SELECT_THIRD: { target: '.third' } // 'options.third'
-  }
+    SELECT_THIRD: { target: '.third' }, // 'options.third'
+  },
 });
 ```
 
-By default, relative targets are [internal transitions](./transitions.md#internal-transitions), which means the parent state will _not_ exit and reenter. You can make relative targets external transitions by specifying `internal: false`:
+По умолчанию относительные цели - это [внутренние переходы](transitions.md#internal-transitions), что означает, что родительское состояние _не будет_ выходить и повторно входить. Вы можете сделать относительные цели внешних переходов, указав `internal: false`:
 
-```js {4}
+```js hl_lines="4"
 // ...
 on: {
   SELECT_FIRST: {
@@ -64,7 +62,7 @@ on: {
 }
 ```
 
-## Custom IDs
+## Пользовательские идентификаторы
 
 State nodes can be targeted via unique identifiers, instead of by relative identifiers. This can simplify the creation of complex statecharts.
 
@@ -82,23 +80,23 @@ const lightMachine = createMachine({
       id: 'greenLight',
       on: {
         // target state node by its ID
-        TIMER: { target: '#yellowLight' }
-      }
+        TIMER: { target: '#yellowLight' },
+      },
     },
     yellow: {
       id: 'yellowLight',
       on: {
-        TIMER: { target: '#redLight' }
-      }
+        TIMER: { target: '#redLight' },
+      },
     },
     red: {
       id: 'redLight',
       on: {
         // relative targets will still work
-        TIMER: { target: 'green' }
-      }
-    }
-  }
+        TIMER: { target: 'green' },
+      },
+    },
+  },
 });
 ```
 
@@ -147,8 +145,8 @@ const lightMachine = createMachine({
     // ID: "light.red"
     red: {
       /* ... */
-    }
-  }
+    },
+  },
 });
 ```
 
