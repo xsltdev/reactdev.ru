@@ -1,6 +1,6 @@
-## Using TypeScript
+# Использование TypeScript
 
-As XState is written in [TypeScript](https://www.typescriptlang.org/), strongly typing your statecharts is useful and encouraged. Consider this light machine example:
+Поскольку XState написан на [TypeScript](https://scriptdev.ru/ts/), строгая типизация диаграмм состояний полезна и приветствуется. Рассмотрим пример простого автомата:
 
 ```typescript
 // The events that the machine handles
@@ -14,7 +14,10 @@ interface LightContext {
   elapsed: number;
 }
 
-const lightMachine = createMachine<LightContext, LightEvent>({
+const lightMachine = createMachine<
+  LightContext,
+  LightEvent
+>({
   key: 'light',
   initial: 'green',
   context: { elapsed: 0 },
@@ -22,63 +25,70 @@ const lightMachine = createMachine<LightContext, LightEvent>({
     green: {
       on: {
         TIMER: { target: 'yellow' },
-        POWER_OUTAGE: { target: 'red' }
-      }
+        POWER_OUTAGE: { target: 'red' },
+      },
     },
     yellow: {
       on: {
         TIMER: { target: 'red' },
-        POWER_OUTAGE: { target: 'red' }
-      }
+        POWER_OUTAGE: { target: 'red' },
+      },
     },
     red: {
       on: {
         TIMER: { target: 'green' },
-        POWER_OUTAGE: { target: 'red' }
+        POWER_OUTAGE: { target: 'red' },
       },
       initial: 'walk',
       states: {
         walk: {
           on: {
-            PED_COUNTDOWN: { target: 'wait' }
-          }
+            PED_COUNTDOWN: { target: 'wait' },
+          },
         },
         wait: {
           on: {
             PED_COUNTDOWN: {
               target: 'stop',
               cond: (context, event) => {
-                return event.duration === 0 && context.elapsed > 0;
-              }
-            }
-          }
+                return (
+                  event.duration === 0 &&
+                  context.elapsed > 0
+                );
+              },
+            },
+          },
         },
         stop: {
           // Transient transition
           always: {
-            target: '#light.green'
-          }
-        }
-      }
-    }
-  }
+            target: '#light.green',
+          },
+        },
+      },
+    },
+  },
 });
 ```
 
-Providing the context and events as generic parameters for the `createMachine()` function gives many advantages:
+Предоставление контекста и событий в качестве общих параметров для функции `createMachine()` дает множество преимуществ:
 
-- The context type/interface (`TContext`) is passed on to actions, guards, services and more. It is also passed to deeply nested states.
-- The event type (`TEvent`) ensures that only specified events (and built-in XState-specific ones) are used in transition configs. The provided event object shapes are also passed on to actions, guards, and services.
-- Events which you send to the machine will be strongly typed, offering you much more confidence in the payload shapes you'll be receiving.
+- Тип / интерфейс контекста (`TContext`) передается действиям, защитным функциям, службам и многому другому. Он также передается в глубоко вложенные состояния.
+- Тип события (`TEvent`) гарантирует, что в конфигурациях перехода используются только указанные события (и встроенные, специфичные для XState). Предоставленные формы объекта события также передаются действиям, защитным функциям и службам.
+- События, которые вы отправляете в автомат, будут строго типизированы, что даст вам гораздо больше уверенности в формах полезной нагрузки, которые вы будете получать.
 
-## Config Objects
+## Объекты настроек
 
-The generic types for `MachineConfig<TContext, any, TEvent>` are the same as those for `createMachine<TContext, TEvent>`. This is useful when you are defining a machine config object _outside_ of the `createMachine(...)` function, and helps prevent [inference errors](https://github.com/statelyai/xstate/issues/310):
+Общие типы для `MachineConfig<TContext, any, TEvent>` такие же, как и для `createMachine<TContext, TEvent>`. Это полезно, когда вы определяете объект конфигурации автомата _вне_ функции `createMachine(...)`, и помогает предотвратить [ошибки вывода типов](https://github.com/statelyai/xstate/issues/310):
 
 ```ts
 import { MachineConfig } from 'xstate';
 
-const myMachineConfig: MachineConfig<TContext, any, TEvent> = {
+const myMachineConfig: MachineConfig<
+  TContext,
+  any,
+  TEvent
+> = {
   id: 'controller',
   initial: 'stopped',
   states: {
@@ -87,24 +97,26 @@ const myMachineConfig: MachineConfig<TContext, any, TEvent> = {
     },
     started: {
       /* ... */
-    }
-  }
+    },
+  },
   // ...
 };
 ```
 
-## Typestates <Badge text="4.7+" />
+## Типизированные состояния
 
-Typestates are a concept that narrow down the shape of the overall state `context` based on the state `value`. This can be helpful in preventing impossible states and narrowing down what the `context` should be in a given state, without having to write excessive assertions.
+_Начиная с версии 4.7+_
 
-A `Typestate` is an interface consisting of two properties:
+**Типизированные состояния** (_Typestates_) - это концепция, сужающая форму общего контекста состояния `context` на основе значения состояния `value`. Это может быть полезно для предотвращения невозможных состояний и сужения контекста `context`, который должен быть в данном состоянии, без необходимости писать лишние утверждения.
 
-- `value` - the state value of the typestate (compound states should be referenced using object syntax; e.g., `{ idle: 'error' }` instead of `"idle.error"`)
-- `context` - the narrowed context of the typestate when the state matches the given `value`
+`Typestate` - это интерфейс, состоящий из двух свойств:
 
-The typestates of a machine are specified as the 3rd generic type in `createMachine<TContext, TEvent, TTypestate>`.
+- `value` - значение состояния typestate (на составные состояния следует ссылаться с использованием синтаксиса объекта; например, `{idle: 'error'}` вместо `idle.error`)
+- `context` - суженный контекст состояния типа, когда состояние соответствует заданному `value`
 
-**Example:**
+Типизированные состояния автомата указываются как 3-й общий тип в `createMachine<TContext, TEvent, TTypestate>`.
+
+**Пример:**
 
 ```ts
 import { createMachine, interpret } from 'xstate';
@@ -137,14 +149,24 @@ type UserTypestate =
     }
   | {
       value: 'success';
-      context: UserContext & { user: User; error: undefined };
+      context: UserContext & {
+        user: User;
+        error: undefined;
+      };
     }
   | {
       value: 'failure';
-      context: UserContext & { user: undefined; error: string };
+      context: UserContext & {
+        user: undefined;
+        error: string;
+      };
     };
 
-const userMachine = createMachine<UserContext, UserEvent, UserTypestate>({
+const userMachine = createMachine<
+  UserContext,
+  UserEvent,
+  UserTypestate
+>({
   id: 'user',
   initial: 'idle',
   states: {
@@ -159,8 +181,8 @@ const userMachine = createMachine<UserContext, UserEvent, UserTypestate>({
     },
     failure: {
       /* ... */
-    }
-  }
+    },
+  },
 });
 
 const userService = interpret(userMachine);
@@ -173,46 +195,45 @@ userService.subscribe((state) => {
 });
 ```
 
-::: warning
-Compound states should have all parent state values explicitly modelled to avoid type errors when testing substates.
+!!!warning "Внимание"
 
-```typescript
-type State =
-  /* ... */
-  | {
-      value: 'parent';
-      context: Context;
-    }
-  | {
-      value: { parent: 'child' };
-      context: Context;
+    Для составных состояний все значения родительских состояний должны быть явно смоделированы, чтобы избежать ошибок типа при тестировании подсостояний.
+
+    ```typescript
+    type State =
+    /* ... */
+    | {
+    	value: 'parent';
+    	context: Context;
+    	}
+    | {
+    	value: { parent: 'child' };
+    	context: Context;
+    	};
+    /* ... */
+    ```
+
+    Если два состояния имеют одинаковые типы контекста, их объявления могут быть объединены с помощью объединения типов для значения.
+
+    ```typescript
+    type State =
+    /* ... */
+    {
+    	value: 'parent' | { parent: 'child' };
+    	context: Context;
     };
-/* ... */
-```
+    /* ... */
+    ```
 
-Where two states have identical context types, their declarations can be merged by using a type union for the value.
+## Исправление проблем
 
-```typescript
-type State =
-  /* ... */
-  {
-    value: 'parent' | { parent: 'child' };
-    context: Context;
-  };
-/* ... */
-```
+У XState и TypeScript есть некоторые известные ограничения. Нам нравится TypeScript, и мы _постоянно_ работаем над тем, чтобы сделать его лучше в XState.
 
-:::
+Вот некоторые известные проблемы, которые можно обойти:
 
-## Troubleshooting
+### События в опциях автомата
 
-There are some known limitations with XState and TypeScript. We love TypeScript, and we're _constantly_ pressing ahead to make it a better experience in XState.
-
-Here are some known issues, all of which can be worked around:
-
-### Events in machine options
-
-When you use `createMachine`, you can pass in implementations to named actions/services/guards in your config. For instance:
+Когда вы используете `createMachine`, вы можете передавать реализации именованным действиям / службам / защитным функциям в вашем `config`. Например:
 
 ```ts
 interface Context {}
@@ -227,22 +248,22 @@ createMachine<Context, Event>(
   {
     on: {
       EVENT_WITH_FLAG: {
-        actions: 'consoleLogData'
-      }
-    }
+        actions: 'consoleLogData',
+      },
+    },
   },
   {
     actions: {
       consoleLogData: (context, event) => {
         // This will error at .flag
         console.log(event.flag);
-      }
-    }
+      },
+    },
   }
 );
 ```
 
-The reason this errors is because inside the `consoleLogData` function, we don't know which event caused it to fire. The cleanest way to manage this is to assert the event type yourself.
+Причина этих ошибок в том, что внутри функции `consoleLogData` мы не знаем, какое событие вызвало ее срабатывание. Самый простой способ справиться с этим - самостоятельно подтвердить тип события.
 
 ```ts
 createMachine<Context, Event>(machine, {
@@ -256,7 +277,7 @@ createMachine<Context, Event>(machine, {
 })
 ```
 
-It's also sometimes possible to move the implementation inline.
+Также иногда возможно переместить реализацию внутрь.
 
 ```ts
 createMachine<Context, Event>({
@@ -266,17 +287,17 @@ createMachine<Context, Event>({
         // No more error, because we know which event
         // is responsible for calling this action
         console.log(event.flag);
-      }
-    }
-  }
+      },
+    },
+  },
 });
 ```
 
-This approach doesn't work for all cases. The action loses its name, so it becomes less nice to look at in the visualiser. It also means if the action is duplicated in several places you'll need to copy-paste it to all the places it's needed.
+Этот подход работает не во всех случаях. Действие теряет свое название, поэтому на него становится менее приятно смотреть в визуализаторе. Это также означает, что если действие дублируется в нескольких местах, вам нужно скопировать и вставить его во все необходимые места.
 
-### Event types in entry actions
+### Типы событий в действиях входа
 
-Event types in inline entry actions are not currently typed to the event that led to them. Consider this example:
+Типы событий во встроенных входных действиях в настоящее время не относятся к событию, которое к ним привело. Рассмотрим этот пример:
 
 ```ts
 interface Context {}
@@ -293,23 +314,23 @@ createMachine<Context, Event>({
     state1: {
       on: {
         EVENT_WITH_FLAG: {
-          target: 'state2'
-        }
-      }
+          target: 'state2',
+        },
+      },
     },
     state2: {
       entry: [
         (context, event) => {
           // This will error at .flag
           console.log(event.flag);
-        }
-      ]
-    }
-  }
+        },
+      ],
+    },
+  },
 });
 ```
 
-Here, we don't know what event led to the `entry` action on `state2`. The only way to fix this is to do a similar trick to above:
+Здесь мы не знаем, какое событие привело к действию `entry` в `state2`. Единственный способ исправить это - проделать аналогичный трюк, описанный выше:
 
 ```ts
 entry: [
@@ -317,13 +338,13 @@ entry: [
     if (event.type !== 'EVENT_WITH_FLAG') return;
     // No more error at .flag!
     console.log(event.flag);
-  }
+  },
 ];
 ```
 
-### `onDone`/`onError` events in machine options
+### `onDone` и `onError` события в настройках автомата
 
-The result of promise-based services is quite hard to type safely in XState. For instance, a machine like this:
+Результат использования служб на основе промисов довольно сложно безопасно ввести в XState. Например, такой автомат:
 
 ```ts
 interface Data {
@@ -342,17 +363,17 @@ createMachine<Context, Event>(
     invoke: {
       src: async () => {
         const data: Data = {
-          flag: true
+          flag: true,
         };
         return data;
       },
       onDone: {
-        actions: 'consoleLogData'
+        actions: 'consoleLogData',
       },
       onError: {
-        actions: 'consoleLogError'
-      }
-    }
+        actions: 'consoleLogError',
+      },
+    },
   },
   {
     actions: {
@@ -363,13 +384,13 @@ createMachine<Context, Event>(
       consoleLogError: (context, event) => {
         // Error on this line - data does not exist!
         console.log(event.data);
-      }
-    }
+      },
+    },
   }
 );
 ```
 
-Frustratingly, the best way to fix this is to cast the `event` to `any` and reassign it based on what we know it to be:
+К сожалению, лучший способ исправить это - передать `event` в `any` и переназначить его в зависимости от того, что мы знаем о нем:
 
 ```ts
 import { DoneInvokeEvent, ErrorPlatformEvent } from 'xstate'
@@ -387,9 +408,9 @@ actions: {
 }
 ```
 
-### Assign action behaving strangely
+### Странное поведение действия assing
 
-When run in `strict: true` mode, assign actions can sometimes behave very strangely.
+При запуске в режиме `strict: true` действия `assign` иногда могут вести себя очень странно.
 
 ```ts
 interface Context {
@@ -398,28 +419,31 @@ interface Context {
 
 createMachine<Context>({
   context: {
-    something: true
+    something: true,
   },
   entry: [
-    // Type 'AssignAction<{ something: false; }, AnyEventObject>' is not assignable to type 'string'.
+    // Type 'AssignAction<{ something: false; }, AnyEventObject>'
+    // is not assignable to type 'string'.
     assign(() => {
       return {
-        something: false
+        something: false,
       };
     }),
-    // Type 'AssignAction<{ something: false; }, AnyEventObject>' is not assignable to type 'string'.
+    // Type 'AssignAction<{ something: false; }, AnyEventObject>'
+    // is not assignable to type 'string'.
     assign({
-      something: false
+      something: false,
     }),
-    // Type 'AssignAction<{ something: false; }, AnyEventObject>' is not assignable to type 'string'.
+    // Type 'AssignAction<{ something: false; }, AnyEventObject>'
+    // is not assignable to type 'string'.
     assign({
-      something: () => false
-    })
-  ]
+      something: () => false,
+    }),
+  ],
 });
 ```
 
-It might appear that nothing you try works - all syntaxes are buggy. The fix is very strange, but works consistently. Add an unused `context` argument to the first argument of your assigner function.
+Может показаться, что ничего из того, что вы пытаетесь сделать, не работает - все синтаксисы ошибочны. Исправление очень странное, но работает стабильно. Добавьте неиспользуемый аргумент контекста `context` к первому аргументу функции `assign`.
 
 ```ts
 entry: [
@@ -440,17 +464,15 @@ entry: [
 ],
 ```
 
-This is a nasty bug to fix and involves moving our codebase to strict mode, but we're planning to do it in V5.
+Это неприятная ошибка, которую нужно исправить, и она включает в себя перевод нашей кодовой базы в строгий режим, но мы планируем сделать это в V5.
 
 ### `keyofStringsOnly`
 
-If you are seeing this error:
+Если вы видите эту ошибку:
 
 ```
-
 Type error: Type 'string | number' does not satisfy the constraint 'string'.
 Type 'number' is not assignable to type 'string'. TS2344
-
 ```
 
-Ensure that your tsconfig file does not include `"keyofStringsOnly": true,`.
+Убедитесь, что ваш файл `tsconfig` не включает `"keyofStringsOnly": true,`.

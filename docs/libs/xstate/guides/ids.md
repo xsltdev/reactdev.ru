@@ -64,11 +64,11 @@ on: {
 
 ## Пользовательские идентификаторы
 
-State nodes can be targeted via unique identifiers, instead of by relative identifiers. This can simplify the creation of complex statecharts.
+Узлы состояния могут быть обозначены с помощью уникальных идентификаторов, а не с помощью относительных идентификаторов. Это может упростить создание сложных диаграмм состояний.
 
-To specify an ID for a state node, provide a unique string identifier as its `id` property, e.g., `id: 'greenLight'`.
+Чтобы указать идентификатор для узла состояния, укажите уникальный строковый идентификатор в качестве его свойства `id`, например `id: 'greenLight'`.
 
-To target a state node by its ID, prepend the `'#'` symbol to its string ID, e.g., `TIMER: '#greenLight'`.
+Чтобы сослаться на узел состояния по его идентификатору, добавьте к его строковому идентификатору символ '`#`', например, `TIMER: '#greenLight'`.
 
 ```js
 const lightMachine = createMachine({
@@ -100,34 +100,34 @@ const lightMachine = createMachine({
 });
 ```
 
-**Notes:**
+**Примечания:**
 
-- IDs are always recommended for the root state node.
-- Make sure that all IDs are unique in order to prevent naming conflicts. This is naturally enforced by the automatically generated IDs.
+- Для корневого узла состояния всегда рекомендуются задавать идентификатор.
+- Убедитесь, что все идентификаторы уникальны, чтобы предотвратить конфликты имен. Естественно, уникальность обеспечивается автоматически сгенерированными идентификаторами.
 
-::: warning
-Do not mix custom identifiers with relative identifiers. For example, if the `red` state node above has a custom `"redLight"` ID and a child `walking` state node, e.g.:
+!!!warning "Внимание"
 
-```js
-// ...
-red: {
-  id: 'redLight',
-  initial: 'walking',
-  states: {
-    // ID still resolves to 'light.red.walking'
-    walking: {/* ... */},
+    Не смешивайте пользовательские идентификаторы с относительными идентификаторами. Например, если узел состояния `red` выше имеет пользовательский идентификатор `redLight` и дочерний узел состояния `walking`, например:
+
+    ```js
     // ...
-  }
-}
-// ...
-```
+    red: {
+    	id: 'redLight',
+    	initial: 'walking',
+    	states: {
+    		// ID still resolves to 'light.red.walking'
+    		walking: {/* ... */},
+    		// ...
+    	}
+    }
+    // ...
+    ```
 
-Then you cannot target the `'walking'` state via `'#redLight.walking'`, because its ID is resolved to `'#light.red.walking'`. A target that starts with `'#'` will always refer to the _exact match_ for the `'#[state node ID]'`.
-:::
+    Тогда вы не можете настроить таргетинг на состояние `'walking'` с помощью `'#redLight.walking'`, потому что его идентификатор преобразован в `'#light.red.walking'`. Цель, которая начинается с `'#'`, всегда будет относиться к _точному совпадению_ для `'#[state node ID]'`.
 
-## Quick Reference
+## Краткий справочник
 
-**Default, automatically generated ID:**
+**Идентификатор по умолчанию, автоматически сгенерированный:**
 
 ```js
 const lightMachine = createMachine({
@@ -150,7 +150,7 @@ const lightMachine = createMachine({
 });
 ```
 
-**Custom ID**
+**Пользовательский идентификатор**
 
 ```js
 // ...
@@ -162,7 +162,7 @@ states: {
 }
 ```
 
-**Targeting state node by ID:**
+**Таргетинг узла состояния по идентификатору**
 
 ```js
 // ...

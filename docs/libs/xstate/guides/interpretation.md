@@ -1,25 +1,26 @@
-# Interpreting Machines
+# Интерпретация автоматов
 
-While a state machine/statechart with a pure `.transition()` function is useful for flexibility, purity, and testability, in order for it to have any use in a real-life application, something needs to:
+Хотя конечный автомат / диаграмма состояний с чистой функцией `.transition()` полезны для обеспечения гибкости, чистоты и тестируемости, но для того, чтобы ее можно было использовать в реальном приложении, нужно еще кое-что:
 
-- Keep track of the current state, and persist it
-- Execute side-effects
-- Handle delayed transitions and events
-- Communicate with external services
+- Следить за текущим состоянием и сохранять его
+- Выполнять побочные эффекты
+- Обрабатывать отложенные переходы и события
+- Общаться с внешними службами
 
-The **interpreter** is responsible for _interpreting_ the state machine/statechart and doing all of the above - that is, parsing and executing it in a runtime environment. An interpreted, running instance of a statechart is called a **service**.
+**Интерпретатор** (_interpreter_) отвечает за _интерпретацию_ конечного автомата / диаграммы состояний и выполнение всего вышеперечисленного, то есть его синтаксического анализа и выполнения в среде выполнения. Интерпретируемый, работающий экземпляр диаграммы состояний называется **службой** (_service_).
 
-## Interpreter <Badge text="4.0+" />
+## Интерпретатор
 
-An optional interpreter is provided that you can use to run your statecharts. The interpreter handles:
+_Начиная с версии 4.0+_
 
-- State transitions
-- Executing actions (side-effects)
-- Delayed events with cancellation
-- Activities (ongoing actions)
-- Invoking/spawning child statechart services
-- Support for multiple listeners for state transitions, context changes, events, etc.
-- And more!
+Доступен дополнительный интерпретатор, который можно использовать для запуска диаграмм состояний. Интерпретатор, в частности, поддерживает:
+
+- Переходы между состояниями
+- Выполнение действий (побочные эффекты)
+- Отложенные события с возможностью отмены
+- Активности (постоянно выполняемые действия)
+- Вызов или создание дочерних служб диаграммы состояний
+- Поддержка нескольких слушателей для переходов состояний, изменений контекста, событий и т. д.
 
 ```js
 import { createMachine, interpret } from 'xstate';
@@ -41,11 +42,11 @@ service.send({ type: 'SOME_EVENT' });
 service.stop();
 ```
 
-## Sending Events
+## Отправка событий
 
-Events are sent to a running service by calling `service.send(event)`. There are 3 ways an event can be sent:
+События отправляются в работающую службу путем вызова `service.send(event)`. Событие можно отправить тремя способами:
 
-```js {5,8,12}
+```js hl_lines="4 8 12"
 service.start();
 
 // As an object (preferred):
@@ -60,23 +61,23 @@ service.send('CLICK');
 service.send('CLICK', { x: 40, y: 21 });
 ```
 
-- As an event object (e.g., `.send({ type: 'CLICK', x: 40, y: 21 })`)
-  - The event object must have a `type: ...` string property.
-- As a string (e.g., `.send('CLICK')`, which resolves to sending `{ type: 'CLICK' }`)
-  - The string represents the event type.
-- As a string followed by an object payload (e.g., `.send('CLICK', { x: 40, y: 21 })`) <Badge text="4.5+"/>
-  - The first string argument represents the event type.
-  - The second argument must be an object without a `type: ...` property.
+- Как объект события (например, `.send({ type: 'CLICK', x: 40, y: 21 })`)
+  : - Объект события должен иметь строковое свойство `type: ...`.
+- Как строка (например, `.send('CLICK')`, что равносильно отправке `{ type: 'CLICK' }`)
+  : - Строка представляет тип события.
+- В виде строки, за которой следует полезная нагрузка в виде объекта (например, `.send('CLICK', { x: 40, y: 21 })`), реализовано _начиная с версии 4.5+_
+  : - Первый строковый аргумент представляет тип события.
+  : - Второй аргумент должен быть объектом без свойства `type: ...`
 
-::: warning
-If the service is not initialized (that is, if `service.start()` wasn't called yet), events will be **deferred** until the service is started. This means that the events won't be processed until `service.start()` is called, and then they will all be sequentially processed.
+!!!warning "Внимание"
 
-This behavior can be changed by setting `{ deferEvents: false }` in the [service options](#options). When `deferEvents` is `false`, sending an event to an uninitialized service will throw an error.
-:::
+    Если служба не инициализирована (то есть, если `service.start()` еще не был вызван), события будут **отложены** до запуска службы. Это означает, что события не будут обрабатываться до тех пор, пока не будет вызван `service.start()`, а затем все они будут последовательно обработаны.
 
-## Batched Events
+    Это поведение можно изменить, установив `{deferEvents: false}` в параметрах службы. Когда `deferEvents` имеет значение `false`, отправка события неинициализированной службе вызовет ошибку.
 
-Multiple events can be sent as a group, or "batch", to a running service by calling `service.send(events)` with an array of events:
+## Пакетные события
+
+Несколько событий можно отправить в виде группы или «пакета» в работающую службу, вызвав `service.send(events)` с массивом событий:
 
 ```js
 service.send([
@@ -86,29 +87,25 @@ service.send([
   'ANOTHER_EVENT',
   // Event objects
   { type: 'CLICK', x: 40, y: 21 },
-  { type: 'KEYDOWN', key: 'Escape' }
+  { type: 'KEYDOWN', key: 'Escape' },
 ]);
 ```
 
-This will immediately schedule all batched events to be processed sequentially. Since each event causes a state transition that might have actions to execute, actions in intermediate states are deferred until all events are processed, and then they are executed with the state they were created in (not the end state).
+Это немедленно запланирует последовательную обработку всех пакетных событий. Поскольку каждое событие вызывает переход состояния, который может иметь действия для выполнения, действия в промежуточных состояниях откладываются до тех пор, пока все события не будут обработаны, а затем они выполняются в состоянии, в котором они были созданы (а не в конечном состоянии).
 
-This means that the end state (after all events are processed) will have an `.actions` array of _all_ of the accumulated actions from the intermediate states. Each of these actions will be bound to their respective intermediate states.
+Это означает, что конечное состояние (после обработки всех событий) будет иметь массив `.actions` _всех_ накопленных действий из промежуточных состояний. Каждое из этих действий будет связано с соответствующими промежуточными состояниями.
 
-::: warning
+!!!warning "Внимание"
 
-Only one state -- the **end state** (i.e., the resulting state after all events are processed) -- will be sent to the `.onTransition(...)` listener(s). This makes batched events an optimized approach for performance.
+    Только одно состояние - **конечное состояние** (т. е. результирующее состояние после обработки всех событий) - будет отправлено слушателю `.onTransition(...)`. Это делает пакетные события оптимальным подходом для повышения производительности.
 
-:::
+!!!tip "Подсказка"
 
-::: tip
+    Пакетные события полезны для подходов к [поиску событий](https://martinfowler.com/eaaDev/EventSourcing.html). Журнал событий может быть сохранен, а затем воспроизведен путем отправки пакетных событий службе для достижения того же состояния.
 
-Batched events are useful for [event sourcing](https://martinfowler.com/eaaDev/EventSourcing.html) approaches. A log of events can be stored and later replayed by sending the batched events to a service to arrive at the same state.
+## Переходы
 
-:::
-
-## Transitions
-
-Listeners for state transitions are registered via the `.onTransition(...)` method, which takes a state listener. State listeners are called every time a state transition (including the initial state) happens, with the current [`state` instance](./states.md):
+Слушатели для переходов между состояниями регистрируются с помощью метода `.onTransition(...)`, который принимает прослушиватель состояния. Слушатели состояния вызываются каждый раз, когда происходит переход состояния (включая начальное состояние) с экземпляром текущего состояния:
 
 ```js
 // Interpret the machine
@@ -122,27 +119,25 @@ service.onTransition((state) => {
 service.start();
 ```
 
-::: tip
+!!!tip "Подсказка"
 
-If you only want the `.onTransition(...)` handler(s) to be called when the state changes (that is, when the `state.value` changes, the `state.context` changes, or there are new `state.actions`), use [`state.changed`](https://xstate.js.org/docs/guides/states.html#state-changed):
+    Если вы хотите, чтобы обработчики `.onTransition (...)` вызывались только при изменении состояния (то есть, когда изменяется `state.value`, изменяется `state.context` или появляются новые `state.actions`), используйте [`state.changed`](states.md#state-changed):
 
-```js {2}
-service.onTransition((state) => {
-  if (state.changed) {
-    console.log(state.value);
-  }
-});
-```
+    ```js hl_lines="2"
+    service.onTransition((state) => {
+    	if (state.changed) {
+    		console.log(state.value);
+    	}
+    });
+    ```
 
-::: tip
-The `.onTransition()` callback will not run between eventless ("always") transitions or other microsteps. It only runs on macrosteps.
-Microsteps are the intermediate transitions between macrosteps.
-:::
+!!!tip "Подсказка"
 
+    Обратный вызов `.onTransition()` не будет выполняться между переходами без событий или другими микрошагами. Он работает только на макрошагах. Микрошаги - это промежуточные переходы между макрошагами.
 
-## Starting and Stopping
+## Запуск и остановка
 
-The service can be initialized (i.e., started) and stopped with `.start()` and `.stop()`. Calling `.start()` will immediately transition the service to its initial state. Calling `.stop()` will remove all listeners from the service, and do any listener cleanup, if applicable.
+Службу можно инициализировать (т. е. запустить) и остановить с помощью `.start()` и `.stop()`. Вызов `.start()` немедленно переведет службу в исходное состояние. Вызов `.stop()` удалит всех слушателей из службы и выполнит любую очистку слушателей, если это возможно.
 
 ```js
 const service = interpret(machine);
@@ -157,7 +152,7 @@ service.stop();
 service.start();
 ```
 
-Services can be started from a specific [state](./states.md) by passing the `state` into `service.start(state)`. This is useful when rehydrating the service from a previously saved state.
+Службы можно запускать из определенного [состояния](states.md), передав состояние в `service.start(state)`. Это полезно при восстановлении сервиса из ранее сохраненного состояния.
 
 ```js
 // Starts the service from the specified state,
@@ -165,15 +160,15 @@ Services can be started from a specific [state](./states.md) by passing the `sta
 service.start(previousState);
 ```
 
-## Executing Actions
+## Выполнение действий
 
-[Actions (side-effects)](./actions.md) are, by default, executed immediately when the state transitions. This is configurable by setting the `{ execute: false }` option (see example). Each action object specified on the `state` might have an `.exec` property, which is called with the state's `context` and `event` object.
+[Действия](actions.md) (побочные эффекты) по умолчанию выполняются сразу после перехода состояния. Это можно настроить, установив параметр `{execute: false}`. Каждый объект действия, указанный в `state`, может иметь свойство `.exec`, которое вызывается с контекстом состояния `context` и объектом события `event`.
 
-Actions can be executed manually by calling `service.execute(state)`. This is useful when you want to control when actions are executed:
+Действия можно выполнить вручную, вызвав `service.execute(state)`. Это полезно, когда вы хотите контролировать выполнение действий:
 
 ```js
 const service = interpret(machine, {
-  execute: false // do not execute actions on state transitions
+  execute: false, // do not execute actions on state transitions
 });
 
 service.onTransition((state) => {
@@ -185,21 +180,20 @@ service.onTransition((state) => {
 service.start();
 ```
 
-## Options
+## Параметры
 
-The following options can be passed into the interpreter as the 2nd argument (`interpret(machine, options)`):
+Следующие параметры могут быть переданы интерпретатору в качестве второго аргумента (`interpret(machine, options)`):
 
-- `execute` (boolean) - Signifies whether state actions should be executed upon transition. Defaults to `true`.
-  - See [Executing Actions](#executing-actions) for customizing this behavior.
-- `deferEvents` (boolean) <Badge text="4.4+"/> - Signifies whether events sent to an uninitialized service (i.e., prior to calling `service.start()`) should be deferred until the service is initialized. Defaults to `true`.
-  - If `false`, events sent to an uninitialized service will throw an error.
-- `devTools` (boolean) - Signifies whether events should be sent to the [Redux DevTools extension](https://github.com/zalmoxisus/redux-devtools-extension). Defaults to `false`.
-- `logger` - Specifies the logger to be used for `log(...)` actions. Defaults to the native `console.log` method.
-- `clock` - Specifies the [clock interface for delayed actions](./delays.md#interpretation). Defaults to the native `setTimeout` and `clearTimeout` functions.
+- `execute` (boolean) - Указывает, следует ли выполнять действия состояния при переходе. По-умолчанию `true`.
+- `deferEvents` (boolean) Указывает, должны ли события, отправленные в неинициализированную службу (т. е. до вызова `service.start()`), откладываться до инициализации службы. По умолчанию `true`.
+  : - Если `false`, события, отправленные в неинициализированную службу, вызовут ошибку.
+- `devTools` (boolean) - Указывает, следует ли отправлять события в расширение [Redux DevTools](https://github.com/zalmoxisus/redux-devtools-extension). По умолчанию - `false`.
+- `logger` - Задает средство ведения журнала, которое будет использоваться для действий `log(...)`. По умолчанию используется собственный метод `console.log`.
+- `clock` - Задает [интерфейс часов](delays.md#interpretation) для отложенных действий. По умолчанию используются собственные функции `setTimeout` и `clearTimeout`.
 
-## Custom Interpreters
+## Пользовательские интерпретаторы
 
-You may use any interpreter (or create your own) to run your state machine/statechart. Here's an example minimal implementation that demonstrates how flexible interpretation can be (despite the amount of boilerplate):
+Вы можете использовать любой интерпретатор (или создать свой собственный) для запуска вашего конечного автомата / диаграммы состояний. Вот пример минимальной реализации, демонстрирующий, насколько гибкой может быть интерпретация (несмотря на количество шаблонов):
 
 ```js
 const machine = createMachine(/* machine config */);
@@ -244,10 +238,10 @@ listen((state) => {
 send('SOME_EVENT');
 ```
 
-## Notes
+## Примечания
 
-- The `interpret` function is exported directly from `xstate` since 4.3+ (i.e., `import { interpret } from 'xstate'`). For prior versions, it is imported from `'xstate/lib/interpreter'`.
-- Most interpreter methods can be chained:
+- Функция `interpret` экспортируется непосредственно из `xstate` начиная с версии 4.3+ (т. е. `import { interpret } from 'xstate'`). Для предыдущих версий он импортируется из `'xstate/lib/interpreter'`.
+- Большинство методов интерпретатора можно объединить в цепочку:
 
 ```js
 const service = interpret(machine)
@@ -256,4 +250,4 @@ const service = interpret(machine)
   .start(); // returns started service
 ```
 
-- Do not call `service.send(...)` directly from actions. This impedes testing, visualization, and analysis. Instead, [use `invoke`](./communication.md).
+- Не вызывайте `service.send(...)` непосредственно из действий. Это затрудняет тестирование, визуализацию и анализ. Вместо этого используйте [`invoke`](communication.md).
