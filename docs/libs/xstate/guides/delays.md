@@ -314,8 +314,8 @@ service.clock.increment(1000);
 
 Вы можете создать свои собственные «часы», чтобы предоставить их интерпретатору. Интерфейс часов - это объект с двумя функциями / методами:
 
-- `setTimeout` - те же аргументы, что и `window.setTimeout(fn, timeout)`
-- `clearTimeout` - те же аргументы, что и `window.clearTimeout(id)`
+- `setTimeout` — те же аргументы, что и `window.setTimeout(fn, timeout)`
+- `clearTimeout` — те же аргументы, что и `window.clearTimeout(id)`
 
 ## За кулисами
 

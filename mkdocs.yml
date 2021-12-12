@@ -19,7 +19,6 @@ theme:
     features:
         - navigation.tabs
         - navigation.tracking
-        - navigation.instant
     favicon: react.svg
     logo: react.svg
 
