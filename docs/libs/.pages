@@ -9,3 +9,4 @@ nav:
     - react-query.md
     - react-spring.md
     - styled-components.md
+    - xstate

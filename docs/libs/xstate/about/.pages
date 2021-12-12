@@ -1,0 +1,8 @@
+title: Об XState
+nav:
+    - concepts.md
+    - goals.md
+    - Примеры ↗: https://xstate.js.org/docs/about/showcase.html
+    - Ресурсы ↗: https://xstate.js.org/docs/about/resources.html
+    - Руководства ↗: https://xstate.js.org/docs/about/tutorials.html
+    - Глоссарий ↗: https://xstate.js.org/docs/about/glossary.html

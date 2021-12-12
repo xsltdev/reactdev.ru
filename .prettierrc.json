@@ -17,7 +17,7 @@
 		{
 			"files": ".pages",
 			"options": {
-				"parser": "markdown",
+				"parser": "yaml",
 				"useTabs": false,
 				"tabWidth": 4
 			}

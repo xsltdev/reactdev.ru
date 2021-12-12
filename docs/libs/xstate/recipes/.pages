@@ -1,0 +1,8 @@
+title: Рецепты XState
+nav:
+    - react.md
+    - vue.md
+    - rxjs.md
+    - ember.md
+    - stencil.md
+    - svelte.md
