@@ -146,7 +146,6 @@ h3 {
 	align-items: center;
 	display: flex;
 	flex-direction: column;
-	font-size: 85%;
 	grid-column-gap: 2rem;
 }
 .layout .cell h3 {
