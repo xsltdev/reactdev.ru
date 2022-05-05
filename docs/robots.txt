@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Clean-param: query
 
 Host: https://reactdev.ru/
 Sitemap: https://reactdev.ru/sitemap.xml
