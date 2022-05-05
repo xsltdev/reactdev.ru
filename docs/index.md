@@ -8,10 +8,6 @@ hide:
 
 # ![React](react.svg){: style="height:32px;width:32px;vertical-align:middle;"} Справочник React
 
-<div class="layout layout2" markdown="1">
-
-<div class="cell" markdown="1">
-
 [Документация по React](handbook/tutorial.md)
 : React – это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов. Она позволяет вам собирать сложный UI из маленьких изолированных кусочков кода, называемых «компонентами».
 
@@ -26,10 +22,6 @@ hide:
 
 [Вопросы про React на собеседовании](questions.md)
 : Частые вопросы и ответы про React, задаваемые на собеседованиях
-
-</div>
-
-<div class="cell" markdown="1">
 
 [React Router](libs/react-router.md)
 : Маршрутизатор
@@ -54,10 +46,6 @@ hide:
 
 [XState](libs/xstate/index.md)
 : Библиотека для управления конечными автоматами
-
-</div>
-
-</div>
 
 !!!abstract "Справочники"
 
