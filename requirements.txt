@@ -12,3 +12,5 @@ mkdocs-section-index
 PyYAML
 six
 tornado
+pillow
+cairosvg
