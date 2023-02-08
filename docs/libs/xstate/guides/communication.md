@@ -507,7 +507,7 @@ const service = interpret(parentMachine)
 
     Создатели действий `send(...)` и `sendParent(...)` не обязательно отправляют события на машины. Это чистые функции, которые возвращают объект действия, описывающий, что нужно отправить, например `{type: 'xstate.send', event: ...}`. [Интерпретатор](interpretation.md) прочитает эти объекты, а затем отправит их.
 
-    [Подробнее о `send`](actions.html#send-action)
+    [Подробнее о `send`](actions.md#send-action)
 
 Вот пример двух машин, `pingMachine` и `pongMachine`, которые обмениваются данными друг с другом:
 

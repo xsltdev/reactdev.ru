@@ -13,12 +13,26 @@ theme:
     # name: null
     # custom_dir: 'theme/material'
     palette:
-        primary: cyan
-        accent: cyan
+        - media: '(prefers-color-scheme: light)'
+          scheme: default
+          primary: cyan
+          accent: cyan
+          toggle:
+              icon: material/toggle-switch-off-outline
+              name: Тёмная тема
+        - media: '(prefers-color-scheme: dark)'
+          scheme: slate
+          primary: cyan
+          accent: cyan
+          toggle:
+              icon: material/toggle-switch
+              name: Светлая тема
     language: ru
     features:
         - navigation.tabs
         - navigation.tracking
+        - navigation.top
+        - content.action.edit
     favicon: react.svg
     logo: react.svg
 
@@ -63,7 +77,8 @@ markdown_extensions:
     - pymdownx.emoji:
           emoji_index: !!python/name:materialx.emoji.twemoji
           emoji_generator: !!python/name:materialx.emoji.to_svg
-    - pymdownx.tabbed
+    - pymdownx.tabbed:
+          alternate_style: true
     - pymdownx.superfences
 
 plugins:
@@ -76,4 +91,4 @@ plugins:
     - social
 
 extra_css:
-    - '/assets/stylesheets/styles.css'
+    - '/assets/stylesheets/styles.css?2'

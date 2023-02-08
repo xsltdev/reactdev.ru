@@ -156,10 +156,12 @@ h3 {
 }
 
 .md-tabs__list li:last-child {
-	font-weight: 700;
 	position: absolute;
 	right: 0;
+}
+.md-tabs__list li:last-child a {
+	font-weight: 700;
 	padding-left: 24px;
-	background: url('/boosty-white.svg') left center / 22px
-		22px no-repeat;
+	background: url('/heart.svg') left center / 16px 16px
+		no-repeat;
 }
