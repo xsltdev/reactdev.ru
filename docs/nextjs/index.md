@@ -1,5 +1,34 @@
 # Начало работы
 
-https://habr.com/ru/company/timeweb/blog/588498/
+Для создания проекта рекомендуется использовать `create-next-app`:
 
-https://habr.com/ru/company/timeweb/blog/590157/
+```bash
+yarn create next-app app-name
+# typescript
+yarn create next-app app-name --typescript
+```
+
+Ручная установка:
+
+- устанавливаем зависимости:
+
+```bash
+yarn add next react react-dom
+```
+
+- обновляем `package.json`:
+
+```json
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint"
+}
+```
+
+Запуск сервера для разработки:
+
+```bash
+yarn dev
+```
