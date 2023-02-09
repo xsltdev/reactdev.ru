@@ -1,0 +1,13 @@
+title: Основные возможности
+nav:
+    - pages.md
+    - data-fetching.md
+    - css.md
+    - layouts.md
+    - images.md
+    - fonts.md
+    - script.md
+    - static.md
+    - fast-refresh.md
+    - typescript.md
+    - env.md

@@ -1,0 +1,12 @@
+title: Продвинутые возможности
+nav:
+    - dynamic-route.md
+    - auto-optimization.md
+    - static-export.md
+    - abs-import.md
+    - custom-server.md
+    - custom-app.md
+    - custom-error.md
+    - src.md
+    - i18n.md
+    - headers.md
