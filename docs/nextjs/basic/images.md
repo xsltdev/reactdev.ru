@@ -18,7 +18,7 @@ export default function Home() {
     <>
       <h1>Главная страница</h1>
       <Image src={imgSrc} alt="" role="presentation" />
-    </h1>
+    </>
   );
 }
 ```
