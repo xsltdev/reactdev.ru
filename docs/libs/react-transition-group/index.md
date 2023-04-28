@@ -1,5 +1,7 @@
 # React Transition Group
 
+[:octicons-tag-24: react-transition-group v4.4.5](https://reactcommunity.org/react-transition-group/)
+
 Раскрывает простые компоненты, полезные для определения переходов входа и выхода. **React Transition Group** — это не библиотека анимации, как [React-Motion](https://github.com/chenglou/react-motion), она сама по себе не анимирует стили. Вместо этого она раскрывает стадии перехода, управляет классами и элементами группы и манипулирует DOM полезными способами, делая реализацию реальных визуальных переходов намного проще.
 
 ## Начало работы
