@@ -423,7 +423,7 @@ return (
 );
 ```
 
-## useSpring
+## useSprings
 
 ```js
 import { useSprings, animated } from 'react-spring';
