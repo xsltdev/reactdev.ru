@@ -10,3 +10,4 @@ nav:
     - react-spring.md
     - styled-components.md
     - xstate
+    - react-transition-group

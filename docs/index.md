@@ -47,6 +47,9 @@ hide:
 [XState](libs/xstate/index.md)
 : Библиотека для управления конечными автоматами
 
+[React Transition Group](libs/react-transition-group/index.md)
+: Предоставляет простые компоненты, полезные для определения входных и выходных переходов
+
 !!!abstract "Справочники"
 
     [![HTML](html.svg){: style="height:16px;width:16px;vertical-align:middle;"} HTML + CSS](https://hcdev.ru/) &nbsp;&nbsp;&nbsp;
