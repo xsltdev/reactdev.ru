@@ -5,7 +5,6 @@ nav:
     - react-router.md
     - redux
     - redux-toolkit.md
-    - recoil.md
     - react-query.md
     - react-spring.md
     - styled-components.md

@@ -6,49 +6,52 @@ hide:
   - navigation
 ---
 
-# ![React](react.svg){: style="height:32px;width:32px;vertical-align:middle;"} Справочник React
+# ![React](react.svg){: style="height:64px;width:64px;vertical-align:middle;"} Справочник React
 
-[Документация по React](handbook/tutorial.md)
-: React – это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов. Она позволяет вам собирать сложный UI из маленьких изолированных кусочков кода, называемых «компонентами».
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-column-gap: 30px; place-items: stretch;" markdown>
 
-[React и Typescript](types/index.md)
-: Типизация библиотеки React с помощью Typescript
+[![React](react.svg){: style="height:20px;width:20px;vertical-align:middle;"} **React**](https://react.dev/) &mdash; это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов
 
-[Create React App](libs/cra.md)
-: Интерфейс командной строки, позволяющий создавать предварительно настроенные React-проекты
+!!!info "Документация по React"
 
-[GraphQL](graphql/index.md)
-: GraphQL обеспечивает полное и понятное описание данных в вашем API, дает клиентам возможность запрашивать именно то, что им нужно, упрощает обновление API-интерфейсов и предоставляет мощные инструменты для разработчиков
+    - [Официальная дока React v16](handbook/tutorial.md)
+    - [React и Typescript](types/index.md) &mdash; Типизация библиотеки React с помощью Typescript
 
-[Вопросы про React на собеседовании](questions.md)
-: Частые вопросы и ответы про React, задаваемые на собеседованиях
+!!!info "Стартовые проекты React"
 
-[React Router](libs/react-router.md)
-: Маршрутизатор
+    - [Create React App](libs/cra.md)
+    - [![Next.js](nextjs.svg){: style="height:20px;width:20px;vertical-align:middle;"} Next.js](nextjs/index.md)
 
-[Redux](libs/redux/index.md)
-: Библиотека управления состоянием
+!!!info "Redux"
 
-[Redux Toolkit](libs/redux-toolkit.md)
-: Пакет, облегчающий работу с Redux
+    - [![Redux](redux.svg){: style="height:20px;width:20px;vertical-align:middle;"} Redux](libs/redux/index.md) &mdash; Библиотека управления состоянием
+    - [Redux Toolkit](libs/redux-toolkit.md)
 
-[Recoil](libs/recoil.md)
-: Инструмент для управления состоянием в React-приложениях
+!!!info "Менеджеры состояния"
 
-[React Query](libs/react-query)
-: Библиотека для получения, кэширования, синхронизации и обновления "серверного" состояния в React-приложениях
+    - [React Query](libs/react-query) &mdash; менеджер серверного состояния
+    - [XState](libs/xstate/index.md) &mdash; конечные автоматы
 
-[React Spring](libs/react-spring.md)
-: Библиотека для анимации интерфейсов
+!!!info "Загрузка данных"
 
-[Styled Components](libs/styled-components.md)
-: Шпаргалка по библиотеке стилизации
+    - [![GraphQL](graphql.svg){: style="height:20px;width:20px;vertical-align:middle;"} GraphQL](graphql/index.md) &mdash; язык запросов данных
 
-[XState](libs/xstate/index.md)
-: Библиотека для управления конечными автоматами
+!!!info "Роутинг"
 
-[React Transition Group](libs/react-transition-group/index.md)
-: Предоставляет простые компоненты, полезные для определения входных и выходных переходов
+    - [![React Router](react-router.svg){: style="height:20px;width:20px;vertical-align:middle;"} React Router](libs/react-router.md) &mdash; маршрутизатор
+
+!!!info "Стили и CSS"
+
+    - [Styled Components](libs/styled-components.md) &mdash; библиотека стилизации
+
+!!!info "Анимации"
+
+    - [![React Spring](react-spring.svg){: style="height:20px;width:20px;vertical-align:middle;"} React Spring](libs/react-spring.md) &mdash; анимация интерфейсов
+    - [React Transition Group](libs/react-transition-group/index.md) &mdash; анимация переходов
+
+</div>
+
+---
 
 !!!abstract "Справочники"
 
