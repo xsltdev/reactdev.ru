@@ -33,6 +33,7 @@ theme:
         - navigation.tracking
         - navigation.top
         - content.action.edit
+        - content.code.copy
     favicon: react.svg
     logo: react.svg
 
@@ -91,4 +92,4 @@ plugins:
     - social
 
 extra_css:
-    - '/assets/stylesheets/styles.css?2'
+    - '/assets/stylesheets/styles.css?3'

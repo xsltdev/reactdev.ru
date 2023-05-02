@@ -1,6 +1,6 @@
 nav:
     - index.md
-    - handbook
+    - learn
     - types
     - nextjs
     - graphql

@@ -11,7 +11,7 @@
 			"options": {
 				"parser": "markdown",
 				"useTabs": false,
-				"tabWidth": 2
+				"tabWidth": 4
 			}
 		},
 		{

@@ -1,0 +1,16 @@
+title: Документация
+nav:
+    - "Быстрый старт":
+        - index.md
+        - tutorial-tic-tac-toe.md
+        - thinking-in-react.md
+    - "Установка":
+        - installation.md
+        - start-a-new-react-project.md
+        - add-react-to-an-existing-project.md
+        - editor-setup.md
+        - react-developer-tools.md
+    - "Описание пользовательского интерфейса":
+        - describing-the-ui.md
+        - your-first-component.md
+        - importing-and-exporting-components.md
