@@ -1,5 +1,7 @@
 # React Router DOM
 
+[React Router v5.x :octicons-tag-24:"](https://v5.reactrouter.com/web/guides/quick-start)
+
 ## Примеры
 
 ### Основная маршрутизация
