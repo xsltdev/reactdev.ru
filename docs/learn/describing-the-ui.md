@@ -39,17 +39,6 @@ export default function Gallery() {
 }
 ```
 
-<!-- 0002.part.md -->
-
-<!-- 0003.part.md -->
-
-```css
-img {
-    margin: 0 10px 10px 0;
-    height: 90px;
-}
-```
-
 <!-- 0004.part.md -->
 
 Прочитайте **[Ваш первый компонент](your-first-component.md)**, чтобы узнать, как объявлять и использовать компоненты React.
@@ -102,16 +91,6 @@ export default function Profile() {
 }
 ```
 
-<!-- 0010.part.md -->
-
-<!-- 0011.part.md -->
-
-```css
-img {
-    margin: 0 10px 10px 0;
-}
-```
-
 <!-- 0012.part.md -->
 
 Прочитайте **[Импорт и экспорт компонентов](importing-and-exporting-components.md)**, чтобы узнать, как разделить компоненты на собственные файлы.
@@ -143,16 +122,6 @@ export default function TodoList() {
 }
 ```
 
-<!-- 0014.part.md -->
-
-<!-- 0015.part.md -->
-
-```css
-img {
-    height: 90px;
-}
-```
-
 <!-- 0016.part.md -->
 
 Если у вас есть HTML, подобный этому, вы можете исправить его с помощью [конвертера](https://transform.tools/html-to-jsx):
@@ -176,16 +145,6 @@ export default function TodoList() {
             </ul>
         </>
     );
-}
-```
-
-<!-- 0018.part.md -->
-
-<!-- 0019.part.md -->
-
-```css
-img {
-    height: 90px;
 }
 ```
 
@@ -224,24 +183,6 @@ export default function TodoList() {
             </ul>
         </div>
     );
-}
-```
-
-<!-- 0022.part.md -->
-
-<!-- 0023.part.md -->
-
-```css
-body {
-    padding: 0;
-    margin: 0;
-}
-body > div > div {
-    padding: 20px;
-}
-.avatar {
-    border-radius: 50%;
-    height: 90px;
 }
 ```
 
@@ -301,27 +242,6 @@ export function getImageUrl(person, size = 's') {
         size +
         '.jpg'
     );
-}
-```
-
-<!-- 0028.part.md -->
-
-<!-- 0029.part.md -->
-
-```css
-.card {
-    width: fit-content;
-    margin: 5px;
-    padding: 5px;
-    font-size: 20px;
-    text-align: center;
-    border: 1px solid #aaa;
-    border-radius: 20px;
-    background: #fff;
-}
-.avatar {
-    margin: 20px;
-    border-radius: 50%;
 }
 ```
 
@@ -460,34 +380,6 @@ export function getImageUrl(person) {
     return (
         'https://i.imgur.com/' + person.imageId + 's.jpg'
     );
-}
-```
-
-<!-- 0038.part.md -->
-
-<!-- 0039.part.md -->
-
-```css
-ul {
-    list-style-type: none;
-    padding: 0px 10px;
-}
-li {
-    margin-bottom: 10px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-}
-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-}
-h1 {
-    font-size: 22px;
-}
-h2 {
-    font-size: 20px;
 }
 ```
 

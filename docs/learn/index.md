@@ -1,15 +1,19 @@
 # Быстрый старт
 
-[:octicons-tag-24: React v18](https://react.dev/learn)
+Перевод документации [:octicons-tag-24: React v18](https://react.dev/learn)
+
+<small>Перевод старой документации [React v16](../archive/react16/tutorial.md)</small>
 
 Добро пожаловать в документацию по React! На этой странице вы познакомитесь с 80% концепций React, которые вы будете использовать ежедневно.
 
-- Как создавать и размещать компоненты
-- Как добавлять разметку и стили
-- Как отображать данные
-- Как отображать условия и списки
-- Как реагировать на события и обновлять экран
-- Как обмениваться данными между компонентами
+!!!quote "Вы узнаете"
+
+    -   Как создавать и размещать компоненты
+    -   Как добавлять разметку и стили
+    -   Как отображать данные
+    -   Как отображать условия и списки
+    -   Как реагировать на события и обновлять экран
+    -   Как обмениваться данными между компонентами
 
 ## Создание и вложение компонентов
 
@@ -21,7 +25,7 @@
 
 ```js
 function MyButton() {
-  return <button>I'm a button</button>;
+    return <button>I'm a button</button>;
 }
 ```
 
@@ -31,12 +35,12 @@ function MyButton() {
 
 ```js hl_lines="5"
 export default function MyApp() {
-  return (
-    <div>
-      <h1>Welcome to my app</h1>
-      <MyButton />
-    </div>
-  );
+    return (
+        <div>
+            <h1>Welcome to my app</h1>
+            <MyButton />
+        </div>
+    );
 }
 ```
 
@@ -48,16 +52,16 @@ export default function MyApp() {
 
 ```js
 function MyButton() {
-  return <button>I'm a button</button>;
+    return <button>I'm a button</button>;
 }
 
 export default function MyApp() {
-  return (
-    <div>
-      <h1>Welcome to my app</h1>
-      <MyButton />
-    </div>
-  );
+    return (
+        <div>
+            <h1>Welcome to my app</h1>
+            <MyButton />
+        </div>
+    );
 }
 ```
 
@@ -73,16 +77,16 @@ export default function MyApp() {
 
 ```js
 function AboutPage() {
-  return (
-    <>
-      <h1>About</h1>
-      <p>
-        Hello there.
-        <br />
-        How do you do?
-      </p>
-    </>
-  );
+    return (
+        <>
+            <h1>About</h1>
+            <p>
+                Hello there.
+                <br />
+                How do you do?
+            </p>
+        </>
+    );
 }
 ```
 
@@ -107,7 +111,7 @@ function AboutPage() {
 ```css
 /* In your CSS */
 .avatar {
-  border-radius: 50%;
+    border-radius: 50%;
 }
 ```
 
@@ -135,40 +139,26 @@ return <img className="avatar" src={user.imageUrl} />;
 
 ```js
 const user = {
-  name: 'Hedy Lamarr',
-  imageUrl: 'https://i.imgur.com/yXOvdOSs.jpg',
-  imageSize: 90,
+    name: 'Hedy Lamarr',
+    imageUrl: 'https://i.imgur.com/yXOvdOSs.jpg',
+    imageSize: 90,
 };
 
 export default function Profile() {
-  return (
-    <>
-      <h1>{user.name}</h1>
-      <img
-        className="avatar"
-        src={user.imageUrl}
-        alt={'Photo of ' + user.name}
-        style={{
-          width: user.imageSize,
-          height: user.imageSize,
-        }}
-      />
-    </>
-  );
-}
-```
-
-<!-- 0010.part.md -->
-
-<!-- 0011.part.md -->
-
-```css
-.avatar {
-  border-radius: 50%;
-}
-
-.large {
-  border: 4px solid gold;
+    return (
+        <>
+            <h1>{user.name}</h1>
+            <img
+                className="avatar"
+                src={user.imageUrl}
+                alt={'Photo of ' + user.name}
+                style={{
+                    width: user.imageSize,
+                    height: user.imageSize,
+                }}
+            />
+        </>
+    );
 }
 ```
 
@@ -185,9 +175,9 @@ export default function Profile() {
 ```js
 let content;
 if (isLoggedIn) {
-  content = <AdminPanel />;
+    content = <AdminPanel />;
 } else {
-  content = <LoginForm />;
+    content = <LoginForm />;
 }
 return <div>{content}</div>;
 ```
@@ -226,9 +216,9 @@ return <div>{content}</div>;
 
 ```js
 const products = [
-  { title: 'Cabbage', id: 1 },
-  { title: 'Garlic', id: 2 },
-  { title: 'Apple', id: 3 },
+    { title: 'Cabbage', id: 1 },
+    { title: 'Garlic', id: 2 },
+    { title: 'Apple', id: 3 },
 ];
 ```
 
@@ -240,7 +230,7 @@ const products = [
 
 ```js
 const listItems = products.map((product) => (
-  <li key={product.id}>{product.title}</li>
+    <li key={product.id}>{product.title}</li>
 ));
 
 return <ul>{listItems}</ul>;
@@ -254,24 +244,26 @@ return <ul>{listItems}</ul>;
 
 ```js
 const products = [
-  { title: 'Cabbage', isFruit: false, id: 1 },
-  { title: 'Garlic', isFruit: false, id: 2 },
-  { title: 'Apple', isFruit: true, id: 3 },
+    { title: 'Cabbage', isFruit: false, id: 1 },
+    { title: 'Garlic', isFruit: false, id: 2 },
+    { title: 'Apple', isFruit: true, id: 3 },
 ];
 
 export default function ShoppingList() {
-  const listItems = products.map((product) => (
-    <li
-      key={product.id}
-      style={{
-        color: product.isFruit ? 'magenta' : 'darkgreen',
-      }}
-    >
-      {product.title}
-    </li>
-  ));
+    const listItems = products.map((product) => (
+        <li
+            key={product.id}
+            style={{
+                color: product.isFruit
+                    ? 'magenta'
+                    : 'darkgreen',
+            }}
+        >
+            {product.title}
+        </li>
+    ));
 
-  return <ul>{listItems}</ul>;
+    return <ul>{listItems}</ul>;
 }
 ```
 
@@ -283,11 +275,11 @@ export default function ShoppingList() {
 
 ```js
 function MyButton() {
-  function handleClick() {
-    alert('You clicked me!');
-  }
+    function handleClick() {
+        alert('You clicked me!');
+    }
 
-  return <button onClick={handleClick}>Click me</button>;
+    return <button onClick={handleClick}>Click me</button>;
 }
 ```
 
@@ -307,8 +299,8 @@ import { useState } from 'react';
 
 ```js
 function MyButton() {
-  const [count, setCount] = useState(0);
-  // ...
+    const [count, setCount] = useState(0);
+    // ...
 }
 ```
 
@@ -318,17 +310,17 @@ function MyButton() {
 
 ```js
 function MyButton() {
-  const [count, setCount] = useState(0);
+    const [count, setCount] = useState(0);
 
-  function handleClick() {
-    setCount(count + 1);
-  }
+    function handleClick() {
+        setCount(count + 1);
+    }
 
-  return (
-    <button onClick={handleClick}>
-      Clicked {count} times
-    </button>
-  );
+    return (
+        <button onClick={handleClick}>
+            Clicked {count} times
+        </button>
+    );
 }
 ```
 
@@ -342,38 +334,27 @@ React снова вызовет функцию вашего компонента
 import { useState } from 'react';
 
 export default function MyApp() {
-  return (
-    <div>
-      <h1>Counters that update separately</h1>
-      <MyButton />
-      <MyButton />
-    </div>
-  );
+    return (
+        <div>
+            <h1>Counters that update separately</h1>
+            <MyButton />
+            <MyButton />
+        </div>
+    );
 }
 
 function MyButton() {
-  const [count, setCount] = useState(0);
+    const [count, setCount] = useState(0);
 
-  function handleClick() {
-    setCount(count + 1);
-  }
+    function handleClick() {
+        setCount(count + 1);
+    }
 
-  return (
-    <button onClick={handleClick}>
-      Clicked {count} times
-    </button>
-  );
-}
-```
-
-<!-- 0032.part.md -->
-
-<!-- 0033.part.md -->
-
-```css
-button {
-  display: block;
-  margin-bottom: 5px;
+    return (
+        <button onClick={handleClick}>
+            Clicked {count} times
+        </button>
+    );
 }
 ```
 
@@ -392,12 +373,12 @@ button {
 В предыдущем примере каждая `MyButton` имела свой собственный независимый `count`, и при нажатии на каждую кнопку изменялся только `count` для нажатой кнопки:
 
 <figure markdown>
-  ![Диаграмма показывает дерево из трех компонентов, один родительский с меткой MyApp и два дочерних с меткой MyButton. Оба компонента MyButton содержат счетчик со значением ноль.](sharing_data_child.webp){width=300}
+  ![Диаграмма показывает дерево из трех компонентов, один родительский с меткой MyApp и два дочерних с меткой MyButton. Оба компонента MyButton содержат счетчик со значением ноль.](sharing_data_child.webp){width=300 style="margin: 0 auto"}
   <figcaption markdown>Изначально, состояние `count` каждого `MyButton` равно `0`</figcaption>
 </figure>
 
 <figure markdown>
-  ![Диаграмма показывает дерево из трех компонентов, один родительский с меткой MyApp и два дочерних с меткой MyButton. Оба компонента MyButton содержат счетчик со значением ноль.](sharing_data_child_clicked.webp){width=300}
+  ![Диаграмма показывает дерево из трех компонентов, один родительский с меткой MyApp и два дочерних с меткой MyButton. Оба компонента MyButton содержат счетчик со значением ноль.](sharing_data_child_clicked.webp){width=300 style="margin: 0 auto"}
   <figcaption markdown>Первый `MyButton` обновляет свой `count` до `1`.</figcaption>
 </figure>
 
@@ -408,12 +389,12 @@ button {
 В данном примере это `MyApp`:
 
 <figure markdown>
-  ![Диаграмма показывает дерево из трех компонентов, один родительский с меткой MyApp и два дочерних с меткой MyButton. MyApp содержит значение count равное нулю, которое передается вниз обоим компонентам MyButton, которые также показывают значение ноль.](sharing_data_parent.webp){width=300}
+  ![Диаграмма показывает дерево из трех компонентов, один родительский с меткой MyApp и два дочерних с меткой MyButton. MyApp содержит значение count равное нулю, которое передается вниз обоим компонентам MyButton, которые также показывают значение ноль.](sharing_data_parent.webp){width=300 style="margin: 0 auto"}
   <figcaption markdown>Изначально состояние `count` в `MyApp` равно `0` и передается вниз обоим дочерним компонентам</figcaption>
 </figure>
 
 <figure markdown>
-  ![Та же диаграмма, что и предыдущая, с подсчетом родительского компонента MyApp, выделенным, указывающим на щелчок, с увеличением значения до единицы. Поток к обоим дочерним компонентам MyButton также выделен, а значение count в каждом дочернем компоненте установлено в единицу, что указывает на то, что значение было передано вниз.](sharing_data_parent_clicked.webp){width=300}
+  ![Та же диаграмма, что и предыдущая, с подсчетом родительского компонента MyApp, выделенным, указывающим на щелчок, с увеличением значения до единицы. Поток к обоим дочерним компонентам MyButton также выделен, а значение count в каждом дочернем компоненте установлено в единицу, что указывает на то, что значение было передано вниз.](sharing_data_parent_clicked.webp){width=300 style="margin: 0 auto"}
   <figcaption markdown>При нажатии, `MyApp` обновляет свое состояние `count` до `1` и передает его вниз обоим дочерним компонентам</figcaption>
 </figure>
 
@@ -423,23 +404,23 @@ button {
 
 ```js
 export default function MyApp() {
-  const [count, setCount] = useState(0);
+    const [count, setCount] = useState(0);
 
-  function handleClick() {
-    setCount(count + 1);
-  }
+    function handleClick() {
+        setCount(count + 1);
+    }
 
-  return (
-    <div>
-      <h1>Counters that update separately</h1>
-      <MyButton />
-      <MyButton />
-    </div>
-  );
+    return (
+        <div>
+            <h1>Counters that update separately</h1>
+            <MyButton />
+            <MyButton />
+        </div>
+    );
 }
 
 function MyButton() {
-  // ... we're moving code from here ...
+    // ... we're moving code from here ...
 }
 ```
 
@@ -447,19 +428,19 @@ function MyButton() {
 
 ```js
 export default function MyApp() {
-  const [count, setCount] = useState(0);
+    const [count, setCount] = useState(0);
 
-  function handleClick() {
-    setCount(count + 1);
-  }
+    function handleClick() {
+        setCount(count + 1);
+    }
 
-  return (
-    <div>
-      <h1>Counters that update together</h1>
-      <MyButton count={count} onClick={handleClick} />
-      <MyButton count={count} onClick={handleClick} />
-    </div>
-  );
+    return (
+        <div>
+            <h1>Counters that update together</h1>
+            <MyButton count={count} onClick={handleClick} />
+            <MyButton count={count} onClick={handleClick} />
+        </div>
+    );
 }
 ```
 
@@ -469,9 +450,11 @@ export default function MyApp() {
 
 ```js
 function MyButton({ count, onClick }) {
-  return (
-    <button onClick={onClick}>Clicked {count} times</button>
-  );
+    return (
+        <button onClick={onClick}>
+            Clicked {count} times
+        </button>
+    );
 }
 ```
 
@@ -481,32 +464,27 @@ function MyButton({ count, onClick }) {
 import { useState } from 'react';
 
 export default function MyApp() {
-  const [count, setCount] = useState(0);
+    const [count, setCount] = useState(0);
 
-  function handleClick() {
-    setCount(count + 1);
-  }
+    function handleClick() {
+        setCount(count + 1);
+    }
 
-  return (
-    <div>
-      <h1>Counters that update together</h1>
-      <MyButton count={count} onClick={handleClick} />
-      <MyButton count={count} onClick={handleClick} />
-    </div>
-  );
+    return (
+        <div>
+            <h1>Counters that update together</h1>
+            <MyButton count={count} onClick={handleClick} />
+            <MyButton count={count} onClick={handleClick} />
+        </div>
+    );
 }
 
 function MyButton({ count, onClick }) {
-  return (
-    <button onClick={onClick}>Clicked {count} times</button>
-  );
-}
-```
-
-```css
-button {
-  display: block;
-  margin-bottom: 5px;
+    return (
+        <button onClick={onClick}>
+            Clicked {count} times
+        </button>
+    );
 }
 ```
 

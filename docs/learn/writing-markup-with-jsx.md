@@ -20,7 +20,7 @@ _JSX_ - это расширение синтаксиса для JavaScript, по
 <figurecaption>JavaScript</figurecaption>
 </figure>
 
-Но по мере того, как веб становился все более интерактивным, логика все больше определяла содержание. JavaScript стал отвечать за HTML\! Вот почему **в React логика рендеринга и разметка живут вместе в одном месте - в компонентах.**.
+Но по мере того, как веб становился все более интерактивным, логика все больше определяла содержание. JavaScript стал отвечать за HTML! Вот почему **в React логика рендеринга и разметка живут вместе в одном месте - в компонентах.**.
 
 <figure markdown>
 ![React компонент с HTML и JavaScript из предыдущих примеров. Имя функции - Sidebar, которая вызывает функцию isLoggedIn, выделенную желтым цветом. Внутри функции, выделенной фиолетовым, находится тег p из предыдущего примера и тег Form, ссылающийся на компонент, показанный на следующей диаграмме.](writing_jsx_sidebar.webp)
@@ -96,16 +96,6 @@ export default function TodoList() {
       <li>Improve the spectrum technology
     </ul>
   );
-}
-```
-
-<!-- 0007.part.md -->
-
-<!-- 0008.part.md -->
-
-```css
-img {
-    height: 90px;
 }
 ```
 
@@ -242,16 +232,6 @@ export default function TodoList() {
 }
 ```
 
-<!-- 0019.part.md -->
-
-<!-- 0020.part.md -->
-
-```css
-img {
-    height: 90px;
-}
-```
-
 <!-- 0021.part.md -->
 
 Теперь вы знаете, зачем существует JSX и как использовать его в компонентах:
@@ -281,34 +261,6 @@ export default function Bio() {
 }
 ```
 
-<!-- 0023.part.md -->
-
-<!-- 0024.part.md -->
-
-```css
-.intro {
-    background-image: linear-gradient(
-        to left,
-        violet,
-        indigo,
-        blue,
-        green,
-        yellow,
-        orange,
-        red
-    );
-    background-clip: text;
-    color: transparent;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.summary {
-    padding: 20px;
-    border: 10px solid gold;
-}
-```
-
 <!-- 0025.part.md -->
 
 Делать ли это вручную или с помощью конвертера - решать вам!
@@ -332,33 +284,5 @@ export default function Bio() {
             </p>
         </div>
     );
-}
-```
-
-<!-- 0027.part.md -->
-
-<!-- 0028.part.md -->
-
-```css
-.intro {
-    background-image: linear-gradient(
-        to left,
-        violet,
-        indigo,
-        blue,
-        green,
-        yellow,
-        orange,
-        red
-    );
-    background-clip: text;
-    color: transparent;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.summary {
-    padding: 20px;
-    border: 10px solid gold;
 }
 ```

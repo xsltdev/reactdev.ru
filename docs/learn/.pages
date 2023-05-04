@@ -14,3 +14,9 @@ nav:
         - describing-the-ui.md
         - your-first-component.md
         - importing-and-exporting-components.md
+        - writing-markup-with-jsx.md
+        - javascript-in-jsx-with-curly-braces.md
+        - passing-props-to-a-component.md
+        - conditional-rendering.md
+        - rendering-lists.md
+        - keeping-components-pure.md

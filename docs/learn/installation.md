@@ -2,10 +2,10 @@
 
 React с самого начала был разработан для постепенного внедрения. Вы можете использовать так мало или так много React, как вам нужно. Если вы хотите попробовать React, добавить немного интерактивности на HTML-страницу или создать сложное приложение на базе React, этот раздел поможет вам начать работу.
 
--   [Как начать новый проект React](/learn/start-a-new-react-project)
--   [Как добавить React в существующий проект](/learn/add-react-to-an-existing-project)
--   [Как настроить редактор](/learn/editor-setup)
--   [Как установить React Developer Tools](/learn/react-developer-tools)
+-   [Как начать новый проект React](start-a-new-react-project.md)
+-   [Как добавить React в существующий проект](add-react-to-an-existing-project.md)
+-   [Как настроить редактор](editor-setup.md)
+-   [Как установить React Developer Tools](react-developer-tools.md)
 
 ## Попробуйте React
 

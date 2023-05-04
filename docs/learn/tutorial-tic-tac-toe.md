@@ -179,55 +179,6 @@ function calculateWinner(squares) {
 }
 ```
 
-<!-- 0002.part.md -->
-
-<!-- 0003.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
-}
-```
-
 <!-- 0004.part.md -->
 
 Если код пока не имеет для вас смысла, или если вы не знакомы с синтаксисом кода, не волнуйтесь! Цель этого урока - помочь вам понять React и его синтаксис.
@@ -248,61 +199,12 @@ export default function Square() {
 }
 ```
 
-<!-- 0006.part.md -->
-
-<!-- 0007.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
-}
-```
-
 <!-- 0008.part.md -->
 
 Вы также можете следовать этому руководству, используя локальную среду разработки. Для этого вам необходимо:
 
 1.  Установить [Node.js](https://nodejs.org/en/)
-2.  На вкладке CodeSandbox, которую вы открыли ранее, нажмите кнопку в левом верхнем углу, чтобы открыть меню, а затем выберите **Файл \>Экспорт в ZIP** в этом меню, чтобы загрузить архив файлов локально.
+2.  На вкладке CodeSandbox, которую вы открыли ранее, нажмите кнопку в левом верхнем углу, чтобы открыть меню, а затем выберите **Файл \> Экспорт в ZIP** в этом меню, чтобы загрузить архив файлов локально.
 3.  Распакуйте архив, затем откройте терминал и `cd` в каталог, который вы распаковали.
 4.  Установите зависимости с помощью `npm install`.
 5.  Запустите `npm start` для запуска локального сервера и следуйте подсказкам для просмотра кода в браузере.
@@ -419,7 +321,9 @@ export default function Square() {
 
 Вы получите эту ошибку:
 
+```
 /src/App.js: Смежные элементы JSX должны быть обернуты в объемлющий тег. Вы хотели получить JSX-фрагмент `<>...</>`?
+```
 
 Компоненты React должны возвращать один JSX-элемент, а не несколько смежных JSX-элементов, как две кнопки. Чтобы исправить это, вы можете использовать _фрагменты_ (`<>` и `</>`) для обертывания нескольких соседних JSX-элементов, как это сделано здесь:
 
@@ -519,55 +423,6 @@ export default function Board() {
             </div>
         </>
     );
-}
-```
-
-<!-- 0026.part.md -->
-
-<!-- 0027.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
 }
 ```
 
@@ -746,55 +601,6 @@ export default function Board() {
 }
 ```
 
-<!-- 0042.part.md -->
-
-<!-- 0043.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
-}
-```
-
 <!-- 0044.part.md -->
 
 ### Создание интерактивного компонента
@@ -950,55 +756,6 @@ export default function Board() {
 }
 ```
 
-<!-- 0054.part.md -->
-
-<!-- 0055.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
-}
-```
-
 <!-- 0056.part.md -->
 
 ### React Developer Tools
@@ -1136,55 +893,6 @@ export default function Board() {
             </div>
         </>
     );
-}
-```
-
-<!-- 0066.part.md -->
-
-<!-- 0067.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
 }
 ```
 
@@ -1486,55 +1194,6 @@ export default function Board() {
 }
 ```
 
-<!-- 0086.part.md -->
-
-<!-- 0087.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
-}
-```
-
 <!-- 0088.part.md -->
 
 Теперь, когда обработка состояния находится в компоненте `Board`, родительский компонент `Board` передает реквизиты дочерним компонентам `Square`, чтобы они отображались правильно. При нажатии на `квадрат` дочерний компонент `квадрата` теперь просит родительский компонент `доски` обновить состояние доски. Когда состояние `Board` изменяется, компонент `Board` и каждый дочерний `Square` автоматически перерисовываются. Сохранение состояния всех квадратов в компоненте `Board` позволит ему в будущем определить победителя.
@@ -1669,7 +1328,7 @@ export default function Board() {
 
 ![O перезаписывает X](o-replaces-x.gif)
 
-X заменяется на O\! Хотя это добавило бы очень интересный поворот в игру, мы пока будем придерживаться оригинальных правил.
+X заменяется на O! Хотя это добавило бы очень интересный поворот в игру, мы пока будем придерживаться оригинальных правил.
 
 Когда вы помечаете квадрат символом `X` или `O`, вы сначала не проверяете, не имеет ли квадрат уже значения `X` или `O`. Вы можете исправить это, _возвращаясь раньше_. Вы будете проверять, не имеет ли квадрат уже значение `X` или `O`. Если квадрат уже заполнен, вы `возвратитесь` в функцию `handleClick` раньше, чем она попытается обновить состояние доски.
 
@@ -1768,55 +1427,6 @@ export default function Board() {
             </div>
         </>
     );
-}
-```
-
-<!-- 0100.part.md -->
-
-<!-- 0101.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
 }
 ```
 
@@ -2018,55 +1628,6 @@ function calculateWinner(squares) {
         }
     }
     return null;
-}
-```
-
-<!-- 0110.part.md -->
-
-<!-- 0111.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
 }
 ```
 
@@ -2390,55 +1951,6 @@ function calculateWinner(squares) {
 }
 ```
 
-<!-- 0130.part.md -->
-
-<!-- 0131.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
-}
-```
-
 <!-- 0132.part.md -->
 
 ### Отображение прошлых ходов
@@ -2669,56 +2181,6 @@ function calculateWinner(squares) {
         }
     }
     return null;
-}
-```
-
-<!-- 0138.part.md -->
-
-<!-- 0139.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
 }
 ```
 
@@ -2958,56 +2420,6 @@ function calculateWinner(squares) {
         }
     }
     return null;
-}
-```
-
-<!-- 0150.part.md -->
-
-<!-- 0151.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
 }
 ```
 
@@ -3256,55 +2668,6 @@ function calculateWinner(squares) {
 }
 ```
 
-<!-- 0162.part.md -->
-
-<!-- 0163.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
-}
-```
-
 <!-- 0164.part.md -->
 
 ### Окончательная очистка
@@ -3516,55 +2879,6 @@ function calculateWinner(squares) {
         }
     }
     return null;
-}
-```
-
-<!-- 0168.part.md -->
-
-<!-- 0169.part.md -->
-
-```css
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-    margin: 20px;
-    padding: 0;
-}
-
-.square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-}
-
-.board-row:after {
-    clear: both;
-    content: '';
-    display: table;
-}
-
-.status {
-    margin-bottom: 10px;
-}
-.game {
-    display: flex;
-    flex-direction: row;
-}
-
-.game-info {
-    margin-left: 20px;
 }
 ```
 

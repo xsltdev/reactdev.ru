@@ -81,6 +81,8 @@ markdown_extensions:
     - pymdownx.tabbed:
           alternate_style: true
     - pymdownx.superfences
+    - pymdownx.arithmatex:
+          generic: true
 
 plugins:
     - search:
@@ -93,3 +95,8 @@ plugins:
 
 extra_css:
     - '/assets/stylesheets/styles.css?3'
+
+extra_javascript:
+    - '/assets/javascripts/mathjax.js'
+    - https://polyfill.io/v3/polyfill.min.js?features=es6
+    - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

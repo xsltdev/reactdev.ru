@@ -2,8 +2,8 @@
 title: Главная
 description: React – это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов
 hide:
-  - toc
-  - navigation
+    - toc
+    - navigation
 ---
 
 # ![React](react.svg){: style="height:64px;width:64px;vertical-align:middle;"} Справочник React
@@ -14,7 +14,7 @@ hide:
 
 !!!info "Документация по React"
 
-    - [Официальная дока React v16](handbook/tutorial.md)
+    - [Официальная дока React v18](learn/index.md)
     - [React и Typescript](types/index.md) &mdash; Типизация библиотеки React с помощью Typescript
 
 !!!info "Стартовые проекты React"
