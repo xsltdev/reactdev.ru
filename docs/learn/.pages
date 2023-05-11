@@ -20,3 +20,7 @@ nav:
         - conditional-rendering.md
         - rendering-lists.md
         - keeping-components-pure.md
+    - "Добавление интерактивности":
+        - adding-interactivity.md
+        - responding-to-events.md
+        - state-a-components-memory.md
