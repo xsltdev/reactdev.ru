@@ -2,7 +2,7 @@
 
 Перевод документации [:octicons-tag-24: React v18](https://react.dev/learn)
 
-<small>Перевод старой документации [React v16](../archive/react16/tutorial.md)</small>
+<small>Перевод старой документации [React v16](../tutorial/tutorial.md)</small>
 
 Добро пожаловать в документацию по React! На этой странице вы познакомитесь с 80% концепций React, которые вы будете использовать ежедневно.
 

@@ -1,5 +1,6 @@
 nav:
     - learn
+    - tutorial
     - types
     - nextjs
     - graphql

@@ -578,28 +578,6 @@ export default function Form() {
 }
 ```
 
-<!-- 0034.part.md -->
-
-<!-- 0035.part.md -->
-
-```js
-{
-  "dependencies": {
-    "immer": "1.7.3",
-    "react": "latest",
-    "react-dom": "latest",
-    "react-scripts": "latest",
-    "use-immer": "0.5.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
-
 Прочитайте **[Обновление объектов в состоянии](updating-objects-in-state.md)**, чтобы узнать, как правильно обновлять объекты.
 
 ## Обновление массивов в состоянии
@@ -733,28 +711,6 @@ function ItemList({ artworks, onToggle }) {
             ))}
         </ul>
     );
-}
-```
-
-<!-- 0042.part.md -->
-
-<!-- 0043.part.md -->
-
-```js
-{
-  "dependencies": {
-    "immer": "1.7.3",
-    "react": "latest",
-    "react-dom": "latest",
-    "react-scripts": "latest",
-    "use-immer": "0.5.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
 }
 ```
 

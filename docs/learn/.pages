@@ -1,4 +1,4 @@
-title: Документация
+title: React 18
 nav:
     - "Быстрый старт":
         - index.md
@@ -24,3 +24,12 @@ nav:
         - adding-interactivity.md
         - responding-to-events.md
         - state-a-components-memory.md
+        - render-and-commit.md
+        - state-as-a-snapshot.md
+        - queueing-a-series-of-state-updates.md
+        - updating-objects-in-state.md
+        - updating-arrays-in-state.md
+    - "Управление состоянием":
+        - ...
+    - "Механизмы внешнего доступа":
+        - ...

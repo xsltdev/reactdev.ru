@@ -14,8 +14,9 @@ hide:
 
 !!!info "Документация по React"
 
-    - [Официальная дока React v18](learn/index.md)
-    - [React и Typescript](types/index.md) &mdash; Типизация библиотеки React с помощью Typescript
+    - **[Перевод React 18](learn/index.md)**
+    - [Перевод React 16](tutorial/tutorial.md)
+    - [React и Typescript](types/index.md) &mdash; типизация библиотеки React с помощью Typescript
 
 !!!info "Стартовые проекты React"
 
@@ -24,7 +25,7 @@ hide:
 
 !!!info "Redux"
 
-    - [![Redux](redux.svg){: style="height:20px;width:20px;vertical-align:middle;"} Redux](libs/redux/index.md) &mdash; Библиотека управления состоянием
+    - [![Redux](redux.svg){: style="height:20px;width:20px;vertical-align:middle;"} Redux](libs/redux/index.md) &mdash; библиотека управления состоянием
     - [Redux Toolkit](libs/redux-toolkit.md)
 
 !!!info "Менеджеры состояния"
