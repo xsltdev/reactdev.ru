@@ -2,7 +2,9 @@
 
 Используйте React Developer Tools для проверки React [components](your-first-component.md), редактирования [props](passing-props-to-a-component.md) и [state](state-a-components-memory.md) и выявления проблем производительности.
 
--   Как установить React Developer Tools
+!!!tip "Вы узнаете"
+
+    -   Как установить React Developer Tools
 
 ## Расширение для браузера
 
@@ -70,6 +72,11 @@ react-devtools
 
 Он должен подключиться к любому локальному запущенному приложению React Native.
 
-> Попробуйте перезагрузить приложение, если инструменты разработчика не подключаются через несколько секунд.
+!!!note ""
 
-[Подробнее об отладке React Native.](https://reactnative.dev/docs/debugging)
+    Попробуйте перезагрузить приложение, если инструменты разработчика не подключаются через несколько секунд.
+
+## Ссылки
+
+-   [Подробнее об отладке React Native.](https://reactnative.dev/docs/debugging)
+-   [https://react.dev/learn/react-developer-tools](https://react.dev/learn/react-developer-tools)

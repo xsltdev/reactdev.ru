@@ -2,7 +2,9 @@
 
 Если вы хотите добавить интерактивности в существующий проект, вам не нужно переписывать его на React. Добавьте React к существующему стеку и выводите интерактивные компоненты React в любом месте.
 
-Хотя вы можете [попробовать React](installation.md) онлайн или с помощью простой HTML-страницы, в реальности большинство инструментов JavaScript, которые вы захотите использовать для разработки, требуют Node.js.
+!!!note "Для локальной разработки необходимо установить Node.js."
+
+    Хотя вы можете [попробовать React](installation.md) онлайн или с помощью простой HTML-страницы, в реальности большинство инструментов JavaScript, которые вы захотите использовать для разработки, требуют Node.js.
 
 ## Использование React для целого подмаршрута существующего сайта
 
@@ -20,7 +22,7 @@
 
 ## Использование React для части существующей страницы
 
-Допустим, у вас есть существующая страница, построенная на другой технологии (либо серверной, как Rails, либо клиентской, как Backbone), и вы хотите отобразить интерактивные компоненты React где-то на этой странице. Это распространенный способ интеграции React - фактически, именно так большинство пользователей React смотрели на Meta в течение многих лет\!
+Допустим, у вас есть существующая страница, построенная на другой технологии (либо серверной, как Rails, либо клиентской, как Backbone), и вы хотите отобразить интерактивные компоненты React где-то на этой странице. Это распространенный способ интеграции React — фактически, именно так большинство пользователей React смотрели на Meta в течение многих лет!
 
 Вы можете сделать это в два шага:
 
@@ -33,7 +35,7 @@
 
 <!-- 0001.part.md -->
 
-Модульная среда JavaScript позволяет писать компоненты React в отдельных файлах, в отличие от написания всего кода в одном файле. Она также позволяет использовать все замечательные пакеты, опубликованные другими разработчиками в реестре [npm](https://www.npmjs.com/) - включая сам React! Как вы это сделаете, зависит от вашей существующей настройки:
+Модульная среда JavaScript позволяет писать компоненты React в отдельных файлах, в отличие от написания всего кода в одном файле. Она также позволяет использовать все замечательные пакеты, опубликованные другими разработчиками в реестре [npm](https://www.npmjs.com/) — включая сам React! Как вы это сделаете, зависит от вашей существующей настройки:
 
 -   Если ваше приложение уже разбито на файлы, использующие операторы `import`, попробуйте использовать уже имеющуюся настройку. Проверьте, не приводит ли написание `<div />` в вашем JS-коде к синтаксической ошибке. Если это приводит к синтаксической ошибке, вам может понадобиться [преобразовать ваш JavaScript код с помощью Babel](https://babeljs.io/setup), и включить [предустановку Babel React](https://babeljs.io/docs/babel-preset-react) для использования JSX.
 
@@ -47,22 +49,30 @@ npm install react react-dom
 
 Затем добавьте эти строки кода в начало вашего основного файла JavaScript (он может называться `index.js` или `main.js`):
 
-```js
-import { createRoot } from 'react-dom/client';
+=== "index.js"
 
-// Clear the existing HTML content
-document.body.innerHTML = '<div id="app"></div>';
+    ```js
+    import { createRoot } from 'react-dom/client';
 
-// Render your React component instead
-const root = createRoot(document.getElementById('app'));
-root.render(<h1>Hello, world</h1>);
-```
+    // Clear the existing HTML content
+    document.body.innerHTML = '<div id="app"></div>';
+
+    // Render your React component instead
+    const root = createRoot(document.getElementById('app'));
+    root.render(<h1>Hello, world</h1>);
+    ```
+
+=== "Результат"
+
+    ![результат](add-react-to-an-existing-project-1.png)
 
 <!-- 0003.part.md -->
 
 Если все содержимое вашей страницы заменить на "Привет, мир!", все заработает! Продолжайте читать.
 
-Интеграция модульной среды JavaScript в существующий проект в первый раз может показаться пугающей, но оно того стоит!
+!!!note ""
+
+    Интеграция модульной среды JavaScript в существующий проект в первый раз может показаться пугающей, но оно того стоит!
 
 ### Шаг 2: Рендеринг компонентов React в любом месте страницы
 
@@ -97,26 +107,44 @@ root.render(<h1>Hello, world</h1>);
 <!-- ... more html ... -->
 ```
 
-<!-- 0007.part.md -->
-
 Это позволит вам найти этот элемент HTML с помощью [`document.getElementById`](https://developer.mozilla.org/ru/docs/Web/API/Document/getElementById) и передать его в `createRoot`, чтобы вы могли создать внутри него свой собственный компонент React:
 
 <!-- 0008.part.md -->
 
-```js
-import { createRoot } from 'react-dom/client';
+=== "index.js"
 
-function NavigationBar() {
-    // TODO: Actually implement a navigation bar
-    return <h1>Hello from React!</h1>;
-}
+    ```js
+    import { createRoot } from 'react-dom/client';
 
-const domNode = document.getElementById('navigation');
-const root = createRoot(domNode);
-root.render(<NavigationBar />);
-```
+    function NavigationBar() {
+    	// TODO: Actually implement a navigation bar
+    	return <h1>Hello from React!</h1>;
+    }
 
-<!-- 0009.part.md -->
+    const domNode = document.getElementById('navigation');
+    const root = createRoot(domNode);
+    root.render(<NavigationBar />);
+    ```
+
+=== "index.html"
+
+    ```html
+    <!DOCTYPE html>
+    <html>
+    	<head>
+    		<title>My app</title>
+    	</head>
+    	<body>
+    		<p>This paragraph is a part of HTML.</p>
+    		<nav id="navigation"></nav>
+    		<p>This paragraph is also a part of HTML.</p>
+    	</body>
+    </html>
+    ```
+
+=== "Результат"
+
+    ![результат](add-react-to-an-existing-project-2.png)
 
 Обратите внимание, что оригинальное содержимое HTML из `index.html` сохраняется, но ваш собственный React-компонент `NavigationBar` теперь появляется внутри `<nav id="navigation">` из вашего HTML. Прочитайте документацию по использованию `createRoot`, чтобы узнать больше о рендеринге компонентов React внутри существующей HTML-страницы.
 
@@ -127,3 +155,7 @@ root.render(<NavigationBar />);
 [React Native](https://reactnative.dev/) также может быть интегрирован в существующие нативные приложения постепенно. Если у вас есть существующее нативное приложение для Android (Java или Kotlin) или iOS (Objective-C или Swift), [следуйте этому руководству](https://reactnative.dev/docs/integration-with-existing-apps), чтобы добавить в него экран React Native.
 
 <!-- 0010.part.md -->
+
+## Ссылки
+
+-   [https://react.dev/learn/add-react-to-an-existing-project](https://react.dev/learn/add-react-to-an-existing-project)

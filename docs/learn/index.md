@@ -6,7 +6,7 @@
 
 Добро пожаловать в документацию по React! На этой странице вы познакомитесь с 80% концепций React, которые вы будете использовать ежедневно.
 
-!!!quote "Вы узнаете"
+!!!tip "Вы узнаете"
 
     -   Как создавать и размещать компоненты
     -   Как добавлять разметку и стили
@@ -17,9 +17,9 @@
 
 ## Создание и вложение компонентов
 
-Приложения React состоят из _компонентов_. Компонент - это часть пользовательского интерфейса, которая имеет свою собственную логику и внешний вид. Компонент может быть маленьким, как кнопка, или большим, как целая страница.
+Приложения React состоят из _компонентов_. Компонент — это часть пользовательского интерфейса, которая имеет свою собственную логику и внешний вид. Компонент может быть маленьким, как кнопка, или большим, как целая страница.
 
-Компоненты React - это функции JavaScript, которые возвращают разметку:
+Компоненты React — это функции JavaScript, которые возвращают разметку:
 
 <!-- 0001.part.md -->
 
@@ -50,20 +50,26 @@ export default function MyApp() {
 
 <!-- 0003.part.md -->
 
-```js
-function MyButton() {
-    return <button>I'm a button</button>;
-}
+=== "App.js"
 
-export default function MyApp() {
-    return (
-        <div>
-            <h1>Welcome to my app</h1>
-            <MyButton />
-        </div>
-    );
-}
-```
+    ```js
+    function MyButton() {
+    	return <button>I'm a button</button>;
+    }
+
+    export default function MyApp() {
+    	return (
+    		<div>
+    			<h1>Welcome to my app</h1>
+    			<MyButton />
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](index-1.png)
 
 <!-- 0004.part.md -->
 
@@ -137,34 +143,40 @@ return <img className="avatar" src={user.imageUrl} />;
 
 <!-- 0009.part.md -->
 
-```js
-const user = {
-    name: 'Hedy Lamarr',
-    imageUrl: 'https://i.imgur.com/yXOvdOSs.jpg',
-    imageSize: 90,
-};
+=== "App.js"
 
-export default function Profile() {
-    return (
-        <>
-            <h1>{user.name}</h1>
-            <img
-                className="avatar"
-                src={user.imageUrl}
-                alt={'Photo of ' + user.name}
-                style={{
-                    width: user.imageSize,
-                    height: user.imageSize,
-                }}
-            />
-        </>
-    );
-}
-```
+    ```js
+    const user = {
+    	name: 'Hedy Lamarr',
+    	imageUrl: 'https://i.imgur.com/yXOvdOSs.jpg',
+    	imageSize: 90,
+    };
+
+    export default function Profile() {
+    	return (
+    		<>
+    			<h1>{user.name}</h1>
+    			<img
+    				className="avatar"
+    				src={user.imageUrl}
+    				alt={'Photo of ' + user.name}
+    				style={{
+    					width: user.imageSize,
+    					height: user.imageSize,
+    				}}
+    			/>
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](index-2.png)
 
 <!-- 0012.part.md -->
 
-В приведенном выше примере `style={{}}` - это не специальный синтаксис, а обычный объект `{}` внутри фигурных скобок JSX `style={ }`. Вы можете использовать атрибут `style`, когда ваши стили зависят от переменных JavaScript.
+В приведенном выше примере `style={{}}` — это не специальный синтаксис, а обычный объект `{}` внутри фигурных скобок JSX `style={ }`. Вы можете использовать атрибут `style`, когда ваши стили зависят от переменных JavaScript.
 
 ## Условный рендеринг
 
@@ -184,7 +196,7 @@ return <div>{content}</div>;
 
 <!-- 0014.part.md -->
 
-Если вы предпочитаете более компактный код, вы можете использовать [условный оператор `?`.](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) В отличие от `if`, он работает внутри JSX:
+Если вы предпочитаете более компактный код, вы можете использовать [условный оператор `?`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Conditional_Operator). В отличие от `if`, он работает внутри JSX:
 
 <!-- 0015.part.md -->
 
@@ -242,30 +254,36 @@ return <ul>{listItems}</ul>;
 
 <!-- 0023.part.md -->
 
-```js
-const products = [
-    { title: 'Cabbage', isFruit: false, id: 1 },
-    { title: 'Garlic', isFruit: false, id: 2 },
-    { title: 'Apple', isFruit: true, id: 3 },
-];
+=== "App.js"
 
-export default function ShoppingList() {
-    const listItems = products.map((product) => (
-        <li
-            key={product.id}
-            style={{
-                color: product.isFruit
-                    ? 'magenta'
-                    : 'darkgreen',
-            }}
-        >
-            {product.title}
-        </li>
-    ));
+    ```js
+    const products = [
+    	{ title: 'Cabbage', isFruit: false, id: 1 },
+    	{ title: 'Garlic', isFruit: false, id: 2 },
+    	{ title: 'Apple', isFruit: true, id: 3 },
+    ];
 
-    return <ul>{listItems}</ul>;
-}
-```
+    export default function ShoppingList() {
+    	const listItems = products.map((product) => (
+    		<li
+    			key={product.id}
+    			style={{
+    				color: product.isFruit
+    					? 'magenta'
+    					: 'darkgreen',
+    			}}
+    		>
+    			{product.title}
+    		</li>
+    	));
+
+    	return <ul>{listItems}</ul>;
+    }
+    ```
+
+=== "Результат"
+
+    ![рендер списка](index-3.png)
 
 <!-- 0024.part.md -->
 
@@ -283,7 +301,7 @@ function MyButton() {
 }
 ```
 
-Обратите внимание, что `onClick={handleClick}` не имеет круглых скобок в конце! Не нужно _вызывать_ функцию обработчика события: вам нужно только _передать ее вниз_. React вызовет ваш обработчик события, когда пользователь нажмет на кнопку.
+Обратите внимание, что `onClick={handleClick}` не имеет круглых скобок в конце! Не нужно _вызывать_ функцию обработчика события: вам нужно только _передать ее дальше_. React вызовет ваш обработчик события, когда пользователь нажмет на кнопку.
 
 ## Обновление экрана
 
@@ -330,33 +348,39 @@ React снова вызовет функцию вашего компонента
 
 <!-- 0031.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function MyApp() {
-    return (
-        <div>
-            <h1>Counters that update separately</h1>
-            <MyButton />
-            <MyButton />
-        </div>
-    );
-}
+    ```js
+    import { useState } from 'react';
 
-function MyButton() {
-    const [count, setCount] = useState(0);
-
-    function handleClick() {
-        setCount(count + 1);
+    export default function MyApp() {
+    	return (
+    		<div>
+    			<h1>Counters that update separately</h1>
+    			<MyButton />
+    			<MyButton />
+    		</div>
+    	);
     }
 
-    return (
-        <button onClick={handleClick}>
-            Clicked {count} times
-        </button>
-    );
-}
-```
+    function MyButton() {
+    	const [count, setCount] = useState(0);
+
+    	function handleClick() {
+    		setCount(count + 1);
+    	}
+
+    	return (
+    		<button onClick={handleClick}>
+    			Clicked {count} times
+    		</button>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![рендер](index-4.png)
 
 <!-- 0034.part.md -->
 
@@ -364,7 +388,7 @@ function MyButton() {
 
 ## Использование хуков
 
-Функции, начинающиеся с `use`, называются _Hooks_. `useState` - это встроенный хук, предоставляемый React. Вы можете найти другие встроенные хуки в [Справочник API](../reference/index.md). Вы также можете написать свои собственные хуки, комбинируя существующие.
+Функции, начинающиеся с `use`, называются _Hooks_. `useState` — это встроенный хук, предоставляемый React. Вы можете найти другие встроенные хуки в [Справочник API](../reference/index.md). Вы также можете написать свои собственные хуки, комбинируя существующие.
 
 Хуки имеют более строгие ограничения, чем другие функции. Вы можете вызывать хуки только _сверху_ ваших компонентов (или других хуков). Если вы хотите использовать `useState` в условии или цикле, создайте новый компонент и поместите его туда.
 
@@ -460,36 +484,46 @@ function MyButton({ count, onClick }) {
 
 Когда вы нажимаете на кнопку, срабатывает обработчик `onClick`. Реквизит `onClick` каждой кнопки был установлен на функцию `handleClick` внутри `MyApp`, поэтому код внутри нее запускается. Этот код вызывает `setCount(count + 1)`, увеличивая переменную состояния `count`. Новое значение `count` передается в качестве параметра каждой кнопке, поэтому все они показывают новое значение. Это называется "поднимать состояние вверх". Поднимая состояние вверх, вы разделяете его между компонентами.
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function MyApp() {
-    const [count, setCount] = useState(0);
+    ```js
+    import { useState } from 'react';
 
-    function handleClick() {
-        setCount(count + 1);
+    export default function MyApp() {
+    	const [count, setCount] = useState(0);
+
+    	function handleClick() {
+    		setCount(count + 1);
+    	}
+
+    	return (
+    		<div>
+    			<h1>Counters that update together</h1>
+    			<MyButton count={count} onClick={handleClick} />
+    			<MyButton count={count} onClick={handleClick} />
+    		</div>
+    	);
     }
 
-    return (
-        <div>
-            <h1>Counters that update together</h1>
-            <MyButton count={count} onClick={handleClick} />
-            <MyButton count={count} onClick={handleClick} />
-        </div>
-    );
-}
+    function MyButton({ count, onClick }) {
+    	return (
+    		<button onClick={onClick}>
+    			Clicked {count} times
+    		</button>
+    	);
+    }
+    ```
 
-function MyButton({ count, onClick }) {
-    return (
-        <button onClick={onClick}>
-            Clicked {count} times
-        </button>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](index-5.png)
 
 ## Следующие шаги
 
 К этому моменту вы уже знаете основы написания кода на React!
 
 Просмотрите [Учебник: крестики-нолики](tutorial-tic-tac-toe.md), чтобы применить их на практике и создать свое первое мини-приложение на React.
+
+## Ссылки
+
+-   [https://react.dev/learn](https://react.dev/learn)

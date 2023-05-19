@@ -1,126 +1,134 @@
-# Описание пользовательского интерфейса
+# Разработка интерфейса
 
-React - это библиотека JavaScript для визуализации пользовательских интерфейсов (UI). Пользовательский интерфейс строится из небольших блоков, таких как кнопки, текст и изображения. React позволяет объединять их в многократно используемые, вложенные _компоненты._ От веб-сайтов до приложений для телефонов - все на экране может быть разбито на компоненты. В этой главе вы научитесь создавать, настраивать и условно отображать компоненты React.
+**React** — это библиотека JavaScript для визуализации пользовательских интерфейсов (UI). Пользовательский интерфейс строится из небольших блоков, таких как кнопки, текст и изображения. React позволяет объединять их в многократно используемые, вложенные _компоненты._ От веб-сайтов до приложений для телефонов — все на экране может быть разбито на компоненты. В этой главе вы научитесь создавать, настраивать и условно отображать компоненты React.
 
--   [Как написать свой первый компонент React](your-first-component.md)
--   [Когда и как создавать многокомпонентные файлы](importing-and-exporting-components.md)
--   [Как добавить разметку в JavaScript с помощью JSX](writing-markup-with-jsx.md)
--   [Как использовать фигурные скобки в JSX для доступа к функциональности JavaScript из ваших компонентов](javascript-in-jsx-with-curly-braces.md)
--   [Как конфигурировать компоненты с помощью props](passing-props-to-a-component.md)
--   [Как условно отрисовывать компоненты](conditional-rendering.md)
--   [Как отрисовывать несколько компонентов одновременно](rendering-lists.md)
--   [Как избежать запутанных ошибок, сохраняя чистоту компонентов](keeping-components-pure.md)
+!!!tip "В этой главе"
+
+    -   [Как написать свой первый компонент React](your-first-component.md)
+    -   [Когда и как создавать многокомпонентные файлы](importing-and-exporting-components.md)
+    -   [Как добавить разметку в JavaScript с помощью JSX](writing-markup-with-jsx.md)
+    -   [Как использовать фигурные скобки в JSX для доступа к функциональности JavaScript из ваших компонентов](javascript-in-jsx-with-curly-braces.md)
+    -   [Как конфигурировать компоненты с помощью props](passing-props-to-a-component.md)
+    -   [Как условно отрисовывать компоненты](conditional-rendering.md)
+    -   [Как отрисовывать несколько компонентов одновременно](rendering-lists.md)
+    -   [Как избежать запутанных ошибок, сохраняя чистоту компонентов](keeping-components-pure.md)
 
 ## Ваш первый компонент
 
-Приложения React строятся из изолированных частей пользовательского интерфейса, называемых _компонентами_. Компонент React - это функция JavaScript, которую вы можете посыпать разметкой. Компоненты могут быть как маленькими, как кнопка, так и большими, как целая страница. Вот компонент `Gallery`, отображающий три компонента `Profile`:
+Приложения React строятся из изолированных частей пользовательского интерфейса, называемых _компонентами_. Компонент React — это функция JavaScript, которую вы можете посыпать разметкой. Компоненты могут быть как маленькими, как кнопка, так и большими, как целая страница. Вот компонент `Gallery`, отображающий три компонента `Profile`:
 
 <!-- 0001.part.md -->
 
-```js
-function Profile() {
-    return (
-        <img
-            src="https://i.imgur.com/MK3eW3As.jpg"
-            alt="Katherine Johnson"
-        />
-    );
-}
+=== "App.js"
 
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Amazing scientists</h1>
-            <Profile />
-            <Profile />
-            <Profile />
-        </section>
-    );
-}
-```
+    ```js
+    function Profile() {
+    	return (
+    		<img
+    			src="https://i.imgur.com/MK3eW3As.jpg"
+    			alt="Katherine Johnson"
+    		/>
+    	);
+    }
+
+    export default function Gallery() {
+    	return (
+    		<section>
+    			<h1>Amazing scientists</h1>
+    			<Profile />
+    			<Profile />
+    			<Profile />
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![результат](describing-the-ui-1.png)
 
 <!-- 0004.part.md -->
 
-Прочитайте **[Ваш первый компонент](your-first-component.md)**, чтобы узнать, как объявлять и использовать компоненты React.
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Ваш первый компонент](your-first-component.md), чтобы узнать, как объявлять и использовать компоненты React.
 
 ## Импорт и экспорт компонентов
 
 Вы можете объявить много компонентов в одном файле, но в больших файлах может быть трудно ориентироваться. Чтобы решить эту проблему, вы можете _экспортировать_ компонент в свой собственный файл, а затем _импортировать_ этот компонент из другого файла:
 
-<!-- 0005.part.md -->
+=== "Gallery.js"
 
-```js
-import Gallery from './Gallery.js';
+    ```js
+    import Profile from './Profile.js';
 
-export default function App() {
-    return <Gallery />;
-}
-```
+    export default function Gallery() {
+    	return (
+    		<section>
+    			<h1>Amazing scientists</h1>
+    			<Profile />
+    			<Profile />
+    			<Profile />
+    		</section>
+    	);
+    }
+    ```
 
-<!-- 0006.part.md -->
+=== "Profile.js"
 
-<!-- 0007.part.md -->
+    ```js
+    export default function Profile() {
+    	return (
+    		<img
+    			src="https://i.imgur.com/QIrZWGIs.jpg"
+    			alt="Alan L. Hart"
+    		/>
+    	);
+    }
+    ```
 
-```js
-import Profile from './Profile.js';
+=== "Результат"
 
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Amazing scientists</h1>
-            <Profile />
-            <Profile />
-            <Profile />
-        </section>
-    );
-}
-```
-
-<!-- 0008.part.md -->
-
-<!-- 0009.part.md -->
-
-```js
-export default function Profile() {
-    return (
-        <img
-            src="https://i.imgur.com/QIrZWGIs.jpg"
-            alt="Alan L. Hart"
-        />
-    );
-}
-```
+    ![результат](describing-the-ui-2.png)
 
 <!-- 0012.part.md -->
 
-Прочитайте **[Импорт и экспорт компонентов](importing-and-exporting-components.md)**, чтобы узнать, как разделить компоненты на собственные файлы.
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Импорт и экспорт компонентов](importing-and-exporting-components.md), чтобы узнать, как разделить компоненты на собственные файлы.
 
 ## Написание разметки с помощью JSX
 
-Каждый компонент React - это функция JavaScript, которая может содержать некоторую разметку, которую React отображает в браузере. Компоненты React используют расширение синтаксиса под названием JSX для представления этой разметки. JSX очень похож на HTML, но он немного строже и может отображать динамическую информацию.
+Каждый компонент React — это функция JavaScript, которая может содержать некоторую разметку, которую React отображает в браузере. Компоненты React используют расширение синтаксиса под названием JSX для представления этой разметки. JSX очень похож на HTML, но он немного строже и может отображать динамическую информацию.
 
-Если мы вставим существующую HTML-разметку в компонент React, она не всегда будет работать:
+Если мы вставим существующую HTML-разметку в компонент React, она не будет работать:
 
 <!-- 0013.part.md -->
 
-```js
-export default function TodoList() {
-  return (
-    // This doesn't quite work!
-    <h1>Hedy Lamarr's Todos</h1>
-    <img
-      src="https://i.imgur.com/yXOvdOSs.jpg"
-      alt="Hedy Lamarr"
-      class="photo"
-    >
-    <ul>
-      <li>Invent new traffic lights
-      <li>Rehearse a movie scene
-      <li>Improve spectrum technology
-    </ul>
-  );
-}
-```
+=== "App.js"
+
+    ```js
+    export default function TodoList() {
+    return (
+    	// This doesn't quite work!
+    	<h1>Hedy Lamarr's Todos</h1>
+    	<img
+    	src="https://i.imgur.com/yXOvdOSs.jpg"
+    	alt="Hedy Lamarr"
+    	class="photo"
+    	>
+    	<ul>
+    	<li>Invent new traffic lights
+    	<li>Rehearse a movie scene
+    	<li>Improve spectrum technology
+    	</ul>
+    );
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](describing-the-ui-3.png)
 
 <!-- 0016.part.md -->
 
@@ -128,29 +136,37 @@ export default function TodoList() {
 
 <!-- 0017.part.md -->
 
-```js
-export default function TodoList() {
-    return (
-        <>
-            <h1>Hedy Lamarr's Todos</h1>
-            <img
-                src="https://i.imgur.com/yXOvdOSs.jpg"
-                alt="Hedy Lamarr"
-                className="photo"
-            />
-            <ul>
-                <li>Invent new traffic lights</li>
-                <li>Rehearse a movie scene</li>
-                <li>Improve spectrum technology</li>
-            </ul>
-        </>
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    export default function TodoList() {
+    	return (
+    		<>
+    			<h1>Hedy Lamarr's Todos</h1>
+    			<img
+    				src="https://i.imgur.com/yXOvdOSs.jpg"
+    				alt="Hedy Lamarr"
+    				className="photo"
+    			/>
+    			<ul>
+    				<li>Invent new traffic lights</li>
+    				<li>Rehearse a movie scene</li>
+    				<li>Improve spectrum technology</li>
+    			</ul>
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](describing-the-ui-4.png)
 
 <!-- 0020.part.md -->
 
-Прочитайте **[Writing Markup with JSX](writing-markup-with-jsx.md)**, чтобы узнать, как писать правильный JSX.
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Writing Markup with JSX](writing-markup-with-jsx.md), чтобы узнать, как писать правильный JSX.
 
 ## JavaScript в JSX с фигурными скобками
 
@@ -158,37 +174,45 @@ JSX позволяет вам писать HTML-подобную разметк�
 
 <!-- 0021.part.md -->
 
-```js
-const person = {
-    name: 'Gregorio Y. Zara',
-    theme: {
-        backgroundColor: 'black',
-        color: 'pink',
-    },
-};
+=== "App.js"
 
-export default function TodoList() {
-    return (
-        <div style={person.theme}>
-            <h1>{person.name}'s Todos</h1>
-            <img
-                className="avatar"
-                src="https://i.imgur.com/7vQD0fPs.jpg"
-                alt="Gregorio Y. Zara"
-            />
-            <ul>
-                <li>Improve the videophone</li>
-                <li>Prepare aeronautics lectures</li>
-                <li>Work on the alcohol-fuelled engine</li>
-            </ul>
-        </div>
-    );
-}
-```
+    ```js
+    const person = {
+    	name: 'Gregorio Y. Zara',
+    	theme: {
+    		backgroundColor: 'black',
+    		color: 'pink',
+    	},
+    };
+
+    export default function TodoList() {
+    	return (
+    		<div style={person.theme}>
+    			<h1>{person.name}'s Todos</h1>
+    			<img
+    				className="avatar"
+    				src="https://i.imgur.com/7vQD0fPs.jpg"
+    				alt="Gregorio Y. Zara"
+    			/>
+    			<ul>
+    				<li>Improve the videophone</li>
+    				<li>Prepare aeronautics lectures</li>
+    				<li>Work on the alcohol-fuelled engine</li>
+    			</ul>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](describing-the-ui-5.png)
 
 <!-- 0024.part.md -->
 
-Читайте **[JavaScript в JSX с фигурными скобками](javascript-in-jsx-with-curly-braces.md)**, чтобы узнать, как получить доступ к данным JavaScript из JSX.
+!!!note "Готовы изучить эту тему?"
+
+    Читайте [JavaScript в JSX с фигурными скобками](javascript-in-jsx-with-curly-braces.md), чтобы узнать, как получить доступ к данным JavaScript из JSX.
 
 ## Передача реквизитов компоненту
 
@@ -196,58 +220,64 @@ export default function TodoList() {
 
 <!-- 0025.part.md -->
 
-```js
-import { getImageUrl } from './utils.js';
+=== "App.js"
 
-export default function Profile() {
-    return (
-        <Card>
-            <Avatar
-                size={100}
-                person={{
-                    name: 'Katsuko Saruhashi',
-                    imageId: 'YfeOqp2',
-                }}
-            />
-        </Card>
-    );
-}
+    ```js
+    import { getImageUrl } from './utils.js';
 
-function Avatar({ person, size }) {
-    return (
-        <img
-            className="avatar"
-            src={getImageUrl(person)}
-            alt={person.name}
-            width={size}
-            height={size}
-        />
-    );
-}
+    export default function Profile() {
+    	return (
+    		<Card>
+    			<Avatar
+    				size={100}
+    				person={{
+    					name: 'Katsuko Saruhashi',
+    					imageId: 'YfeOqp2',
+    				}}
+    			/>
+    		</Card>
+    	);
+    }
 
-function Card({ children }) {
-    return <div className="card">{children}</div>;
-}
-```
+    function Avatar({ person, size }) {
+    	return (
+    		<img
+    			className="avatar"
+    			src={getImageUrl(person)}
+    			alt={person.name}
+    			width={size}
+    			height={size}
+    		/>
+    	);
+    }
 
-<!-- 0026.part.md -->
+    function Card({ children }) {
+    	return <div className="card">{children}</div>;
+    }
+    ```
 
-<!-- 0027.part.md -->
+=== "utils.js"
 
-```js
-export function getImageUrl(person, size = 's') {
-    return (
-        'https://i.imgur.com/' +
-        person.imageId +
-        size +
-        '.jpg'
-    );
-}
-```
+    ```js
+    export function getImageUrl(person, size = 's') {
+    	return (
+    		'https://i.imgur.com/' +
+    		person.imageId +
+    		size +
+    		'.jpg'
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](describing-the-ui-6.png)
 
 <!-- 0030.part.md -->
 
-Прочитайте **[Передача реквизитов компоненту](passing-props-to-a-component.md)**, чтобы узнать, как передавать и читать реквизиты.
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Передача реквизитов компоненту](passing-props-to-a-component.md), чтобы узнать, как передавать и читать реквизиты.
 
 ## Условный рендеринг
 
@@ -257,38 +287,46 @@ export function getImageUrl(person, size = 's') {
 
 <!-- 0031.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    return (
-        <li className="item">
-            {name} {isPacked && '✔'}
-        </li>
-    );
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, isPacked }) {
+    	return (
+    		<li className="item">
+    			{name} {isPacked && '✔'}
+    		</li>
+    	);
+    }
+
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item isPacked={true} name="Space suit" />
+    				<Item
+    					isPacked={true}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item
+    					isPacked={false}
+    					name="Photo of Tam"
+    				/>
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](describing-the-ui-7.png)
 
 <!-- 0032.part.md -->
 
-Прочитайте **[Условный рендеринг](conditional-rendering.md)**, чтобы узнать о различных способах условного рендеринга контента.
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Условный рендеринг](conditional-rendering.md), чтобы узнать о различных способах условного рендеринга контента.
 
 ## Рендеринг списков
 
@@ -298,94 +336,98 @@ export default function PackingList() {
 
 <!-- 0033.part.md -->
 
-```js
-import { people } from './data.js';
-import { getImageUrl } from './utils.js';
+=== "App.js"
 
-export default function List() {
-    const listItems = people.map((person) => (
-        <li key={person.id}>
-            <img
-                src={getImageUrl(person)}
-                alt={person.name}
-            />
-            <p>
-                <b>{person.name}:</b>
-                {' ' + person.profession + ' '}
-                known for {person.accomplishment}
-            </p>
-        </li>
-    ));
-    return (
-        <article>
-            <h1>Scientists</h1>
-            <ul>{listItems}</ul>
-        </article>
-    );
-}
-```
+    ```js
+    import { people } from './data.js';
+    import { getImageUrl } from './utils.js';
 
-<!-- 0034.part.md -->
+    export default function List() {
+    	const listItems = people.map((person) => (
+    		<li key={person.id}>
+    			<img
+    				src={getImageUrl(person)}
+    				alt={person.name}
+    			/>
+    			<p>
+    				<b>{person.name}:</b>
+    				{' ' + person.profession + ' '}
+    				known for {person.accomplishment}
+    			</p>
+    		</li>
+    	));
+    	return (
+    		<article>
+    			<h1>Scientists</h1>
+    			<ul>{listItems}</ul>
+    		</article>
+    	);
+    }
+    ```
 
-<!-- 0035.part.md -->
+=== "data.js"
 
-```js
-export const people = [
-    {
-        id: 0,
-        name: 'Creola Katherine Johnson',
-        profession: 'mathematician',
-        accomplishment: 'spaceflight calculations',
-        imageId: 'MK3eW3A',
-    },
-    {
-        id: 1,
-        name: 'Mario José Molina-Pasquel Henríquez',
-        profession: 'chemist',
-        accomplishment: 'discovery of Arctic ozone hole',
-        imageId: 'mynHUSa',
-    },
-    {
-        id: 2,
-        name: 'Mohammad Abdus Salam',
-        profession: 'physicist',
-        accomplishment: 'electromagnetism theory',
-        imageId: 'bE7W1ji',
-    },
-    {
-        id: 3,
-        name: 'Percy Lavon Julian',
-        profession: 'chemist',
-        accomplishment:
-            'pioneering cortisone drugs, steroids and birth control pills',
-        imageId: 'IOjWm71',
-    },
-    {
-        id: 4,
-        name: 'Subrahmanyan Chandrasekhar',
-        profession: 'astrophysicist',
-        accomplishment:
-            'white dwarf star mass calculations',
-        imageId: 'lrWQx8l',
-    },
-];
-```
+    ```js
+    export const people = [
+    	{
+    		id: 0,
+    		name: 'Creola Katherine Johnson',
+    		profession: 'mathematician',
+    		accomplishment: 'spaceflight calculations',
+    		imageId: 'MK3eW3A',
+    	},
+    	{
+    		id: 1,
+    		name: 'Mario José Molina-Pasquel Henríquez',
+    		profession: 'chemist',
+    		accomplishment: 'discovery of Arctic ozone hole',
+    		imageId: 'mynHUSa',
+    	},
+    	{
+    		id: 2,
+    		name: 'Mohammad Abdus Salam',
+    		profession: 'physicist',
+    		accomplishment: 'electromagnetism theory',
+    		imageId: 'bE7W1ji',
+    	},
+    	{
+    		id: 3,
+    		name: 'Percy Lavon Julian',
+    		profession: 'chemist',
+    		accomplishment:
+    			'pioneering cortisone drugs, steroids and birth control pills',
+    		imageId: 'IOjWm71',
+    	},
+    	{
+    		id: 4,
+    		name: 'Subrahmanyan Chandrasekhar',
+    		profession: 'astrophysicist',
+    		accomplishment:
+    			'white dwarf star mass calculations',
+    		imageId: 'lrWQx8l',
+    	},
+    ];
+    ```
 
-<!-- 0036.part.md -->
+=== "utils.js"
 
-<!-- 0037.part.md -->
+    ```js
+    export function getImageUrl(person) {
+    	return (
+    		'https://i.imgur.com/' + person.imageId + 's.jpg'
+    	);
+    }
+    ```
 
-```js
-export function getImageUrl(person) {
-    return (
-        'https://i.imgur.com/' + person.imageId + 's.jpg'
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](describing-the-ui-8.png)
 
 <!-- 0040.part.md -->
 
-Прочитайте **[Rendering Lists](rendering-lists.md)**, чтобы узнать, как отобразить список компонентов и как выбрать ключ.
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Rendering Lists](rendering-lists.md), чтобы узнать, как отобразить список компонентов и как выбрать ключ.
 
 ## Соблюдение чистоты компонентов
 
@@ -398,56 +440,74 @@ export function getImageUrl(person) {
 
 <!-- 0041.part.md -->
 
-```js
-let guest = 0;
+=== "App.js"
 
-function Cup() {
-    // Bad: changing a preexisting variable!
-    guest = guest + 1;
-    return <h2>Tea cup for guest #{guest}</h2>;
-}
+    ```js
+    let guest = 0;
 
-export default function TeaSet() {
-    return (
-        <>
-            <Cup />
-            <Cup />
-            <Cup />
-        </>
-    );
-}
-```
+    function Cup() {
+    	// Bad: changing a preexisting variable!
+    	guest = guest + 1;
+    	return <h2>Tea cup for guest #{guest}</h2>;
+    }
+
+    export default function TeaSet() {
+    	return (
+    		<>
+    			<Cup />
+    			<Cup />
+    			<Cup />
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](describing-the-ui-9.png)
 
 <!-- 0042.part.md -->
 
-Вы можете сделать этот компонент чистым, передав ему prop вместо изменения предварительно существующей переменной:
+Вы можете сделать этот компонент чистым, передав ему параметр вместо изменения предварительно существующей переменной:
 
 <!-- 0043.part.md -->
 
-```js
-function Cup({ guest }) {
-    return <h2>Tea cup for guest #{guest}</h2>;
-}
+=== "App.js"
 
-export default function TeaSet() {
-    return (
-        <>
-            <Cup guest={1} />
-            <Cup guest={2} />
-            <Cup guest={3} />
-        </>
-    );
-}
-```
+    ```js
+    function Cup({ guest }) {
+    	return <h2>Tea cup for guest #{guest}</h2>;
+    }
+
+    export default function TeaSet() {
+    	return (
+    		<>
+    			<Cup guest={1} />
+    			<Cup guest={2} />
+    			<Cup guest={3} />
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](describing-the-ui-10.png)
 
 <!-- 0044.part.md -->
 
-Прочитайте **[Keeping Components Pure](keeping-components-pure.md)**, чтобы узнать, как писать компоненты как чистые, предсказуемые функции.
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Keeping Components Pure](keeping-components-pure.md), чтобы узнать, как писать компоненты как чистые, предсказуемые функции.
 
 ## Что дальше?
 
 Перейдите по ссылке [Ваш первый компонент](your-first-component.md), чтобы начать читать эту главу страница за страницей!
 
-Или, если вы уже знакомы с этими темами, почему бы не прочитать [Adding Interactivity](adding-interactivity.md)?
+Или, если вы уже знакомы с этими темами, почему бы не прочитать [Добаление интерактивности](adding-interactivity.md)?
 
 <!-- 0045.part.md -->
+
+## Ссылки
+
+-   [https://react.dev/learn/describing-the-ui](https://react.dev/learn/describing-the-ui)

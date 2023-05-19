@@ -10,7 +10,7 @@ nav:
         - add-react-to-an-existing-project.md
         - editor-setup.md
         - react-developer-tools.md
-    - "Описание пользовательского интерфейса":
+    - "Разработка UI":
         - describing-the-ui.md
         - your-first-component.md
         - importing-and-exporting-components.md
