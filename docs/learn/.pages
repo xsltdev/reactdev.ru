@@ -30,6 +30,6 @@ nav:
         - updating-objects-in-state.md
         - updating-arrays-in-state.md
     - "Управление состоянием":
-        - ...
+        - managing-state.md
     - "Механизмы внешнего доступа":
         - ...
