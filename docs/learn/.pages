@@ -36,5 +36,13 @@ nav:
         - sharing-state-between-components.md
         - preserving-and-resetting-state.md
         - extracting-state-logic-into-a-reducer.md
+        - passing-data-deeply-with-context.md
+        - scaling-up-with-reducer-and-context.md
     - "Механизмы внешнего доступа":
-        - ...
+        - escape-hatches.md
+        - referencing-values-with-refs.md
+        - manipulating-the-dom-with-refs.md
+        - synchronizing-with-effects.md
+        - you-might-not-need-an-effect.md
+        - lifecycle-of-reactive-effects.md
+        - separating-events-from-effects.md
