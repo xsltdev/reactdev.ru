@@ -102,14 +102,6 @@ h3 {
 	opacity: 0.85;
 }
 
-/*
-	CODE BLOCK
-*/
-.md-typeset .codehilite,
-.md-typeset .highlight {
-	border: 1px solid rgba(236, 236, 236, 1);
-}
-
 /* Google button */
 .gsc-search-button-v2 svg {
 	fill: #ffffff;

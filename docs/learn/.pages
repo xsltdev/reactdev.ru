@@ -1,0 +1,49 @@
+title: React 18
+nav:
+    - "Быстрый старт":
+        - index.md
+        - tutorial-tic-tac-toe.md
+        - thinking-in-react.md
+    - "Установка":
+        - installation.md
+        - start-a-new-react-project.md
+        - add-react-to-an-existing-project.md
+        - editor-setup.md
+        - react-developer-tools.md
+    - "Разработка UI":
+        - describing-the-ui.md
+        - your-first-component.md
+        - importing-and-exporting-components.md
+        - writing-markup-with-jsx.md
+        - javascript-in-jsx-with-curly-braces.md
+        - passing-props-to-a-component.md
+        - conditional-rendering.md
+        - rendering-lists.md
+        - keeping-components-pure.md
+    - "Добавление интерактивности":
+        - adding-interactivity.md
+        - responding-to-events.md
+        - state-a-components-memory.md
+        - render-and-commit.md
+        - state-as-a-snapshot.md
+        - queueing-a-series-of-state-updates.md
+        - updating-objects-in-state.md
+        - updating-arrays-in-state.md
+    - "Управление состоянием":
+        - managing-state.md
+        - reacting-to-input-with-state.md
+        - choosing-the-state-structure.md
+        - sharing-state-between-components.md
+        - preserving-and-resetting-state.md
+        - extracting-state-logic-into-a-reducer.md
+        - passing-data-deeply-with-context.md
+        - scaling-up-with-reducer-and-context.md
+    - "Механизмы внешнего доступа":
+        - escape-hatches.md
+        - referencing-values-with-refs.md
+        - manipulating-the-dom-with-refs.md
+        - synchronizing-with-effects.md
+        - you-might-not-need-an-effect.md
+        - lifecycle-of-reactive-effects.md
+        - separating-events-from-effects.md
+        - removing-effect-dependencies.md

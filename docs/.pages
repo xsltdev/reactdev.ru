@@ -1,7 +1,7 @@
 nav:
-    - index.md
-    - handbook
+    - learn
     - types
+    - tutorial
     - nextjs
     - graphql
     - libs
