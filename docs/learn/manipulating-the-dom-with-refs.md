@@ -39,7 +39,7 @@ const myRef = useRef(null);
 
 <!-- 0006.part.md -->
 
-The `useRef` Hook returns an object with a single property called `current`. Initially, `myRef.current` will be `null`. When React creates a DOM node for this `<div>`, React will put a reference to this node into `myRef.current`. You can then access this DOM node from your [event handlers](/learn/responding-to-events) and use the built-in [browser APIs](https://developer.mozilla.org/docs/Web/API/Element) defined on it.
+The `useRef` Hook returns an object with a single property called `current`. Initially, `myRef.current` will be `null`. When React creates a DOM node for this `<div>`, React will put a reference to this node into `myRef.current`. You can then access this DOM node from your [event handlers](responding-to-events.md) and use the built-in [browser APIs](https://developer.mozilla.org/docs/Web/API/Element) defined on it.
 
 <!-- 0007.part.md -->
 
@@ -83,14 +83,14 @@ To implement this:
 
 1.  Declare `inputRef` with the `useRef` Hook.
 2.  Pass it as `<input ref={inputRef}>`. This tells React to **put this `<input>`’s DOM node into `inputRef.current`.**
-3.  In the `handleClick` function, read the input DOM node from `inputRef.current` and call [`focus()`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) on it with `inputRef.current.focus()`.
+3.  In the `handleClick` function, read the input DOM node from `inputRef.current` and call [`focus()`](https://developer.mozilla.org/docs/Web/API/HTMLElement/focus) on it with `inputRef.current.focus()`.
 4.  Pass the `handleClick` event handler to `<button>` with `onClick`.
 
-While DOM manipulation is the most common use case for refs, the `useRef` Hook can be used for storing other things outside React, like timer IDs. Similarly to state, refs remain between renders. Refs are like state variables that don’t trigger re-renders when you set them. Read about refs in [Referencing Values with Refs.](/learn/referencing-values-with-refs)
+While DOM manipulation is the most common use case for refs, the `useRef` Hook can be used for storing other things outside React, like timer IDs. Similarly to state, refs remain between renders. Refs are like state variables that don’t trigger re-renders when you set them. Read about refs in [Referencing Values with Refs.](referencing-values-with-refs.md)
 
 ### Example: Scrolling to an element {/_example-scrolling-to-an-element_/}
 
-You can have more than a single ref in a component. In this example, there is a carousel of three images. Each button centers an image by calling the browser [`scrollIntoView()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView) method on the corresponding DOM node:
+You can have more than a single ref in a component. In this example, there is a carousel of three images. Each button centers an image by calling the browser [`scrollIntoView()`](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView) method on the corresponding DOM node:
 
 <!-- 0011.part.md -->
 
@@ -334,7 +334,7 @@ li {
 
 <!-- 0020.part.md -->
 
-В этом примере `itemsRef` не содержит ни одного узла DOM. Вместо этого он содержит [Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map) от ID элемента к узлу DOM. ([Ссылки могут содержать любые значения\!](/learn/referencing-values-with-refs)) Обратный вызов [`ref`](/reference/react-dom/components/common#ref-callback) для каждого элемента списка заботится об обновлении карты:
+В этом примере `itemsRef` не содержит ни одного узла DOM. Вместо этого он содержит [Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map) от ID элемента к узлу DOM. ([Ссылки могут содержать любые значения!](referencing-values-with-refs.md)) Обратный вызов `ref` для каждого элемента списка заботится об обновлении карты:
 
 <!-- 0021.part.md -->
 
@@ -498,12 +498,12 @@ export default function Form() {
 
 ## Когда React присоединяет ссылки {/_when-react-attaches-the-refs_/}
 
-В React каждое обновление делится на [две фазы] (/learn/render-and-commit#step-3-react-commits-changes-to-the-dom):
+В React каждое обновление делится на [две фазы](render-and-commit.md):
 
 -   Во время **render,** React вызывает ваши компоненты, чтобы выяснить, что должно быть на экране.
 -   Во время **commit,** React применяет изменения в DOM.
 
-В общем, вы [не хотите](/learn/referencing-values-with-refs#best-practices-for-refs) обращаться к рефкам во время рендеринга. Это относится и к ссылкам, содержащим узлы DOM. Во время первого рендеринга узлы DOM еще не были созданы, поэтому `ref.current` будет `null`. А во время рендеринга обновлений, узлы DOM еще не были обновлены. Поэтому читать их еще рано.
+В общем, вы [не хотите](referencing-values-with-refs.md) обращаться к рефкам во время рендеринга. Это относится и к ссылкам, содержащим узлы DOM. Во время первого рендеринга узлы DOM еще не были созданы, поэтому `ref.current` будет `null`. А во время рендеринга обновлений, узлы DOM еще не были обновлены. Поэтому читать их еще рано.
 
 React устанавливает `ref.current` во время фиксации. Перед обновлением DOM, React устанавливает затронутые значения `ref.current` в `null`. После обновления DOM, React немедленно устанавливает их в соответствующие узлы DOM.
 
@@ -572,7 +572,7 @@ listRef.current.lastChild.scrollIntoView();
 
 <!-- 0034.part.md -->
 
-В React [обновления состояния ставятся в очередь.](/learn/queueing-a-series-of-state-updates) Обычно это то, что вам нужно. Однако здесь это вызывает проблему, потому что `setTodos` не обновляет DOM немедленно. Поэтому, когда вы прокручиваете список до последнего элемента, todo еще не был добавлен. Поэтому прокрутка всегда "отстает" на один элемент.
+В React [обновления состояния ставятся в очередь](queueing-a-series-of-state-updates.md). Обычно это то, что вам нужно. Однако здесь это вызывает проблему, потому что `setTodos` не обновляет DOM немедленно. Поэтому, когда вы прокручиваете список до последнего элемента, todo еще не был добавлен. Поэтому прокрутка всегда "отстает" на один элемент.
 
 Чтобы решить эту проблему, вы можете заставить React обновлять ("промывать") DOM синхронно. Для этого импортируйте `flushSync` из `react-dom` и **оберните обновление состояния** в вызов `flushSync`:
 
@@ -646,7 +646,7 @@ for (let i = 0; i < 20; i++) {
 
 Если вы придерживаетесь неразрушающих действий, таких как фокусировка и прокрутка, вы не должны столкнуться с какими-либо проблемами. Однако, если вы попытаетесь **изменить** DOM вручную, вы рискуете вступить в конфликт с изменениями, которые вносит React.
 
-Чтобы проиллюстрировать эту проблему, данный пример включает в себя приветственное сообщение и две кнопки. Первая кнопка переключает свое присутствие, используя [conditional rendering](/learn/conditional-rendering) и [state](/learn/state-a-components-memory), как вы обычно делаете в React. Вторая кнопка использует [`remove()` DOM API](https://developer.mozilla.org/en-US/docs/Web/API/Element/remove), чтобы принудительно удалить ее из DOM вне контроля React.
+Чтобы проиллюстрировать эту проблему, данный пример включает в себя приветственное сообщение и две кнопки. Первая кнопка переключает свое присутствие, используя [conditional rendering](conditional-rendering.md) и [state](state-a-components-memory.md), как вы обычно делаете в React. Вторая кнопка использует [`remove()` DOM API](https://developer.mozilla.org/docs/Web/API/Element/remove), чтобы принудительно удалить ее из DOM вне контроля React.
 
 Попробуйте нажать "Toggle with setState" несколько раз. Сообщение должно исчезнуть и появиться снова. Затем нажмите "Удалить из DOM". Это приведет к принудительному удалению. Наконец, нажмите "Toggle with setState":
 
