@@ -2,10 +2,12 @@
 
 JSX позволяет вам писать HTML-подобную разметку внутри файла JavaScript, сохраняя логику рендеринга и содержимое в одном месте. Иногда вы захотите добавить немного логики JavaScript или сослаться на динамическое свойство внутри этой разметки. В этой ситуации вы можете использовать фигурные скобки в JSX, чтобы открыть окно для JavaScript.
 
--   Как передавать строки с кавычками
--   Как ссылаться на переменную JavaScript внутри JSX с помощью фигурных скобок
--   Как вызвать функцию JavaScript в JSX с помощью фигурных скобок
--   Как использовать объект JavaScript внутри JSX с фигурными скобками
+!!!tip "Вы узнаете"
+
+    -   Как передавать строки с кавычками
+    -   Как ссылаться на переменную JavaScript внутри JSX с помощью фигурных скобок
+    -   Как вызвать функцию JavaScript в JSX с помощью фигурных скобок
+    -   Как использовать объект JavaScript внутри JSX с фигурными скобками
 
 ## Передача строк с кавычками
 
@@ -13,17 +15,23 @@ JSX позволяет вам писать HTML-подобную разметк�
 
 <!-- 0001.part.md -->
 
-```js
-export default function Avatar() {
-    return (
-        <img
-            className="avatar"
-            src="https://i.imgur.com/7vQD0fPs.jpg"
-            alt="Gregorio Y. Zara"
-        />
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    export default function Avatar() {
+    	return (
+    		<img
+    			className="avatar"
+    			src="https://i.imgur.com/7vQD0fPs.jpg"
+    			alt="Gregorio Y. Zara"
+    		/>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](javascript-in-jsx-with-curly-braces-1.png)
 
 <!-- 0004.part.md -->
 
@@ -33,19 +41,25 @@ export default function Avatar() {
 
 <!-- 0005.part.md -->
 
-```js
-export default function Avatar() {
-    const avatar = 'https://i.imgur.com/7vQD0fPs.jpg';
-    const description = 'Gregorio Y. Zara';
-    return (
-        <img
-            className="avatar"
-            src={avatar}
-            alt={description}
-        />
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    export default function Avatar() {
+    	const avatar = 'https://i.imgur.com/7vQD0fPs.jpg';
+    	const description = 'Gregorio Y. Zara';
+    	return (
+    		<img
+    			className="avatar"
+    			src={avatar}
+    			alt={description}
+    		/>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](javascript-in-jsx-with-curly-braces-1.png)
 
 <!-- 0008.part.md -->
 
@@ -57,12 +71,18 @@ JSX - это особый способ написания JavaScript. Это о�
 
 <!-- 0009.part.md -->
 
-```js
-export default function TodoList() {
-    const name = 'Gregorio Y. Zara';
-    return <h1>{name}'s To Do List</h1>;
-}
-```
+=== "App.js"
+
+    ```js
+    export default function TodoList() {
+    	const name = 'Gregorio Y. Zara';
+    	return <h1>{name}'s To Do List</h1>;
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](javascript-in-jsx-with-curly-braces-2.png)
 
 <!-- 0010.part.md -->
 
@@ -72,19 +92,25 @@ export default function TodoList() {
 
 <!-- 0011.part.md -->
 
-```js
-const today = new Date();
+=== "App.js"
 
-function formatDate(date) {
-    return new Intl.DateTimeFormat('en-US', {
-        weekday: 'long',
-    }).format(date);
-}
+    ```js
+    const today = new Date();
 
-export default function TodoList() {
-    return <h1>To Do List for {formatDate(today)}</h1>;
-}
-```
+    function formatDate(date) {
+    	return new Intl.DateTimeFormat('en-US', {
+    		weekday: 'long',
+    	}).format(date);
+    }
+
+    export default function TodoList() {
+    	return <h1>To Do List for {formatDate(today)}</h1>;
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](javascript-in-jsx-with-curly-braces-3.png)
 
 <!-- 0012.part.md -->
 
@@ -92,7 +118,7 @@ export default function TodoList() {
 
 В JSX фигурные скобки можно использовать только двумя способами:
 
-1.  **В качестве текста** непосредственно внутри тега JSX: `<h1>{name}'s To Do List</h1>` работает, а `<{tag}>Gregorio Y. Zara's To Do List</{tag}> не работает.
+1.  **В качестве текста** непосредственно внутри тега JSX: `<h1>{name}'s To Do List</h1>` работает, а <code>&lt;{tag}&gt;Gregorio Y. Zara's To Do List&lt;/{tag}&gt;</code> не работает.
 2.  **Атрибуты** сразу после знака `=`: `src={avatar}` прочитает переменную `avatar`, но `src="{avatar}"` передаст строку `"{avatar}"`.
 
 ## Использование "двойных завитушек": CSS и другие объекты в JSX
@@ -103,22 +129,28 @@ export default function TodoList() {
 
 <!-- 0013.part.md -->
 
-```js
-export default function TodoList() {
-    return (
-        <ul
-            style={{
-                backgroundColor: 'black',
-                color: 'pink',
-            }}
-        >
-            <li>Improve the videophone</li>
-            <li>Prepare aeronautics lectures</li>
-            <li>Work on the alcohol-fuelled engine</li>
-        </ul>
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    export default function TodoList() {
+    	return (
+    		<ul
+    			style={{
+    				backgroundColor: 'black',
+    				color: 'pink',
+    			}}
+    		>
+    			<li>Improve the videophone</li>
+    			<li>Prepare aeronautics lectures</li>
+    			<li>Work on the alcohol-fuelled engine</li>
+    		</ul>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](javascript-in-jsx-with-curly-braces-4.png)
 
 <!-- 0016.part.md -->
 
@@ -141,7 +173,9 @@ export default function TodoList() {
 
 Когда в следующий раз вы увидите `{{` и `}}` в JSX, знайте, что это не что иное, как объект внутри JSX curlies!
 
-Инлайн-свойства `style` записываются в camelCase. Например, HTML `<ul style="background-color: black">` будет записан как `<ul style={{ backgroundColor: 'black' }}>` в вашем компоненте.
+!!!warning "Внимание"
+
+    Инлайн-свойства `style` записываются в camelCase. Например, HTML `<ul style="background-color: black">` будет записан как `<ul style={{ backgroundColor: 'black' }}>` в вашем компоненте.
 
 ## Больше веселья с объектами JavaScript и фигурными скобками
 
@@ -149,33 +183,39 @@ export default function TodoList() {
 
 <!-- 0019.part.md -->
 
-```js
-const person = {
-    name: 'Gregorio Y. Zara',
-    theme: {
-        backgroundColor: 'black',
-        color: 'pink',
-    },
-};
+=== "App.js"
 
-export default function TodoList() {
-    return (
-        <div style={person.theme}>
-            <h1>{person.name}'s Todos</h1>
-            <img
-                className="avatar"
-                src="https://i.imgur.com/7vQD0fPs.jpg"
-                alt="Gregorio Y. Zara"
-            />
-            <ul>
-                <li>Improve the videophone</li>
-                <li>Prepare aeronautics lectures</li>
-                <li>Work on the alcohol-fuelled engine</li>
-            </ul>
-        </div>
-    );
-}
-```
+    ```js
+    const person = {
+    	name: 'Gregorio Y. Zara',
+    	theme: {
+    		backgroundColor: 'black',
+    		color: 'pink',
+    	},
+    };
+
+    export default function TodoList() {
+    	return (
+    		<div style={person.theme}>
+    			<h1>{person.name}'s Todos</h1>
+    			<img
+    				className="avatar"
+    				src="https://i.imgur.com/7vQD0fPs.jpg"
+    				alt="Gregorio Y. Zara"
+    			/>
+    			<ul>
+    				<li>Improve the videophone</li>
+    				<li>Prepare aeronautics lectures</li>
+    				<li>Work on the alcohol-fuelled engine</li>
+    			</ul>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](javascript-in-jsx-with-curly-braces-5.png)
 
 <!-- 0022.part.md -->
 
@@ -208,161 +248,191 @@ const person = {
 
 JSX очень минимален как язык шаблонов, потому что он позволяет организовать данные и логику с помощью JavaScript.
 
-Теперь вы знаете почти все о JSX:
+!!!note "Итого"
 
--   Атрибуты JSX, заключенные в кавычки, передаются как строки.
--   Фигурные скобки позволяют вам привнести логику и переменные JavaScript в вашу разметку.
--   Они работают внутри содержимого тега JSX или сразу после `=` в атрибутах.
--   `{{` и `}}` - это не специальный синтаксис: это объект JavaScript, помещенный в фигурные скобки JSX.
+    Теперь вы знаете почти все о JSX:
 
-#### Исправьте ошибку
+    -   Атрибуты JSX, заключенные в кавычки, передаются как строки.
+    -   Фигурные скобки позволяют вам привнести логику и переменные JavaScript в вашу разметку.
+    -   Они работают внутри содержимого тега JSX или сразу после `=` в атрибутах.
+    -   `{{` и `}}` - это не специальный синтаксис: это объект JavaScript, помещенный в фигурные скобки JSX.
+
+## Задачи
+
+### 1. Исправьте ошибку
 
 Этот код аварийно завершается с ошибкой `Objects are not valid as a React child`:
 
 <!-- 0027.part.md -->
 
-```js
-const person = {
-    name: 'Gregorio Y. Zara',
-    theme: {
-        backgroundColor: 'black',
-        color: 'pink',
-    },
-};
+=== "App.js"
 
-export default function TodoList() {
-    return (
-        <div style={person.theme}>
-            <h1>{person}'s Todos</h1>
-            <img
-                className="avatar"
-                src="https://i.imgur.com/7vQD0fPs.jpg"
-                alt="Gregorio Y. Zara"
-            />
-            <ul>
-                <li>Improve the videophone</li>
-                <li>Prepare aeronautics lectures</li>
-                <li>Work on the alcohol-fuelled engine</li>
-            </ul>
-        </div>
-    );
-}
-```
+    ```js
+    const person = {
+    	name: 'Gregorio Y. Zara',
+    	theme: {
+    		backgroundColor: 'black',
+    		color: 'pink',
+    	},
+    };
+
+    export default function TodoList() {
+    	return (
+    		<div style={person.theme}>
+    			<h1>{person}'s Todos</h1>
+    			<img
+    				className="avatar"
+    				src="https://i.imgur.com/7vQD0fPs.jpg"
+    				alt="Gregorio Y. Zara"
+    			/>
+    			<ul>
+    				<li>Improve the videophone</li>
+    				<li>Prepare aeronautics lectures</li>
+    				<li>Work on the alcohol-fuelled engine</li>
+    			</ul>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](javascript-in-jsx-with-curly-braces-6.png)
 
 <!-- 0030.part.md -->
 
 Можете ли вы найти проблему?
 
-Посмотрите, что находится внутри фигурных скобок. Мы поместили туда то, что нужно?
+???tip "Показать подсказку"
 
-Это происходит потому, что в данном примере в разметку помещается _сам объект_, а не строка: `<h1>{person}'s Todos</h1>` пытается отобразить весь объект `person`! Включение необработанных объектов в текстовое содержимое приводит к ошибке, потому что React не знает, как вы хотите их отобразить.
+    Посмотрите, что находится внутри фигурных скобок. Мы поместили туда то, что нужно?
 
-Чтобы исправить это, замените `<h1>{person}'s Todos</h1>` на `<h1>{person.name}'s Todos</h1>`:
+???success "Показать решение"
 
-<!-- 0031.part.md -->
+    Это происходит потому, что в данном примере в разметку помещается _сам объект_, а не строка: `<h1>{person}'s Todos</h1>` пытается отобразить весь объект `person`! Включение необработанных объектов в текстовое содержимое приводит к ошибке, потому что React не знает, как вы хотите их отобразить.
 
-```js
-const person = {
-    name: 'Gregorio Y. Zara',
-    theme: {
-        backgroundColor: 'black',
-        color: 'pink',
-    },
-};
+    Чтобы исправить это, замените `<h1>{person}'s Todos</h1>` на `<h1>{person.name}'s Todos</h1>`:
 
-export default function TodoList() {
-    return (
-        <div style={person.theme}>
-            <h1>{person.name}'s Todos</h1>
-            <img
-                className="avatar"
-                src="https://i.imgur.com/7vQD0fPs.jpg"
-                alt="Gregorio Y. Zara"
-            />
-            <ul>
-                <li>Improve the videophone</li>
-                <li>Prepare aeronautics lectures</li>
-                <li>Work on the alcohol-fuelled engine</li>
-            </ul>
-        </div>
-    );
-}
-```
+    <!-- 0031.part.md -->
+
+    === "App.js"
+
+    	```js
+    	const person = {
+    		name: 'Gregorio Y. Zara',
+    		theme: {
+    			backgroundColor: 'black',
+    			color: 'pink',
+    		},
+    	};
+
+    	export default function TodoList() {
+    		return (
+    			<div style={person.theme}>
+    				<h1>{person.name}'s Todos</h1>
+    				<img
+    					className="avatar"
+    					src="https://i.imgur.com/7vQD0fPs.jpg"
+    					alt="Gregorio Y. Zara"
+    				/>
+    				<ul>
+    					<li>Improve the videophone</li>
+    					<li>Prepare aeronautics lectures</li>
+    					<li>Work on the alcohol-fuelled engine</li>
+    				</ul>
+    			</div>
+    		);
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](javascript-in-jsx-with-curly-braces-5.png)
 
 <!-- 0034.part.md -->
 
-#### Извлечение информации в объект
+### 2. Извлечение информации в объект
 
 Извлеките URL изображения в объект `person`.
 
 <!-- 0035.part.md -->
 
-```js
-const person = {
-    name: 'Gregorio Y. Zara',
-    theme: {
-        backgroundColor: 'black',
-        color: 'pink',
-    },
-};
+=== "App.js"
 
-export default function TodoList() {
-    return (
-        <div style={person.theme}>
-            <h1>{person.name}'s Todos</h1>
-            <img
-                className="avatar"
-                src="https://i.imgur.com/7vQD0fPs.jpg"
-                alt="Gregorio Y. Zara"
-            />
-            <ul>
-                <li>Improve the videophone</li>
-                <li>Prepare aeronautics lectures</li>
-                <li>Work on the alcohol-fuelled engine</li>
-            </ul>
-        </div>
-    );
-}
-```
+    ```js
+    const person = {
+    	name: 'Gregorio Y. Zara',
+    	theme: {
+    		backgroundColor: 'black',
+    		color: 'pink',
+    	},
+    };
+
+    export default function TodoList() {
+    	return (
+    		<div style={person.theme}>
+    			<h1>{person.name}'s Todos</h1>
+    			<img
+    				className="avatar"
+    				src="https://i.imgur.com/7vQD0fPs.jpg"
+    				alt="Gregorio Y. Zara"
+    			/>
+    			<ul>
+    				<li>Improve the videophone</li>
+    				<li>Prepare aeronautics lectures</li>
+    				<li>Work on the alcohol-fuelled engine</li>
+    			</ul>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](javascript-in-jsx-with-curly-braces-5.png)
 
 <!-- 0038.part.md -->
 
-Переместите URL изображения в свойство `person.imageUrl` и считайте его из тега `<img>` с помощью фигурных символов:
+???success "Показать решение"
 
-<!-- 0039.part.md -->
+    Переместите URL изображения в свойство `person.imageUrl` и считайте его из тега `<img>` с помощью фигурных символов:
 
-```js
-const person = {
-    name: 'Gregorio Y. Zara',
-    imageUrl: 'https://i.imgur.com/7vQD0fPs.jpg',
-    theme: {
-        backgroundColor: 'black',
-        color: 'pink',
-    },
-};
+    === "App.js"
 
-export default function TodoList() {
-    return (
-        <div style={person.theme}>
-            <h1>{person.name}'s Todos</h1>
-            <img
-                className="avatar"
-                src={person.imageUrl}
-                alt="Gregorio Y. Zara"
-            />
-            <ul>
-                <li>Improve the videophone</li>
-                <li>Prepare aeronautics lectures</li>
-                <li>Work on the alcohol-fuelled engine</li>
-            </ul>
-        </div>
-    );
-}
-```
+    	```js
+    	const person = {
+    		name: 'Gregorio Y. Zara',
+    		imageUrl: 'https://i.imgur.com/7vQD0fPs.jpg',
+    		theme: {
+    			backgroundColor: 'black',
+    			color: 'pink',
+    		},
+    	};
 
-<!-- 0042.part.md -->
+    	export default function TodoList() {
+    		return (
+    			<div style={person.theme}>
+    				<h1>{person.name}'s Todos</h1>
+    				<img
+    					className="avatar"
+    					src={person.imageUrl}
+    					alt="Gregorio Y. Zara"
+    				/>
+    				<ul>
+    					<li>Improve the videophone</li>
+    					<li>Prepare aeronautics lectures</li>
+    					<li>Work on the alcohol-fuelled engine</li>
+    				</ul>
+    			</div>
+    		);
+    	}
+    	```
 
-#### Запишите выражение внутри фигурных скобок JSX
+    === "Результат"
+
+    	![Результат](javascript-in-jsx-with-curly-braces-5.png)
+
+### 3. Запишите выражение внутри фигурных скобок JSX
 
 В приведенном ниже объекте полный URL изображения разделен на четыре части: базовый URL, `imageId`, `imageSize` и расширение файла.
 
@@ -370,144 +440,152 @@ export default function TodoList() {
 
 Вы можете это исправить?
 
-<!-- 0043.part.md -->
+=== "App.js"
 
-```js
-const baseUrl = 'https://i.imgur.com/';
-const person = {
-    name: 'Gregorio Y. Zara',
-    imageId: '7vQD0fP',
-    imageSize: 's',
-    theme: {
-        backgroundColor: 'black',
-        color: 'pink',
-    },
-};
+    ```js
+    const baseUrl = 'https://i.imgur.com/';
+    const person = {
+    	name: 'Gregorio Y. Zara',
+    	imageId: '7vQD0fP',
+    	imageSize: 's',
+    	theme: {
+    		backgroundColor: 'black',
+    		color: 'pink',
+    	},
+    };
 
-export default function TodoList() {
-    return (
-        <div style={person.theme}>
-            <h1>{person.name}'s Todos</h1>
-            <img
-                className="avatar"
-                src="{baseUrl}{person.imageId}{person.imageSize}.jpg"
-                alt={person.name}
-            />
-            <ul>
-                <li>Improve the videophone</li>
-                <li>Prepare aeronautics lectures</li>
-                <li>Work on the alcohol-fuelled engine</li>
-            </ul>
-        </div>
-    );
-}
-```
+    export default function TodoList() {
+    	return (
+    		<div style={person.theme}>
+    			<h1>{person.name}'s Todos</h1>
+    			<img
+    				className="avatar"
+    				src="{baseUrl}{person.imageId}{person.imageSize}.jpg"
+    				alt={person.name}
+    			/>
+    			<ul>
+    				<li>Improve the videophone</li>
+    				<li>Prepare aeronautics lectures</li>
+    				<li>Work on the alcohol-fuelled engine</li>
+    			</ul>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](javascript-in-jsx-with-curly-braces-7.png)
 
 <!-- 0046.part.md -->
 
 Чтобы проверить, что ваше исправление сработало, попробуйте изменить значение `imageSize` на `'b'`. Размер изображения должен измениться после вашей правки.
 
-Вы можете записать это как `src={baseUrl + person.imageId + person.imageSize + '.jpg'}`.
+???success "Показать решение"
 
-1.  `{` открывает выражение JavaScript
-2.  `baseUrl + person.imageId + person.imageSize + '.jpg'` выдает правильную строку URL
-3.  `}` закрывает выражение JavaScript
+    Вы можете записать это как `src={baseUrl + person.imageId + person.imageSize + '.jpg'}`.
 
-<!-- конец списка -->
+    1.  `{` открывает выражение JavaScript
+    2.  `baseUrl + person.imageId + person.imageSize + '.jpg'` выдает правильную строку URL
+    3.  `}` закрывает выражение JavaScript
 
-<!-- 0047.part.md -->
+    === "App.js"
 
-```js
-const baseUrl = 'https://i.imgur.com/';
-const person = {
-    name: 'Gregorio Y. Zara',
-    imageId: '7vQD0fP',
-    imageSize: 's',
-    theme: {
-        backgroundColor: 'black',
-        color: 'pink',
-    },
-};
+    	```js
+    	const baseUrl = 'https://i.imgur.com/';
+    	const person = {
+    		name: 'Gregorio Y. Zara',
+    		imageId: '7vQD0fP',
+    		imageSize: 's',
+    		theme: {
+    			backgroundColor: 'black',
+    			color: 'pink',
+    		},
+    	};
 
-export default function TodoList() {
-    return (
-        <div style={person.theme}>
-            <h1>{person.name}'s Todos</h1>
-            <img
-                className="avatar"
-                src={
-                    baseUrl +
-                    person.imageId +
-                    person.imageSize +
-                    '.jpg'
-                }
-                alt={person.name}
-            />
-            <ul>
-                <li>Improve the videophone</li>
-                <li>Prepare aeronautics lectures</li>
-                <li>Work on the alcohol-fuelled engine</li>
-            </ul>
-        </div>
-    );
-}
-```
+    	export default function TodoList() {
+    		return (
+    			<div style={person.theme}>
+    				<h1>{person.name}'s Todos</h1>
+    				<img
+    					className="avatar"
+    					src={
+    						baseUrl +
+    						person.imageId +
+    						person.imageSize +
+    						'.jpg'
+    					}
+    					alt={person.name}
+    				/>
+    				<ul>
+    					<li>Improve the videophone</li>
+    					<li>Prepare aeronautics lectures</li>
+    					<li>Work on the alcohol-fuelled engine</li>
+    				</ul>
+    			</div>
+    		);
+    	}
+    	```
 
-<!-- 0050.part.md -->
+    === "Результат"
 
-Вы также можете перенести это выражение в отдельную функцию, как `getImageUrl` ниже:
+    	![Результат](javascript-in-jsx-with-curly-braces-5.png)
 
-<!-- 0051.part.md -->
+    Вы также можете перенести это выражение в отдельную функцию, как `getImageUrl` ниже:
 
-```js
-import { getImageUrl } from './utils.js';
+    === "App.js"
 
-const person = {
-    name: 'Gregorio Y. Zara',
-    imageId: '7vQD0fP',
-    imageSize: 's',
-    theme: {
-        backgroundColor: 'black',
-        color: 'pink',
-    },
-};
+    	```js
+    	import { getImageUrl } from './utils.js';
 
-export default function TodoList() {
-    return (
-        <div style={person.theme}>
-            <h1>{person.name}'s Todos</h1>
-            <img
-                className="avatar"
-                src={getImageUrl(person)}
-                alt={person.name}
-            />
-            <ul>
-                <li>Improve the videophone</li>
-                <li>Prepare aeronautics lectures</li>
-                <li>Work on the alcohol-fuelled engine</li>
-            </ul>
-        </div>
-    );
-}
-```
+    	const person = {
+    		name: 'Gregorio Y. Zara',
+    		imageId: '7vQD0fP',
+    		imageSize: 's',
+    		theme: {
+    			backgroundColor: 'black',
+    			color: 'pink',
+    		},
+    	};
 
-<!-- 0052.part.md -->
+    	export default function TodoList() {
+    		return (
+    			<div style={person.theme}>
+    				<h1>{person.name}'s Todos</h1>
+    				<img
+    					className="avatar"
+    					src={getImageUrl(person)}
+    					alt={person.name}
+    				/>
+    				<ul>
+    					<li>Improve the videophone</li>
+    					<li>Prepare aeronautics lectures</li>
+    					<li>Work on the alcohol-fuelled engine</li>
+    				</ul>
+    			</div>
+    		);
+    	}
+    	```
 
-<!-- 0053.part.md -->
+    === "utils.js"
 
-```js
-export function getImageUrl(person) {
-    return (
-        'https://i.imgur.com/' +
-        person.imageId +
-        person.imageSize +
-        '.jpg'
-    );
-}
-```
+    	```js
+    	export function getImageUrl(person) {
+    		return (
+    			'https://i.imgur.com/' +
+    			person.imageId +
+    			person.imageSize +
+    			'.jpg'
+    		);
+    	}
+    	```
 
-<!-- 0056.part.md -->
+    === "Результат"
 
-Переменные и функции помогут вам сохранить простоту разметки!
+    	![Результат](javascript-in-jsx-with-curly-braces-5.png)
 
-<!-- 0057.part.md -->
+    Переменные и функции помогут вам сохранить простоту разметки!
+
+## Ссылки
+
+-   [https://react.dev/learn/javascript-in-jsx-with-curly-braces](https://react.dev/learn/javascript-in-jsx-with-curly-braces)

@@ -47,3 +47,4 @@ nav:
         - lifecycle-of-reactive-effects.md
         - separating-events-from-effects.md
         - removing-effect-dependencies.md
+        - reusing-logic-with-custom-hooks.md
