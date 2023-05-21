@@ -1,7 +1,7 @@
 nav:
     - learn
-    - tutorial
     - types
+    - tutorial
     - nextjs
     - graphql
     - libs
