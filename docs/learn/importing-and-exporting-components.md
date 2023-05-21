@@ -2,39 +2,47 @@
 
 Магия компонентов заключается в возможности их повторного использования: вы можете создавать компоненты, которые состоят из других компонентов. Но по мере того, как вы создаете все больше и больше компонентов, часто имеет смысл начать разделять их на разные файлы. Это позволяет легко сканировать файлы и повторно использовать компоненты в большем количестве мест.
 
--   Что такое файл корневого компонента
--   Как импортировать и экспортировать компонент
--   Когда использовать импорт и экспорт по умолчанию и по имени
--   Как импортировать и экспортировать несколько компонентов из одного файла
--   Как разделить компоненты на несколько файлов
+!!!tip "Вы узнаете"
+
+    -   Что такое файл корневого компонента
+    -   Как импортировать и экспортировать компонент
+    -   Когда использовать импорт и экспорт по умолчанию и по имени
+    -   Как импортировать и экспортировать несколько компонентов из одного файла
+    -   Как разделить компоненты на несколько файлов
 
 ## Корневой файл компонента
 
-В [Your First Component](your-first-component.md) вы создали компонент `Profile` и компонент `Gallery`, который его отображает:
+В [ваш первый компонент](your-first-component.md) вы создали компонент `Profile` и компонент `Gallery`, который его отображает:
 
 <!-- 0001.part.md -->
 
-```js
-function Profile() {
-    return (
-        <img
-            src="https://i.imgur.com/MK3eW3As.jpg"
-            alt="Katherine Johnson"
-        />
-    );
-}
+=== "App.js"
 
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Amazing scientists</h1>
-            <Profile />
-            <Profile />
-            <Profile />
-        </section>
-    );
-}
-```
+    ```js
+    function Profile() {
+    	return (
+    		<img
+    			src="https://i.imgur.com/MK3eW3As.jpg"
+    			alt="Katherine Johnson"
+    		/>
+    	);
+    }
+
+    export default function Gallery() {
+    	return (
+    		<section>
+    			<h1>Amazing scientists</h1>
+    			<Profile />
+    			<Profile />
+    			<Profile />
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](importing-and-exporting-components-1.png)
 
 <!-- 0004.part.md -->
 
@@ -52,39 +60,43 @@ export default function Gallery() {
 
 <!-- 0005.part.md -->
 
-```js
-import Gallery from './Gallery.js';
+=== "App.js"
 
-export default function App() {
-    return <Gallery />;
-}
-```
+    ```js
+    import Gallery from './Gallery.js';
 
-<!-- 0006.part.md -->
+    export default function App() {
+    	return <Gallery />;
+    }
+    ```
 
-<!-- 0007.part.md -->
+=== "Gallery.js"
 
-```js
-function Profile() {
-    return (
-        <img
-            src="https://i.imgur.com/QIrZWGIs.jpg"
-            alt="Alan L. Hart"
-        />
-    );
-}
+    ```js
+    function Profile() {
+    	return (
+    		<img
+    			src="https://i.imgur.com/QIrZWGIs.jpg"
+    			alt="Alan L. Hart"
+    		/>
+    	);
+    }
 
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Amazing scientists</h1>
-            <Profile />
-            <Profile />
-            <Profile />
-        </section>
-    );
-}
-```
+    export default function Gallery() {
+    	return (
+    		<section>
+    			<h1>Amazing scientists</h1>
+    			<Profile />
+    			<Profile />
+    			<Profile />
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](importing-and-exporting-components-2.png)
 
 <!-- 0010.part.md -->
 
@@ -97,40 +109,40 @@ export default function Gallery() {
     -   Импортирует `Gallery` как **импорт по умолчанию** из `Gallery.js`.
     -   Экспортирует корневой компонент `App` как **экспорт по умолчанию.**.
 
-Вы можете встретить файлы, в которых расширение `.js` опускается, например:
+!!!note ""
 
-<!-- 0011.part.md -->
+    Вы можете встретить файлы, в которых расширение `.js` опускается, например:
 
-```js
-import Gallery from './Gallery';
-```
+    ```js
+    import Gallery from './Gallery';
+    ```
 
-<!-- 0012.part.md -->
+    Либо `'./Gallery.js'`, либо `'./Gallery'` будут работать с React, хотя первый вариант ближе к тому, как работают [native ES Modules](https://developer.mozilla.org/docs/Web/JavaScript/Guide/Modules).
 
-Либо `'./Gallery.js'`, либо `'./Gallery'` будут работать с React, хотя первый вариант ближе к тому, как работают [native ES Modules](https://developer.mozilla.org/docs/Web/JavaScript/Guide/Modules).
+!!!note "Экспорт по умолчанию и именованный экспорт"
 
-### Экспорт по умолчанию и именованный экспорт
+    Существует два основных способа экспорта значений в JavaScript: экспорт по умолчанию и именованный экспорт. До сих пор в наших примерах использовался только экспорт по умолчанию. Но вы можете использовать один или оба из них в одном файле. **В файле может быть не более одного _дефолтного_ экспорта, но в нем может быть сколько угодно _именованных_ экспортов.**
 
-Существует два основных способа экспорта значений в JavaScript: экспорт по умолчанию и именованный экспорт. До сих пор в наших примерах использовался только экспорт по умолчанию. Но вы можете использовать один или оба из них в одном файле. **В файле может быть не более одного _дефолтного_ экспорта, но в нем может быть сколько угодно _именованных_ экспортов.**
+    ![Экспорт по умолчанию и именованный экспорт](i_import-export.svg)
 
-![Экспорт по умолчанию и именованный экспорт](i_import-export.svg)
+    То, как вы экспортируете свой компонент, диктует, как вы должны его импортировать. Вы получите ошибку, если попытаетесь импортировать экспорт по умолчанию так же, как и именованный экспорт! Эта диаграмма поможет вам следить за этим:
 
-То, как вы экспортируете свой компонент, диктует, как вы должны его импортировать. Вы получите ошибку, если попытаетесь импортировать экспорт по умолчанию так же, как и именованный экспорт! Эта диаграмма поможет вам следить за этим:
+    | Синтаксис    | Утверждение экспорта                  | Утверждение импорта                     |
+    | ------------ | ------------------------------------- | --------------------------------------- |
+    | По умолчанию | `export default function Button() {}` | `import Button from './Button.js';`     |
+    | Named        | `export function Button() {}`         | `import { Button } from './Button.js';` |
 
-| Синтаксис    | Утверждение экспорта                  | Утверждение импорта                     |
-| ------------ | ------------------------------------- | --------------------------------------- |
-| По умолчанию | `export default function Button() {}` | `import Button from './Button.js';`     |
-| Named        | `export function Button() {}`         | `import { Button } from './Button.js';` |
+    Когда вы пишете импорт _по умолчанию_, вы можете поместить любое имя после `import`. Например, вы можете написать `import Banana from './Button.js'` вместо этого, и это все равно предоставит вам тот же экспорт по умолчанию. В отличие от этого, при именованном импорте имя должно совпадать с обеих сторон. Вот почему они называются _именованными_ импортами!
 
-Когда вы пишете импорт _по умолчанию_, вы можете поместить любое имя после `import`. Например, вы можете написать `import Banana from './Button.js'` вместо этого, и это все равно предоставит вам тот же экспорт по умолчанию. В отличие от этого, при именованном импорте имя должно совпадать с обеих сторон. Вот почему они называются _именованными_ импортами!
-
-**Люди часто используют экспорт по умолчанию, если файл экспортирует только один компонент, и используют именованный экспорт, если он экспортирует несколько компонентов и значений.** Независимо от того, какой стиль кодирования вы предпочитаете, всегда давайте осмысленные имена вашим компонентным функциям и файлам, которые их содержат. Компоненты без имен, такие как `export default () => {}`, не рекомендуется использовать, поскольку они затрудняют отладку.
+    **Люди часто используют экспорт по умолчанию, если файл экспортирует только один компонент, и используют именованный экспорт, если он экспортирует несколько компонентов и значений.** Независимо от того, какой стиль кодирования вы предпочитаете, всегда давайте осмысленные имена вашим компонентным функциям и файлам, которые их содержат. Компоненты без имен, такие как `export default () => {}`, не рекомендуется использовать, поскольку они затрудняют отладку.
 
 ## Экспорт и импорт нескольких компонентов из одного файла
 
 Что если вы хотите показать только один `Профиль` вместо галереи? Вы можете экспортировать и компонент `Profile`. Но `Gallery.js` уже имеет экспорт по _умолчанию_, а вы не можете иметь _два_ экспорта по умолчанию. Вы можете создать новый файл с экспортом по умолчанию, или добавить _именной_ экспорт для `Profile`. **Файл может иметь только один экспорт по умолчанию, но может иметь множество именованных экспортов!**.
 
-Чтобы уменьшить потенциальную путаницу между экспортом по умолчанию и именованным экспортом, некоторые команды предпочитают придерживаться только одного стиля (по умолчанию или именованного), или избегать их смешивания в одном файле. Делайте то, что подходит именно вам!
+!!!note ""
+
+    Чтобы уменьшить потенциальную путаницу между экспортом по умолчанию и именованным экспортом, некоторые команды предпочитают придерживаться только одного стиля (по умолчанию или именованного), или избегать их смешивания в одном файле. Делайте то, что подходит именно вам!
 
 Во-первых, **экспортируйте** `Profile` из `Gallery.js`, используя именованный экспорт (без ключевого слова `default`):
 
@@ -170,40 +182,44 @@ export default function App() {
 
 <!-- 0019.part.md -->
 
-```js
-import Gallery from './Gallery.js';
-import { Profile } from './Gallery.js';
+=== "App.j"
 
-export default function App() {
-    return <Profile />;
-}
-```
+    ```js
+    import Gallery from './Gallery.js';
+    import { Profile } from './Gallery.js';
 
-<!-- 0020.part.md -->
+    export default function App() {
+    	return <Profile />;
+    }
+    ```
 
-<!-- 0021.part.md -->
+=== "Gallery.js"
 
-```js
-export function Profile() {
-    return (
-        <img
-            src="https://i.imgur.com/QIrZWGIs.jpg"
-            alt="Alan L. Hart"
-        />
-    );
-}
+    ```js
+    export function Profile() {
+    	return (
+    		<img
+    			src="https://i.imgur.com/QIrZWGIs.jpg"
+    			alt="Alan L. Hart"
+    		/>
+    	);
+    }
 
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Amazing scientists</h1>
-            <Profile />
-            <Profile />
-            <Profile />
-        </section>
-    );
-}
-```
+    export default function Gallery() {
+    	return (
+    		<section>
+    			<h1>Amazing scientists</h1>
+    			<Profile />
+    			<Profile />
+    			<Profile />
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](importing-and-exporting-components-3.png)
 
 <!-- 0024.part.md -->
 
@@ -217,14 +233,18 @@ export default function Gallery() {
     -   Импортирует `Gallery` как **импорт по умолчанию** из `Gallery.js`.
     -   Экспортирует корневой компонент `App` как **экспорт по умолчанию.**.
 
-На этой странице вы узнали:
+!!!note "Итоги"
 
--   Что такое файл корневого компонента
--   Как импортировать и экспортировать компонент
--   Когда и как использовать импорт и экспорт по умолчанию и по имени
--   Как экспортировать несколько компонентов из одного файла
+    На этой странице вы узнали:
 
-### Разделяйте компоненты дальше
+    -   Что такое файл корневого компонента
+    -   Как импортировать и экспортировать компонент
+    -   Когда и как использовать импорт и экспорт по умолчанию и по имени
+    -   Как экспортировать несколько компонентов из одного файла
+
+## Задача
+
+### 1. Разделяйте компоненты дальше
 
 В настоящее время `Gallery.js` экспортирует и `Profile` и `Gallery`, что немного запутывает.
 
@@ -241,152 +261,172 @@ export default function Gallery() {
 
 <!-- 0025.part.md -->
 
-```js
-import Gallery from './Gallery.js';
-import { Profile } from './Gallery.js';
+=== "App.js"
 
-export default function App() {
-    return (
-        <div>
-            <Profile />
-        </div>
-    );
-}
-```
+    ```js
+    import Gallery from './Gallery.js';
+    import { Profile } from './Gallery.js';
 
-<!-- 0026.part.md -->
+    export default function App() {
+    	return (
+    		<div>
+    			<Profile />
+    		</div>
+    	);
+    }
+    ```
 
-<!-- 0027.part.md -->
+=== "Gallery.js"
 
-```js
-// Move me to Profile.js!
-export function Profile() {
-    return (
-        <img
-            src="https://i.imgur.com/QIrZWGIs.jpg"
-            alt="Alan L. Hart"
-        />
-    );
-}
+    ```js
+    // Перемести в Profile.js!
+    export function Profile() {
+    	return (
+    		<img
+    			src="https://i.imgur.com/QIrZWGIs.jpg"
+    			alt="Alan L. Hart"
+    		/>
+    	);
+    }
 
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Amazing scientists</h1>
-            <Profile />
-            <Profile />
-            <Profile />
-        </section>
-    );
-}
-```
+    export default function Gallery() {
+    	return (
+    		<section>
+    			<h1>Amazing scientists</h1>
+    			<Profile />
+    			<Profile />
+    			<Profile />
+    		</section>
+    	);
+    }
+    ```
+
+=== "Profile.js"
+
+    ```js
+
+    ```
+
+=== "Результат"
+
+    ![Результат](importing-and-exporting-components-4.png)
 
 <!-- 0032.part.md -->
 
 После того, как вы заставите его работать с одним видом экспорта, заставьте его работать с другим видом.
 
-Это решение с именованным экспортом:
+???info "Показать подсказку"
 
-<!-- 0033.part.md -->
+    Не забудьте импортировать свои компоненты туда, где они вызываются. Разве `Gallery` тоже не использует `Profile`?
 
-```js
-import Gallery from './Gallery.js';
-import { Profile } from './Profile.js';
+???success "Показать решение 1"
 
-export default function App() {
-    return (
-        <div>
-            <Profile />
-            <Gallery />
-        </div>
-    );
-}
-```
+    Это решение с именованным экспортом:
 
-<!-- 0034.part.md -->
+    === "App.js"
 
-<!-- 0035.part.md -->
+    	```js
+    	import Gallery from './Gallery.js';
+    	import { Profile } from './Profile.js';
 
-```js
-import { Profile } from './Profile.js';
+    	export default function App() {
+    		return (
+    			<div>
+    				<Profile />
+    				<Gallery />
+    			</div>
+    		);
+    	}
+    	```
 
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Amazing scientists</h1>
-            <Profile />
-            <Profile />
-            <Profile />
-        </section>
-    );
-}
-```
+    === "Gallery.js"
 
-<!-- 0036.part.md -->
+    	```js
+    	import { Profile } from './Profile.js';
 
-<!-- 0037.part.md -->
+    	export default function Gallery() {
+    		return (
+    			<section>
+    				<h1>Amazing scientists</h1>
+    				<Profile />
+    				<Profile />
+    				<Profile />
+    			</section>
+    		);
+    	}
+    	```
 
-```js
-export function Profile() {
-    return (
-        <img
-            src="https://i.imgur.com/QIrZWGIs.jpg"
-            alt="Alan L. Hart"
-        />
-    );
-}
-```
+    === "Profile.js"
 
-<!-- 0040.part.md -->
+    	```js
+    	export function Profile() {
+    		return (
+    			<img
+    				src="https://i.imgur.com/QIrZWGIs.jpg"
+    				alt="Alan L. Hart"
+    			/>
+    		);
+    	}
+    	```
 
-Это решение с экспортом по умолчанию:
+    === "Результат"
 
-<!-- 0041.part.md -->
+    	![Результат](importing-and-exporting-components-5.png)
 
-```js
-import Gallery from './Gallery.js';
-import Profile from './Profile.js';
+???success "Показать решение 2"
 
-export default function App() {
-    return (
-        <div>
-            <Profile />
-            <Gallery />
-        </div>
-    );
-}
-```
+    Это решение с экспортом по умолчанию:
 
-<!-- 0042.part.md -->
+    === "App.js"
 
-<!-- 0043.part.md -->
+    	```js
+    	import Gallery from './Gallery.js';
+    	import Profile from './Profile.js';
 
-```js
-import Profile from './Profile.js';
+    	export default function App() {
+    		return (
+    			<div>
+    				<Profile />
+    				<Gallery />
+    			</div>
+    		);
+    	}
+    	```
 
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Amazing scientists</h1>
-            <Profile />
-            <Profile />
-            <Profile />
-        </section>
-    );
-}
-```
+    === "Gallery.js"
 
-<!-- 0044.part.md -->
+    	```js
+    	import Profile from './Profile.js';
 
-<!-- 0045.part.md -->
+    	export default function Gallery() {
+    		return (
+    			<section>
+    				<h1>Amazing scientists</h1>
+    				<Profile />
+    				<Profile />
+    				<Profile />
+    			</section>
+    		);
+    	}
+    	```
 
-```js
-export default function Profile() {
-    return (
-        <img
-            src="https://i.imgur.com/QIrZWGIs.jpg"
-            alt="Alan L. Hart"
-        />
-    );
-}
-```
+    === "Profile.js"
+
+    	```js
+    	export default function Profile() {
+    		return (
+    			<img
+    				src="https://i.imgur.com/QIrZWGIs.jpg"
+    				alt="Alan L. Hart"
+    			/>
+    		);
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](importing-and-exporting-components-5.png)
+
+## Ссылки
+
+-   [https://react.dev/learn/importing-and-exporting-components](https://react.dev/learn/importing-and-exporting-components)

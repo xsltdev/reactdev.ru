@@ -46,3 +46,4 @@ nav:
         - you-might-not-need-an-effect.md
         - lifecycle-of-reactive-effects.md
         - separating-events-from-effects.md
+        - removing-effect-dependencies.md
