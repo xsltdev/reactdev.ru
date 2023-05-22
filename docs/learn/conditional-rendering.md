@@ -2,9 +2,11 @@
 
 Ваши компоненты часто должны отображать разные вещи в зависимости от различных условий. В React вы можете условно выводить JSX, используя синтаксис JavaScript, такой как операторы `if`, `&&` и `? :`.
 
--   Как возвращать различные JSX в зависимости от условия
--   Как условно включить или исключить фрагмент JSX
--   Общие сокращения условного синтаксиса, которые вы можете встретить в кодовых базах React
+!!!tip "Вы узнаете"
+
+    -   Как возвращать различные JSX в зависимости от условия
+    -   Как условно включить или исключить фрагмент JSX
+    -   Общие сокращения условного синтаксиса, которые вы можете встретить в кодовых базах React
 
 ## Условное возвращение JSX
 
@@ -12,30 +14,36 @@
 
 <!-- 0001.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    return <li className="item">{name}</li>;
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, isPacked }) {
+    	return <li className="item">{name}</li>;
+    }
+
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item isPacked={true} name="Space suit" />
+    				<Item
+    					isPacked={true}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item
+    					isPacked={false}
+    					name="Photo of Tam"
+    				/>
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](conditional-rendering-1.png)
 
 <!-- 0002.part.md -->
 
@@ -58,33 +66,39 @@ return <li className="item">{name}</li>;
 
 <!-- 0005.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    if (isPacked) {
-        return <li className="item">{name} ✔</li>;
-    }
-    return <li className="item">{name}</li>;
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, isPacked }) {
+    	if (isPacked) {
+    		return <li className="item">{name} ✔</li>;
+    	}
+    	return <li className="item">{name}</li>;
+    }
+
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item isPacked={true} name="Space suit" />
+    				<Item
+    					isPacked={true}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item
+    					isPacked={false}
+    					name="Photo of Tam"
+    				/>
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](conditional-rendering-2.png)
 
 <!-- 0006.part.md -->
 
@@ -111,33 +125,39 @@ return <li className="item">{name}</li>;
 
 <!-- 0009.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    if (isPacked) {
-        return null;
-    }
-    return <li className="item">{name}</li>;
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, isPacked }) {
+    	if (isPacked) {
+    		return null;
+    	}
+    	return <li className="item">{name}</li>;
+    }
+
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item isPacked={true} name="Space suit" />
+    				<Item
+    					isPacked={true}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item
+    					isPacked={false}
+    					name="Photo of Tam"
+    				/>
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](conditional-rendering-3.png)
 
 <!-- 0010.part.md -->
 
@@ -182,7 +202,7 @@ return <li className="item">{name}</li>;
 
 ### Условный (тернарный) оператор (`? :`)
 
-В JavaScript есть компактный синтаксис для записи условного выражения - [условный оператор](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) или "тернарный оператор".
+В JavaScript есть компактный синтаксис для записи условного выражения — [условный оператор](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) или "тернарный оператор".
 
 Вместо этого:
 
@@ -213,42 +233,48 @@ return (
 
 Вы можете прочитать это как _"если `isPacked` истинно, то (`?`) render `name + ' ✔'`, иначе (`:`) render `name`"_.
 
-#### Являются ли эти два примера полностью эквивалентными?
+!!!note "Являются ли эти два примера полностью эквивалентными?"
 
-Если вы знакомы с объектно-ориентированным программированием, вы можете предположить, что два приведенных выше примера мало чем отличаются друг от друга, поскольку один из них может создавать два разных "экземпляра" `<li>`. Но элементы JSX не являются "экземплярами", потому что они не хранят никакого внутреннего состояния и не являются реальными узлами DOM. Это легкие описания, как чертежи. Так что эти два примера, на самом деле, полностью эквивалентны. В [Preserving and Resetting State](preserving-and-resetting-state.md) подробно описано, как это работает.
+    Если вы знакомы с объектно-ориентированным программированием, вы можете предположить, что два приведенных выше примера мало чем отличаются друг от друга, поскольку один из них может создавать два разных "экземпляра" `<li>`. Но элементы JSX не являются "экземплярами", потому что они не хранят никакого внутреннего состояния и не являются реальными узлами DOM. Это легкие описания, как чертежи. Так что эти два примера, на самом деле, полностью эквивалентны. В [сохранение и сброс состояния](preserving-and-resetting-state.md) подробно описано, как это работает.
 
 Теперь предположим, что вы хотите обернуть текст завершенного элемента в другой HTML-тег, например `<del>`, чтобы вычеркнуть его. Вы можете добавить еще больше новых строк и круглых скобок, чтобы было легче вложить больше JSX в каждом из случаев:
 
 <!-- 0021.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    return (
-        <li className="item">
-            {isPacked ? <del>{name + ' ✔'}</del> : name}
-        </li>
-    );
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, isPacked }) {
+    	return (
+    		<li className="item">
+    			{isPacked ? <del>{name + ' ✔'}</del> : name}
+    		</li>
+    	);
+    }
+
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item isPacked={true} name="Space suit" />
+    				<Item
+    					isPacked={true}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item
+    					isPacked={false}
+    					name="Photo of Tam"
+    				/>
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](conditional-rendering-4.png)
 
 <!-- 0022.part.md -->
 
@@ -256,7 +282,7 @@ export default function PackingList() {
 
 ### Логический оператор AND (`&&`)
 
-Еще одно часто встречающееся сокращение - это оператор [JavaScript logical AND (`&&`)](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Logical_AND). В компонентах React это часто возникает, когда вы хотите отобразить некоторый JSX, когда условие истинно, **или ничего не отображать в противном случае.** Используя `&&`, вы можете условно отобразить флажок только если `isPacked` является `true`:
+Еще одно часто встречающееся сокращение — это оператор [JavaScript logical AND (`&&`)](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Logical_AND). В компонентах React это часто возникает, когда вы хотите отобразить некоторый JSX, когда условие истинно, **или ничего не отображать в противном случае.** Используя `&&`, вы можете условно отобразить флажок только если `isPacked` является `true`:
 
 <!-- 0023.part.md -->
 
@@ -276,50 +302,58 @@ return (
 
 <!-- 0025.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    return (
-        <li className="item">
-            {name} {isPacked && '✔'}
-        </li>
-    );
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, isPacked }) {
+    	return (
+    		<li className="item">
+    			{name} {isPacked && '✔'}
+    		</li>
+    	);
+    }
+
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item isPacked={true} name="Space suit" />
+    				<Item
+    					isPacked={true}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item
+    					isPacked={false}
+    					name="Photo of Tam"
+    				/>
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](conditional-rendering-5.png)
 
 <!-- 0026.part.md -->
 
-Выражение [JavaScript && expression](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Logical_AND) возвращает значение своей правой части (в нашем случае, галочку), если левая часть (наше условие) `истина`. Но если условие `false`, то все выражение становится `false`. React рассматривает `false` как "дыру" в дереве JSX, так же как `null` или `undefined`, и ничего не отображает на его месте.
+Выражение [JavaScript && expression](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Logical_AND) возвращает значение своей правой части (в нашем случае, галочку), если левая часть (наше условие) `истина`. Но если условие `false`, то все выражение становится `false`. React рассматривает `false` как "дыру" в дереве JSX, так же как `null` или `undefined`, и ничего не отображает на его месте.
 
-Не ставьте числа в левой части `&&`.
+!!!warning "Внимание"
 
-Чтобы проверить условие, JavaScript автоматически преобразует левую часть в булево значение. Однако если левая часть равна `0`, то все выражение получает это значение (`0`), и React с радостью отобразит `0`, а не ничего.
+    **Не ставьте числа в левой части `&&`.**
 
-Например, распространенной ошибкой является написание кода типа `messageCount && <p>Новые сообщения</p>`. Легко предположить, что он ничего не отображает, когда `messageCount` равно `0`, но на самом деле он отображает сам `0`!
+    Чтобы проверить условие, JavaScript автоматически преобразует левую часть в булево значение. Однако если левая часть равна `0`, то все выражение получает это значение (`0`), и React с радостью отобразит `0`, а не ничего.
 
-Чтобы исправить это, сделайте левую часть булевой: `messageCount > 0 && <p>Новые сообщения</p>`.
+    Например, распространенной ошибкой является написание кода типа `messageCount && <p>Новые сообщения</p>`. Легко предположить, что он ничего не отображает, когда `messageCount` равно `0`, но на самом деле он отображает сам `0`!
+
+    Чтобы исправить это, сделайте левую часть булевой: `messageCount > 0 && <p>Новые сообщения</p>`.
 
 ### Условное присвоение JSX переменной
 
-Когда ярлыки мешают писать простой код, попробуйте использовать оператор `if` и переменную. Вы можете переназначать переменные, определенные с помощью [`let`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Statements/let), поэтому начните с указания содержимого по умолчанию, которое вы хотите отобразить, - имени:
+Когда ярлыки мешают писать простой код, попробуйте использовать оператор `if` и переменную. Вы можете переназначать переменные, определенные с помощью [`let`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Statements/let), поэтому начните с указания содержимого по умолчанию, которое вы хотите отобразить, — имени:
 
 <!-- 0027.part.md -->
 
@@ -355,34 +389,40 @@ if (isPacked) {
 
 <!-- 0033.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    let itemContent = name;
-    if (isPacked) {
-        itemContent = name + ' ✔';
-    }
-    return <li className="item">{itemContent}</li>;
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, isPacked }) {
+    	let itemContent = name;
+    	if (isPacked) {
+    		itemContent = name + ' ✔';
+    	}
+    	return <li className="item">{itemContent}</li>;
+    }
+
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item isPacked={true} name="Space suit" />
+    				<Item
+    					isPacked={true}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item
+    					isPacked={false}
+    					name="Photo of Tam"
+    				/>
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](conditional-rendering-6.png)
 
 <!-- 0034.part.md -->
 
@@ -390,113 +430,137 @@ export default function PackingList() {
 
 <!-- 0035.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    let itemContent = name;
-    if (isPacked) {
-        itemContent = <del>{name + ' ✔'}</del>;
-    }
-    return <li className="item">{itemContent}</li>;
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, isPacked }) {
+    	let itemContent = name;
+    	if (isPacked) {
+    		itemContent = <del>{name + ' ✔'}</del>;
+    	}
+    	return <li className="item">{itemContent}</li>;
+    }
+
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item isPacked={true} name="Space suit" />
+    				<Item
+    					isPacked={true}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item
+    					isPacked={false}
+    					name="Photo of Tam"
+    				/>
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](conditional-rendering-7.png)
 
 <!-- 0036.part.md -->
 
-Если вы не знакомы с JavaScript, такое разнообразие стилей может поначалу показаться ошеломляющим. Однако их изучение поможет вам читать и писать любой код JavaScript - и не только компоненты React! Выберите для начала тот, который вам больше нравится, а затем снова обратитесь к этому справочнику, если вы забудете, как работают другие.
+Если вы не знакомы с JavaScript, такое разнообразие стилей может поначалу показаться ошеломляющим. Однако их изучение поможет вам читать и писать любой код JavaScript — и не только компоненты React! Выберите для начала тот, который вам больше нравится, а затем снова обратитесь к этому справочнику, если вы забудете, как работают другие.
 
--   В React вы управляете логикой ветвления с помощью JavaScript.
--   Вы можете вернуть выражение JSX условно с помощью оператора `if`.
--   Вы можете условно сохранить некоторые JSX в переменную, а затем включить их в другие JSX с помощью фигурных скобок.
--   В JSX, `{cond ? <A /> : <B />}` означает _“if `cond`, render `<A />`, otherwise `<B />`”_.
--   В JSX, `{cond && <A />}` означает _“if `cond`, render `<A />`, otherwise nothing”_.
--   Эти сокращения являются общепринятыми, но вы можете не использовать их, если предпочитаете простое `if`.
+!!!note "Итоги"
 
-#### Показать значок для незавершенных элементов с `? :`
+    -   В React вы управляете логикой ветвления с помощью JavaScript.
+    -   Вы можете вернуть выражение JSX условно с помощью оператора `if`.
+    -   Вы можете условно сохранить некоторые JSX в переменную, а затем включить их в другие JSX с помощью фигурных скобок.
+    -   В JSX, `{cond ? <A /> : <B />}` означает _“if `cond`, render `<A />`, otherwise `<B />`”_.
+    -   В JSX, `{cond && <A />}` означает _“if `cond`, render `<A />`, otherwise nothing”_.
+    -   Эти сокращения являются общепринятыми, но вы можете не использовать их, если предпочитаете простое `if`.
+
+## Задачи
+
+### 1. Показать значок для незавершенных элементов с `? :`
 
 Используйте условный оператор (`cond ? a : b`) для отображения ❌, если `isPacked` не является `true`.
 
 <!-- 0037.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    return (
-        <li className="item">
-            {name} {isPacked && '✔'}
-        </li>
-    );
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, isPacked }) {
+    	return (
+    		<li className="item">
+    			{name} {isPacked && '✔'}
+    		</li>
+    	);
+    }
+
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item isPacked={true} name="Space suit" />
+    				<Item
+    					isPacked={true}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item
+    					isPacked={false}
+    					name="Photo of Tam"
+    				/>
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](conditional-rendering-8.png)
 
 <!-- 0039.part.md -->
 
-```js
-function Item({ name, isPacked }) {
-    return (
-        <li className="item">
-            {name} {isPacked ? '✔' : '❌'}
-        </li>
-    );
-}
+???success "Показать решение"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item isPacked={true} name="Space suit" />
-                <Item
-                    isPacked={true}
-                    name="Helmet with a golden leaf"
-                />
-                <Item
-                    isPacked={false}
-                    name="Photo of Tam"
-                />
-            </ul>
-        </section>
-    );
-}
-```
+    === "App.js"
 
-#### Показать важность элемента с помощью `&&`
+    	```js
+    	function Item({ name, isPacked }) {
+    		return (
+    			<li className="item">
+    				{name} {isPacked ? '✔' : '❌'}
+    			</li>
+    		);
+    	}
+
+    	export default function PackingList() {
+    		return (
+    			<section>
+    				<h1>Sally Ride's Packing List</h1>
+    				<ul>
+    					<Item isPacked={true} name="Space suit" />
+    					<Item
+    						isPacked={true}
+    						name="Helmet with a golden leaf"
+    					/>
+    					<Item
+    						isPacked={false}
+    						name="Photo of Tam"
+    					/>
+    				</ul>
+    			</section>
+    		);
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](conditional-rendering-9.png)
+
+### 2. Показать важность элемента с помощью `&&`
 
 В этом примере каждый `Item` получает числовой параметр `importance`. Используйте оператор `&&`, чтобы отобразить "_(Важность: X)_" курсивом, но только для тех элементов, которые имеют ненулевую важность. В итоге ваш список предметов должен выглядеть следующим образом:
 
@@ -508,199 +572,233 @@ export default function PackingList() {
 
 <!-- 0041.part.md -->
 
-```js
-function Item({ name, importance }) {
-    return <li className="item">{name}</li>;
-}
+=== "App.js"
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item importance={9} name="Space suit" />
-                <Item
-                    importance={0}
-                    name="Helmet with a golden leaf"
-                />
-                <Item importance={6} name="Photo of Tam" />
-            </ul>
-        </section>
-    );
-}
-```
+    ```js
+    function Item({ name, importance }) {
+    	return <li className="item">{name}</li>;
+    }
 
-Это должно помочь:
+    export default function PackingList() {
+    	return (
+    		<section>
+    			<h1>Sally Ride's Packing List</h1>
+    			<ul>
+    				<Item importance={9} name="Space suit" />
+    				<Item
+    					importance={0}
+    					name="Helmet with a golden leaf"
+    				/>
+    				<Item importance={6} name="Photo of Tam" />
+    			</ul>
+    		</section>
+    	);
+    }
+    ```
 
-<!-- 0043.part.md -->
+=== "Результат"
 
-```js
-function Item({ name, importance }) {
-    return (
-        <li className="item">
-            {name}
-            {importance > 0 && ' '}
-            {importance > 0 && (
-                <i>(Importance: {importance})</i>
-            )}
-        </li>
-    );
-}
+    ![Результат](conditional-rendering-10.png)
 
-export default function PackingList() {
-    return (
-        <section>
-            <h1>Sally Ride's Packing List</h1>
-            <ul>
-                <Item importance={9} name="Space suit" />
-                <Item
-                    importance={0}
-                    name="Helmet with a golden leaf"
-                />
-                <Item importance={6} name="Photo of Tam" />
-            </ul>
-        </section>
-    );
-}
-```
+???success "Показать решение"
 
-<!-- 0044.part.md -->
+    Это должно помочь:
 
-Обратите внимание, что вы должны написать `importance > 0 && ...`, а не `importance && ...`, чтобы если `importance` равно `0`, `0` не отображалось как результат!
+    === "App.js"
 
-В этом решении используются два отдельных условия для вставки пробела между именем и меткой важности. В качестве альтернативы можно использовать фрагмент с пробелом: `importance > 0 && <> <i>...</i></>` или добавьте пробел непосредственно внутри `<i>`: `importance > 0 && <i> ...</i>`.
+    	```js
+    	function Item({ name, importance }) {
+    		return (
+    			<li className="item">
+    				{name}
+    				{importance > 0 && ' '}
+    				{importance > 0 && (
+    					<i>(Importance: {importance})</i>
+    				)}
+    			</li>
+    		);
+    	}
 
-#### Рефакторинг серии `? :` на `if` и переменные
+    	export default function PackingList() {
+    		return (
+    			<section>
+    				<h1>Sally Ride's Packing List</h1>
+    				<ul>
+    					<Item importance={9} name="Space suit" />
+    					<Item
+    						importance={0}
+    						name="Helmet with a golden leaf"
+    					/>
+    					<Item importance={6} name="Photo of Tam" />
+    				</ul>
+    			</section>
+    		);
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](conditional-rendering-11.png)
+
+    Обратите внимание, что вы должны написать `importance > 0 && ...`, а не `importance && ...`, чтобы если `importance` равно `0`, `0` не отображалось как результат!
+
+    В этом решении используются два отдельных условия для вставки пробела между именем и меткой важности. В качестве альтернативы можно использовать фрагмент с пробелом: `importance > 0 && <> <i>...</i></>` или добавьте пробел непосредственно внутри `<i>`: `importance > 0 && <i> ...</i>`.
+
+### 3. Рефакторинг серии `? :` на `if` и переменные
 
 Этот компонент `Drink` использует серию `? :` условий для отображения различной информации в зависимости от того, является ли `name` реквизит `"чай"` или `"кофе"`. Проблема в том, что информация о каждом напитке распределена по нескольким условиям. Переработайте этот код, чтобы использовать один оператор `if` вместо трех `? :` условий.
 
 <!-- 0045.part.md -->
 
-```js
-function Drink({ name }) {
-    return (
-        <section>
-            <h1>{name}</h1>
-            <dl>
-                <dt>Part of plant</dt>
-                <dd>{name === 'tea' ? 'leaf' : 'bean'}</dd>
-                <dt>Caffeine content</dt>
-                <dd>
-                    {name === 'tea'
-                        ? '15–70 mg/cup'
-                        : '80–185 mg/cup'}
-                </dd>
-                <dt>Age</dt>
-                <dd>
-                    {name === 'tea'
-                        ? '4,000+ years'
-                        : '1,000+ years'}
-                </dd>
-            </dl>
-        </section>
-    );
-}
+=== "App.js"
 
-export default function DrinkList() {
-    return (
-        <div>
-            <Drink name="tea" />
-            <Drink name="coffee" />
-        </div>
-    );
-}
-```
+    ```js
+    function Drink({ name }) {
+    	return (
+    		<section>
+    			<h1>{name}</h1>
+    			<dl>
+    				<dt>Part of plant</dt>
+    				<dd>{name === 'tea' ? 'leaf' : 'bean'}</dd>
+    				<dt>Caffeine content</dt>
+    				<dd>
+    					{name === 'tea'
+    						? '15–70 mg/cup'
+    						: '80–185 mg/cup'}
+    				</dd>
+    				<dt>Age</dt>
+    				<dd>
+    					{name === 'tea'
+    						? '4,000+ years'
+    						: '1,000+ years'}
+    				</dd>
+    			</dl>
+    		</section>
+    	);
+    }
+
+    export default function DrinkList() {
+    	return (
+    		<div>
+    			<Drink name="tea" />
+    			<Drink name="coffee" />
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](conditional-rendering-12.png)
 
 <!-- 0046.part.md -->
 
 После рефакторинга кода для использования `if`, есть ли у вас дальнейшие идеи, как его упростить?
 
-Вы можете пойти разными путями, но вот одна из отправных точек:
+???success "Показать решение"
 
-<!-- 0047.part.md -->
+    Вы можете пойти разными путями, но вот одна из отправных точек:
 
-```js
-function Drink({ name }) {
-    let part, caffeine, age;
-    if (name === 'tea') {
-        part = 'leaf';
-        caffeine = '15–70 mg/cup';
-        age = '4,000+ years';
-    } else if (name === 'coffee') {
-        part = 'bean';
-        caffeine = '80–185 mg/cup';
-        age = '1,000+ years';
-    }
-    return (
-        <section>
-            <h1>{name}</h1>
-            <dl>
-                <dt>Part of plant</dt>
-                <dd>{part}</dd>
-                <dt>Caffeine content</dt>
-                <dd>{caffeine}</dd>
-                <dt>Age</dt>
-                <dd>{age}</dd>
-            </dl>
-        </section>
-    );
-}
+    <!-- 0047.part.md -->
 
-export default function DrinkList() {
-    return (
-        <div>
-            <Drink name="tea" />
-            <Drink name="coffee" />
-        </div>
-    );
-}
-```
+    === "App.js"
 
-<!-- 0048.part.md -->
+    	```js
+    	function Drink({ name }) {
+    		let part, caffeine, age;
+    		if (name === 'tea') {
+    			part = 'leaf';
+    			caffeine = '15–70 mg/cup';
+    			age = '4,000+ years';
+    		} else if (name === 'coffee') {
+    			part = 'bean';
+    			caffeine = '80–185 mg/cup';
+    			age = '1,000+ years';
+    		}
+    		return (
+    			<section>
+    				<h1>{name}</h1>
+    				<dl>
+    					<dt>Part of plant</dt>
+    					<dd>{part}</dd>
+    					<dt>Caffeine content</dt>
+    					<dd>{caffeine}</dd>
+    					<dt>Age</dt>
+    					<dd>{age}</dd>
+    				</dl>
+    			</section>
+    		);
+    	}
 
-Здесь информация о каждом напитке сгруппирована вместе, а не распределена по нескольким условиям. Это облегчает добавление новых напитков в будущем.
+    	export default function DrinkList() {
+    		return (
+    			<div>
+    				<Drink name="tea" />
+    				<Drink name="coffee" />
+    			</div>
+    		);
+    	}
+    	```
 
-Другим решением может быть полное удаление условий путем перемещения информации в объекты:
+    === "Результат"
 
-<!-- 0049.part.md -->
+    	![Результат](conditional-rendering-13.png)
 
-```js
-const drinks = {
-    tea: {
-        part: 'leaf',
-        caffeine: '15–70 mg/cup',
-        age: '4,000+ years',
-    },
-    coffee: {
-        part: 'bean',
-        caffeine: '80–185 mg/cup',
-        age: '1,000+ years',
-    },
-};
+    <!-- 0048.part.md -->
 
-function Drink({ name }) {
-    const info = drinks[name];
-    return (
-        <section>
-            <h1>{name}</h1>
-            <dl>
-                <dt>Part of plant</dt>
-                <dd>{info.part}</dd>
-                <dt>Caffeine content</dt>
-                <dd>{info.caffeine}</dd>
-                <dt>Age</dt>
-                <dd>{info.age}</dd>
-            </dl>
-        </section>
-    );
-}
+    Здесь информация о каждом напитке сгруппирована вместе, а не распределена по нескольким условиям. Это облегчает добавление новых напитков в будущем.
 
-export default function DrinkList() {
-    return (
-        <div>
-            <Drink name="tea" />
-            <Drink name="coffee" />
-        </div>
-    );
-}
-```
+    Другим решением может быть полное удаление условий путем перемещения информации в объекты:
+
+    <!-- 0049.part.md -->
+
+    === "App.js"
+
+    	```js
+    	const drinks = {
+    		tea: {
+    			part: 'leaf',
+    			caffeine: '15–70 mg/cup',
+    			age: '4,000+ years',
+    		},
+    		coffee: {
+    			part: 'bean',
+    			caffeine: '80–185 mg/cup',
+    			age: '1,000+ years',
+    		},
+    	};
+
+    	function Drink({ name }) {
+    		const info = drinks[name];
+    		return (
+    			<section>
+    				<h1>{name}</h1>
+    				<dl>
+    					<dt>Part of plant</dt>
+    					<dd>{info.part}</dd>
+    					<dt>Caffeine content</dt>
+    					<dd>{info.caffeine}</dd>
+    					<dt>Age</dt>
+    					<dd>{info.age}</dd>
+    				</dl>
+    			</section>
+    		);
+    	}
+
+    	export default function DrinkList() {
+    		return (
+    			<div>
+    				<Drink name="tea" />
+    				<Drink name="coffee" />
+    			</div>
+    		);
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](conditional-rendering-14.png)
+
+## Ссылки
+
+-   [https://react.dev/learn/conditional-rendering](https://react.dev/learn/conditional-rendering)
