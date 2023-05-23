@@ -2,13 +2,15 @@
 
 Некоторые элементы на экране обновляются в ответ на ввод пользователя. Например, щелчок по галерее изображений переключает активное изображение. В React данные, которые изменяются со временем, называются _состояние_. Вы можете добавить состояние в любой компонент и обновлять его по мере необходимости. В этой главе вы узнаете, как писать компоненты, которые обрабатывают взаимодействия, обновляют свое состояние и отображают различные результаты с течением времени.
 
--   [Как обрабатывать события, инициированные пользователем](responding-to-events.md)
--   [Как заставить компоненты "запоминать" информацию с помощью состояния](state-a-components-memory.md)
--   [Как React обновляет UI в два этапа](render-and-commit.md)
--   [Почему состояние не обновляется сразу после его изменения](state-as-a-snapshot.md)
--   [Как поставить в очередь несколько обновлений состояния](queueing-a-series-of-state-updates.md)
--   [Как обновить объект в состоянии](updating-objects-in-state.md)
--   [Как обновить массив в состоянии](updating-arrays-in-state.md)
+!!!tip "В этой главе"
+
+    -   [Как обрабатывать события, инициированные пользователем](responding-to-events.md)
+    -   [Как заставить компоненты "запоминать" информацию с помощью состояния](state-a-components-memory.md)
+    -   [Как React обновляет UI в два этапа](render-and-commit.md)
+    -   [Почему состояние не обновляется сразу после его изменения](state-as-a-snapshot.md)
+    -   [Как поставить в очередь несколько обновлений состояния](queueing-a-series-of-state-updates.md)
+    -   [Как обновить объект в состоянии](updating-objects-in-state.md)
+    -   [Как обновить массив в состоянии](updating-arrays-in-state.md)
 
 ## Реагирование на события
 
@@ -18,37 +20,45 @@ React позволяет добавлять _обработчики событи
 
 <!-- 0001.part.md -->
 
-```js
-export default function App() {
-    return (
-        <Toolbar
-            onPlayMovie={() => alert('Playing!')}
-            onUploadImage={() => alert('Uploading!')}
-        />
-    );
-}
+=== "App.js"
 
-function Toolbar({ onPlayMovie, onUploadImage }) {
-    return (
-        <div>
-            <Button onClick={onPlayMovie}>
-                Play Movie
-            </Button>
-            <Button onClick={onUploadImage}>
-                Upload Image
-            </Button>
-        </div>
-    );
-}
+    ```js
+    export default function App() {
+    	return (
+    		<Toolbar
+    			onPlayMovie={() => alert('Playing!')}
+    			onUploadImage={() => alert('Uploading!')}
+    		/>
+    	);
+    }
 
-function Button({ onClick, children }) {
-    return <button onClick={onClick}>{children}</button>;
-}
-```
+    function Toolbar({ onPlayMovie, onUploadImage }) {
+    	return (
+    		<div>
+    			<Button onClick={onPlayMovie}>
+    				Play Movie
+    			</Button>
+    			<Button onClick={onUploadImage}>
+    				Upload Image
+    			</Button>
+    		</div>
+    	);
+    }
+
+    function Button({ onClick, children }) {
+    	return <button onClick={onClick}>{children}</button>;
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](adding-interactivity-1.png)
 
 <!-- 0004.part.md -->
 
-Прочитайте **[Responding to Events](responding-to-events.md)**, чтобы узнать, как добавлять обработчики событий.
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Реакция на события](responding-to-events.md), чтобы узнать, как добавлять обработчики событий.
 
 ## Состояние: память компонента
 
@@ -70,6 +80,8 @@ const [showMore, setShowMore] = useState(false);
 <!-- 0007.part.md -->
 
 === "App.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -113,7 +125,11 @@ const [showMore, setShowMore] = useState(false);
     }
     ```
 
+    </div>
+
 === "data.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export const sculptureList = [
@@ -228,7 +244,11 @@ const [showMore, setShowMore] = useState(false);
     ];
     ```
 
-Прочитайте **[State: A Component's Memory](state-a-components-memory.md)**, чтобы узнать, как запомнить значение и обновлять его при взаимодействии.
+    </div>
+
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Состояние: память компонента](state-a-components-memory.md), чтобы узнать, как запомнить значение и обновлять его при взаимодействии.
 
 ## Рендеринг и фиксация
 
@@ -240,7 +260,9 @@ const [showMore, setShowMore] = useState(false);
 2.  **Рендеринг** компонента (подготовка заказа на кухне)
 3.  **Коммитирование** в DOM (размещение заказа на столе)
 
-Прочитайте **[Render and Commit](render-and-commit.md)**, чтобы узнать о жизненном цикле обновления пользовательского интерфейса.
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Render и Commit](render-and-commit.md), чтобы узнать о жизненном цикле обновления пользовательского интерфейса.
 
 ## Состояние как моментальный снимок
 
@@ -260,44 +282,56 @@ console.log(count); // Still 0!
 
 <!-- 0015.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Form() {
-    const [to, setTo] = useState('Alice');
-    const [message, setMessage] = useState('Hello');
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setTimeout(() => {
-            alert(`You said ${message} to ${to}`);
-        }, 5000);
+    ```js
+    import { useState } from 'react';
+
+    export default function Form() {
+    	const [to, setTo] = useState('Alice');
+    	const [message, setMessage] = useState('Hello');
+
+    	function handleSubmit(e) {
+    		e.preventDefault();
+    		setTimeout(() => {
+    			alert(`You said ${message} to ${to}`);
+    		}, 5000);
+    	}
+
+    	return (
+    		<form onSubmit={handleSubmit}>
+    			<label>
+    				To:{' '}
+    				<select
+    					value={to}
+    					onChange={(e) => setTo(e.target.value)}
+    				>
+    					<option value="Alice">Alice</option>
+    					<option value="Bob">Bob</option>
+    				</select>
+    			</label>
+    			<textarea
+    				placeholder="Message"
+    				value={message}
+    				onChange={(e) => setMessage(e.target.value)}
+    			/>
+    			<button type="submit">Send</button>
+    		</form>
+    	);
     }
+    ```
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                To:{' '}
-                <select
-                    value={to}
-                    onChange={(e) => setTo(e.target.value)}
-                >
-                    <option value="Alice">Alice</option>
-                    <option value="Bob">Bob</option>
-                </select>
-            </label>
-            <textarea
-                placeholder="Message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-            />
-            <button type="submit">Send</button>
-        </form>
-    );
-}
-```
+    </div>
 
-Прочитайте **[State as a Snapshot](state-as-a-snapshot.md)**, чтобы узнать, почему состояние кажется "фиксированным" и неизменным внутри обработчиков событий.
+=== "Результат"
+
+    ![Результат](adding-interactivity-2.png)
+
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Состояние как моментальный снимок](state-as-a-snapshot.md), чтобы узнать, почему состояние кажется "фиксированным" и неизменным внутри обработчиков событий.
 
 ## Постановка в очередь серии обновлений состояния
 
@@ -305,37 +339,43 @@ export default function Form() {
 
 <!-- 0019.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Counter() {
-    const [score, setScore] = useState(0);
+    ```js
+    import { useState } from 'react';
 
-    function increment() {
-        setScore(score + 1);
+    export default function Counter() {
+    	const [score, setScore] = useState(0);
+
+    	function increment() {
+    		setScore(score + 1);
+    	}
+
+    	return (
+    		<>
+    			<button onClick={() => increment()}>+1</button>
+    			<button
+    				onClick={() => {
+    					increment();
+    					increment();
+    					increment();
+    				}}
+    			>
+    				+3
+    			</button>
+    			<h1>Score: {score}</h1>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <button onClick={() => increment()}>+1</button>
-            <button
-                onClick={() => {
-                    increment();
-                    increment();
-                    increment();
-                }}
-            >
-                +3
-            </button>
-            <h1>Score: {score}</h1>
-        </>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](adding-interactivity-3.png)
 
 <!-- 0022.part.md -->
 
-[State as a Snapshot](state-as-a-snapshot.md) объясняет, почему это происходит. Установка состояния запрашивает новый рендеринг, но не изменяет его в уже запущенном коде. Поэтому `score` продолжает быть `0` сразу после вызова `setScore(score + 1)`.
+[Состояние как моментальный снимок](state-as-a-snapshot.md) объясняет, почему это происходит. Установка состояния запрашивает новый рендеринг, но не изменяет его в уже запущенном коде. Поэтому `score` продолжает быть `0` сразу после вызова `setScore(score + 1)`.
 
 <!-- 0023.part.md -->
 
@@ -355,35 +395,43 @@ console.log(score); // 0
 
 <!-- 0025.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Counter() {
-    const [score, setScore] = useState(0);
+    ```js
+    import { useState } from 'react';
 
-    function increment() {
-        setScore((s) => s + 1);
+    export default function Counter() {
+    	const [score, setScore] = useState(0);
+
+    	function increment() {
+    		setScore((s) => s + 1);
+    	}
+
+    	return (
+    		<>
+    			<button onClick={() => increment()}>+1</button>
+    			<button
+    				onClick={() => {
+    					increment();
+    					increment();
+    					increment();
+    				}}
+    			>
+    				+3
+    			</button>
+    			<h1>Score: {score}</h1>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <button onClick={() => increment()}>+1</button>
-            <button
-                onClick={() => {
-                    increment();
-                    increment();
-                    increment();
-                }}
-            >
-                +3
-            </button>
-            <h1>Score: {score}</h1>
-        </>
-    );
-}
-```
+=== "Результат"
 
-Читайте **[Постановка в очередь серии обновлений состояния](queueing-a-series-of-state-updates.md)**, чтобы узнать, как поставить в очередь последовательность обновлений состояния.
+    ![Результат](adding-interactivity-4.png)
+
+!!!note "Готовы изучить эту тему?"
+
+    Читайте [Постановка в очередь серии обновлений состояния](queueing-a-series-of-state-updates.md), чтобы узнать, как поставить в очередь последовательность обновлений состояния.
 
 ## Обновление объектов в состоянии
 
@@ -393,101 +441,111 @@ export default function Counter() {
 
 <!-- 0029.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Form() {
-    const [person, setPerson] = useState({
-        name: 'Niki de Saint Phalle',
-        artwork: {
-            title: 'Blue Nana',
-            city: 'Hamburg',
-            image: 'https://i.imgur.com/Sd1AgUOm.jpg',
-        },
-    });
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleNameChange(e) {
-        setPerson({
-            ...person,
-            name: e.target.value,
-        });
+    ```js
+    import { useState } from 'react';
+
+    export default function Form() {
+    	const [person, setPerson] = useState({
+    		name: 'Niki de Saint Phalle',
+    		artwork: {
+    			title: 'Blue Nana',
+    			city: 'Hamburg',
+    			image: 'https://i.imgur.com/Sd1AgUOm.jpg',
+    		},
+    	});
+
+    	function handleNameChange(e) {
+    		setPerson({
+    			...person,
+    			name: e.target.value,
+    		});
+    	}
+
+    	function handleTitleChange(e) {
+    		setPerson({
+    			...person,
+    			artwork: {
+    				...person.artwork,
+    				title: e.target.value,
+    			},
+    		});
+    	}
+
+    	function handleCityChange(e) {
+    		setPerson({
+    			...person,
+    			artwork: {
+    				...person.artwork,
+    				city: e.target.value,
+    			},
+    		});
+    	}
+
+    	function handleImageChange(e) {
+    		setPerson({
+    			...person,
+    			artwork: {
+    				...person.artwork,
+    				image: e.target.value,
+    			},
+    		});
+    	}
+
+    	return (
+    		<>
+    			<label>
+    				Name:
+    				<input
+    					value={person.name}
+    					onChange={handleNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Title:
+    				<input
+    					value={person.artwork.title}
+    					onChange={handleTitleChange}
+    				/>
+    			</label>
+    			<label>
+    				City:
+    				<input
+    					value={person.artwork.city}
+    					onChange={handleCityChange}
+    				/>
+    			</label>
+    			<label>
+    				Image:
+    				<input
+    					value={person.artwork.image}
+    					onChange={handleImageChange}
+    				/>
+    			</label>
+    			<p>
+    				<i>{person.artwork.title}</i>
+    				{' by '}
+    				{person.name}
+    				<br />
+    				(located in {person.artwork.city})
+    			</p>
+    			<img
+    				src={person.artwork.image}
+    				alt={person.artwork.title}
+    			/>
+    		</>
+    	);
     }
+    ```
 
-    function handleTitleChange(e) {
-        setPerson({
-            ...person,
-            artwork: {
-                ...person.artwork,
-                title: e.target.value,
-            },
-        });
-    }
+    </div>
 
-    function handleCityChange(e) {
-        setPerson({
-            ...person,
-            artwork: {
-                ...person.artwork,
-                city: e.target.value,
-            },
-        });
-    }
+=== "Результат"
 
-    function handleImageChange(e) {
-        setPerson({
-            ...person,
-            artwork: {
-                ...person.artwork,
-                image: e.target.value,
-            },
-        });
-    }
-
-    return (
-        <>
-            <label>
-                Name:
-                <input
-                    value={person.name}
-                    onChange={handleNameChange}
-                />
-            </label>
-            <label>
-                Title:
-                <input
-                    value={person.artwork.title}
-                    onChange={handleTitleChange}
-                />
-            </label>
-            <label>
-                City:
-                <input
-                    value={person.artwork.city}
-                    onChange={handleCityChange}
-                />
-            </label>
-            <label>
-                Image:
-                <input
-                    value={person.artwork.image}
-                    onChange={handleImageChange}
-                />
-            </label>
-            <p>
-                <i>{person.artwork.title}</i>
-                {' by '}
-                {person.name}
-                <br />
-                (located in {person.artwork.city})
-            </p>
-            <img
-                src={person.artwork.image}
-                alt={person.artwork.title}
-            />
-        </>
-    );
-}
-```
+    ![Результат](adding-interactivity-5.png)
 
 <!-- 0032.part.md -->
 
@@ -495,90 +553,102 @@ export default function Form() {
 
 <!-- 0033.part.md -->
 
-```js
-import { useImmer } from 'use-immer';
+=== "App.js"
 
-export default function Form() {
-    const [person, updatePerson] = useImmer({
-        name: 'Niki de Saint Phalle',
-        artwork: {
-            title: 'Blue Nana',
-            city: 'Hamburg',
-            image: 'https://i.imgur.com/Sd1AgUOm.jpg',
-        },
-    });
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleNameChange(e) {
-        updatePerson((draft) => {
-            draft.name = e.target.value;
-        });
+    ```js
+    import { useImmer } from 'use-immer';
+
+    export default function Form() {
+    	const [person, updatePerson] = useImmer({
+    		name: 'Niki de Saint Phalle',
+    		artwork: {
+    			title: 'Blue Nana',
+    			city: 'Hamburg',
+    			image: 'https://i.imgur.com/Sd1AgUOm.jpg',
+    		},
+    	});
+
+    	function handleNameChange(e) {
+    		updatePerson((draft) => {
+    			draft.name = e.target.value;
+    		});
+    	}
+
+    	function handleTitleChange(e) {
+    		updatePerson((draft) => {
+    			draft.artwork.title = e.target.value;
+    		});
+    	}
+
+    	function handleCityChange(e) {
+    		updatePerson((draft) => {
+    			draft.artwork.city = e.target.value;
+    		});
+    	}
+
+    	function handleImageChange(e) {
+    		updatePerson((draft) => {
+    			draft.artwork.image = e.target.value;
+    		});
+    	}
+
+    	return (
+    		<>
+    			<label>
+    				Name:
+    				<input
+    					value={person.name}
+    					onChange={handleNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Title:
+    				<input
+    					value={person.artwork.title}
+    					onChange={handleTitleChange}
+    				/>
+    			</label>
+    			<label>
+    				City:
+    				<input
+    					value={person.artwork.city}
+    					onChange={handleCityChange}
+    				/>
+    			</label>
+    			<label>
+    				Image:
+    				<input
+    					value={person.artwork.image}
+    					onChange={handleImageChange}
+    				/>
+    			</label>
+    			<p>
+    				<i>{person.artwork.title}</i>
+    				{' by '}
+    				{person.name}
+    				<br />
+    				(located in {person.artwork.city})
+    			</p>
+    			<img
+    				src={person.artwork.image}
+    				alt={person.artwork.title}
+    			/>
+    		</>
+    	);
     }
+    ```
 
-    function handleTitleChange(e) {
-        updatePerson((draft) => {
-            draft.artwork.title = e.target.value;
-        });
-    }
+    </div>
 
-    function handleCityChange(e) {
-        updatePerson((draft) => {
-            draft.artwork.city = e.target.value;
-        });
-    }
+=== "Результат"
 
-    function handleImageChange(e) {
-        updatePerson((draft) => {
-            draft.artwork.image = e.target.value;
-        });
-    }
+    ![Результат](adding-interactivity-5.png)
 
-    return (
-        <>
-            <label>
-                Name:
-                <input
-                    value={person.name}
-                    onChange={handleNameChange}
-                />
-            </label>
-            <label>
-                Title:
-                <input
-                    value={person.artwork.title}
-                    onChange={handleTitleChange}
-                />
-            </label>
-            <label>
-                City:
-                <input
-                    value={person.artwork.city}
-                    onChange={handleCityChange}
-                />
-            </label>
-            <label>
-                Image:
-                <input
-                    value={person.artwork.image}
-                    onChange={handleImageChange}
-                />
-            </label>
-            <p>
-                <i>{person.artwork.title}</i>
-                {' by '}
-                {person.name}
-                <br />
-                (located in {person.artwork.city})
-            </p>
-            <img
-                src={person.artwork.image}
-                alt={person.artwork.title}
-            />
-        </>
-    );
-}
-```
+!!!note "Готовы изучить эту тему?"
 
-Прочитайте **[Обновление объектов в состоянии](updating-objects-in-state.md)**, чтобы узнать, как правильно обновлять объекты.
+    Прочитайте [Обновление объектов в состоянии](updating-objects-in-state.md), чтобы узнать, как правильно обновлять объекты.
 
 ## Обновление массивов в состоянии
 
@@ -586,67 +656,77 @@ export default function Form() {
 
 <!-- 0039.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-let nextId = 3;
-const initialList = [
-    { id: 0, title: 'Big Bellies', seen: false },
-    { id: 1, title: 'Lunar Landscape', seen: false },
-    { id: 2, title: 'Terracotta Army', seen: true },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function BucketList() {
-    const [list, setList] = useState(initialList);
+    ```js
+    import { useState } from 'react';
 
-    function handleToggle(artworkId, nextSeen) {
-        setList(
-            list.map((artwork) => {
-                if (artwork.id === artworkId) {
-                    return { ...artwork, seen: nextSeen };
-                } else {
-                    return artwork;
-                }
-            })
-        );
+    let nextId = 3;
+    const initialList = [
+    	{ id: 0, title: 'Big Bellies', seen: false },
+    	{ id: 1, title: 'Lunar Landscape', seen: false },
+    	{ id: 2, title: 'Terracotta Army', seen: true },
+    ];
+
+    export default function BucketList() {
+    	const [list, setList] = useState(initialList);
+
+    	function handleToggle(artworkId, nextSeen) {
+    		setList(
+    			list.map((artwork) => {
+    				if (artwork.id === artworkId) {
+    					return { ...artwork, seen: nextSeen };
+    				} else {
+    					return artwork;
+    				}
+    			})
+    		);
+    	}
+
+    	return (
+    		<>
+    			<h1>Art Bucket List</h1>
+    			<h2>My list of art to see:</h2>
+    			<ItemList
+    				artworks={list}
+    				onToggle={handleToggle}
+    			/>
+    		</>
+    	);
     }
 
-    return (
-        <>
-            <h1>Art Bucket List</h1>
-            <h2>My list of art to see:</h2>
-            <ItemList
-                artworks={list}
-                onToggle={handleToggle}
-            />
-        </>
-    );
-}
+    function ItemList({ artworks, onToggle }) {
+    	return (
+    		<ul>
+    			{artworks.map((artwork) => (
+    				<li key={artwork.id}>
+    					<label>
+    						<input
+    							type="checkbox"
+    							checked={artwork.seen}
+    							onChange={(e) => {
+    								onToggle(
+    									artwork.id,
+    									e.target.checked
+    								);
+    							}}
+    						/>
+    						{artwork.title}
+    					</label>
+    				</li>
+    			))}
+    		</ul>
+    	);
+    }
+    ```
 
-function ItemList({ artworks, onToggle }) {
-    return (
-        <ul>
-            {artworks.map((artwork) => (
-                <li key={artwork.id}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={artwork.seen}
-                            onChange={(e) => {
-                                onToggle(
-                                    artwork.id,
-                                    e.target.checked
-                                );
-                            }}
-                        />
-                        {artwork.title}
-                    </label>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+    </div>
+
+=== "Результат"
+
+    ![Результат](adding-interactivity-6.png)
 
 <!-- 0040.part.md -->
 
@@ -654,72 +734,107 @@ function ItemList({ artworks, onToggle }) {
 
 <!-- 0041.part.md -->
 
-```js
-import { useState } from 'react';
-import { useImmer } from 'use-immer';
+=== "App.js"
 
-let nextId = 3;
-const initialList = [
-    { id: 0, title: 'Big Bellies', seen: false },
-    { id: 1, title: 'Lunar Landscape', seen: false },
-    { id: 2, title: 'Terracotta Army', seen: true },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function BucketList() {
-    const [list, updateList] = useImmer(initialList);
+    ```js
+    import { useState } from 'react';
+    import { useImmer } from 'use-immer';
 
-    function handleToggle(artworkId, nextSeen) {
-        updateList((draft) => {
-            const artwork = draft.find(
-                (a) => a.id === artworkId
-            );
-            artwork.seen = nextSeen;
-        });
+    let nextId = 3;
+    const initialList = [
+    	{ id: 0, title: 'Big Bellies', seen: false },
+    	{ id: 1, title: 'Lunar Landscape', seen: false },
+    	{ id: 2, title: 'Terracotta Army', seen: true },
+    ];
+
+    export default function BucketList() {
+    	const [list, updateList] = useImmer(initialList);
+
+    	function handleToggle(artworkId, nextSeen) {
+    		updateList((draft) => {
+    			const artwork = draft.find(
+    				(a) => a.id === artworkId
+    			);
+    			artwork.seen = nextSeen;
+    		});
+    	}
+
+    	return (
+    		<>
+    			<h1>Art Bucket List</h1>
+    			<h2>My list of art to see:</h2>
+    			<ItemList
+    				artworks={list}
+    				onToggle={handleToggle}
+    			/>
+    		</>
+    	);
     }
 
-    return (
-        <>
-            <h1>Art Bucket List</h1>
-            <h2>My list of art to see:</h2>
-            <ItemList
-                artworks={list}
-                onToggle={handleToggle}
-            />
-        </>
-    );
-}
+    function ItemList({ artworks, onToggle }) {
+    	return (
+    		<ul>
+    			{artworks.map((artwork) => (
+    				<li key={artwork.id}>
+    					<label>
+    						<input
+    							type="checkbox"
+    							checked={artwork.seen}
+    							onChange={(e) => {
+    								onToggle(
+    									artwork.id,
+    									e.target.checked
+    								);
+    							}}
+    						/>
+    						{artwork.title}
+    					</label>
+    				</li>
+    			))}
+    		</ul>
+    	);
+    }
+    ```
 
-function ItemList({ artworks, onToggle }) {
-    return (
-        <ul>
-            {artworks.map((artwork) => (
-                <li key={artwork.id}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={artwork.seen}
-                            onChange={(e) => {
-                                onToggle(
-                                    artwork.id,
-                                    e.target.checked
-                                );
-                            }}
-                        />
-                        {artwork.title}
-                    </label>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+    </div>
 
-Прочитайте **[Обновление массивов в состоянии](updating-arrays-in-state.md)**, чтобы узнать, как правильно обновлять массивы.
+=== "package.json"
+
+    ```json
+    {
+    	"dependencies": {
+    		"immer": "1.7.3",
+    		"react": "latest",
+    		"react-dom": "latest",
+    		"react-scripts": "latest",
+    		"use-immer": "0.5.1"
+    	},
+    	"scripts": {
+    		"start": "react-scripts start",
+    		"build": "react-scripts build",
+    		"test": "react-scripts test --env=jsdom",
+    		"eject": "react-scripts eject"
+    	},
+    	"devDependencies": {}
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](adding-interactivity-7.png)
+
+!!!note "Готовы изучить эту тему?"
+
+    Прочитайте [Обновление массивов в состоянии](updating-arrays-in-state.md), чтобы узнать, как правильно обновлять массивы.
 
 ## Что дальше?
 
-Перейдите по ссылке [Responding to Events](responding-to-events.md), чтобы начать читать эту главу страница за страницей!
+Перейдите по ссылке [Реакция на события](responding-to-events.md), чтобы начать читать эту главу страница за страницей!
 
 Или, если вы уже знакомы с этими темами, почему бы не прочитать [Управление состоянием](managing-state.md)?
 
-<!-- 0045.part.md -->
+## Ссылки
+
+-   [https://react.dev/learn/adding-interactivity](https://react.dev/learn/adding-interactivity)

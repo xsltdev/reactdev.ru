@@ -1,22 +1,30 @@
-# Реагирование на события
+# Реакция на события
 
 React позволяет добавлять _обработчики событий_ в JSX. Обработчики событий - это ваши собственные функции, которые будут запускаться в ответ на такие взаимодействия, как нажатие, наведение курсора, фокусировка ввода формы и так далее.
 
--   Различные способы написания обработчика событий
--   Как передать логику обработки событий от родительского компонента
--   Как распространяются события и как их остановить
+!!!tip "Вы узнаете"
+
+    -   Различные способы написания обработчика событий
+    -   Как передать логику обработки событий от родительского компонента
+    -   Как распространяются события и как их остановить
 
 ## Добавление обработчиков событий
 
-Чтобы добавить обработчик событий, вы сначала определите функцию, а затем [передадите ее как реквизит](passing-props-to-a-component.md) в соответствующий JSX тег. Например, вот кнопка, которая еще ничего не делает:
+Чтобы добавить обработчик событий, вы сначала определите функцию, а затем [передадите ее как параметр](passing-props-to-a-component.md) в соответствующий JSX тег. Например, вот кнопка, которая еще ничего не делает:
 
 <!-- 0001.part.md -->
 
-```js
-export default function Button() {
-    return <button>I don't do anything</button>;
-}
-```
+=== "App.js"
+
+    ```js
+    export default function Button() {
+    	return <button>I don't do anything</button>;
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](responding-to-events-1.png)
 
 <!-- 0002.part.md -->
 
@@ -26,21 +34,23 @@ export default function Button() {
 2.  Реализуйте логику внутри этой функции (используйте `alert` для показа сообщения).
 3.  Добавьте `onClick={handleClick}` в JSX `<button>`.
 
-<!-- end list -->
+=== "App.js"
 
-<!-- 0003.part.md -->
+    ```js
+    export default function Button() {
+    	function handleClick() {
+    		alert('You clicked me!');
+    	}
 
-```js
-export default function Button() {
-    function handleClick() {
-        alert('You clicked me!');
+    	return <button onClick={handleClick}>Click me</button>;
     }
+    ```
 
-    return <button onClick={handleClick}>Click me</button>;
-}
-```
+=== "Результат"
 
-Вы определили функцию `handleClick`, а затем [передали ее как реквизит](passing-props-to-a-component.md) в `<button>`. `handleClick` - это **обработчик события.** Функции обработчика события:
+    ![Результат](responding-to-events-2.png)
+
+Вы определили функцию `handleClick`, а затем [передали ее как параметр](passing-props-to-a-component.md) в `<button>`. `handleClick` - это **обработчик события.** Функции обработчика события:
 
 -   Обычно определяются _внутри_ ваших компонентов.
 -   Имеют имена, начинающиеся с `handle`, за которым следует имя события.
@@ -71,51 +81,45 @@ export default function Button() {
 
 Все эти стили эквивалентны. Инлайн-обработчики событий удобны для коротких функций.
 
-Функции, передаваемые в обработчики событий, должны передаваться, а не вызываться. Например:
+!!!warning "Внимание"
 
-| передача функции (правильно)     | вызов функции (неправильно)        |
-| -------------------------------- | ---------------------------------- |
-| `<button onClick={handleClick}>` | `<button onClick={handleClick()}>` |
+    Функции, передаваемые в обработчики событий, должны передаваться, а не вызываться. Например:
 
-Разница очень тонкая. В первом примере функция `handleClick` передается как обработчик события `onClick`. Это говорит React запомнить ее и вызывать вашу функцию только тогда, когда пользователь нажмет на кнопку.
+    | передача функции (правильно)     | вызов функции (неправильно)        |
+    | -------------------------------- | ---------------------------------- |
+    | `<button onClick={handleClick}>` | `<button onClick={handleClick()}>` |
 
-Во втором примере `()` в конце `handleClick()` запускает функцию _непосредственно_ во время [rendering](render-and-commit.md), без каких-либо кликов. Это происходит потому, что JavaScript внутри [JSX `{` и `}`](javascript-in-jsx-with-curly-braces.md) выполняется сразу же.
+    Разница очень тонкая. В первом примере функция `handleClick` передается как обработчик события `onClick`. Это говорит React запомнить ее и вызывать вашу функцию только тогда, когда пользователь нажмет на кнопку.
 
-Когда вы пишете код inline, тот же самый подводный камень проявляется по-другому:
+    Во втором примере `()` в конце `handleClick()` запускает функцию _непосредственно_ во время [rendering](render-and-commit.md), без каких-либо кликов. Это происходит потому, что JavaScript внутри [JSX `{` и `}`](javascript-in-jsx-with-curly-braces.md) выполняется сразу же.
 
-| передача функции (правильно)            | вызов функции (неправильно)       |
-| --------------------------------------- | --------------------------------- |
-| `<button onClick={() => alert('...')}>` | `<button onClick={alert('...')}>` |
+    Когда вы пишете код inline, тот же самый подводный камень проявляется по-другому:
 
-Передача встроенного кода таким образом не срабатывает по щелчку - он срабатывает каждый раз, когда компонент отображается:
+    | передача функции (правильно)            | вызов функции (неправильно)       |
+    | --------------------------------------- | --------------------------------- |
+    | `<button onClick={() => alert('...')}>` | `<button onClick={alert('...')}>` |
 
-<!-- 0011.part.md -->
+    Передача встроенного кода таким образом не срабатывает по щелчку - он срабатывает каждый раз, когда компонент отображается:
 
-```js
-// This alert fires when the component renders, not when clicked!
-<button onClick={alert('You clicked me!')}>
-```
+    ```js
+    // This alert fires when the component renders, not when clicked!
+    <button onClick={alert('You clicked me!')}>
+    ```
 
-<!-- 0012.part.md -->
+    Если вы хотите определить обработчик события в строке, оберните его в анонимную функцию, как показано ниже:
 
-Если вы хотите определить обработчик события в строке, оберните его в анонимную функцию, как показано ниже:
+    ```js
+    <button onClick={() => alert('You clicked me!')}>
+    ```
 
-<!-- 0013.part.md -->
+    Вместо того чтобы выполнять внутренний код при каждом рендере, создается функция, которая будет вызвана позже.
 
-```js
-<button onClick={() => alert('You clicked me!')}>
-```
+    В обоих случаях вы хотите передать функцию:
 
-<!-- 0014.part.md -->
+    -   `<button onClick={handleClick}>` передает функцию `handleClick`.
+    -   `<button onClick={() => alert('...')}>` передает функцию `() => alert('...')`.
 
-Вместо того чтобы выполнять внутренний код при каждом рендере, создается функция, которая будет вызвана позже.
-
-В обоих случаях вы хотите передать функцию:
-
--   `<button onClick={handleClick}>` передает функцию `handleClick`.
--   `<button onClick={() => alert('...')}>` передает функцию `() => alert('...')`.
-
-[Подробнее о стрелочных функциях.](https://javascript.info/arrow-functions-basics)
+    [Подробнее о стрелочных функциях.](https://javascript.info/arrow-functions-basics)
 
 ### Чтение реквизитов в обработчиках событий
 
@@ -123,28 +127,34 @@ export default function Button() {
 
 <!-- 0015.part.md -->
 
-```js
-function AlertButton({ message, children }) {
-    return (
-        <button onClick={() => alert(message)}>
-            {children}
-        </button>
-    );
-}
+=== "App.js"
 
-export default function Toolbar() {
-    return (
-        <div>
-            <AlertButton message="Playing!">
-                Play Movie
-            </AlertButton>
-            <AlertButton message="Uploading!">
-                Upload Image
-            </AlertButton>
-        </div>
-    );
-}
-```
+    ```js
+    function AlertButton({ message, children }) {
+    	return (
+    		<button onClick={() => alert(message)}>
+    			{children}
+    		</button>
+    	);
+    }
+
+    export default function Toolbar() {
+    	return (
+    		<div>
+    			<AlertButton message="Playing!">
+    				Play Movie
+    			</AlertButton>
+    			<AlertButton message="Uploading!">
+    				Upload Image
+    			</AlertButton>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](responding-to-events-3.png)
 
 <!-- 0018.part.md -->
 
@@ -158,40 +168,46 @@ export default function Toolbar() {
 
 <!-- 0019.part.md -->
 
-```js
-function Button({ onClick, children }) {
-    return <button onClick={onClick}>{children}</button>;
-}
+=== "App.js"
 
-function PlayButton({ movieName }) {
-    function handlePlayClick() {
-        alert(`Playing ${movieName}!`);
+    ```js
+    function Button({ onClick, children }) {
+    	return <button onClick={onClick}>{children}</button>;
     }
 
-    return (
-        <Button onClick={handlePlayClick}>
-            Play "{movieName}"
-        </Button>
-    );
-}
+    function PlayButton({ movieName }) {
+    	function handlePlayClick() {
+    		alert(`Playing ${movieName}!`);
+    	}
 
-function UploadButton() {
-    return (
-        <Button onClick={() => alert('Uploading!')}>
-            Upload Image
-        </Button>
-    );
-}
+    	return (
+    		<Button onClick={handlePlayClick}>
+    			Play "{movieName}"
+    		</Button>
+    	);
+    }
 
-export default function Toolbar() {
-    return (
-        <div>
-            <PlayButton movieName="Kiki's Delivery Service" />
-            <UploadButton />
-        </div>
-    );
-}
-```
+    function UploadButton() {
+    	return (
+    		<Button onClick={() => alert('Uploading!')}>
+    			Upload Image
+    		</Button>
+    	);
+    }
+
+    export default function Toolbar() {
+    	return (
+    		<div>
+    			<PlayButton movieName="Kiki's Delivery Service" />
+    			<UploadButton />
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](responding-to-events-4.png)
 
 <!-- 0022.part.md -->
 
@@ -214,64 +230,80 @@ export default function Toolbar() {
 
 <!-- 0023.part.md -->
 
-```js
-function Button({ onSmash, children }) {
-    return <button onClick={onSmash}>{children}</button>;
-}
+=== "App.js"
 
-export default function App() {
-    return (
-        <div>
-            <Button onSmash={() => alert('Playing!')}>
-                Play Movie
-            </Button>
-            <Button onSmash={() => alert('Uploading!')}>
-                Upload Image
-            </Button>
-        </div>
-    );
-}
-```
+    ```js
+    function Button({ onSmash, children }) {
+    	return <button onClick={onSmash}>{children}</button>;
+    }
+
+    export default function App() {
+    	return (
+    		<div>
+    			<Button onSmash={() => alert('Playing!')}>
+    				Play Movie
+    			</Button>
+    			<Button onSmash={() => alert('Uploading!')}>
+    				Upload Image
+    			</Button>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](responding-to-events-3.png)
 
 <!-- 0026.part.md -->
 
-В этом примере `<button onClick={onSmash}>` показывает, что браузеру `<button>` (строчная буква) по-прежнему нужен реквизит `onClick`, но имя реквизита, полученное вашим пользовательским компонентом `Button`, зависит от вас\!
+В этом примере `<button onClick={onSmash}>` показывает, что браузеру `<button>` (строчная буква) по-прежнему нужен реквизит `onClick`, но имя реквизита, полученное вашим пользовательским компонентом `Button`, зависит от вас!
 
 Если ваш компонент поддерживает множество взаимодействий, вы можете назвать реквизиты обработчиков событий для концепций, специфичных для конкретного приложения. Например, компонент `Toolbar` получает обработчики событий `onPlayMovie` и `onUploadImage`:
 
 <!-- 0027.part.md -->
 
-```js
-export default function App() {
-    return (
-        <Toolbar
-            onPlayMovie={() => alert('Playing!')}
-            onUploadImage={() => alert('Uploading!')}
-        />
-    );
-}
+=== "App.js"
 
-function Toolbar({ onPlayMovie, onUploadImage }) {
-    return (
-        <div>
-            <Button onClick={onPlayMovie}>
-                Play Movie
-            </Button>
-            <Button onClick={onUploadImage}>
-                Upload Image
-            </Button>
-        </div>
-    );
-}
+    ```js
+    export default function App() {
+    	return (
+    		<Toolbar
+    			onPlayMovie={() => alert('Playing!')}
+    			onUploadImage={() => alert('Uploading!')}
+    		/>
+    	);
+    }
 
-function Button({ onClick, children }) {
-    return <button onClick={onClick}>{children}</button>;
-}
-```
+    function Toolbar({ onPlayMovie, onUploadImage }) {
+    	return (
+    		<div>
+    			<Button onClick={onPlayMovie}>
+    				Play Movie
+    			</Button>
+    			<Button onClick={onUploadImage}>
+    				Upload Image
+    			</Button>
+    		</div>
+    	);
+    }
+
+    function Button({ onClick, children }) {
+    	return <button onClick={onClick}>{children}</button>;
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](responding-to-events-3.png)
 
 <!-- 0030.part.md -->
 
 Обратите внимание, что компоненту `App` не нужно знать, _что_ `Toolbar` будет делать с `onPlayMovie` или `onUploadImage`. Это деталь реализации `Toolbar`. Здесь `Toolbar` передает их как обработчики `onClick` для своих `Button`, но позже он также может вызвать их по нажатию клавиш. Именование реквизитов в честь специфических для приложения взаимодействий, таких как `onPlayMovie`, дает вам возможность гибко изменять их использование в дальнейшем.
+
+!!!note ""
+
+    Убедитесь, что вы используете соответствующие HTML-теги для обработчиков событий. Например, для обработки кликов используйте [`<button onClick={handleClick}>`](https://developer.mozilla.org/docs/Web/HTML/Element/button) вместо `<div onClick={handleClick}>`. Использование настоящего браузерного `<button>` позволяет использовать встроенные поведенческие характеристики браузера, такие как навигация по клавиатуре. Если вам не нравится стандартная стилизация кнопки в браузере и вы хотите сделать ее более похожей на ссылку или другой элемент пользовательского интерфейса, вы можете добиться этого с помощью CSS. [Узнайте больше](https://developer.mozilla.org/docs/Learn/Accessibility/HTML) о написании доступной разметки.
 
 ## Распространение событий
 
@@ -281,31 +313,39 @@ function Button({ onClick, children }) {
 
 <!-- 0031.part.md -->
 
-```js
-export default function Toolbar() {
-    return (
-        <div
-            className="Toolbar"
-            onClick={() => {
-                alert('You clicked on the toolbar!');
-            }}
-        >
-            <button onClick={() => alert('Playing!')}>
-                Play Movie
-            </button>
-            <button onClick={() => alert('Uploading!')}>
-                Upload Image
-            </button>
-        </div>
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    export default function Toolbar() {
+    	return (
+    		<div
+    			className="Toolbar"
+    			onClick={() => {
+    				alert('You clicked on the toolbar!');
+    			}}
+    		>
+    			<button onClick={() => alert('Playing!')}>
+    				Play Movie
+    			</button>
+    			<button onClick={() => alert('Uploading!')}>
+    				Upload Image
+    			</button>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](responding-to-events-5.png)
 
 <!-- 0034.part.md -->
 
 Если вы нажмете на любую из кнопок, сначала сработает ее `onClick`, а затем `onClick` родительской `<div>`. Таким образом, появятся два сообщения. Если щелкнуть на самой панели инструментов, то будет запущена только `onClick` родительской `<div>`.
 
-Все события распространяются в React, кроме `onScroll`, которое действует только на тег JSX, к которому вы его прикрепили.
+!!!warning "Внимание"
+
+    Все события распространяются в React, кроме `onScroll`, которое действует только на тег JSX, к которому вы его прикрепили.
 
 ### Остановка распространения
 
@@ -315,38 +355,44 @@ export default function Toolbar() {
 
 <!-- 0035.part.md -->
 
-```js
-function Button({ onClick, children }) {
-    return (
-        <button
-            onClick={(e) => {
-                e.stopPropagation();
-                onClick();
-            }}
-        >
-            {children}
-        </button>
-    );
-}
+=== "App.js"
 
-export default function Toolbar() {
-    return (
-        <div
-            className="Toolbar"
-            onClick={() => {
-                alert('You clicked on the toolbar!');
-            }}
-        >
-            <Button onClick={() => alert('Playing!')}>
-                Play Movie
-            </Button>
-            <Button onClick={() => alert('Uploading!')}>
-                Upload Image
-            </Button>
-        </div>
-    );
-}
-```
+    ```js
+    function Button({ onClick, children }) {
+    	return (
+    		<button
+    			onClick={(e) => {
+    				e.stopPropagation();
+    				onClick();
+    			}}
+    		>
+    			{children}
+    		</button>
+    	);
+    }
+
+    export default function Toolbar() {
+    	return (
+    		<div
+    			className="Toolbar"
+    			onClick={() => {
+    				alert('You clicked on the toolbar!');
+    			}}
+    		>
+    			<Button onClick={() => alert('Playing!')}>
+    				Play Movie
+    			</Button>
+    			<Button onClick={() => alert('Uploading!')}>
+    				Upload Image
+    			</Button>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](responding-to-events-5.png)
 
 <!-- 0038.part.md -->
 
@@ -361,38 +407,36 @@ export default function Toolbar() {
 
 В результате `e.stopPropagation()`, при нажатии на кнопки теперь отображается только одно оповещение (из `<button>`), а не оба (из `<button>` и родительской панели инструментов `<div>`). Нажатие на кнопку - это не то же самое, что нажатие на окружающую панель инструментов, поэтому остановка распространения имеет смысл для данного пользовательского интерфейса.
 
-#### Захват фазовых событий
+!!!note "Захват фазовых событий"
 
-В редких случаях вам может понадобиться перехватить все события на дочерних элементах, даже если они прекратили распространение. Например, вы хотите регистрировать каждый клик в аналитике, независимо от логики распространения. Вы можете сделать это, добавив `Capture` в конце имени события:
+    В редких случаях вам может понадобиться перехватить все события на дочерних элементах, даже если они прекратили распространение. Например, вы хотите регистрировать каждый клик в аналитике, независимо от логики распространения. Вы можете сделать это, добавив `Capture` в конце имени события:
 
-<!-- 0039.part.md -->
+    <!-- 0039.part.md -->
 
-```js
-<div
-    onClickCapture={() => {
-        /* this runs first */
-    }}
->
-    <button onClick={(e) => e.stopPropagation()} />
-    <button onClick={(e) => e.stopPropagation()} />
-</div>
-```
+    ```js
+    <div
+    	onClickCapture={() => {
+    		/* this runs first */
+    	}}
+    >
+    	<button onClick={(e) => e.stopPropagation()} />
+    	<button onClick={(e) => e.stopPropagation()} />
+    </div>
+    ```
 
-<!-- 0040.part.md -->
+    <!-- 0040.part.md -->
 
-Каждое событие распространяется в три фазы:
+    Каждое событие распространяется в три фазы:
 
-1.  Оно перемещается вниз, вызывая все обработчики `onClickCapture`.
-2.  Запускается обработчик `onClick` щелкнутого элемента.
-3.  Он перемещается вверх, вызывая все обработчики `onClick`.
+    1.  Оно перемещается вниз, вызывая все обработчики `onClickCapture`.
+    2.  Запускается обработчик `onClick` щелкнутого элемента.
+    3.  Он перемещается вверх, вызывая все обработчики `onClick`.
 
-События захвата полезны для такого кода, как маршрутизаторы или аналитика, но вы, вероятно, не будете использовать их в коде приложений.
+    События захвата полезны для такого кода, как маршрутизаторы или аналитика, но вы, вероятно, не будете использовать их в коде приложений.
 
 ### Передача обработчиков как альтернатива распространению
 
 Обратите внимание, как этот обработчик кликов выполняет строку кода _и затем_ вызывает `onClick`, переданный родителем:
-
-<!-- 0041.part.md -->
 
 ```js
 function Button({ onClick, children }) {
@@ -409,8 +453,6 @@ function Button({ onClick, children }) {
 }
 ```
 
-<!-- 0042.part.md -->
-
 Вы можете добавить больше кода в этот обработчик перед вызовом обработчика родительского события `onClick`. Этот паттерн обеспечивает _альтернативу_ распространению. Он позволяет дочернему компоненту обрабатывать событие, в то же время позволяя родительскому компоненту задать дополнительное поведение. В отличие от распространения, он не является автоматическим. Но преимущество этого паттерна в том, что вы можете четко проследить всю цепочку кода, который выполняется в результате какого-то события.
 
 Если вы полагаетесь на распространение и вам сложно отследить, какие обработчики выполняются и почему, попробуйте применить этот подход.
@@ -421,16 +463,22 @@ function Button({ onClick, children }) {
 
 <!-- 0043.part.md -->
 
-```js
-export default function Signup() {
-    return (
-        <form onSubmit={() => alert('Submitting!')}>
-            <input />
-            <button>Send</button>
-        </form>
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    export default function Signup() {
+    	return (
+    		<form onSubmit={() => alert('Submitting!')}>
+    			<input />
+    			<button>Send</button>
+    		</form>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](responding-to-events-6.png)
 
 <!-- 0046.part.md -->
 
@@ -438,21 +486,27 @@ export default function Signup() {
 
 <!-- 0047.part.md -->
 
-```js
-export default function Signup() {
-    return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                alert('Submitting!');
-            }}
-        >
-            <input />
-            <button>Send</button>
-        </form>
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    export default function Signup() {
+    	return (
+    		<form
+    			onSubmit={(e) => {
+    				e.preventDefault();
+    				alert('Submitting!');
+    			}}
+    		>
+    			<input />
+    			<button>Send</button>
+    		</form>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](responding-to-events-6.png)
 
 <!-- 0050.part.md -->
 
@@ -467,90 +521,108 @@ export default function Signup() {
 
 В отличие от функций рендеринга, обработчики событий не обязаны быть [чистыми](keeping-components-pure.md), поэтому это отличное место для _изменения_ чего-либо - например, изменения значения ввода в ответ на ввод текста или изменения списка в ответ на нажатие кнопки. Однако для того, чтобы изменить какую-то информацию, вам сначала нужно каким-то образом ее сохранить. В React для этого используется [state, память компонента](state-a-components-memory.md). Вы узнаете все об этом на следующей странице.
 
--   Вы можете обрабатывать события, передавая функцию в качестве реквизита элементу, например `<button>`.
--   Обработчики событий должны передаваться, **а не вызываться!** `onClick={handleClick}`, а не `onClick={handleClick()}`.
--   Вы можете определить функцию-обработчик события отдельно или в строке.
--   Обработчики событий определяются внутри компонента, поэтому они могут обращаться к реквизитам.
--   Вы можете объявить обработчик событий в родительском компоненте и передать его в качестве реквизита дочернему компоненту.
--   Вы можете определить собственные реквизиты обработчика событий с именами, специфичными для конкретного приложения.
--   События распространяются вверх. Чтобы предотвратить это, вызовите `e.stopPropagation()` для первого аргумента.
--   События могут иметь нежелательное поведение браузера по умолчанию. Вызовите `e.preventDefault()`, чтобы предотвратить это.
--   Явный вызов свойства обработчика события из дочернего обработчика является хорошей альтернативой распространению.
+!!!note "Итоги"
 
-### Исправьте обработчик события
+    -   Вы можете обрабатывать события, передавая функцию в качестве реквизита элементу, например `<button>`.
+    -   Обработчики событий должны передаваться, **а не вызываться!** `onClick={handleClick}`, а не `onClick={handleClick()}`.
+    -   Вы можете определить функцию-обработчик события отдельно или в строке.
+    -   Обработчики событий определяются внутри компонента, поэтому они могут обращаться к реквизитам.
+    -   Вы можете объявить обработчик событий в родительском компоненте и передать его в качестве реквизита дочернему компоненту.
+    -   Вы можете определить собственные реквизиты обработчика событий с именами, специфичными для конкретного приложения.
+    -   События распространяются вверх. Чтобы предотвратить это, вызовите `e.stopPropagation()` для первого аргумента.
+    -   События могут иметь нежелательное поведение браузера по умолчанию. Вызовите `e.preventDefault()`, чтобы предотвратить это.
+    -   Явный вызов свойства обработчика события из дочернего обработчика является хорошей альтернативой распространению.
+
+## Задачи
+
+### 1. Исправьте обработчик события
 
 Щелчок на этой кнопке должен переключить фон страницы между белым и черным. Однако при нажатии ничего не происходит. Исправьте проблему. (Не беспокойтесь о логике внутри `handleClick` - эта часть в порядке).
 
 <!-- 0051.part.md -->
 
-```js
-export default function LightSwitch() {
-    function handleClick() {
-        let bodyStyle = document.body.style;
-        if (bodyStyle.backgroundColor === 'black') {
-            bodyStyle.backgroundColor = 'white';
-        } else {
-            bodyStyle.backgroundColor = 'black';
-        }
+=== "App.js"
+
+    ```js
+    export default function LightSwitch() {
+    	function handleClick() {
+    		let bodyStyle = document.body.style;
+    		if (bodyStyle.backgroundColor === 'black') {
+    			bodyStyle.backgroundColor = 'white';
+    		} else {
+    			bodyStyle.backgroundColor = 'black';
+    		}
+    	}
+
+    	return (
+    		<button onClick={handleClick()}>
+    			Toggle the lights
+    		</button>
+    	);
     }
+    ```
 
-    return (
-        <button onClick={handleClick()}>
-            Toggle the lights
-        </button>
-    );
-}
-```
+=== "Результат"
 
-Проблема в том, что `<button onClick={handleClick()}>` _вызывает_ функцию `handleClick` во время рендеринга вместо того, чтобы _передать_ ее. Удаление вызова `()`, чтобы было `<button onClick={handleClick}>` устраняет проблему:
+    ![Результат](responding-to-events-7.png)
 
-<!-- 0053.part.md -->
+???success "Показать решение"
 
-```js
-export default function LightSwitch() {
-    function handleClick() {
-        let bodyStyle = document.body.style;
-        if (bodyStyle.backgroundColor === 'black') {
-            bodyStyle.backgroundColor = 'white';
-        } else {
-            bodyStyle.backgroundColor = 'black';
-        }
-    }
+    Проблема в том, что `<button onClick={handleClick()}>` _вызывает_ функцию `handleClick` во время рендеринга вместо того, чтобы _передать_ ее. Удаление вызова `()`, чтобы было `<button onClick={handleClick}>` устраняет проблему:
 
-    return (
-        <button onClick={handleClick}>
-            Toggle the lights
-        </button>
-    );
-}
-```
+    === "App.js"
 
-<!-- 0054.part.md -->
+    	```js
+    	export default function LightSwitch() {
+    		function handleClick() {
+    			let bodyStyle = document.body.style;
+    			if (bodyStyle.backgroundColor === 'black') {
+    				bodyStyle.backgroundColor = 'white';
+    			} else {
+    				bodyStyle.backgroundColor = 'black';
+    			}
+    		}
 
-В качестве альтернативы можно обернуть вызов в другую функцию, например `<button onClick={() => handleClick()}>`:
+    		return (
+    			<button onClick={handleClick}>
+    				Toggle the lights
+    			</button>
+    		);
+    	}
+    	```
 
-<!-- 0055.part.md -->
+    === "Результат"
 
-```js
-export default function LightSwitch() {
-    function handleClick() {
-        let bodyStyle = document.body.style;
-        if (bodyStyle.backgroundColor === 'black') {
-            bodyStyle.backgroundColor = 'white';
-        } else {
-            bodyStyle.backgroundColor = 'black';
-        }
-    }
+    	![Результат](responding-to-events-7.png)
 
-    return (
-        <button onClick={() => handleClick()}>
-            Toggle the lights
-        </button>
-    );
-}
-```
+    В качестве альтернативы можно обернуть вызов в другую функцию, например `<button onClick={() => handleClick()}>`:
 
-#### Подключение событий
+    === "App.js"
+
+    	```js
+    	export default function LightSwitch() {
+    		function handleClick() {
+    			let bodyStyle = document.body.style;
+    			if (bodyStyle.backgroundColor === 'black') {
+    				bodyStyle.backgroundColor = 'white';
+    			} else {
+    				bodyStyle.backgroundColor = 'black';
+    			}
+    		}
+
+    		return (
+    			<button onClick={() => handleClick()}>
+    				Toggle the lights
+    			</button>
+    		);
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](responding-to-events-7.png)
+
+### 2. Подключение событий
 
 Этот компонент `ColorSwitch` отображает кнопку. Он должен менять цвет страницы. Подключите его к обработчику события `onChangeColor`, который он получает от родителя, чтобы щелчок по кнопке изменил цвет.
 
@@ -558,115 +630,45 @@ export default function LightSwitch() {
 
 <!-- 0057.part.md -->
 
-```js
-export default function ColorSwitch({ onChangeColor }) {
-    return <button>Change color</button>;
-}
-```
+=== "App.js"
 
-<!-- 0058.part.md -->
-
-<!-- 0059.part.md -->
-
-```js
-import { useState } from 'react';
-import ColorSwitch from './ColorSwitch.js';
-
-export default function App() {
-    const [clicks, setClicks] = useState(0);
-
-    function handleClickOutside() {
-        setClicks((c) => c + 1);
+    ```js
+    export default function ColorSwitch({ onChangeColor }) {
+    	return <button>Change color</button>;
     }
+    ```
 
-    function getRandomLightColor() {
-        let r = 150 + Math.round(100 * Math.random());
-        let g = 150 + Math.round(100 * Math.random());
-        let b = 150 + Math.round(100 * Math.random());
-        return `rgb(${r}, ${g}, ${b})`;
-    }
+=== "Результат"
 
-    function handleChangeColor() {
-        let bodyStyle = document.body.style;
-        bodyStyle.backgroundColor = getRandomLightColor();
-    }
+    ![Результат](responding-to-events-8.png)
 
-    return (
-        <div
-            style={{ width: '100%', height: '100%' }}
-            onClick={handleClickOutside}
-        >
-            <ColorSwitch
-                onChangeColor={handleChangeColor}
-            />
-            <br />
-            <br />
-            <h2>Clicks on the page: {clicks}</h2>
-        </div>
-    );
-}
-```
+???success "Показать решение"
 
-Сначала нужно добавить обработчик события, например `<button onClick={onChangeColor}>`.
+    Сначала нужно добавить обработчик события, например `<button onClick={onChangeColor}>`.
 
-Однако это влечет за собой проблему увеличивающегося счетчика. Если `onChangeColor` не делает этого, как настаивает ваш коллега, то проблема в том, что это событие распространяется вверх, и какой-то обработчик выше делает это. Чтобы решить эту проблему, нужно остановить распространение. Но не забывайте, что вы все равно должны вызвать `onChangeColor`.
+    Однако это влечет за собой проблему увеличивающегося счетчика. Если `onChangeColor` не делает этого, как настаивает ваш коллега, то проблема в том, что это событие распространяется вверх, и какой-то обработчик выше делает это. Чтобы решить эту проблему, нужно остановить распространение. Но не забывайте, что вы все равно должны вызвать `onChangeColor`.
 
-<!-- 0061.part.md -->
+    === "App.js"
 
-```js
-export default function ColorSwitch({ onChangeColor }) {
-    return (
-        <button
-            onClick={(e) => {
-                e.stopPropagation();
-                onChangeColor();
-            }}
-        >
-            Change color
-        </button>
-    );
-}
-```
+    	```js
+    	export default function ColorSwitch({ onChangeColor }) {
+    		return (
+    			<button
+    				onClick={(e) => {
+    					e.stopPropagation();
+    					onChangeColor();
+    				}}
+    			>
+    				Change color
+    			</button>
+    		);
+    	}
+    	```
 
-<!-- 0062.part.md -->
+    === "Результат"
 
-<!-- 0063.part.md -->
+    	![Результат](responding-to-events-9.png)
 
-```js
-import { useState } from 'react';
-import ColorSwitch from './ColorSwitch.js';
+## Ссылки
 
-export default function App() {
-    const [clicks, setClicks] = useState(0);
-
-    function handleClickOutside() {
-        setClicks((c) => c + 1);
-    }
-
-    function getRandomLightColor() {
-        let r = 150 + Math.round(100 * Math.random());
-        let g = 150 + Math.round(100 * Math.random());
-        let b = 150 + Math.round(100 * Math.random());
-        return `rgb(${r}, ${g}, ${b})`;
-    }
-
-    function handleChangeColor() {
-        let bodyStyle = document.body.style;
-        bodyStyle.backgroundColor = getRandomLightColor();
-    }
-
-    return (
-        <div
-            style={{ width: '100%', height: '100%' }}
-            onClick={handleClickOutside}
-        >
-            <ColorSwitch
-                onChangeColor={handleChangeColor}
-            />
-            <br />
-            <br />
-            <h2>Clicks on the page: {clicks}</h2>
-        </div>
-    );
-}
-```
+-   [https://react.dev/learn/responding-to-events](https://react.dev/learn/responding-to-events)

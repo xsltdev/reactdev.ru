@@ -99,7 +99,7 @@ plugins:
               - en
     - awesome-pages
     - section-index
-#    - social
+    - social
 
 extra_css:
     - '/assets/stylesheets/styles.css?3'
