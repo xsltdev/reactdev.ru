@@ -37,7 +37,7 @@ theme:
         - content.action.edit
         - content.code.copy
     favicon: react.svg
-    logo: react.svg
+    logo: react-white.svg
 
 extra:
     generator: false
@@ -73,7 +73,11 @@ markdown_extensions:
     - toc:
           permalink: true
     - pymdownx.extra
+    - pymdownx.critic
+    - pymdownx.caret
     - pymdownx.keys
+    - pymdownx.mark
+    - pymdownx.tilde
     - pymdownx.details
     - pymdownx.emoji:
           emoji_index: !!python/name:materialx.emoji.twemoji
@@ -99,7 +103,7 @@ plugins:
     - social
 
 extra_css:
-    - '/assets/stylesheets/styles.css?4'
+    - '/assets/stylesheets/styles.css?5'
 
 extra_javascript:
     - '/assets/javascripts/mathjax.js'
