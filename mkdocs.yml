@@ -33,6 +33,7 @@ theme:
         - navigation.tracking
         - navigation.top
         - navigation.footer
+        - navigation.indexes
         - content.action.edit
         - content.code.copy
     favicon: react.svg
@@ -69,9 +70,6 @@ extra:
 
 markdown_extensions:
     - admonition
-    #    - codehilite:
-    #          guess_lang: false
-    #          linenums: false
     - toc:
           permalink: true
     - pymdownx.extra
@@ -98,11 +96,10 @@ plugins:
               - ru
               - en
     - awesome-pages
-    - section-index
     - social
 
 extra_css:
-    - '/assets/stylesheets/styles.css?3'
+    - '/assets/stylesheets/styles.css?4'
 
 extra_javascript:
     - '/assets/javascripts/mathjax.js'

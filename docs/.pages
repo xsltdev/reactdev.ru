@@ -1,4 +1,5 @@
 nav:
+    - 🏠: index.md
     - learn
     - types
     - tutorial

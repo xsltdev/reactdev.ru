@@ -10,6 +10,8 @@ hide:
 
 [![React](react.svg){: style="height:20px;width:20px;vertical-align:middle;"} **React**](https://react.dev/) &mdash; это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов
 
+## React {style="border-bottom: 0;"}
+
 <div class="cards" markdown="1">
 <div class="card" markdown="1">
 
@@ -33,6 +35,8 @@ hide:
 <div class="card" markdown="1">
 
 ### Старт
+
+Фреймворки на React для старта нового проекта
 
 -   [![Next.js](nextjs.svg){: style="height:20px;width:20px;vertical-align:middle;"} Next.js](nextjs/index.md)
 -   [Create React App](libs/cra.md)
@@ -122,7 +126,3 @@ hide:
     [![Node.js](nodejs.svg){: style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;
     [![Python 3](python.svg){: style="height:16px;width:16px;vertical-align:middle;"} Python 3](https://py3dev.ru/) &nbsp;&nbsp;&nbsp;
     [![XSLT](xslt.svg){: style="height:16px;width:16px;vertical-align:middle;"} XSLT](https://xsltdev.ru/)
-
-<!--
-https://github.com/harryheman/React-Total
--->
