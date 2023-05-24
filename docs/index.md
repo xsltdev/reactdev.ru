@@ -8,48 +8,107 @@ hide:
 
 # ![React](react.svg){: style="height:64px;width:64px;vertical-align:middle;"} Справочник React
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-column-gap: 30px; place-items: stretch;" markdown>
-
 [![React](react.svg){: style="height:20px;width:20px;vertical-align:middle;"} **React**](https://react.dev/) &mdash; это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов
 
-!!!info "Документация по React"
+<div class="cards" markdown="1">
+<div class="card" markdown="1">
 
-    - **[Перевод React 18](learn/index.md)**
-    - [Перевод React 16](tutorial/tutorial.md)
-    - [React и Typescript](types/index.md) &mdash; типизация библиотеки React с помощью Typescript
+### Документация
 
-!!!info "Стартовые проекты React"
+Перевод официальной документации
 
-    - [Create React App](libs/cra.md)
-    - [![Next.js](nextjs.svg){: style="height:20px;width:20px;vertical-align:middle;"} Next.js](nextjs/index.md)
+-   **[React 18](learn/index.md)**
+-   [React 16](tutorial/tutorial.md)
 
-!!!info "Redux"
+</div>
+<div class="card" markdown="1">
 
-    - [![Redux](redux.svg){: style="height:20px;width:20px;vertical-align:middle;"} Redux](libs/redux/index.md) &mdash; библиотека управления состоянием
-    - [Redux Toolkit](libs/redux-toolkit.md)
+### Типизация
 
-!!!info "Менеджеры состояния"
+Типизация библиотеки React с помощью Typescript
 
-    - [React Query](libs/react-query) &mdash; менеджер серверного состояния
-    - [XState](libs/xstate/index.md) &mdash; конечные автоматы
+-   [React и Typescript](types/index.md)
 
-!!!info "Загрузка данных"
+</div>
+<div class="card" markdown="1">
 
-    - [![GraphQL](graphql.svg){: style="height:20px;width:20px;vertical-align:middle;"} GraphQL](graphql/index.md) &mdash; язык запросов данных
+### Старт
 
-!!!info "Роутинг"
+-   [![Next.js](nextjs.svg){: style="height:20px;width:20px;vertical-align:middle;"} Next.js](nextjs/index.md)
+-   [Create React App](libs/cra.md)
 
-    - [![React Router](react-router.svg){: style="height:20px;width:20px;vertical-align:middle;"} React Router](libs/react-router.md) &mdash; маршрутизатор
+</div>
+</div>
 
-!!!info "Стили и CSS"
+---
 
-    - [Styled Components](libs/styled-components.md) &mdash; библиотека стилизации
+## Менеджеры состояния {style="border-bottom: 0;"}
 
-!!!info "Анимации"
+<div class="cards" markdown="1">
+<div class="card" markdown="1">
 
-    - [![React Spring](react-spring.svg){: style="height:20px;width:20px;vertical-align:middle;"} React Spring](libs/react-spring.md) &mdash; анимация интерфейсов
-    - [React Transition Group](libs/react-transition-group/index.md) &mdash; анимация переходов
+### Redux
 
+Библиотека управления состоянием
+
+-   [![Redux](redux.svg){: style="height:20px;width:20px;vertical-align:middle;"} Redux](libs/redux/index.md)
+-   [Redux Toolkit](libs/redux-toolkit.md)
+
+</div>
+<div class="card" markdown="1">
+
+### Другие менеджеры
+
+Библиотеки менеджеров состояния
+
+-   [React Query](libs/react-query)
+-   [XState](libs/xstate/index.md)
+
+</div>
+</div>
+
+---
+
+## Библиотеки {style="border-bottom: 0;"}
+
+<div class="cards" markdown="1">
+<div class="card" markdown="1">
+
+### Загрузка данных
+
+Язык запросов данных
+
+-   [![GraphQL](graphql.svg){: style="height:20px;width:20px;vertical-align:middle;"} GraphQL](graphql/index.md)
+
+</div>
+<div class="card" markdown="1">
+
+### Роутинг
+
+Библиотеки организации маршрутизации
+
+-   [![React Router](react-router.svg){: style="height:20px;width:20px;vertical-align:middle;"} React Router](libs/react-router.md)
+
+</div>
+<div class="card" markdown="1">
+
+### Стилизация
+
+Библиотеки для управления стилями
+
+-   [Styled Components](libs/styled-components.md)
+
+</div>
+<div class="card" markdown="1">
+
+### Анимации
+
+Библиотеки анимации и переходов
+
+-   [![React Spring](react-spring.svg){: style="height:20px;width:20px;vertical-align:middle;"} React Spring](libs/react-spring.md)
+-   [React Transition Group](libs/react-transition-group/index.md)
+
+</div>
 </div>
 
 ---
