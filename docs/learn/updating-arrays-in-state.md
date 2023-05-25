@@ -25,54 +25,60 @@
 
 В качестве альтернативы можно использовать Immer, который позволяет использовать методы из обоих столбцов.
 
-К сожалению, [`slice`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/slice) и [`splice`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/splice) называются одинаково, но являются совершенно разными:
+!!!warning "Внимание"
 
--   `slice` позволяет копировать массив или его часть.
--   `splice` **изменяет** массив (для вставки или удаления элементов).
+    К сожалению, [`slice`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/slice) и [`splice`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/splice) называются одинаково, но являются совершенно разными:
 
-В React вы будете использовать `slice` (без `p`!) гораздо чаще, потому что вы не хотите изменять объекты или массивы в состоянии. В [Updating Objects](updating-objects-in-state.md) объясняется, что такое мутация и почему она не рекомендуется для состояния.
+    -   `slice` позволяет копировать массив или его часть.
+    -   `splice` **изменяет** массив (для вставки или удаления элементов).
+
+    В React вы будете использовать `slice` (без `p`!) гораздо чаще, потому что вы не хотите изменять объекты или массивы в состоянии. В [Обновление объектов в состоянии](updating-objects-in-state.md) объясняется, что такое мутация и почему она не рекомендуется для состояния.
 
 ### Добавление в массив
 
 `push()` будет мутировать массив, чего вы не хотите:
 
-<!-- 0001.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    ```js
+    import { useState } from 'react';
 
-let nextId = 0;
+    let nextId = 0;
 
-export default function List() {
-    const [name, setName] = useState('');
-    const [artists, setArtists] = useState([]);
+    export default function List() {
+    	const [name, setName] = useState('');
+    	const [artists, setArtists] = useState([]);
 
-    return (
-        <>
-            <h1>Inspiring sculptors:</h1>
-            <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    artists.push({
-                        id: nextId++,
-                        name: name,
-                    });
-                }}
-            >
-                Add
-            </button>
-            <ul>
-                {artists.map((artist) => (
-                    <li key={artist.id}>{artist.name}</li>
-                ))}
-            </ul>
-        </>
-    );
-}
-```
+    	return (
+    		<>
+    			<h1>Inspiring sculptors:</h1>
+    			<input
+    				value={name}
+    				onChange={(e) => setName(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => {
+    					artists.push({
+    						id: nextId++,
+    						name: name,
+    					});
+    				}}
+    			>
+    				Add
+    			</button>
+    			<ul>
+    				{artists.map((artist) => (
+    					<li key={artist.id}>{artist.name}</li>
+    				))}
+    			</ul>
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-1.png)
 
 <!-- 0004.part.md -->
 
@@ -95,43 +101,51 @@ setArtists(
 
 Теперь он работает правильно:
 
-<!-- 0007.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-let nextId = 0;
+    ```js
+    import { useState } from 'react';
 
-export default function List() {
-    const [name, setName] = useState('');
-    const [artists, setArtists] = useState([]);
+    let nextId = 0;
 
-    return (
-        <>
-            <h1>Inspiring sculptors:</h1>
-            <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setArtists([
-                        ...artists,
-                        { id: nextId++, name: name },
-                    ]);
-                }}
-            >
-                Add
-            </button>
-            <ul>
-                {artists.map((artist) => (
-                    <li key={artist.id}>{artist.name}</li>
-                ))}
-            </ul>
-        </>
-    );
-}
-```
+    export default function List() {
+    	const [name, setName] = useState('');
+    	const [artists, setArtists] = useState([]);
+
+    	return (
+    		<>
+    			<h1>Inspiring sculptors:</h1>
+    			<input
+    				value={name}
+    				onChange={(e) => setName(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => {
+    					setArtists([
+    						...artists,
+    						{ id: nextId++, name: name },
+    					]);
+    				}}
+    			>
+    				Add
+    			</button>
+    			<ul>
+    				{artists.map((artist) => (
+    					<li key={artist.id}>{artist.name}</li>
+    				))}
+    			</ul>
+    		</>
+    	);
+    }
+    ```
+
+    </div>
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-1.png)
 
 <!-- 0010.part.md -->
 
@@ -156,45 +170,55 @@ setArtists([
 
 <!-- 0013.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-let initialArtists = [
-    { id: 0, name: 'Marta Colvin Andrade' },
-    { id: 1, name: 'Lamidi Olonade Fakeye' },
-    { id: 2, name: 'Louise Nevelson' },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function List() {
-    const [artists, setArtists] = useState(initialArtists);
+    ```js
+    import { useState } from 'react';
 
-    return (
-        <>
-            <h1>Inspiring sculptors:</h1>
-            <ul>
-                {artists.map((artist) => (
-                    <li key={artist.id}>
-                        {artist.name}{' '}
-                        <button
-                            onClick={() => {
-                                setArtists(
-                                    artists.filter(
-                                        (a) =>
-                                            a.id !==
-                                            artist.id
-                                    )
-                                );
-                            }}
-                        >
-                            Delete
-                        </button>
-                    </li>
-                ))}
-            </ul>
-        </>
-    );
-}
-```
+    let initialArtists = [
+    	{ id: 0, name: 'Marta Colvin Andrade' },
+    	{ id: 1, name: 'Lamidi Olonade Fakeye' },
+    	{ id: 2, name: 'Louise Nevelson' },
+    ];
+
+    export default function List() {
+    	const [artists, setArtists] = useState(initialArtists);
+
+    	return (
+    		<>
+    			<h1>Inspiring sculptors:</h1>
+    			<ul>
+    				{artists.map((artist) => (
+    					<li key={artist.id}>
+    						{artist.name}{' '}
+    						<button
+    							onClick={() => {
+    								setArtists(
+    									artists.filter(
+    										(a) =>
+    											a.id !==
+    											artist.id
+    									)
+    								);
+    							}}
+    						>
+    							Delete
+    						</button>
+    					</li>
+    				))}
+    			</ul>
+    		</>
+    	);
+    }
+    ```
+
+    </div>
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-2.png)
 
 <!-- 0014.part.md -->
 
@@ -218,61 +242,71 @@ setArtists(artists.filter((a) => a.id !== artist.id));
 
 <!-- 0017.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-let initialShapes = [
-    { id: 0, type: 'circle', x: 50, y: 100 },
-    { id: 1, type: 'square', x: 150, y: 100 },
-    { id: 2, type: 'circle', x: 250, y: 100 },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function ShapeEditor() {
-    const [shapes, setShapes] = useState(initialShapes);
+    ```js
+    import { useState } from 'react';
 
-    function handleClick() {
-        const nextShapes = shapes.map((shape) => {
-            if (shape.type === 'square') {
-                // No change
-                return shape;
-            } else {
-                // Return a new circle 50px below
-                return {
-                    ...shape,
-                    y: shape.y + 50,
-                };
-            }
-        });
-        // Re-render with the new array
-        setShapes(nextShapes);
+    let initialShapes = [
+    	{ id: 0, type: 'circle', x: 50, y: 100 },
+    	{ id: 1, type: 'square', x: 150, y: 100 },
+    	{ id: 2, type: 'circle', x: 250, y: 100 },
+    ];
+
+    export default function ShapeEditor() {
+    	const [shapes, setShapes] = useState(initialShapes);
+
+    	function handleClick() {
+    		const nextShapes = shapes.map((shape) => {
+    			if (shape.type === 'square') {
+    				// No change
+    				return shape;
+    			} else {
+    				// Return a new circle 50px below
+    				return {
+    					...shape,
+    					y: shape.y + 50,
+    				};
+    			}
+    		});
+    		// Re-render with the new array
+    		setShapes(nextShapes);
+    	}
+
+    	return (
+    		<>
+    			<button onClick={handleClick}>
+    				Move circles down!
+    			</button>
+    			{shapes.map((shape) => (
+    				<div
+    					key={shape.id}
+    					style={{
+    						background: 'purple',
+    						position: 'absolute',
+    						left: shape.x,
+    						top: shape.y,
+    						borderRadius:
+    							shape.type === 'circle'
+    								? '50%'
+    								: '',
+    						width: 20,
+    						height: 20,
+    					}}
+    				/>
+    			))}
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <button onClick={handleClick}>
-                Move circles down!
-            </button>
-            {shapes.map((shape) => (
-                <div
-                    key={shape.id}
-                    style={{
-                        background: 'purple',
-                        position: 'absolute',
-                        left: shape.x,
-                        top: shape.y,
-                        borderRadius:
-                            shape.type === 'circle'
-                                ? '50%'
-                                : '',
-                        width: 20,
-                        height: 20,
-                    }}
-                />
-            ))}
-        </>
-    );
-}
-```
+    </div>
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-3.png)
 
 <!-- 0020.part.md -->
 
@@ -284,47 +318,57 @@ export default function ShapeEditor() {
 
 <!-- 0021.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-let initialCounters = [0, 0, 0];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function CounterList() {
-    const [counters, setCounters] = useState(
-        initialCounters
-    );
+    ```js
+    import { useState } from 'react';
 
-    function handleIncrementClick(index) {
-        const nextCounters = counters.map((c, i) => {
-            if (i === index) {
-                // Increment the clicked counter
-                return c + 1;
-            } else {
-                // The rest haven't changed
-                return c;
-            }
-        });
-        setCounters(nextCounters);
+    let initialCounters = [0, 0, 0];
+
+    export default function CounterList() {
+    	const [counters, setCounters] = useState(
+    		initialCounters
+    	);
+
+    	function handleIncrementClick(index) {
+    		const nextCounters = counters.map((c, i) => {
+    			if (i === index) {
+    				// Increment the clicked counter
+    				return c + 1;
+    			} else {
+    				// The rest haven't changed
+    				return c;
+    			}
+    		});
+    		setCounters(nextCounters);
+    	}
+
+    	return (
+    		<ul>
+    			{counters.map((counter, i) => (
+    				<li key={i}>
+    					{counter}
+    					<button
+    						onClick={() => {
+    							handleIncrementClick(i);
+    						}}
+    					>
+    						+1
+    					</button>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
+    ```
 
-    return (
-        <ul>
-            {counters.map((counter, i) => (
-                <li key={i}>
-                    {counter}
-                    <button
-                        onClick={() => {
-                            handleIncrementClick(i);
-                        }}
-                    >
-                        +1
-                    </button>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+    </div>
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-4.png)
 
 <!-- 0024.part.md -->
 
@@ -336,51 +380,61 @@ export default function CounterList() {
 
 <!-- 0025.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-let nextId = 3;
-const initialArtists = [
-    { id: 0, name: 'Marta Colvin Andrade' },
-    { id: 1, name: 'Lamidi Olonade Fakeye' },
-    { id: 2, name: 'Louise Nevelson' },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function List() {
-    const [name, setName] = useState('');
-    const [artists, setArtists] = useState(initialArtists);
+    ```js
+    import { useState } from 'react';
 
-    function handleClick() {
-        const insertAt = 1; // Could be any index
-        const nextArtists = [
-            // Items before the insertion point:
-            ...artists.slice(0, insertAt),
-            // New item:
-            { id: nextId++, name: name },
-            // Items after the insertion point:
-            ...artists.slice(insertAt),
-        ];
-        setArtists(nextArtists);
-        setName('');
+    let nextId = 3;
+    const initialArtists = [
+    	{ id: 0, name: 'Marta Colvin Andrade' },
+    	{ id: 1, name: 'Lamidi Olonade Fakeye' },
+    	{ id: 2, name: 'Louise Nevelson' },
+    ];
+
+    export default function List() {
+    	const [name, setName] = useState('');
+    	const [artists, setArtists] = useState(initialArtists);
+
+    	function handleClick() {
+    		const insertAt = 1; // Could be any index
+    		const nextArtists = [
+    			// Items before the insertion point:
+    			...artists.slice(0, insertAt),
+    			// New item:
+    			{ id: nextId++, name: name },
+    			// Items after the insertion point:
+    			...artists.slice(insertAt),
+    		];
+    		setArtists(nextArtists);
+    		setName('');
+    	}
+
+    	return (
+    		<>
+    			<h1>Inspiring sculptors:</h1>
+    			<input
+    				value={name}
+    				onChange={(e) => setName(e.target.value)}
+    			/>
+    			<button onClick={handleClick}>Insert</button>
+    			<ul>
+    				{artists.map((artist) => (
+    					<li key={artist.id}>{artist.name}</li>
+    				))}
+    			</ul>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <h1>Inspiring sculptors:</h1>
-            <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <button onClick={handleClick}>Insert</button>
-            <ul>
-                {artists.map((artist) => (
-                    <li key={artist.id}>{artist.name}</li>
-                ))}
-            </ul>
-        </>
-    );
-}
-```
+    </div>
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-5.png)
 
 <!-- 0028.part.md -->
 
@@ -392,41 +446,49 @@ export default function List() {
 
 Например:
 
-<!-- 0029.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-let nextId = 3;
-const initialList = [
-    { id: 0, title: 'Big Bellies' },
-    { id: 1, title: 'Lunar Landscape' },
-    { id: 2, title: 'Terracotta Army' },
-];
+    ```js
+    import { useState } from 'react';
 
-export default function List() {
-    const [list, setList] = useState(initialList);
+    let nextId = 3;
+    const initialList = [
+    	{ id: 0, title: 'Big Bellies' },
+    	{ id: 1, title: 'Lunar Landscape' },
+    	{ id: 2, title: 'Terracotta Army' },
+    ];
 
-    function handleClick() {
-        const nextList = [...list];
-        nextList.reverse();
-        setList(nextList);
+    export default function List() {
+    	const [list, setList] = useState(initialList);
+
+    	function handleClick() {
+    		const nextList = [...list];
+    		nextList.reverse();
+    		setList(nextList);
+    	}
+
+    	return (
+    		<>
+    			<button onClick={handleClick}>Reverse</button>
+    			<ul>
+    				{list.map((artwork) => (
+    					<li key={artwork.id}>
+    						{artwork.title}
+    					</li>
+    				))}
+    			</ul>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <button onClick={handleClick}>Reverse</button>
-            <ul>
-                {list.map((artwork) => (
-                    <li key={artwork.id}>
-                        {artwork.title}
-                    </li>
-                ))}
-            </ul>
-        </>
-    );
-}
-```
+    </div>
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-6.png)
 
 <!-- 0030.part.md -->
 
@@ -444,7 +506,7 @@ setList(nextList);
 
 <!-- 0032.part.md -->
 
-Хотя `nextList` и `list` являются двумя разными массивами, **`nextList[0]` и `list[0]` указывают на один и тот же объект.** Поэтому, изменяя `nextList[0].seen`, вы также изменяете `list[0].seen`. Это мутация состояния, которой следует избегать! Вы можете решить эту проблему аналогично [обновлению вложенных объектов JavaScript](updating-objects-in-state.md#updating-a-nested-object)- путем копирования отдельных элементов, которые вы хотите изменить, вместо их мутации. Вот как это делается.
+Хотя `nextList` и `list` являются двумя разными массивами, **`nextList[0]` и `list[0]` указывают на один и тот же объект.** Поэтому, изменяя `nextList[0].seen`, вы также изменяете `list[0].seen`. Это мутация состояния, которой следует избегать! Вы можете решить эту проблему аналогично [обновлению вложенных объектов JavaScript](updating-objects-in-state.md#updating-a-nested-object), путем копирования отдельных элементов, которые вы хотите изменить, вместо их мутации. Вот как это делается.
 
 ## Обновление объектов внутри массивов
 
@@ -454,81 +516,89 @@ setList(nextList);
 
 В этом примере два отдельных списка произведений искусства имеют одинаковое начальное состояние. Они должны быть изолированы, но из-за мутации их состояние случайно стало общим, и установка флажка в одном списке влияет на другой список:
 
-<!-- 0033.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-let nextId = 3;
-const initialList = [
-    { id: 0, title: 'Big Bellies', seen: false },
-    { id: 1, title: 'Lunar Landscape', seen: false },
-    { id: 2, title: 'Terracotta Army', seen: true },
-];
+    ```js
+    import { useState } from 'react';
 
-export default function BucketList() {
-    const [myList, setMyList] = useState(initialList);
-    const [yourList, setYourList] = useState(initialList);
+    let nextId = 3;
+    const initialList = [
+    	{ id: 0, title: 'Big Bellies', seen: false },
+    	{ id: 1, title: 'Lunar Landscape', seen: false },
+    	{ id: 2, title: 'Terracotta Army', seen: true },
+    ];
 
-    function handleToggleMyList(artworkId, nextSeen) {
-        const myNextList = [...myList];
-        const artwork = myNextList.find(
-            (a) => a.id === artworkId
-        );
-        artwork.seen = nextSeen;
-        setMyList(myNextList);
+    export default function BucketList() {
+    	const [myList, setMyList] = useState(initialList);
+    	const [yourList, setYourList] = useState(initialList);
+
+    	function handleToggleMyList(artworkId, nextSeen) {
+    		const myNextList = [...myList];
+    		const artwork = myNextList.find(
+    			(a) => a.id === artworkId
+    		);
+    		artwork.seen = nextSeen;
+    		setMyList(myNextList);
+    	}
+
+    	function handleToggleYourList(artworkId, nextSeen) {
+    		const yourNextList = [...yourList];
+    		const artwork = yourNextList.find(
+    			(a) => a.id === artworkId
+    		);
+    		artwork.seen = nextSeen;
+    		setYourList(yourNextList);
+    	}
+
+    	return (
+    		<>
+    			<h1>Art Bucket List</h1>
+    			<h2>My list of art to see:</h2>
+    			<ItemList
+    				artworks={myList}
+    				onToggle={handleToggleMyList}
+    			/>
+    			<h2>Your list of art to see:</h2>
+    			<ItemList
+    				artworks={yourList}
+    				onToggle={handleToggleYourList}
+    			/>
+    		</>
+    	);
     }
 
-    function handleToggleYourList(artworkId, nextSeen) {
-        const yourNextList = [...yourList];
-        const artwork = yourNextList.find(
-            (a) => a.id === artworkId
-        );
-        artwork.seen = nextSeen;
-        setYourList(yourNextList);
+    function ItemList({ artworks, onToggle }) {
+    	return (
+    		<ul>
+    			{artworks.map((artwork) => (
+    				<li key={artwork.id}>
+    					<label>
+    						<input
+    							type="checkbox"
+    							checked={artwork.seen}
+    							onChange={(e) => {
+    								onToggle(
+    									artwork.id,
+    									e.target.checked
+    								);
+    							}}
+    						/>
+    						{artwork.title}
+    					</label>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <h1>Art Bucket List</h1>
-            <h2>My list of art to see:</h2>
-            <ItemList
-                artworks={myList}
-                onToggle={handleToggleMyList}
-            />
-            <h2>Your list of art to see:</h2>
-            <ItemList
-                artworks={yourList}
-                onToggle={handleToggleYourList}
-            />
-        </>
-    );
-}
+    </div>
 
-function ItemList({ artworks, onToggle }) {
-    return (
-        <ul>
-            {artworks.map((artwork) => (
-                <li key={artwork.id}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={artwork.seen}
-                            onChange={(e) => {
-                                onToggle(
-                                    artwork.id,
-                                    e.target.checked
-                                );
-                            }}
-                        />
-                        {artwork.title}
-                    </label>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-7.png)
 
 <!-- 0034.part.md -->
 
@@ -571,91 +641,99 @@ setMyList(
 
 При таком подходе ни один из существующих элементов состояния не изменяется, и ошибка исправлена:
 
-<!-- 0039.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-let nextId = 3;
-const initialList = [
-    { id: 0, title: 'Big Bellies', seen: false },
-    { id: 1, title: 'Lunar Landscape', seen: false },
-    { id: 2, title: 'Terracotta Army', seen: true },
-];
+    ```js
+    import { useState } from 'react';
 
-export default function BucketList() {
-    const [myList, setMyList] = useState(initialList);
-    const [yourList, setYourList] = useState(initialList);
+    let nextId = 3;
+    const initialList = [
+    	{ id: 0, title: 'Big Bellies', seen: false },
+    	{ id: 1, title: 'Lunar Landscape', seen: false },
+    	{ id: 2, title: 'Terracotta Army', seen: true },
+    ];
 
-    function handleToggleMyList(artworkId, nextSeen) {
-        setMyList(
-            myList.map((artwork) => {
-                if (artwork.id === artworkId) {
-                    // Create a *new* object with changes
-                    return { ...artwork, seen: nextSeen };
-                } else {
-                    // No changes
-                    return artwork;
-                }
-            })
-        );
+    export default function BucketList() {
+    	const [myList, setMyList] = useState(initialList);
+    	const [yourList, setYourList] = useState(initialList);
+
+    	function handleToggleMyList(artworkId, nextSeen) {
+    		setMyList(
+    			myList.map((artwork) => {
+    				if (artwork.id === artworkId) {
+    					// Create a *new* object with changes
+    					return { ...artwork, seen: nextSeen };
+    				} else {
+    					// No changes
+    					return artwork;
+    				}
+    			})
+    		);
+    	}
+
+    	function handleToggleYourList(artworkId, nextSeen) {
+    		setYourList(
+    			yourList.map((artwork) => {
+    				if (artwork.id === artworkId) {
+    					// Create a *new* object with changes
+    					return { ...artwork, seen: nextSeen };
+    				} else {
+    					// No changes
+    					return artwork;
+    				}
+    			})
+    		);
+    	}
+
+    	return (
+    		<>
+    			<h1>Art Bucket List</h1>
+    			<h2>My list of art to see:</h2>
+    			<ItemList
+    				artworks={myList}
+    				onToggle={handleToggleMyList}
+    			/>
+    			<h2>Your list of art to see:</h2>
+    			<ItemList
+    				artworks={yourList}
+    				onToggle={handleToggleYourList}
+    			/>
+    		</>
+    	);
     }
 
-    function handleToggleYourList(artworkId, nextSeen) {
-        setYourList(
-            yourList.map((artwork) => {
-                if (artwork.id === artworkId) {
-                    // Create a *new* object with changes
-                    return { ...artwork, seen: nextSeen };
-                } else {
-                    // No changes
-                    return artwork;
-                }
-            })
-        );
+    function ItemList({ artworks, onToggle }) {
+    	return (
+    		<ul>
+    			{artworks.map((artwork) => (
+    				<li key={artwork.id}>
+    					<label>
+    						<input
+    							type="checkbox"
+    							checked={artwork.seen}
+    							onChange={(e) => {
+    								onToggle(
+    									artwork.id,
+    									e.target.checked
+    								);
+    							}}
+    						/>
+    						{artwork.title}
+    					</label>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <h1>Art Bucket List</h1>
-            <h2>My list of art to see:</h2>
-            <ItemList
-                artworks={myList}
-                onToggle={handleToggleMyList}
-            />
-            <h2>Your list of art to see:</h2>
-            <ItemList
-                artworks={yourList}
-                onToggle={handleToggleYourList}
-            />
-        </>
-    );
-}
+    </div>
 
-function ItemList({ artworks, onToggle }) {
-    return (
-        <ul>
-            {artworks.map((artwork) => (
-                <li key={artwork.id}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={artwork.seen}
-                            onChange={(e) => {
-                                onToggle(
-                                    artwork.id,
-                                    e.target.checked
-                                );
-                            }}
-                        />
-                        {artwork.title}
-                    </label>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-7.png)
 
 <!-- 0040.part.md -->
 
@@ -670,82 +748,111 @@ function ItemList({ artworks, onToggle }) {
 
 Вот пример Art Bucket List, переписанный с помощью Immer:
 
-<!-- 0041.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
-import { useImmer } from 'use-immer';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-let nextId = 3;
-const initialList = [
-    { id: 0, title: 'Big Bellies', seen: false },
-    { id: 1, title: 'Lunar Landscape', seen: false },
-    { id: 2, title: 'Terracotta Army', seen: true },
-];
+    ```js
+    import { useState } from 'react';
+    import { useImmer } from 'use-immer';
 
-export default function BucketList() {
-    const [myList, updateMyList] = useImmer(initialList);
-    const [yourList, updateYourList] = useImmer(
-        initialList
-    );
+    let nextId = 3;
+    const initialList = [
+    	{ id: 0, title: 'Big Bellies', seen: false },
+    	{ id: 1, title: 'Lunar Landscape', seen: false },
+    	{ id: 2, title: 'Terracotta Army', seen: true },
+    ];
 
-    function handleToggleMyList(id, nextSeen) {
-        updateMyList((draft) => {
-            const artwork = draft.find((a) => a.id === id);
-            artwork.seen = nextSeen;
-        });
+    export default function BucketList() {
+    	const [myList, updateMyList] = useImmer(initialList);
+    	const [yourList, updateYourList] = useImmer(
+    		initialList
+    	);
+
+    	function handleToggleMyList(id, nextSeen) {
+    		updateMyList((draft) => {
+    			const artwork = draft.find((a) => a.id === id);
+    			artwork.seen = nextSeen;
+    		});
+    	}
+
+    	function handleToggleYourList(artworkId, nextSeen) {
+    		updateYourList((draft) => {
+    			const artwork = draft.find(
+    				(a) => a.id === artworkId
+    			);
+    			artwork.seen = nextSeen;
+    		});
+    	}
+
+    	return (
+    		<>
+    			<h1>Art Bucket List</h1>
+    			<h2>My list of art to see:</h2>
+    			<ItemList
+    				artworks={myList}
+    				onToggle={handleToggleMyList}
+    			/>
+    			<h2>Your list of art to see:</h2>
+    			<ItemList
+    				artworks={yourList}
+    				onToggle={handleToggleYourList}
+    			/>
+    		</>
+    	);
     }
 
-    function handleToggleYourList(artworkId, nextSeen) {
-        updateYourList((draft) => {
-            const artwork = draft.find(
-                (a) => a.id === artworkId
-            );
-            artwork.seen = nextSeen;
-        });
+    function ItemList({ artworks, onToggle }) {
+    	return (
+    		<ul>
+    			{artworks.map((artwork) => (
+    				<li key={artwork.id}>
+    					<label>
+    						<input
+    							type="checkbox"
+    							checked={artwork.seen}
+    							onChange={(e) => {
+    								onToggle(
+    									artwork.id,
+    									e.target.checked
+    								);
+    							}}
+    						/>
+    						{artwork.title}
+    					</label>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <h1>Art Bucket List</h1>
-            <h2>My list of art to see:</h2>
-            <ItemList
-                artworks={myList}
-                onToggle={handleToggleMyList}
-            />
-            <h2>Your list of art to see:</h2>
-            <ItemList
-                artworks={yourList}
-                onToggle={handleToggleYourList}
-            />
-        </>
-    );
-}
+    </div>
 
-function ItemList({ artworks, onToggle }) {
-    return (
-        <ul>
-            {artworks.map((artwork) => (
-                <li key={artwork.id}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={artwork.seen}
-                            onChange={(e) => {
-                                onToggle(
-                                    artwork.id,
-                                    e.target.checked
-                                );
-                            }}
-                        />
-                        {artwork.title}
-                    </label>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+=== "package.json"
+
+    ```json
+    {
+    	"dependencies": {
+    		"immer": "1.7.3",
+    		"react": "latest",
+    		"react-dom": "latest",
+    		"react-scripts": "latest",
+    		"use-immer": "0.5.1"
+    	},
+    	"scripts": {
+    		"start": "react-scripts start",
+    		"build": "react-scripts build",
+    		"test": "react-scripts test --env=jsdom",
+    		"eject": "react-scripts eject"
+    	},
+    	"devDependencies": {}
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-7.png)
 
 <!-- 0044.part.md -->
 
@@ -766,7 +873,7 @@ updateMyTodos((draft) => {
 
 За кулисами Immer всегда строит следующее состояние с нуля в соответствии с изменениями, которые вы внесли в `draft`. Это позволяет сделать обработчики событий очень лаконичными, не изменяя состояние.
 
-!!!tip "Резюме"
+!!!tip "Итоги"
 
     -   Вы можете поместить массивы в состояние, но вы не можете их изменить.
     -   Вместо того, чтобы изменять массив, создайте _новую_ его версию и обновите состояние на нее.
@@ -774,7 +881,9 @@ updateMyTodos((draft) => {
     -   Вы можете использовать `filter()` и `map()` для создания новых массивов с отфильтрованными или преобразованными элементами.
     -   Вы можете использовать Immer для сохранения краткости кода.
 
-#### Обновление элемента в корзине
+## Задачи
+
+### 1. Обновление элемента в корзине
 
 Заполните логику `handleIncreaseClick` так, чтобы нажатие "+" увеличивало соответствующее число:
 
@@ -895,7 +1004,7 @@ export default function ShoppingCart() {
 
 <!-- 0054.part.md -->
 
-#### Удаление товара из корзины
+### 2. Удаление товара из корзины
 
 В этой корзине есть рабочая кнопка "+", но кнопка "-" ничего не делает. Вам нужно добавить обработчик события, чтобы нажатие на нее уменьшало `count` соответствующего товара. Если вы нажмете "-", когда счетчик будет равен 1, товар должен автоматически удалиться из корзины. Убедитесь, что он никогда не показывает 0.
 
@@ -1052,7 +1161,7 @@ export default function ShoppingCart() {
 }
 ```
 
-#### Исправьте мутации, используя немутационные методы
+### 3. Исправьте мутации, используя немутационные методы
 
 В этом примере все обработчики событий в `App.js` используют мутацию. В результате редактирование и удаление todos не работает. Перепишите `handleAddTodo`, `handleChangeTodo` и `handleDeleteTodo`, чтобы они использовали немутационные методы:
 
@@ -1384,7 +1493,7 @@ function Task({ todo, onChange, onDelete }) {
 }
 ```
 
-#### Исправьте мутации с помощью Immer
+### 4. Исправьте мутации с помощью Immer
 
 Это тот же пример, что и в предыдущей задаче. На этот раз исправьте мутации с помощью Immer. Для вашего удобства, `useImmer` уже импортирован, поэтому вам нужно изменить переменную состояния `todos`, чтобы использовать его.
 
@@ -1893,3 +2002,7 @@ function Task({ todo, onChange, onDelete }) {
 С Immer вы можете выбрать стиль, который кажется наиболее естественным для каждого отдельного случая.
 
 <!-- 0109.part.md -->
+
+## Ссылки
+
+-   [https://react.dev/learn/updating-arrays-in-state](https://react.dev/learn/updating-arrays-in-state)

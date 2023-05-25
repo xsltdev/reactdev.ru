@@ -2,10 +2,12 @@
 
 Переменные состояния могут выглядеть как обычные переменные JavaScript, которые можно читать и записывать. Однако состояние ведет себя скорее как моментальный снимок. Установка состояния не изменяет уже имеющуюся переменную состояния, а вместо этого вызывает повторный рендеринг.
 
--   Как установка состояния вызывает повторный рендеринг
--   Когда и как обновляется состояние
--   Почему состояние не обновляется сразу после его установки
--   Как обработчики событий получают доступ к "снимку" состояния
+!!!tip "Вы узнаете"
+
+    -   Как установка состояния вызывает повторный рендеринг
+    -   Когда и как обновляется состояние
+    -   Почему состояние не обновляется сразу после его установки
+    -   Как обработчики событий получают доступ к "снимку" состояния
 
 ## Установка состояния запускает рендеринг
 
@@ -15,37 +17,43 @@
 
 <!-- 0001.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Form() {
-    const [isSent, setIsSent] = useState(false);
-    const [message, setMessage] = useState('Hi!');
-    if (isSent) {
-        return <h1>Your message is on its way!</h1>;
+    ```js
+    import { useState } from 'react';
+
+    export default function Form() {
+    	const [isSent, setIsSent] = useState(false);
+    	const [message, setMessage] = useState('Hi!');
+    	if (isSent) {
+    		return <h1>Your message is on its way!</h1>;
+    	}
+    	return (
+    		<form
+    			onSubmit={(e) => {
+    				e.preventDefault();
+    				setIsSent(true);
+    				sendMessage(message);
+    			}}
+    		>
+    			<textarea
+    				placeholder="Message"
+    				value={message}
+    				onChange={(e) => setMessage(e.target.value)}
+    			/>
+    			<button type="submit">Send</button>
+    		</form>
+    	);
     }
-    return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                setIsSent(true);
-                sendMessage(message);
-            }}
-        >
-            <textarea
-                placeholder="Message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-            />
-            <button type="submit">Send</button>
-        </form>
-    );
-}
 
-function sendMessage(message) {
-    // ...
-}
-```
+    function sendMessage(message) {
+    	// ...
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](state-as-a-snapshot-1.png)
 
 Вот что происходит, когда вы нажимаете на кнопку:
 
@@ -57,7 +65,7 @@ function sendMessage(message) {
 
 ## Рендеринг делает моментальный снимок времени
 
-["Rendering"](render-and-commit.md#step-2-react-renders-your-components) означает, что React вызывает ваш компонент, который является функцией. JSX, который вы возвращаете из этой функции, - это как снимок пользовательского интерфейса во времени. Его реквизиты, обработчики событий и локальные переменные были рассчитаны _используя его состояние на момент рендеринга_.
+["Rendering"](render-and-commit.md#step-2-react-renders-your-components) означает, что React вызывает ваш компонент, который является функцией. JSX, который вы возвращаете из этой функции, — это как снимок пользовательского интерфейса во времени. Его реквизиты, обработчики событий и локальные переменные были рассчитаны _используя его состояние на момент рендеринга_.
 
 В отличие от фотографии или кадра фильма, возвращаемый вами "снимок" пользовательского интерфейса является интерактивным. Он включает в себя логику, например, обработчики событий, которые определяют, что происходит в ответ на входные данные. React обновляет экран в соответствии с этим снимком и подключает обработчики событий. В результате нажатие кнопки вызовет обработчик нажатия из вашего JSX.
 
@@ -77,30 +85,34 @@ function sendMessage(message) {
 
 Посмотрите, что произойдет, когда вы нажмете кнопку "+3":
 
-<!-- 0005.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    ```js
+    import { useState } from 'react';
 
-export default function Counter() {
-    const [number, setNumber] = useState(0);
+    export default function Counter() {
+    	const [number, setNumber] = useState(0);
 
-    return (
-        <>
-            <h1>{number}</h1>
-            <button
-                onClick={() => {
-                    setNumber(number + 1);
-                    setNumber(number + 1);
-                    setNumber(number + 1);
-                }}
-            >
-                +3
-            </button>
-        </>
-    );
-}
-```
+    	return (
+    		<>
+    			<h1>{number}</h1>
+    			<button
+    				onClick={() => {
+    					setNumber(number + 1);
+    					setNumber(number + 1);
+    					setNumber(number + 1);
+    				}}
+    			>
+    				+3
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](state-as-a-snapshot-2.png)
 
 Обратите внимание, что `number` увеличивается только один раз за клик!
 
@@ -175,29 +187,33 @@ export default function Counter() {
 
 Что ж, это было забавно. Попробуйте угадать, о чем предупредит нажатие на эту кнопку:
 
-<!-- 0015.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    ```js
+    import { useState } from 'react';
 
-export default function Counter() {
-    const [number, setNumber] = useState(0);
+    export default function Counter() {
+    	const [number, setNumber] = useState(0);
 
-    return (
-        <>
-            <h1>{number}</h1>
-            <button
-                onClick={() => {
-                    setNumber(number + 5);
-                    alert(number);
-                }}
-            >
-                +5
-            </button>
-        </>
-    );
-}
-```
+    	return (
+    		<>
+    			<h1>{number}</h1>
+    			<button
+    				onClick={() => {
+    					setNumber(number + 5);
+    					alert(number);
+    				}}
+    			>
+    				+5
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](state-as-a-snapshot-3.png)
 
 <!-- 0018.part.md -->
 
@@ -214,31 +230,35 @@ alert(0);
 
 Но что если поставить таймер на оповещение, чтобы оно срабатывало только после того, как компонент перерендерится? Будет ли он говорить "0" или "5"? Угадайте!
 
-<!-- 0021.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    ```js
+    import { useState } from 'react';
 
-export default function Counter() {
-    const [number, setNumber] = useState(0);
+    export default function Counter() {
+    	const [number, setNumber] = useState(0);
 
-    return (
-        <>
-            <h1>{number}</h1>
-            <button
-                onClick={() => {
-                    setNumber(number + 5);
-                    setTimeout(() => {
-                        alert(number);
-                    }, 3000);
-                }}
-            >
-                +5
-            </button>
-        </>
-    );
-}
-```
+    	return (
+    		<>
+    			<h1>{number}</h1>
+    			<button
+    				onClick={() => {
+    					setNumber(number + 5);
+    					setTimeout(() => {
+    						alert(number);
+    					}, 3000);
+    				}}
+    			>
+    				+5
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](state-as-a-snapshot-3.png)
 
 <!-- 0024.part.md -->
 
@@ -268,42 +288,48 @@ setTimeout(() => {
 
 <!-- 0027.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Form() {
-    const [to, setTo] = useState('Alice');
-    const [message, setMessage] = useState('Hello');
+    ```js
+    import { useState } from 'react';
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setTimeout(() => {
-            alert(`You said ${message} to ${to}`);
-        }, 5000);
+    export default function Form() {
+    	const [to, setTo] = useState('Alice');
+    	const [message, setMessage] = useState('Hello');
+
+    	function handleSubmit(e) {
+    		e.preventDefault();
+    		setTimeout(() => {
+    			alert(`You said ${message} to ${to}`);
+    		}, 5000);
+    	}
+
+    	return (
+    		<form onSubmit={handleSubmit}>
+    			<label>
+    				To:{' '}
+    				<select
+    					value={to}
+    					onChange={(e) => setTo(e.target.value)}
+    				>
+    					<option value="Alice">Alice</option>
+    					<option value="Bob">Bob</option>
+    				</select>
+    			</label>
+    			<textarea
+    				placeholder="Message"
+    				value={message}
+    				onChange={(e) => setMessage(e.target.value)}
+    			/>
+    			<button type="submit">Send</button>
+    		</form>
+    	);
     }
+    ```
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                To:{' '}
-                <select
-                    value={to}
-                    onChange={(e) => setTo(e.target.value)}
-                >
-                    <option value="Alice">Alice</option>
-                    <option value="Bob">Bob</option>
-                </select>
-            </label>
-            <textarea
-                placeholder="Message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-            />
-            <button type="submit">Send</button>
-        </form>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](state-as-a-snapshot-4.png)
 
 **React сохраняет значения состояния "фиксированными" в обработчиках событий одного рендера.** Вам не нужно беспокоиться о том, изменилось ли состояние во время выполнения кода.
 
@@ -319,38 +345,44 @@ export default function Form() {
     -   Вы можете мысленно подставлять состояние в обработчики событий, аналогично тому, как вы думаете о рендеринге JSX.
     -   Обработчики событий, созданные в прошлом, имеют значения состояния из рендера, в котором они были созданы.
 
-#### Реализация светофора
+## Задача
+
+### 1. Реализация светофора
 
 Здесь представлен компонент светофора для пешеходного перехода, который включается при нажатии на кнопку:
 
-<!-- 0031.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    ```js
+    import { useState } from 'react';
 
-export default function TrafficLight() {
-    const [walk, setWalk] = useState(true);
+    export default function TrafficLight() {
+    	const [walk, setWalk] = useState(true);
 
-    function handleClick() {
-        setWalk(!walk);
+    	function handleClick() {
+    		setWalk(!walk);
+    	}
+
+    	return (
+    		<>
+    			<button onClick={handleClick}>
+    				Change to {walk ? 'Stop' : 'Walk'}
+    			</button>
+    			<h1
+    				style={{
+    					color: walk ? 'darkgreen' : 'darkred',
+    				}}
+    			>
+    				{walk ? 'Walk' : 'Stop'}
+    			</h1>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <button onClick={handleClick}>
-                Change to {walk ? 'Stop' : 'Walk'}
-            </button>
-            <h1
-                style={{
-                    color: walk ? 'darkgreen' : 'darkred',
-                }}
-            >
-                {walk ? 'Walk' : 'Stop'}
-            </h1>
-        </>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](state-as-a-snapshot-5.png)
 
 <!-- 0034.part.md -->
 
@@ -358,72 +390,72 @@ export default function TrafficLight() {
 
 Есть ли разница в том, поместить ли `alert` до или после вызова `setWalk`?
 
-Ваше `оповещение` должно выглядеть следующим образом:
+???success "Показать решение"
 
-<!-- 0035.part.md -->
+    Ваше `оповещение` должно выглядеть следующим образом:
 
-```js
-import { useState } from 'react';
+    === "App.js"
 
-export default function TrafficLight() {
-    const [walk, setWalk] = useState(true);
+    	```js
+    	import { useState } from 'react';
 
-    function handleClick() {
-        setWalk(!walk);
-        alert(walk ? 'Stop is next' : 'Walk is next');
-    }
+    	export default function TrafficLight() {
+    		const [walk, setWalk] = useState(true);
 
-    return (
-        <>
-            <button onClick={handleClick}>
-                Change to {walk ? 'Stop' : 'Walk'}
-            </button>
-            <h1
-                style={{
-                    color: walk ? 'darkgreen' : 'darkred',
-                }}
-            >
-                {walk ? 'Walk' : 'Stop'}
-            </h1>
-        </>
-    );
-}
-```
+    		function handleClick() {
+    			setWalk(!walk);
+    			alert(walk ? 'Stop is next' : 'Walk is next');
+    		}
 
-<!-- 0038.part.md -->
+    		return (
+    			<>
+    				<button onClick={handleClick}>
+    					Change to {walk ? 'Stop' : 'Walk'}
+    				</button>
+    				<h1
+    					style={{
+    						color: walk ? 'darkgreen' : 'darkred',
+    					}}
+    				>
+    					{walk ? 'Walk' : 'Stop'}
+    				</h1>
+    			</>
+    		);
+    	}
+    	```
 
-Поместите ли вы его до или после вызова `setWalk`, не имеет никакого значения. Значение `walk` в этом рендере фиксировано. Вызов `setWalk` изменит его только для _следующего_ рендера, но не повлияет на обработчик события предыдущего рендера.
+    === "Результат"
 
-Эта строка сначала может показаться неинтуитивной:
+    	![Результат](state-as-a-snapshot-5.png)
 
-<!-- 0039.part.md -->
+    Поместите ли вы его до или после вызова `setWalk`, не имеет никакого значения. Значение `walk` в этом рендере фиксировано. Вызов `setWalk` изменит его только для _следующего_ рендера, но не повлияет на обработчик события предыдущего рендера.
 
-```js
-alert(walk ? 'Stop is next' : 'Walk is next');
-```
+    Эта строка сначала может показаться неинтуитивной:
 
-<!-- 0040.part.md -->
+    ```js
+    alert(walk ? 'Stop is next' : 'Walk is next');
+    ```
 
-Но это имеет смысл, если прочитать это как: "Если светофор показывает "Идти сейчас", то в сообщении должно быть написано "Остановка следующая"". Переменная `walk` внутри вашего обработчика событий соответствует значению `walk` в рендере и не изменяется.
+    Но это имеет смысл, если прочитать это как: "Если светофор показывает "Идти сейчас", то в сообщении должно быть написано "Остановка следующая"". Переменная `walk` внутри вашего обработчика событий соответствует значению `walk` в рендере и не изменяется.
 
-Вы можете убедиться в правильности этого, применив метод подстановки. Когда `walk` имеет значение `true`, вы получите:
+    Вы можете убедиться в правильности этого, применив метод подстановки. Когда `walk` имеет значение `true`, вы получите:
 
-<!-- 0041.part.md -->
+    ```js
+    <button onClick={() => {
+    	setWalk(false);
+    	alert('Stop is next');
+    }}>
+    	Change to Stop
+    </button>
+    <h1 style={{color: 'darkgreen'}}>
+    	Walk
+    </h1>
+    ```
 
-```js
-<button onClick={() => {
-  setWalk(false);
-  alert('Stop is next');
-}}>
-  Change to Stop
-</button>
-<h1 style={{color: 'darkgreen'}}>
-  Walk
-</h1>
-```
-
-<!-- 0042.part.md -->
-
-Таким образом, нажатие "Change to Stop" ставит в очередь рендеринг с `walk`, установленным в `false`, и предупреждает "Stop is next".
+    Таким образом, нажатие "Change to Stop" ставит в очередь рендеринг с `walk`, установленным в `false`, и предупреждает "Stop is next".
 
 <!-- 0043.part.md -->
+
+## Ссылки
+
+-   [https://react.dev/learn/state-as-a-snapshot](https://react.dev/learn/state-as-a-snapshot)

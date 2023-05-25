@@ -13,28 +13,34 @@
 
 <!-- 0001.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Counter() {
-    const [number, setNumber] = useState(0);
+    ```js
+    import { useState } from 'react';
 
-    return (
-        <>
-            <h1>{number}</h1>
-            <button
-                onClick={() => {
-                    setNumber(number + 1);
-                    setNumber(number + 1);
-                    setNumber(number + 1);
-                }}
-            >
-                +3
-            </button>
-        </>
-    );
-}
-```
+    export default function Counter() {
+    	const [number, setNumber] = useState(0);
+
+    	return (
+    		<>
+    			<h1>{number}</h1>
+    			<button
+    				onClick={() => {
+    					setNumber(number + 1);
+    					setNumber(number + 1);
+    					setNumber(number + 1);
+    				}}
+    			>
+    				+3
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](queueing-a-series-of-state-updates-1.png)
 
 <!-- 0004.part.md -->
 
@@ -64,30 +70,34 @@ setNumber(0 + 1);
 
 Попробуйте теперь увеличить счетчик:
 
-<!-- 0007.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    ```js
+    import { useState } from 'react';
 
-export default function Counter() {
-    const [number, setNumber] = useState(0);
+    export default function Counter() {
+    	const [number, setNumber] = useState(0);
 
-    return (
-        <>
-            <h1>{number}</h1>
-            <button
-                onClick={() => {
-                    setNumber((n) => n + 1);
-                    setNumber((n) => n + 1);
-                    setNumber((n) => n + 1);
-                }}
-            >
-                +3
-            </button>
-        </>
-    );
-}
-```
+    	return (
+    		<>
+    			<h1>{number}</h1>
+    			<button
+    				onClick={() => {
+    					setNumber((n) => n + 1);
+    					setNumber((n) => n + 1);
+    					setNumber((n) => n + 1);
+    				}}
+    			>
+    				+3
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](queueing-a-series-of-state-updates-2.png)
 
 <!-- 0010.part.md -->
 
@@ -139,31 +149,33 @@ React сохраняет `3` как конечный результат и во�
 }}>
 ```
 
-<!-- 0014.part.md -->
+=== "App.js"
 
-<!-- 0015.part.md -->
+    ```js
+    import { useState } from 'react';
 
-```js
-import { useState } from 'react';
+    export default function Counter() {
+    	const [number, setNumber] = useState(0);
 
-export default function Counter() {
-    const [number, setNumber] = useState(0);
+    	return (
+    		<>
+    			<h1>{number}</h1>
+    			<button
+    				onClick={() => {
+    					setNumber(number + 5);
+    					setNumber((n) => n + 1);
+    				}}
+    			>
+    				Increase the number
+    			</button>
+    		</>
+    	);
+    }
+    ```
 
-    return (
-        <>
-            <h1>{number}</h1>
-            <button
-                onClick={() => {
-                    setNumber(number + 5);
-                    setNumber((n) => n + 1);
-                }}
-            >
-                Increase the number
-            </button>
-        </>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](queueing-a-series-of-state-updates-3.png)
 
 <!-- 0018.part.md -->
 
@@ -181,7 +193,9 @@ export default function Counter() {
 
 React сохраняет `6` как конечный результат и возвращает его из `useState`.
 
-Вы могли заметить, что `setState(5)` на самом деле работает как `setState(n => 5)`, но `n` не используется!
+!!!note ""
+
+    Вы могли заметить, что `setState(5)` на самом деле работает как `setState(n => 5)`, но `n` не используется!
 
 ### Что произойдет, если вы замените состояние после его обновления
 
@@ -197,32 +211,34 @@ React сохраняет `6` как конечный результат и во�
 }}>
 ```
 
-<!-- 0020.part.md -->
+=== "App.js"
 
-<!-- 0021.part.md -->
+    ```js
+    import { useState } from 'react';
 
-```js
-import { useState } from 'react';
+    export default function Counter() {
+    	const [number, setNumber] = useState(0);
 
-export default function Counter() {
-    const [number, setNumber] = useState(0);
+    	return (
+    		<>
+    			<h1>{number}</h1>
+    			<button
+    				onClick={() => {
+    					setNumber(number + 5);
+    					setNumber((n) => n + 1);
+    					setNumber(42);
+    				}}
+    			>
+    				Increase the number
+    			</button>
+    		</>
+    	);
+    }
+    ```
 
-    return (
-        <>
-            <h1>{number}</h1>
-            <button
-                onClick={() => {
-                    setNumber(number + 5);
-                    setNumber((n) => n + 1);
-                    setNumber(42);
-                }}
-            >
-                Increase the number
-            </button>
-        </>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](queueing-a-series-of-state-updates-4.png)
 
 <!-- 0024.part.md -->
 
@@ -265,13 +281,15 @@ setFriendCount((fc) => fc * 2);
 
 Если вы предпочитаете более многословный код, еще одним распространенным способом является повторение полного имени переменной состояния, например `setEnabled(enabled => !enabled)`, или использование префикса, например `setEnabled(prevEnabled => !prevEnabled)`.
 
-!!!tip "Резюме"
+!!!tip "Итоги"
 
     -   Установка состояния не изменяет переменную в существующем рендере, но запрашивает новый рендер.
     -   React обрабатывает обновления состояния после завершения работы обработчиков событий. Это называется пакетной обработкой.
     -   Чтобы обновить состояние несколько раз в одном событии, вы можете использовать функцию обновления `setNumber(n => n + 1)`.
 
-#### Исправление счетчика запросов
+## Задачи
+
+### 1. Исправление счетчика запросов
 
 Вы работаете над приложением для рынка предметов искусства, которое позволяет пользователю одновременно отправлять несколько заказов на предметы искусства. Каждый раз, когда пользователь нажимает кнопку "Купить", счетчик "Отложенные" должен увеличиваться на единицу. Через три секунды счетчик "Ожидающие" должен уменьшиться, а счетчик "Выполненные" - увеличиться.
 
@@ -279,290 +297,314 @@ setFriendCount((fc) => fc * 2);
 
 Почему так происходит? Исправьте оба счетчика.
 
-<!-- 0027.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    ```js
+    import { useState } from 'react';
 
-export default function RequestTracker() {
-    const [pending, setPending] = useState(0);
-    const [completed, setCompleted] = useState(0);
+    export default function RequestTracker() {
+    	const [pending, setPending] = useState(0);
+    	const [completed, setCompleted] = useState(0);
 
-    async function handleClick() {
-        setPending(pending + 1);
-        await delay(3000);
-        setPending(pending - 1);
-        setCompleted(completed + 1);
+    	async function handleClick() {
+    		setPending(pending + 1);
+    		await delay(3000);
+    		setPending(pending - 1);
+    		setCompleted(completed + 1);
+    	}
+
+    	return (
+    		<>
+    			<h3>Pending: {pending}</h3>
+    			<h3>Completed: {completed}</h3>
+    			<button onClick={handleClick}>Buy</button>
+    		</>
+    	);
     }
 
-    return (
-        <>
-            <h3>Pending: {pending}</h3>
-            <h3>Completed: {completed}</h3>
-            <button onClick={handleClick}>Buy</button>
-        </>
-    );
-}
-
-function delay(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
-```
-
-Внутри обработчика события `handleClick` значения `pending` и `completed` соответствуют тому, какими они были во время события click. Для первого рендера `pending` было `0`, поэтому `setPending(pending - 1)` становится `setPending(-1)`, что неправильно. Поскольку вы хотите _увеличить_ или _уменьшить_ счетчики, а не установить их в конкретное значение, определенное во время щелчка, вы можете вместо этого передать функции обновления:
-
-<!-- 0029.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function RequestTracker() {
-    const [pending, setPending] = useState(0);
-    const [completed, setCompleted] = useState(0);
-
-    async function handleClick() {
-        setPending((p) => p + 1);
-        await delay(3000);
-        setPending((p) => p - 1);
-        setCompleted((c) => c + 1);
+    function delay(ms) {
+    	return new Promise((resolve) => {
+    		setTimeout(resolve, ms);
+    	});
     }
+    ```
 
-    return (
-        <>
-            <h3>Pending: {pending}</h3>
-            <h3>Completed: {completed}</h3>
-            <button onClick={handleClick}>Buy</button>
-        </>
-    );
-}
+=== "Результат"
 
-function delay(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
-```
+    ![Результат](queueing-a-series-of-state-updates-5.png)
 
-<!-- 0030.part.md -->
+???success "Показать решение"
 
-Это гарантирует, что когда вы увеличиваете или уменьшаете счетчик, вы делаете это относительно его _последнего_ состояния, а не того состояния, которое было во время щелчка.
+    Внутри обработчика события `handleClick` значения `pending` и `completed` соответствуют тому, какими они были во время события click. Для первого рендера `pending` было `0`, поэтому `setPending(pending - 1)` становится `setPending(-1)`, что неправильно. Поскольку вы хотите _увеличить_ или _уменьшить_ счетчики, а не установить их в конкретное значение, определенное во время щелчка, вы можете вместо этого передать функции обновления:
 
-#### Реализуйте очередь состояний самостоятельно
+    === "App.js"
+
+    	```js
+    	import { useState } from 'react';
+
+    	export default function RequestTracker() {
+    		const [pending, setPending] = useState(0);
+    		const [completed, setCompleted] = useState(0);
+
+    		async function handleClick() {
+    			setPending((p) => p + 1);
+    			await delay(3000);
+    			setPending((p) => p - 1);
+    			setCompleted((c) => c + 1);
+    		}
+
+    		return (
+    			<>
+    				<h3>Pending: {pending}</h3>
+    				<h3>Completed: {completed}</h3>
+    				<button onClick={handleClick}>Buy</button>
+    			</>
+    		);
+    	}
+
+    	function delay(ms) {
+    		return new Promise((resolve) => {
+    			setTimeout(resolve, ms);
+    		});
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](queueing-a-series-of-state-updates-6.png)
+
+    <!-- 0030.part.md -->
+
+    Это гарантирует, что когда вы увеличиваете или уменьшаете счетчик, вы делаете это относительно его _последнего_ состояния, а не того состояния, которое было во время щелчка.
+
+### 2. Реализуйте очередь состояний самостоятельно
 
 В этом задании вам предстоит реализовать крошечную часть React с нуля! Это не так сложно, как кажется.
 
-Прокрутите предварительный просмотр песочницы. Обратите внимание, что в ней показаны **четыре тестовых случая.** Они соответствуют примерам, которые вы видели ранее на этой странице. Ваша задача - реализовать функцию `getFinalState` так, чтобы она возвращала правильный результат для каждого из этих случаев. Если вы реализуете функцию правильно, все четыре теста должны пройти.
+Прокрутите предварительный просмотр песочницы. Обратите внимание, что в ней показаны **четыре тестовых случая.** Они соответствуют примерам, которые вы видели ранее на этой странице. Ваша задача — реализовать функцию `getFinalState` так, чтобы она возвращала правильный результат для каждого из этих случаев. Если вы реализуете функцию правильно, все четыре теста должны пройти.
 
-Вы получите два аргумента: `baseState` - начальное состояние (например, `0`), и `queue` - массив, содержащий смесь чисел (например, `5`) и функций обновления (например, `n => n + 1`) в порядке их добавления.
+Вы получите два аргумента: `baseState` — начальное состояние (например, `0`), и `queue` — массив, содержащий смесь чисел (например, `5`) и функций обновления (например, `n => n + 1`) в порядке их добавления.
 
-Ваша задача - вернуть конечное состояние, точно так же, как таблицы на этой странице show!
-
-Если вы чувствуете, что застряли, начните с этой структуры кода:
+Ваша задача — вернуть конечное состояние, точно так же, как таблицы на этой странице show!
 
 <!-- 0031.part.md -->
 
-```js
-export function getFinalState(baseState, queue) {
-    let finalState = baseState;
+=== "processQueue.js"
 
-    for (let update of queue) {
-        if (typeof update === 'function') {
-            // TODO: apply the updater function
-        } else {
-            // TODO: replace the state
-        }
+    ```js
+    export function getFinalState(baseState, queue) {
+    	let finalState = baseState;
+
+    	// TODO: do something with the queue...
+
+    	return finalState;
+    }
+    ```
+
+=== "App.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    import { getFinalState } from './processQueue.js';
+
+    function increment(n) {
+    	return n + 1;
+    }
+    increment.toString = () => 'n => n+1';
+
+    export default function App() {
+    	return (
+    		<>
+    			<TestCase
+    				baseState={0}
+    				queue={[1, 1, 1]}
+    				expected={1}
+    			/>
+    			<hr />
+    			<TestCase
+    				baseState={0}
+    				queue={[increment, increment, increment]}
+    				expected={3}
+    			/>
+    			<hr />
+    			<TestCase
+    				baseState={0}
+    				queue={[5, increment]}
+    				expected={6}
+    			/>
+    			<hr />
+    			<TestCase
+    				baseState={0}
+    				queue={[5, increment, 42]}
+    				expected={42}
+    			/>
+    		</>
+    	);
     }
 
-    return finalState;
-}
-```
-
-<!-- 0032.part.md -->
-
-Заполните недостающие строки!
-
-<!-- 0033.part.md -->
-
-```js
-export function getFinalState(baseState, queue) {
-    let finalState = baseState;
-
-    // TODO: do something with the queue...
-
-    return finalState;
-}
-```
-
-<!-- 0034.part.md -->
-
-<!-- 0035.part.md -->
-
-```js
-import { getFinalState } from './processQueue.js';
-
-function increment(n) {
-    return n + 1;
-}
-increment.toString = () => 'n => n+1';
-
-export default function App() {
-    return (
-        <>
-            <TestCase
-                baseState={0}
-                queue={[1, 1, 1]}
-                expected={1}
-            />
-            <hr />
-            <TestCase
-                baseState={0}
-                queue={[increment, increment, increment]}
-                expected={3}
-            />
-            <hr />
-            <TestCase
-                baseState={0}
-                queue={[5, increment]}
-                expected={6}
-            />
-            <hr />
-            <TestCase
-                baseState={0}
-                queue={[5, increment, 42]}
-                expected={42}
-            />
-        </>
-    );
-}
-
-function TestCase({ baseState, queue, expected }) {
-    const actual = getFinalState(baseState, queue);
-    return (
-        <>
-            <p>
-                Base state: <b>{baseState}</b>
-            </p>
-            <p>
-                Queue: <b>[{queue.join(', ')}]</b>
-            </p>
-            <p>
-                Expected result: <b>{expected}</b>
-            </p>
-            <p
-                style={{
-                    color:
-                        actual === expected
-                            ? 'green'
-                            : 'red',
-                }}
-            >
-                Your result: <b>{actual}</b> (
-                {actual === expected ? 'correct' : 'wrong'})
-            </p>
-        </>
-    );
-}
-```
-
-<!-- 0036.part.md -->
-
-Это точный алгоритм, описанный на этой странице, который React использует для вычисления конечного состояния:
-
-<!-- 0037.part.md -->
-
-```js
-export function getFinalState(baseState, queue) {
-    let finalState = baseState;
-
-    for (let update of queue) {
-        if (typeof update === 'function') {
-            // Apply the updater function.
-            finalState = update(finalState);
-        } else {
-            // Replace the next state.
-            finalState = update;
-        }
+    function TestCase({ baseState, queue, expected }) {
+    	const actual = getFinalState(baseState, queue);
+    	return (
+    		<>
+    			<p>
+    				Base state: <b>{baseState}</b>
+    			</p>
+    			<p>
+    				Queue: <b>[{queue.join(', ')}]</b>
+    			</p>
+    			<p>
+    				Expected result: <b>{expected}</b>
+    			</p>
+    			<p
+    				style={{
+    					color:
+    						actual === expected
+    							? 'green'
+    							: 'red',
+    				}}
+    			>
+    				Your result: <b>{actual}</b> (
+    				{actual === expected ? 'correct' : 'wrong'})
+    			</p>
+    		</>
+    	);
     }
+    ```
 
-    return finalState;
-}
-```
+    </div>
 
-<!-- 0038.part.md -->
+=== "Результат"
 
-<!-- 0039.part.md -->
+    ![Результат](queueing-a-series-of-state-updates-7.png)
 
-```js
-import { getFinalState } from './processQueue.js';
+???tip "Показать подсказку"
 
-function increment(n) {
-    return n + 1;
-}
-increment.toString = () => 'n => n+1';
+    Если вы чувствуете, что застряли, начните с этой структуры кода:
 
-export default function App() {
-    return (
-        <>
-            <TestCase
-                baseState={0}
-                queue={[1, 1, 1]}
-                expected={1}
-            />
-            <hr />
-            <TestCase
-                baseState={0}
-                queue={[increment, increment, increment]}
-                expected={3}
-            />
-            <hr />
-            <TestCase
-                baseState={0}
-                queue={[5, increment]}
-                expected={6}
-            />
-            <hr />
-            <TestCase
-                baseState={0}
-                queue={[5, increment, 42]}
-                expected={42}
-            />
-        </>
-    );
-}
+    ```js
+    export function getFinalState(baseState, queue) {
+    	let finalState = baseState;
 
-function TestCase({ baseState, queue, expected }) {
-    const actual = getFinalState(baseState, queue);
-    return (
-        <>
-            <p>
-                Base state: <b>{baseState}</b>
-            </p>
-            <p>
-                Queue: <b>[{queue.join(', ')}]</b>
-            </p>
-            <p>
-                Expected result: <b>{expected}</b>
-            </p>
-            <p
-                style={{
-                    color:
-                        actual === expected
-                            ? 'green'
-                            : 'red',
-                }}
-            >
-                Your result: <b>{actual}</b> (
-                {actual === expected ? 'correct' : 'wrong'})
-            </p>
-        </>
-    );
-}
-```
+    	for (let update of queue) {
+    		if (typeof update === 'function') {
+    			// TODO: apply the updater function
+    		} else {
+    			// TODO: replace the state
+    		}
+    	}
 
-<!-- 0040.part.md -->
+    	return finalState;
+    }
+    ```
 
-Теперь вы знаете, как работает эта часть React!
+    Заполните недостающие строки!
+
+???success "Показать решение"
+
+    Это точный алгоритм, описанный на этой странице, который React использует для вычисления конечного состояния:
+
+    === "processQueue.js"
+
+    	```js
+    	export function getFinalState(baseState, queue) {
+    		let finalState = baseState;
+
+    		for (let update of queue) {
+    			if (typeof update === 'function') {
+    				// Apply the updater function.
+    				finalState = update(finalState);
+    			} else {
+    				// Replace the next state.
+    				finalState = update;
+    			}
+    		}
+
+    		return finalState;
+    	}
+    	```
+
+    === "App.js"
+
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
+
+    	```js
+    	import { getFinalState } from './processQueue.js';
+
+    	function increment(n) {
+    		return n + 1;
+    	}
+    	increment.toString = () => 'n => n+1';
+
+    	export default function App() {
+    		return (
+    			<>
+    				<TestCase
+    					baseState={0}
+    					queue={[1, 1, 1]}
+    					expected={1}
+    				/>
+    				<hr />
+    				<TestCase
+    					baseState={0}
+    					queue={[increment, increment, increment]}
+    					expected={3}
+    				/>
+    				<hr />
+    				<TestCase
+    					baseState={0}
+    					queue={[5, increment]}
+    					expected={6}
+    				/>
+    				<hr />
+    				<TestCase
+    					baseState={0}
+    					queue={[5, increment, 42]}
+    					expected={42}
+    				/>
+    			</>
+    		);
+    	}
+
+    	function TestCase({ baseState, queue, expected }) {
+    		const actual = getFinalState(baseState, queue);
+    		return (
+    			<>
+    				<p>
+    					Base state: <b>{baseState}</b>
+    				</p>
+    				<p>
+    					Queue: <b>[{queue.join(', ')}]</b>
+    				</p>
+    				<p>
+    					Expected result: <b>{expected}</b>
+    				</p>
+    				<p
+    					style={{
+    						color:
+    							actual === expected
+    								? 'green'
+    								: 'red',
+    					}}
+    				>
+    					Your result: <b>{actual}</b> (
+    					{actual === expected ? 'correct' : 'wrong'})
+    				</p>
+    			</>
+    		);
+    	}
+    	```
+
+    	</div>
+
+    === "Результат"
+
+    	![Результат](queueing-a-series-of-state-updates-8.png)
+
+    Теперь вы знаете, как работает эта часть React!
 
 <!-- 0041.part.md -->
+
+## Ссылки
+
+-   [https://react.dev/learn/queueing-a-series-of-state-updates](https://react.dev/learn/queueing-a-series-of-state-updates)

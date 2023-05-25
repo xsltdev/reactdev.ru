@@ -63,41 +63,47 @@ position.x = 5;
 
 <!-- 0009.part.md -->
 
-```js
-import { useState } from 'react';
-export default function MovingDot() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    return (
-        <div
-            onPointerMove={(e) => {
-                position.x = e.clientX;
-                position.y = e.clientY;
-            }}
-            style={{
-                position: 'relative',
-                width: '100vw',
-                height: '100vh',
-            }}
-        >
-            <div
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'red',
-                    borderRadius: '50%',
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    left: -10,
-                    top: -10,
-                    width: 20,
-                    height: 20,
-                }}
-            />
-        </div>
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    import { useState } from 'react';
+    export default function MovingDot() {
+    	const [position, setPosition] = useState({
+    		x: 0,
+    		y: 0,
+    	});
+    	return (
+    		<div
+    			onPointerMove={(e) => {
+    				position.x = e.clientX;
+    				position.y = e.clientY;
+    			}}
+    			style={{
+    				position: 'relative',
+    				width: '100vw',
+    				height: '100vh',
+    			}}
+    		>
+    			<div
+    				style={{
+    					position: 'absolute',
+    					backgroundColor: 'red',
+    					borderRadius: '50%',
+    					transform: `translate(${position.x}px, ${position.y}px)`,
+    					left: -10,
+    					top: -10,
+    					width: 20,
+    					height: 20,
+    				}}
+    			/>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](updating-objects-in-state-1.png)
 
 <!-- 0012.part.md -->
 
@@ -140,88 +146,82 @@ onPointerMove={e => {
 
 <!-- 0017.part.md -->
 
-```js
-import { useState } from 'react';
-export default function MovingDot() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    return (
-        <div
-            onPointerMove={(e) => {
-                setPosition({
-                    x: e.clientX,
-                    y: e.clientY,
-                });
-            }}
-            style={{
-                position: 'relative',
-                width: '100vw',
-                height: '100vh',
-            }}
-        >
-            <div
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'red',
-                    borderRadius: '50%',
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    left: -10,
-                    top: -10,
-                    width: 20,
-                    height: 20,
-                }}
-            />
-        </div>
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    import { useState } from 'react';
+    export default function MovingDot() {
+    	const [position, setPosition] = useState({
+    		x: 0,
+    		y: 0,
+    	});
+    	return (
+    		<div
+    			onPointerMove={(e) => {
+    				setPosition({
+    					x: e.clientX,
+    					y: e.clientY,
+    				});
+    			}}
+    			style={{
+    				position: 'relative',
+    				width: '100vw',
+    				height: '100vh',
+    			}}
+    		>
+    			<div
+    				style={{
+    					position: 'absolute',
+    					backgroundColor: 'red',
+    					borderRadius: '50%',
+    					transform: `translate(${position.x}px, ${position.y}px)`,
+    					left: -10,
+    					top: -10,
+    					width: 20,
+    					height: 20,
+    				}}
+    			/>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](updating-objects-in-state-2.png)
 
 <!-- 0020.part.md -->
 
-### Локальная мутация в порядке
+!!!note "Локальная мутация — это нормально"
 
-Код, подобный этому, является проблемой, потому что он изменяет _существующий_ объект в состоянии:
+    Код, подобный этому, является проблемой, потому что он изменяет _существующий_ объект в состоянии:
 
-<!-- 0021.part.md -->
+    ```js
+    position.x = e.clientX;
+    position.y = e.clientY;
+    ```
 
-```js
-position.x = e.clientX;
-position.y = e.clientY;
-```
+    Но такой код **абсолютно нормален**, потому что вы мутируете свежий объект, который вы _только что создали_:
 
-<!-- 0022.part.md -->
+    ```js
+    const nextPosition = {};
+    nextPosition.x = e.clientX;
+    nextPosition.y = e.clientY;
+    setPosition(nextPosition);
+    ```
 
-Но такой код **абсолютно нормален**, потому что вы мутируете свежий объект, который вы _только что создали_:
+    На самом деле, это совершенно равносильно тому, чтобы написать это:
 
-<!-- 0023.part.md -->
+    ```js
+    setPosition({
+    	x: e.clientX,
+    	y: e.clientY,
+    });
+    ```
 
-```js
-const nextPosition = {};
-nextPosition.x = e.clientX;
-nextPosition.y = e.clientY;
-setPosition(nextPosition);
-```
+    Мутация является проблемой только тогда, когда вы изменяете _существующие_ объекты, которые уже находятся в состоянии. Мутация только что созданного объекта - это нормально, потому что _на него пока не ссылается никакой другой код._ Изменение объекта не окажет случайного влияния на что-то, что от него зависит. Это называется "локальной мутацией". Вы даже можете делать локальную мутацию [во время рендеринга](keeping-components-pure.md#local-mutation-your-components-little-secret) Очень удобно и совершенно нормально!
 
-<!-- 0024.part.md -->
-
-На самом деле, это совершенно равносильно тому, чтобы написать это:
-
-<!-- 0025.part.md -->
-
-```js
-setPosition({
-    x: e.clientX,
-    y: e.clientY,
-});
-```
-
-<!-- 0026.part.md -->
-
-Мутация является проблемой только тогда, когда вы изменяете _существующие_ объекты, которые уже находятся в состоянии. Мутация только что созданного объекта - это нормально, потому что _на него пока не ссылается никакой другой код._ Изменение объекта не окажет случайного влияния на что-то, что от него зависит. Это называется "локальной мутацией". Вы даже можете делать локальную мутацию [во время рендеринга](keeping-components-pure.md#local-mutation-your-components-little-secret) Очень удобно и совершенно нормально!
-
-## Копирование объектов с синтаксисом распространения
+## Копирование объектов с синтаксисом `...`
 
 В предыдущем примере объект `position` всегда создается свежим из текущей позиции курсора. Но часто возникает необходимость включить _существующие_ данные как часть нового создаваемого объекта. Например, вы можете захотеть обновить _только одно_ поле в форме, но сохранить прежние значения для всех остальных полей.
 
@@ -229,59 +229,69 @@ setPosition({
 
 <!-- 0027.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Form() {
-    const [person, setPerson] = useState({
-        firstName: 'Barbara',
-        lastName: 'Hepworth',
-        email: 'bhepworth@sculpture.com',
-    });
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleFirstNameChange(e) {
-        person.firstName = e.target.value;
+    ```js
+    import { useState } from 'react';
+
+    export default function Form() {
+    	const [person, setPerson] = useState({
+    		firstName: 'Barbara',
+    		lastName: 'Hepworth',
+    		email: 'bhepworth@sculpture.com',
+    	});
+
+    	function handleFirstNameChange(e) {
+    		person.firstName = e.target.value;
+    	}
+
+    	function handleLastNameChange(e) {
+    		person.lastName = e.target.value;
+    	}
+
+    	function handleEmailChange(e) {
+    		person.email = e.target.value;
+    	}
+
+    	return (
+    		<>
+    			<label>
+    				First name:
+    				<input
+    					value={person.firstName}
+    					onChange={handleFirstNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Last name:
+    				<input
+    					value={person.lastName}
+    					onChange={handleLastNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Email:
+    				<input
+    					value={person.email}
+    					onChange={handleEmailChange}
+    				/>
+    			</label>
+    			<p>
+    				{person.firstName} {person.lastName} (
+    				{person.email})
+    			</p>
+    		</>
+    	);
     }
+    ```
 
-    function handleLastNameChange(e) {
-        person.lastName = e.target.value;
-    }
+    </div>
 
-    function handleEmailChange(e) {
-        person.email = e.target.value;
-    }
+=== "Результат"
 
-    return (
-        <>
-            <label>
-                First name:
-                <input
-                    value={person.firstName}
-                    onChange={handleFirstNameChange}
-                />
-            </label>
-            <label>
-                Last name:
-                <input
-                    value={person.lastName}
-                    onChange={handleLastNameChange}
-                />
-            </label>
-            <label>
-                Email:
-                <input
-                    value={person.email}
-                    onChange={handleEmailChange}
-                />
-            </label>
-            <p>
-                {person.firstName} {person.lastName} (
-                {person.email})
-            </p>
-        </>
-    );
-}
-```
+    ![Результат](updating-objects-in-state-3.png)
 
 <!-- 0030.part.md -->
 
@@ -295,7 +305,7 @@ person.firstName = e.target.value;
 
 <!-- 0032.part.md -->
 
-Надежный способ добиться нужного вам поведения - создать новый объект и передать его в `setPerson`. Но здесь вы хотите также **копировать в него существующие данные**, поскольку изменилось только одно из полей:
+Надежный способ добиться нужного вам поведения — создать новый объект и передать его в `setPerson`. Но здесь вы хотите также **копировать в него существующие данные**, поскольку изменилось только одно из полей:
 
 <!-- 0033.part.md -->
 
@@ -324,138 +334,154 @@ setPerson({
 
 Теперь форма работает!
 
-Обратите внимание, что вы не объявили отдельную переменную состояния для каждого поля ввода. Для больших форм очень удобно хранить все данные, сгруппированные в одном объекте - при условии, что вы правильно их обновляете!
+Обратите внимание, что вы не объявили отдельную переменную состояния для каждого поля ввода. Для больших форм очень удобно хранить все данные, сгруппированные в одном объекте — при условии, что вы правильно их обновляете!
 
-<!-- 0037.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Form() {
-    const [person, setPerson] = useState({
-        firstName: 'Barbara',
-        lastName: 'Hepworth',
-        email: 'bhepworth@sculpture.com',
-    });
+    ```js
+    import { useState } from 'react';
 
-    function handleFirstNameChange(e) {
-        setPerson({
-            ...person,
-            firstName: e.target.value,
-        });
+    export default function Form() {
+    	const [person, setPerson] = useState({
+    		firstName: 'Barbara',
+    		lastName: 'Hepworth',
+    		email: 'bhepworth@sculpture.com',
+    	});
+
+    	function handleFirstNameChange(e) {
+    		setPerson({
+    			...person,
+    			firstName: e.target.value,
+    		});
+    	}
+
+    	function handleLastNameChange(e) {
+    		setPerson({
+    			...person,
+    			lastName: e.target.value,
+    		});
+    	}
+
+    	function handleEmailChange(e) {
+    		setPerson({
+    			...person,
+    			email: e.target.value,
+    		});
+    	}
+
+    	return (
+    		<>
+    			<label>
+    				First name:
+    				<input
+    					value={person.firstName}
+    					onChange={handleFirstNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Last name:
+    				<input
+    					value={person.lastName}
+    					onChange={handleLastNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Email:
+    				<input
+    					value={person.email}
+    					onChange={handleEmailChange}
+    				/>
+    			</label>
+    			<p>
+    				{person.firstName} {person.lastName} (
+    				{person.email})
+    			</p>
+    		</>
+    	);
     }
+    ```
 
-    function handleLastNameChange(e) {
-        setPerson({
-            ...person,
-            lastName: e.target.value,
-        });
-    }
+    </div>
 
-    function handleEmailChange(e) {
-        setPerson({
-            ...person,
-            email: e.target.value,
-        });
-    }
+=== "Результат"
 
-    return (
-        <>
-            <label>
-                First name:
-                <input
-                    value={person.firstName}
-                    onChange={handleFirstNameChange}
-                />
-            </label>
-            <label>
-                Last name:
-                <input
-                    value={person.lastName}
-                    onChange={handleLastNameChange}
-                />
-            </label>
-            <label>
-                Email:
-                <input
-                    value={person.email}
-                    onChange={handleEmailChange}
-                />
-            </label>
-            <p>
-                {person.firstName} {person.lastName} (
-                {person.email})
-            </p>
-        </>
-    );
-}
-```
+    ![Результат](updating-objects-in-state-4.png)
 
 <!-- 0040.part.md -->
 
 Обратите внимание, что синтаксис распространения `...` является "неглубоким" - он копирует объекты только на один уровень вглубь. Это делает его быстрым, но это также означает, что если вы хотите обновить вложенное свойство, вам придется использовать его несколько раз.
 
-### Использование одного обработчика событий для нескольких полей
+!!!note "Использование одного обработчика событий для нескольких полей"
 
-Вы также можете использовать скобки `[` и `]` внутри определения объекта, чтобы указать свойство с динамическим именем. Вот тот же пример, но с одним обработчиком событий вместо трех разных:
+    Вы также можете использовать скобки `[` и `]` внутри определения объекта, чтобы указать свойство с динамическим именем. Вот тот же пример, но с одним обработчиком событий вместо трех разных:
 
-<!-- 0041.part.md -->
+    === "App.js"
 
-```js
-import { useState } from 'react';
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Form() {
-    const [person, setPerson] = useState({
-        firstName: 'Barbara',
-        lastName: 'Hepworth',
-        email: 'bhepworth@sculpture.com',
-    });
+    	```js
+    	import { useState } from 'react';
 
-    function handleChange(e) {
-        setPerson({
-            ...person,
-            [e.target.name]: e.target.value,
-        });
-    }
+    	export default function Form() {
+    		const [person, setPerson] = useState({
+    			firstName: 'Barbara',
+    			lastName: 'Hepworth',
+    			email: 'bhepworth@sculpture.com',
+    		});
 
-    return (
-        <>
-            <label>
-                First name:
-                <input
-                    name="firstName"
-                    value={person.firstName}
-                    onChange={handleChange}
-                />
-            </label>
-            <label>
-                Last name:
-                <input
-                    name="lastName"
-                    value={person.lastName}
-                    onChange={handleChange}
-                />
-            </label>
-            <label>
-                Email:
-                <input
-                    name="email"
-                    value={person.email}
-                    onChange={handleChange}
-                />
-            </label>
-            <p>
-                {person.firstName} {person.lastName} (
-                {person.email})
-            </p>
-        </>
-    );
-}
-```
+    		function handleChange(e) {
+    			setPerson({
+    				...person,
+    				[e.target.name]: e.target.value,
+    			});
+    		}
 
-<!-- 0044.part.md -->
+    		return (
+    			<>
+    				<label>
+    					First name:
+    					<input
+    						name="firstName"
+    						value={person.firstName}
+    						onChange={handleChange}
+    					/>
+    				</label>
+    				<label>
+    					Last name:
+    					<input
+    						name="lastName"
+    						value={person.lastName}
+    						onChange={handleChange}
+    					/>
+    				</label>
+    				<label>
+    					Email:
+    					<input
+    						name="email"
+    						value={person.email}
+    						onChange={handleChange}
+    					/>
+    				</label>
+    				<p>
+    					{person.firstName} {person.lastName} (
+    					{person.email})
+    				</p>
+    			</>
+    		);
+    	}
+    	```
 
-Здесь `e.target.name` относится к свойству `name`, заданному DOM-элементу `<input>`.
+    	</div>
+
+    === "Результат"
+
+    	![Результат](updating-objects-in-state-4.png)
+
+    <!-- 0044.part.md -->
+
+    Здесь `e.target.name` относится к свойству `name`, заданному DOM-элементу `<input>`.
 
 ## Обновление вложенного объекта
 
@@ -520,169 +546,165 @@ setPerson({
 
 Это немного многословно, но для многих случаев подходит:
 
-<!-- 0053.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Form() {
-    const [person, setPerson] = useState({
-        name: 'Niki de Saint Phalle',
-        artwork: {
-            title: 'Blue Nana',
-            city: 'Hamburg',
-            image: 'https://i.imgur.com/Sd1AgUOm.jpg',
-        },
-    });
+    ```js
+    import { useState } from 'react';
 
-    function handleNameChange(e) {
-        setPerson({
-            ...person,
-            name: e.target.value,
-        });
+    export default function Form() {
+    	const [person, setPerson] = useState({
+    		name: 'Niki de Saint Phalle',
+    		artwork: {
+    			title: 'Blue Nana',
+    			city: 'Hamburg',
+    			image: 'https://i.imgur.com/Sd1AgUOm.jpg',
+    		},
+    	});
+
+    	function handleNameChange(e) {
+    		setPerson({
+    			...person,
+    			name: e.target.value,
+    		});
+    	}
+
+    	function handleTitleChange(e) {
+    		setPerson({
+    			...person,
+    			artwork: {
+    				...person.artwork,
+    				title: e.target.value,
+    			},
+    		});
+    	}
+
+    	function handleCityChange(e) {
+    		setPerson({
+    			...person,
+    			artwork: {
+    				...person.artwork,
+    				city: e.target.value,
+    			},
+    		});
+    	}
+
+    	function handleImageChange(e) {
+    		setPerson({
+    			...person,
+    			artwork: {
+    				...person.artwork,
+    				image: e.target.value,
+    			},
+    		});
+    	}
+
+    	return (
+    		<>
+    			<label>
+    				Name:
+    				<input
+    					value={person.name}
+    					onChange={handleNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Title:
+    				<input
+    					value={person.artwork.title}
+    					onChange={handleTitleChange}
+    				/>
+    			</label>
+    			<label>
+    				City:
+    				<input
+    					value={person.artwork.city}
+    					onChange={handleCityChange}
+    				/>
+    			</label>
+    			<label>
+    				Image:
+    				<input
+    					value={person.artwork.image}
+    					onChange={handleImageChange}
+    				/>
+    			</label>
+    			<p>
+    				<i>{person.artwork.title}</i>
+    				{' by '}
+    				{person.name}
+    				<br />
+    				(located in {person.artwork.city})
+    			</p>
+    			<img
+    				src={person.artwork.image}
+    				alt={person.artwork.title}
+    			/>
+    		</>
+    	);
     }
+    ```
 
-    function handleTitleChange(e) {
-        setPerson({
-            ...person,
-            artwork: {
-                ...person.artwork,
-                title: e.target.value,
-            },
-        });
-    }
+    </div>
 
-    function handleCityChange(e) {
-        setPerson({
-            ...person,
-            artwork: {
-                ...person.artwork,
-                city: e.target.value,
-            },
-        });
-    }
+=== "Результат"
 
-    function handleImageChange(e) {
-        setPerson({
-            ...person,
-            artwork: {
-                ...person.artwork,
-                image: e.target.value,
-            },
-        });
-    }
-
-    return (
-        <>
-            <label>
-                Name:
-                <input
-                    value={person.name}
-                    onChange={handleNameChange}
-                />
-            </label>
-            <label>
-                Title:
-                <input
-                    value={person.artwork.title}
-                    onChange={handleTitleChange}
-                />
-            </label>
-            <label>
-                City:
-                <input
-                    value={person.artwork.city}
-                    onChange={handleCityChange}
-                />
-            </label>
-            <label>
-                Image:
-                <input
-                    value={person.artwork.image}
-                    onChange={handleImageChange}
-                />
-            </label>
-            <p>
-                <i>{person.artwork.title}</i>
-                {' by '}
-                {person.name}
-                <br />
-                (located in {person.artwork.city})
-            </p>
-            <img
-                src={person.artwork.image}
-                alt={person.artwork.title}
-            />
-        </>
-    );
-}
-```
+    ![Результат](updating-objects-in-state-5.png)
 
 <!-- 0056.part.md -->
 
-### Объекты на самом деле не являются вложенными
+!!!note "Объекты на самом деле не являются вложенными"
 
-Объект, подобный этому, появляется "вложенным" в код:
+    Объект, подобный этому, появляется "вложенным" в код:
 
-<!-- 0057.part.md -->
+    ```js
+    let obj = {
+    	name: 'Niki de Saint Phalle',
+    	artwork: {
+    		title: 'Blue Nana',
+    		city: 'Hamburg',
+    		image: 'https://i.imgur.com/Sd1AgUOm.jpg',
+    	},
+    };
+    ```
 
-```js
-let obj = {
-    name: 'Niki de Saint Phalle',
-    artwork: {
-        title: 'Blue Nana',
-        city: 'Hamburg',
-        image: 'https://i.imgur.com/Sd1AgUOm.jpg',
-    },
-};
-```
+    Однако "вложенность" - это неточный способ представления о том, как ведут себя объекты. Когда код выполняется, не существует такого понятия, как "вложенный" объект. На самом деле вы рассматриваете два разных объекта:
 
-<!-- 0058.part.md -->
+    ```js
+    let obj1 = {
+    	title: 'Blue Nana',
+    	city: 'Hamburg',
+    	image: 'https://i.imgur.com/Sd1AgUOm.jpg',
+    };
 
-Однако "вложенность" - это неточный способ представления о том, как ведут себя объекты. Когда код выполняется, не существует такого понятия, как "вложенный" объект. На самом деле вы рассматриваете два разных объекта:
+    let obj2 = {
+    	name: 'Niki de Saint Phalle',
+    	artwork: obj1,
+    };
+    ```
 
-<!-- 0059.part.md -->
+    Объект `obj1` не находится "внутри" `obj2`. Например, `obj3` может "указывать" и на `obj1`:
 
-```js
-let obj1 = {
-    title: 'Blue Nana',
-    city: 'Hamburg',
-    image: 'https://i.imgur.com/Sd1AgUOm.jpg',
-};
+    ```js
+    let obj1 = {
+    	title: 'Blue Nana',
+    	city: 'Hamburg',
+    	image: 'https://i.imgur.com/Sd1AgUOm.jpg',
+    };
 
-let obj2 = {
-    name: 'Niki de Saint Phalle',
-    artwork: obj1,
-};
-```
+    let obj2 = {
+    	name: 'Niki de Saint Phalle',
+    	artwork: obj1,
+    };
 
-<!-- 0060.part.md -->
+    let obj3 = {
+    	name: 'Copycat',
+    	artwork: obj1,
+    };
+    ```
 
-Объект `obj1` не находится "внутри" `obj2`. Например, `obj3` может "указывать" и на `obj1`:
-
-<!-- 0061.part.md -->
-
-```js
-let obj1 = {
-    title: 'Blue Nana',
-    city: 'Hamburg',
-    image: 'https://i.imgur.com/Sd1AgUOm.jpg',
-};
-
-let obj2 = {
-    name: 'Niki de Saint Phalle',
-    artwork: obj1,
-};
-
-let obj3 = {
-    name: 'Copycat',
-    artwork: obj1,
-};
-```
-
-<!-- 0062.part.md -->
-
-Если бы вы изменили `obj3.artwork.city`, это повлияло бы и на `obj2.artwork.city`, и на `obj1.city`. Это происходит потому, что `obj3.artwork`, `obj2.artwork` и `obj1` являются одним и тем же объектом. Это трудно заметить, когда вы думаете об объектах как о "вложенных". Вместо этого они представляют собой отдельные объекты, "указывающие" друг на друга с помощью свойств.
+    Если бы вы изменили `obj3.artwork.city`, это повлияло бы и на `obj2.artwork.city`, и на `obj1.city`. Это происходит потому, что `obj3.artwork`, `obj2.artwork` и `obj1` являются одним и тем же объектом. Это трудно заметить, когда вы думаете об объектах как о "вложенных". Вместо этого они представляют собой отдельные объекты, "указывающие" друг на друга с помощью свойств.
 
 ### Напишите лаконичную логику обновления с помощью Immer
 
@@ -700,9 +722,9 @@ updatePerson((draft) => {
 
 Но в отличие от обычной мутации, она не переписывает прошлое состояние!
 
-#### Как работает Immer?
+!!!note "Как работает Immer?"
 
-Черновик", предоставляемый Immer, является особым типом объекта, называемым [Proxy](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Proxy), который "записывает" то, что вы с ним делаете. Именно поэтому вы можете свободно мутировать его сколько угодно! Под капотом Immer определяет, какие части `черновика` были изменены, и создает совершенно новый объект, содержащий ваши правки.
+    "Черновик", предоставляемый Immer, является особым типом объекта, называемым [Proxy](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Proxy), который "записывает" то, что вы с ним делаете. Именно поэтому вы можете свободно мутировать его сколько угодно! Под капотом Immer определяет, какие части `черновика` были изменены, и создает совершенно новый объект, содержащий ваши правки.
 
 Чтобы попробовать Immer:
 
@@ -713,104 +735,135 @@ updatePerson((draft) => {
 
 <!-- 0065.part.md -->
 
-```js
-import { useImmer } from 'use-immer';
+=== "App.js"
 
-export default function Form() {
-    const [person, updatePerson] = useImmer({
-        name: 'Niki de Saint Phalle',
-        artwork: {
-            title: 'Blue Nana',
-            city: 'Hamburg',
-            image: 'https://i.imgur.com/Sd1AgUOm.jpg',
-        },
-    });
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleNameChange(e) {
-        updatePerson((draft) => {
-            draft.name = e.target.value;
-        });
+    ```js
+    import { useImmer } from 'use-immer';
+
+    export default function Form() {
+    	const [person, updatePerson] = useImmer({
+    		name: 'Niki de Saint Phalle',
+    		artwork: {
+    			title: 'Blue Nana',
+    			city: 'Hamburg',
+    			image: 'https://i.imgur.com/Sd1AgUOm.jpg',
+    		},
+    	});
+
+    	function handleNameChange(e) {
+    		updatePerson((draft) => {
+    			draft.name = e.target.value;
+    		});
+    	}
+
+    	function handleTitleChange(e) {
+    		updatePerson((draft) => {
+    			draft.artwork.title = e.target.value;
+    		});
+    	}
+
+    	function handleCityChange(e) {
+    		updatePerson((draft) => {
+    			draft.artwork.city = e.target.value;
+    		});
+    	}
+
+    	function handleImageChange(e) {
+    		updatePerson((draft) => {
+    			draft.artwork.image = e.target.value;
+    		});
+    	}
+
+    	return (
+    		<>
+    			<label>
+    				Name:
+    				<input
+    					value={person.name}
+    					onChange={handleNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Title:
+    				<input
+    					value={person.artwork.title}
+    					onChange={handleTitleChange}
+    				/>
+    			</label>
+    			<label>
+    				City:
+    				<input
+    					value={person.artwork.city}
+    					onChange={handleCityChange}
+    				/>
+    			</label>
+    			<label>
+    				Image:
+    				<input
+    					value={person.artwork.image}
+    					onChange={handleImageChange}
+    				/>
+    			</label>
+    			<p>
+    				<i>{person.artwork.title}</i>
+    				{' by '}
+    				{person.name}
+    				<br />
+    				(located in {person.artwork.city})
+    			</p>
+    			<img
+    				src={person.artwork.image}
+    				alt={person.artwork.title}
+    			/>
+    		</>
+    	);
     }
+    ```
 
-    function handleTitleChange(e) {
-        updatePerson((draft) => {
-            draft.artwork.title = e.target.value;
-        });
+    </div>
+
+=== "package.json"
+
+    ```json
+    {
+    	"dependencies": {
+    		"immer": "1.7.3",
+    		"react": "latest",
+    		"react-dom": "latest",
+    		"react-scripts": "latest",
+    		"use-immer": "0.5.1"
+    	},
+    	"scripts": {
+    		"start": "react-scripts start",
+    		"build": "react-scripts build",
+    		"test": "react-scripts test --env=jsdom",
+    		"eject": "react-scripts eject"
+    	},
+    	"devDependencies": {}
     }
+    ```
 
-    function handleCityChange(e) {
-        updatePerson((draft) => {
-            draft.artwork.city = e.target.value;
-        });
-    }
+=== "Результат"
 
-    function handleImageChange(e) {
-        updatePerson((draft) => {
-            draft.artwork.image = e.target.value;
-        });
-    }
-
-    return (
-        <>
-            <label>
-                Name:
-                <input
-                    value={person.name}
-                    onChange={handleNameChange}
-                />
-            </label>
-            <label>
-                Title:
-                <input
-                    value={person.artwork.title}
-                    onChange={handleTitleChange}
-                />
-            </label>
-            <label>
-                City:
-                <input
-                    value={person.artwork.city}
-                    onChange={handleCityChange}
-                />
-            </label>
-            <label>
-                Image:
-                <input
-                    value={person.artwork.image}
-                    onChange={handleImageChange}
-                />
-            </label>
-            <p>
-                <i>{person.artwork.title}</i>
-                {' by '}
-                {person.name}
-                <br />
-                (located in {person.artwork.city})
-            </p>
-            <img
-                src={person.artwork.image}
-                alt={person.artwork.title}
-            />
-        </>
-    );
-}
-```
+    ![Результат](updating-objects-in-state-5.png)
 
 <!-- 0070.part.md -->
 
-Обратите внимание, насколько более лаконичными стали обработчики событий. Вы можете смешивать и сочетать `useState` и `useImmer` в одном компоненте сколько угодно. Immer - отличный способ сохранить обработчики обновлений лаконичными, особенно если в вашем состоянии есть вложенность, и копирование объектов приводит к повторяющемуся коду.
+Обратите внимание, насколько более лаконичными стали обработчики событий. Вы можете смешивать и сочетать `useState` и `useImmer` в одном компоненте сколько угодно. Immer — отличный способ сохранить обработчики обновлений лаконичными, особенно если в вашем состоянии есть вложенность, и копирование объектов приводит к повторяющемуся коду.
 
-#### Почему мутирование состояния не рекомендуется в React?
+!!!note "Почему мутирование состояния не рекомендуется в React?"
 
-Есть несколько причин:
+    Есть несколько причин:
 
--   **Отладка:** Если вы используете `console.log` и не мутируете состояние, ваши прошлые логи не будут забиты недавними изменениями состояния. Таким образом, вы можете четко видеть, как изменялось состояние между рендерами.
--   **Оптимизация:** Обычные [стратегии оптимизации React](/reference/react/memo) полагаются на пропуск работы, если предыдущие реквизиты или состояние совпадают с последующими. Если вы никогда не изменяете состояние, то проверить, были ли изменения, можно очень быстро. Если `prevObj === obj`, вы можете быть уверены, что внутри него ничего не могло измениться.
--   **Новые возможности:** Новые возможности React, которые мы создаем, зависят от того, что состояние [рассматривается как снимок](state-as-a-snapshot.md). Если вы мутируете прошлые версии состояния, это может помешать вам использовать новые возможности.
--   **Изменения требований:** Некоторые возможности приложения, такие как реализация Undo/Redo, показ истории изменений или предоставление пользователю возможности вернуть форму к прежним значениям, проще сделать, если ничего не мутировать. Это происходит потому, что вы можете хранить в памяти прошлые копии состояния и использовать их повторно, когда это необходимо. Если вы начнете с мутативного подхода, такие функции, как эта, будет трудно добавить позже.
--   **Простая реализация:** Поскольку React не полагается на мутацию, ему не нужно делать ничего особенного с вашими объектами. Ему не нужно перехватывать их свойства, всегда оборачивать их в прокси или выполнять другую работу при инициализации, как это делают многие "реактивные" решения. Именно поэтому React позволяет вам поместить любой объект в состояние - независимо от его размера - без дополнительных проблем с производительностью и корректностью.
+    -   **Отладка:** Если вы используете `console.log` и не мутируете состояние, ваши прошлые логи не будут забиты недавними изменениями состояния. Таким образом, вы можете четко видеть, как изменялось состояние между рендерами.
+    -   **Оптимизация:** Обычные [стратегии оптимизации React](/reference/react/memo) полагаются на пропуск работы, если предыдущие реквизиты или состояние совпадают с последующими. Если вы никогда не изменяете состояние, то проверить, были ли изменения, можно очень быстро. Если `prevObj === obj`, вы можете быть уверены, что внутри него ничего не могло измениться.
+    -   **Новые возможности:** Новые возможности React, которые мы создаем, зависят от того, что состояние [рассматривается как снимок](state-as-a-snapshot.md). Если вы мутируете прошлые версии состояния, это может помешать вам использовать новые возможности.
+    -   **Изменения требований:** Некоторые возможности приложения, такие как реализация Undo/Redo, показ истории изменений или предоставление пользователю возможности вернуть форму к прежним значениям, проще сделать, если ничего не мутировать. Это происходит потому, что вы можете хранить в памяти прошлые копии состояния и использовать их повторно, когда это необходимо. Если вы начнете с мутативного подхода, такие функции, как эта, будет трудно добавить позже.
+    -   **Простая реализация:** Поскольку React не полагается на мутацию, ему не нужно делать ничего особенного с вашими объектами. Ему не нужно перехватывать их свойства, всегда оборачивать их в прокси или выполнять другую работу при инициализации, как это делают многие "реактивные" решения. Именно поэтому React позволяет вам поместить любой объект в состояние - независимо от его размера - без дополнительных проблем с производительностью и корректностью.
 
-На практике вы часто можете "уйти" от мутирования состояния в React, но мы настоятельно рекомендуем вам не делать этого, чтобы вы могли использовать новые возможности React, разработанные с учетом этого подхода. Будущие разработчики и, возможно, даже ваше будущее "я" скажут вам спасибо!
+    На практике вы часто можете "уйти" от мутирования состояния в React, но мы настоятельно рекомендуем вам не делать этого, чтобы вы могли использовать новые возможности React, разработанные с учетом этого подхода. Будущие разработчики и, возможно, даже ваше будущее "я" скажут вам спасибо!
 
 !!!tip "Резюме"
 
@@ -822,139 +875,157 @@ export default function Form() {
     -   Чтобы обновить вложенный объект, вам нужно создать копии по всему пути вверх от того места, которое вы обновляете.
     -   Чтобы уменьшить количество повторяющегося кода копирования, используйте Immer.
 
-#### Исправление некорректных обновлений состояния
+## Задачи
 
-Эта форма имеет несколько
+### 1. Исправление некорректных обновлений состояния
+
+В этой форме есть несколько ошибок. Несколько раз нажмите на кнопку, увеличивающую оценку. Заметьте, что он не увеличивается. Затем отредактируйте имя и фамилию и заметите, что оценка внезапно "подхватила" ваши изменения. Наконец, отредактируйте фамилию, и заметите, что оценка полностью исчезла.
 
 <!-- 0071.part.md -->
 
-Ваша задача - исправить все эти ошибки. Исправляя их, объясните, почему происходит каждая из них.
+Ваша задача — исправить все эти ошибки. Исправляя их, объясните, почему происходит каждая из них.
 
-<!-- 0072.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Scoreboard() {
-    const [player, setPlayer] = useState({
-        firstName: 'Ranjani',
-        lastName: 'Shettar',
-        score: 10,
-    });
+    ```js
+    import { useState } from 'react';
 
-    function handlePlusClick() {
-        player.score++;
+    export default function Scoreboard() {
+    	const [player, setPlayer] = useState({
+    		firstName: 'Ranjani',
+    		lastName: 'Shettar',
+    		score: 10,
+    	});
+
+    	function handlePlusClick() {
+    		player.score++;
+    	}
+
+    	function handleFirstNameChange(e) {
+    		setPlayer({
+    			...player,
+    			firstName: e.target.value,
+    		});
+    	}
+
+    	function handleLastNameChange(e) {
+    		setPlayer({
+    			lastName: e.target.value,
+    		});
+    	}
+
+    	return (
+    		<>
+    			<label>
+    				Score: <b>{player.score}</b>{' '}
+    				<button onClick={handlePlusClick}>
+    					+1
+    				</button>
+    			</label>
+    			<label>
+    				First name:
+    				<input
+    					value={player.firstName}
+    					onChange={handleFirstNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Last name:
+    				<input
+    					value={player.lastName}
+    					onChange={handleLastNameChange}
+    				/>
+    			</label>
+    		</>
+    	);
     }
+    ```
 
-    function handleFirstNameChange(e) {
-        setPlayer({
-            ...player,
-            firstName: e.target.value,
-        });
-    }
+    </div>
 
-    function handleLastNameChange(e) {
-        setPlayer({
-            lastName: e.target.value,
-        });
-    }
+=== "Результат"
 
-    return (
-        <>
-            <label>
-                Score: <b>{player.score}</b>{' '}
-                <button onClick={handlePlusClick}>
-                    +1
-                </button>
-            </label>
-            <label>
-                First name:
-                <input
-                    value={player.firstName}
-                    onChange={handleFirstNameChange}
-                />
-            </label>
-            <label>
-                Last name:
-                <input
-                    value={player.lastName}
-                    onChange={handleLastNameChange}
-                />
-            </label>
-        </>
-    );
-}
-```
+    ![Результат](updating-objects-in-state-6.png)
 
-Вот версия, в которой исправлены обе ошибки:
+???success "Показать решение"
 
-<!-- 0076.part.md -->
+    Вот версия, в которой исправлены обе ошибки:
 
-```js
-import { useState } from 'react';
+    === "App.js"
 
-export default function Scoreboard() {
-    const [player, setPlayer] = useState({
-        firstName: 'Ranjani',
-        lastName: 'Shettar',
-        score: 10,
-    });
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handlePlusClick() {
-        setPlayer({
-            ...player,
-            score: player.score + 1,
-        });
-    }
+    	```js
+    	import { useState } from 'react';
 
-    function handleFirstNameChange(e) {
-        setPlayer({
-            ...player,
-            firstName: e.target.value,
-        });
-    }
+    	export default function Scoreboard() {
+    		const [player, setPlayer] = useState({
+    			firstName: 'Ranjani',
+    			lastName: 'Shettar',
+    			score: 10,
+    		});
 
-    function handleLastNameChange(e) {
-        setPlayer({
-            ...player,
-            lastName: e.target.value,
-        });
-    }
+    		function handlePlusClick() {
+    			setPlayer({
+    				...player,
+    				score: player.score + 1,
+    			});
+    		}
 
-    return (
-        <>
-            <label>
-                Score: <b>{player.score}</b>{' '}
-                <button onClick={handlePlusClick}>
-                    +1
-                </button>
-            </label>
-            <label>
-                First name:
-                <input
-                    value={player.firstName}
-                    onChange={handleFirstNameChange}
-                />
-            </label>
-            <label>
-                Last name:
-                <input
-                    value={player.lastName}
-                    onChange={handleLastNameChange}
-                />
-            </label>
-        </>
-    );
-}
-```
+    		function handleFirstNameChange(e) {
+    			setPlayer({
+    				...player,
+    				firstName: e.target.value,
+    			});
+    		}
 
-<!-- 0079.part.md -->
+    		function handleLastNameChange(e) {
+    			setPlayer({
+    				...player,
+    				lastName: e.target.value,
+    			});
+    		}
 
-Проблема с `handlePlusClick` заключалась в том, что он мутировал объект `player`. В результате React не знал, что есть причина для повторного рендеринга, и не обновлял счет на экране. Вот почему, когда вы редактировали первое имя, состояние обновлялось, вызывая повторный рендеринг, который _также_ обновлял счет на экране.
+    		return (
+    			<>
+    				<label>
+    					Score: <b>{player.score}</b>{' '}
+    					<button onClick={handlePlusClick}>
+    						+1
+    					</button>
+    				</label>
+    				<label>
+    					First name:
+    					<input
+    						value={player.firstName}
+    						onChange={handleFirstNameChange}
+    					/>
+    				</label>
+    				<label>
+    					Last name:
+    					<input
+    						value={player.lastName}
+    						onChange={handleLastNameChange}
+    					/>
+    				</label>
+    			</>
+    		);
+    	}
+    	```
 
-Проблема с `handleLastNameChange` заключалась в том, что он не копировал существующие поля `...player` в новый объект. Вот почему счет терялся после редактирования фамилии.
+    	</div>
 
-#### Найти и исправить мутацию
+    === "Результат"
+
+    	![Результат](updating-objects-in-state-6.png)
+
+    Проблема с `handlePlusClick` заключалась в том, что он мутировал объект `player`. В результате React не знал, что есть причина для повторного рендеринга, и не обновлял счет на экране. Вот почему, когда вы редактировали первое имя, состояние обновлялось, вызывая повторный рендеринг, который _также_ обновлял счет на экране.
+
+    Проблема с `handleLastNameChange` заключалась в том, что он не копировал существующие поля `...player` в новый объект. Вот почему счет терялся после редактирования фамилии.
+
+### 2. Найти и исправить мутацию
 
 Имеется перетаскиваемый ящик на статичном фоне. Вы можете изменить цвет поля с помощью кнопки select.
 
@@ -962,603 +1033,683 @@ export default function Scoreboard() {
 
 Найдите ошибку и исправьте ее.
 
-Если что-то неожиданно меняется, значит, произошла мутация. Найдите мутацию в `App.js` и исправьте ее.
+=== "App.js"
 
-<!-- 0080.part.md -->
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState } from 'react';
-import Background from './Background.js';
-import Box from './Box.js';
+    ```js
+    import { useState } from 'react';
+    import Background from './Background.js';
+    import Box from './Box.js';
 
-const initialPosition = {
-    x: 0,
-    y: 0,
-};
+    const initialPosition = {
+    	x: 0,
+    	y: 0,
+    };
 
-export default function Canvas() {
-    const [shape, setShape] = useState({
-        color: 'orange',
-        position: initialPosition,
-    });
+    export default function Canvas() {
+    	const [shape, setShape] = useState({
+    		color: 'orange',
+    		position: initialPosition,
+    	});
 
-    function handleMove(dx, dy) {
-        shape.position.x += dx;
-        shape.position.y += dy;
+    	function handleMove(dx, dy) {
+    		shape.position.x += dx;
+    		shape.position.y += dy;
+    	}
+
+    	function handleColorChange(e) {
+    		setShape({
+    			...shape,
+    			color: e.target.value,
+    		});
+    	}
+
+    	return (
+    		<>
+    			<select
+    				value={shape.color}
+    				onChange={handleColorChange}
+    			>
+    				<option value="orange">orange</option>
+    				<option value="lightpink">lightpink</option>
+    				<option value="aliceblue">aliceblue</option>
+    			</select>
+    			<Background position={initialPosition} />
+    			<Box
+    				color={shape.color}
+    				position={shape.position}
+    				onMove={handleMove}
+    			>
+    				Drag me!
+    			</Box>
+    		</>
+    	);
     }
+    ```
 
-    function handleColorChange(e) {
-        setShape({
-            ...shape,
-            color: e.target.value,
-        });
+    </div>
+
+=== "Box.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    import { useState } from 'react';
+
+    export default function Box({
+    	children,
+    	color,
+    	position,
+    	onMove,
+    }) {
+    	const [lastCoordinates, setLastCoordinates] = useState(
+    		null
+    	);
+
+    	function handlePointerDown(e) {
+    		e.target.setPointerCapture(e.pointerId);
+    		setLastCoordinates({
+    			x: e.clientX,
+    			y: e.clientY,
+    		});
+    	}
+
+    	function handlePointerMove(e) {
+    		if (lastCoordinates) {
+    			setLastCoordinates({
+    				x: e.clientX,
+    				y: e.clientY,
+    			});
+    			const dx = e.clientX - lastCoordinates.x;
+    			const dy = e.clientY - lastCoordinates.y;
+    			onMove(dx, dy);
+    		}
+    	}
+
+    	function handlePointerUp(e) {
+    		setLastCoordinates(null);
+    	}
+
+    	return (
+    		<div
+    			onPointerDown={handlePointerDown}
+    			onPointerMove={handlePointerMove}
+    			onPointerUp={handlePointerUp}
+    			style={{
+    				width: 100,
+    				height: 100,
+    				cursor: 'grab',
+    				backgroundColor: color,
+    				position: 'absolute',
+    				border: '1px solid black',
+    				display: 'flex',
+    				justifyContent: 'center',
+    				alignItems: 'center',
+    				transform: `translate(
+    		${position.x}px,
+    		${position.y}px
+    		)`,
+    			}}
+    		>
+    			{children}
+    		</div>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <select
-                value={shape.color}
-                onChange={handleColorChange}
-            >
-                <option value="orange">orange</option>
-                <option value="lightpink">lightpink</option>
-                <option value="aliceblue">aliceblue</option>
-            </select>
-            <Background position={initialPosition} />
-            <Box
-                color={shape.color}
-                position={shape.position}
-                onMove={handleMove}
-            >
-                Drag me!
-            </Box>
-        </>
-    );
-}
-```
+    </div>
 
-<!-- 0081.part.md -->
+=== "Background.js"
 
-<!-- 0082.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function Box({
-    children,
-    color,
-    position,
-    onMove,
-}) {
-    const [lastCoordinates, setLastCoordinates] = useState(
-        null
-    );
-
-    function handlePointerDown(e) {
-        e.target.setPointerCapture(e.pointerId);
-        setLastCoordinates({
-            x: e.clientX,
-            y: e.clientY,
-        });
+    ```js
+    export default function Background({ position }) {
+    	return (
+    		<div
+    			style={{
+    				position: 'absolute',
+    				transform: `translate(
+    		${position.x}px,
+    		${position.y}px
+    	)`,
+    				width: 250,
+    				height: 250,
+    				backgroundColor: 'rgba(200, 200, 0, 0.2)',
+    			}}
+    		/>
+    	);
     }
+    ```
 
-    function handlePointerMove(e) {
-        if (lastCoordinates) {
-            setLastCoordinates({
-                x: e.clientX,
-                y: e.clientY,
-            });
-            const dx = e.clientX - lastCoordinates.x;
-            const dy = e.clientY - lastCoordinates.y;
-            onMove(dx, dy);
-        }
-    }
+=== "Результат"
 
-    function handlePointerUp(e) {
-        setLastCoordinates(null);
-    }
+    ![Результат](updating-objects-in-state-7.png)
 
-    return (
-        <div
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            style={{
-                width: 100,
-                height: 100,
-                cursor: 'grab',
-                backgroundColor: color,
-                position: 'absolute',
-                border: '1px solid black',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                transform: `translate(
-          ${position.x}px,
-          ${position.y}px
-        )`,
-            }}
-        >
-            {children}
-        </div>
-    );
-}
-```
+???tip "Показать подсказку"
 
-<!-- 0083.part.md -->
+    Если что-то неожиданно меняется, значит, произошла мутация. Найдите мутацию в `App.js` и исправьте ее.
 
-<!-- 0084.part.md -->
+???success "Показать решение"
 
-```js
-export default function Background({ position }) {
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                transform: `translate(
-        ${position.x}px,
-        ${position.y}px
-      )`,
-                width: 250,
-                height: 250,
-                backgroundColor: 'rgba(200, 200, 0, 0.2)',
-            }}
-        />
-    );
-}
-```
+    Проблема была в мутации внутри `handleMove`. Она мутировала `shape.position`, но это тот же объект, на который указывает `initialPosition`. Поэтому и форма, и фон перемещаются. (Это мутация, поэтому изменение не отражается на экране до тех пор, пока не произойдет несвязанное обновление - изменение цвета - не вызовет повторный рендеринг).
 
-<!-- 0087.part.md -->
+    Исправление заключается в удалении мутации из `handleMove` и использовании синтаксиса распространения для копирования формы. Обратите внимание, что `+=` - это мутация, поэтому вам нужно переписать ее, чтобы использовать обычную операцию `+`.
 
-Проблема была в мутации внутри `handleMove`. Она мутировала `shape.position`, но это тот же объект, на который указывает `initialPosition`. Поэтому и форма, и фон перемещаются. (Это мутация, поэтому изменение не отражается на экране до тех пор, пока не произойдет несвязанное обновление - изменение цвета - не вызовет повторный рендеринг).
+    === "App.js"
 
-Исправление заключается в удалении мутации из `handleMove` и использовании синтаксиса распространения для копирования формы. Обратите внимание, что `+=` - это мутация, поэтому вам нужно переписать ее, чтобы использовать обычную операцию `+`.
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-<!-- 0088.part.md -->
+    	```js
+    	import { useState } from 'react';
+    	import Background from './Background.js';
+    	import Box from './Box.js';
 
-```js
-import { useState } from 'react';
-import Background from './Background.js';
-import Box from './Box.js';
+    	const initialPosition = {
+    		x: 0,
+    		y: 0,
+    	};
 
-const initialPosition = {
-    x: 0,
-    y: 0,
-};
+    	export default function Canvas() {
+    		const [shape, setShape] = useState({
+    			color: 'orange',
+    			position: initialPosition,
+    		});
 
-export default function Canvas() {
-    const [shape, setShape] = useState({
-        color: 'orange',
-        position: initialPosition,
-    });
+    		function handleMove(dx, dy) {
+    			setShape({
+    				...shape,
+    				position: {
+    					x: shape.position.x + dx,
+    					y: shape.position.y + dy,
+    				},
+    			});
+    		}
 
-    function handleMove(dx, dy) {
-        setShape({
-            ...shape,
-            position: {
-                x: shape.position.x + dx,
-                y: shape.position.y + dy,
-            },
-        });
-    }
+    		function handleColorChange(e) {
+    			setShape({
+    				...shape,
+    				color: e.target.value,
+    			});
+    		}
 
-    function handleColorChange(e) {
-        setShape({
-            ...shape,
-            color: e.target.value,
-        });
-    }
+    		return (
+    			<>
+    				<select
+    					value={shape.color}
+    					onChange={handleColorChange}
+    				>
+    					<option value="orange">orange</option>
+    					<option value="lightpink">lightpink</option>
+    					<option value="aliceblue">aliceblue</option>
+    				</select>
+    				<Background position={initialPosition} />
+    				<Box
+    					color={shape.color}
+    					position={shape.position}
+    					onMove={handleMove}
+    				>
+    					Drag me!
+    				</Box>
+    			</>
+    		);
+    	}
+    	```
 
-    return (
-        <>
-            <select
-                value={shape.color}
-                onChange={handleColorChange}
-            >
-                <option value="orange">orange</option>
-                <option value="lightpink">lightpink</option>
-                <option value="aliceblue">aliceblue</option>
-            </select>
-            <Background position={initialPosition} />
-            <Box
-                color={shape.color}
-                position={shape.position}
-                onMove={handleMove}
-            >
-                Drag me!
-            </Box>
-        </>
-    );
-}
-```
+    	</div>
 
-<!-- 0089.part.md -->
+    === "Box.js"
 
-<!-- 0090.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState } from 'react';
+    	```js
+    	import { useState } from 'react';
 
-export default function Box({
-    children,
-    color,
-    position,
-    onMove,
-}) {
-    const [lastCoordinates, setLastCoordinates] = useState(
-        null
-    );
+    	export default function Box({
+    		children,
+    		color,
+    		position,
+    		onMove,
+    	}) {
+    		const [lastCoordinates, setLastCoordinates] = useState(
+    			null
+    		);
 
-    function handlePointerDown(e) {
-        e.target.setPointerCapture(e.pointerId);
-        setLastCoordinates({
-            x: e.clientX,
-            y: e.clientY,
-        });
-    }
+    		function handlePointerDown(e) {
+    			e.target.setPointerCapture(e.pointerId);
+    			setLastCoordinates({
+    				x: e.clientX,
+    				y: e.clientY,
+    			});
+    		}
 
-    function handlePointerMove(e) {
-        if (lastCoordinates) {
-            setLastCoordinates({
-                x: e.clientX,
-                y: e.clientY,
-            });
-            const dx = e.clientX - lastCoordinates.x;
-            const dy = e.clientY - lastCoordinates.y;
-            onMove(dx, dy);
-        }
-    }
+    		function handlePointerMove(e) {
+    			if (lastCoordinates) {
+    				setLastCoordinates({
+    					x: e.clientX,
+    					y: e.clientY,
+    				});
+    				const dx = e.clientX - lastCoordinates.x;
+    				const dy = e.clientY - lastCoordinates.y;
+    				onMove(dx, dy);
+    			}
+    		}
 
-    function handlePointerUp(e) {
-        setLastCoordinates(null);
-    }
+    		function handlePointerUp(e) {
+    			setLastCoordinates(null);
+    		}
 
-    return (
-        <div
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            style={{
-                width: 100,
-                height: 100,
-                cursor: 'grab',
-                backgroundColor: color,
-                position: 'absolute',
-                border: '1px solid black',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                transform: `translate(
-          ${position.x}px,
-          ${position.y}px
-        )`,
-            }}
-        >
-            {children}
-        </div>
-    );
-}
-```
+    		return (
+    			<div
+    				onPointerDown={handlePointerDown}
+    				onPointerMove={handlePointerMove}
+    				onPointerUp={handlePointerUp}
+    				style={{
+    					width: 100,
+    					height: 100,
+    					cursor: 'grab',
+    					backgroundColor: color,
+    					position: 'absolute',
+    					border: '1px solid black',
+    					display: 'flex',
+    					justifyContent: 'center',
+    					alignItems: 'center',
+    					transform: `translate(
+    			${position.x}px,
+    			${position.y}px
+    			)`,
+    				}}
+    			>
+    				{children}
+    			</div>
+    		);
+    	}
+    	```
 
-<!-- 0091.part.md -->
+    	</div>
 
-<!-- 0092.part.md -->
+    === "Background.js"
 
-```js
-export default function Background({ position }) {
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                transform: `translate(
-        ${position.x}px,
-        ${position.y}px
-      )`,
-                width: 250,
-                height: 250,
-                backgroundColor: 'rgba(200, 200, 0, 0.2)',
-            }}
-        />
-    );
-}
-```
+    	```js
+    	export default function Background({ position }) {
+    		return (
+    			<div
+    				style={{
+    					position: 'absolute',
+    					transform: `translate(
+    			${position.x}px,
+    			${position.y}px
+    		)`,
+    					width: 250,
+    					height: 250,
+    					backgroundColor: 'rgba(200, 200, 0, 0.2)',
+    				}}
+    			/>
+    		);
+    	}
+    	```
 
-<!-- 0095.part.md -->
+    === "Результат"
 
-#### Обновление объекта с помощью Immer
+    	![Результат](updating-objects-in-state-8.png)
+
+### 3. Обновление объекта с помощью Immer
 
 Это тот же пример с ошибкой, что и в предыдущей задаче. На этот раз исправьте мутацию, используя Immer. Для вашего удобства функция `useImmer` уже импортирована, поэтому вам нужно изменить переменную состояния `shape`, чтобы использовать ее.
 
-<!-- 0096.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
-import { useImmer } from 'use-immer';
-import Background from './Background.js';
-import Box from './Box.js';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-const initialPosition = {
-    x: 0,
-    y: 0,
-};
+    ```js
+    import { useState } from 'react';
+    import { useImmer } from 'use-immer';
+    import Background from './Background.js';
+    import Box from './Box.js';
 
-export default function Canvas() {
-    const [shape, setShape] = useState({
-        color: 'orange',
-        position: initialPosition,
-    });
+    const initialPosition = {
+    	x: 0,
+    	y: 0,
+    };
 
-    function handleMove(dx, dy) {
-        shape.position.x += dx;
-        shape.position.y += dy;
+    export default function Canvas() {
+    	const [shape, setShape] = useState({
+    		color: 'orange',
+    		position: initialPosition,
+    	});
+
+    	function handleMove(dx, dy) {
+    		shape.position.x += dx;
+    		shape.position.y += dy;
+    	}
+
+    	function handleColorChange(e) {
+    		setShape({
+    			...shape,
+    			color: e.target.value,
+    		});
+    	}
+
+    	return (
+    		<>
+    			<select
+    				value={shape.color}
+    				onChange={handleColorChange}
+    			>
+    				<option value="orange">orange</option>
+    				<option value="lightpink">lightpink</option>
+    				<option value="aliceblue">aliceblue</option>
+    			</select>
+    			<Background position={initialPosition} />
+    			<Box
+    				color={shape.color}
+    				position={shape.position}
+    				onMove={handleMove}
+    			>
+    				Drag me!
+    			</Box>
+    		</>
+    	);
     }
+    ```
 
-    function handleColorChange(e) {
-        setShape({
-            ...shape,
-            color: e.target.value,
-        });
+    </div>
+
+=== "Box.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    import { useState } from 'react';
+
+    export default function Box({
+    	children,
+    	color,
+    	position,
+    	onMove,
+    }) {
+    	const [lastCoordinates, setLastCoordinates] = useState(
+    		null
+    	);
+
+    	function handlePointerDown(e) {
+    		e.target.setPointerCapture(e.pointerId);
+    		setLastCoordinates({
+    			x: e.clientX,
+    			y: e.clientY,
+    		});
+    	}
+
+    	function handlePointerMove(e) {
+    		if (lastCoordinates) {
+    			setLastCoordinates({
+    				x: e.clientX,
+    				y: e.clientY,
+    			});
+    			const dx = e.clientX - lastCoordinates.x;
+    			const dy = e.clientY - lastCoordinates.y;
+    			onMove(dx, dy);
+    		}
+    	}
+
+    	function handlePointerUp(e) {
+    		setLastCoordinates(null);
+    	}
+
+    	return (
+    		<div
+    			onPointerDown={handlePointerDown}
+    			onPointerMove={handlePointerMove}
+    			onPointerUp={handlePointerUp}
+    			style={{
+    				width: 100,
+    				height: 100,
+    				cursor: 'grab',
+    				backgroundColor: color,
+    				position: 'absolute',
+    				border: '1px solid black',
+    				display: 'flex',
+    				justifyContent: 'center',
+    				alignItems: 'center',
+    				transform: `translate(
+    		${position.x}px,
+    		${position.y}px
+    		)`,
+    			}}
+    		>
+    			{children}
+    		</div>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <select
-                value={shape.color}
-                onChange={handleColorChange}
-            >
-                <option value="orange">orange</option>
-                <option value="lightpink">lightpink</option>
-                <option value="aliceblue">aliceblue</option>
-            </select>
-            <Background position={initialPosition} />
-            <Box
-                color={shape.color}
-                position={shape.position}
-                onMove={handleMove}
-            >
-                Drag me!
-            </Box>
-        </>
-    );
-}
-```
+    </div>
 
-<!-- 0097.part.md -->
+=== "Background.js"
 
-<!-- 0098.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function Box({
-    children,
-    color,
-    position,
-    onMove,
-}) {
-    const [lastCoordinates, setLastCoordinates] = useState(
-        null
-    );
-
-    function handlePointerDown(e) {
-        e.target.setPointerCapture(e.pointerId);
-        setLastCoordinates({
-            x: e.clientX,
-            y: e.clientY,
-        });
+    ```js
+    export default function Background({ position }) {
+    	return (
+    		<div
+    			style={{
+    				position: 'absolute',
+    				transform: `translate(
+    		${position.x}px,
+    		${position.y}px
+    	)`,
+    				width: 250,
+    				height: 250,
+    				backgroundColor: 'rgba(200, 200, 0, 0.2)',
+    			}}
+    		/>
+    	);
     }
+    ```
 
-    function handlePointerMove(e) {
-        if (lastCoordinates) {
-            setLastCoordinates({
-                x: e.clientX,
-                y: e.clientY,
-            });
-            const dx = e.clientX - lastCoordinates.x;
-            const dy = e.clientY - lastCoordinates.y;
-            onMove(dx, dy);
-        }
+=== "package.json"
+
+    ```json
+    {
+    	"dependencies": {
+    		"immer": "1.7.3",
+    		"react": "latest",
+    		"react-dom": "latest",
+    		"react-scripts": "latest",
+    		"use-immer": "0.5.1"
+    	},
+    	"scripts": {
+    		"start": "react-scripts start",
+    		"build": "react-scripts build",
+    		"test": "react-scripts test --env=jsdom",
+    		"eject": "react-scripts eject"
+    	},
+    	"devDependencies": {}
     }
+    ```
 
-    function handlePointerUp(e) {
-        setLastCoordinates(null);
-    }
+=== "Результат"
 
-    return (
-        <div
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            style={{
-                width: 100,
-                height: 100,
-                cursor: 'grab',
-                backgroundColor: color,
-                position: 'absolute',
-                border: '1px solid black',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                transform: `translate(
-          ${position.x}px,
-          ${position.y}px
-        )`,
-            }}
-        >
-            {children}
-        </div>
-    );
-}
-```
-
-<!-- 0099.part.md -->
-
-<!-- 0100.part.md -->
-
-```js
-export default function Background({ position }) {
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                transform: `translate(
-        ${position.x}px,
-        ${position.y}px
-      )`,
-                width: 250,
-                height: 250,
-                backgroundColor: 'rgba(200, 200, 0, 0.2)',
-            }}
-        />
-    );
-}
-```
+    ![Результат](updating-objects-in-state-8.png)
 
 <!-- 0105.part.md -->
 
-Это решение переписано с помощью Immer. Обратите внимание, что обработчики событий написаны мутирующим образом, но ошибка не возникает. Это потому, что Immer никогда не мутирует существующие объекты.
+???success "Показать решение"
 
-<!-- 0106.part.md -->
+    Это решение переписано с помощью Immer. Обратите внимание, что обработчики событий написаны мутирующим образом, но ошибка не возникает. Это потому, что Immer никогда не мутирует существующие объекты.
 
-```js
-import { useImmer } from 'use-immer';
-import Background from './Background.js';
-import Box from './Box.js';
+    === "App.js"
 
-const initialPosition = {
-    x: 0,
-    y: 0,
-};
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Canvas() {
-    const [shape, updateShape] = useImmer({
-        color: 'orange',
-        position: initialPosition,
-    });
+    	```js
+    	import { useImmer } from 'use-immer';
+    	import Background from './Background.js';
+    	import Box from './Box.js';
 
-    function handleMove(dx, dy) {
-        updateShape((draft) => {
-            draft.position.x += dx;
-            draft.position.y += dy;
-        });
-    }
+    	const initialPosition = {
+    		x: 0,
+    		y: 0,
+    	};
 
-    function handleColorChange(e) {
-        updateShape((draft) => {
-            draft.color = e.target.value;
-        });
-    }
+    	export default function Canvas() {
+    		const [shape, updateShape] = useImmer({
+    			color: 'orange',
+    			position: initialPosition,
+    		});
 
-    return (
-        <>
-            <select
-                value={shape.color}
-                onChange={handleColorChange}
-            >
-                <option value="orange">orange</option>
-                <option value="lightpink">lightpink</option>
-                <option value="aliceblue">aliceblue</option>
-            </select>
-            <Background position={initialPosition} />
-            <Box
-                color={shape.color}
-                position={shape.position}
-                onMove={handleMove}
-            >
-                Drag me!
-            </Box>
-        </>
-    );
-}
-```
+    		function handleMove(dx, dy) {
+    			updateShape((draft) => {
+    				draft.position.x += dx;
+    				draft.position.y += dy;
+    			});
+    		}
 
-<!-- 0107.part.md -->
+    		function handleColorChange(e) {
+    			updateShape((draft) => {
+    				draft.color = e.target.value;
+    			});
+    		}
 
-<!-- 0108.part.md -->
+    		return (
+    			<>
+    				<select
+    					value={shape.color}
+    					onChange={handleColorChange}
+    				>
+    					<option value="orange">orange</option>
+    					<option value="lightpink">lightpink</option>
+    					<option value="aliceblue">aliceblue</option>
+    				</select>
+    				<Background position={initialPosition} />
+    				<Box
+    					color={shape.color}
+    					position={shape.position}
+    					onMove={handleMove}
+    				>
+    					Drag me!
+    				</Box>
+    			</>
+    		);
+    	}
+    	```
 
-```js
-import { useState } from 'react';
+    	</div>
 
-export default function Box({
-    children,
-    color,
-    position,
-    onMove,
-}) {
-    const [lastCoordinates, setLastCoordinates] = useState(
-        null
-    );
+    === "Box.js"
 
-    function handlePointerDown(e) {
-        e.target.setPointerCapture(e.pointerId);
-        setLastCoordinates({
-            x: e.clientX,
-            y: e.clientY,
-        });
-    }
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handlePointerMove(e) {
-        if (lastCoordinates) {
-            setLastCoordinates({
-                x: e.clientX,
-                y: e.clientY,
-            });
-            const dx = e.clientX - lastCoordinates.x;
-            const dy = e.clientY - lastCoordinates.y;
-            onMove(dx, dy);
-        }
-    }
+    	```js
+    	import { useState } from 'react';
 
-    function handlePointerUp(e) {
-        setLastCoordinates(null);
-    }
+    	export default function Box({
+    		children,
+    		color,
+    		position,
+    		onMove,
+    	}) {
+    		const [lastCoordinates, setLastCoordinates] = useState(
+    			null
+    		);
 
-    return (
-        <div
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            style={{
-                width: 100,
-                height: 100,
-                cursor: 'grab',
-                backgroundColor: color,
-                position: 'absolute',
-                border: '1px solid black',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                transform: `translate(
-          ${position.x}px,
-          ${position.y}px
-        )`,
-            }}
-        >
-            {children}
-        </div>
-    );
-}
-```
+    		function handlePointerDown(e) {
+    			e.target.setPointerCapture(e.pointerId);
+    			setLastCoordinates({
+    				x: e.clientX,
+    				y: e.clientY,
+    			});
+    		}
 
-<!-- 0109.part.md -->
+    		function handlePointerMove(e) {
+    			if (lastCoordinates) {
+    				setLastCoordinates({
+    					x: e.clientX,
+    					y: e.clientY,
+    				});
+    				const dx = e.clientX - lastCoordinates.x;
+    				const dy = e.clientY - lastCoordinates.y;
+    				onMove(dx, dy);
+    			}
+    		}
 
-<!-- 0110.part.md -->
+    		function handlePointerUp(e) {
+    			setLastCoordinates(null);
+    		}
 
-```js
-export default function Background({ position }) {
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                transform: `translate(
-        ${position.x}px,
-        ${position.y}px
-      )`,
-                width: 250,
-                height: 250,
-                backgroundColor: 'rgba(200, 200, 0, 0.2)',
-            }}
-        />
-    );
-}
-```
+    		return (
+    			<div
+    				onPointerDown={handlePointerDown}
+    				onPointerMove={handlePointerMove}
+    				onPointerUp={handlePointerUp}
+    				style={{
+    					width: 100,
+    					height: 100,
+    					cursor: 'grab',
+    					backgroundColor: color,
+    					position: 'absolute',
+    					border: '1px solid black',
+    					display: 'flex',
+    					justifyContent: 'center',
+    					alignItems: 'center',
+    					transform: `translate(
+    			${position.x}px,
+    			${position.y}px
+    			)`,
+    				}}
+    			>
+    				{children}
+    			</div>
+    		);
+    	}
+    	```
+
+    	</div>
+
+    === "Background.js"
+
+    	```js
+    	export default function Background({ position }) {
+    		return (
+    			<div
+    				style={{
+    					position: 'absolute',
+    					transform: `translate(
+    			${position.x}px,
+    			${position.y}px
+    		)`,
+    					width: 250,
+    					height: 250,
+    					backgroundColor: 'rgba(200, 200, 0, 0.2)',
+    				}}
+    			/>
+    		);
+    	}
+    	```
+
+    === "package.json"
+
+    	```json
+    	{
+    		"dependencies": {
+    			"immer": "1.7.3",
+    			"react": "latest",
+    			"react-dom": "latest",
+    			"react-scripts": "latest",
+    			"use-immer": "0.5.1"
+    		},
+    		"scripts": {
+    			"start": "react-scripts start",
+    			"build": "react-scripts build",
+    			"test": "react-scripts test --env=jsdom",
+    			"eject": "react-scripts eject"
+    		},
+    		"devDependencies": {}
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](updating-objects-in-state-8.png)
+
+## Ссылки
+
+-   [https://react.dev/learn/updating-objects-in-state](https://react.dev/learn/updating-objects-in-state)

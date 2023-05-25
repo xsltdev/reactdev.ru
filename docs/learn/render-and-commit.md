@@ -28,28 +28,32 @@
 
 <!-- 0001.part.md -->
 
-```js
-import Image from './Image.js';
-import { createRoot } from 'react-dom/client';
+=== "index.js"
 
-const root = createRoot(document.getElementById('root'));
-root.render(<Image />);
-```
+    ```js
+    import Image from './Image.js';
+    import { createRoot } from 'react-dom/client';
 
-<!-- 0002.part.md -->
+    const root = createRoot(document.getElementById('root'));
+    root.render(<Image />);
+    ```
 
-<!-- 0003.part.md -->
+=== "Image.js"
 
-```js
-export default function Image() {
-    return (
-        <img
-            src="https://i.imgur.com/ZF6s192.jpg"
-            alt="'Floralis Genérica' by Eduardo Catalano: a gigantic metallic flower sculpture with reflective petals"
-        />
-    );
-}
-```
+    ```js
+    export default function Image() {
+    	return (
+    		<img
+    			src="https://i.imgur.com/ZF6s192.jpg"
+    			alt="'Floralis Genérica' by Eduardo Catalano: a gigantic metallic flower sculpture with reflective petals"
+    		/>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](render-and-commit-1.png)
 
 <!-- 0004.part.md -->
 
@@ -57,7 +61,7 @@ export default function Image() {
 
 ### Рендеринг при обновлении состояния
 
-После того, как компонент был первоначально отрисован, вы можете инициировать дальнейшие рендеры, обновляя его состояние с помощью функции [`set`](/reference/react/useState#setstate) Обновление состояния компонента автоматически ставит его в очередь на рендер. (Вы можете представить это как посетитель ресторана, который после первого заказа заказывает чай, десерт и всевозможные вещи, в зависимости от состояния его жажды или голода).
+После того, как компонент был первоначально отрисован, вы можете инициировать дальнейшие рендеры, обновляя его состояние с помощью функции [`set`](../reference/useState.md) Обновление состояния компонента автоматически ставит его в очередь на рендер. (Вы можете представить это как посетитель ресторана, который после первого заказа заказывает чай, десерт и всевозможные вещи, в зависимости от состояния его жажды или голода).
 
 ## Шаг 2: React рендерит ваши компоненты
 
@@ -70,57 +74,61 @@ export default function Image() {
 
 В следующем примере React вызовет `Gallery()` и `Image()` несколько раз:
 
-<!-- 0005.part.md -->
+=== "Gallery.js"
 
-```js
-export default function Gallery() {
-    return (
-        <section>
-            <h1>Inspiring Sculptures</h1>
-            <Image />
-            <Image />
-            <Image />
-        </section>
-    );
-}
+    ```js
+    export default function Gallery() {
+    	return (
+    		<section>
+    			<h1>Inspiring Sculptures</h1>
+    			<Image />
+    			<Image />
+    			<Image />
+    		</section>
+    	);
+    }
 
-function Image() {
-    return (
-        <img
-            src="https://i.imgur.com/ZF6s192.jpg"
-            alt="'Floralis Genérica' by Eduardo Catalano: a gigantic metallic flower sculpture with reflective petals"
-        />
-    );
-}
-```
+    function Image() {
+    	return (
+    		<img
+    			src="https://i.imgur.com/ZF6s192.jpg"
+    			alt="'Floralis Genérica' by Eduardo Catalano: a gigantic metallic flower sculpture with reflective petals"
+    		/>
+    	);
+    }
+    ```
 
-<!-- 0006.part.md -->
+=== "index.js"
 
-<!-- 0007.part.md -->
+    ```js
+    import Gallery from './Gallery.js';
+    import { createRoot } from 'react-dom/client';
 
-```js
-import Gallery from './Gallery.js';
-import { createRoot } from 'react-dom/client';
+    const root = createRoot(document.getElementById('root'));
+    root.render(<Gallery />);
+    ```
 
-const root = createRoot(document.getElementById('root'));
-root.render(<Gallery />);
-```
+=== "Результат"
+
+    ![Результат](render-and-commit-2.png)
 
 -   **Во время первоначального рендеринга** React [создаст DOM-узлы](https://developer.mozilla.org/docs/Web/API/Document/createElement) для тегов `<section>`, `<h1>` и трех `<img>`.
 -   Во время повторного рендеринга React вычислит, какие из их свойств, если таковые имеются, изменились с момента предыдущего рендеринга. Он ничего не будет делать с этой информацией до следующего шага, фазы фиксации.
 
-Рендеринг всегда должен быть [чистым вычислением](keeping-components-pure.md):
+!!!warning "Внимание"
 
--   **Одинаковые входы, одинаковый выход.** При одинаковых входах компонент всегда должен возвращать одинаковый JSX. (Когда кто-то заказывает салат с помидорами, он не должен получить салат с луком!)
--   **Он занимается своими делами.** Он не должен изменять никакие объекты или переменные, существовавшие до рендеринга. (Один заказ не должен изменять другой заказ).
+    Рендеринг всегда должен быть [чистым вычислением](keeping-components-pure.md):
 
-В противном случае вы можете столкнуться с непонятными ошибками и непредсказуемым поведением по мере усложнения вашей кодовой базы. При разработке в "строгом режиме" React вызывает функцию каждого компонента дважды, что может помочь выявить ошибки, вызванные нечистыми функциями.
+    -   **Одинаковые входы, одинаковый выход.** При одинаковых входах компонент всегда должен возвращать одинаковый JSX. (Когда кто-то заказывает салат с помидорами, он не должен получить салат с луком!)
+    -   **Он занимается своими делами.** Он не должен изменять никакие объекты или переменные, существовавшие до рендеринга. (Один заказ не должен изменять другой заказ).
 
-### Оптимизация производительности
+    В противном случае вы можете столкнуться с непонятными ошибками и непредсказуемым поведением по мере усложнения вашей кодовой базы. При разработке в "строгом режиме" React вызывает функцию каждого компонента дважды, что может помочь выявить ошибки, вызванные нечистыми функциями.
 
-Поведение по умолчанию, при котором отображаются все компоненты, вложенные в обновленный компонент, не является оптимальным с точки зрения производительности, если обновленный компонент находится очень высоко в дереве. Если вы столкнулись с проблемой производительности, есть несколько способов ее решения, описанных в разделе [Performance](https://reactjs.org/docs/optimizing-performance.html).
+!!!note "Оптимизация производительности"
 
-**Не оптимизируйте преждевременно!**
+    Поведение по умолчанию, при котором отображаются все компоненты, вложенные в обновленный компонент, не является оптимальным с точки зрения производительности, если обновленный компонент находится очень высоко в дереве. Если вы столкнулись с проблемой производительности, есть несколько способов ее решения, описанных в разделе [Оптимизация производительности](https://ru.legacy.reactjs.org/docs/optimizing-performance.html).
+
+    **Не оптимизируйте преждевременно!**
 
 ## Шаг 3: React фиксирует изменения в DOM
 
@@ -133,57 +141,40 @@ root.render(<Gallery />);
 
 <!-- 0011.part.md -->
 
-```js
-export default function Clock({ time }) {
-    return (
-        <>
-            <h1>{time}</h1>
-            <input />
-        </>
-    );
-}
-```
+=== "Clock.js"
 
-<!-- 0012.part.md -->
+    ```js
+    export default function Clock({ time }) {
+    	return (
+    		<>
+    			<h1>{time}</h1>
+    			<input />
+    		</>
+    	);
+    }
+    ```
 
-<!-- 0013.part.md -->
+=== "Результат"
 
-```js
-import { useState, useEffect } from 'react';
-import Clock from './Clock.js';
-
-function useTime() {
-    const [time, setTime] = useState(() => new Date());
-    useEffect(() => {
-        const id = setInterval(() => {
-            setTime(new Date());
-        }, 1000);
-        return () => clearInterval(id);
-    }, []);
-    return time;
-}
-
-export default function App() {
-    const time = useTime();
-    return <Clock time={time.toLocaleTimeString()} />;
-}
-```
+    ![Результат](render-and-commit-3.png)
 
 <!-- 0014.part.md -->
 
-Это работает, потому что во время последнего шага React только обновляет содержимое `<h1>` с новым `time`. Он видит, что `<input>` появляется в JSX в том же месте, что и в прошлый раз, поэтому React не трогает `<input>` - или его `value`!
+Это работает, потому что во время последнего шага React только обновляет содержимое `<h1>` с новым `time`. Он видит, что `<input>` появляется в JSX в том же месте, что и в прошлый раз, поэтому React не трогает `<input>` или его `value`!
 
-## Эпилог: Браузерная отрисовка
+## Браузерная отрисовка
 
 После того как рендеринг завершен и React обновил DOM, браузер перерисовывает экран. Хотя этот процесс известен как "браузерный рендеринг", мы будем называть его "рисованием", чтобы избежать путаницы в документации.
 
-## Резюме
+!!!note "Итого"
 
--   Любое обновление экрана в приложении React происходит в три этапа:
-    1.  Триггер
-    2.  Рендеринг
-    3.  Коммит
--   Вы можете использовать режим Strict Mode для поиска ошибок в ваших компонентах
--   React не трогает DOM, если результат рендеринга такой же, как и в прошлый раз
+    -   Любое обновление экрана в приложении React происходит в три этапа:
+    	1.  Триггер
+    	2.  Рендеринг
+    	3.  Коммит
+    -   Вы можете использовать режим Strict Mode для поиска ошибок в ваших компонентах
+    -   React не трогает DOM, если результат рендеринга такой же, как и в прошлый раз
 
-<!-- 0015.part.md -->
+## Ссылки
+
+-   [https://react.dev/learn/render-and-commit](https://react.dev/learn/render-and-commit)
