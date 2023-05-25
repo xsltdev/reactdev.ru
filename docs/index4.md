@@ -10,8 +10,6 @@ hide:
 
 [![React](react.svg){: style="height:20px;width:20px;vertical-align:middle;"} **React** :octicons-link-external-16:](https://react.dev/) &mdash; это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов
 
-## React {style="border-bottom: 0;"}
-
 <div class="grid cards" markdown>
 
 -   :material-file-document-multiple:{ .lg .middle } **Документация**

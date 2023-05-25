@@ -223,6 +223,7 @@ h3 {
 	margin: 0;
 	padding: 0.8rem;
 	transition: border 0.25s, box-shadow 0.25s;
+	box-shadow: var(--md-shadow-z1);
 }
 .md-typeset .grid.cards > ol > li:focus-within,
 .md-typeset .grid.cards > ol > li:hover,
