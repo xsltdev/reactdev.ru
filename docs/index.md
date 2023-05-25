@@ -56,6 +56,18 @@ hide:
 
     [:octicons-arrow-right-24: Redux Toolkit](libs/redux-toolkit.md)
 
+-   :simple-apollographql:{ .lg .middle } **Apollo**
+
+    ***
+
+    Библиотеки GraphQL API
+
+    [:octicons-arrow-right-24: GraphQL](graphql/index.md)
+
+    :octicons-arrow-right-24: React Apollo Client 3
+
+    :octicons-arrow-right-24: Apollo Server :octicons-link-external-16:
+
 -   :material-state-machine:{ .lg .middle } **Другие менеджеры**
 
     ***
@@ -71,14 +83,6 @@ hide:
 ## Библиотеки {style="border-bottom: 0;"}
 
 <div class="grid cards" markdown>
-
--   :simple-graphql:{ .lg .middle } **Загрузка данных**
-
-    ***
-
-    Язык запросов данных
-
-    [:octicons-arrow-right-24: GraphQL](graphql/index.md)
 
 -   :simple-reactrouter:{ .lg .middle } **Роутинг**
 
