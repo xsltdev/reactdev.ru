@@ -8,111 +8,104 @@ hide:
 
 # ![React](react.svg){: style="height:64px;width:64px;vertical-align:middle;"} Справочник React
 
-[![React](react.svg){: style="height:20px;width:20px;vertical-align:middle;"} **React**](https://react.dev/) &mdash; это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов
+[![React](react.svg){: style="height:20px;width:20px;vertical-align:middle;"} **React** :octicons-link-external-16:](https://react.dev/) &mdash; это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов
 
-## React {style="border-bottom: 0;"}
+<div class="grid cards" markdown>
 
-<div class="cards" markdown="1">
-<div class="card" markdown="1">
+-   :material-file-document-multiple:{ .lg .middle } **Документация**
 
-### Документация
+    ***
 
-Перевод официальной документации
+    Перевод официальной документации
 
--   **[React 18](learn/index.md)**
--   [React 16](tutorial/tutorial.md)
+    **[:octicons-arrow-right-24: React 18](learn/index.md)**
+
+    [:octicons-arrow-right-24: React 16](tutorial/tutorial.md)
+
+-   :material-language-typescript:{ .lg .middle } **Типизация**
+
+    ***
+
+    Типизация React на Typescript
+
+    [:octicons-arrow-right-24: React и Typescript](types/index.md)
+
+-   :simple-react:{ .lg .middle } **Старт**
+
+    ***
+
+    Фреймворки для старта нового проекта
+
+    [:octicons-arrow-right-24: Next.js](nextjs/index.md)
+
+    [:octicons-arrow-right-24: Create React App](libs/cra.md)
 
 </div>
-<div class="card" markdown="1">
-
-### Типизация
-
-Типизация библиотеки React с помощью Typescript
-
--   [React и Typescript](types/index.md)
-
-</div>
-<div class="card" markdown="1">
-
-### Старт
-
-Фреймворки на React для старта нового проекта
-
--   [![Next.js](nextjs.svg){: style="height:20px;width:20px;vertical-align:middle;"} Next.js](nextjs/index.md)
--   [Create React App](libs/cra.md)
-
-</div>
-</div>
-
----
 
 ## Менеджеры состояния {style="border-bottom: 0;"}
 
-<div class="cards" markdown="1">
-<div class="card" markdown="1">
+<div class="grid cards" markdown>
 
-### Redux
+-   :simple-redux:{ .lg .middle } **Redux**
 
-Библиотека управления состоянием
+    ***
 
--   [![Redux](redux.svg){: style="height:20px;width:20px;vertical-align:middle;"} Redux](libs/redux/index.md)
--   [Redux Toolkit](libs/redux-toolkit.md)
+    Библиотека управления состоянием
+
+    [:octicons-arrow-right-24: Redux](libs/redux/index.md)
+
+    [:octicons-arrow-right-24: Redux Toolkit](libs/redux-toolkit.md)
+
+-   :material-state-machine:{ .lg .middle } **Другие менеджеры**
+
+    ***
+
+    Библиотеки менеджеров состояния
+
+    [:octicons-arrow-right-24: React Query](libs/react-query)
+
+    [:octicons-arrow-right-24: XState](libs/xstate/index.md)
 
 </div>
-<div class="card" markdown="1">
-
-### Другие менеджеры
-
-Библиотеки менеджеров состояния
-
--   [React Query](libs/react-query)
--   [XState](libs/xstate/index.md)
-
-</div>
-</div>
-
----
 
 ## Библиотеки {style="border-bottom: 0;"}
 
-<div class="cards" markdown="1">
-<div class="card" markdown="1">
+<div class="grid cards" markdown>
 
-### Загрузка данных
+-   :simple-graphql:{ .lg .middle } **Загрузка данных**
 
-Язык запросов данных
+    ***
 
--   [![GraphQL](graphql.svg){: style="height:20px;width:20px;vertical-align:middle;"} GraphQL](graphql/index.md)
+    Язык запросов данных
 
-</div>
-<div class="card" markdown="1">
+    [:octicons-arrow-right-24: GraphQL](graphql/index.md)
 
-### Роутинг
+-   :simple-reactrouter:{ .lg .middle } **Роутинг**
 
-Библиотеки организации маршрутизации
+    ***
 
--   [![React Router](react-router.svg){: style="height:20px;width:20px;vertical-align:middle;"} React Router](libs/react-router.md)
+    Библиотеки организации маршрутизации
 
-</div>
-<div class="card" markdown="1">
+    [:octicons-arrow-right-24: React Router](libs/react-router.md)
 
-### Стилизация
+-   :simple-stylelint:{ .lg .middle } **Стилизация**
 
-Библиотеки для управления стилями
+    ***
 
--   [Styled Components](libs/styled-components.md)
+    Библиотеки для управления стилями
 
-</div>
-<div class="card" markdown="1">
+    [:octicons-arrow-right-24: Styled Components](libs/styled-components.md)
 
-### Анимации
+-   :material-animation-play:{ .lg .middle } **Анимации**
 
-Библиотеки анимации и переходов
+    ***
 
--   [![React Spring](react-spring.svg){: style="height:20px;width:20px;vertical-align:middle;"} React Spring](libs/react-spring.md)
--   [React Transition Group](libs/react-transition-group/index.md)
+    Библиотеки анимации и переходов
 
-</div>
+    [:octicons-arrow-right-24: React Spring](libs/react-spring.md)
+
+    [:octicons-arrow-right-24: React Transition Group](libs/react-transition-group/index.md)
+
 </div>
 
 ---
@@ -126,3 +119,7 @@ hide:
     [![Node.js](nodejs.svg){: style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;
     [![Python 3](python.svg){: style="height:16px;width:16px;vertical-align:middle;"} Python 3](https://py3dev.ru/) &nbsp;&nbsp;&nbsp;
     [![XSLT](xslt.svg){: style="height:16px;width:16px;vertical-align:middle;"} XSLT](https://xsltdev.ru/)
+
+<!--
+https://github.com/harryheman/React-Total
+-->
