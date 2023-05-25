@@ -8,7 +8,7 @@ hide:
 
 # ![React](react.svg){: style="height:64px;width:64px;vertical-align:middle;"} Справочник React
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); grid-column-gap: 35px; place-items: stretch;" markdown>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-column-gap: 30px; place-items: stretch;" markdown>
 
 [![React](react.svg){: style="height:20px;width:20px;vertical-align:middle;"} **React**](https://react.dev/) &mdash; это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов
 
