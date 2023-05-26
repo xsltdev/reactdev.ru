@@ -6,13 +6,13 @@ hide:
     - navigation
 ---
 
-# ![React](react.svg){: style="height:64px;width:64px;vertical-align:middle;"} Справочник React
+# ![React](react.svg){: style="height:42px;width:42px;vertical-align:middle;"} Справочник React
 
-[![React](react.svg){: style="height:20px;width:20px;vertical-align:middle;"} **React** :octicons-link-external-16:](https://react.dev/) &mdash; это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов
+[**React** :octicons-link-external-16:](https://react.dev/) &mdash; это декларативная, эффективная и гибкая JavaScript библиотека для создания пользовательских интерфейсов.
 
-<div class="grid cards" markdown>
+<div class="grid cards" style="margin-top: 1.6em" markdown>
 
--   :material-file-document-multiple:{ .lg .middle } **Документация**
+-   :simple-react:{ .lg .middle } **Документация**
 
     ***
 
@@ -30,7 +30,7 @@ hide:
 
     [:octicons-arrow-right-24: React и Typescript](types/index.md)
 
--   :simple-react:{ .lg .middle } **Старт**
+-   :simple-nextdotjs:{ .lg .middle } **Старт**
 
     ***
 
@@ -64,7 +64,7 @@ hide:
 
     [:octicons-arrow-right-24: GraphQL](graphql/index.md)
 
-    :octicons-arrow-right-24: React Apollo Client 3
+    :octicons-arrow-right-24: React Apollo Client <small>v3</small>
 
     :octicons-arrow-right-24: Apollo Server :octicons-link-external-16:
 
@@ -76,7 +76,7 @@ hide:
 
     [:octicons-arrow-right-24: React Query](libs/react-query)
 
-    [:octicons-arrow-right-24: XState](libs/xstate/index.md)
+    [:octicons-arrow-right-24: XState](libs/xstate/index.md) <small>v4</small>
 
 </div>
 
