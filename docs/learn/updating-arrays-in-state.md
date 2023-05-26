@@ -889,120 +889,138 @@ updateMyTodos((draft) => {
 
 <!-- 0047.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-const initialProducts = [
-    {
-        id: 0,
-        name: 'Baklava',
-        count: 1,
-    },
-    {
-        id: 1,
-        name: 'Cheese',
-        count: 5,
-    },
-    {
-        id: 2,
-        name: 'Spaghetti',
-        count: 2,
-    },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function ShoppingCart() {
-    const [products, setProducts] = useState(
-        initialProducts
-    );
+    ```js
+    import { useState } from 'react';
 
-    function handleIncreaseClick(productId) {}
+    const initialProducts = [
+    	{
+    		id: 0,
+    		name: 'Baklava',
+    		count: 1,
+    	},
+    	{
+    		id: 1,
+    		name: 'Cheese',
+    		count: 5,
+    	},
+    	{
+    		id: 2,
+    		name: 'Spaghetti',
+    		count: 2,
+    	},
+    ];
 
-    return (
-        <ul>
-            {products.map((product) => (
-                <li key={product.id}>
-                    {product.name} (<b>{product.count}</b>)
-                    <button
-                        onClick={() => {
-                            handleIncreaseClick(product.id);
-                        }}
-                    >
-                        +
-                    </button>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+    export default function ShoppingCart() {
+    	const [products, setProducts] = useState(
+    		initialProducts
+    	);
+
+    	function handleIncreaseClick(productId) {}
+
+    	return (
+    		<ul>
+    			{products.map((product) => (
+    				<li key={product.id}>
+    					{product.name} (<b>{product.count}</b>)
+    					<button
+    						onClick={() => {
+    							handleIncreaseClick(product.id);
+    						}}
+    					>
+    						+
+    					</button>
+    				</li>
+    			))}
+    		</ul>
+    	);
+    }
+    ```
+
+    </div>
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-8.png)
 
 <!-- 0050.part.md -->
 
-Вы можете использовать функцию `map` для создания нового массива, а затем использовать синтаксис распространения объектов `...` для создания копии измененного объекта для нового массива:
+???success "Показать решение"
 
-<!-- 0051.part.md -->
+    Вы можете использовать функцию `map` для создания нового массива, а затем использовать синтаксис распространения объектов `...` для создания копии измененного объекта для нового массива:
 
-```js
-import { useState } from 'react';
+    === "App.js"
 
-const initialProducts = [
-    {
-        id: 0,
-        name: 'Baklava',
-        count: 1,
-    },
-    {
-        id: 1,
-        name: 'Cheese',
-        count: 5,
-    },
-    {
-        id: 2,
-        name: 'Spaghetti',
-        count: 2,
-    },
-];
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function ShoppingCart() {
-    const [products, setProducts] = useState(
-        initialProducts
-    );
+    	```js
+    	import { useState } from 'react';
 
-    function handleIncreaseClick(productId) {
-        setProducts(
-            products.map((product) => {
-                if (product.id === productId) {
-                    return {
-                        ...product,
-                        count: product.count + 1,
-                    };
-                } else {
-                    return product;
-                }
-            })
-        );
-    }
+    	const initialProducts = [
+    		{
+    			id: 0,
+    			name: 'Baklava',
+    			count: 1,
+    		},
+    		{
+    			id: 1,
+    			name: 'Cheese',
+    			count: 5,
+    		},
+    		{
+    			id: 2,
+    			name: 'Spaghetti',
+    			count: 2,
+    		},
+    	];
 
-    return (
-        <ul>
-            {products.map((product) => (
-                <li key={product.id}>
-                    {product.name} (<b>{product.count}</b>)
-                    <button
-                        onClick={() => {
-                            handleIncreaseClick(product.id);
-                        }}
-                    >
-                        +
-                    </button>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+    	export default function ShoppingCart() {
+    		const [products, setProducts] = useState(
+    			initialProducts
+    		);
 
-<!-- 0054.part.md -->
+    		function handleIncreaseClick(productId) {
+    			setProducts(
+    				products.map((product) => {
+    					if (product.id === productId) {
+    						return {
+    							...product,
+    							count: product.count + 1,
+    						};
+    					} else {
+    						return product;
+    					}
+    				})
+    			);
+    		}
+
+    		return (
+    			<ul>
+    				{products.map((product) => (
+    					<li key={product.id}>
+    						{product.name} (<b>{product.count}</b>)
+    						<button
+    							onClick={() => {
+    								handleIncreaseClick(product.id);
+    							}}
+    						>
+    							+
+    						</button>
+    					</li>
+    				))}
+    			</ul>
+    		);
+    	}
+    	```
+
+    	</div>
+
+    === "Результат"
+
+    	![Результат](updating-arrays-in-state-9.png)
 
 ### 2. Удаление товара из корзины
 
@@ -1010,156 +1028,178 @@ export default function ShoppingCart() {
 
 <!-- 0055.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-const initialProducts = [
-    {
-        id: 0,
-        name: 'Baklava',
-        count: 1,
-    },
-    {
-        id: 1,
-        name: 'Cheese',
-        count: 5,
-    },
-    {
-        id: 2,
-        name: 'Spaghetti',
-        count: 2,
-    },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function ShoppingCart() {
-    const [products, setProducts] = useState(
-        initialProducts
-    );
+    ```js
+    import { useState } from 'react';
 
-    function handleIncreaseClick(productId) {
-        setProducts(
-            products.map((product) => {
-                if (product.id === productId) {
-                    return {
-                        ...product,
-                        count: product.count + 1,
-                    };
-                } else {
-                    return product;
-                }
-            })
-        );
+    const initialProducts = [
+    	{
+    		id: 0,
+    		name: 'Baklava',
+    		count: 1,
+    	},
+    	{
+    		id: 1,
+    		name: 'Cheese',
+    		count: 5,
+    	},
+    	{
+    		id: 2,
+    		name: 'Spaghetti',
+    		count: 2,
+    	},
+    ];
+
+    export default function ShoppingCart() {
+    	const [products, setProducts] = useState(
+    		initialProducts
+    	);
+
+    	function handleIncreaseClick(productId) {
+    		setProducts(
+    			products.map((product) => {
+    				if (product.id === productId) {
+    					return {
+    						...product,
+    						count: product.count + 1,
+    					};
+    				} else {
+    					return product;
+    				}
+    			})
+    		);
+    	}
+
+    	return (
+    		<ul>
+    			{products.map((product) => (
+    				<li key={product.id}>
+    					{product.name} (<b>{product.count}</b>)
+    					<button
+    						onClick={() => {
+    							handleIncreaseClick(product.id);
+    						}}
+    					>
+    						+
+    					</button>
+    					<button>–</button>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
+    ```
 
-    return (
-        <ul>
-            {products.map((product) => (
-                <li key={product.id}>
-                    {product.name} (<b>{product.count}</b>)
-                    <button
-                        onClick={() => {
-                            handleIncreaseClick(product.id);
-                        }}
-                    >
-                        +
-                    </button>
-                    <button>–</button>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+    </div>
+
+=== "Результат"
+
+    ![Результат](updating-arrays-in-state-10.png)
 
 <!-- 0058.part.md -->
 
-Вы можете сначала использовать `map` для создания нового массива, а затем `filter` для удаления продуктов с `count`, установленным в `0`:
+???success "Показать решение"
 
-<!-- 0059.part.md -->
+    Вы можете сначала использовать `map` для создания нового массива, а затем `filter` для удаления продуктов с `count`, установленным в `0`:
 
-```js
-import { useState } from 'react';
+    <!-- 0059.part.md -->
 
-const initialProducts = [
-    {
-        id: 0,
-        name: 'Baklava',
-        count: 1,
-    },
-    {
-        id: 1,
-        name: 'Cheese',
-        count: 5,
-    },
-    {
-        id: 2,
-        name: 'Spaghetti',
-        count: 2,
-    },
-];
+    === "App.js"
 
-export default function ShoppingCart() {
-    const [products, setProducts] = useState(
-        initialProducts
-    );
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleIncreaseClick(productId) {
-        setProducts(
-            products.map((product) => {
-                if (product.id === productId) {
-                    return {
-                        ...product,
-                        count: product.count + 1,
-                    };
-                } else {
-                    return product;
-                }
-            })
-        );
-    }
+    	```js
+    	import { useState } from 'react';
 
-    function handleDecreaseClick(productId) {
-        let nextProducts = products.map((product) => {
-            if (product.id === productId) {
-                return {
-                    ...product,
-                    count: product.count - 1,
-                };
-            } else {
-                return product;
-            }
-        });
-        nextProducts = nextProducts.filter(
-            (p) => p.count > 0
-        );
-        setProducts(nextProducts);
-    }
+    	const initialProducts = [
+    		{
+    			id: 0,
+    			name: 'Baklava',
+    			count: 1,
+    		},
+    		{
+    			id: 1,
+    			name: 'Cheese',
+    			count: 5,
+    		},
+    		{
+    			id: 2,
+    			name: 'Spaghetti',
+    			count: 2,
+    		},
+    	];
 
-    return (
-        <ul>
-            {products.map((product) => (
-                <li key={product.id}>
-                    {product.name} (<b>{product.count}</b>)
-                    <button
-                        onClick={() => {
-                            handleIncreaseClick(product.id);
-                        }}
-                    >
-                        +
-                    </button>
-                    <button
-                        onClick={() => {
-                            handleDecreaseClick(product.id);
-                        }}
-                    >
-                        –
-                    </button>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+    	export default function ShoppingCart() {
+    		const [products, setProducts] = useState(
+    			initialProducts
+    		);
+
+    		function handleIncreaseClick(productId) {
+    			setProducts(
+    				products.map((product) => {
+    					if (product.id === productId) {
+    						return {
+    							...product,
+    							count: product.count + 1,
+    						};
+    					} else {
+    						return product;
+    					}
+    				})
+    			);
+    		}
+
+    		function handleDecreaseClick(productId) {
+    			let nextProducts = products.map((product) => {
+    				if (product.id === productId) {
+    					return {
+    						...product,
+    						count: product.count - 1,
+    					};
+    				} else {
+    					return product;
+    				}
+    			});
+    			nextProducts = nextProducts.filter(
+    				(p) => p.count > 0
+    			);
+    			setProducts(nextProducts);
+    		}
+
+    		return (
+    			<ul>
+    				{products.map((product) => (
+    					<li key={product.id}>
+    						{product.name} (<b>{product.count}</b>)
+    						<button
+    							onClick={() => {
+    								handleIncreaseClick(product.id);
+    							}}
+    						>
+    							+
+    						</button>
+    						<button
+    							onClick={() => {
+    								handleDecreaseClick(product.id);
+    							}}
+    						>
+    							–
+    						</button>
+    					</li>
+    				))}
+    			</ul>
+    		);
+    	}
+    	```
+
+    	</div>
+
+    === "Результат"
+
+    	![Результат](updating-arrays-in-state-11.png)
 
 ### 3. Исправьте мутации, используя немутационные методы
 
@@ -1167,331 +1207,353 @@ export default function ShoppingCart() {
 
 <!-- 0063.part.md -->
 
-```js
-import { useState } from 'react';
-import AddTodo from './AddTodo.js';
-import TaskList from './TaskList.js';
+=== "App.js"
 
-let nextId = 3;
-const initialTodos = [
-    { id: 0, title: 'Buy milk', done: true },
-    { id: 1, title: 'Eat tacos', done: false },
-    { id: 2, title: 'Brew tea', done: false },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function TaskApp() {
-    const [todos, setTodos] = useState(initialTodos);
+    ```js
+    import { useState } from 'react';
+    import AddTodo from './AddTodo.js';
+    import TaskList from './TaskList.js';
 
-    function handleAddTodo(title) {
-        todos.push({
-            id: nextId++,
-            title: title,
-            done: false,
-        });
+    let nextId = 3;
+    const initialTodos = [
+    	{ id: 0, title: 'Buy milk', done: true },
+    	{ id: 1, title: 'Eat tacos', done: false },
+    	{ id: 2, title: 'Brew tea', done: false },
+    ];
+
+    export default function TaskApp() {
+    	const [todos, setTodos] = useState(initialTodos);
+
+    	function handleAddTodo(title) {
+    		todos.push({
+    			id: nextId++,
+    			title: title,
+    			done: false,
+    		});
+    	}
+
+    	function handleChangeTodo(nextTodo) {
+    		const todo = todos.find(
+    			(t) => t.id === nextTodo.id
+    		);
+    		todo.title = nextTodo.title;
+    		todo.done = nextTodo.done;
+    	}
+
+    	function handleDeleteTodo(todoId) {
+    		const index = todos.findIndex(
+    			(t) => t.id === todoId
+    		);
+    		todos.splice(index, 1);
+    	}
+
+    	return (
+    		<>
+    			<AddTodo onAddTodo={handleAddTodo} />
+    			<TaskList
+    				todos={todos}
+    				onChangeTodo={handleChangeTodo}
+    				onDeleteTodo={handleDeleteTodo}
+    			/>
+    		</>
+    	);
+    }
+    ```
+
+    </div>
+
+=== "AddTodo.js"
+
+    ```js
+    import { useState } from 'react';
+
+    export default function AddTodo({ onAddTodo }) {
+    	const [title, setTitle] = useState('');
+    	return (
+    		<>
+    			<input
+    				placeholder="Add todo"
+    				value={title}
+    				onChange={(e) => setTitle(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => {
+    					setTitle('');
+    					onAddTodo(title);
+    				}}
+    			>
+    				Add
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "TaskList.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    import { useState } from 'react';
+
+    export default function TaskList({
+    	todos,
+    	onChangeTodo,
+    	onDeleteTodo,
+    }) {
+    	return (
+    		<ul>
+    			{todos.map((todo) => (
+    				<li key={todo.id}>
+    					<Task
+    						todo={todo}
+    						onChange={onChangeTodo}
+    						onDelete={onDeleteTodo}
+    					/>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
 
-    function handleChangeTodo(nextTodo) {
-        const todo = todos.find(
-            (t) => t.id === nextTodo.id
-        );
-        todo.title = nextTodo.title;
-        todo.done = nextTodo.done;
+    function Task({ todo, onChange, onDelete }) {
+    	const [isEditing, setIsEditing] = useState(false);
+    	let todoContent;
+    	if (isEditing) {
+    		todoContent = (
+    			<>
+    				<input
+    					value={todo.title}
+    					onChange={(e) => {
+    						onChange({
+    							...todo,
+    							title: e.target.value,
+    						});
+    					}}
+    				/>
+    				<button onClick={() => setIsEditing(false)}>
+    					Save
+    				</button>
+    			</>
+    		);
+    	} else {
+    		todoContent = (
+    			<>
+    				{todo.title}
+    				<button onClick={() => setIsEditing(true)}>
+    					Edit
+    				</button>
+    			</>
+    		);
+    	}
+    	return (
+    		<label>
+    			<input
+    				type="checkbox"
+    				checked={todo.done}
+    				onChange={(e) => {
+    					onChange({
+    						...todo,
+    						done: e.target.checked,
+    					});
+    				}}
+    			/>
+    			{todoContent}
+    			<button onClick={() => onDelete(todo.id)}>
+    				Delete
+    			</button>
+    		</label>
+    	);
     }
+    ```
 
-    function handleDeleteTodo(todoId) {
-        const index = todos.findIndex(
-            (t) => t.id === todoId
-        );
-        todos.splice(index, 1);
-    }
+    </div>
 
-    return (
-        <>
-            <AddTodo onAddTodo={handleAddTodo} />
-            <TaskList
-                todos={todos}
-                onChangeTodo={handleChangeTodo}
-                onDeleteTodo={handleDeleteTodo}
-            />
-        </>
-    );
-}
-```
+=== "Результат"
 
-<!-- 0064.part.md -->
-
-<!-- 0065.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function AddTodo({ onAddTodo }) {
-    const [title, setTitle] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add todo"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setTitle('');
-                    onAddTodo(title);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
-
-<!-- 0066.part.md -->
-
-<!-- 0067.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function TaskList({
-    todos,
-    onChangeTodo,
-    onDeleteTodo,
-}) {
-    return (
-        <ul>
-            {todos.map((todo) => (
-                <li key={todo.id}>
-                    <Task
-                        todo={todo}
-                        onChange={onChangeTodo}
-                        onDelete={onDeleteTodo}
-                    />
-                </li>
-            ))}
-        </ul>
-    );
-}
-
-function Task({ todo, onChange, onDelete }) {
-    const [isEditing, setIsEditing] = useState(false);
-    let todoContent;
-    if (isEditing) {
-        todoContent = (
-            <>
-                <input
-                    value={todo.title}
-                    onChange={(e) => {
-                        onChange({
-                            ...todo,
-                            title: e.target.value,
-                        });
-                    }}
-                />
-                <button onClick={() => setIsEditing(false)}>
-                    Save
-                </button>
-            </>
-        );
-    } else {
-        todoContent = (
-            <>
-                {todo.title}
-                <button onClick={() => setIsEditing(true)}>
-                    Edit
-                </button>
-            </>
-        );
-    }
-    return (
-        <label>
-            <input
-                type="checkbox"
-                checked={todo.done}
-                onChange={(e) => {
-                    onChange({
-                        ...todo,
-                        done: e.target.checked,
-                    });
-                }}
-            />
-            {todoContent}
-            <button onClick={() => onDelete(todo.id)}>
-                Delete
-            </button>
-        </label>
-    );
-}
-```
+    ![Результат](updating-arrays-in-state-12.png)
 
 <!-- 0070.part.md -->
 
-В `handleAddTodo` вы можете использовать синтаксис распространения массива. В `handleChangeTodo` вы можете создать новый массив с помощью `map`. В `handleDeleteTodo` можно создать новый массив с помощью `filter`. Теперь список работает правильно:
+???success "Показать решение"
 
-<!-- 0071.part.md -->
+    В `handleAddTodo` вы можете использовать синтаксис распространения массива. В `handleChangeTodo` вы можете создать новый массив с помощью `map`. В `handleDeleteTodo` можно создать новый массив с помощью `filter`. Теперь список работает правильно:
 
-```js
-import { useState } from 'react';
-import AddTodo from './AddTodo.js';
-import TaskList from './TaskList.js';
+    <!-- 0071.part.md -->
 
-let nextId = 3;
-const initialTodos = [
-    { id: 0, title: 'Buy milk', done: true },
-    { id: 1, title: 'Eat tacos', done: false },
-    { id: 2, title: 'Brew tea', done: false },
-];
+    === "App.js"
 
-export default function TaskApp() {
-    const [todos, setTodos] = useState(initialTodos);
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleAddTodo(title) {
-        setTodos([
-            ...todos,
-            {
-                id: nextId++,
-                title: title,
-                done: false,
-            },
-        ]);
-    }
+    	```js
+    	import { useState } from 'react';
+    	import AddTodo from './AddTodo.js';
+    	import TaskList from './TaskList.js';
 
-    function handleChangeTodo(nextTodo) {
-        setTodos(
-            todos.map((t) => {
-                if (t.id === nextTodo.id) {
-                    return nextTodo;
-                } else {
-                    return t;
-                }
-            })
-        );
-    }
+    	let nextId = 3;
+    	const initialTodos = [
+    		{ id: 0, title: 'Buy milk', done: true },
+    		{ id: 1, title: 'Eat tacos', done: false },
+    		{ id: 2, title: 'Brew tea', done: false },
+    	];
 
-    function handleDeleteTodo(todoId) {
-        setTodos(todos.filter((t) => t.id !== todoId));
-    }
+    	export default function TaskApp() {
+    		const [todos, setTodos] = useState(initialTodos);
 
-    return (
-        <>
-            <AddTodo onAddTodo={handleAddTodo} />
-            <TaskList
-                todos={todos}
-                onChangeTodo={handleChangeTodo}
-                onDeleteTodo={handleDeleteTodo}
-            />
-        </>
-    );
-}
-```
+    		function handleAddTodo(title) {
+    			setTodos([
+    				...todos,
+    				{
+    					id: nextId++,
+    					title: title,
+    					done: false,
+    				},
+    			]);
+    		}
 
-<!-- 0072.part.md -->
+    		function handleChangeTodo(nextTodo) {
+    			setTodos(
+    				todos.map((t) => {
+    					if (t.id === nextTodo.id) {
+    						return nextTodo;
+    					} else {
+    						return t;
+    					}
+    				})
+    			);
+    		}
 
-<!-- 0073.part.md -->
+    		function handleDeleteTodo(todoId) {
+    			setTodos(todos.filter((t) => t.id !== todoId));
+    		}
 
-```js
-import { useState } from 'react';
+    		return (
+    			<>
+    				<AddTodo onAddTodo={handleAddTodo} />
+    				<TaskList
+    					todos={todos}
+    					onChangeTodo={handleChangeTodo}
+    					onDeleteTodo={handleDeleteTodo}
+    				/>
+    			</>
+    		);
+    	}
+    	```
 
-export default function AddTodo({ onAddTodo }) {
-    const [title, setTitle] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add todo"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setTitle('');
-                    onAddTodo(title);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
+    	</div>
 
-<!-- 0074.part.md -->
+    === "AddTodo.js"
 
-<!-- 0075.part.md -->
+    	```js
+    	import { useState } from 'react';
 
-```js
-import { useState } from 'react';
+    	export default function AddTodo({ onAddTodo }) {
+    		const [title, setTitle] = useState('');
+    		return (
+    			<>
+    				<input
+    					placeholder="Add todo"
+    					value={title}
+    					onChange={(e) => setTitle(e.target.value)}
+    				/>
+    				<button
+    					onClick={() => {
+    						setTitle('');
+    						onAddTodo(title);
+    					}}
+    				>
+    					Add
+    				</button>
+    			</>
+    		);
+    	}
+    	```
 
-export default function TaskList({
-    todos,
-    onChangeTodo,
-    onDeleteTodo,
-}) {
-    return (
-        <ul>
-            {todos.map((todo) => (
-                <li key={todo.id}>
-                    <Task
-                        todo={todo}
-                        onChange={onChangeTodo}
-                        onDelete={onDeleteTodo}
-                    />
-                </li>
-            ))}
-        </ul>
-    );
-}
+    === "TaskList.js"
 
-function Task({ todo, onChange, onDelete }) {
-    const [isEditing, setIsEditing] = useState(false);
-    let todoContent;
-    if (isEditing) {
-        todoContent = (
-            <>
-                <input
-                    value={todo.title}
-                    onChange={(e) => {
-                        onChange({
-                            ...todo,
-                            title: e.target.value,
-                        });
-                    }}
-                />
-                <button onClick={() => setIsEditing(false)}>
-                    Save
-                </button>
-            </>
-        );
-    } else {
-        todoContent = (
-            <>
-                {todo.title}
-                <button onClick={() => setIsEditing(true)}>
-                    Edit
-                </button>
-            </>
-        );
-    }
-    return (
-        <label>
-            <input
-                type="checkbox"
-                checked={todo.done}
-                onChange={(e) => {
-                    onChange({
-                        ...todo,
-                        done: e.target.checked,
-                    });
-                }}
-            />
-            {todoContent}
-            <button onClick={() => onDelete(todo.id)}>
-                Delete
-            </button>
-        </label>
-    );
-}
-```
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
+
+    	```js
+    	import { useState } from 'react';
+
+    	export default function TaskList({
+    		todos,
+    		onChangeTodo,
+    		onDeleteTodo,
+    	}) {
+    		return (
+    			<ul>
+    				{todos.map((todo) => (
+    					<li key={todo.id}>
+    						<Task
+    							todo={todo}
+    							onChange={onChangeTodo}
+    							onDelete={onDeleteTodo}
+    						/>
+    					</li>
+    				))}
+    			</ul>
+    		);
+    	}
+
+    	function Task({ todo, onChange, onDelete }) {
+    		const [isEditing, setIsEditing] = useState(false);
+    		let todoContent;
+    		if (isEditing) {
+    			todoContent = (
+    				<>
+    					<input
+    						value={todo.title}
+    						onChange={(e) => {
+    							onChange({
+    								...todo,
+    								title: e.target.value,
+    							});
+    						}}
+    					/>
+    					<button onClick={() => setIsEditing(false)}>
+    						Save
+    					</button>
+    				</>
+    			);
+    		} else {
+    			todoContent = (
+    				<>
+    					{todo.title}
+    					<button onClick={() => setIsEditing(true)}>
+    						Edit
+    					</button>
+    				</>
+    			);
+    		}
+    		return (
+    			<label>
+    				<input
+    					type="checkbox"
+    					checked={todo.done}
+    					onChange={(e) => {
+    						onChange({
+    							...todo,
+    							done: e.target.checked,
+    						});
+    					}}
+    				/>
+    				{todoContent}
+    				<button onClick={() => onDelete(todo.id)}>
+    					Delete
+    				</button>
+    			</label>
+    		);
+    	}
+    	```
+
+    	</div>
+
+    === "Результат"
+
+    	![Результат](updating-arrays-in-state-13.png)
 
 ### 4. Исправьте мутации с помощью Immer
 
@@ -1499,507 +1561,594 @@ function Task({ todo, onChange, onDelete }) {
 
 <!-- 0079.part.md -->
 
-```js
-import { useState } from 'react';
-import { useImmer } from 'use-immer';
-import AddTodo from './AddTodo.js';
-import TaskList from './TaskList.js';
+=== "App.js"
 
-let nextId = 3;
-const initialTodos = [
-    { id: 0, title: 'Buy milk', done: true },
-    { id: 1, title: 'Eat tacos', done: false },
-    { id: 2, title: 'Brew tea', done: false },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function TaskApp() {
-    const [todos, setTodos] = useState(initialTodos);
+    ```js
+    import { useState } from 'react';
+    import { useImmer } from 'use-immer';
+    import AddTodo from './AddTodo.js';
+    import TaskList from './TaskList.js';
 
-    function handleAddTodo(title) {
-        todos.push({
-            id: nextId++,
-            title: title,
-            done: false,
-        });
+    let nextId = 3;
+    const initialTodos = [
+    	{ id: 0, title: 'Buy milk', done: true },
+    	{ id: 1, title: 'Eat tacos', done: false },
+    	{ id: 2, title: 'Brew tea', done: false },
+    ];
+
+    export default function TaskApp() {
+    	const [todos, setTodos] = useState(initialTodos);
+
+    	function handleAddTodo(title) {
+    		todos.push({
+    			id: nextId++,
+    			title: title,
+    			done: false,
+    		});
+    	}
+
+    	function handleChangeTodo(nextTodo) {
+    		const todo = todos.find(
+    			(t) => t.id === nextTodo.id
+    		);
+    		todo.title = nextTodo.title;
+    		todo.done = nextTodo.done;
+    	}
+
+    	function handleDeleteTodo(todoId) {
+    		const index = todos.findIndex(
+    			(t) => t.id === todoId
+    		);
+    		todos.splice(index, 1);
+    	}
+
+    	return (
+    		<>
+    			<AddTodo onAddTodo={handleAddTodo} />
+    			<TaskList
+    				todos={todos}
+    				onChangeTodo={handleChangeTodo}
+    				onDeleteTodo={handleDeleteTodo}
+    			/>
+    		</>
+    	);
+    }
+    ```
+
+    </div>
+
+=== "AddTodo.js"
+
+    ```js
+    import { useState } from 'react';
+
+    export default function AddTodo({ onAddTodo }) {
+    	const [title, setTitle] = useState('');
+    	return (
+    		<>
+    			<input
+    				placeholder="Add todo"
+    				value={title}
+    				onChange={(e) => setTitle(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => {
+    					setTitle('');
+    					onAddTodo(title);
+    				}}
+    			>
+    				Add
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "TaskList.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    import { useState } from 'react';
+
+    export default function TaskList({
+    	todos,
+    	onChangeTodo,
+    	onDeleteTodo,
+    }) {
+    	return (
+    		<ul>
+    			{todos.map((todo) => (
+    				<li key={todo.id}>
+    					<Task
+    						todo={todo}
+    						onChange={onChangeTodo}
+    						onDelete={onDeleteTodo}
+    					/>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
 
-    function handleChangeTodo(nextTodo) {
-        const todo = todos.find(
-            (t) => t.id === nextTodo.id
-        );
-        todo.title = nextTodo.title;
-        todo.done = nextTodo.done;
+    function Task({ todo, onChange, onDelete }) {
+    	const [isEditing, setIsEditing] = useState(false);
+    	let todoContent;
+    	if (isEditing) {
+    		todoContent = (
+    			<>
+    				<input
+    					value={todo.title}
+    					onChange={(e) => {
+    						onChange({
+    							...todo,
+    							title: e.target.value,
+    						});
+    					}}
+    				/>
+    				<button onClick={() => setIsEditing(false)}>
+    					Save
+    				</button>
+    			</>
+    		);
+    	} else {
+    		todoContent = (
+    			<>
+    				{todo.title}
+    				<button onClick={() => setIsEditing(true)}>
+    					Edit
+    				</button>
+    			</>
+    		);
+    	}
+    	return (
+    		<label>
+    			<input
+    				type="checkbox"
+    				checked={todo.done}
+    				onChange={(e) => {
+    					onChange({
+    						...todo,
+    						done: e.target.checked,
+    					});
+    				}}
+    			/>
+    			{todoContent}
+    			<button onClick={() => onDelete(todo.id)}>
+    				Delete
+    			</button>
+    		</label>
+    	);
     }
+    ```
 
-    function handleDeleteTodo(todoId) {
-        const index = todos.findIndex(
-            (t) => t.id === todoId
-        );
-        todos.splice(index, 1);
+    </div>
+
+=== "package.json"
+
+    ```json
+    {
+    	"dependencies": {
+    		"immer": "1.7.3",
+    		"react": "latest",
+    		"react-dom": "latest",
+    		"react-scripts": "latest",
+    		"use-immer": "0.5.1"
+    	},
+    	"scripts": {
+    		"start": "react-scripts start",
+    		"build": "react-scripts build",
+    		"test": "react-scripts test --env=jsdom",
+    		"eject": "react-scripts eject"
+    	},
+    	"devDependencies": {}
     }
+    ```
 
-    return (
-        <>
-            <AddTodo onAddTodo={handleAddTodo} />
-            <TaskList
-                todos={todos}
-                onChangeTodo={handleChangeTodo}
-                onDeleteTodo={handleDeleteTodo}
-            />
-        </>
-    );
-}
-```
+=== "Результат"
 
-<!-- 0080.part.md -->
+    ![Результат](updating-arrays-in-state-14.png)
 
-<!-- 0081.part.md -->
+???success "Показать решение"
 
-```js
-import { useState } from 'react';
+    С Immer вы можете писать код мутативным способом, пока вы мутируете только части `draft`, который дает вам Immer. Здесь все мутации выполняются над `draft`, так что код работает:
 
-export default function AddTodo({ onAddTodo }) {
-    const [title, setTitle] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add todo"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setTitle('');
-                    onAddTodo(title);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
+    === "App.js"
 
-<!-- 0082.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-<!-- 0083.part.md -->
+    	```js
+    	import { useState } from 'react';
+    	import { useImmer } from 'use-immer';
+    	import AddTodo from './AddTodo.js';
+    	import TaskList from './TaskList.js';
 
-```js
-import { useState } from 'react';
+    	let nextId = 3;
+    	const initialTodos = [
+    		{ id: 0, title: 'Buy milk', done: true },
+    		{ id: 1, title: 'Eat tacos', done: false },
+    		{ id: 2, title: 'Brew tea', done: false },
+    	];
 
-export default function TaskList({
-    todos,
-    onChangeTodo,
-    onDeleteTodo,
-}) {
-    return (
-        <ul>
-            {todos.map((todo) => (
-                <li key={todo.id}>
-                    <Task
-                        todo={todo}
-                        onChange={onChangeTodo}
-                        onDelete={onDeleteTodo}
-                    />
-                </li>
-            ))}
-        </ul>
-    );
-}
+    	export default function TaskApp() {
+    		const [todos, updateTodos] = useImmer(initialTodos);
 
-function Task({ todo, onChange, onDelete }) {
-    const [isEditing, setIsEditing] = useState(false);
-    let todoContent;
-    if (isEditing) {
-        todoContent = (
-            <>
-                <input
-                    value={todo.title}
-                    onChange={(e) => {
-                        onChange({
-                            ...todo,
-                            title: e.target.value,
-                        });
-                    }}
-                />
-                <button onClick={() => setIsEditing(false)}>
-                    Save
-                </button>
-            </>
-        );
-    } else {
-        todoContent = (
-            <>
-                {todo.title}
-                <button onClick={() => setIsEditing(true)}>
-                    Edit
-                </button>
-            </>
-        );
-    }
-    return (
-        <label>
-            <input
-                type="checkbox"
-                checked={todo.done}
-                onChange={(e) => {
-                    onChange({
-                        ...todo,
-                        done: e.target.checked,
-                    });
-                }}
-            />
-            {todoContent}
-            <button onClick={() => onDelete(todo.id)}>
-                Delete
-            </button>
-        </label>
-    );
-}
-```
+    		function handleAddTodo(title) {
+    			updateTodos((draft) => {
+    				draft.push({
+    					id: nextId++,
+    					title: title,
+    					done: false,
+    				});
+    			});
+    		}
 
-С Immer вы можете писать код мутативным способом, пока вы мутируете только части `черновика`, который дает вам Immer. Здесь все мутации выполняются над `черновиком`, так что код работает:
+    		function handleChangeTodo(nextTodo) {
+    			updateTodos((draft) => {
+    				const todo = draft.find(
+    					(t) => t.id === nextTodo.id
+    				);
+    				todo.title = nextTodo.title;
+    				todo.done = nextTodo.done;
+    			});
+    		}
 
-<!-- 0089.part.md -->
+    		function handleDeleteTodo(todoId) {
+    			updateTodos((draft) => {
+    				const index = draft.findIndex(
+    					(t) => t.id === todoId
+    				);
+    				draft.splice(index, 1);
+    			});
+    		}
 
-```js
-import { useState } from 'react';
-import { useImmer } from 'use-immer';
-import AddTodo from './AddTodo.js';
-import TaskList from './TaskList.js';
+    		return (
+    			<>
+    				<AddTodo onAddTodo={handleAddTodo} />
+    				<TaskList
+    					todos={todos}
+    					onChangeTodo={handleChangeTodo}
+    					onDeleteTodo={handleDeleteTodo}
+    				/>
+    			</>
+    		);
+    	}
+    	```
 
-let nextId = 3;
-const initialTodos = [
-    { id: 0, title: 'Buy milk', done: true },
-    { id: 1, title: 'Eat tacos', done: false },
-    { id: 2, title: 'Brew tea', done: false },
-];
+    	</div>
 
-export default function TaskApp() {
-    const [todos, updateTodos] = useImmer(initialTodos);
+    === "AddTodo.js"
 
-    function handleAddTodo(title) {
-        updateTodos((draft) => {
-            draft.push({
-                id: nextId++,
-                title: title,
-                done: false,
-            });
-        });
-    }
+    	```js
+    	import { useState } from 'react';
 
-    function handleChangeTodo(nextTodo) {
-        updateTodos((draft) => {
-            const todo = draft.find(
-                (t) => t.id === nextTodo.id
-            );
-            todo.title = nextTodo.title;
-            todo.done = nextTodo.done;
-        });
-    }
+    	export default function AddTodo({ onAddTodo }) {
+    		const [title, setTitle] = useState('');
+    		return (
+    			<>
+    				<input
+    					placeholder="Add todo"
+    					value={title}
+    					onChange={(e) => setTitle(e.target.value)}
+    				/>
+    				<button
+    					onClick={() => {
+    						setTitle('');
+    						onAddTodo(title);
+    					}}
+    				>
+    					Add
+    				</button>
+    			</>
+    		);
+    	}
+    	```
 
-    function handleDeleteTodo(todoId) {
-        updateTodos((draft) => {
-            const index = draft.findIndex(
-                (t) => t.id === todoId
-            );
-            draft.splice(index, 1);
-        });
-    }
+    === "TaskList.js"
 
-    return (
-        <>
-            <AddTodo onAddTodo={handleAddTodo} />
-            <TaskList
-                todos={todos}
-                onChangeTodo={handleChangeTodo}
-                onDeleteTodo={handleDeleteTodo}
-            />
-        </>
-    );
-}
-```
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-<!-- 0090.part.md -->
+    	```js
+    	import { useState } from 'react';
 
-<!-- 0091.part.md -->
+    	export default function TaskList({
+    		todos,
+    		onChangeTodo,
+    		onDeleteTodo,
+    	}) {
+    		return (
+    			<ul>
+    				{todos.map((todo) => (
+    					<li key={todo.id}>
+    						<Task
+    							todo={todo}
+    							onChange={onChangeTodo}
+    							onDelete={onDeleteTodo}
+    						/>
+    					</li>
+    				))}
+    			</ul>
+    		);
+    	}
 
-```js
-import { useState } from 'react';
+    	function Task({ todo, onChange, onDelete }) {
+    		const [isEditing, setIsEditing] = useState(false);
+    		let todoContent;
+    		if (isEditing) {
+    			todoContent = (
+    				<>
+    					<input
+    						value={todo.title}
+    						onChange={(e) => {
+    							onChange({
+    								...todo,
+    								title: e.target.value,
+    							});
+    						}}
+    					/>
+    					<button onClick={() => setIsEditing(false)}>
+    						Save
+    					</button>
+    				</>
+    			);
+    		} else {
+    			todoContent = (
+    				<>
+    					{todo.title}
+    					<button onClick={() => setIsEditing(true)}>
+    						Edit
+    					</button>
+    				</>
+    			);
+    		}
+    		return (
+    			<label>
+    				<input
+    					type="checkbox"
+    					checked={todo.done}
+    					onChange={(e) => {
+    						onChange({
+    							...todo,
+    							done: e.target.checked,
+    						});
+    					}}
+    				/>
+    				{todoContent}
+    				<button onClick={() => onDelete(todo.id)}>
+    					Delete
+    				</button>
+    			</label>
+    		);
+    	}
+    	```
 
-export default function AddTodo({ onAddTodo }) {
-    const [title, setTitle] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add todo"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setTitle('');
-                    onAddTodo(title);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
+    	</div>
 
-<!-- 0092.part.md -->
+    === "package.json"
 
-<!-- 0093.part.md -->
+    	```json
+    	{
+    		"dependencies": {
+    			"immer": "1.7.3",
+    			"react": "latest",
+    			"react-dom": "latest",
+    			"react-scripts": "latest",
+    			"use-immer": "0.5.1"
+    		},
+    		"scripts": {
+    			"start": "react-scripts start",
+    			"build": "react-scripts build",
+    			"test": "react-scripts test --env=jsdom",
+    			"eject": "react-scripts eject"
+    		},
+    		"devDependencies": {}
+    	}
+    	```
 
-```js
-import { useState } from 'react';
+    === "Результат"
 
-export default function TaskList({
-    todos,
-    onChangeTodo,
-    onDeleteTodo,
-}) {
-    return (
-        <ul>
-            {todos.map((todo) => (
-                <li key={todo.id}>
-                    <Task
-                        todo={todo}
-                        onChange={onChangeTodo}
-                        onDelete={onDeleteTodo}
-                    />
-                </li>
-            ))}
-        </ul>
-    );
-}
+    	![Результат](updating-arrays-in-state-15.png)
 
-function Task({ todo, onChange, onDelete }) {
-    const [isEditing, setIsEditing] = useState(false);
-    let todoContent;
-    if (isEditing) {
-        todoContent = (
-            <>
-                <input
-                    value={todo.title}
-                    onChange={(e) => {
-                        onChange({
-                            ...todo,
-                            title: e.target.value,
-                        });
-                    }}
-                />
-                <button onClick={() => setIsEditing(false)}>
-                    Save
-                </button>
-            </>
-        );
-    } else {
-        todoContent = (
-            <>
-                {todo.title}
-                <button onClick={() => setIsEditing(true)}>
-                    Edit
-                </button>
-            </>
-        );
-    }
-    return (
-        <label>
-            <input
-                type="checkbox"
-                checked={todo.done}
-                onChange={(e) => {
-                    onChange({
-                        ...todo,
-                        done: e.target.checked,
-                    });
-                }}
-            />
-            {todoContent}
-            <button onClick={() => onDelete(todo.id)}>
-                Delete
-            </button>
-        </label>
-    );
-}
-```
+    Вы также можете смешивать и сочетать мутативные и немутативные подходы в Immer.
 
-<!-- 0098.part.md -->
+    Например, в этой версии `handleAddTodo` реализована путем мутации Immer `draft`, а `handleChangeTodo` и `handleDeleteTodo` используют немутативные методы `map` и `filter`:
 
-Вы также можете смешивать и сочетать мутативные и немутативные подходы в Immer.
+    === "App.js"
 
-Например, в этой версии `handleAddTodo` реализована путем мутации Immer `draft`, а `handleChangeTodo` и `handleDeleteTodo` используют немутативные методы `map` и `filter`:
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-<!-- 0099.part.md -->
+    	```js
+    	import { useState } from 'react';
+    	import { useImmer } from 'use-immer';
+    	import AddTodo from './AddTodo.js';
+    	import TaskList from './TaskList.js';
 
-```js
-import { useState } from 'react';
-import { useImmer } from 'use-immer';
-import AddTodo from './AddTodo.js';
-import TaskList from './TaskList.js';
+    	let nextId = 3;
+    	const initialTodos = [
+    		{ id: 0, title: 'Buy milk', done: true },
+    		{ id: 1, title: 'Eat tacos', done: false },
+    		{ id: 2, title: 'Brew tea', done: false },
+    	];
 
-let nextId = 3;
-const initialTodos = [
-    { id: 0, title: 'Buy milk', done: true },
-    { id: 1, title: 'Eat tacos', done: false },
-    { id: 2, title: 'Brew tea', done: false },
-];
+    	export default function TaskApp() {
+    		const [todos, updateTodos] = useImmer(initialTodos);
 
-export default function TaskApp() {
-    const [todos, updateTodos] = useImmer(initialTodos);
+    		function handleAddTodo(title) {
+    			updateTodos((draft) => {
+    				draft.push({
+    					id: nextId++,
+    					title: title,
+    					done: false,
+    				});
+    			});
+    		}
 
-    function handleAddTodo(title) {
-        updateTodos((draft) => {
-            draft.push({
-                id: nextId++,
-                title: title,
-                done: false,
-            });
-        });
-    }
+    		function handleChangeTodo(nextTodo) {
+    			updateTodos(
+    				todos.map((todo) => {
+    					if (todo.id === nextTodo.id) {
+    						return nextTodo;
+    					} else {
+    						return todo;
+    					}
+    				})
+    			);
+    		}
 
-    function handleChangeTodo(nextTodo) {
-        updateTodos(
-            todos.map((todo) => {
-                if (todo.id === nextTodo.id) {
-                    return nextTodo;
-                } else {
-                    return todo;
-                }
-            })
-        );
-    }
+    		function handleDeleteTodo(todoId) {
+    			updateTodos(todos.filter((t) => t.id !== todoId));
+    		}
 
-    function handleDeleteTodo(todoId) {
-        updateTodos(todos.filter((t) => t.id !== todoId));
-    }
+    		return (
+    			<>
+    				<AddTodo onAddTodo={handleAddTodo} />
+    				<TaskList
+    					todos={todos}
+    					onChangeTodo={handleChangeTodo}
+    					onDeleteTodo={handleDeleteTodo}
+    				/>
+    			</>
+    		);
+    	}
+    	```
 
-    return (
-        <>
-            <AddTodo onAddTodo={handleAddTodo} />
-            <TaskList
-                todos={todos}
-                onChangeTodo={handleChangeTodo}
-                onDeleteTodo={handleDeleteTodo}
-            />
-        </>
-    );
-}
-```
+    	</div>
 
-<!-- 0100.part.md -->
+    === "AddTodo.js"
 
-<!-- 0101.part.md -->
+    	```js
+    	import { useState } from 'react';
 
-```js
-import { useState } from 'react';
+    	export default function AddTodo({ onAddTodo }) {
+    		const [title, setTitle] = useState('');
+    		return (
+    			<>
+    				<input
+    					placeholder="Add todo"
+    					value={title}
+    					onChange={(e) => setTitle(e.target.value)}
+    				/>
+    				<button
+    					onClick={() => {
+    						setTitle('');
+    						onAddTodo(title);
+    					}}
+    				>
+    					Add
+    				</button>
+    			</>
+    		);
+    	}
+    	```
 
-export default function AddTodo({ onAddTodo }) {
-    const [title, setTitle] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add todo"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setTitle('');
-                    onAddTodo(title);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
+    === "TaskList.js"
 
-<!-- 0102.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-<!-- 0103.part.md -->
+    	```js
+    	import { useState } from 'react';
 
-```js
-import { useState } from 'react';
+    	export default function TaskList({
+    		todos,
+    		onChangeTodo,
+    		onDeleteTodo,
+    	}) {
+    		return (
+    			<ul>
+    				{todos.map((todo) => (
+    					<li key={todo.id}>
+    						<Task
+    							todo={todo}
+    							onChange={onChangeTodo}
+    							onDelete={onDeleteTodo}
+    						/>
+    					</li>
+    				))}
+    			</ul>
+    		);
+    	}
 
-export default function TaskList({
-    todos,
-    onChangeTodo,
-    onDeleteTodo,
-}) {
-    return (
-        <ul>
-            {todos.map((todo) => (
-                <li key={todo.id}>
-                    <Task
-                        todo={todo}
-                        onChange={onChangeTodo}
-                        onDelete={onDeleteTodo}
-                    />
-                </li>
-            ))}
-        </ul>
-    );
-}
+    	function Task({ todo, onChange, onDelete }) {
+    		const [isEditing, setIsEditing] = useState(false);
+    		let todoContent;
+    		if (isEditing) {
+    			todoContent = (
+    				<>
+    					<input
+    						value={todo.title}
+    						onChange={(e) => {
+    							onChange({
+    								...todo,
+    								title: e.target.value,
+    							});
+    						}}
+    					/>
+    					<button onClick={() => setIsEditing(false)}>
+    						Save
+    					</button>
+    				</>
+    			);
+    		} else {
+    			todoContent = (
+    				<>
+    					{todo.title}
+    					<button onClick={() => setIsEditing(true)}>
+    						Edit
+    					</button>
+    				</>
+    			);
+    		}
+    		return (
+    			<label>
+    				<input
+    					type="checkbox"
+    					checked={todo.done}
+    					onChange={(e) => {
+    						onChange({
+    							...todo,
+    							done: e.target.checked,
+    						});
+    					}}
+    				/>
+    				{todoContent}
+    				<button onClick={() => onDelete(todo.id)}>
+    					Delete
+    				</button>
+    			</label>
+    		);
+    	}
+    	```
 
-function Task({ todo, onChange, onDelete }) {
-    const [isEditing, setIsEditing] = useState(false);
-    let todoContent;
-    if (isEditing) {
-        todoContent = (
-            <>
-                <input
-                    value={todo.title}
-                    onChange={(e) => {
-                        onChange({
-                            ...todo,
-                            title: e.target.value,
-                        });
-                    }}
-                />
-                <button onClick={() => setIsEditing(false)}>
-                    Save
-                </button>
-            </>
-        );
-    } else {
-        todoContent = (
-            <>
-                {todo.title}
-                <button onClick={() => setIsEditing(true)}>
-                    Edit
-                </button>
-            </>
-        );
-    }
-    return (
-        <label>
-            <input
-                type="checkbox"
-                checked={todo.done}
-                onChange={(e) => {
-                    onChange({
-                        ...todo,
-                        done: e.target.checked,
-                    });
-                }}
-            />
-            {todoContent}
-            <button onClick={() => onDelete(todo.id)}>
-                Delete
-            </button>
-        </label>
-    );
-}
-```
+    	</div>
 
-<!-- 0108.part.md -->
+    === "package.json"
 
-С Immer вы можете выбрать стиль, который кажется наиболее естественным для каждого отдельного случая.
+    	```json
+    	{
+    		"dependencies": {
+    			"immer": "1.7.3",
+    			"react": "latest",
+    			"react-dom": "latest",
+    			"react-scripts": "latest",
+    			"use-immer": "0.5.1"
+    		},
+    		"scripts": {
+    			"start": "react-scripts start",
+    			"build": "react-scripts build",
+    			"test": "react-scripts test --env=jsdom",
+    			"eject": "react-scripts eject"
+    		},
+    		"devDependencies": {}
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](updating-arrays-in-state-16.png)
+
+    С Immer вы можете выбрать стиль, который кажется наиболее естественным для каждого отдельного случая.
 
 <!-- 0109.part.md -->
 
