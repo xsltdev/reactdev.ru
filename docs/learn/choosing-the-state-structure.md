@@ -2,9 +2,11 @@
 
 Правильное структурирование состояния может сделать разницу между компонентом, который приятно модифицировать и отлаживать, и компонентом, который является постоянным источником ошибок. Вот несколько советов, которые следует учитывать при структурировании состояния.
 
--   Когда использовать одну или несколько переменных состояния
--   Чего следует избегать при организации состояния
--   Как исправить распространенные проблемы со структурой состояния
+!!!tip "Вы узнаете"
+
+    -   Когда использовать одну или несколько переменных состояния
+    -   Чего следует избегать при организации состояния
+    -   Как исправить распространенные проблемы со структурой состояния
 
 ## Принципы структурирования состояния
 
@@ -16,7 +18,7 @@
 4.  Когда одни и те же данные дублируются в нескольких переменных состояния или во вложенных объектах, их трудно синхронизировать. Сократите дублирование, когда это возможно.
 5.  **Избегайте глубоко вложенного состояния.** Глубоко иерархическое состояние не очень удобно для обновления. Когда это возможно, предпочитайте структурировать состояние плоским образом.
 
-Цель этих принципов - _сделать состояние легко обновляемым без ошибок_. Удаление избыточных и дублирующих данных из состояния помогает обеспечить синхронизацию всех его частей. Это похоже на то, как инженер базы данных может захотеть ["нормализовать" структуру базы данных](https://docs.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description), чтобы уменьшить вероятность ошибок. Перефразируя Альберта Эйнштейна, **"Сделайте ваше состояние настолько простым, насколько оно может быть - но не проще."**.
+Цель этих принципов - _сделать состояние легко обновляемым без ошибок_. Удаление избыточных и дублирующих данных из состояния помогает обеспечить синхронизацию всех его частей. Это похоже на то, как инженер базы данных может захотеть ["нормализовать" структуру базы данных](https://docs.microsoft.com/office/troubleshoot/access/database-normalization-description), чтобы уменьшить вероятность ошибок. Перефразируя Альберта Эйнштейна, **"Сделайте ваше состояние настолько простым, насколько оно может быть - но не проще."**.
 
 Теперь давайте посмотрим, как эти принципы применяются на практике.
 
@@ -49,48 +51,56 @@ const [position, setPosition] = useState({ x: 0, y: 0 });
 
 <!-- 0005.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function MovingDot() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    return (
-        <div
-            onPointerMove={(e) => {
-                setPosition({
-                    x: e.clientX,
-                    y: e.clientY,
-                });
-            }}
-            style={{
-                position: 'relative',
-                width: '100vw',
-                height: '100vh',
-            }}
-        >
-            <div
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'red',
-                    borderRadius: '50%',
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    left: -10,
-                    top: -10,
-                    width: 20,
-                    height: 20,
-                }}
-            />
-        </div>
-    );
-}
-```
+    ```js
+    import { useState } from 'react';
+
+    export default function MovingDot() {
+    	const [position, setPosition] = useState({
+    		x: 0,
+    		y: 0,
+    	});
+    	return (
+    		<div
+    			onPointerMove={(e) => {
+    				setPosition({
+    					x: e.clientX,
+    					y: e.clientY,
+    				});
+    			}}
+    			style={{
+    				position: 'relative',
+    				width: '100vw',
+    				height: '100vh',
+    			}}
+    		>
+    			<div
+    				style={{
+    					position: 'absolute',
+    					backgroundColor: 'red',
+    					borderRadius: '50%',
+    					transform: `translate(${position.x}px, ${position.y}px)`,
+    					left: -10,
+    					top: -10,
+    					width: 20,
+    					height: 20,
+    				}}
+    			/>
+    		</div>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-1.png)
 
 Еще один случай, когда вы группируете данные в объект или массив, - это когда вы не знаете, сколько частей состояния вам понадобится. Например, это полезно, когда у вас есть форма, в которой пользователь может добавлять пользовательские поля.
 
-Если ваша переменная состояния является объектом, помните, что [вы не можете обновить только одно поле в нем](updating-objects-in-state.md) без явного копирования других полей. Например, вы не можете сделать `setPosition({ x: 100 })` в приведенном выше примере, потому что у него не будет свойства `y` вообще! Вместо этого, если бы вы хотели установить только `x`, вы бы либо сделали `setPosition({ ...position, x: 100 })`, либо разделили их на две переменные состояния и сделали `setX(100)`.
+!!!warning ""
+
+    Если ваша переменная состояния является объектом, помните, что [вы не можете обновить только одно поле в нем](updating-objects-in-state.md) без явного копирования других полей. Например, вы не можете сделать `setPosition({ x: 100 })` в приведенном выше примере, потому что у него не будет свойства `y` вообще! Вместо этого, если бы вы хотели установить только `x`, вы бы либо сделали `setPosition({ ...position, x: 100 })`, либо разделили их на две переменные состояния и сделали `setX(100)`.
 
 ## Избегайте противоречий в состоянии
 
@@ -98,50 +108,60 @@ export default function MovingDot() {
 
 <!-- 0009.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function FeedbackForm() {
-    const [text, setText] = useState('');
-    const [isSending, setIsSending] = useState(false);
-    const [isSent, setIsSent] = useState(false);
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-        setIsSending(true);
-        await sendMessage(text);
-        setIsSending(false);
-        setIsSent(true);
+    ```js
+    import { useState } from 'react';
+
+    export default function FeedbackForm() {
+    	const [text, setText] = useState('');
+    	const [isSending, setIsSending] = useState(false);
+    	const [isSent, setIsSent] = useState(false);
+
+    	async function handleSubmit(e) {
+    		e.preventDefault();
+    		setIsSending(true);
+    		await sendMessage(text);
+    		setIsSending(false);
+    		setIsSent(true);
+    	}
+
+    	if (isSent) {
+    		return <h1>Thanks for feedback!</h1>;
+    	}
+
+    	return (
+    		<form onSubmit={handleSubmit}>
+    			<p>How was your stay at The Prancing Pony?</p>
+    			<textarea
+    				disabled={isSending}
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<br />
+    			<button disabled={isSending} type="submit">
+    				Send
+    			</button>
+    			{isSending && <p>Sending...</p>}
+    		</form>
+    	);
     }
 
-    if (isSent) {
-        return <h1>Thanks for feedback!</h1>;
+    // Pretend to send a message.
+    function sendMessage(text) {
+    	return new Promise((resolve) => {
+    		setTimeout(resolve, 2000);
+    	});
     }
+    ```
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <p>How was your stay at The Prancing Pony?</p>
-            <textarea
-                disabled={isSending}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <br />
-            <button disabled={isSending} type="submit">
-                Send
-            </button>
-            {isSending && <p>Sending...</p>}
-        </form>
-    );
-}
+    </div>
 
-// Pretend to send a message.
-function sendMessage(text) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, 2000);
-    });
-}
-```
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-2.png)
 
 <!-- 0010.part.md -->
 
@@ -151,51 +171,61 @@ function sendMessage(text) {
 
 <!-- 0011.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function FeedbackForm() {
-    const [text, setText] = useState('');
-    const [status, setStatus] = useState('typing');
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-        setStatus('sending');
-        await sendMessage(text);
-        setStatus('sent');
+    ```js
+    import { useState } from 'react';
+
+    export default function FeedbackForm() {
+    	const [text, setText] = useState('');
+    	const [status, setStatus] = useState('typing');
+
+    	async function handleSubmit(e) {
+    		e.preventDefault();
+    		setStatus('sending');
+    		await sendMessage(text);
+    		setStatus('sent');
+    	}
+
+    	const isSending = status === 'sending';
+    	const isSent = status === 'sent';
+
+    	if (isSent) {
+    		return <h1>Thanks for feedback!</h1>;
+    	}
+
+    	return (
+    		<form onSubmit={handleSubmit}>
+    			<p>How was your stay at The Prancing Pony?</p>
+    			<textarea
+    				disabled={isSending}
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<br />
+    			<button disabled={isSending} type="submit">
+    				Send
+    			</button>
+    			{isSending && <p>Sending...</p>}
+    		</form>
+    	);
     }
 
-    const isSending = status === 'sending';
-    const isSent = status === 'sent';
-
-    if (isSent) {
-        return <h1>Thanks for feedback!</h1>;
+    // Pretend to send a message.
+    function sendMessage(text) {
+    	return new Promise((resolve) => {
+    		setTimeout(resolve, 2000);
+    	});
     }
+    ```
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <p>How was your stay at The Prancing Pony?</p>
-            <textarea
-                disabled={isSending}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <br />
-            <button disabled={isSending} type="submit">
-                Send
-            </button>
-            {isSending && <p>Sending...</p>}
-        </form>
-    );
-}
+    </div>
 
-// Pretend to send a message.
-function sendMessage(text) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, 2000);
-    });
-}
-```
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-3.png)
 
 <!-- 0012.part.md -->
 
@@ -220,49 +250,59 @@ const isSent = status === 'sent';
 
 <!-- 0015.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Form() {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [fullName, setFullName] = useState('');
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleFirstNameChange(e) {
-        setFirstName(e.target.value);
-        setFullName(e.target.value + ' ' + lastName);
+    ```js
+    import { useState } from 'react';
+
+    export default function Form() {
+    	const [firstName, setFirstName] = useState('');
+    	const [lastName, setLastName] = useState('');
+    	const [fullName, setFullName] = useState('');
+
+    	function handleFirstNameChange(e) {
+    		setFirstName(e.target.value);
+    		setFullName(e.target.value + ' ' + lastName);
+    	}
+
+    	function handleLastNameChange(e) {
+    		setLastName(e.target.value);
+    		setFullName(firstName + ' ' + e.target.value);
+    	}
+
+    	return (
+    		<>
+    			<h2>Let’s check you in</h2>
+    			<label>
+    				First name:{' '}
+    				<input
+    					value={firstName}
+    					onChange={handleFirstNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Last name:{' '}
+    				<input
+    					value={lastName}
+    					onChange={handleLastNameChange}
+    				/>
+    			</label>
+    			<p>
+    				Your ticket will be issued to:{' '}
+    				<b>{fullName}</b>
+    			</p>
+    		</>
+    	);
     }
+    ```
 
-    function handleLastNameChange(e) {
-        setLastName(e.target.value);
-        setFullName(firstName + ' ' + e.target.value);
-    }
+    </div>
 
-    return (
-        <>
-            <h2>Let’s check you in</h2>
-            <label>
-                First name:{' '}
-                <input
-                    value={firstName}
-                    onChange={handleFirstNameChange}
-                />
-            </label>
-            <label>
-                Last name:{' '}
-                <input
-                    value={lastName}
-                    onChange={handleLastNameChange}
-                />
-            </label>
-            <p>
-                Your ticket will be issued to:{' '}
-                <b>{fullName}</b>
-            </p>
-        </>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-4.png)
 
 Эта форма имеет три переменные состояния: `firstName`, `lastName` и `fullName`. Однако `fullName` является избыточной. **Вы всегда можете вычислить `fullName` из `firstName` и `lastName` во время рендеринга, поэтому удалите ее из state.**.
 
@@ -270,48 +310,58 @@ export default function Form() {
 
 <!-- 0019.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Form() {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    const fullName = firstName + ' ' + lastName;
+    ```js
+    import { useState } from 'react';
 
-    function handleFirstNameChange(e) {
-        setFirstName(e.target.value);
+    export default function Form() {
+    	const [firstName, setFirstName] = useState('');
+    	const [lastName, setLastName] = useState('');
+
+    	const fullName = firstName + ' ' + lastName;
+
+    	function handleFirstNameChange(e) {
+    		setFirstName(e.target.value);
+    	}
+
+    	function handleLastNameChange(e) {
+    		setLastName(e.target.value);
+    	}
+
+    	return (
+    		<>
+    			<h2>Let’s check you in</h2>
+    			<label>
+    				First name:{' '}
+    				<input
+    					value={firstName}
+    					onChange={handleFirstNameChange}
+    				/>
+    			</label>
+    			<label>
+    				Last name:{' '}
+    				<input
+    					value={lastName}
+    					onChange={handleLastNameChange}
+    				/>
+    			</label>
+    			<p>
+    				Your ticket will be issued to:{' '}
+    				<b>{fullName}</b>
+    			</p>
+    		</>
+    	);
     }
+    ```
 
-    function handleLastNameChange(e) {
-        setLastName(e.target.value);
-    }
+    </div>
 
-    return (
-        <>
-            <h2>Let’s check you in</h2>
-            <label>
-                First name:{' '}
-                <input
-                    value={firstName}
-                    onChange={handleFirstNameChange}
-                />
-            </label>
-            <label>
-                Last name:{' '}
-                <input
-                    value={lastName}
-                    onChange={handleLastNameChange}
-                />
-            </label>
-            <p>
-                Your ticket will be issued to:{' '}
-                <b>{fullName}</b>
-            </p>
-        </>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-5.png)
 
 Здесь `fullName` не является _не_ переменной состояния. Вместо этого она вычисляется во время рендеринга:
 
@@ -325,93 +375,91 @@ const fullName = firstName + ' ' + lastName;
 
 В результате обработчикам изменений не нужно делать ничего особенного, чтобы обновить его. Когда вы вызываете `setFirstName` или `setLastName`, вы вызываете повторный рендеринг, а затем следующее `fullName` будет вычислено на основе свежих данных.
 
-#### Не зеркалируйте реквизиты в состоянии
+!!!note "Не зеркалируйте реквизиты в состоянии"
 
-Частым примером избыточного состояния является код, подобный этому:
+    Частым примером избыточного состояния является код, подобный этому:
 
-<!-- 0025.part.md -->
+    ```js
+    function Message({ messageColor }) {
+    	const [color, setColor] = useState(messageColor);
+    }
+    ```
 
-```js
-function Message({ messageColor }) {
-    const [color, setColor] = useState(messageColor);
-}
-```
+    Здесь переменная состояния `color` инициализируется параметром `messageColor`. Проблема в том, что **если родительский компонент позже передаст другое значение `messageColor` (например, `'red'` вместо `'blue'`), переменная состояния `color` не будет обновлена!** Состояние инициализируется только во время первого рендеринга.
 
-<!-- 0026.part.md -->
+    Вот почему "зеркальное отражение" какого-либо свойства в переменной состояния может привести к путанице. Вместо этого используйте свойство `messageColor` непосредственно в коде. Если вы хотите дать ему более короткое имя, используйте константу:
 
-Здесь переменная состояния `color` инициализируется параметром `messageColor`. Проблема в том, что **если родительский компонент позже передаст другое значение `messageColor` (например, `'red'` вместо `'blue'`), переменная состояния `color` не будет обновлена!** Состояние инициализируется только во время первого рендеринга.
+    ```js
+    function Message({ messageColor }) {
+    	const color = messageColor;
+    }
+    ```
 
-Вот почему "зеркальное отражение" какого-либо свойства в переменной состояния может привести к путанице. Вместо этого используйте свойство `messageColor` непосредственно в коде. Если вы хотите дать ему более короткое имя, используйте константу:
+    Таким образом, он не будет рассинхронизирован с реквизитом, переданным из родительского компонента.
 
-<!-- 0027.part.md -->
+    "Зеркалирование" реквизитов в состояние имеет смысл только тогда, когда вы _хотите_ игнорировать все обновления для конкретного реквизита. По традиции, начните имя реквизита с `initial` или `default`, чтобы уточнить, что его новые значения игнорируются:
 
-```js
-function Message({ messageColor }) {
-    const color = messageColor;
-}
-```
+    ```js
+    function Message({ initialColor }) {
+    	// The `color` state variable holds the *first* value of `initialColor`.
+    	// Further changes to the `initialColor` prop are ignored.
+    	const [color, setColor] = useState(initialColor);
+    }
+    ```
 
-<!-- 0028.part.md -->
-
-Таким образом, он не будет рассинхронизирован с реквизитом, переданным из родительского компонента.
-
-"Зеркалирование" реквизитов в состояние имеет смысл только тогда, когда вы _хотите_ игнорировать все обновления для конкретного реквизита. По традиции, начните имя реквизита с `initial` или `default`, чтобы уточнить, что его новые значения игнорируются:
-
-<!-- 0029.part.md -->
-
-```js
-function Message({ initialColor }) {
-    // The `color` state variable holds the *first* value of `initialColor`.
-    // Further changes to the `initialColor` prop are ignored.
-    const [color, setColor] = useState(initialColor);
-}
-```
-
-<!-- 0030.part.md -->
-
-## Избегайте дублирования в штате
+## Избегайте дублирования в состоянии
 
 Этот компонент списка меню позволяет выбрать одну туристическую закуску из нескольких:
 
 <!-- 0031.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-const initialItems = [
-    { title: 'pretzels', id: 0 },
-    { title: 'crispy seaweed', id: 1 },
-    { title: 'granola bar', id: 2 },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Menu() {
-    const [items, setItems] = useState(initialItems);
-    const [selectedItem, setSelectedItem] = useState(
-        items[0]
-    );
+    ```js
+    import { useState } from 'react';
 
-    return (
-        <>
-            <h2>What's your travel snack?</h2>
-            <ul>
-                {items.map((item) => (
-                    <li key={item.id}>
-                        {item.title}{' '}
-                        <button
-                            onClick={() => {
-                                setSelectedItem(item);
-                            }}
-                        >
-                            Choose
-                        </button>
-                    </li>
-                ))}
-            </ul>
-            <p>You picked {selectedItem.title}.</p>
-        </>
-    );
-}
-```
+    const initialItems = [
+    	{ title: 'pretzels', id: 0 },
+    	{ title: 'crispy seaweed', id: 1 },
+    	{ title: 'granola bar', id: 2 },
+    ];
+
+    export default function Menu() {
+    	const [items, setItems] = useState(initialItems);
+    	const [selectedItem, setSelectedItem] = useState(
+    		items[0]
+    	);
+
+    	return (
+    		<>
+    			<h2>What's your travel snack?</h2>
+    			<ul>
+    				{items.map((item) => (
+    					<li key={item.id}>
+    						{item.title}{' '}
+    						<button
+    							onClick={() => {
+    								setSelectedItem(item);
+    							}}
+    						>
+    							Choose
+    						</button>
+    					</li>
+    				))}
+    			</ul>
+    			<p>You picked {selectedItem.title}.</p>
+    		</>
+    	);
+    }
+    ```
+
+    </div>
+
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-6.png)
 
 В настоящее время он хранит выбранный элемент как объект в переменной состояния `selectedItem`. Однако это не очень хорошо: **содержимое `selectedItem` является тем же объектом, что и один из элементов списка `items`.** Это означает, что информация о самом элементе дублируется в двух местах.
 
@@ -419,66 +467,76 @@ export default function Menu() {
 
 <!-- 0035.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-const initialItems = [
-    { title: 'pretzels', id: 0 },
-    { title: 'crispy seaweed', id: 1 },
-    { title: 'granola bar', id: 2 },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Menu() {
-    const [items, setItems] = useState(initialItems);
-    const [selectedItem, setSelectedItem] = useState(
-        items[0]
-    );
+    ```js
+    import { useState } from 'react';
 
-    function handleItemChange(id, e) {
-        setItems(
-            items.map((item) => {
-                if (item.id === id) {
-                    return {
-                        ...item,
-                        title: e.target.value,
-                    };
-                } else {
-                    return item;
-                }
-            })
-        );
+    const initialItems = [
+    	{ title: 'pretzels', id: 0 },
+    	{ title: 'crispy seaweed', id: 1 },
+    	{ title: 'granola bar', id: 2 },
+    ];
+
+    export default function Menu() {
+    	const [items, setItems] = useState(initialItems);
+    	const [selectedItem, setSelectedItem] = useState(
+    		items[0]
+    	);
+
+    	function handleItemChange(id, e) {
+    		setItems(
+    			items.map((item) => {
+    				if (item.id === id) {
+    					return {
+    						...item,
+    						title: e.target.value,
+    					};
+    				} else {
+    					return item;
+    				}
+    			})
+    		);
+    	}
+
+    	return (
+    		<>
+    			<h2>What's your travel snack?</h2>
+    			<ul>
+    				{items.map((item, index) => (
+    					<li key={item.id}>
+    						<input
+    							value={item.title}
+    							onChange={(e) => {
+    								handleItemChange(
+    									item.id,
+    									e
+    								);
+    							}}
+    						/>{' '}
+    						<button
+    							onClick={() => {
+    								setSelectedItem(item);
+    							}}
+    						>
+    							Choose
+    						</button>
+    					</li>
+    				))}
+    			</ul>
+    			<p>You picked {selectedItem.title}.</p>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <h2>What's your travel snack?</h2>
-            <ul>
-                {items.map((item, index) => (
-                    <li key={item.id}>
-                        <input
-                            value={item.title}
-                            onChange={(e) => {
-                                handleItemChange(
-                                    item.id,
-                                    e
-                                );
-                            }}
-                        />{' '}
-                        <button
-                            onClick={() => {
-                                setSelectedItem(item);
-                            }}
-                        >
-                            Choose
-                        </button>
-                    </li>
-                ))}
-            </ul>
-            <p>You picked {selectedItem.title}.</p>
-        </>
-    );
-}
-```
+    </div>
+
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-7.png)
 
 Обратите внимание, что если вы сначала нажмете "Выбрать" на элементе, а затем **отредактируете его**, ввод обновляется, но метка внизу не отражает правки.Это потому, что у вас дублируется состояние, и вы забыли обновить `selectedItem`.
 
@@ -486,68 +544,78 @@ export default function Menu() {
 
 <!-- 0039.part.md -->
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-const initialItems = [
-    { title: 'pretzels', id: 0 },
-    { title: 'crispy seaweed', id: 1 },
-    { title: 'granola bar', id: 2 },
-];
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Menu() {
-    const [items, setItems] = useState(initialItems);
-    const [selectedId, setSelectedId] = useState(0);
+    ```js
+    import { useState } from 'react';
 
-    const selectedItem = items.find(
-        (item) => item.id === selectedId
-    );
+    const initialItems = [
+    	{ title: 'pretzels', id: 0 },
+    	{ title: 'crispy seaweed', id: 1 },
+    	{ title: 'granola bar', id: 2 },
+    ];
 
-    function handleItemChange(id, e) {
-        setItems(
-            items.map((item) => {
-                if (item.id === id) {
-                    return {
-                        ...item,
-                        title: e.target.value,
-                    };
-                } else {
-                    return item;
-                }
-            })
-        );
+    export default function Menu() {
+    	const [items, setItems] = useState(initialItems);
+    	const [selectedId, setSelectedId] = useState(0);
+
+    	const selectedItem = items.find(
+    		(item) => item.id === selectedId
+    	);
+
+    	function handleItemChange(id, e) {
+    		setItems(
+    			items.map((item) => {
+    				if (item.id === id) {
+    					return {
+    						...item,
+    						title: e.target.value,
+    					};
+    				} else {
+    					return item;
+    				}
+    			})
+    		);
+    	}
+
+    	return (
+    		<>
+    			<h2>What's your travel snack?</h2>
+    			<ul>
+    				{items.map((item, index) => (
+    					<li key={item.id}>
+    						<input
+    							value={item.title}
+    							onChange={(e) => {
+    								handleItemChange(
+    									item.id,
+    									e
+    								);
+    							}}
+    						/>{' '}
+    						<button
+    							onClick={() => {
+    								setSelectedId(item.id);
+    							}}
+    						>
+    							Choose
+    						</button>
+    					</li>
+    				))}
+    			</ul>
+    			<p>You picked {selectedItem.title}.</p>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <h2>What's your travel snack?</h2>
-            <ul>
-                {items.map((item, index) => (
-                    <li key={item.id}>
-                        <input
-                            value={item.title}
-                            onChange={(e) => {
-                                handleItemChange(
-                                    item.id,
-                                    e
-                                );
-                            }}
-                        />{' '}
-                        <button
-                            onClick={() => {
-                                setSelectedId(item.id);
-                            }}
-                        >
-                            Choose
-                        </button>
-                    </li>
-                ))}
-            </ul>
-            <p>You picked {selectedItem.title}.</p>
-        </>
-    );
-}
-```
+    </div>
+
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-8.png)
 
 <!-- 0042.part.md -->
 
@@ -573,310 +641,326 @@ export default function Menu() {
 
 <!-- 0043.part.md -->
 
-```js
-import { useState } from 'react';
-import { initialTravelPlan } from './places.js';
+=== "App.js"
 
-function PlaceTree({ place }) {
-    const childPlaces = place.childPlaces;
-    return (
-        <li>
-            {place.title}
-            {childPlaces.length > 0 && (
-                <ol>
-                    {childPlaces.map((place) => (
-                        <PlaceTree
-                            key={place.id}
-                            place={place}
-                        />
-                    ))}
-                </ol>
-            )}
-        </li>
-    );
-}
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function TravelPlan() {
-    const [plan, setPlan] = useState(initialTravelPlan);
-    const planets = plan.childPlaces;
-    return (
-        <>
-            <h2>Places to visit</h2>
-            <ol>
-                {planets.map((place) => (
-                    <PlaceTree
-                        key={place.id}
-                        place={place}
-                    />
-                ))}
-            </ol>
-        </>
-    );
-}
-```
+    ```js
+    import { useState } from 'react';
+    import { initialTravelPlan } from './places.js';
 
-```js
-export const initialTravelPlan = {
-    id: 0,
-    title: '(Root)',
-    childPlaces: [
-        {
-            id: 1,
-            title: 'Earth',
-            childPlaces: [
-                {
-                    id: 2,
-                    title: 'Africa',
-                    childPlaces: [
-                        {
-                            id: 3,
-                            title: 'Botswana',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 4,
-                            title: 'Egypt',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 5,
-                            title: 'Kenya',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 6,
-                            title: 'Madagascar',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 7,
-                            title: 'Morocco',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 8,
-                            title: 'Nigeria',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 9,
-                            title: 'South Africa',
-                            childPlaces: [],
-                        },
-                    ],
-                },
-                {
-                    id: 10,
-                    title: 'Americas',
-                    childPlaces: [
-                        {
-                            id: 11,
-                            title: 'Argentina',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 12,
-                            title: 'Brazil',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 13,
-                            title: 'Barbados',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 14,
-                            title: 'Canada',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 15,
-                            title: 'Jamaica',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 16,
-                            title: 'Mexico',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 17,
-                            title: 'Trinidad and Tobago',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 18,
-                            title: 'Venezuela',
-                            childPlaces: [],
-                        },
-                    ],
-                },
-                {
-                    id: 19,
-                    title: 'Asia',
-                    childPlaces: [
-                        {
-                            id: 20,
-                            title: 'China',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 21,
-                            title: 'Hong Kong',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 22,
-                            title: 'India',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 23,
-                            title: 'Singapore',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 24,
-                            title: 'South Korea',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 25,
-                            title: 'Thailand',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 26,
-                            title: 'Vietnam',
-                            childPlaces: [],
-                        },
-                    ],
-                },
-                {
-                    id: 27,
-                    title: 'Europe',
-                    childPlaces: [
-                        {
-                            id: 28,
-                            title: 'Croatia',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 29,
-                            title: 'France',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 30,
-                            title: 'Germany',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 31,
-                            title: 'Italy',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 32,
-                            title: 'Portugal',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 33,
-                            title: 'Spain',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 34,
-                            title: 'Turkey',
-                            childPlaces: [],
-                        },
-                    ],
-                },
-                {
-                    id: 35,
-                    title: 'Oceania',
-                    childPlaces: [
-                        {
-                            id: 36,
-                            title: 'Australia',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 37,
-                            title:
-                                'Bora Bora (French Polynesia)',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 38,
-                            title: 'Easter Island (Chile)',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 39,
-                            title: 'Fiji',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 40,
-                            title: 'Hawaii (the USA)',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 41,
-                            title: 'New Zealand',
-                            childPlaces: [],
-                        },
-                        {
-                            id: 42,
-                            title: 'Vanuatu',
-                            childPlaces: [],
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            id: 43,
-            title: 'Moon',
-            childPlaces: [
-                {
-                    id: 44,
-                    title: 'Rheita',
-                    childPlaces: [],
-                },
-                {
-                    id: 45,
-                    title: 'Piccolomini',
-                    childPlaces: [],
-                },
-                {
-                    id: 46,
-                    title: 'Tycho',
-                    childPlaces: [],
-                },
-            ],
-        },
-        {
-            id: 47,
-            title: 'Mars',
-            childPlaces: [
-                {
-                    id: 48,
-                    title: 'Corn Town',
-                    childPlaces: [],
-                },
-                {
-                    id: 49,
-                    title: 'Green Hill',
-                    childPlaces: [],
-                },
-            ],
-        },
-    ],
-};
-```
+    function PlaceTree({ place }) {
+    	const childPlaces = place.childPlaces;
+    	return (
+    		<li>
+    			{place.title}
+    			{childPlaces.length > 0 && (
+    				<ol>
+    					{childPlaces.map((place) => (
+    						<PlaceTree
+    							key={place.id}
+    							place={place}
+    						/>
+    					))}
+    				</ol>
+    			)}
+    		</li>
+    	);
+    }
+
+    export default function TravelPlan() {
+    	const [plan, setPlan] = useState(initialTravelPlan);
+    	const planets = plan.childPlaces;
+    	return (
+    		<>
+    			<h2>Places to visit</h2>
+    			<ol>
+    				{planets.map((place) => (
+    					<PlaceTree
+    						key={place.id}
+    						place={place}
+    					/>
+    				))}
+    			</ol>
+    		</>
+    	);
+    }
+    ```
+
+    </div>
+
+=== "places.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    export const initialTravelPlan = {
+    	id: 0,
+    	title: '(Root)',
+    	childPlaces: [
+    		{
+    			id: 1,
+    			title: 'Earth',
+    			childPlaces: [
+    				{
+    					id: 2,
+    					title: 'Africa',
+    					childPlaces: [
+    						{
+    							id: 3,
+    							title: 'Botswana',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 4,
+    							title: 'Egypt',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 5,
+    							title: 'Kenya',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 6,
+    							title: 'Madagascar',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 7,
+    							title: 'Morocco',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 8,
+    							title: 'Nigeria',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 9,
+    							title: 'South Africa',
+    							childPlaces: [],
+    						},
+    					],
+    				},
+    				{
+    					id: 10,
+    					title: 'Americas',
+    					childPlaces: [
+    						{
+    							id: 11,
+    							title: 'Argentina',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 12,
+    							title: 'Brazil',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 13,
+    							title: 'Barbados',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 14,
+    							title: 'Canada',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 15,
+    							title: 'Jamaica',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 16,
+    							title: 'Mexico',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 17,
+    							title: 'Trinidad and Tobago',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 18,
+    							title: 'Venezuela',
+    							childPlaces: [],
+    						},
+    					],
+    				},
+    				{
+    					id: 19,
+    					title: 'Asia',
+    					childPlaces: [
+    						{
+    							id: 20,
+    							title: 'China',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 21,
+    							title: 'Hong Kong',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 22,
+    							title: 'India',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 23,
+    							title: 'Singapore',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 24,
+    							title: 'South Korea',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 25,
+    							title: 'Thailand',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 26,
+    							title: 'Vietnam',
+    							childPlaces: [],
+    						},
+    					],
+    				},
+    				{
+    					id: 27,
+    					title: 'Europe',
+    					childPlaces: [
+    						{
+    							id: 28,
+    							title: 'Croatia',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 29,
+    							title: 'France',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 30,
+    							title: 'Germany',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 31,
+    							title: 'Italy',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 32,
+    							title: 'Portugal',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 33,
+    							title: 'Spain',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 34,
+    							title: 'Turkey',
+    							childPlaces: [],
+    						},
+    					],
+    				},
+    				{
+    					id: 35,
+    					title: 'Oceania',
+    					childPlaces: [
+    						{
+    							id: 36,
+    							title: 'Australia',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 37,
+    							title:
+    								'Bora Bora (French Polynesia)',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 38,
+    							title: 'Easter Island (Chile)',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 39,
+    							title: 'Fiji',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 40,
+    							title: 'Hawaii (the USA)',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 41,
+    							title: 'New Zealand',
+    							childPlaces: [],
+    						},
+    						{
+    							id: 42,
+    							title: 'Vanuatu',
+    							childPlaces: [],
+    						},
+    					],
+    				},
+    			],
+    		},
+    		{
+    			id: 43,
+    			title: 'Moon',
+    			childPlaces: [
+    				{
+    					id: 44,
+    					title: 'Rheita',
+    					childPlaces: [],
+    				},
+    				{
+    					id: 45,
+    					title: 'Piccolomini',
+    					childPlaces: [],
+    				},
+    				{
+    					id: 46,
+    					title: 'Tycho',
+    					childPlaces: [],
+    				},
+    			],
+    		},
+    		{
+    			id: 47,
+    			title: 'Mars',
+    			childPlaces: [
+    				{
+    					id: 48,
+    					title: 'Corn Town',
+    					childPlaces: [],
+    				},
+    				{
+    					id: 49,
+    					title: 'Green Hill',
+    					childPlaces: [],
+    				},
+    			],
+    		},
+    	],
+    };
+    ```
+
+    </div>
+
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-9.png)
 
 <!-- 0046.part.md -->
 
@@ -888,312 +972,322 @@ export const initialTravelPlan = {
 
 <!-- 0047.part.md -->
 
-```js
-import { useState } from 'react';
-import { initialTravelPlan } from './places.js';
+=== "App.js"
 
-function PlaceTree({ id, placesById }) {
-    const place = placesById[id];
-    const childIds = place.childIds;
-    return (
-        <li>
-            {place.title}
-            {childIds.length > 0 && (
-                <ol>
-                    {childIds.map((childId) => (
-                        <PlaceTree
-                            key={childId}
-                            id={childId}
-                            placesById={placesById}
-                        />
-                    ))}
-                </ol>
-            )}
-        </li>
-    );
-}
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function TravelPlan() {
-    const [plan, setPlan] = useState(initialTravelPlan);
-    const root = plan[0];
-    const planetIds = root.childIds;
-    return (
-        <>
-            <h2>Places to visit</h2>
-            <ol>
-                {planetIds.map((id) => (
-                    <PlaceTree
-                        key={id}
-                        id={id}
-                        placesById={plan}
-                    />
-                ))}
-            </ol>
-        </>
-    );
-}
-```
+    ```js
+    import { useState } from 'react';
+    import { initialTravelPlan } from './places.js';
 
-<!-- 0048.part.md -->
+    function PlaceTree({ id, placesById }) {
+    	const place = placesById[id];
+    	const childIds = place.childIds;
+    	return (
+    		<li>
+    			{place.title}
+    			{childIds.length > 0 && (
+    				<ol>
+    					{childIds.map((childId) => (
+    						<PlaceTree
+    							key={childId}
+    							id={childId}
+    							placesById={placesById}
+    						/>
+    					))}
+    				</ol>
+    			)}
+    		</li>
+    	);
+    }
 
-<!-- 0049.part.md -->
+    export default function TravelPlan() {
+    	const [plan, setPlan] = useState(initialTravelPlan);
+    	const root = plan[0];
+    	const planetIds = root.childIds;
+    	return (
+    		<>
+    			<h2>Places to visit</h2>
+    			<ol>
+    				{planetIds.map((id) => (
+    					<PlaceTree
+    						key={id}
+    						id={id}
+    						placesById={plan}
+    					/>
+    				))}
+    			</ol>
+    		</>
+    	);
+    }
+    ```
 
-```js
-export const initialTravelPlan = {
-    0: {
-        id: 0,
-        title: '(Root)',
-        childIds: [1, 43, 47],
-    },
-    1: {
-        id: 1,
-        title: 'Earth',
-        childIds: [2, 10, 19, 27, 35],
-    },
-    2: {
-        id: 2,
-        title: 'Africa',
-        childIds: [3, 4, 5, 6, 7, 8, 9],
-    },
-    3: {
-        id: 3,
-        title: 'Botswana',
-        childIds: [],
-    },
-    4: {
-        id: 4,
-        title: 'Egypt',
-        childIds: [],
-    },
-    5: {
-        id: 5,
-        title: 'Kenya',
-        childIds: [],
-    },
-    6: {
-        id: 6,
-        title: 'Madagascar',
-        childIds: [],
-    },
-    7: {
-        id: 7,
-        title: 'Morocco',
-        childIds: [],
-    },
-    8: {
-        id: 8,
-        title: 'Nigeria',
-        childIds: [],
-    },
-    9: {
-        id: 9,
-        title: 'South Africa',
-        childIds: [],
-    },
-    10: {
-        id: 10,
-        title: 'Americas',
-        childIds: [11, 12, 13, 14, 15, 16, 17, 18],
-    },
-    11: {
-        id: 11,
-        title: 'Argentina',
-        childIds: [],
-    },
-    12: {
-        id: 12,
-        title: 'Brazil',
-        childIds: [],
-    },
-    13: {
-        id: 13,
-        title: 'Barbados',
-        childIds: [],
-    },
-    14: {
-        id: 14,
-        title: 'Canada',
-        childIds: [],
-    },
-    15: {
-        id: 15,
-        title: 'Jamaica',
-        childIds: [],
-    },
-    16: {
-        id: 16,
-        title: 'Mexico',
-        childIds: [],
-    },
-    17: {
-        id: 17,
-        title: 'Trinidad and Tobago',
-        childIds: [],
-    },
-    18: {
-        id: 18,
-        title: 'Venezuela',
-        childIds: [],
-    },
-    19: {
-        id: 19,
-        title: 'Asia',
-        childIds: [20, 21, 22, 23, 24, 25, 26],
-    },
-    20: {
-        id: 20,
-        title: 'China',
-        childIds: [],
-    },
-    21: {
-        id: 21,
-        title: 'Hong Kong',
-        childIds: [],
-    },
-    22: {
-        id: 22,
-        title: 'India',
-        childIds: [],
-    },
-    23: {
-        id: 23,
-        title: 'Singapore',
-        childIds: [],
-    },
-    24: {
-        id: 24,
-        title: 'South Korea',
-        childIds: [],
-    },
-    25: {
-        id: 25,
-        title: 'Thailand',
-        childIds: [],
-    },
-    26: {
-        id: 26,
-        title: 'Vietnam',
-        childIds: [],
-    },
-    27: {
-        id: 27,
-        title: 'Europe',
-        childIds: [28, 29, 30, 31, 32, 33, 34],
-    },
-    28: {
-        id: 28,
-        title: 'Croatia',
-        childIds: [],
-    },
-    29: {
-        id: 29,
-        title: 'France',
-        childIds: [],
-    },
-    30: {
-        id: 30,
-        title: 'Germany',
-        childIds: [],
-    },
-    31: {
-        id: 31,
-        title: 'Italy',
-        childIds: [],
-    },
-    32: {
-        id: 32,
-        title: 'Portugal',
-        childIds: [],
-    },
-    33: {
-        id: 33,
-        title: 'Spain',
-        childIds: [],
-    },
-    34: {
-        id: 34,
-        title: 'Turkey',
-        childIds: [],
-    },
-    35: {
-        id: 35,
-        title: 'Oceania',
-        childIds: [36, 37, 38, 39, 40, 41, 42],
-    },
-    36: {
-        id: 36,
-        title: 'Australia',
-        childIds: [],
-    },
-    37: {
-        id: 37,
-        title: 'Bora Bora (French Polynesia)',
-        childIds: [],
-    },
-    38: {
-        id: 38,
-        title: 'Easter Island (Chile)',
-        childIds: [],
-    },
-    39: {
-        id: 39,
-        title: 'Fiji',
-        childIds: [],
-    },
-    40: {
-        id: 40,
-        title: 'Hawaii (the USA)',
-        childIds: [],
-    },
-    41: {
-        id: 41,
-        title: 'New Zealand',
-        childIds: [],
-    },
-    42: {
-        id: 42,
-        title: 'Vanuatu',
-        childIds: [],
-    },
-    43: {
-        id: 43,
-        title: 'Moon',
-        childIds: [44, 45, 46],
-    },
-    44: {
-        id: 44,
-        title: 'Rheita',
-        childIds: [],
-    },
-    45: {
-        id: 45,
-        title: 'Piccolomini',
-        childIds: [],
-    },
-    46: {
-        id: 46,
-        title: 'Tycho',
-        childIds: [],
-    },
-    47: {
-        id: 47,
-        title: 'Mars',
-        childIds: [48, 49],
-    },
-    48: {
-        id: 48,
-        title: 'Corn Town',
-        childIds: [],
-    },
-    49: {
-        id: 49,
-        title: 'Green Hill',
-        childIds: [],
-    },
-};
-```
+    </div>
 
-<!-- 0050.part.md -->
+=== "places.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    export const initialTravelPlan = {
+    	0: {
+    		id: 0,
+    		title: '(Root)',
+    		childIds: [1, 43, 47],
+    	},
+    	1: {
+    		id: 1,
+    		title: 'Earth',
+    		childIds: [2, 10, 19, 27, 35],
+    	},
+    	2: {
+    		id: 2,
+    		title: 'Africa',
+    		childIds: [3, 4, 5, 6, 7, 8, 9],
+    	},
+    	3: {
+    		id: 3,
+    		title: 'Botswana',
+    		childIds: [],
+    	},
+    	4: {
+    		id: 4,
+    		title: 'Egypt',
+    		childIds: [],
+    	},
+    	5: {
+    		id: 5,
+    		title: 'Kenya',
+    		childIds: [],
+    	},
+    	6: {
+    		id: 6,
+    		title: 'Madagascar',
+    		childIds: [],
+    	},
+    	7: {
+    		id: 7,
+    		title: 'Morocco',
+    		childIds: [],
+    	},
+    	8: {
+    		id: 8,
+    		title: 'Nigeria',
+    		childIds: [],
+    	},
+    	9: {
+    		id: 9,
+    		title: 'South Africa',
+    		childIds: [],
+    	},
+    	10: {
+    		id: 10,
+    		title: 'Americas',
+    		childIds: [11, 12, 13, 14, 15, 16, 17, 18],
+    	},
+    	11: {
+    		id: 11,
+    		title: 'Argentina',
+    		childIds: [],
+    	},
+    	12: {
+    		id: 12,
+    		title: 'Brazil',
+    		childIds: [],
+    	},
+    	13: {
+    		id: 13,
+    		title: 'Barbados',
+    		childIds: [],
+    	},
+    	14: {
+    		id: 14,
+    		title: 'Canada',
+    		childIds: [],
+    	},
+    	15: {
+    		id: 15,
+    		title: 'Jamaica',
+    		childIds: [],
+    	},
+    	16: {
+    		id: 16,
+    		title: 'Mexico',
+    		childIds: [],
+    	},
+    	17: {
+    		id: 17,
+    		title: 'Trinidad and Tobago',
+    		childIds: [],
+    	},
+    	18: {
+    		id: 18,
+    		title: 'Venezuela',
+    		childIds: [],
+    	},
+    	19: {
+    		id: 19,
+    		title: 'Asia',
+    		childIds: [20, 21, 22, 23, 24, 25, 26],
+    	},
+    	20: {
+    		id: 20,
+    		title: 'China',
+    		childIds: [],
+    	},
+    	21: {
+    		id: 21,
+    		title: 'Hong Kong',
+    		childIds: [],
+    	},
+    	22: {
+    		id: 22,
+    		title: 'India',
+    		childIds: [],
+    	},
+    	23: {
+    		id: 23,
+    		title: 'Singapore',
+    		childIds: [],
+    	},
+    	24: {
+    		id: 24,
+    		title: 'South Korea',
+    		childIds: [],
+    	},
+    	25: {
+    		id: 25,
+    		title: 'Thailand',
+    		childIds: [],
+    	},
+    	26: {
+    		id: 26,
+    		title: 'Vietnam',
+    		childIds: [],
+    	},
+    	27: {
+    		id: 27,
+    		title: 'Europe',
+    		childIds: [28, 29, 30, 31, 32, 33, 34],
+    	},
+    	28: {
+    		id: 28,
+    		title: 'Croatia',
+    		childIds: [],
+    	},
+    	29: {
+    		id: 29,
+    		title: 'France',
+    		childIds: [],
+    	},
+    	30: {
+    		id: 30,
+    		title: 'Germany',
+    		childIds: [],
+    	},
+    	31: {
+    		id: 31,
+    		title: 'Italy',
+    		childIds: [],
+    	},
+    	32: {
+    		id: 32,
+    		title: 'Portugal',
+    		childIds: [],
+    	},
+    	33: {
+    		id: 33,
+    		title: 'Spain',
+    		childIds: [],
+    	},
+    	34: {
+    		id: 34,
+    		title: 'Turkey',
+    		childIds: [],
+    	},
+    	35: {
+    		id: 35,
+    		title: 'Oceania',
+    		childIds: [36, 37, 38, 39, 40, 41, 42],
+    	},
+    	36: {
+    		id: 36,
+    		title: 'Australia',
+    		childIds: [],
+    	},
+    	37: {
+    		id: 37,
+    		title: 'Bora Bora (French Polynesia)',
+    		childIds: [],
+    	},
+    	38: {
+    		id: 38,
+    		title: 'Easter Island (Chile)',
+    		childIds: [],
+    	},
+    	39: {
+    		id: 39,
+    		title: 'Fiji',
+    		childIds: [],
+    	},
+    	40: {
+    		id: 40,
+    		title: 'Hawaii (the USA)',
+    		childIds: [],
+    	},
+    	41: {
+    		id: 41,
+    		title: 'New Zealand',
+    		childIds: [],
+    	},
+    	42: {
+    		id: 42,
+    		title: 'Vanuatu',
+    		childIds: [],
+    	},
+    	43: {
+    		id: 43,
+    		title: 'Moon',
+    		childIds: [44, 45, 46],
+    	},
+    	44: {
+    		id: 44,
+    		title: 'Rheita',
+    		childIds: [],
+    	},
+    	45: {
+    		id: 45,
+    		title: 'Piccolomini',
+    		childIds: [],
+    	},
+    	46: {
+    		id: 46,
+    		title: 'Tycho',
+    		childIds: [],
+    	},
+    	47: {
+    		id: 47,
+    		title: 'Mars',
+    		childIds: [48, 49],
+    	},
+    	48: {
+    		id: 48,
+    		title: 'Corn Town',
+    		childIds: [],
+    	},
+    	49: {
+    		id: 49,
+    		title: 'Green Hill',
+    		childIds: [],
+    	},
+    };
+    ```
+
+    </div>
+
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-10.png)
 
 **Теперь, когда состояние "плоское" (также известное как "нормализованное"), обновлять вложенные элементы стало проще.**.
 
@@ -1206,906 +1300,813 @@ export const initialTravelPlan = {
 
 <!-- 0051.part.md -->
 
-```js
-import { useState } from 'react';
-import { initialTravelPlan } from './places.js';
+=== "App.js"
 
-export default function TravelPlan() {
-    const [plan, setPlan] = useState(initialTravelPlan);
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleComplete(parentId, childId) {
-        const parent = plan[parentId];
-        // Create a new version of the parent place
-        // that doesn't include this child ID.
-        const nextParent = {
-            ...parent,
-            childIds: parent.childIds.filter(
-                (id) => id !== childId
-            ),
-        };
-        // Update the root state object...
-        setPlan({
-            ...plan,
-            // ...so that it has the updated parent.
-            [parentId]: nextParent,
-        });
+    ```js
+    import { useState } from 'react';
+    import { initialTravelPlan } from './places.js';
+
+    export default function TravelPlan() {
+    	const [plan, setPlan] = useState(initialTravelPlan);
+
+    	function handleComplete(parentId, childId) {
+    		const parent = plan[parentId];
+    		// Create a new version of the parent place
+    		// that doesn't include this child ID.
+    		const nextParent = {
+    			...parent,
+    			childIds: parent.childIds.filter(
+    				(id) => id !== childId
+    			),
+    		};
+    		// Update the root state object...
+    		setPlan({
+    			...plan,
+    			// ...so that it has the updated parent.
+    			[parentId]: nextParent,
+    		});
+    	}
+
+    	const root = plan[0];
+    	const planetIds = root.childIds;
+    	return (
+    		<>
+    			<h2>Places to visit</h2>
+    			<ol>
+    				{planetIds.map((id) => (
+    					<PlaceTree
+    						key={id}
+    						id={id}
+    						parentId={0}
+    						placesById={plan}
+    						onComplete={handleComplete}
+    					/>
+    				))}
+    			</ol>
+    		</>
+    	);
     }
 
-    const root = plan[0];
-    const planetIds = root.childIds;
-    return (
-        <>
-            <h2>Places to visit</h2>
-            <ol>
-                {planetIds.map((id) => (
-                    <PlaceTree
-                        key={id}
-                        id={id}
-                        parentId={0}
-                        placesById={plan}
-                        onComplete={handleComplete}
-                    />
-                ))}
-            </ol>
-        </>
-    );
-}
+    function PlaceTree({
+    	id,
+    	parentId,
+    	placesById,
+    	onComplete,
+    }) {
+    	const place = placesById[id];
+    	const childIds = place.childIds;
+    	return (
+    		<li>
+    			{place.title}
+    			<button
+    				onClick={() => {
+    					onComplete(parentId, id);
+    				}}
+    			>
+    				Complete
+    			</button>
+    			{childIds.length > 0 && (
+    				<ol>
+    					{childIds.map((childId) => (
+    						<PlaceTree
+    							key={childId}
+    							id={childId}
+    							parentId={id}
+    							placesById={placesById}
+    							onComplete={onComplete}
+    						/>
+    					))}
+    				</ol>
+    			)}
+    		</li>
+    	);
+    }
+    ```
 
-function PlaceTree({
-    id,
-    parentId,
-    placesById,
-    onComplete,
-}) {
-    const place = placesById[id];
-    const childIds = place.childIds;
-    return (
-        <li>
-            {place.title}
-            <button
-                onClick={() => {
-                    onComplete(parentId, id);
-                }}
-            >
-                Complete
-            </button>
-            {childIds.length > 0 && (
-                <ol>
-                    {childIds.map((childId) => (
-                        <PlaceTree
-                            key={childId}
-                            id={childId}
-                            parentId={id}
-                            placesById={placesById}
-                            onComplete={onComplete}
-                        />
-                    ))}
-                </ol>
-            )}
-        </li>
-    );
-}
-```
+    </div>
 
-<!-- 0052.part.md -->
+=== "places.js"
 
-<!-- 0053.part.md -->
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-export const initialTravelPlan = {
-    0: {
-        id: 0,
-        title: '(Root)',
-        childIds: [1, 43, 47],
-    },
-    1: {
-        id: 1,
-        title: 'Earth',
-        childIds: [2, 10, 19, 27, 35],
-    },
-    2: {
-        id: 2,
-        title: 'Africa',
-        childIds: [3, 4, 5, 6, 7, 8, 9],
-    },
-    3: {
-        id: 3,
-        title: 'Botswana',
-        childIds: [],
-    },
-    4: {
-        id: 4,
-        title: 'Egypt',
-        childIds: [],
-    },
-    5: {
-        id: 5,
-        title: 'Kenya',
-        childIds: [],
-    },
-    6: {
-        id: 6,
-        title: 'Madagascar',
-        childIds: [],
-    },
-    7: {
-        id: 7,
-        title: 'Morocco',
-        childIds: [],
-    },
-    8: {
-        id: 8,
-        title: 'Nigeria',
-        childIds: [],
-    },
-    9: {
-        id: 9,
-        title: 'South Africa',
-        childIds: [],
-    },
-    10: {
-        id: 10,
-        title: 'Americas',
-        childIds: [11, 12, 13, 14, 15, 16, 17, 18],
-    },
-    11: {
-        id: 11,
-        title: 'Argentina',
-        childIds: [],
-    },
-    12: {
-        id: 12,
-        title: 'Brazil',
-        childIds: [],
-    },
-    13: {
-        id: 13,
-        title: 'Barbados',
-        childIds: [],
-    },
-    14: {
-        id: 14,
-        title: 'Canada',
-        childIds: [],
-    },
-    15: {
-        id: 15,
-        title: 'Jamaica',
-        childIds: [],
-    },
-    16: {
-        id: 16,
-        title: 'Mexico',
-        childIds: [],
-    },
-    17: {
-        id: 17,
-        title: 'Trinidad and Tobago',
-        childIds: [],
-    },
-    18: {
-        id: 18,
-        title: 'Venezuela',
-        childIds: [],
-    },
-    19: {
-        id: 19,
-        title: 'Asia',
-        childIds: [20, 21, 22, 23, 24, 25, 26],
-    },
-    20: {
-        id: 20,
-        title: 'China',
-        childIds: [],
-    },
-    21: {
-        id: 21,
-        title: 'Hong Kong',
-        childIds: [],
-    },
-    22: {
-        id: 22,
-        title: 'India',
-        childIds: [],
-    },
-    23: {
-        id: 23,
-        title: 'Singapore',
-        childIds: [],
-    },
-    24: {
-        id: 24,
-        title: 'South Korea',
-        childIds: [],
-    },
-    25: {
-        id: 25,
-        title: 'Thailand',
-        childIds: [],
-    },
-    26: {
-        id: 26,
-        title: 'Vietnam',
-        childIds: [],
-    },
-    27: {
-        id: 27,
-        title: 'Europe',
-        childIds: [28, 29, 30, 31, 32, 33, 34],
-    },
-    28: {
-        id: 28,
-        title: 'Croatia',
-        childIds: [],
-    },
-    29: {
-        id: 29,
-        title: 'France',
-        childIds: [],
-    },
-    30: {
-        id: 30,
-        title: 'Germany',
-        childIds: [],
-    },
-    31: {
-        id: 31,
-        title: 'Italy',
-        childIds: [],
-    },
-    32: {
-        id: 32,
-        title: 'Portugal',
-        childIds: [],
-    },
-    33: {
-        id: 33,
-        title: 'Spain',
-        childIds: [],
-    },
-    34: {
-        id: 34,
-        title: 'Turkey',
-        childIds: [],
-    },
-    35: {
-        id: 35,
-        title: 'Oceania',
-        childIds: [36, 37, 38, 39, 40, 41, , 42],
-    },
-    36: {
-        id: 36,
-        title: 'Australia',
-        childIds: [],
-    },
-    37: {
-        id: 37,
-        title: 'Bora Bora (French Polynesia)',
-        childIds: [],
-    },
-    38: {
-        id: 38,
-        title: 'Easter Island (Chile)',
-        childIds: [],
-    },
-    39: {
-        id: 39,
-        title: 'Fiji',
-        childIds: [],
-    },
-    40: {
-        id: 40,
-        title: 'Hawaii (the USA)',
-        childIds: [],
-    },
-    41: {
-        id: 41,
-        title: 'New Zealand',
-        childIds: [],
-    },
-    42: {
-        id: 42,
-        title: 'Vanuatu',
-        childIds: [],
-    },
-    43: {
-        id: 43,
-        title: 'Moon',
-        childIds: [44, 45, 46],
-    },
-    44: {
-        id: 44,
-        title: 'Rheita',
-        childIds: [],
-    },
-    45: {
-        id: 45,
-        title: 'Piccolomini',
-        childIds: [],
-    },
-    46: {
-        id: 46,
-        title: 'Tycho',
-        childIds: [],
-    },
-    47: {
-        id: 47,
-        title: 'Mars',
-        childIds: [48, 49],
-    },
-    48: {
-        id: 48,
-        title: 'Corn Town',
-        childIds: [],
-    },
-    49: {
-        id: 49,
-        title: 'Green Hill',
-        childIds: [],
-    },
-};
-```
+    ```js
+    export const initialTravelPlan = {
+    	0: {
+    		id: 0,
+    		title: '(Root)',
+    		childIds: [1, 43, 47],
+    	},
+    	1: {
+    		id: 1,
+    		title: 'Earth',
+    		childIds: [2, 10, 19, 27, 35],
+    	},
+    	2: {
+    		id: 2,
+    		title: 'Africa',
+    		childIds: [3, 4, 5, 6, 7, 8, 9],
+    	},
+    	3: {
+    		id: 3,
+    		title: 'Botswana',
+    		childIds: [],
+    	},
+    	4: {
+    		id: 4,
+    		title: 'Egypt',
+    		childIds: [],
+    	},
+    	5: {
+    		id: 5,
+    		title: 'Kenya',
+    		childIds: [],
+    	},
+    	6: {
+    		id: 6,
+    		title: 'Madagascar',
+    		childIds: [],
+    	},
+    	7: {
+    		id: 7,
+    		title: 'Morocco',
+    		childIds: [],
+    	},
+    	8: {
+    		id: 8,
+    		title: 'Nigeria',
+    		childIds: [],
+    	},
+    	9: {
+    		id: 9,
+    		title: 'South Africa',
+    		childIds: [],
+    	},
+    	10: {
+    		id: 10,
+    		title: 'Americas',
+    		childIds: [11, 12, 13, 14, 15, 16, 17, 18],
+    	},
+    	11: {
+    		id: 11,
+    		title: 'Argentina',
+    		childIds: [],
+    	},
+    	12: {
+    		id: 12,
+    		title: 'Brazil',
+    		childIds: [],
+    	},
+    	13: {
+    		id: 13,
+    		title: 'Barbados',
+    		childIds: [],
+    	},
+    	14: {
+    		id: 14,
+    		title: 'Canada',
+    		childIds: [],
+    	},
+    	15: {
+    		id: 15,
+    		title: 'Jamaica',
+    		childIds: [],
+    	},
+    	16: {
+    		id: 16,
+    		title: 'Mexico',
+    		childIds: [],
+    	},
+    	17: {
+    		id: 17,
+    		title: 'Trinidad and Tobago',
+    		childIds: [],
+    	},
+    	18: {
+    		id: 18,
+    		title: 'Venezuela',
+    		childIds: [],
+    	},
+    	19: {
+    		id: 19,
+    		title: 'Asia',
+    		childIds: [20, 21, 22, 23, 24, 25, 26],
+    	},
+    	20: {
+    		id: 20,
+    		title: 'China',
+    		childIds: [],
+    	},
+    	21: {
+    		id: 21,
+    		title: 'Hong Kong',
+    		childIds: [],
+    	},
+    	22: {
+    		id: 22,
+    		title: 'India',
+    		childIds: [],
+    	},
+    	23: {
+    		id: 23,
+    		title: 'Singapore',
+    		childIds: [],
+    	},
+    	24: {
+    		id: 24,
+    		title: 'South Korea',
+    		childIds: [],
+    	},
+    	25: {
+    		id: 25,
+    		title: 'Thailand',
+    		childIds: [],
+    	},
+    	26: {
+    		id: 26,
+    		title: 'Vietnam',
+    		childIds: [],
+    	},
+    	27: {
+    		id: 27,
+    		title: 'Europe',
+    		childIds: [28, 29, 30, 31, 32, 33, 34],
+    	},
+    	28: {
+    		id: 28,
+    		title: 'Croatia',
+    		childIds: [],
+    	},
+    	29: {
+    		id: 29,
+    		title: 'France',
+    		childIds: [],
+    	},
+    	30: {
+    		id: 30,
+    		title: 'Germany',
+    		childIds: [],
+    	},
+    	31: {
+    		id: 31,
+    		title: 'Italy',
+    		childIds: [],
+    	},
+    	32: {
+    		id: 32,
+    		title: 'Portugal',
+    		childIds: [],
+    	},
+    	33: {
+    		id: 33,
+    		title: 'Spain',
+    		childIds: [],
+    	},
+    	34: {
+    		id: 34,
+    		title: 'Turkey',
+    		childIds: [],
+    	},
+    	35: {
+    		id: 35,
+    		title: 'Oceania',
+    		childIds: [36, 37, 38, 39, 40, 41, , 42],
+    	},
+    	36: {
+    		id: 36,
+    		title: 'Australia',
+    		childIds: [],
+    	},
+    	37: {
+    		id: 37,
+    		title: 'Bora Bora (French Polynesia)',
+    		childIds: [],
+    	},
+    	38: {
+    		id: 38,
+    		title: 'Easter Island (Chile)',
+    		childIds: [],
+    	},
+    	39: {
+    		id: 39,
+    		title: 'Fiji',
+    		childIds: [],
+    	},
+    	40: {
+    		id: 40,
+    		title: 'Hawaii (the USA)',
+    		childIds: [],
+    	},
+    	41: {
+    		id: 41,
+    		title: 'New Zealand',
+    		childIds: [],
+    	},
+    	42: {
+    		id: 42,
+    		title: 'Vanuatu',
+    		childIds: [],
+    	},
+    	43: {
+    		id: 43,
+    		title: 'Moon',
+    		childIds: [44, 45, 46],
+    	},
+    	44: {
+    		id: 44,
+    		title: 'Rheita',
+    		childIds: [],
+    	},
+    	45: {
+    		id: 45,
+    		title: 'Piccolomini',
+    		childIds: [],
+    	},
+    	46: {
+    		id: 46,
+    		title: 'Tycho',
+    		childIds: [],
+    	},
+    	47: {
+    		id: 47,
+    		title: 'Mars',
+    		childIds: [48, 49],
+    	},
+    	48: {
+    		id: 48,
+    		title: 'Corn Town',
+    		childIds: [],
+    	},
+    	49: {
+    		id: 49,
+    		title: 'Green Hill',
+    		childIds: [],
+    	},
+    };
+    ```
+
+    </div>
+
+=== "Результат"
+
+    ![Результат](choosing-the-state-structure-11.png)
 
 <!-- 0056.part.md -->
 
 Вкладывать состояние можно сколько угодно, но если сделать его "плоским", это решит множество проблем. Это облегчает обновление состояния и помогает избежать дублирования в различных частях вложенного объекта.
 
-#### Улучшение использования памяти
+!!!note "Улучшение использования памяти"
 
-В идеале, для улучшения использования памяти вы также должны удалить удаленные элементы (и их детей!) из объекта "table". В данной версии это сделано. Она также [использует Immer](updating-objects-in-state.md#write-concise-update-logic-with-immer), чтобы сделать логику обновления более лаконичной.
+    В идеале, для улучшения использования памяти вы также должны удалить удаленные элементы (и их детей!) из объекта "table". В данной версии это сделано. Она также [использует Immer](updating-objects-in-state.md#write-concise-update-logic-with-immer), чтобы сделать логику обновления более лаконичной.
 
-<!-- 0057.part.md -->
+    <!-- 0057.part.md -->
 
-```js
-import { useImmer } from 'use-immer';
-import { initialTravelPlan } from './places.js';
+    === "App.js"
 
-export default function TravelPlan() {
-    const [plan, updatePlan] = useImmer(initialTravelPlan);
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleComplete(parentId, childId) {
-        updatePlan((draft) => {
-            // Remove from the parent place's child IDs.
-            const parent = draft[parentId];
-            parent.childIds = parent.childIds.filter(
-                (id) => id !== childId
-            );
+    	```js
+    	import { useImmer } from 'use-immer';
+    	import { initialTravelPlan } from './places.js';
 
-            // Forget this place and all its subtree.
-            deleteAllChildren(childId);
-            function deleteAllChildren(id) {
-                const place = draft[id];
-                place.childIds.forEach(deleteAllChildren);
-                delete draft[id];
-            }
-        });
-    }
+    	export default function TravelPlan() {
+    		const [plan, updatePlan] = useImmer(initialTravelPlan);
 
-    const root = plan[0];
-    const planetIds = root.childIds;
-    return (
-        <>
-            <h2>Places to visit</h2>
-            <ol>
-                {planetIds.map((id) => (
-                    <PlaceTree
-                        key={id}
-                        id={id}
-                        parentId={0}
-                        placesById={plan}
-                        onComplete={handleComplete}
-                    />
-                ))}
-            </ol>
-        </>
-    );
-}
+    		function handleComplete(parentId, childId) {
+    			updatePlan((draft) => {
+    				// Remove from the parent place's child IDs.
+    				const parent = draft[parentId];
+    				parent.childIds = parent.childIds.filter(
+    					(id) => id !== childId
+    				);
 
-function PlaceTree({
-    id,
-    parentId,
-    placesById,
-    onComplete,
-}) {
-    const place = placesById[id];
-    const childIds = place.childIds;
-    return (
-        <li>
-            {place.title}
-            <button
-                onClick={() => {
-                    onComplete(parentId, id);
-                }}
-            >
-                Complete
-            </button>
-            {childIds.length > 0 && (
-                <ol>
-                    {childIds.map((childId) => (
-                        <PlaceTree
-                            key={childId}
-                            id={childId}
-                            parentId={id}
-                            placesById={placesById}
-                            onComplete={onComplete}
-                        />
-                    ))}
-                </ol>
-            )}
-        </li>
-    );
-}
-```
+    				// Forget this place and all its subtree.
+    				deleteAllChildren(childId);
+    				function deleteAllChildren(id) {
+    					const place = draft[id];
+    					place.childIds.forEach(deleteAllChildren);
+    					delete draft[id];
+    				}
+    			});
+    		}
 
-<!-- 0058.part.md -->
+    		const root = plan[0];
+    		const planetIds = root.childIds;
+    		return (
+    			<>
+    				<h2>Places to visit</h2>
+    				<ol>
+    					{planetIds.map((id) => (
+    						<PlaceTree
+    							key={id}
+    							id={id}
+    							parentId={0}
+    							placesById={plan}
+    							onComplete={handleComplete}
+    						/>
+    					))}
+    				</ol>
+    			</>
+    		);
+    	}
 
-<!-- 0059.part.md -->
+    	function PlaceTree({
+    		id,
+    		parentId,
+    		placesById,
+    		onComplete,
+    	}) {
+    		const place = placesById[id];
+    		const childIds = place.childIds;
+    		return (
+    			<li>
+    				{place.title}
+    				<button
+    					onClick={() => {
+    						onComplete(parentId, id);
+    					}}
+    				>
+    					Complete
+    				</button>
+    				{childIds.length > 0 && (
+    					<ol>
+    						{childIds.map((childId) => (
+    							<PlaceTree
+    								key={childId}
+    								id={childId}
+    								parentId={id}
+    								placesById={placesById}
+    								onComplete={onComplete}
+    							/>
+    						))}
+    					</ol>
+    				)}
+    			</li>
+    		);
+    	}
+    	```
 
-```js
-export const initialTravelPlan = {
-    0: {
-        id: 0,
-        title: '(Root)',
-        childIds: [1, 43, 47],
-    },
-    1: {
-        id: 1,
-        title: 'Earth',
-        childIds: [2, 10, 19, 27, 35],
-    },
-    2: {
-        id: 2,
-        title: 'Africa',
-        childIds: [3, 4, 5, 6, 7, 8, 9],
-    },
-    3: {
-        id: 3,
-        title: 'Botswana',
-        childIds: [],
-    },
-    4: {
-        id: 4,
-        title: 'Egypt',
-        childIds: [],
-    },
-    5: {
-        id: 5,
-        title: 'Kenya',
-        childIds: [],
-    },
-    6: {
-        id: 6,
-        title: 'Madagascar',
-        childIds: [],
-    },
-    7: {
-        id: 7,
-        title: 'Morocco',
-        childIds: [],
-    },
-    8: {
-        id: 8,
-        title: 'Nigeria',
-        childIds: [],
-    },
-    9: {
-        id: 9,
-        title: 'South Africa',
-        childIds: [],
-    },
-    10: {
-        id: 10,
-        title: 'Americas',
-        childIds: [11, 12, 13, 14, 15, 16, 17, 18],
-    },
-    11: {
-        id: 11,
-        title: 'Argentina',
-        childIds: [],
-    },
-    12: {
-        id: 12,
-        title: 'Brazil',
-        childIds: [],
-    },
-    13: {
-        id: 13,
-        title: 'Barbados',
-        childIds: [],
-    },
-    14: {
-        id: 14,
-        title: 'Canada',
-        childIds: [],
-    },
-    15: {
-        id: 15,
-        title: 'Jamaica',
-        childIds: [],
-    },
-    16: {
-        id: 16,
-        title: 'Mexico',
-        childIds: [],
-    },
-    17: {
-        id: 17,
-        title: 'Trinidad and Tobago',
-        childIds: [],
-    },
-    18: {
-        id: 18,
-        title: 'Venezuela',
-        childIds: [],
-    },
-    19: {
-        id: 19,
-        title: 'Asia',
-        childIds: [20, 21, 22, 23, 24, 25, 26],
-    },
-    20: {
-        id: 20,
-        title: 'China',
-        childIds: [],
-    },
-    21: {
-        id: 21,
-        title: 'Hong Kong',
-        childIds: [],
-    },
-    22: {
-        id: 22,
-        title: 'India',
-        childIds: [],
-    },
-    23: {
-        id: 23,
-        title: 'Singapore',
-        childIds: [],
-    },
-    24: {
-        id: 24,
-        title: 'South Korea',
-        childIds: [],
-    },
-    25: {
-        id: 25,
-        title: 'Thailand',
-        childIds: [],
-    },
-    26: {
-        id: 26,
-        title: 'Vietnam',
-        childIds: [],
-    },
-    27: {
-        id: 27,
-        title: 'Europe',
-        childIds: [28, 29, 30, 31, 32, 33, 34],
-    },
-    28: {
-        id: 28,
-        title: 'Croatia',
-        childIds: [],
-    },
-    29: {
-        id: 29,
-        title: 'France',
-        childIds: [],
-    },
-    30: {
-        id: 30,
-        title: 'Germany',
-        childIds: [],
-    },
-    31: {
-        id: 31,
-        title: 'Italy',
-        childIds: [],
-    },
-    32: {
-        id: 32,
-        title: 'Portugal',
-        childIds: [],
-    },
-    33: {
-        id: 33,
-        title: 'Spain',
-        childIds: [],
-    },
-    34: {
-        id: 34,
-        title: 'Turkey',
-        childIds: [],
-    },
-    35: {
-        id: 35,
-        title: 'Oceania',
-        childIds: [36, 37, 38, 39, 40, 41, , 42],
-    },
-    36: {
-        id: 36,
-        title: 'Australia',
-        childIds: [],
-    },
-    37: {
-        id: 37,
-        title: 'Bora Bora (French Polynesia)',
-        childIds: [],
-    },
-    38: {
-        id: 38,
-        title: 'Easter Island (Chile)',
-        childIds: [],
-    },
-    39: {
-        id: 39,
-        title: 'Fiji',
-        childIds: [],
-    },
-    40: {
-        id: 40,
-        title: 'Hawaii (the USA)',
-        childIds: [],
-    },
-    41: {
-        id: 41,
-        title: 'New Zealand',
-        childIds: [],
-    },
-    42: {
-        id: 42,
-        title: 'Vanuatu',
-        childIds: [],
-    },
-    43: {
-        id: 43,
-        title: 'Moon',
-        childIds: [44, 45, 46],
-    },
-    44: {
-        id: 44,
-        title: 'Rheita',
-        childIds: [],
-    },
-    45: {
-        id: 45,
-        title: 'Piccolomini',
-        childIds: [],
-    },
-    46: {
-        id: 46,
-        title: 'Tycho',
-        childIds: [],
-    },
-    47: {
-        id: 47,
-        title: 'Mars',
-        childIds: [48, 49],
-    },
-    48: {
-        id: 48,
-        title: 'Corn Town',
-        childIds: [],
-    },
-    49: {
-        id: 49,
-        title: 'Green Hill',
-        childIds: [],
-    },
-};
-```
+    	</div>
+
+    === "places.js"
+
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
+
+    	```js
+    	export const initialTravelPlan = {
+    		0: {
+    			id: 0,
+    			title: '(Root)',
+    			childIds: [1, 43, 47],
+    		},
+    		1: {
+    			id: 1,
+    			title: 'Earth',
+    			childIds: [2, 10, 19, 27, 35],
+    		},
+    		2: {
+    			id: 2,
+    			title: 'Africa',
+    			childIds: [3, 4, 5, 6, 7, 8, 9],
+    		},
+    		3: {
+    			id: 3,
+    			title: 'Botswana',
+    			childIds: [],
+    		},
+    		4: {
+    			id: 4,
+    			title: 'Egypt',
+    			childIds: [],
+    		},
+    		5: {
+    			id: 5,
+    			title: 'Kenya',
+    			childIds: [],
+    		},
+    		6: {
+    			id: 6,
+    			title: 'Madagascar',
+    			childIds: [],
+    		},
+    		7: {
+    			id: 7,
+    			title: 'Morocco',
+    			childIds: [],
+    		},
+    		8: {
+    			id: 8,
+    			title: 'Nigeria',
+    			childIds: [],
+    		},
+    		9: {
+    			id: 9,
+    			title: 'South Africa',
+    			childIds: [],
+    		},
+    		10: {
+    			id: 10,
+    			title: 'Americas',
+    			childIds: [11, 12, 13, 14, 15, 16, 17, 18],
+    		},
+    		11: {
+    			id: 11,
+    			title: 'Argentina',
+    			childIds: [],
+    		},
+    		12: {
+    			id: 12,
+    			title: 'Brazil',
+    			childIds: [],
+    		},
+    		13: {
+    			id: 13,
+    			title: 'Barbados',
+    			childIds: [],
+    		},
+    		14: {
+    			id: 14,
+    			title: 'Canada',
+    			childIds: [],
+    		},
+    		15: {
+    			id: 15,
+    			title: 'Jamaica',
+    			childIds: [],
+    		},
+    		16: {
+    			id: 16,
+    			title: 'Mexico',
+    			childIds: [],
+    		},
+    		17: {
+    			id: 17,
+    			title: 'Trinidad and Tobago',
+    			childIds: [],
+    		},
+    		18: {
+    			id: 18,
+    			title: 'Venezuela',
+    			childIds: [],
+    		},
+    		19: {
+    			id: 19,
+    			title: 'Asia',
+    			childIds: [20, 21, 22, 23, 24, 25, 26],
+    		},
+    		20: {
+    			id: 20,
+    			title: 'China',
+    			childIds: [],
+    		},
+    		21: {
+    			id: 21,
+    			title: 'Hong Kong',
+    			childIds: [],
+    		},
+    		22: {
+    			id: 22,
+    			title: 'India',
+    			childIds: [],
+    		},
+    		23: {
+    			id: 23,
+    			title: 'Singapore',
+    			childIds: [],
+    		},
+    		24: {
+    			id: 24,
+    			title: 'South Korea',
+    			childIds: [],
+    		},
+    		25: {
+    			id: 25,
+    			title: 'Thailand',
+    			childIds: [],
+    		},
+    		26: {
+    			id: 26,
+    			title: 'Vietnam',
+    			childIds: [],
+    		},
+    		27: {
+    			id: 27,
+    			title: 'Europe',
+    			childIds: [28, 29, 30, 31, 32, 33, 34],
+    		},
+    		28: {
+    			id: 28,
+    			title: 'Croatia',
+    			childIds: [],
+    		},
+    		29: {
+    			id: 29,
+    			title: 'France',
+    			childIds: [],
+    		},
+    		30: {
+    			id: 30,
+    			title: 'Germany',
+    			childIds: [],
+    		},
+    		31: {
+    			id: 31,
+    			title: 'Italy',
+    			childIds: [],
+    		},
+    		32: {
+    			id: 32,
+    			title: 'Portugal',
+    			childIds: [],
+    		},
+    		33: {
+    			id: 33,
+    			title: 'Spain',
+    			childIds: [],
+    		},
+    		34: {
+    			id: 34,
+    			title: 'Turkey',
+    			childIds: [],
+    		},
+    		35: {
+    			id: 35,
+    			title: 'Oceania',
+    			childIds: [36, 37, 38, 39, 40, 41, , 42],
+    		},
+    		36: {
+    			id: 36,
+    			title: 'Australia',
+    			childIds: [],
+    		},
+    		37: {
+    			id: 37,
+    			title: 'Bora Bora (French Polynesia)',
+    			childIds: [],
+    		},
+    		38: {
+    			id: 38,
+    			title: 'Easter Island (Chile)',
+    			childIds: [],
+    		},
+    		39: {
+    			id: 39,
+    			title: 'Fiji',
+    			childIds: [],
+    		},
+    		40: {
+    			id: 40,
+    			title: 'Hawaii (the USA)',
+    			childIds: [],
+    		},
+    		41: {
+    			id: 41,
+    			title: 'New Zealand',
+    			childIds: [],
+    		},
+    		42: {
+    			id: 42,
+    			title: 'Vanuatu',
+    			childIds: [],
+    		},
+    		43: {
+    			id: 43,
+    			title: 'Moon',
+    			childIds: [44, 45, 46],
+    		},
+    		44: {
+    			id: 44,
+    			title: 'Rheita',
+    			childIds: [],
+    		},
+    		45: {
+    			id: 45,
+    			title: 'Piccolomini',
+    			childIds: [],
+    		},
+    		46: {
+    			id: 46,
+    			title: 'Tycho',
+    			childIds: [],
+    		},
+    		47: {
+    			id: 47,
+    			title: 'Mars',
+    			childIds: [48, 49],
+    		},
+    		48: {
+    			id: 48,
+    			title: 'Corn Town',
+    			childIds: [],
+    		},
+    		49: {
+    			id: 49,
+    			title: 'Green Hill',
+    			childIds: [],
+    		},
+    	};
+    	```
+
+    	</div>
+
+    === "package.json"
+
+    	```json
+    	{
+    		"dependencies": {
+    			"immer": "1.7.3",
+    			"react": "latest",
+    			"react-dom": "latest",
+    			"react-scripts": "latest",
+    			"use-immer": "0.5.1"
+    		},
+    		"scripts": {
+    			"start": "react-scripts start",
+    			"build": "react-scripts build",
+    			"test": "react-scripts test --env=jsdom",
+    			"eject": "react-scripts eject"
+    		},
+    		"devDependencies": {}
+    	}
+    	```
+
+    === "Результат"
+
+    	![Результат](choosing-the-state-structure-12.png)
 
 Иногда вложенность состояния можно уменьшить, переместив часть вложенного состояния в дочерние компоненты. Это хорошо работает для эфемерного состояния пользовательского интерфейса, которое не нужно хранить, например, наведение курсора на элемент.
 
--   Если две переменные состояния всегда обновляются вместе, подумайте о том, чтобы объединить их в одну.
--   Тщательно выбирайте переменные состояния, чтобы избежать создания "невозможных" состояний.
--   Структурируйте состояние таким образом, чтобы уменьшить вероятность ошибки при его обновлении.
--   Избегайте избыточных и дублирующих состояний, чтобы не нужно было их синхронизировать.
--   Не помещайте реквизиты _в_ состояние, если только вы специально не хотите предотвратить их обновление.
--   Для шаблонов пользовательского интерфейса, таких как выбор, храните ID или индекс в состоянии, а не сам объект.
--   Если обновление глубоко вложенного состояния является сложным, попробуйте сгладить его.
+!!!note "Итоги"
 
-#### Исправление компонента, который не обновляется
+    -   Если две переменные состояния всегда обновляются вместе, подумайте о том, чтобы объединить их в одну.
+    -   Тщательно выбирайте переменные состояния, чтобы избежать создания "невозможных" состояний.
+    -   Структурируйте состояние таким образом, чтобы уменьшить вероятность ошибки при его обновлении.
+    -   Избегайте избыточных и дублирующих состояний, чтобы не нужно было их синхронизировать.
+    -   Не помещайте реквизиты _в_ состояние, если только вы специально не хотите предотвратить их обновление.
+    -   Для шаблонов пользовательского интерфейса, таких как выбор, храните ID или индекс в состоянии, а не сам объект.
+    -   Если обновление глубоко вложенного состояния является сложным, попробуйте сгладить его.
+
+## Задачи
+
+### 1. Исправление компонента, который не обновляется
 
 Этот компонент `Clock` получает два реквизита: `color` и `time`. Когда вы выбираете другой цвет в поле выбора, компонент `Clock` получает другой реквизит `color` от своего родительского компонента. Однако по какой-то причине отображаемый цвет не обновляется. Почему? Устраните проблему.
 
 <!-- 0065.part.md -->
 
-```js
-import { useState } from 'react';
+=== "Clock.js"
 
-export default function Clock(props) {
-    const [color, setColor] = useState(props.color);
-    return <h1 style={{ color: color }}>{props.time}</h1>;
-}
-```
+    ```js
+    import { useState } from 'react';
 
-<!-- 0066.part.md -->
+    export default function Clock(props) {
+    	const [color, setColor] = useState(props.color);
+    	return <h1 style={{ color: color }}>{props.time}</h1>;
+    }
+    ```
 
-<!-- 0067.part.md -->
+=== "Результат"
 
-```js
-import { useState, useEffect } from 'react';
-import Clock from './Clock.js';
+    ![Результат](choosing-the-state-structure-13.png)
 
-function useTime() {
-    const [time, setTime] = useState(() => new Date());
-    useEffect(() => {
-        const id = setInterval(() => {
-            setTime(new Date());
-        }, 1000);
-        return () => clearInterval(id);
-    }, []);
-    return time;
-}
+???success "Показать решение"
 
-export default function App() {
-    const time = useTime();
-    const [color, setColor] = useState('lightcoral');
-    return (
-        <div>
-            <p>
-                Pick a color:{' '}
-                <select
-                    value={color}
-                    onChange={(e) =>
-                        setColor(e.target.value)
-                    }
-                >
-                    <option value="lightcoral">
-                        lightcoral
-                    </option>
-                    <option value="midnightblue">
-                        midnightblue
-                    </option>
-                    <option value="rebeccapurple">
-                        rebeccapurple
-                    </option>
-                </select>
-            </p>
-            <Clock
-                color={color}
-                time={time.toLocaleTimeString()}
-            />
-        </div>
-    );
-}
-```
+    Проблема в том, что у этого компонента состояние `color` инициализируется начальным значением свойства `color`. Но когда реквизит `color` изменяется, это не влияет на переменную состояния! Поэтому они рассинхронизируются. Чтобы решить эту проблему, удалите переменную state совсем и используйте непосредственно реквизит `color`.
 
-Проблема в том, что у этого компонента состояние `color` инициализируется начальным значением свойства `color`. Но когда реквизит `color` изменяется, это не влияет на переменную состояния! Поэтому они рассинхронизируются. Чтобы решить эту проблему, удалите переменную state совсем и используйте непосредственно реквизит `color`.
+    === "Clock.js"
 
-<!-- 0069.part.md -->
+    	```js
+    	import { useState } from 'react';
 
-```js
-import { useState } from 'react';
+    	export default function Clock(props) {
+    		return (
+    			<h1 style={{ color: props.color }}>{props.time}</h1>
+    		);
+    	}
+    	```
 
-export default function Clock(props) {
-    return (
-        <h1 style={{ color: props.color }}>{props.time}</h1>
-    );
-}
-```
+    === "Результат"
 
-<!-- 0070.part.md -->
+    	![Результат](choosing-the-state-structure-14.png)
 
-<!-- 0071.part.md -->
+    Или, используя синтаксис деструктуризации:
 
-```js
-import { useState, useEffect } from 'react';
-import Clock from './Clock.js';
+    === "Clock.js"
 
-function useTime() {
-    const [time, setTime] = useState(() => new Date());
-    useEffect(() => {
-        const id = setInterval(() => {
-            setTime(new Date());
-        }, 1000);
-        return () => clearInterval(id);
-    }, []);
-    return time;
-}
+    	```js
+    	import { useState } from 'react';
 
-export default function App() {
-    const time = useTime();
-    const [color, setColor] = useState('lightcoral');
-    return (
-        <div>
-            <p>
-                Pick a color:{' '}
-                <select
-                    value={color}
-                    onChange={(e) =>
-                        setColor(e.target.value)
-                    }
-                >
-                    <option value="lightcoral">
-                        lightcoral
-                    </option>
-                    <option value="midnightblue">
-                        midnightblue
-                    </option>
-                    <option value="rebeccapurple">
-                        rebeccapurple
-                    </option>
-                </select>
-            </p>
-            <Clock
-                color={color}
-                time={time.toLocaleTimeString()}
-            />
-        </div>
-    );
-}
-```
+    	export default function Clock({ color, time }) {
+    		return <h1 style={{ color: color }}>{time}</h1>;
+    	}
+    	```
 
-<!-- 0072.part.md -->
+    === "Результат"
 
-Или, используя синтаксис деструктуризации:
+    	![Результат](choosing-the-state-structure-14.png)
 
-<!-- 0073.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function Clock({ color, time }) {
-    return <h1 style={{ color: color }}>{time}</h1>;
-}
-```
-
-<!-- 0074.part.md -->
-
-<!-- 0075.part.md -->
-
-```js
-import { useState, useEffect } from 'react';
-import Clock from './Clock.js';
-
-function useTime() {
-    const [time, setTime] = useState(() => new Date());
-    useEffect(() => {
-        const id = setInterval(() => {
-            setTime(new Date());
-        }, 1000);
-        return () => clearInterval(id);
-    }, []);
-    return time;
-}
-
-export default function App() {
-    const time = useTime();
-    const [color, setColor] = useState('lightcoral');
-    return (
-        <div>
-            <p>
-                Pick a color:{' '}
-                <select
-                    value={color}
-                    onChange={(e) =>
-                        setColor(e.target.value)
-                    }
-                >
-                    <option value="lightcoral">
-                        lightcoral
-                    </option>
-                    <option value="midnightblue">
-                        midnightblue
-                    </option>
-                    <option value="rebeccapurple">
-                        rebeccapurple
-                    </option>
-                </select>
-            </p>
-            <Clock
-                color={color}
-                time={time.toLocaleTimeString()}
-            />
-        </div>
-    );
-}
-```
-
-#### Исправьте сломанный упаковочный лист
+### 2. Исправьте сломанный упаковочный лист
 
 Этот упаковочный лист имеет нижний колонтитул, который показывает, сколько предметов упаковано, и сколько предметов в целом. Поначалу кажется, что это работает, но на самом деле это ошибка. Например, если вы пометите предмет как упакованный, а затем удалите его, счетчик не будет обновлен правильно. Исправьте счетчик так, чтобы он всегда был корректным.
 
@@ -2400,7 +2401,7 @@ export default function PackingList({
 
 Обратите внимание, что после этого изменения обработчики событий занимаются только вызовом `setItems`. Количество элементов теперь вычисляется во время следующего рендеринга из `items`, поэтому они всегда актуальны.
 
-#### Исправление исчезающего выбора
+### 3. Исправление исчезающего выбора
 
 Есть список `букв` в состоянии. Когда вы наводите курсор или фокус на определенную букву, она выделяется. Текущая выделенная буква хранится в переменной состояния `highlightedLetter`. Вы можете "выделять" и "снимать выделение" отдельных букв, что приводит к обновлению массива `letters` в состоянии.
 
@@ -2633,13 +2634,13 @@ export const initialLetters = [
 ];
 ```
 
-#### Реализация множественного выбора
+### 4. Реализация множественного выбора
 
 В этом примере каждая `буква` имеет свойство `isSelected` и обработчик `onToggle`, который отмечает ее как выбранную. Это работает, но состояние хранится как `selectedId` (либо `null`, либо ID), поэтому в каждый момент времени может быть выбрана только одна буква.
 
 Измените структуру состояния для поддержки множественного выбора. (Как бы вы его структурировали? Подумайте об этом перед написанием кода.) Каждый флажок должен стать независимым от других. Щелчок по выбранной букве должен снимать флажок. Наконец, нижний колонтитул должен показывать правильное количество выбранных элементов.
 
-Вместо одного выбранного ID, вы можете захотеть хранить массив или [Set](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Set) выбранных ID в состоянии.
+Вместо одного выбранного ID, вы можете захотеть хранить массив или [Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set) выбранных ID в состоянии.
 
 <!-- 0109.part.md -->
 
