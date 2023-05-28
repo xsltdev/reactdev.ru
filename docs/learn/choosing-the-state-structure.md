@@ -2110,296 +2110,170 @@ const fullName = firstName + ' ' + lastName;
 
 Этот упаковочный лист имеет нижний колонтитул, который показывает, сколько предметов упаковано, и сколько предметов в целом. Поначалу кажется, что это работает, но на самом деле это ошибка. Например, если вы пометите предмет как упакованный, а затем удалите его, счетчик не будет обновлен правильно. Исправьте счетчик так, чтобы он всегда был корректным.
 
-Является ли какое-либо состояние в этом примере избыточным?
+=== "App.js"
 
-<!-- 0077.part.md -->
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState } from 'react';
-import AddItem from './AddItem.js';
-import PackingList from './PackingList.js';
+    ```js
+    import { useState } from 'react';
+    import AddItem from './AddItem.js';
+    import PackingList from './PackingList.js';
 
-let nextId = 3;
-const initialItems = [
-    { id: 0, title: 'Warm socks', packed: true },
-    { id: 1, title: 'Travel journal', packed: false },
-    { id: 2, title: 'Watercolors', packed: false },
-];
+    let nextId = 3;
+    const initialItems = [
+    	{ id: 0, title: 'Warm socks', packed: true },
+    	{ id: 1, title: 'Travel journal', packed: false },
+    	{ id: 2, title: 'Watercolors', packed: false },
+    ];
 
-export default function TravelPlan() {
-    const [items, setItems] = useState(initialItems);
-    const [total, setTotal] = useState(3);
-    const [packed, setPacked] = useState(1);
+    export default function TravelPlan() {
+    	const [items, setItems] = useState(initialItems);
+    	const [total, setTotal] = useState(3);
+    	const [packed, setPacked] = useState(1);
 
-    function handleAddItem(title) {
-        setTotal(total + 1);
-        setItems([
-            ...items,
-            {
-                id: nextId++,
-                title: title,
-                packed: false,
-            },
-        ]);
+    	function handleAddItem(title) {
+    		setTotal(total + 1);
+    		setItems([
+    			...items,
+    			{
+    				id: nextId++,
+    				title: title,
+    				packed: false,
+    			},
+    		]);
+    	}
+
+    	function handleChangeItem(nextItem) {
+    		if (nextItem.packed) {
+    			setPacked(packed + 1);
+    		} else {
+    			setPacked(packed - 1);
+    		}
+    		setItems(
+    			items.map((item) => {
+    				if (item.id === nextItem.id) {
+    					return nextItem;
+    				} else {
+    					return item;
+    				}
+    			})
+    		);
+    	}
+
+    	function handleDeleteItem(itemId) {
+    		setTotal(total - 1);
+    		setItems(
+    			items.filter((item) => item.id !== itemId)
+    		);
+    	}
+
+    	return (
+    		<>
+    			<AddItem onAddItem={handleAddItem} />
+    			<PackingList
+    				items={items}
+    				onChangeItem={handleChangeItem}
+    				onDeleteItem={handleDeleteItem}
+    			/>
+    			<hr />
+    			<b>
+    				{packed} out of {total} packed!
+    			</b>
+    		</>
+    	);
     }
+    ```
 
-    function handleChangeItem(nextItem) {
-        if (nextItem.packed) {
-            setPacked(packed + 1);
-        } else {
-            setPacked(packed - 1);
-        }
-        setItems(
-            items.map((item) => {
-                if (item.id === nextItem.id) {
-                    return nextItem;
-                } else {
-                    return item;
-                }
-            })
-        );
-    }
+    </div>
 
-    function handleDeleteItem(itemId) {
-        setTotal(total - 1);
-        setItems(
-            items.filter((item) => item.id !== itemId)
-        );
-    }
+=== "Результат"
 
-    return (
-        <>
-            <AddItem onAddItem={handleAddItem} />
-            <PackingList
-                items={items}
-                onChangeItem={handleChangeItem}
-                onDeleteItem={handleDeleteItem}
-            />
-            <hr />
-            <b>
-                {packed} out of {total} packed!
-            </b>
-        </>
-    );
-}
-```
+    ![Результат](choosing-the-state-structure-15.png)
 
-<!-- 0078.part.md -->
+???tip "Показать подсказку"
 
-<!-- 0079.part.md -->
+    Является ли какое-либо состояние в этом примере избыточным?
 
-```js
-import { useState } from 'react';
+???success "Показать подсказку"
 
-export default function AddItem({ onAddItem }) {
-    const [title, setTitle] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add item"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setTitle('');
-                    onAddItem(title);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
+    Хотя вы могли бы тщательно изменить каждый обработчик событий, чтобы правильно обновлять счетчики `total` и `packed`, основная проблема заключается в том, что эти переменные состояния вообще существуют. Они избыточны, потому что вы всегда можете вычислить количество элементов (упакованных или всего) из массива `items`. Удалите избыточное состояние, чтобы исправить ошибку:
 
-<!-- 0080.part.md -->
+    === "App.js"
 
-<!-- 0081.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState } from 'react';
+    	```js
+    	import { useState } from 'react';
+    	import AddItem from './AddItem.js';
+    	import PackingList from './PackingList.js';
 
-export default function PackingList({
-    items,
-    onChangeItem,
-    onDeleteItem,
-}) {
-    return (
-        <ul>
-            {items.map((item) => (
-                <li key={item.id}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={item.packed}
-                            onChange={(e) => {
-                                onChangeItem({
-                                    ...item,
-                                    packed:
-                                        e.target.checked,
-                                });
-                            }}
-                        />{' '}
-                        {item.title}
-                    </label>
-                    <button
-                        onClick={() =>
-                            onDeleteItem(item.id)
-                        }
-                    >
-                        Delete
-                    </button>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
+    	let nextId = 3;
+    	const initialItems = [
+    		{ id: 0, title: 'Warm socks', packed: true },
+    		{ id: 1, title: 'Travel journal', packed: false },
+    		{ id: 2, title: 'Watercolors', packed: false },
+    	];
 
-Хотя вы могли бы тщательно изменить каждый обработчик событий, чтобы правильно обновлять счетчики `total` и `packed`, основная проблема заключается в том, что эти переменные состояния вообще существуют. Они избыточны, потому что вы всегда можете вычислить количество элементов (упакованных или всего) из массива `items`. Удалите избыточное состояние, чтобы исправить ошибку:
+    	export default function TravelPlan() {
+    		const [items, setItems] = useState(initialItems);
 
-<!-- 0085.part.md -->
+    		const total = items.length;
+    		const packed = items.filter((item) => item.packed)
+    			.length;
 
-```js
-import { useState } from 'react';
-import AddItem from './AddItem.js';
-import PackingList from './PackingList.js';
+    		function handleAddItem(title) {
+    			setItems([
+    				...items,
+    				{
+    					id: nextId++,
+    					title: title,
+    					packed: false,
+    				},
+    			]);
+    		}
 
-let nextId = 3;
-const initialItems = [
-    { id: 0, title: 'Warm socks', packed: true },
-    { id: 1, title: 'Travel journal', packed: false },
-    { id: 2, title: 'Watercolors', packed: false },
-];
+    		function handleChangeItem(nextItem) {
+    			setItems(
+    				items.map((item) => {
+    					if (item.id === nextItem.id) {
+    						return nextItem;
+    					} else {
+    						return item;
+    					}
+    				})
+    			);
+    		}
 
-export default function TravelPlan() {
-    const [items, setItems] = useState(initialItems);
+    		function handleDeleteItem(itemId) {
+    			setItems(
+    				items.filter((item) => item.id !== itemId)
+    			);
+    		}
 
-    const total = items.length;
-    const packed = items.filter((item) => item.packed)
-        .length;
+    		return (
+    			<>
+    				<AddItem onAddItem={handleAddItem} />
+    				<PackingList
+    					items={items}
+    					onChangeItem={handleChangeItem}
+    					onDeleteItem={handleDeleteItem}
+    				/>
+    				<hr />
+    				<b>
+    					{packed} out of {total} packed!
+    				</b>
+    			</>
+    		);
+    	}
+    	```
 
-    function handleAddItem(title) {
-        setItems([
-            ...items,
-            {
-                id: nextId++,
-                title: title,
-                packed: false,
-            },
-        ]);
-    }
+    	</div>
 
-    function handleChangeItem(nextItem) {
-        setItems(
-            items.map((item) => {
-                if (item.id === nextItem.id) {
-                    return nextItem;
-                } else {
-                    return item;
-                }
-            })
-        );
-    }
+    === "Результат"
 
-    function handleDeleteItem(itemId) {
-        setItems(
-            items.filter((item) => item.id !== itemId)
-        );
-    }
+    	![Результат](choosing-the-state-structure-16.png)
 
-    return (
-        <>
-            <AddItem onAddItem={handleAddItem} />
-            <PackingList
-                items={items}
-                onChangeItem={handleChangeItem}
-                onDeleteItem={handleDeleteItem}
-            />
-            <hr />
-            <b>
-                {packed} out of {total} packed!
-            </b>
-        </>
-    );
-}
-```
-
-<!-- 0086.part.md -->
-
-<!-- 0087.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function AddItem({ onAddItem }) {
-    const [title, setTitle] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add item"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setTitle('');
-                    onAddItem(title);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
-
-<!-- 0088.part.md -->
-
-<!-- 0089.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function PackingList({
-    items,
-    onChangeItem,
-    onDeleteItem,
-}) {
-    return (
-        <ul>
-            {items.map((item) => (
-                <li key={item.id}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={item.packed}
-                            onChange={(e) => {
-                                onChangeItem({
-                                    ...item,
-                                    packed:
-                                        e.target.checked,
-                                });
-                            }}
-                        />{' '}
-                        {item.title}
-                    </label>
-                    <button
-                        onClick={() =>
-                            onDeleteItem(item.id)
-                        }
-                    >
-                        Delete
-                    </button>
-                </li>
-            ))}
-        </ul>
-    );
-}
-```
-
-Обратите внимание, что после этого изменения обработчики событий занимаются только вызовом `setItems`. Количество элементов теперь вычисляется во время следующего рендеринга из `items`, поэтому они всегда актуальны.
+    Обратите внимание, что после этого изменения обработчики событий занимаются только вызовом `setItems`. Количество элементов теперь вычисляется во время следующего рендеринга из `items`, поэтому они всегда актуальны.
 
 ### 3. Исправление исчезающего выбора
 
@@ -2407,549 +2281,577 @@ export default function PackingList({
 
 Этот код работает, но есть небольшой сбой в пользовательском интерфейсе. Когда вы нажимаете "Star" или "Unstar", подсветка на мгновение исчезает. Однако она снова появляется, как только вы перемещаете указатель или переключаетесь на другую букву с клавиатуры. Почему это происходит? Исправьте это, чтобы подсветка не исчезала после нажатия кнопки.
 
-<!-- 0093.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
-import { initialLetters } from './data.js';
-import Letter from './Letter.js';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function MailClient() {
-    const [letters, setLetters] = useState(initialLetters);
-    const [
-        highlightedLetter,
-        setHighlightedLetter,
-    ] = useState(null);
+    ```js
+    import { useState } from 'react';
+    import { initialLetters } from './data.js';
+    import Letter from './Letter.js';
 
-    function handleHover(letter) {
-        setHighlightedLetter(letter);
+    export default function MailClient() {
+    	const [letters, setLetters] = useState(initialLetters);
+    	const [
+    		highlightedLetter,
+    		setHighlightedLetter,
+    	] = useState(null);
+
+    	function handleHover(letter) {
+    		setHighlightedLetter(letter);
+    	}
+
+    	function handleStar(starred) {
+    		setLetters(
+    			letters.map((letter) => {
+    				if (letter.id === starred.id) {
+    					return {
+    						...letter,
+    						isStarred: !letter.isStarred,
+    					};
+    				} else {
+    					return letter;
+    				}
+    			})
+    		);
+    	}
+
+    	return (
+    		<>
+    			<h2>Inbox</h2>
+    			<ul>
+    				{letters.map((letter) => (
+    					<Letter
+    						key={letter.id}
+    						letter={letter}
+    						isHighlighted={
+    							letter === highlightedLetter
+    						}
+    						onHover={handleHover}
+    						onToggleStar={handleStar}
+    					/>
+    				))}
+    			</ul>
+    		</>
+    	);
     }
+    ```
 
-    function handleStar(starred) {
-        setLetters(
-            letters.map((letter) => {
-                if (letter.id === starred.id) {
-                    return {
-                        ...letter,
-                        isStarred: !letter.isStarred,
-                    };
-                } else {
-                    return letter;
-                }
-            })
-        );
+    </div>
+
+=== "Letter.js"
+
+    ```js
+    export default function Letter({
+    	letter,
+    	isHighlighted,
+    	onHover,
+    	onToggleStar,
+    }) {
+    	return (
+    		<li
+    			className={isHighlighted ? 'highlighted' : ''}
+    			onFocus={() => {
+    				onHover(letter);
+    			}}
+    			onPointerMove={() => {
+    				onHover(letter);
+    			}}
+    		>
+    			<button
+    				onClick={() => {
+    					onToggleStar(letter);
+    				}}
+    			>
+    				{letter.isStarred ? 'Unstar' : 'Star'}
+    			</button>
+    			{letter.subject}
+    		</li>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <h2>Inbox</h2>
-            <ul>
-                {letters.map((letter) => (
-                    <Letter
-                        key={letter.id}
-                        letter={letter}
-                        isHighlighted={
-                            letter === highlightedLetter
-                        }
-                        onHover={handleHover}
-                        onToggleStar={handleStar}
-                    />
-                ))}
-            </ul>
-        </>
-    );
-}
-```
+=== "data.js"
 
-<!-- 0094.part.md -->
+    ```js
+    export const initialLetters = [
+    	{
+    		id: 0,
+    		subject: 'Ready for adventure?',
+    		isStarred: true,
+    	},
+    	{
+    		id: 1,
+    		subject: 'Time to check in!',
+    		isStarred: false,
+    	},
+    	{
+    		id: 2,
+    		subject: 'Festival Begins in Just SEVEN Days!',
+    		isStarred: false,
+    	},
+    ];
+    ```
 
-<!-- 0095.part.md -->
+=== "Результат"
 
-```js
-export default function Letter({
-    letter,
-    isHighlighted,
-    onHover,
-    onToggleStar,
-}) {
-    return (
-        <li
-            className={isHighlighted ? 'highlighted' : ''}
-            onFocus={() => {
-                onHover(letter);
-            }}
-            onPointerMove={() => {
-                onHover(letter);
-            }}
-        >
-            <button
-                onClick={() => {
-                    onToggleStar(letter);
-                }}
-            >
-                {letter.isStarred ? 'Unstar' : 'Star'}
-            </button>
-            {letter.subject}
-        </li>
-    );
-}
-```
+    ![Результат](choosing-the-state-structure-17.png)
 
-<!-- 0096.part.md -->
+???success "Показать решение"
 
-<!-- 0097.part.md -->
+    Проблема в том, что вы храните объект буквы в `highlightedLetter`. Но вы также храните ту же информацию в массиве `letters`. Таким образом, ваше состояние дублируется! Когда вы обновляете массив `letters` после нажатия кнопки, вы создаете новый объект буквы, который отличается от `highlightedLetter`. Поэтому проверка `highlightedLetter === letter` становится `false`, и выделение исчезает. Оно снова появляется при следующем вызове `setHighlightedLetter`, когда указатель перемещается.
 
-```js
-export const initialLetters = [
-    {
-        id: 0,
-        subject: 'Ready for adventure?',
-        isStarred: true,
-    },
-    {
-        id: 1,
-        subject: 'Time to check in!',
-        isStarred: false,
-    },
-    {
-        id: 2,
-        subject: 'Festival Begins in Just SEVEN Days!',
-        isStarred: false,
-    },
-];
-```
+    Чтобы решить эту проблему, удалите дублирование из состояния. Вместо того чтобы хранить _саму букву_ в двух местах, храните `highlightedId`. Тогда вы сможете проверять `isHighlighted` для каждой буквы с `letter.id === highlightedId`, что будет работать, даже если объект `letter` изменился с момента последнего рендеринга.
 
-Проблема в том, что вы храните объект буквы в `highlightedLetter`. Но вы также храните ту же информацию в массиве `letters`. Таким образом, ваше состояние дублируется! Когда вы обновляете массив `letters` после нажатия кнопки, вы создаете новый объект буквы, который отличается от `highlightedLetter`. Поэтому проверка `highlightedLetter === letter` становится `false`, и выделение исчезает. Оно снова появляется при следующем вызове `setHighlightedLetter`, когда указатель перемещается.
+    === "App.js"
 
-Чтобы решить эту проблему, удалите дублирование из состояния. Вместо того чтобы хранить _саму букву_ в двух местах, храните `highlightedId`. Тогда вы сможете проверять `isHighlighted` для каждой буквы с `letter.id === highlightedId`, что будет работать, даже если объект `letter` изменился с момента последнего рендеринга.
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-<!-- 0101.part.md -->
+    	```js
+    	import { useState } from 'react';
+    	import { initialLetters } from './data.js';
+    	import Letter from './Letter.js';
 
-```js
-import { useState } from 'react';
-import { initialLetters } from './data.js';
-import Letter from './Letter.js';
+    	export default function MailClient() {
+    		const [letters, setLetters] = useState(initialLetters);
+    		const [highlightedId, setHighlightedId] = useState(
+    			null
+    		);
 
-export default function MailClient() {
-    const [letters, setLetters] = useState(initialLetters);
-    const [highlightedId, setHighlightedId] = useState(
-        null
-    );
+    		function handleHover(letterId) {
+    			setHighlightedId(letterId);
+    		}
 
-    function handleHover(letterId) {
-        setHighlightedId(letterId);
-    }
+    		function handleStar(starredId) {
+    			setLetters(
+    				letters.map((letter) => {
+    					if (letter.id === starredId) {
+    						return {
+    							...letter,
+    							isStarred: !letter.isStarred,
+    						};
+    					} else {
+    						return letter;
+    					}
+    				})
+    			);
+    		}
 
-    function handleStar(starredId) {
-        setLetters(
-            letters.map((letter) => {
-                if (letter.id === starredId) {
-                    return {
-                        ...letter,
-                        isStarred: !letter.isStarred,
-                    };
-                } else {
-                    return letter;
-                }
-            })
-        );
-    }
+    		return (
+    			<>
+    				<h2>Inbox</h2>
+    				<ul>
+    					{letters.map((letter) => (
+    						<Letter
+    							key={letter.id}
+    							letter={letter}
+    							isHighlighted={
+    								letter.id === highlightedId
+    							}
+    							onHover={handleHover}
+    							onToggleStar={handleStar}
+    						/>
+    					))}
+    				</ul>
+    			</>
+    		);
+    	}
+    	```
 
-    return (
-        <>
-            <h2>Inbox</h2>
-            <ul>
-                {letters.map((letter) => (
-                    <Letter
-                        key={letter.id}
-                        letter={letter}
-                        isHighlighted={
-                            letter.id === highlightedId
-                        }
-                        onHover={handleHover}
-                        onToggleStar={handleStar}
-                    />
-                ))}
-            </ul>
-        </>
-    );
-}
-```
+    	</div>
 
-<!-- 0102.part.md -->
+    === "Letter.js"
 
-<!-- 0103.part.md -->
+    	```js
+    	export default function Letter({
+    		letter,
+    		isHighlighted,
+    		onHover,
+    		onToggleStar,
+    	}) {
+    		return (
+    			<li
+    				className={isHighlighted ? 'highlighted' : ''}
+    				onFocus={() => {
+    					onHover(letter.id);
+    				}}
+    				onPointerMove={() => {
+    					onHover(letter.id);
+    				}}
+    			>
+    				<button
+    					onClick={() => {
+    						onToggleStar(letter.id);
+    					}}
+    				>
+    					{letter.isStarred ? 'Unstar' : 'Star'}
+    				</button>
+    				{letter.subject}
+    			</li>
+    		);
+    	}
+    	```
 
-```js
-export default function Letter({
-    letter,
-    isHighlighted,
-    onHover,
-    onToggleStar,
-}) {
-    return (
-        <li
-            className={isHighlighted ? 'highlighted' : ''}
-            onFocus={() => {
-                onHover(letter.id);
-            }}
-            onPointerMove={() => {
-                onHover(letter.id);
-            }}
-        >
-            <button
-                onClick={() => {
-                    onToggleStar(letter.id);
-                }}
-            >
-                {letter.isStarred ? 'Unstar' : 'Star'}
-            </button>
-            {letter.subject}
-        </li>
-    );
-}
-```
+    === "data.js"
 
-<!-- 0104.part.md -->
+    	```js
+    	export const initialLetters = [
+    		{
+    			id: 0,
+    			subject: 'Ready for adventure?',
+    			isStarred: true,
+    		},
+    		{
+    			id: 1,
+    			subject: 'Time to check in!',
+    			isStarred: false,
+    		},
+    		{
+    			id: 2,
+    			subject: 'Festival Begins in Just SEVEN Days!',
+    			isStarred: false,
+    		},
+    	];
+    	```
 
-<!-- 0105.part.md -->
+    === "Результат"
 
-```js
-export const initialLetters = [
-    {
-        id: 0,
-        subject: 'Ready for adventure?',
-        isStarred: true,
-    },
-    {
-        id: 1,
-        subject: 'Time to check in!',
-        isStarred: false,
-    },
-    {
-        id: 2,
-        subject: 'Festival Begins in Just SEVEN Days!',
-        isStarred: false,
-    },
-];
-```
+    	![Результат](choosing-the-state-structure-18.png)
 
 ### 4. Реализация множественного выбора
 
 В этом примере каждая `буква` имеет свойство `isSelected` и обработчик `onToggle`, который отмечает ее как выбранную. Это работает, но состояние хранится как `selectedId` (либо `null`, либо ID), поэтому в каждый момент времени может быть выбрана только одна буква.
 
-Измените структуру состояния для поддержки множественного выбора. (Как бы вы его структурировали? Подумайте об этом перед написанием кода.) Каждый флажок должен стать независимым от других. Щелчок по выбранной букве должен снимать флажок. Наконец, нижний колонтитул должен показывать правильное количество выбранных элементов.
+Измените структуру состояния для поддержки множественного выбора (Как бы вы его структурировали? Подумайте об этом перед написанием кода). Каждый флажок должен стать независимым от других. Щелчок по выбранной букве должен снимать флажок. Наконец, нижний колонтитул должен показывать правильное количество выбранных элементов.
 
-Вместо одного выбранного ID, вы можете захотеть хранить массив или [Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set) выбранных ID в состоянии.
+=== "App.js"
 
-<!-- 0109.part.md -->
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState } from 'react';
-import { letters } from './data.js';
-import Letter from './Letter.js';
+    ```js
+    import { useState } from 'react';
+    import { letters } from './data.js';
+    import Letter from './Letter.js';
 
-export default function MailClient() {
-    const [selectedId, setSelectedId] = useState(null);
+    export default function MailClient() {
+    	const [selectedId, setSelectedId] = useState(null);
 
-    // TODO: allow multiple selection
-    const selectedCount = 1;
+    	// TODO: allow multiple selection
+    	const selectedCount = 1;
 
-    function handleToggle(toggledId) {
-        // TODO: allow multiple selection
-        setSelectedId(toggledId);
+    	function handleToggle(toggledId) {
+    		// TODO: allow multiple selection
+    		setSelectedId(toggledId);
+    	}
+
+    	return (
+    		<>
+    			<h2>Inbox</h2>
+    			<ul>
+    				{letters.map((letter) => (
+    					<Letter
+    						key={letter.id}
+    						letter={letter}
+    						isSelected={
+    							// TODO: allow multiple selection
+    							letter.id === selectedId
+    						}
+    						onToggle={handleToggle}
+    					/>
+    				))}
+    				<hr />
+    				<p>
+    					<b>
+    						You selected {selectedCount} letters
+    					</b>
+    				</p>
+    			</ul>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <h2>Inbox</h2>
-            <ul>
-                {letters.map((letter) => (
-                    <Letter
-                        key={letter.id}
-                        letter={letter}
-                        isSelected={
-                            // TODO: allow multiple selection
-                            letter.id === selectedId
-                        }
-                        onToggle={handleToggle}
-                    />
-                ))}
-                <hr />
-                <p>
-                    <b>
-                        You selected {selectedCount} letters
-                    </b>
-                </p>
-            </ul>
-        </>
-    );
-}
-```
+    </div>
 
-<!-- 0110.part.md -->
+=== "Letter.js"
 
-<!-- 0111.part.md -->
-
-```js
-export default function Letter({
-    letter,
-    onToggle,
-    isSelected,
-}) {
-    return (
-        <li className={isSelected ? 'selected' : ''}>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => {
-                        onToggle(letter.id);
-                    }}
-                />
-                {letter.subject}
-            </label>
-        </li>
-    );
-}
-```
-
-<!-- 0112.part.md -->
-
-<!-- 0113.part.md -->
-
-```js
-export const letters = [
-    {
-        id: 0,
-        subject: 'Ready for adventure?',
-        isStarred: true,
-    },
-    {
-        id: 1,
-        subject: 'Time to check in!',
-        isStarred: false,
-    },
-    {
-        id: 2,
-        subject: 'Festival Begins in Just SEVEN Days!',
-        isStarred: false,
-    },
-];
-```
-
-Вместо одного `selectedId`, храните `selectedIds` _массив_ в состоянии. Например, если вы выбираете первую и последнюю буквы, он будет содержать `[0, 2]`. Когда ничего не выбрано, это будет пустой массив `[]`:
-
-<!-- 0117.part.md -->
-
-```js
-import { useState } from 'react';
-import { letters } from './data.js';
-import Letter from './Letter.js';
-
-export default function MailClient() {
-    const [selectedIds, setSelectedIds] = useState([]);
-
-    const selectedCount = selectedIds.length;
-
-    function handleToggle(toggledId) {
-        // Was it previously selected?
-        if (selectedIds.includes(toggledId)) {
-            // Then remove this ID from the array.
-            setSelectedIds(
-                selectedIds.filter((id) => id !== toggledId)
-            );
-        } else {
-            // Otherwise, add this ID to the array.
-            setSelectedIds([...selectedIds, toggledId]);
-        }
+    ```js
+    export default function Letter({
+    	letter,
+    	onToggle,
+    	isSelected,
+    }) {
+    	return (
+    		<li className={isSelected ? 'selected' : ''}>
+    			<label>
+    				<input
+    					type="checkbox"
+    					checked={isSelected}
+    					onChange={() => {
+    						onToggle(letter.id);
+    					}}
+    				/>
+    				{letter.subject}
+    			</label>
+    		</li>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <h2>Inbox</h2>
-            <ul>
-                {letters.map((letter) => (
-                    <Letter
-                        key={letter.id}
-                        letter={letter}
-                        isSelected={selectedIds.includes(
-                            letter.id
-                        )}
-                        onToggle={handleToggle}
-                    />
-                ))}
-                <hr />
-                <p>
-                    <b>
-                        You selected {selectedCount} letters
-                    </b>
-                </p>
-            </ul>
-        </>
-    );
-}
-```
+=== "data.js"
 
-<!-- 0118.part.md -->
+    ```js
+    export const letters = [
+    	{
+    		id: 0,
+    		subject: 'Ready for adventure?',
+    		isStarred: true,
+    	},
+    	{
+    		id: 1,
+    		subject: 'Time to check in!',
+    		isStarred: false,
+    	},
+    	{
+    		id: 2,
+    		subject: 'Festival Begins in Just SEVEN Days!',
+    		isStarred: false,
+    	},
+    ];
+    ```
 
-<!-- 0119.part.md -->
+=== "Результат"
 
-```js
-export default function Letter({
-    letter,
-    onToggle,
-    isSelected,
-}) {
-    return (
-        <li className={isSelected ? 'selected' : ''}>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => {
-                        onToggle(letter.id);
-                    }}
-                />
-                {letter.subject}
-            </label>
-        </li>
-    );
-}
-```
+    ![Результат](choosing-the-state-structure-19.png)
 
-<!-- 0120.part.md -->
+???tip "Показать подсказку"
 
-<!-- 0121.part.md -->
+    Вместо одного выбранного ID, вы можете захотеть хранить массив или [Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set) выбранных ID в состоянии.
 
-```js
-export const letters = [
-    {
-        id: 0,
-        subject: 'Ready for adventure?',
-        isStarred: true,
-    },
-    {
-        id: 1,
-        subject: 'Time to check in!',
-        isStarred: false,
-    },
-    {
-        id: 2,
-        subject: 'Festival Begins in Just SEVEN Days!',
-        isStarred: false,
-    },
-];
-```
+???success "Показать решение"
 
-Одним из небольших недостатков использования массива является то, что для каждого элемента вы вызываете `selectedIds.includes(letter.id)`, чтобы проверить, выбран ли он. Если массив очень большой, это может стать проблемой производительности, поскольку поиск в массиве с помощью [`includes()`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/includes) занимает линейное время, а вы выполняете этот поиск для каждого отдельного элемента.
+    Вместо одного `selectedId`, храните `selectedIds` _массив_ в состоянии. Например, если вы выбираете первую и последнюю буквы, он будет содержать `[0, 2]`. Когда ничего не выбрано, это будет пустой массив `[]`:
 
-Чтобы решить эту проблему, вы можете держать в состоянии [Set](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Set), что обеспечивает быструю операцию [`has()`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Set/has):
+    === "App.js"
 
-<!-- 0125.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState } from 'react';
-import { letters } from './data.js';
-import Letter from './Letter.js';
+    	```js
+    	import { useState } from 'react';
+    	import { letters } from './data.js';
+    	import Letter from './Letter.js';
 
-export default function MailClient() {
-    const [selectedIds, setSelectedIds] = useState(
-        new Set()
-    );
+    	export default function MailClient() {
+    		const [selectedIds, setSelectedIds] = useState([]);
 
-    const selectedCount = selectedIds.size;
+    		const selectedCount = selectedIds.length;
 
-    function handleToggle(toggledId) {
-        // Create a copy (to avoid mutation).
-        const nextIds = new Set(selectedIds);
-        if (nextIds.has(toggledId)) {
-            nextIds.delete(toggledId);
-        } else {
-            nextIds.add(toggledId);
-        }
-        setSelectedIds(nextIds);
-    }
+    		function handleToggle(toggledId) {
+    			// Was it previously selected?
+    			if (selectedIds.includes(toggledId)) {
+    				// Then remove this ID from the array.
+    				setSelectedIds(
+    					selectedIds.filter((id) => id !== toggledId)
+    				);
+    			} else {
+    				// Otherwise, add this ID to the array.
+    				setSelectedIds([...selectedIds, toggledId]);
+    			}
+    		}
 
-    return (
-        <>
-            <h2>Inbox</h2>
-            <ul>
-                {letters.map((letter) => (
-                    <Letter
-                        key={letter.id}
-                        letter={letter}
-                        isSelected={selectedIds.has(
-                            letter.id
-                        )}
-                        onToggle={handleToggle}
-                    />
-                ))}
-                <hr />
-                <p>
-                    <b>
-                        You selected {selectedCount} letters
-                    </b>
-                </p>
-            </ul>
-        </>
-    );
-}
-```
+    		return (
+    			<>
+    				<h2>Inbox</h2>
+    				<ul>
+    					{letters.map((letter) => (
+    						<Letter
+    							key={letter.id}
+    							letter={letter}
+    							isSelected={selectedIds.includes(
+    								letter.id
+    							)}
+    							onToggle={handleToggle}
+    						/>
+    					))}
+    					<hr />
+    					<p>
+    						<b>
+    							You selected {selectedCount} letters
+    						</b>
+    					</p>
+    				</ul>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0126.part.md -->
+    	</div>
 
-<!-- 0127.part.md -->
+    === "Letter.js"
 
-```js
-export default function Letter({
-    letter,
-    onToggle,
-    isSelected,
-}) {
-    return (
-        <li className={isSelected ? 'selected' : ''}>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => {
-                        onToggle(letter.id);
-                    }}
-                />
-                {letter.subject}
-            </label>
-        </li>
-    );
-}
-```
+    	```js
+    	export default function Letter({
+    		letter,
+    		onToggle,
+    		isSelected,
+    	}) {
+    		return (
+    			<li className={isSelected ? 'selected' : ''}>
+    				<label>
+    					<input
+    						type="checkbox"
+    						checked={isSelected}
+    						onChange={() => {
+    							onToggle(letter.id);
+    						}}
+    					/>
+    					{letter.subject}
+    				</label>
+    			</li>
+    		);
+    	}
+    	```
 
-<!-- 0128.part.md -->
+    === "data.js"
 
-<!-- 0129.part.md -->
+    	```js
+    	export const letters = [
+    		{
+    			id: 0,
+    			subject: 'Ready for adventure?',
+    			isStarred: true,
+    		},
+    		{
+    			id: 1,
+    			subject: 'Time to check in!',
+    			isStarred: false,
+    		},
+    		{
+    			id: 2,
+    			subject: 'Festival Begins in Just SEVEN Days!',
+    			isStarred: false,
+    		},
+    	];
+    	```
 
-```js
-export const letters = [
-    {
-        id: 0,
-        subject: 'Ready for adventure?',
-        isStarred: true,
-    },
-    {
-        id: 1,
-        subject: 'Time to check in!',
-        isStarred: false,
-    },
-    {
-        id: 2,
-        subject: 'Festival Begins in Just SEVEN Days!',
-        isStarred: false,
-    },
-];
-```
+    === "Результат"
 
-<!-- 0132.part.md -->
+    	![Результат](choosing-the-state-structure-20.png)
 
-Теперь каждый элемент выполняет проверку `selectedIds.has(letter.id)`, что очень быстро.
+    Одним из небольших недостатков использования массива является то, что для каждого элемента вы вызываете `selectedIds.includes(letter.id)`, чтобы проверить, выбран ли он. Если массив очень большой, это может стать проблемой производительности, поскольку поиск в массиве с помощью [`includes()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/includes) занимает линейное время, а вы выполняете этот поиск для каждого отдельного элемента.
 
-Помните, что [не следует мутировать объекты в состоянии](updating-objects-in-state.md), и это относится и к наборам. Вот почему функция `handleToggle` сначала создает _копию_ набора, а затем обновляет эту копию.
+    Чтобы решить эту проблему, вы можете держать в состоянии [Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set), что обеспечивает быструю операцию [`has()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set/has):
+
+    === "App.js"
+
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
+
+    	```js
+    	import { useState } from 'react';
+    	import { letters } from './data.js';
+    	import Letter from './Letter.js';
+
+    	export default function MailClient() {
+    		const [selectedIds, setSelectedIds] = useState(
+    			new Set()
+    		);
+
+    		const selectedCount = selectedIds.size;
+
+    		function handleToggle(toggledId) {
+    			// Create a copy (to avoid mutation).
+    			const nextIds = new Set(selectedIds);
+    			if (nextIds.has(toggledId)) {
+    				nextIds.delete(toggledId);
+    			} else {
+    				nextIds.add(toggledId);
+    			}
+    			setSelectedIds(nextIds);
+    		}
+
+    		return (
+    			<>
+    				<h2>Inbox</h2>
+    				<ul>
+    					{letters.map((letter) => (
+    						<Letter
+    							key={letter.id}
+    							letter={letter}
+    							isSelected={selectedIds.has(
+    								letter.id
+    							)}
+    							onToggle={handleToggle}
+    						/>
+    					))}
+    					<hr />
+    					<p>
+    						<b>
+    							You selected {selectedCount} letters
+    						</b>
+    					</p>
+    				</ul>
+    			</>
+    		);
+    	}
+    	```
+
+    	</div>
+
+    === "Letter.js"
+
+    	```js
+    	export default function Letter({
+    		letter,
+    		onToggle,
+    		isSelected,
+    	}) {
+    		return (
+    			<li className={isSelected ? 'selected' : ''}>
+    				<label>
+    					<input
+    						type="checkbox"
+    						checked={isSelected}
+    						onChange={() => {
+    							onToggle(letter.id);
+    						}}
+    					/>
+    					{letter.subject}
+    				</label>
+    			</li>
+    		);
+    	}
+    	```
+
+    === "data.js"
+
+    	```js
+    	export const letters = [
+    		{
+    			id: 0,
+    			subject: 'Ready for adventure?',
+    			isStarred: true,
+    		},
+    		{
+    			id: 1,
+    			subject: 'Time to check in!',
+    			isStarred: false,
+    		},
+    		{
+    			id: 2,
+    			subject: 'Festival Begins in Just SEVEN Days!',
+    			isStarred: false,
+    		},
+    	];
+    	```
+
+    === "Результат"
+
+    	![Результат](choosing-the-state-structure-21.png)
+
+    Теперь каждый элемент выполняет проверку `selectedIds.has(letter.id)`, что очень быстро.
+
+    Помните, что [не следует мутировать объекты в состоянии](updating-objects-in-state.md), и это относится и к наборам. Вот почему функция `handleToggle` сначала создает _копию_ набора, а затем обновляет эту копию.
+
+## Ссылки
+
+-   [https://react.dev/learn/choosing-the-state-structure](https://react.dev/learn/choosing-the-state-structure)
