@@ -1,30 +1,33 @@
 # CSSTransition
 
-Компонент перехода, созданный на основе замечательной библиотеки [`ng-animate`](https://docs.angularjs.org/api/ngAnimate). Его следует использовать, если вы используете CSS-переходы или анимацию. Он создан на основе компонента [`Transition`](transition.md), поэтому наследует все его реквизиты.
+Компонент перехода, созданный на основе замечательной библиотеки [`ng-animate`](https://docs.angularjs.org/api/ngAnimate). Его следует использовать, если вы используете CSS-переходы или анимацию. Он создан на основе компонента [`Transition`](transition.md), поэтому наследует все его пропсы.
 
 `CSSTransition` применяет пару имен классов во время состояний `appear`, `enter` и `exit` перехода. Применяется первый класс, а затем второй класс `*-active`, чтобы активировать CSS-переход. После перехода применяются соответствующие имена классов `*-done`, чтобы сохранить состояние перехода.
 
 ```jsx
 function App() {
-  const [inProp, setInProp] = useState(false);
-  const nodeRef = useRef(null);
-  return (
-    <div>
-      <CSSTransition
-        nodeRef={nodeRef}
-        in={inProp}
-        timeout={200}
-        classNames="my-node"
-      >
-        <div ref={nodeRef}>
-          {"I'll receive my-node-* classes"}
+    const [inProp, setInProp] = useState(false);
+    const nodeRef = useRef(null);
+    return (
+        <div>
+            <CSSTransition
+                nodeRef={nodeRef}
+                in={inProp}
+                timeout={200}
+                classNames="my-node"
+            >
+                <div ref={nodeRef}>
+                    {"I'll receive my-node-* classes"}
+                </div>
+            </CSSTransition>
+            <button
+                type="button"
+                onClick={() => setInProp(true)}
+            >
+                Click to Enter
+            </button>
         </div>
-      </CSSTransition>
-      <button type="button" onClick={() => setInProp(true)}>
-        Click to Enter
-      </button>
-    </div>
-  );
+    );
 }
 ```
 
@@ -32,18 +35,18 @@ function App() {
 
 ```css
 .my-node-enter {
-  opacity: 0;
+    opacity: 0;
 }
 .my-node-enter-active {
-  opacity: 1;
-  transition: opacity 200ms;
+    opacity: 1;
+    transition: opacity 200ms;
 }
 .my-node-exit {
-  opacity: 1;
+    opacity: 1;
 }
 .my-node-exit-active {
-  opacity: 0;
-  transition: opacity 200ms;
+    opacity: 0;
+    transition: opacity 200ms;
 }
 ```
 
@@ -51,7 +54,7 @@ function App() {
 
 !!!note ""
 
-    Если вы используете реквизит `appear`, не забудьте определить стили и для классов `.appear-*`.
+    Если вы используете пропс `appear`, не забудьте определить стили и для классов `.appear-*`.
 
 ## Пример
 
@@ -59,15 +62,15 @@ function App() {
 
 ## Свойства
 
-Принимает все реквизиты из `<Transition>`, если не указано иное.
+Принимает все пропсы из `<Transition>`, если не указано иное.
 
 ### classNames
 
 Имена классов анимации, применяемые к компоненту при его появлении, входе, выходе или завершении перехода. Можно указать одно имя, которое будет иметь суффикс для каждого этапа, например, применяется `classNames="fade"`:
 
-- `fade-appear`, `fade-appear-active`, `fade-appear-done`
-- `fade-enter`, `fade-enter-active`, `fade-enter-done`
-- `fade-exit`, `fade-exit-active`, `fade-exit-done`
+-   `fade-appear`, `fade-appear-active`, `fade-appear-done`
+-   `fade-enter`, `fade-enter-active`, `fade-enter-done`
+-   `fade-exit`, `fade-exit-active`, `fade-exit-done`
 
 Следует отметить несколько деталей о том, как применяются эти классы:
 
@@ -103,8 +106,8 @@ import styles from './styles.css';
 classNames={{ ...styles }}
 ```
 
-- type: `string | { appear?: string, appearActive?: string, appearDone?: string, enter?: string, enterActive?: string, enterDone?: string, exit?: string, exitActive?: string, exitDone?: string, }`
-- default: `''`
+-   type: `string | { appear?: string, appearActive?: string, appearDone?: string, enter?: string, enterActive?: string, enterDone?: string, exit?: string, exitActive?: string, exitDone?: string, }`
+-   default: `''`
 
 ### onEnter
 
@@ -112,9 +115,9 @@ classNames={{ ...styles }}
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
+    Когда передается пропс `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
 
-- type: `Function(node: HtmlElement, isAppearing: bool)`
+-   type: `Function(node: HtmlElement, isAppearing: bool)`
 
 ### onEntering
 
@@ -122,9 +125,9 @@ classNames={{ ...styles }}
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
+    Когда передается пропс `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
 
-- type: `Function(node: HtmlElement, isAppearing: bool)`
+-   type: `Function(node: HtmlElement, isAppearing: bool)`
 
 ### onEntered
 
@@ -132,9 +135,9 @@ classNames={{ ...styles }}
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
+    Когда передается пропс `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
 
-- type: `Function(node: HtmlElement, isAppearing: bool)`
+-   type: `Function(node: HtmlElement, isAppearing: bool)`
 
 ### onExit
 
@@ -142,9 +145,9 @@ classNames={{ ...styles }}
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается
+    Когда передается пропс `nodeRef`, `node` не передается
 
-- type: `Function(node: HtmlElement)`
+-   type: `Function(node: HtmlElement)`
 
 ### onExiting
 
@@ -152,9 +155,9 @@ classNames={{ ...styles }}
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается
+    Когда передается пропс `nodeRef`, `node` не передается
 
-- type: `Function(node: HtmlElement)`
+-   type: `Function(node: HtmlElement)`
 
 ### onExited
 
@@ -162,6 +165,6 @@ classNames={{ ...styles }}
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается
+    Когда передается пропс `nodeRef`, `node` не передается
 
-- type: `Function(node: HtmlElement)`
+-   type: `Function(node: HtmlElement)`

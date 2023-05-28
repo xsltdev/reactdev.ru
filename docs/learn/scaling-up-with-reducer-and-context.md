@@ -2,228 +2,220 @@
 
 Редукторы позволяют консолидировать логику обновления состояния компонента. Контекст позволяет передавать информацию вглубь других компонентов. Вы можете объединить редукторы и контекст для управления состоянием сложного экрана.
 
--   Как объединить редуктор и контекст
--   Как избежать передачи состояния и диспетчеризации через параметры
--   Как хранить логику контекста и состояния в отдельном файле
+!!!tip "Вы узнаете"
 
-## Объединение редуктора с контекстом {/_combining-a-reducer-with-context_/}
+    -   Как объединить редуктор и контекст
+    -   Как избежать передачи состояния и диспетчеризации через параметры
+    -   Как хранить логику контекста и состояния в отдельном файле
 
-В этом примере из [the introduction to reducers](/learn/extracting-state-logic-into-a-reducer) состояние управляется редуктором. Функция reducer содержит всю логику обновления состояния и объявлена в нижней части этого файла:
+## Объединение редуктора с контекстом
 
-<!-- 0001.part.md -->
+В этом примере из [the introduction to reducers](extracting-state-logic-into-a-reducer.md) состояние управляется редуктором. Функция reducer содержит всю логику обновления состояния и объявлена в нижней части этого файла:
 
-```js
-import { useReducer } from 'react';
-import AddTask from './AddTask.js';
-import TaskList from './TaskList.js';
+=== "App.js"
 
-export default function TaskApp() {
-    const [tasks, dispatch] = useReducer(
-        tasksReducer,
-        initialTasks
-    );
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleAddTask(text) {
-        dispatch({
-            type: 'added',
-            id: nextId++,
-            text: text,
-        });
+    ```js
+    import { useReducer } from 'react';
+    import AddTask from './AddTask.js';
+    import TaskList from './TaskList.js';
+
+    export default function TaskApp() {
+    	const [tasks, dispatch] = useReducer(
+    		tasksReducer,
+    		initialTasks
+    	);
+
+    	function handleAddTask(text) {
+    		dispatch({
+    			type: 'added',
+    			id: nextId++,
+    			text: text,
+    		});
+    	}
+
+    	function handleChangeTask(task) {
+    		dispatch({
+    			type: 'changed',
+    			task: task,
+    		});
+    	}
+
+    	function handleDeleteTask(taskId) {
+    		dispatch({
+    			type: 'deleted',
+    			id: taskId,
+    		});
+    	}
+
+    	return (
+    		<>
+    			<h1>Day off in Kyoto</h1>
+    			<AddTask onAddTask={handleAddTask} />
+    			<TaskList
+    				tasks={tasks}
+    				onChangeTask={handleChangeTask}
+    				onDeleteTask={handleDeleteTask}
+    			/>
+    		</>
+    	);
     }
 
-    function handleChangeTask(task) {
-        dispatch({
-            type: 'changed',
-            task: task,
-        });
+    function tasksReducer(tasks, action) {
+    	switch (action.type) {
+    		case 'added': {
+    			return [
+    				...tasks,
+    				{
+    					id: action.id,
+    					text: action.text,
+    					done: false,
+    				},
+    			];
+    		}
+    		case 'changed': {
+    			return tasks.map((t) => {
+    				if (t.id === action.task.id) {
+    					return action.task;
+    				} else {
+    					return t;
+    				}
+    			});
+    		}
+    		case 'deleted': {
+    			return tasks.filter((t) => t.id !== action.id);
+    		}
+    		default: {
+    			throw Error('Unknown action: ' + action.type);
+    		}
+    	}
     }
 
-    function handleDeleteTask(taskId) {
-        dispatch({
-            type: 'deleted',
-            id: taskId,
-        });
+    let nextId = 3;
+    const initialTasks = [
+    	{ id: 0, text: 'Philosopher’s Path', done: true },
+    	{ id: 1, text: 'Visit the temple', done: false },
+    	{ id: 2, text: 'Drink matcha', done: false },
+    ];
+    ```
+
+    </div>
+
+=== "AddTask.js"
+
+    ```js
+    import { useState } from 'react';
+
+    export default function AddTask({ onAddTask }) {
+    	const [text, setText] = useState('');
+    	return (
+    		<>
+    			<input
+    				placeholder="Add task"
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => {
+    					setText('');
+    					onAddTask(text);
+    				}}
+    			>
+    				Add
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "TaskList.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    import { useState } from 'react';
+
+    export default function TaskList({
+    	tasks,
+    	onChangeTask,
+    	onDeleteTask,
+    }) {
+    	return (
+    		<ul>
+    			{tasks.map((task) => (
+    				<li key={task.id}>
+    					<Task
+    						task={task}
+    						onChange={onChangeTask}
+    						onDelete={onDeleteTask}
+    					/>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
 
-    return (
-        <>
-            <h1>Day off in Kyoto</h1>
-            <AddTask onAddTask={handleAddTask} />
-            <TaskList
-                tasks={tasks}
-                onChangeTask={handleChangeTask}
-                onDeleteTask={handleDeleteTask}
-            />
-        </>
-    );
-}
-
-function tasksReducer(tasks, action) {
-    switch (action.type) {
-        case 'added': {
-            return [
-                ...tasks,
-                {
-                    id: action.id,
-                    text: action.text,
-                    done: false,
-                },
-            ];
-        }
-        case 'changed': {
-            return tasks.map((t) => {
-                if (t.id === action.task.id) {
-                    return action.task;
-                } else {
-                    return t;
-                }
-            });
-        }
-        case 'deleted': {
-            return tasks.filter((t) => t.id !== action.id);
-        }
-        default: {
-            throw Error('Unknown action: ' + action.type);
-        }
+    function Task({ task, onChange, onDelete }) {
+    	const [isEditing, setIsEditing] = useState(false);
+    	let taskContent;
+    	if (isEditing) {
+    		taskContent = (
+    			<>
+    				<input
+    					value={task.text}
+    					onChange={(e) => {
+    						onChange({
+    							...task,
+    							text: e.target.value,
+    						});
+    					}}
+    				/>
+    				<button onClick={() => setIsEditing(false)}>
+    					Save
+    				</button>
+    			</>
+    		);
+    	} else {
+    		taskContent = (
+    			<>
+    				{task.text}
+    				<button onClick={() => setIsEditing(true)}>
+    					Edit
+    				</button>
+    			</>
+    		);
+    	}
+    	return (
+    		<label>
+    			<input
+    				type="checkbox"
+    				checked={task.done}
+    				onChange={(e) => {
+    					onChange({
+    						...task,
+    						done: e.target.checked,
+    					});
+    				}}
+    			/>
+    			{taskContent}
+    			<button onClick={() => onDelete(task.id)}>
+    				Delete
+    			</button>
+    		</label>
+    	);
     }
-}
+    ```
 
-let nextId = 3;
-const initialTasks = [
-    { id: 0, text: 'Philosopher’s Path', done: true },
-    { id: 1, text: 'Visit the temple', done: false },
-    { id: 2, text: 'Drink matcha', done: false },
-];
-```
+    </div>
 
-<!-- 0002.part.md -->
+=== "Результат"
 
-<!-- 0003.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function AddTask({ onAddTask }) {
-    const [text, setText] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add task"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setText('');
-                    onAddTask(text);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
-
-<!-- 0004.part.md -->
-
-<!-- 0005.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function TaskList({
-    tasks,
-    onChangeTask,
-    onDeleteTask,
-}) {
-    return (
-        <ul>
-            {tasks.map((task) => (
-                <li key={task.id}>
-                    <Task
-                        task={task}
-                        onChange={onChangeTask}
-                        onDelete={onDeleteTask}
-                    />
-                </li>
-            ))}
-        </ul>
-    );
-}
-
-function Task({ task, onChange, onDelete }) {
-    const [isEditing, setIsEditing] = useState(false);
-    let taskContent;
-    if (isEditing) {
-        taskContent = (
-            <>
-                <input
-                    value={task.text}
-                    onChange={(e) => {
-                        onChange({
-                            ...task,
-                            text: e.target.value,
-                        });
-                    }}
-                />
-                <button onClick={() => setIsEditing(false)}>
-                    Save
-                </button>
-            </>
-        );
-    } else {
-        taskContent = (
-            <>
-                {task.text}
-                <button onClick={() => setIsEditing(true)}>
-                    Edit
-                </button>
-            </>
-        );
-    }
-    return (
-        <label>
-            <input
-                type="checkbox"
-                checked={task.done}
-                onChange={(e) => {
-                    onChange({
-                        ...task,
-                        done: e.target.checked,
-                    });
-                }}
-            />
-            {taskContent}
-            <button onClick={() => onDelete(task.id)}>
-                Delete
-            </button>
-        </label>
-    );
-}
-```
-
-<!-- 0006.part.md -->
-
-<!-- 0007.part.md -->
-
-```css
-button {
-    margin: 5px;
-}
-li {
-    list-style-type: none;
-}
-ul,
-li {
-    margin: 0;
-    padding: 0;
-}
-```
+    ![Результат](scaling-up-with-reducer-and-context-1.png)
 
 <!-- 0008.part.md -->
 
-Редуктор помогает сделать обработчики событий короткими и лаконичными. Однако по мере роста вашего приложения вы можете столкнуться с другой трудностью. **В настоящее время состояние `tasks` и функция `dispatch` доступны только в компоненте верхнего уровня `TaskApp`.** Чтобы позволить другим компонентам читать список задач или изменять его, вы должны явно [передать вниз](/learn/passing-props-to-a-component) текущее состояние и обработчики событий, которые изменяют его, как реквизиты.
+Редуктор помогает сделать обработчики событий короткими и лаконичными. Однако по мере роста вашего приложения вы можете столкнуться с другой трудностью. **В настоящее время состояние `tasks` и функция `dispatch` доступны только в компоненте верхнего уровня `TaskApp`.** Чтобы позволить другим компонентам читать список задач или изменять его, вы должны явно [передать вниз](passing-props-to-a-component.md) текущее состояние и обработчики событий, которые изменяют его, как пропсы.
 
 Например, `TaskApp` передает список задач и обработчики событий в `TaskList`:
 
@@ -253,9 +245,9 @@ li {
 
 <!-- 0012.part.md -->
 
-В небольшом примере, подобном этому, это работает хорошо, но если у вас в центре десятки или сотни компонентов, передача всех состояний и функций может оказаться весьма разорительной\!
+В небольшом примере, подобном этому, это работает хорошо, но если у вас в центре десятки или сотни компонентов, передача всех состояний и функций может оказаться весьма разорительной!
 
-Вот почему, в качестве альтернативы передаче через реквизиты, вы можете поместить состояние `tasks` и функцию `dispatch` [в контекст](/learn/passing-data-deeply-with-context) **Таким образом, любой компонент ниже `TaskApp` в дереве может читать задачи и отправлять действия без повторяющегося "бурения реквизитов "**.
+Вот почему, в качестве альтернативы передаче через пропсы, вы можете поместить состояние `tasks` и функцию `dispatch` [в контекст](passing-data-deeply-with-context.md) **Таким образом, любой компонент ниже `TaskApp` в дереве может читать задачи и отправлять действия без повторяющегося "бурения пропсов "**.
 
 Вот как можно объединить reducer с контекстом:
 
@@ -263,7 +255,7 @@ li {
 2.  **Поместить** состояние и диспетчеризацию в контекст.
 3.  **Использовать** контекст в любом месте дерева.
 
-### Шаг 1: Создание контекста {/_step-1-create-the-context_/}
+### Шаг 1: Создание контекста
 
 Хук `useReducer` возвращает текущие `задачи` и функцию `dispatch`, которая позволяет вам обновить их:
 
@@ -278,242 +270,228 @@ const [tasks, dispatch] = useReducer(
 
 <!-- 0014.part.md -->
 
-Чтобы передать их по дереву, вы [создадите](/learn/passing-data-deeply-with-context#step-2-use-the-context) два отдельных контекста:
+Чтобы передать их по дереву, вы [создадите](passing-data-deeply-with-context.md) два отдельных контекста:
 
 -   `TasksContext` предоставляет текущий список задач.
 -   `TasksDispatchContext` предоставляет функцию, которая позволяет компонентам диспетчеризировать действия.
 
 Экспортируйте их из отдельного файла, чтобы впоследствии вы могли импортировать их из других файлов:
 
-<!-- 0015.part.md -->
+=== "App.js"
 
-```js
-import { useReducer } from 'react';
-import AddTask from './AddTask.js';
-import TaskList from './TaskList.js';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function TaskApp() {
-    const [tasks, dispatch] = useReducer(
-        tasksReducer,
-        initialTasks
-    );
+    ```js
+    import { useReducer } from 'react';
+    import AddTask from './AddTask.js';
+    import TaskList from './TaskList.js';
 
-    function handleAddTask(text) {
-        dispatch({
-            type: 'added',
-            id: nextId++,
-            text: text,
-        });
+    export default function TaskApp() {
+    	const [tasks, dispatch] = useReducer(
+    		tasksReducer,
+    		initialTasks
+    	);
+
+    	function handleAddTask(text) {
+    		dispatch({
+    			type: 'added',
+    			id: nextId++,
+    			text: text,
+    		});
+    	}
+
+    	function handleChangeTask(task) {
+    		dispatch({
+    			type: 'changed',
+    			task: task,
+    		});
+    	}
+
+    	function handleDeleteTask(taskId) {
+    		dispatch({
+    			type: 'deleted',
+    			id: taskId,
+    		});
+    	}
+
+    	return (
+    		<>
+    			<h1>Day off in Kyoto</h1>
+    			<AddTask onAddTask={handleAddTask} />
+    			<TaskList
+    				tasks={tasks}
+    				onChangeTask={handleChangeTask}
+    				onDeleteTask={handleDeleteTask}
+    			/>
+    		</>
+    	);
     }
 
-    function handleChangeTask(task) {
-        dispatch({
-            type: 'changed',
-            task: task,
-        });
+    function tasksReducer(tasks, action) {
+    	switch (action.type) {
+    		case 'added': {
+    			return [
+    				...tasks,
+    				{
+    					id: action.id,
+    					text: action.text,
+    					done: false,
+    				},
+    			];
+    		}
+    		case 'changed': {
+    			return tasks.map((t) => {
+    				if (t.id === action.task.id) {
+    					return action.task;
+    				} else {
+    					return t;
+    				}
+    			});
+    		}
+    		case 'deleted': {
+    			return tasks.filter((t) => t.id !== action.id);
+    		}
+    		default: {
+    			throw Error('Unknown action: ' + action.type);
+    		}
+    	}
     }
 
-    function handleDeleteTask(taskId) {
-        dispatch({
-            type: 'deleted',
-            id: taskId,
-        });
+    let nextId = 3;
+    const initialTasks = [
+    	{ id: 0, text: 'Philosopher’s Path', done: true },
+    	{ id: 1, text: 'Visit the temple', done: false },
+    	{ id: 2, text: 'Drink matcha', done: false },
+    ];
+    ```
+
+    </div>
+
+=== "TasksContext.js"
+
+    ```js
+    import { createContext } from 'react';
+
+    export const TasksContext = createContext(null);
+    export const TasksDispatchContext = createContext(null);
+    ```
+
+=== "AddTask.js"
+
+    ```js
+    import { useState } from 'react';
+
+    export default function AddTask({ onAddTask }) {
+    	const [text, setText] = useState('');
+    	return (
+    		<>
+    			<input
+    				placeholder="Add task"
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => {
+    					setText('');
+    					onAddTask(text);
+    				}}
+    			>
+    				Add
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "TaskList.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    import { useState } from 'react';
+
+    export default function TaskList({
+    	tasks,
+    	onChangeTask,
+    	onDeleteTask,
+    }) {
+    	return (
+    		<ul>
+    			{tasks.map((task) => (
+    				<li key={task.id}>
+    					<Task
+    						task={task}
+    						onChange={onChangeTask}
+    						onDelete={onDeleteTask}
+    					/>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
 
-    return (
-        <>
-            <h1>Day off in Kyoto</h1>
-            <AddTask onAddTask={handleAddTask} />
-            <TaskList
-                tasks={tasks}
-                onChangeTask={handleChangeTask}
-                onDeleteTask={handleDeleteTask}
-            />
-        </>
-    );
-}
-
-function tasksReducer(tasks, action) {
-    switch (action.type) {
-        case 'added': {
-            return [
-                ...tasks,
-                {
-                    id: action.id,
-                    text: action.text,
-                    done: false,
-                },
-            ];
-        }
-        case 'changed': {
-            return tasks.map((t) => {
-                if (t.id === action.task.id) {
-                    return action.task;
-                } else {
-                    return t;
-                }
-            });
-        }
-        case 'deleted': {
-            return tasks.filter((t) => t.id !== action.id);
-        }
-        default: {
-            throw Error('Unknown action: ' + action.type);
-        }
+    function Task({ task, onChange, onDelete }) {
+    	const [isEditing, setIsEditing] = useState(false);
+    	let taskContent;
+    	if (isEditing) {
+    		taskContent = (
+    			<>
+    				<input
+    					value={task.text}
+    					onChange={(e) => {
+    						onChange({
+    							...task,
+    							text: e.target.value,
+    						});
+    					}}
+    				/>
+    				<button onClick={() => setIsEditing(false)}>
+    					Save
+    				</button>
+    			</>
+    		);
+    	} else {
+    		taskContent = (
+    			<>
+    				{task.text}
+    				<button onClick={() => setIsEditing(true)}>
+    					Edit
+    				</button>
+    			</>
+    		);
+    	}
+    	return (
+    		<label>
+    			<input
+    				type="checkbox"
+    				checked={task.done}
+    				onChange={(e) => {
+    					onChange({
+    						...task,
+    						done: e.target.checked,
+    					});
+    				}}
+    			/>
+    			{taskContent}
+    			<button onClick={() => onDelete(task.id)}>
+    				Delete
+    			</button>
+    		</label>
+    	);
     }
-}
+    ```
 
-let nextId = 3;
-const initialTasks = [
-    { id: 0, text: 'Philosopher’s Path', done: true },
-    { id: 1, text: 'Visit the temple', done: false },
-    { id: 2, text: 'Drink matcha', done: false },
-];
-```
+    </div>
 
-<!-- 0016.part.md -->
+=== "Результат"
 
-<!-- 0017.part.md -->
-
-```js
-import { createContext } from 'react';
-
-export const TasksContext = createContext(null);
-export const TasksDispatchContext = createContext(null);
-```
-
-<!-- 0018.part.md -->
-
-<!-- 0019.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function AddTask({ onAddTask }) {
-    const [text, setText] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add task"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setText('');
-                    onAddTask(text);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
-
-<!-- 0020.part.md -->
-
-<!-- 0021.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function TaskList({
-    tasks,
-    onChangeTask,
-    onDeleteTask,
-}) {
-    return (
-        <ul>
-            {tasks.map((task) => (
-                <li key={task.id}>
-                    <Task
-                        task={task}
-                        onChange={onChangeTask}
-                        onDelete={onDeleteTask}
-                    />
-                </li>
-            ))}
-        </ul>
-    );
-}
-
-function Task({ task, onChange, onDelete }) {
-    const [isEditing, setIsEditing] = useState(false);
-    let taskContent;
-    if (isEditing) {
-        taskContent = (
-            <>
-                <input
-                    value={task.text}
-                    onChange={(e) => {
-                        onChange({
-                            ...task,
-                            text: e.target.value,
-                        });
-                    }}
-                />
-                <button onClick={() => setIsEditing(false)}>
-                    Save
-                </button>
-            </>
-        );
-    } else {
-        taskContent = (
-            <>
-                {task.text}
-                <button onClick={() => setIsEditing(true)}>
-                    Edit
-                </button>
-            </>
-        );
-    }
-    return (
-        <label>
-            <input
-                type="checkbox"
-                checked={task.done}
-                onChange={(e) => {
-                    onChange({
-                        ...task,
-                        done: e.target.checked,
-                    });
-                }}
-            />
-            {taskContent}
-            <button onClick={() => onDelete(task.id)}>
-                Delete
-            </button>
-        </label>
-    );
-}
-```
-
-<!-- 0022.part.md -->
-
-<!-- 0023.part.md -->
-
-```css
-button {
-    margin: 5px;
-}
-li {
-    list-style-type: none;
-}
-ul,
-li {
-    margin: 0;
-    padding: 0;
-}
-```
-
-<!-- 0024.part.md -->
+    ![Результат](scaling-up-with-reducer-and-context-1.png)
 
 Здесь вы передаете `null` в качестве значения по умолчанию в оба контекста. Фактические значения будут предоставлены компонентом `TaskApp`.
 
-### Шаг 2: Поместите состояние и диспетчеризацию в контекст {/_step-2-put-state-and-dispatch-into-context_/}
+### Шаг 2: Поместите состояние и диспетчеризацию в контекст
 
-Теперь вы можете импортировать оба контекста в компонент `TaskApp`. Возьмите `tasks` и `dispatch`, возвращенные `useReducer()`, и [предоставьте их](/learn/passing-data-deeply-with-context#step-3-provide-the-context) всему дереву ниже:
+Теперь вы можете импортировать оба контекста в компонент `TaskApp`. Возьмите `tasks` и `dispatch`, возвращенные `useReducer()`, и [предоставьте их](passing-data-deeply-with-context.md) всему дереву ниже:
 
 <!-- 0025.part.md -->
 
@@ -541,241 +519,229 @@ export default function TaskApp() {
 
 <!-- 0026.part.md -->
 
-Пока что вы передаете информацию как через реквизит, так и в контексте:
+Пока что вы передаете информацию как через пропс, так и в контексте:
 
-<!-- 0027.part.md -->
+=== "App.js"
 
-```js
-import { useReducer } from 'react';
-import AddTask from './AddTask.js';
-import TaskList from './TaskList.js';
-import {
-    TasksContext,
-    TasksDispatchContext,
-} from './TasksContext.js';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function TaskApp() {
-    const [tasks, dispatch] = useReducer(
-        tasksReducer,
-        initialTasks
-    );
+    ```js
+    import { useReducer } from 'react';
+    import AddTask from './AddTask.js';
+    import TaskList from './TaskList.js';
+    import {
+    	TasksContext,
+    	TasksDispatchContext,
+    } from './TasksContext.js';
 
-    function handleAddTask(text) {
-        dispatch({
-            type: 'added',
-            id: nextId++,
-            text: text,
-        });
+    export default function TaskApp() {
+    	const [tasks, dispatch] = useReducer(
+    		tasksReducer,
+    		initialTasks
+    	);
+
+    	function handleAddTask(text) {
+    		dispatch({
+    			type: 'added',
+    			id: nextId++,
+    			text: text,
+    		});
+    	}
+
+    	function handleChangeTask(task) {
+    		dispatch({
+    			type: 'changed',
+    			task: task,
+    		});
+    	}
+
+    	function handleDeleteTask(taskId) {
+    		dispatch({
+    			type: 'deleted',
+    			id: taskId,
+    		});
+    	}
+
+    	return (
+    		<TasksContext.Provider value={tasks}>
+    			<TasksDispatchContext.Provider value={dispatch}>
+    				<h1>Day off in Kyoto</h1>
+    				<AddTask onAddTask={handleAddTask} />
+    				<TaskList
+    					tasks={tasks}
+    					onChangeTask={handleChangeTask}
+    					onDeleteTask={handleDeleteTask}
+    				/>
+    			</TasksDispatchContext.Provider>
+    		</TasksContext.Provider>
+    	);
     }
 
-    function handleChangeTask(task) {
-        dispatch({
-            type: 'changed',
-            task: task,
-        });
+    function tasksReducer(tasks, action) {
+    	switch (action.type) {
+    		case 'added': {
+    			return [
+    				...tasks,
+    				{
+    					id: action.id,
+    					text: action.text,
+    					done: false,
+    				},
+    			];
+    		}
+    		case 'changed': {
+    			return tasks.map((t) => {
+    				if (t.id === action.task.id) {
+    					return action.task;
+    				} else {
+    					return t;
+    				}
+    			});
+    		}
+    		case 'deleted': {
+    			return tasks.filter((t) => t.id !== action.id);
+    		}
+    		default: {
+    			throw Error('Unknown action: ' + action.type);
+    		}
+    	}
     }
 
-    function handleDeleteTask(taskId) {
-        dispatch({
-            type: 'deleted',
-            id: taskId,
-        });
+    let nextId = 3;
+    const initialTasks = [
+    	{ id: 0, text: 'Philosopher’s Path', done: true },
+    	{ id: 1, text: 'Visit the temple', done: false },
+    	{ id: 2, text: 'Drink matcha', done: false },
+    ];
+    ```
+
+    </div>
+
+=== "TasksContext.js"
+
+    ```js
+    import { createContext } from 'react';
+
+    export const TasksContext = createContext(null);
+    export const TasksDispatchContext = createContext(null);
+    ```
+
+=== "AddTask.js"
+
+    ```js
+    import { useState } from 'react';
+
+    export default function AddTask({ onAddTask }) {
+    	const [text, setText] = useState('');
+    	return (
+    		<>
+    			<input
+    				placeholder="Add task"
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => {
+    					setText('');
+    					onAddTask(text);
+    				}}
+    			>
+    				Add
+    			</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "TaskList.js"
+
+    <div markdown style="max-height: 400px; overflow-y: auto;">
+
+    ```js
+    import { useState } from 'react';
+
+    export default function TaskList({
+    	tasks,
+    	onChangeTask,
+    	onDeleteTask,
+    }) {
+    	return (
+    		<ul>
+    			{tasks.map((task) => (
+    				<li key={task.id}>
+    					<Task
+    						task={task}
+    						onChange={onChangeTask}
+    						onDelete={onDeleteTask}
+    					/>
+    				</li>
+    			))}
+    		</ul>
+    	);
     }
 
-    return (
-        <TasksContext.Provider value={tasks}>
-            <TasksDispatchContext.Provider value={dispatch}>
-                <h1>Day off in Kyoto</h1>
-                <AddTask onAddTask={handleAddTask} />
-                <TaskList
-                    tasks={tasks}
-                    onChangeTask={handleChangeTask}
-                    onDeleteTask={handleDeleteTask}
-                />
-            </TasksDispatchContext.Provider>
-        </TasksContext.Provider>
-    );
-}
-
-function tasksReducer(tasks, action) {
-    switch (action.type) {
-        case 'added': {
-            return [
-                ...tasks,
-                {
-                    id: action.id,
-                    text: action.text,
-                    done: false,
-                },
-            ];
-        }
-        case 'changed': {
-            return tasks.map((t) => {
-                if (t.id === action.task.id) {
-                    return action.task;
-                } else {
-                    return t;
-                }
-            });
-        }
-        case 'deleted': {
-            return tasks.filter((t) => t.id !== action.id);
-        }
-        default: {
-            throw Error('Unknown action: ' + action.type);
-        }
+    function Task({ task, onChange, onDelete }) {
+    	const [isEditing, setIsEditing] = useState(false);
+    	let taskContent;
+    	if (isEditing) {
+    		taskContent = (
+    			<>
+    				<input
+    					value={task.text}
+    					onChange={(e) => {
+    						onChange({
+    							...task,
+    							text: e.target.value,
+    						});
+    					}}
+    				/>
+    				<button onClick={() => setIsEditing(false)}>
+    					Save
+    				</button>
+    			</>
+    		);
+    	} else {
+    		taskContent = (
+    			<>
+    				{task.text}
+    				<button onClick={() => setIsEditing(true)}>
+    					Edit
+    				</button>
+    			</>
+    		);
+    	}
+    	return (
+    		<label>
+    			<input
+    				type="checkbox"
+    				checked={task.done}
+    				onChange={(e) => {
+    					onChange({
+    						...task,
+    						done: e.target.checked,
+    					});
+    				}}
+    			/>
+    			{taskContent}
+    			<button onClick={() => onDelete(task.id)}>
+    				Delete
+    			</button>
+    		</label>
+    	);
     }
-}
+    ```
 
-let nextId = 3;
-const initialTasks = [
-    { id: 0, text: 'Philosopher’s Path', done: true },
-    { id: 1, text: 'Visit the temple', done: false },
-    { id: 2, text: 'Drink matcha', done: false },
-];
-```
+    </div>
 
-<!-- 0028.part.md -->
+=== "Результат"
 
-<!-- 0029.part.md -->
-
-```js
-import { createContext } from 'react';
-
-export const TasksContext = createContext(null);
-export const TasksDispatchContext = createContext(null);
-```
-
-<!-- 0030.part.md -->
-
-<!-- 0031.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function AddTask({ onAddTask }) {
-    const [text, setText] = useState('');
-    return (
-        <>
-            <input
-                placeholder="Add task"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <button
-                onClick={() => {
-                    setText('');
-                    onAddTask(text);
-                }}
-            >
-                Add
-            </button>
-        </>
-    );
-}
-```
-
-<!-- 0032.part.md -->
-
-<!-- 0033.part.md -->
-
-```js
-import { useState } from 'react';
-
-export default function TaskList({
-    tasks,
-    onChangeTask,
-    onDeleteTask,
-}) {
-    return (
-        <ul>
-            {tasks.map((task) => (
-                <li key={task.id}>
-                    <Task
-                        task={task}
-                        onChange={onChangeTask}
-                        onDelete={onDeleteTask}
-                    />
-                </li>
-            ))}
-        </ul>
-    );
-}
-
-function Task({ task, onChange, onDelete }) {
-    const [isEditing, setIsEditing] = useState(false);
-    let taskContent;
-    if (isEditing) {
-        taskContent = (
-            <>
-                <input
-                    value={task.text}
-                    onChange={(e) => {
-                        onChange({
-                            ...task,
-                            text: e.target.value,
-                        });
-                    }}
-                />
-                <button onClick={() => setIsEditing(false)}>
-                    Save
-                </button>
-            </>
-        );
-    } else {
-        taskContent = (
-            <>
-                {task.text}
-                <button onClick={() => setIsEditing(true)}>
-                    Edit
-                </button>
-            </>
-        );
-    }
-    return (
-        <label>
-            <input
-                type="checkbox"
-                checked={task.done}
-                onChange={(e) => {
-                    onChange({
-                        ...task,
-                        done: e.target.checked,
-                    });
-                }}
-            />
-            {taskContent}
-            <button onClick={() => onDelete(task.id)}>
-                Delete
-            </button>
-        </label>
-    );
-}
-```
-
-<!-- 0034.part.md -->
-
-<!-- 0035.part.md -->
-
-```css
-button {
-    margin: 5px;
-}
-li {
-    list-style-type: none;
-}
-ul,
-li {
-    margin: 0;
-    padding: 0;
-}
-```
+    ![Результат](scaling-up-with-reducer-and-context-1.png)
 
 <!-- 0036.part.md -->
 
-В следующем шаге вы удалите передачу реквизита.
+В следующем шаге вы удалите передачу пропса.
 
-### Шаг 3: Используйте контекст в любом месте дерева {/_step-3-use-context-anywhere-in-the-tree_/}
+### Шаг 3: Используйте контекст в любом месте дерева
 
 Теперь вам не нужно передавать список задач или обработчики событий вниз по дереву:
 
@@ -829,7 +795,7 @@ export default function AddTask() {
 
 <!-- 0042.part.md -->
 
-** Компонент `TaskApp` не передает никаких обработчиков событий вниз, а `TaskList` также не передает никаких обработчиков событий компоненту `Task`.** Каждый компонент считывает контекст, который ему необходим:
+**Компонент `TaskApp` не передает никаких обработчиков событий вниз, а `TaskList` также не передает никаких обработчиков событий компоненту `Task`.** Каждый компонент считывает контекст, который ему необходим:
 
 <!-- 0043.part.md -->
 
@@ -1033,29 +999,11 @@ function Task({ task }) {
 }
 ```
 
-<!-- 0050.part.md -->
-
-<!-- 0051.part.md -->
-
-```css
-button {
-    margin: 5px;
-}
-li {
-    list-style-type: none;
-}
-ul,
-li {
-    margin: 0;
-    padding: 0;
-}
-```
-
 <!-- 0052.part.md -->
 
-** Состояние по-прежнему "живет" в компоненте верхнего уровня `TaskApp`, управляемом с помощью `useReducer`.** Но его `задачи` и `dispatch` теперь доступны каждому компоненту ниже в дереве путем импорта и использования этих контекстов.
+**Состояние по-прежнему "живет" в компоненте верхнего уровня `TaskApp`, управляемом с помощью `useReducer`.** Но его `задачи` и `dispatch` теперь доступны каждому компоненту ниже в дереве путем импорта и использования этих контекстов.
 
-## Перемещение всех проводов в один файл {/_moving-all-wiring-into-a-single-file_/}
+## Перемещение всех проводов в один файл
 
 Это необязательно делать, но вы можете еще больше упростить компоненты, переместив и редуктор, и контекст в один файл. В настоящее время `TasksContext.js` содержит только два объявления контекста:
 
@@ -1070,11 +1018,11 @@ export const TasksDispatchContext = createContext(null);
 
 <!-- 0054.part.md -->
 
-Этот файл скоро будет переполнен\! Вы переместите редуктор в этот же файл. Затем вы объявите новый компонент `TasksProvider` в том же файле. Этот компонент свяжет все части вместе:
+Этот файл скоро будет переполнен! Вы переместите редуктор в этот же файл. Затем вы объявите новый компонент `TasksProvider` в том же файле. Этот компонент свяжет все части вместе:
 
 1.  Он будет управлять состоянием с помощью редуктора.
 2.  Он будет предоставлять оба контекста компонентам ниже.
-3.  Он будет [принимать `children` как реквизит](/learn/passing-props-to-a-component#passing-jsx-as-children), чтобы вы могли передавать ему JSX.
+3.  Он будет [принимать `children` как пропс](passing-props-to-a-component.md), чтобы вы могли передавать ему JSX.
 
 <!-- конец списка -->
 
@@ -1304,24 +1252,6 @@ function Task({ task }) {
             </button>
         </label>
     );
-}
-```
-
-<!-- 0064.part.md -->
-
-<!-- 0065.part.md -->
-
-```css
-button {
-    margin: 5px;
-}
-li {
-    list-style-type: none;
-}
-ul,
-li {
-    margin: 0;
-    padding: 0;
 }
 ```
 
@@ -1575,31 +1505,13 @@ function Task({ task }) {
 }
 ```
 
-<!-- 0078.part.md -->
-
-<!-- 0079.part.md -->
-
-```css
-button {
-    margin: 5px;
-}
-li {
-    list-style-type: none;
-}
-ul,
-li {
-    margin: 0;
-    padding: 0;
-}
-```
-
 <!-- 0080.part.md -->
 
 Вы можете рассматривать `TasksProvider` как часть экрана, которая знает, как работать с задачами, `useTasks` - как способ их чтения, а `useTasksDispatch` - как способ их обновления из любого компонента ниже в дереве.
 
-Функции типа `useTasks` и `useTasksDispatch` называются _[Custom Hooks.](/learn/reusing-logic-with-custom-hooks)_ Ваша функция считается пользовательским хуком, если ее имя начинается с `use`. Это позволяет вам использовать внутри нее другие хуки, например `useContext`.
+Функции типа `useTasks` и `useTasksDispatch` называются _[Custom Hooks.](reusing-logic-with-custom-hooks.md)_ Ваша функция считается пользовательским хуком, если ее имя начинается с `use`. Это позволяет вам использовать внутри нее другие хуки, например `useContext`.
 
-По мере роста вашего приложения у вас может быть много пар контекст-редуктор, подобных этой. Это мощный способ масштабировать ваше приложение и [поднимать состояние вверх](/learn/sharing-state-between-components) без лишней работы всякий раз, когда вы хотите получить доступ к данным в глубине дерева.
+По мере роста вашего приложения у вас может быть много пар контекст-редуктор, подобных этой. Это мощный способ масштабировать ваше приложение и [поднимать состояние вверх](sharing-state-between-components.md) без лишней работы всякий раз, когда вы хотите получить доступ к данным в глубине дерева.
 
 \<Recap\>
 

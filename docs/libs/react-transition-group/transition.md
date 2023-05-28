@@ -15,47 +15,47 @@ import { useRef } from 'react';
 const duration = 300;
 
 const defaultStyle = {
-  transition: `opacity ${duration}ms ease-in-out`,
-  opacity: 0,
+    transition: `opacity ${duration}ms ease-in-out`,
+    opacity: 0,
 };
 
 const transitionStyles = {
-  entering: { opacity: 1 },
-  entered: { opacity: 1 },
-  exiting: { opacity: 0 },
-  exited: { opacity: 0 },
+    entering: { opacity: 1 },
+    entered: { opacity: 1 },
+    exiting: { opacity: 0 },
+    exited: { opacity: 0 },
 };
 
 function Fade({ in: inProp }) {
-  const nodeRef = useRef(null);
-  return (
-    <Transition
-      nodeRef={nodeRef}
-      in={inProp}
-      timeout={duration}
-    >
-      {(state) => (
-        <div
-          ref={nodeRef}
-          style={{
-            ...defaultStyle,
-            ...transitionStyles[state],
-          }}
+    const nodeRef = useRef(null);
+    return (
+        <Transition
+            nodeRef={nodeRef}
+            in={inProp}
+            timeout={duration}
         >
-          I'm a fade Transition!
-        </div>
-      )}
-    </Transition>
-  );
+            {(state) => (
+                <div
+                    ref={nodeRef}
+                    style={{
+                        ...defaultStyle,
+                        ...transitionStyles[state],
+                    }}
+                >
+                    I'm a fade Transition!
+                </div>
+            )}
+        </Transition>
+    );
 }
 ```
 
 Существует 4 основных состояния, в которых может находиться `Transition`:
 
-- `entering`
-- `entered`
-- `exiting`
-- `exited`
+-   `entering`
+-   `entered`
+-   `exiting`
+-   `exited`
 
 Состояние `Transition` переключается с помощью параметра `in`. При значении `true` компонент начинает стадию "Enter". Во время этого этапа компонент переходит из текущего состояния перехода в состояние "`entering`" на время перехода, а затем в состояние "`entered`" после его завершения. Рассмотрим следующий пример (мы будем использовать хук [`useState`](https://reactjs.org/docs/hooks-reference.html#usestate)):
 
@@ -91,54 +91,54 @@ function App() {
 
 Ссылка React на элемент DOM, который должен перейти: [https://stackoverflow.com/a/51127130/4671932](https://stackoverflow.com/a/51127130/4671932)
 
-- Этот параметр необязателен, но рекомендуется, чтобы избежать использования по умолчанию [`ReactDOM.findDOMNode`](https://reactjs.org/docs/react-dom.html#finddomnode), который является устаревшим в `StrictMode`.
-- При использовании свойства `nodeRef`, `node` не передается в функции обратного вызова (например, `onEnter`), поскольку пользователь уже имеет прямой доступ к узлу.
-- При изменении `key` prop `Transition` в `TransitionGroup` необходимо предоставить `Transition` новый `nodeRef` с измененным `key` prop (см. [`test/CSSTransition-test.js`](https://github.com/reactjs/react-transition-group/blob/13435f897b3ab71f6e19d724f145596f5910581c/test/CSSTransition-test.js#L362-L437)).
+-   Этот параметр необязателен, но рекомендуется, чтобы избежать использования по умолчанию [`ReactDOM.findDOMNode`](https://reactjs.org/docs/react-dom.html#finddomnode), который является устаревшим в `StrictMode`.
+-   При использовании свойства `nodeRef`, `node` не передается в функции обратного вызова (например, `onEnter`), поскольку пользователь уже имеет прямой доступ к узлу.
+-   При изменении `key` prop `Transition` в `TransitionGroup` необходимо предоставить `Transition` новый `nodeRef` с измененным `key` prop (см. [`test/CSSTransition-test.js`](https://github.com/reactjs/react-transition-group/blob/13435f897b3ab71f6e19d724f145596f5910581c/test/CSSTransition-test.js#L362-L437)).
 
-- type: `shape`
+-   type: `shape`
 
 ### children
 
-Вместо элемента React можно использовать дочернюю `function`. Эта функция вызывается с текущим статусом перехода ("`entering`", "`entered`", "`exiting`", "`exited`"), который можно использовать для применения к компоненту реквизитов, зависящих от контекста.
+Вместо элемента React можно использовать дочернюю `function`. Эта функция вызывается с текущим статусом перехода ("`entering`", "`entered`", "`exiting`", "`exited`"), который можно использовать для применения к компоненту пропсов, зависящих от контекста.
 
 ```jsx
 <Transition
-  nodeRef={nodeRef}
-  in={this.state.in}
-  timeout={150}
+    nodeRef={nodeRef}
+    in={this.state.in}
+    timeout={150}
 >
-  {(state) => (
-    <MyComponent
-      ref={nodeRef}
-      className={`fade fade-${state}`}
-    />
-  )}
+    {(state) => (
+        <MyComponent
+            ref={nodeRef}
+            className={`fade fade-${state}`}
+        />
+    )}
 </Transition>
 ```
 
-- type: `Function | element`
-- required
+-   type: `Function | element`
+-   required
 
 ### in
 
 Показать компонент; вызывает состояния входа или выхода
 
-- type: `boolean`
-- default: `false`
+-   type: `boolean`
+-   default: `false`
 
 ### mountOnEnter
 
 По умолчанию дочерний компонент монтируется сразу вместе с родительским компонентом `Transition`. Если вы хотите "лениво смонтировать" компонент при первом переходе `in={true}`, вы можете установить `mountOnEnter`. После первого перехода enter компонент останется смонтированным, даже при "выходе", если вы также не укажете `unmountOnExit`.
 
-- type: `boolean`
-- default: `false`
+-   type: `boolean`
+-   default: `false`
 
 ### unmountOnExit
 
 По умолчанию дочерний компонент остается смонтированным после достижения состояния "`exited`". Установите `unmountOnExit`, если вы предпочитаете размонтировать компонент после завершения его выхода.
 
-- type: `boolean`
-- default: `false`
+-   type: `boolean`
+-   default: `false`
 
 ### appear
 
@@ -146,24 +146,24 @@ function App() {
 
 !!!note ""
 
-    Не существует специальных состояний появления, таких как `appearing/appeared`, этот реквизит только добавляет дополнительный переход `enter`. Однако в компоненте `<CSSTransition>` этот первый переход `enter` приводит к появлению дополнительных классов `.appear-*`, таким образом, вы можете выбрать другой стиль.
+    Не существует специальных состояний появления, таких как `appearing/appeared`, этот пропс только добавляет дополнительный переход `enter`. Однако в компоненте `<CSSTransition>` этот первый переход `enter` приводит к появлению дополнительных классов `.appear-*`, таким образом, вы можете выбрать другой стиль.
 
-- type: `boolean`
-- default: `false`
+-   type: `boolean`
+-   default: `false`
 
 ### enter
 
 Включение или отключение переходов ввода.
 
-- type: `boolean`
-- default: `true`
+-   type: `boolean`
+-   default: `true`
 
 ### exit
 
 Включение или отключение переходов выхода.
 
-- type: `boolean`
-- default: `true`
+-   type: `boolean`
+-   default: `true`
 
 ### timeout
 
@@ -185,11 +185,11 @@ timeout={{
 }}
 ```
 
-- `appear` по умолчанию принимает значение `enter`.
-- `enter` по умолчанию равно `0`
-- `exit` по умолчанию равно `0`
+-   `appear` по умолчанию принимает значение `enter`.
+-   `enter` по умолчанию равно `0`
+-   `exit` по умолчанию равно `0`
 
-- type: `number | { enter?: number, exit?: number, appear?: number }`
+-   type: `number | { enter?: number, exit?: number, appear?: number }`
 
 ### addEndListener
 
@@ -197,7 +197,7 @@ timeout={{
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается, поэтому `done` передается в качестве первого аргумента.
+    Когда передается пропс `nodeRef`, `node` не передается, поэтому `done` передается в качестве первого аргумента.
 
 ```js
 addEndListener={(node, done) => {
@@ -206,7 +206,7 @@ addEndListener={(node, done) => {
 }}
 ```
 
-- type: `Function`
+-   type: `Function`
 
 ### onEnter
 
@@ -214,10 +214,10 @@ addEndListener={(node, done) => {
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
+    Когда передается пропс `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
 
-- type: `Function(node: HtmlElement, isAppearing: bool) -> void`
-- default: `function noop() {}`
+-   type: `Function(node: HtmlElement, isAppearing: bool) -> void`
+-   default: `function noop() {}`
 
 ### onEntering
 
@@ -225,10 +225,10 @@ addEndListener={(node, done) => {
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
+    Когда передается пропс `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
 
-- type: `Function(node: HtmlElement, isAppearing: bool)`
-- default: `function noop() {}`
+-   type: `Function(node: HtmlElement, isAppearing: bool)`
+-   default: `function noop() {}`
 
 ### onEntered
 
@@ -236,10 +236,10 @@ addEndListener={(node, done) => {
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
+    Когда передается пропс `nodeRef`, `node` не передается, поэтому `isAppearing` передается в качестве первого аргумента.
 
-- type: `Function(node: HtmlElement, isAppearing: bool) -> void`
-- default: `function noop() {}`
+-   type: `Function(node: HtmlElement, isAppearing: bool) -> void`
+-   default: `function noop() {}`
 
 ### onExit
 
@@ -247,10 +247,10 @@ addEndListener={(node, done) => {
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается.
+    Когда передается пропс `nodeRef`, `node` не передается.
 
-- type: `Function(node: HtmlElement) -> void`
-- default: `function noop() {}`
+-   type: `Function(node: HtmlElement) -> void`
+-   default: `function noop() {}`
 
 ### onExiting
 
@@ -258,10 +258,10 @@ addEndListener={(node, done) => {
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается.
+    Когда передается пропс `nodeRef`, `node` не передается.
 
-- type: `Function(node: HtmlElement) -> void`
-- default: `function noop() {}`
+-   type: `Function(node: HtmlElement) -> void`
+-   default: `function noop() {}`
 
 ### onExited
 
@@ -269,7 +269,7 @@ addEndListener={(node, done) => {
 
 !!!note ""
 
-    Когда передается реквизит `nodeRef`, `node` не передается
+    Когда передается пропс `nodeRef`, `node` не передается
 
-- type: `Function(node: HtmlElement) -> void`
-- default: `function noop() {}`
+-   type: `Function(node: HtmlElement) -> void`
+-   default: `function noop() {}`

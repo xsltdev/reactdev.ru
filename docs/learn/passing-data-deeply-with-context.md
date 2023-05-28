@@ -1,201 +1,167 @@
 # Глубокая передача данных с помощью контекста
 
-Обычно вы передаете информацию от родительского компонента к дочернему компоненту с помощью реквизитов. Но передача реквизитов может стать многословной и неудобной, если вам приходится передавать их через множество компонентов в середине, или если многим компонентам в вашем приложении нужна одна и та же информация. _Context_ позволяет родительскому компоненту сделать некоторую информацию доступной для любого компонента в дереве под ним - независимо от глубины - без явной передачи ее через props.
+Обычно вы передаете информацию от родительского компонента к дочернему компоненту с помощью пропсов. Но передача пропсов может стать многословной и неудобной, если вам приходится передавать их через множество компонентов в середине, или если многим компонентам в вашем приложении нужна одна и та же информация. _Context_ позволяет родительскому компоненту сделать некоторую информацию доступной для любого компонента в дереве под ним - независимо от глубины - без явной передачи ее через `props`.
 
--   Что такое "бурение реквизитов"
--   Как заменить повторяющуюся передачу реквизитов контекстом
--   Общие случаи использования контекста
--   Общие альтернативы контексту
+!!!tip "Вы узнаете"
 
-## Проблема с передачей реквизитов {/_the-problem-with-passing-props_/}
+    -   Что такое "бурение пропсов"
+    -   Как заменить повторяющуюся передачу пропсов контекстом
+    -   Общие случаи использования контекста
+    -   Общие альтернативы контексту
 
-[Передача реквизитов](passing-props-to-a-component.md) - это отличный способ явной передачи данных через дерево вашего пользовательского интерфейса компонентам, которые их используют.
+## Проблема с передачей пропсов
 
-Но передача реквизитов может стать многословной и неудобной, если вам нужно передать какой-то реквизит глубоко в дереве, или если многим компонентам нужен один и тот же реквизит. Ближайший общий предок может быть далеко от компонентов, которым нужны данные, а [поднятие состояния вверх](sharing-state-between-components.md) так высоко может привести к ситуации, называемой "prop drilling".
+[Передача пропсов](passing-props-to-a-component.md) - это отличный способ явной передачи данных через дерево вашего пользовательского интерфейса компонентам, которые их используют.
 
-\<ДиаграммаГруппа\>
+Но передача пропсов может стать многословной и неудобной, если вам нужно передать какой-то пропс глубоко в дереве, или если многим компонентам нужен один и тот же пропс. Ближайший общий предок может быть далеко от компонентов, которым нужны данные, а [поднятие состояния вверх](sharing-state-between-components.md) так высоко может привести к ситуации, называемой "prop drilling".
 
-\<Diagram name="passing_data_lifting_state" height={160} width={608} captionPosition="top" alt="Диаграмма с деревом из трех компонентов. Родительский компонент содержит пузырек, представляющий значение, выделенное фиолетовым цветом. Значение перетекает вниз к каждому из двух дочерних компонентов, оба выделены фиолетовым цветом." \>
+![Диаграмма с деревом из трех компонентов. Родительский компонент содержит пузырек, представляющий значение, выделенное фиолетовым цветом. Значение перетекает вниз к каждому из двух дочерних компонентов, оба выделены фиолетовым цветом.](passing_data_lifting_state.webp)
 
 Подъем состояния вверх
 
-\</Diagram\> \<Diagram name="passing_data_prop_drilling" height={430} width={608} captionPosition="top" alt="Диаграмма с деревом из десяти узлов, каждый узел с двумя детьми или меньше. Корневой узел содержит пузырек, представляющий значение, выделенное фиолетовым цветом. Значение проходит вниз через два дочерних узла, каждый из которых передает значение, но не содержит его. Левый ребенок передает значение вниз двум детям, которые оба выделены фиолетовым цветом. Правый ребенок корня передает значение одному из двух своих детей - правому, который выделен фиолетовым цветом. Этот ребенок передает значение через своего единственного ребенка, который передает его обоим своим детям, выделенным фиолетовым цветом."\>
+![Диаграмма с деревом из десяти узлов, каждый узел с двумя детьми или меньше. Корневой узел содержит пузырек, представляющий значение, выделенное фиолетовым цветом. Значение проходит вниз через два дочерних узла, каждый из которых передает значение, но не содержит его. Левый ребенок передает значение вниз двум детям, которые оба выделены фиолетовым цветом. Правый ребенок корня передает значение одному из двух своих детей - правому, который выделен фиолетовым цветом. Этот ребенок передает значение через своего единственного ребенка, который передает его обоим своим детям, выделенным фиолетовым цветом.](passing_data_prop_drilling.webp)
 
-Бурение реквизита
+Бурение пропса
 
-\</Diagram\>
+Было бы здорово, если бы существовал способ "телепортировать" данные к тем компонентам в дереве, которым они нужны, без передачи пропсов. С функцией контекста React это возможно!
 
-\</DiagramGroup\>
-
-Было бы здорово, если бы существовал способ "телепортировать" данные к тем компонентам в дереве, которым они нужны, без передачи реквизитов. С функцией контекста React это возможно\!
-
-## Контекст: альтернатива передаче props {/_context-an-alternative-to-passing-props_/}
+## Контекст: альтернатива передаче `props`
 
 Контекст позволяет родительскому компоненту предоставлять данные всему дереву под ним. Существует множество вариантов использования контекста. Вот один из примеров. Рассмотрим компонент `Heading`, который принимает `level` для своего размера:
 
-<!-- 0001.part.md -->
+=== "App.js"
 
-```js
-import Heading from './Heading.js';
-import Section from './Section.js';
+    ```js
+    import Heading from './Heading.js';
+    import Section from './Section.js';
 
-export default function Page() {
-    return (
-        <Section>
-            <Heading level={1}>Title</Heading>
-            <Heading level={2}>Heading</Heading>
-            <Heading level={3}>Sub-heading</Heading>
-            <Heading level={4}>Sub-sub-heading</Heading>
-            <Heading level={5}>Sub-sub-sub-heading</Heading>
-            <Heading level={6}>
-                Sub-sub-sub-sub-heading
-            </Heading>
-        </Section>
-    );
-}
-```
-
-<!-- 0002.part.md -->
-
-<!-- 0003.part.md -->
-
-```js
-export default function Section({ children }) {
-    return (
-        <section className="section">{children}</section>
-    );
-}
-```
-
-<!-- 0004.part.md -->
-
-<!-- 0005.part.md -->
-
-```js
-export default function Heading({ level, children }) {
-    switch (level) {
-        case 1:
-            return <h1>{children}</h1>;
-        case 2:
-            return <h2>{children}</h2>;
-        case 3:
-            return <h3>{children}</h3>;
-        case 4:
-            return <h4>{children}</h4>;
-        case 5:
-            return <h5>{children}</h5>;
-        case 6:
-            return <h6>{children}</h6>;
-        default:
-            throw Error('Unknown level: ' + level);
+    export default function Page() {
+    	return (
+    		<Section>
+    			<Heading level={1}>Title</Heading>
+    			<Heading level={2}>Heading</Heading>
+    			<Heading level={3}>Sub-heading</Heading>
+    			<Heading level={4}>Sub-sub-heading</Heading>
+    			<Heading level={5}>Sub-sub-sub-heading</Heading>
+    			<Heading level={6}>
+    				Sub-sub-sub-sub-heading
+    			</Heading>
+    		</Section>
+    	);
     }
-}
-```
+    ```
 
-<!-- 0006.part.md -->
+=== "Section.js"
 
-<!-- 0007.part.md -->
+    ```js
+    export default function Section({ children }) {
+    	return (
+    		<section className="section">{children}</section>
+    	);
+    }
+    ```
 
-```css
-.section {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-}
-```
+=== "Heading.js"
 
-<!-- 0008.part.md -->
+    ```js
+    export default function Heading({ level, children }) {
+    	switch (level) {
+    		case 1:
+    			return <h1>{children}</h1>;
+    		case 2:
+    			return <h2>{children}</h2>;
+    		case 3:
+    			return <h3>{children}</h3>;
+    		case 4:
+    			return <h4>{children}</h4>;
+    		case 5:
+    			return <h5>{children}</h5>;
+    		case 6:
+    			return <h6>{children}</h6>;
+    		default:
+    			throw Error('Unknown level: ' + level);
+    	}
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](passing-data-deeply-with-context-1.png)
 
 Допустим, вы хотите, чтобы несколько заголовков в одном `разделе` всегда имели одинаковый размер:
 
-<!-- 0009.part.md -->
+=== "App.js"
 
-```js
-import Heading from './Heading.js';
-import Section from './Section.js';
+    ```js
+    import Heading from './Heading.js';
+    import Section from './Section.js';
 
-export default function Page() {
-    return (
-        <Section>
-            <Heading level={1}>Title</Heading>
-            <Section>
-                <Heading level={2}>Heading</Heading>
-                <Heading level={2}>Heading</Heading>
-                <Heading level={2}>Heading</Heading>
-                <Section>
-                    <Heading level={3}>Sub-heading</Heading>
-                    <Heading level={3}>Sub-heading</Heading>
-                    <Heading level={3}>Sub-heading</Heading>
-                    <Section>
-                        <Heading level={4}>
-                            Sub-sub-heading
-                        </Heading>
-                        <Heading level={4}>
-                            Sub-sub-heading
-                        </Heading>
-                        <Heading level={4}>
-                            Sub-sub-heading
-                        </Heading>
-                    </Section>
-                </Section>
-            </Section>
-        </Section>
-    );
-}
-```
-
-<!-- 0010.part.md -->
-
-<!-- 0011.part.md -->
-
-```js
-export default function Section({ children }) {
-    return (
-        <section className="section">{children}</section>
-    );
-}
-```
-
-<!-- 0012.part.md -->
-
-<!-- 0013.part.md -->
-
-```js
-export default function Heading({ level, children }) {
-    switch (level) {
-        case 1:
-            return <h1>{children}</h1>;
-        case 2:
-            return <h2>{children}</h2>;
-        case 3:
-            return <h3>{children}</h3>;
-        case 4:
-            return <h4>{children}</h4>;
-        case 5:
-            return <h5>{children}</h5>;
-        case 6:
-            return <h6>{children}</h6>;
-        default:
-            throw Error('Unknown level: ' + level);
+    export default function Page() {
+    	return (
+    		<Section>
+    			<Heading level={1}>Title</Heading>
+    			<Section>
+    				<Heading level={2}>Heading</Heading>
+    				<Heading level={2}>Heading</Heading>
+    				<Heading level={2}>Heading</Heading>
+    				<Section>
+    					<Heading level={3}>Sub-heading</Heading>
+    					<Heading level={3}>Sub-heading</Heading>
+    					<Heading level={3}>Sub-heading</Heading>
+    					<Section>
+    						<Heading level={4}>
+    							Sub-sub-heading
+    						</Heading>
+    						<Heading level={4}>
+    							Sub-sub-heading
+    						</Heading>
+    						<Heading level={4}>
+    							Sub-sub-heading
+    						</Heading>
+    					</Section>
+    				</Section>
+    			</Section>
+    		</Section>
+    	);
     }
-}
-```
+    ```
 
-<!-- 0014.part.md -->
+=== "Section.js"
 
-<!-- 0015.part.md -->
+    ```js
+    export default function Section({ children }) {
+    	return (
+    		<section className="section">{children}</section>
+    	);
+    }
+    ```
 
-```css
-.section {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-}
-```
+=== "Heading.js"
 
-<!-- 0016.part.md -->
+    ```js
+    export default function Heading({ level, children }) {
+    	switch (level) {
+    		case 1:
+    			return <h1>{children}</h1>;
+    		case 2:
+    			return <h2>{children}</h2>;
+    		case 3:
+    			return <h3>{children}</h3>;
+    		case 4:
+    			return <h4>{children}</h4>;
+    		case 5:
+    			return <h5>{children}</h5>;
+    		case 6:
+    			return <h6>{children}</h6>;
+    		default:
+    			throw Error('Unknown level: ' + level);
+    	}
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](passing-data-deeply-with-context-2.png)
 
 В настоящее время вы передаете параметр `level` каждому `<Heading>` отдельно:
 
@@ -225,9 +191,9 @@ export default function Heading({ level, children }) {
 
 <!-- 0020.part.md -->
 
-Но как компонент `<Глава>` может узнать уровень ближайшего к нему `<Раздела>`? \*_Для этого нужно, чтобы дочерний компонент мог "запрашивать" данные откуда-то сверху в дереве_.
+Но как компонент `<Глава>` может узнать уровень ближайшего к нему `<Раздела>`? **Для этого нужно, чтобы дочерний компонент мог "запрашивать" данные откуда-то сверху в дереве**.
 
-Вы не можете сделать это только с помощью реквизитов. Здесь в игру вступает контекст. Вы сделаете это в три шага:
+Вы не можете сделать это только с помощью пропсов. Здесь в игру вступает контекст. Вы сделаете это в три шага:
 
 1.  **Создайте** контекст. (Вы можете назвать его `LevelContext`, поскольку он предназначен для уровня заголовка).
 2.  **Используем** этот контекст из компонента, которому нужны данные. (`Heading` будет использовать `LevelContext`).
@@ -235,127 +201,102 @@ export default function Heading({ level, children }) {
 
 Контекст позволяет родителю - даже очень далекому - предоставлять некоторые данные всему дереву внутри него.
 
-\<ДиаграммаГруппа\>
-
-\<Diagram name="passing_data_context_close" height={160} width={608} captionPosition="top" alt="Диаграмма с деревом из трех компонентов. Родитель содержит пузырек, представляющий значение, выделенное оранжевым цветом, которое проецируется вниз на два дочерних компонента, каждый из которых выделен оранжевым цветом." \>
+![Диаграмма с деревом из трех компонентов. Родитель содержит пузырек, представляющий значение, выделенное оранжевым цветом, которое проецируется вниз на два дочерних компонента, каждый из которых выделен оранжевым цветом.](passing_data_context_close.webp)
 
 Использование контекста в близких дочерних компонентах
 
-\</Диаграмма\>
-
-\<Diagram name="passing_data_context_far" height={430} width={608} captionPosition="top" alt="Диаграмма с деревом из десяти узлов, каждый узел с двумя детьми или меньше. Корневой родительский узел содержит пузырек, представляющий значение, выделенное оранжевым цветом. Значение проецируется вниз непосредственно на четыре листа и один промежуточный компонент дерева, которые все выделены оранжевым цветом. Ни один из других промежуточных компонентов не выделен."\>.
+![Диаграмма с деревом из десяти узлов, каждый узел с двумя детьми или меньше. Корневой родительский узел содержит пузырек, представляющий значение, выделенное оранжевым цветом. Значение проецируется вниз непосредственно на четыре листа и один промежуточный компонент дерева, которые все выделены оранжевым цветом. Ни один из других промежуточных компонентов не выделен.](passing_data_context_far.webp)
 
 Использование контекста в далеких детях
 
-\</Diagram\>
-
-\</DiagramGroup\>
-
-### Шаг 1: Создание контекста {/_step-1-create-the-context_/}
+### Шаг 1: Создание контекста
 
 Во-первых, вам нужно создать контекст. Вам нужно будет **экспортировать его из файла**, чтобы ваши компоненты могли его использовать:
 
-<!-- 0021.part.md -->
+=== "App.js"
 
-```js
-import Heading from './Heading.js';
-import Section from './Section.js';
+    ```js
+    import Heading from './Heading.js';
+    import Section from './Section.js';
 
-export default function Page() {
-    return (
-        <Section>
-            <Heading level={1}>Title</Heading>
-            <Section>
-                <Heading level={2}>Heading</Heading>
-                <Heading level={2}>Heading</Heading>
-                <Heading level={2}>Heading</Heading>
-                <Section>
-                    <Heading level={3}>Sub-heading</Heading>
-                    <Heading level={3}>Sub-heading</Heading>
-                    <Heading level={3}>Sub-heading</Heading>
-                    <Section>
-                        <Heading level={4}>
-                            Sub-sub-heading
-                        </Heading>
-                        <Heading level={4}>
-                            Sub-sub-heading
-                        </Heading>
-                        <Heading level={4}>
-                            Sub-sub-heading
-                        </Heading>
-                    </Section>
-                </Section>
-            </Section>
-        </Section>
-    );
-}
-```
-
-<!-- 0022.part.md -->
-
-<!-- 0023.part.md -->
-
-```js
-export default function Section({ children }) {
-    return (
-        <section className="section">{children}</section>
-    );
-}
-```
-
-<!-- 0024.part.md -->
-
-<!-- 0025.part.md -->
-
-```js
-export default function Heading({ level, children }) {
-    switch (level) {
-        case 1:
-            return <h1>{children}</h1>;
-        case 2:
-            return <h2>{children}</h2>;
-        case 3:
-            return <h3>{children}</h3>;
-        case 4:
-            return <h4>{children}</h4>;
-        case 5:
-            return <h5>{children}</h5>;
-        case 6:
-            return <h6>{children}</h6>;
-        default:
-            throw Error('Unknown level: ' + level);
+    export default function Page() {
+    	return (
+    		<Section>
+    			<Heading level={1}>Title</Heading>
+    			<Section>
+    				<Heading level={2}>Heading</Heading>
+    				<Heading level={2}>Heading</Heading>
+    				<Heading level={2}>Heading</Heading>
+    				<Section>
+    					<Heading level={3}>Sub-heading</Heading>
+    					<Heading level={3}>Sub-heading</Heading>
+    					<Heading level={3}>Sub-heading</Heading>
+    					<Section>
+    						<Heading level={4}>
+    							Sub-sub-heading
+    						</Heading>
+    						<Heading level={4}>
+    							Sub-sub-heading
+    						</Heading>
+    						<Heading level={4}>
+    							Sub-sub-heading
+    						</Heading>
+    					</Section>
+    				</Section>
+    			</Section>
+    		</Section>
+    	);
     }
-}
-```
+    ```
 
-<!-- 0026.part.md -->
+=== "Section.js"
 
-<!-- 0027.part.md -->
+    ```js
+    export default function Section({ children }) {
+    	return (
+    		<section className="section">{children}</section>
+    	);
+    }
+    ```
 
-```js
-import { createContext } from 'react';
+=== "Heading.js"
 
-export const LevelContext = createContext(1);
-```
+    ```js
+    export default function Heading({ level, children }) {
+    	switch (level) {
+    		case 1:
+    			return <h1>{children}</h1>;
+    		case 2:
+    			return <h2>{children}</h2>;
+    		case 3:
+    			return <h3>{children}</h3>;
+    		case 4:
+    			return <h4>{children}</h4>;
+    		case 5:
+    			return <h5>{children}</h5>;
+    		case 6:
+    			return <h6>{children}</h6>;
+    		default:
+    			throw Error('Unknown level: ' + level);
+    	}
+    }
+    ```
 
-<!-- 0028.part.md -->
+=== "LevelContext.js"
 
-<!-- 0029.part.md -->
+    ```js
+    import { createContext } from 'react';
 
-```css
-.section {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-}
-```
+    export const LevelContext = createContext(1);
+    ```
 
-<!-- 0030.part.md -->
+=== "Результат"
+
+    ![Результат](passing-data-deeply-with-context-2.png)
 
 Единственным аргументом для `createContext` является значение _по умолчанию_. Здесь `1` означает самый большой уровень заголовка, но вы можете передать любое значение (даже объект). Значение значения по умолчанию вы увидите в следующем шаге.
 
-### Шаг 2: Использование контекста {/_step-2-use-the-context_/}
+### Шаг 2: Использование контекста
 
 Импортируйте хук `useContext` из React и ваш контекст:
 
@@ -368,7 +309,7 @@ import { LevelContext } from './LevelContext.js';
 
 <!-- 0032.part.md -->
 
-В настоящее время компонент `Heading` считывает `level` из реквизита:
+В настоящее время компонент `Heading` считывает `level` из пропса:
 
 <!-- 0033.part.md -->
 
@@ -425,107 +366,92 @@ export default function Heading({ children }) {
 
 Напомним, что это разметка, которую вы пытались заставить работать:
 
-<!-- 0041.part.md -->
+=== "App.js"
 
-```js
-import Heading from './Heading.js';
-import Section from './Section.js';
+    ```js
+    import Heading from './Heading.js';
+    import Section from './Section.js';
 
-export default function Page() {
-    return (
-        <Section level={1}>
-            <Heading>Title</Heading>
-            <Section level={2}>
-                <Heading>Heading</Heading>
-                <Heading>Heading</Heading>
-                <Heading>Heading</Heading>
-                <Section level={3}>
-                    <Heading>Sub-heading</Heading>
-                    <Heading>Sub-heading</Heading>
-                    <Heading>Sub-heading</Heading>
-                    <Section level={4}>
-                        <Heading>Sub-sub-heading</Heading>
-                        <Heading>Sub-sub-heading</Heading>
-                        <Heading>Sub-sub-heading</Heading>
-                    </Section>
-                </Section>
-            </Section>
-        </Section>
-    );
-}
-```
-
-<!-- 0042.part.md -->
-
-<!-- 0043.part.md -->
-
-```js
-export default function Section({ children }) {
-    return (
-        <section className="section">{children}</section>
-    );
-}
-```
-
-<!-- 0044.part.md -->
-
-<!-- 0045.part.md -->
-
-```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
-
-export default function Heading({ children }) {
-    const level = useContext(LevelContext);
-    switch (level) {
-        case 1:
-            return <h1>{children}</h1>;
-        case 2:
-            return <h2>{children}</h2>;
-        case 3:
-            return <h3>{children}</h3>;
-        case 4:
-            return <h4>{children}</h4>;
-        case 5:
-            return <h5>{children}</h5>;
-        case 6:
-            return <h6>{children}</h6>;
-        default:
-            throw Error('Unknown level: ' + level);
+    export default function Page() {
+    	return (
+    		<Section level={1}>
+    			<Heading>Title</Heading>
+    			<Section level={2}>
+    				<Heading>Heading</Heading>
+    				<Heading>Heading</Heading>
+    				<Heading>Heading</Heading>
+    				<Section level={3}>
+    					<Heading>Sub-heading</Heading>
+    					<Heading>Sub-heading</Heading>
+    					<Heading>Sub-heading</Heading>
+    					<Section level={4}>
+    						<Heading>Sub-sub-heading</Heading>
+    						<Heading>Sub-sub-heading</Heading>
+    						<Heading>Sub-sub-heading</Heading>
+    					</Section>
+    				</Section>
+    			</Section>
+    		</Section>
+    	);
     }
-}
-```
+    ```
 
-<!-- 0046.part.md -->
+=== "Section.js"
 
-<!-- 0047.part.md -->
+    ```js
+    export default function Section({ children }) {
+    	return (
+    		<section className="section">{children}</section>
+    	);
+    }
+    ```
 
-```js
-import { createContext } from 'react';
+=== "Heading.js"
 
-export const LevelContext = createContext(1);
-```
+    ```js
+    import { useContext } from 'react';
+    import { LevelContext } from './LevelContext.js';
 
-<!-- 0048.part.md -->
+    export default function Heading({ children }) {
+    	const level = useContext(LevelContext);
+    	switch (level) {
+    		case 1:
+    			return <h1>{children}</h1>;
+    		case 2:
+    			return <h2>{children}</h2>;
+    		case 3:
+    			return <h3>{children}</h3>;
+    		case 4:
+    			return <h4>{children}</h4>;
+    		case 5:
+    			return <h5>{children}</h5>;
+    		case 6:
+    			return <h6>{children}</h6>;
+    		default:
+    			throw Error('Unknown level: ' + level);
+    	}
+    }
+    ```
 
-<!-- 0049.part.md -->
+=== "LevelContext.js"
 
-```css
-.section {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-}
-```
+    ```js
+    import { createContext } from 'react';
+
+    export const LevelContext = createContext(1);
+    ```
+
+=== "Результат"
+
+    ![Результат](passing-data-deeply-with-context-2.png)
 
 <!-- 0050.part.md -->
 
-Заметьте, что этот пример не совсем работает\! Все заголовки имеют одинаковый размер, потому что **хотя вы _используете_ контекст, вы еще не _предоставили_ его.** React не знает, где его взять\!
+Заметьте, что этот пример не совсем работает! Все заголовки имеют одинаковый размер, потому что **хотя вы _используете_ контекст, вы еще не _предоставили_ его.** React не знает, где его взять!
 
 Если вы не предоставите контекст, React будет использовать значение по умолчанию, которое вы указали в предыдущем шаге. В этом примере вы указали `1` в качестве аргумента для `createContext`, поэтому `useContext(LevelContext)` возвращает `1`, устанавливая все эти заголовки в `<h1>`. Давайте решим эту проблему, предоставив каждой `Section` свой собственный контекст.
 
-### Шаг 3: Предоставление контекста {/_step-3-provide-the-context_/}
+### Шаг 3: Предоставление контекста
 
 Компонент `Section` в настоящее время отображает свои дочерние элементы:
 
@@ -563,121 +489,106 @@ export default function Section({ level, children }) {
 
 Это говорит React: "если какой-либо компонент внутри этой `<Section>` запрашивает `LevelContext`, дайте ему этот `level`". Компонент будет использовать значение ближайшего `<LevelContext.Provider>` в дереве пользовательского интерфейса над ним.
 
-<!-- 0055.part.md -->
+=== "App.js"
 
-```js
-import Heading from './Heading.js';
-import Section from './Section.js';
+    ```js
+    import Heading from './Heading.js';
+    import Section from './Section.js';
 
-export default function Page() {
-    return (
-        <Section level={1}>
-            <Heading>Title</Heading>
-            <Section level={2}>
-                <Heading>Heading</Heading>
-                <Heading>Heading</Heading>
-                <Heading>Heading</Heading>
-                <Section level={3}>
-                    <Heading>Sub-heading</Heading>
-                    <Heading>Sub-heading</Heading>
-                    <Heading>Sub-heading</Heading>
-                    <Section level={4}>
-                        <Heading>Sub-sub-heading</Heading>
-                        <Heading>Sub-sub-heading</Heading>
-                        <Heading>Sub-sub-heading</Heading>
-                    </Section>
-                </Section>
-            </Section>
-        </Section>
-    );
-}
-```
-
-<!-- 0056.part.md -->
-
-<!-- 0057.part.md -->
-
-```js
-import { LevelContext } from './LevelContext.js';
-
-export default function Section({ level, children }) {
-    return (
-        <section className="section">
-            <LevelContext.Provider value={level}>
-                {children}
-            </LevelContext.Provider>
-        </section>
-    );
-}
-```
-
-<!-- 0058.part.md -->
-
-<!-- 0059.part.md -->
-
-```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
-
-export default function Heading({ children }) {
-    const level = useContext(LevelContext);
-    switch (level) {
-        case 1:
-            return <h1>{children}</h1>;
-        case 2:
-            return <h2>{children}</h2>;
-        case 3:
-            return <h3>{children}</h3>;
-        case 4:
-            return <h4>{children}</h4>;
-        case 5:
-            return <h5>{children}</h5>;
-        case 6:
-            return <h6>{children}</h6>;
-        default:
-            throw Error('Unknown level: ' + level);
+    export default function Page() {
+    	return (
+    		<Section level={1}>
+    			<Heading>Title</Heading>
+    			<Section level={2}>
+    				<Heading>Heading</Heading>
+    				<Heading>Heading</Heading>
+    				<Heading>Heading</Heading>
+    				<Section level={3}>
+    					<Heading>Sub-heading</Heading>
+    					<Heading>Sub-heading</Heading>
+    					<Heading>Sub-heading</Heading>
+    					<Section level={4}>
+    						<Heading>Sub-sub-heading</Heading>
+    						<Heading>Sub-sub-heading</Heading>
+    						<Heading>Sub-sub-heading</Heading>
+    					</Section>
+    				</Section>
+    			</Section>
+    		</Section>
+    	);
     }
-}
-```
+    ```
 
-<!-- 0060.part.md -->
+=== "Secton.js"
 
-<!-- 0061.part.md -->
+    ```js
+    import { LevelContext } from './LevelContext.js';
 
-```js
-import { createContext } from 'react';
+    export default function Section({ level, children }) {
+    	return (
+    		<section className="section">
+    			<LevelContext.Provider value={level}>
+    				{children}
+    			</LevelContext.Provider>
+    		</section>
+    	);
+    }
+    ```
 
-export const LevelContext = createContext(1);
-```
+=== "Heading.js"
 
-<!-- 0062.part.md -->
+    ```js
+    import { useContext } from 'react';
+    import { LevelContext } from './LevelContext.js';
 
-<!-- 0063.part.md -->
+    export default function Heading({ children }) {
+    	const level = useContext(LevelContext);
+    	switch (level) {
+    		case 1:
+    			return <h1>{children}</h1>;
+    		case 2:
+    			return <h2>{children}</h2>;
+    		case 3:
+    			return <h3>{children}</h3>;
+    		case 4:
+    			return <h4>{children}</h4>;
+    		case 5:
+    			return <h5>{children}</h5>;
+    		case 6:
+    			return <h6>{children}</h6>;
+    		default:
+    			throw Error('Unknown level: ' + level);
+    	}
+    }
+    ```
 
-```css
-.section {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-}
-```
+=== "LevelContext.js"
+
+    ```js
+    import { createContext } from 'react';
+
+    export const LevelContext = createContext(1);
+    ```
+
+=== "Результат"
+
+    ![Результат](passing-data-deeply-with-context-2.png)
 
 <!-- 0064.part.md -->
 
 Это тот же результат, что и в оригинальном коде, но вам не нужно передавать свойство `level` каждому компоненту `Heading`\! Вместо этого, он "вычисляет" уровень заголовка, спрашивая ближайший `Section` выше:
 
-1.  Вы передаете реквизит `level` компоненту `<Section>`.
+1.  Вы передаете пропс `level` компоненту `<Section>`.
 2.  `Section` оборачивает свои дочерние элементы в `<LevelContext.Provider value={level}>`.
 3.  `Heading` запрашивает ближайшее значение `LevelContext` выше с помощью `useContext(LevelContext)`.
 
-## Использование и предоставление контекста из одного и того же компонента {/_using-and-providing-context-from-the-same-component_/}
+## Использование и предоставление контекста из одного и того же компонента
 
 В настоящее время вы все еще должны указывать `уровень` каждой секции вручную:
 
 <!-- 0065.part.md -->
 
-```js
+```
 export default function Page() {
   return (
     <Section level={1}>
@@ -714,286 +625,256 @@ export default function Section({ children }) {
 
 С этим изменением вам не нужно передавать параметр `level` _либо_ в `<Section>`, либо в `<Heading>`:
 
-<!-- 0069.part.md -->
+=== "App.js"
 
-```js
-import Heading from './Heading.js';
-import Section from './Section.js';
+    ```js
+    import Heading from './Heading.js';
+    import Section from './Section.js';
 
-export default function Page() {
-    return (
-        <Section>
-            <Heading>Title</Heading>
-            <Section>
-                <Heading>Heading</Heading>
-                <Heading>Heading</Heading>
-                <Heading>Heading</Heading>
-                <Section>
-                    <Heading>Sub-heading</Heading>
-                    <Heading>Sub-heading</Heading>
-                    <Heading>Sub-heading</Heading>
-                    <Section>
-                        <Heading>Sub-sub-heading</Heading>
-                        <Heading>Sub-sub-heading</Heading>
-                        <Heading>Sub-sub-heading</Heading>
-                    </Section>
-                </Section>
-            </Section>
-        </Section>
-    );
-}
-```
-
-<!-- 0070.part.md -->
-
-<!-- 0071.part.md -->
-
-```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
-
-export default function Section({ children }) {
-    const level = useContext(LevelContext);
-    return (
-        <section className="section">
-            <LevelContext.Provider value={level + 1}>
-                {children}
-            </LevelContext.Provider>
-        </section>
-    );
-}
-```
-
-<!-- 0072.part.md -->
-
-<!-- 0073.part.md -->
-
-```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
-
-export default function Heading({ children }) {
-    const level = useContext(LevelContext);
-    switch (level) {
-        case 0:
-            throw Error(
-                'Heading must be inside a Section!'
-            );
-        case 1:
-            return <h1>{children}</h1>;
-        case 2:
-            return <h2>{children}</h2>;
-        case 3:
-            return <h3>{children}</h3>;
-        case 4:
-            return <h4>{children}</h4>;
-        case 5:
-            return <h5>{children}</h5>;
-        case 6:
-            return <h6>{children}</h6>;
-        default:
-            throw Error('Unknown level: ' + level);
+    export default function Page() {
+    	return (
+    		<Section>
+    			<Heading>Title</Heading>
+    			<Section>
+    				<Heading>Heading</Heading>
+    				<Heading>Heading</Heading>
+    				<Heading>Heading</Heading>
+    				<Section>
+    					<Heading>Sub-heading</Heading>
+    					<Heading>Sub-heading</Heading>
+    					<Heading>Sub-heading</Heading>
+    					<Section>
+    						<Heading>Sub-sub-heading</Heading>
+    						<Heading>Sub-sub-heading</Heading>
+    						<Heading>Sub-sub-heading</Heading>
+    					</Section>
+    				</Section>
+    			</Section>
+    		</Section>
+    	);
     }
-}
-```
+    ```
 
-<!-- 0074.part.md -->
+=== "Section.js"
 
-<!-- 0075.part.md -->
+    ```js
+    import { useContext } from 'react';
+    import { LevelContext } from './LevelContext.js';
 
-```js
-import { createContext } from 'react';
+    export default function Section({ children }) {
+    	const level = useContext(LevelContext);
+    	return (
+    		<section className="section">
+    			<LevelContext.Provider value={level + 1}>
+    				{children}
+    			</LevelContext.Provider>
+    		</section>
+    	);
+    }
+    ```
 
-export const LevelContext = createContext(0);
-```
+=== "Heading.js"
 
-<!-- 0076.part.md -->
+    ```js
+    import { useContext } from 'react';
+    import { LevelContext } from './LevelContext.js';
 
-<!-- 0077.part.md -->
+    export default function Heading({ children }) {
+    	const level = useContext(LevelContext);
+    	switch (level) {
+    		case 0:
+    			throw Error(
+    				'Heading must be inside a Section!'
+    			);
+    		case 1:
+    			return <h1>{children}</h1>;
+    		case 2:
+    			return <h2>{children}</h2>;
+    		case 3:
+    			return <h3>{children}</h3>;
+    		case 4:
+    			return <h4>{children}</h4>;
+    		case 5:
+    			return <h5>{children}</h5>;
+    		case 6:
+    			return <h6>{children}</h6>;
+    		default:
+    			throw Error('Unknown level: ' + level);
+    	}
+    }
+    ```
 
-```css
-.section {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-}
-```
+=== "LevelContext.js"
+
+    ```js
+    import { createContext } from 'react';
+
+    export const LevelContext = createContext(0);
+    ```
+
+=== "Результат"
+
+    ![Результат](passing-data-deeply-with-context-2.png)
 
 <!-- 0078.part.md -->
 
-Now both `Heading` and `Section` read the `LevelContext` to figure out how “deep” they are. And the `Section` wraps its children into the `LevelContext` to specify that anything inside of it is at a “deeper” level.
+Теперь и `Heading`, и `Section` читают `LevelContext`, чтобы определить, насколько "глубоко" они находятся. А `Section` оборачивает свои дочерние компоненты в `LevelContext`, чтобы указать, что все, что находится внутри него, находится на более "глубоком" уровне.
 
-This example uses heading levels because they show visually how nested components can override context. But context is useful for many other use cases too. You can pass down any information needed by the entire subtree: the current color theme, the currently logged in user, and so on.
+!!!note ""
 
-## Context passes through intermediate components {/_context-passes-through-intermediate-components_/}
+    В этом примере используются уровни заголовков, потому что они наглядно показывают, как вложенные компоненты могут переопределять контекст. Но контекст полезен и во многих других случаях. Вы можете передать любую информацию, необходимую всему поддереву: текущую цветовую тему, пользователя, вошедшего в систему, и так далее.
 
-You can insert as many components as you like between the component that provides context and the one that uses it. This includes both built-in components like `<div>` and components you might build yourself.
+## Контекст проходит через промежуточные компоненты
 
-In this example, the same `Post` component (with a dashed border) is rendered at two different nesting levels. Notice that the `<Heading>` inside of it gets its level automatically from the closest `<Section>`:
+Между компонентом, который предоставляет контекст, и компонентом, который его использует, можно вставить сколько угодно компонентов. Сюда входят как встроенные компоненты типа `<div>`, так и компоненты, которые вы можете создать самостоятельно.
 
-<!-- 0079.part.md -->
+В этом примере один и тот же компонент `Post` (с пунктирной границей) отображается на двух разных уровнях вложенности. Обратите внимание, что `<Heading>` внутри него получает свой уровень автоматически от ближайшего `<Section>`:
 
-```js
-import Heading from './Heading.js';
-import Section from './Section.js';
+=== "App.js"
 
-export default function ProfilePage() {
-    return (
-        <Section>
-            <Heading>My Profile</Heading>
-            <Post
-                title="Hello traveller!"
-                body="Read about my adventures."
-            />
-            <AllPosts />
-        </Section>
-    );
-}
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-function AllPosts() {
-    return (
-        <Section>
-            <Heading>Posts</Heading>
-            <RecentPosts />
-        </Section>
-    );
-}
+    ```js
+    import Heading from './Heading.js';
+    import Section from './Section.js';
 
-function RecentPosts() {
-    return (
-        <Section>
-            <Heading>Recent Posts</Heading>
-            <Post
-                title="Flavors of Lisbon"
-                body="...those pastéis de nata!"
-            />
-            <Post
-                title="Buenos Aires in the rhythm of tango"
-                body="I loved it!"
-            />
-        </Section>
-    );
-}
-
-function Post({ title, body }) {
-    return (
-        <Section isFancy={true}>
-            <Heading>{title}</Heading>
-            <p>
-                <i>{body}</i>
-            </p>
-        </Section>
-    );
-}
-```
-
-<!-- 0080.part.md -->
-
-<!-- 0081.part.md -->
-
-```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
-
-export default function Section({ children, isFancy }) {
-    const level = useContext(LevelContext);
-    return (
-        <section
-            className={
-                'section ' + (isFancy ? 'fancy' : '')
-            }
-        >
-            <LevelContext.Provider value={level + 1}>
-                {children}
-            </LevelContext.Provider>
-        </section>
-    );
-}
-```
-
-<!-- 0082.part.md -->
-
-<!-- 0083.part.md -->
-
-```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
-
-export default function Heading({ children }) {
-    const level = useContext(LevelContext);
-    switch (level) {
-        case 0:
-            throw Error(
-                'Heading must be inside a Section!'
-            );
-        case 1:
-            return <h1>{children}</h1>;
-        case 2:
-            return <h2>{children}</h2>;
-        case 3:
-            return <h3>{children}</h3>;
-        case 4:
-            return <h4>{children}</h4>;
-        case 5:
-            return <h5>{children}</h5>;
-        case 6:
-            return <h6>{children}</h6>;
-        default:
-            throw Error('Unknown level: ' + level);
+    export default function ProfilePage() {
+    	return (
+    		<Section>
+    			<Heading>My Profile</Heading>
+    			<Post
+    				title="Hello traveller!"
+    				body="Read about my adventures."
+    			/>
+    			<AllPosts />
+    		</Section>
+    	);
     }
-}
-```
 
-<!-- 0084.part.md -->
+    function AllPosts() {
+    	return (
+    		<Section>
+    			<Heading>Posts</Heading>
+    			<RecentPosts />
+    		</Section>
+    	);
+    }
 
-<!-- 0085.part.md -->
+    function RecentPosts() {
+    	return (
+    		<Section>
+    			<Heading>Recent Posts</Heading>
+    			<Post
+    				title="Flavors of Lisbon"
+    				body="...those pastéis de nata!"
+    			/>
+    			<Post
+    				title="Buenos Aires in the rhythm of tango"
+    				body="I loved it!"
+    			/>
+    		</Section>
+    	);
+    }
 
-```js
-import { createContext } from 'react';
+    function Post({ title, body }) {
+    	return (
+    		<Section isFancy={true}>
+    			<Heading>{title}</Heading>
+    			<p>
+    				<i>{body}</i>
+    			</p>
+    		</Section>
+    	);
+    }
+    ```
 
-export const LevelContext = createContext(0);
-```
+    </div>
 
-<!-- 0086.part.md -->
+=== "Section.js"
 
-<!-- 0087.part.md -->
+    ```js
+    import { useContext } from 'react';
+    import { LevelContext } from './LevelContext.js';
 
-```css
-.section {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-}
+    export default function Section({ children, isFancy }) {
+    	const level = useContext(LevelContext);
+    	return (
+    		<section
+    			className={
+    				'section ' + (isFancy ? 'fancy' : '')
+    			}
+    		>
+    			<LevelContext.Provider value={level + 1}>
+    				{children}
+    			</LevelContext.Provider>
+    		</section>
+    	);
+    }
+    ```
 
-.fancy {
-    border: 4px dashed pink;
-}
-```
+=== "Heading.js"
 
-<!-- 0088.part.md -->
+    ```js
+    import { useContext } from 'react';
+    import { LevelContext } from './LevelContext.js';
 
-You didn’t do anything special for this to work. A `Section` specifies the context for the tree inside it, so you can insert a `<Heading>` anywhere, and it will have the correct size. Try it in the sandbox above\!
+    export default function Heading({ children }) {
+    	const level = useContext(LevelContext);
+    	switch (level) {
+    		case 0:
+    			throw Error(
+    				'Heading must be inside a Section!'
+    			);
+    		case 1:
+    			return <h1>{children}</h1>;
+    		case 2:
+    			return <h2>{children}</h2>;
+    		case 3:
+    			return <h3>{children}</h3>;
+    		case 4:
+    			return <h4>{children}</h4>;
+    		case 5:
+    			return <h5>{children}</h5>;
+    		case 6:
+    			return <h6>{children}</h6>;
+    		default:
+    			throw Error('Unknown level: ' + level);
+    	}
+    }
+    ```
 
-**Context lets you write components that “adapt to their surroundings” and display themselves differently depending on _where_ (or, in other words, _in which context_) they are being rendered.**
+=== "LevelContext.js"
 
-How context works might remind you of [CSS property inheritance.](https://developer.mozilla.org/en-US/docs/Web/CSS/inheritance) In CSS, you can specify `color: blue` for a `<div>`, and any DOM node inside of it, no matter how deep, will inherit that color unless some other DOM node in the middle overrides it with `color: green`. Similarly, in React, the only way to override some context coming from above is to wrap children into a context provider with a different value.
+    ```js
+    import { createContext } from 'react';
 
-In CSS, different properties like `color` and `background-color` don’t override each other. You can set all `<div>`’s `color` to red without impacting `background-color`. Similarly, **different React contexts don’t override each other.** Each context that you make with `createContext()` is completely separate from other ones, and ties together components using and providing _that particular_ context. One component may use or provide many different contexts without a problem.
+    export const LevelContext = createContext(0);
+    ```
 
-## Прежде чем использовать контекст {/_before-you-use-context_/}
+=== "Результат"
 
-Контекст очень заманчиво использовать\! Однако, это также означает, что его слишком легко использовать чрезмерно. **Если вам нужно передать некоторые реквизиты на несколько уровней вглубь, это не значит, что вы должны поместить эту информацию в контекст.**
+    ![Результат](passing-data-deeply-with-context-3.png)
+
+Вы не сделали ничего особенного, чтобы это сработало. Секция `Section` определяет контекст для дерева внутри нее, поэтому вы можете вставить `<Heading>` куда угодно, и он будет иметь правильный размер. Попробуйте это в песочнице выше!
+
+**Контекст позволяет вам писать компоненты, которые "адаптируются к окружению" и отображаются по-разному в зависимости от того, _где_ (или, другими словами, _в каком контексте_) они отображаются**.
+
+Работа контекста может напомнить вам [CSS property inheritance](https://developer.mozilla.org/docs/Web/CSS/inheritance). В CSS вы можете указать `color: blue` для `div`, и любой DOM-узел внутри него, независимо от глубины, унаследует этот цвет, если только какой-либо другой DOM-узел в середине не переопределит его с `color: green`. Аналогично, в React единственный способ переопределить какой-то контекст, идущий сверху, - это обернуть дочерние элементы в провайдер контекста с другим значением.
+
+В CSS различные свойства, такие как `color` и `background-color`, не отменяют друг друга. Вы можете установить `color` всех `div` в красный цвет, не влияя на `background-color`. Аналогично, **различные контексты React не отменяют друг друга.** Каждый контекст, который вы создаете с помощью `createContext()`, полностью отделен от других, и связывает вместе компоненты, использующие и предоставляющие _этот конкретный_ контекст. Один компонент может использовать или предоставлять множество различных контекстов без проблем.
+
+## Прежде чем использовать контекст
+
+Контекст очень заманчиво использовать! Однако, это также означает, что его слишком легко использовать чрезмерно. **Если вам нужно передать некоторые пропсы на несколько уровней вглубь, это не значит, что вы должны поместить эту информацию в контекст.**
 
 Вот несколько альтернатив, которые вы должны рассмотреть, прежде чем использовать контекст:
 
-1.  **Начните с [передачи реквизитов](passing-props-to-a-component.md)** Если ваши компоненты не тривиальны, нет ничего необычного в том, чтобы передать дюжину реквизитов вниз через дюжину компонентов. Это может показаться трудоемкой задачей, но так становится ясно, какие компоненты используют те или иные данные\! Человек, обслуживающий ваш код, будет рад, что вы сделали поток данных явным с помощью реквизитов.
-2.  **Извлекайте компоненты и [передавайте JSX как `дети`](passing-props-to-a-component.md) к ним.** Если вы передаете некоторые данные через множество уровней промежуточных компонентов, которые не используют эти данные (и передают их только дальше вниз), это часто означает, что вы забыли извлечь некоторые компоненты по пути. Например, вы передаете реквизиты данных, такие как `posts`, визуальным компонентам, которые не используют их напрямую, например `<Layout posts={posts} />`. Вместо этого, заставьте `Layout` принимать `children` в качестве реквизита и выводить `<Layout><Posts posts={posts} /></Layout>`. Это уменьшает количество уровней между компонентом, задающим данные, и компонентом, которому они нужны.
+1.  **Начните с [передачи пропсов](passing-props-to-a-component.md)** Если ваши компоненты не тривиальны, нет ничего необычного в том, чтобы передать дюжину пропсов вниз через дюжину компонентов. Это может показаться трудоемкой задачей, но так становится ясно, какие компоненты используют те или иные данные! Человек, обслуживающий ваш код, будет рад, что вы сделали поток данных явным с помощью пропсов.
+2.  **Извлекайте компоненты и [передавайте JSX как `дети`](passing-props-to-a-component.md) к ним.** Если вы передаете некоторые данные через множество уровней промежуточных компонентов, которые не используют эти данные (и передают их только дальше вниз), это часто означает, что вы забыли извлечь некоторые компоненты по пути. Например, вы передаете пропсы данных, такие как `posts`, визуальным компонентам, которые не используют их напрямую, например `<Layout posts={posts} />`. Вместо этого, заставьте `Layout` принимать `children` в качестве пропса и выводить `<Layout><Posts posts={posts} /></Layout>`. Это уменьшает количество уровней между компонентом, задающим данные, и компонентом, которому они нужны.
 
 Если ни один из этих подходов вам не подходит, подумайте о контексте.
 
-## Примеры использования контекста {/_use-cases-for-context_/}
+## Примеры использования контекста
 
 -   **Тематика:** Если ваше приложение позволяет пользователю изменять его внешний вид (например, темный режим), вы можете поместить провайдер контекста в верхней части вашего приложения,
 
@@ -1003,366 +884,334 @@ In CSS, different properties like `color` and `background-color` don’t overrid
 -   **Маршрутизация:** Большинство решений для маршрутизации используют внутренний контекст для хранения текущего маршрута. Так каждая ссылка "знает", активна она или нет. Если вы создаете свой собственный маршрутизатор, вы, возможно, захотите сделать это тоже.
 -   **Управление состоянием:** По мере роста вашего приложения, вы можете оказаться с большим количеством состояния ближе к вершине приложения. Многие удаленные компоненты внизу могут захотеть его изменить. Обычно [используется reducer вместе с контекстом](scaling-up-with-reducer-and-context.md) для управления сложным состоянием и передачи его вниз к удаленным компонентам без лишних проблем.
 
-Контекст не ограничивается статическими значениями. Если при следующем рендере вы передадите другое значение, React обновит все компоненты, читающие его ниже\! Вот почему контекст часто используется в сочетании с состоянием.
+Контекст не ограничивается статическими значениями. Если при следующем рендере вы передадите другое значение, React обновит все компоненты, читающие его ниже! Вот почему контекст часто используется в сочетании с состоянием.
 
 В общем, если какая-то информация нужна удаленным компонентам в разных частях дерева, это верный признак того, что контекст вам поможет.
 
-\<Recap\>
+!!!note "Итого"
 
--   Контекст позволяет компоненту предоставлять некоторую информацию всему дереву под ним.
--   Чтобы передать контекст:
-    1.  Создайте и экспортируйте его с помощью `export const MyContext = createContext(defaultValue)`.
-    2.  Передайте его в хук `useContext(MyContext)`, чтобы прочитать его в любом дочернем компоненте, независимо от его глубины.
-    3.  Заверните дочерние компоненты в `<MyContext.Provider value={...}>`, чтобы предоставить его от родителя.
--   Контекст проходит через любые компоненты в середине.
--   Контекст позволяет вам писать компоненты, которые "адаптируются к своему окружению".
--   Прежде чем использовать контекст, попробуйте передать props или передать JSX в качестве `дочерних`.
+    -   Контекст позволяет компоненту предоставлять некоторую информацию всему дереву под ним.
+    -   Чтобы передать контекст:
+    	1.  Создайте и экспортируйте его с помощью `export const MyContext = createContext(defaultValue)`.
+    	2.  Передайте его в хук `useContext(MyContext)`, чтобы прочитать его в любом дочернем компоненте, независимо от его глубины.
+    	3.  Заверните дочерние компоненты в `<MyContext.Provider value={...}>`, чтобы предоставить его от родителя.
+    -   Контекст проходит через любые компоненты в середине.
+    -   Контекст позволяет вам писать компоненты, которые "адаптируются к своему окружению".
+    -   Прежде чем использовать контекст, попробуйте передать props или передать JSX в качестве `children`.
 
-\</Recap\>
+## Задача
 
-\<Проблемы\>
-
-#### Замените сверление реквизита контекстом {/_replace-prop-drilling-with-context_/}
+### 1. Замените сверление пропса контекстом
 
 В этом примере переключение флажка изменяет параметр `imageSize`, передаваемый каждому `<PlaceImage>`. Состояние флажка хранится в компоненте верхнего уровня `App`, но каждый `<PlaceImage>` должен знать об этом.
 
-В настоящее время `App` передает `imageSize` в `List`, который передает его в каждое `Place`, которое передает его в `PlaceImage`. Удалите реквизит `imageSize`, и вместо этого передавайте его из компонента `App` непосредственно в `PlaceImage`.
+В настоящее время `App` передает `imageSize` в `List`, который передает его в каждое `Place`, которое передает его в `PlaceImage`. Удалите пропс `imageSize`, и вместо этого передавайте его из компонента `App` непосредственно в `PlaceImage`.
 
 Вы можете объявить контекст в файле `Context.js`.
 
-<!-- 0090.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
-import { places } from './data.js';
-import { getImageUrl } from './utils.js';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function App() {
-    const [isLarge, setIsLarge] = useState(false);
-    const imageSize = isLarge ? 150 : 100;
-    return (
-        <>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={isLarge}
-                    onChange={(e) => {
-                        setIsLarge(e.target.checked);
-                    }}
-                />
-                Use large images
-            </label>
-            <hr />
-            <List imageSize={imageSize} />
-        </>
-    );
-}
+    ```js
+    import { useState } from 'react';
+    import { places } from './data.js';
+    import { getImageUrl } from './utils.js';
 
-function List({ imageSize }) {
-    const listItems = places.map((place) => (
-        <li key={place.id}>
-            <Place place={place} imageSize={imageSize} />
-        </li>
-    ));
-    return <ul>{listItems}</ul>;
-}
+    export default function App() {
+    	const [isLarge, setIsLarge] = useState(false);
+    	const imageSize = isLarge ? 150 : 100;
+    	return (
+    		<>
+    			<label>
+    				<input
+    					type="checkbox"
+    					checked={isLarge}
+    					onChange={(e) => {
+    						setIsLarge(e.target.checked);
+    					}}
+    				/>
+    				Use large images
+    			</label>
+    			<hr />
+    			<List imageSize={imageSize} />
+    		</>
+    	);
+    }
 
-function Place({ place, imageSize }) {
-    return (
-        <>
-            <PlaceImage
-                place={place}
-                imageSize={imageSize}
-            />
-            <p>
-                <b>{place.name}</b>
-                {': ' + place.description}
-            </p>
-        </>
-    );
-}
+    function List({ imageSize }) {
+    	const listItems = places.map((place) => (
+    		<li key={place.id}>
+    			<Place place={place} imageSize={imageSize} />
+    		</li>
+    	));
+    	return <ul>{listItems}</ul>;
+    }
 
-function PlaceImage({ place, imageSize }) {
-    return (
-        <img
-            src={getImageUrl(place)}
-            alt={place.name}
-            width={imageSize}
-            height={imageSize}
-        />
-    );
-}
-```
+    function Place({ place, imageSize }) {
+    	return (
+    		<>
+    			<PlaceImage
+    				place={place}
+    				imageSize={imageSize}
+    			/>
+    			<p>
+    				<b>{place.name}</b>
+    				{': ' + place.description}
+    			</p>
+    		</>
+    	);
+    }
 
-<!-- 0091.part.md -->
+    function PlaceImage({ place, imageSize }) {
+    	return (
+    		<img
+    			src={getImageUrl(place)}
+    			alt={place.name}
+    			width={imageSize}
+    			height={imageSize}
+    		/>
+    	);
+    }
+    ```
 
-<!-- 0092.part.md -->
+    </div>
 
-```js
+=== "Context.js"
 
-```
+    ```js
 
-<!-- 0093.part.md -->
+    ```
 
-<!-- 0094.part.md -->
+=== "data.js"
 
-```js
-export const places = [
-    {
-        id: 0,
-        name: 'Bo-Kaap in Cape Town, South Africa',
-        description:
-            'The tradition of choosing bright colors for houses began in the late 20th century.',
-        imageId: 'K9HVAGH',
-    },
-    {
-        id: 1,
-        name: 'Rainbow Village in Taichung, Taiwan',
-        description:
-            'To save the houses from demolition, Huang Yung-Fu, a local resident, painted all 1,200 of them in 1924.',
-        imageId: '9EAYZrt',
-    },
-    {
-        id: 2,
-        name: 'Macromural de Pachuca, Mexico',
-        description:
-            'One of the largest murals in the world covering homes in a hillside neighborhood.',
-        imageId: 'DgXHVwu',
-    },
-    {
-        id: 3,
-        name: 'Selarón Staircase in Rio de Janeiro, Brazil',
-        description:
-            'This landmark was created by Jorge Selarón, a Chilean-born artist, as a "tribute to the Brazilian people."',
-        imageId: 'aeO3rpI',
-    },
-    {
-        id: 4,
-        name: 'Burano, Italy',
-        description:
-            'The houses are painted following a specific color system dating back to 16th century.',
-        imageId: 'kxsph5C',
-    },
-    {
-        id: 5,
-        name: 'Chefchaouen, Marocco',
-        description:
-            'There are a few theories on why the houses are painted blue, including that the color repells mosquitos or that it symbolizes sky and heaven.',
-        imageId: 'rTqKo46',
-    },
-    {
-        id: 6,
-        name:
-            'Gamcheon Culture Village in Busan, South Korea',
-        description:
-            'In 2009, the village was converted into a cultural hub by painting the houses and featuring exhibitions and art installations.',
-        imageId: 'ZfQOOzf',
-    },
-];
-```
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-<!-- 0095.part.md -->
+    ```js
+    export const places = [
+    	{
+    		id: 0,
+    		name: 'Bo-Kaap in Cape Town, South Africa',
+    		description:
+    			'The tradition of choosing bright colors for houses began in the late 20th century.',
+    		imageId: 'K9HVAGH',
+    	},
+    	{
+    		id: 1,
+    		name: 'Rainbow Village in Taichung, Taiwan',
+    		description:
+    			'To save the houses from demolition, Huang Yung-Fu, a local resident, painted all 1,200 of them in 1924.',
+    		imageId: '9EAYZrt',
+    	},
+    	{
+    		id: 2,
+    		name: 'Macromural de Pachuca, Mexico',
+    		description:
+    			'One of the largest murals in the world covering homes in a hillside neighborhood.',
+    		imageId: 'DgXHVwu',
+    	},
+    	{
+    		id: 3,
+    		name: 'Selarón Staircase in Rio de Janeiro, Brazil',
+    		description:
+    			'This landmark was created by Jorge Selarón, a Chilean-born artist, as a "tribute to the Brazilian people."',
+    		imageId: 'aeO3rpI',
+    	},
+    	{
+    		id: 4,
+    		name: 'Burano, Italy',
+    		description:
+    			'The houses are painted following a specific color system dating back to 16th century.',
+    		imageId: 'kxsph5C',
+    	},
+    	{
+    		id: 5,
+    		name: 'Chefchaouen, Marocco',
+    		description:
+    			'There are a few theories on why the houses are painted blue, including that the color repells mosquitos or that it symbolizes sky and heaven.',
+    		imageId: 'rTqKo46',
+    	},
+    	{
+    		id: 6,
+    		name:
+    			'Gamcheon Culture Village in Busan, South Korea',
+    		description:
+    			'In 2009, the village was converted into a cultural hub by painting the houses and featuring exhibitions and art installations.',
+    		imageId: 'ZfQOOzf',
+    	},
+    ];
+    ```
 
-<!-- 0096.part.md -->
+    </div>
 
-```js
-export function getImageUrl(place) {
-    return 'https://i.imgur.com/' + place.imageId + 'l.jpg';
-}
-```
+=== "utils.js"
 
-<!-- 0097.part.md -->
+    ```js
+    export function getImageUrl(place) {
+    	return 'https://i.imgur.com/' + place.imageId + 'l.jpg';
+    }
+    ```
 
-<!-- 0098.part.md -->
+=== "Результат"
 
-```css
-ul {
-    list-style-type: none;
-    padding: 0px 10px;
-}
-li {
-    margin-bottom: 10px;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 20px;
-    align-items: center;
-}
-```
+    ![Результат](passing-data-deeply-with-context-4.png)
 
-<!-- 0099.part.md -->
+???success "Показать решение"
 
-\<Решение\>
+    Удалите свойство `imageSize` из всех компонентов.
 
-Удалите свойство `imageSize` из всех компонентов.
+    Создайте и экспортируйте `ImageSizeContext` из `Context.js`. Затем оберните список в `<ImageSizeContext.Provider value={imageSize}>`, чтобы передать значение вниз, и `useContext(ImageSizeContext)`, чтобы прочитать его в `PlaceImage`:
 
-Создайте и экспортируйте `ImageSizeContext` из `Context.js`. Затем оберните список в `<ImageSizeContext.Provider value={imageSize}>`, чтобы передать значение вниз, и `useContext(ImageSizeContext)`, чтобы прочитать его в `PlaceImage`:
+    === "App.js"
 
-<!-- 0100.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState, useContext } from 'react';
-import { places } from './data.js';
-import { getImageUrl } from './utils.js';
-import { ImageSizeContext } from './Context.js';
+    	```js
+    	import { useState, useContext } from 'react';
+    	import { places } from './data.js';
+    	import { getImageUrl } from './utils.js';
+    	import { ImageSizeContext } from './Context.js';
 
-export default function App() {
-    const [isLarge, setIsLarge] = useState(false);
-    const imageSize = isLarge ? 150 : 100;
-    return (
-        <ImageSizeContext.Provider value={imageSize}>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={isLarge}
-                    onChange={(e) => {
-                        setIsLarge(e.target.checked);
-                    }}
-                />
-                Use large images
-            </label>
-            <hr />
-            <List />
-        </ImageSizeContext.Provider>
-    );
-}
+    	export default function App() {
+    		const [isLarge, setIsLarge] = useState(false);
+    		const imageSize = isLarge ? 150 : 100;
+    		return (
+    			<ImageSizeContext.Provider value={imageSize}>
+    				<label>
+    					<input
+    						type="checkbox"
+    						checked={isLarge}
+    						onChange={(e) => {
+    							setIsLarge(e.target.checked);
+    						}}
+    					/>
+    					Use large images
+    				</label>
+    				<hr />
+    				<List />
+    			</ImageSizeContext.Provider>
+    		);
+    	}
 
-function List() {
-    const listItems = places.map((place) => (
-        <li key={place.id}>
-            <Place place={place} />
-        </li>
-    ));
-    return <ul>{listItems}</ul>;
-}
+    	function List() {
+    		const listItems = places.map((place) => (
+    			<li key={place.id}>
+    				<Place place={place} />
+    			</li>
+    		));
+    		return <ul>{listItems}</ul>;
+    	}
 
-function Place({ place }) {
-    return (
-        <>
-            <PlaceImage place={place} />
-            <p>
-                <b>{place.name}</b>
-                {': ' + place.description}
-            </p>
-        </>
-    );
-}
+    	function Place({ place }) {
+    		return (
+    			<>
+    				<PlaceImage place={place} />
+    				<p>
+    					<b>{place.name}</b>
+    					{': ' + place.description}
+    				</p>
+    			</>
+    		);
+    	}
 
-function PlaceImage({ place }) {
-    const imageSize = useContext(ImageSizeContext);
-    return (
-        <img
-            src={getImageUrl(place)}
-            alt={place.name}
-            width={imageSize}
-            height={imageSize}
-        />
-    );
-}
-```
+    	function PlaceImage({ place }) {
+    		const imageSize = useContext(ImageSizeContext);
+    		return (
+    			<img
+    				src={getImageUrl(place)}
+    				alt={place.name}
+    				width={imageSize}
+    				height={imageSize}
+    			/>
+    		);
+    	}
+    	```
 
-<!-- 0101.part.md -->
+    	</div>
 
-<!-- 0102.part.md -->
+    === "Context.js"
 
-```js
-import { createContext } from 'react';
+    	```js
+    	import { createContext } from 'react';
 
-export const ImageSizeContext = createContext(500);
-```
+    	export const ImageSizeContext = createContext(500);
+    	```
 
-<!-- 0103.part.md -->
+    === "data.js"
 
-<!-- 0104.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-export const places = [
-    {
-        id: 0,
-        name: 'Bo-Kaap in Cape Town, South Africa',
-        description:
-            'The tradition of choosing bright colors for houses began in the late 20th century.',
-        imageId: 'K9HVAGH',
-    },
-    {
-        id: 1,
-        name: 'Rainbow Village in Taichung, Taiwan',
-        description:
-            'To save the houses from demolition, Huang Yung-Fu, a local resident, painted all 1,200 of them in 1924.',
-        imageId: '9EAYZrt',
-    },
-    {
-        id: 2,
-        name: 'Macromural de Pachuca, Mexico',
-        description:
-            'One of the largest murals in the world covering homes in a hillside neighborhood.',
-        imageId: 'DgXHVwu',
-    },
-    {
-        id: 3,
-        name: 'Selarón Staircase in Rio de Janeiro, Brazil',
-        description:
-            'This landmark was created by Jorge Selarón, a Chilean-born artist, as a "tribute to the Brazilian people".',
-        imageId: 'aeO3rpI',
-    },
-    {
-        id: 4,
-        name: 'Burano, Italy',
-        description:
-            'The houses are painted following a specific color system dating back to 16th century.',
-        imageId: 'kxsph5C',
-    },
-    {
-        id: 5,
-        name: 'Chefchaouen, Marocco',
-        description:
-            'There are a few theories on why the houses are painted blue, including that the color repells mosquitos or that it symbolizes sky and heaven.',
-        imageId: 'rTqKo46',
-    },
-    {
-        id: 6,
-        name:
-            'Gamcheon Culture Village in Busan, South Korea',
-        description:
-            'In 2009, the village was converted into a cultural hub by painting the houses and featuring exhibitions and art installations.',
-        imageId: 'ZfQOOzf',
-    },
-];
-```
+    	```js
+    	export const places = [
+    		{
+    			id: 0,
+    			name: 'Bo-Kaap in Cape Town, South Africa',
+    			description:
+    				'The tradition of choosing bright colors for houses began in the late 20th century.',
+    			imageId: 'K9HVAGH',
+    		},
+    		{
+    			id: 1,
+    			name: 'Rainbow Village in Taichung, Taiwan',
+    			description:
+    				'To save the houses from demolition, Huang Yung-Fu, a local resident, painted all 1,200 of them in 1924.',
+    			imageId: '9EAYZrt',
+    		},
+    		{
+    			id: 2,
+    			name: 'Macromural de Pachuca, Mexico',
+    			description:
+    				'One of the largest murals in the world covering homes in a hillside neighborhood.',
+    			imageId: 'DgXHVwu',
+    		},
+    		{
+    			id: 3,
+    			name: 'Selarón Staircase in Rio de Janeiro, Brazil',
+    			description:
+    				'This landmark was created by Jorge Selarón, a Chilean-born artist, as a "tribute to the Brazilian people".',
+    			imageId: 'aeO3rpI',
+    		},
+    		{
+    			id: 4,
+    			name: 'Burano, Italy',
+    			description:
+    				'The houses are painted following a specific color system dating back to 16th century.',
+    			imageId: 'kxsph5C',
+    		},
+    		{
+    			id: 5,
+    			name: 'Chefchaouen, Marocco',
+    			description:
+    				'There are a few theories on why the houses are painted blue, including that the color repells mosquitos or that it symbolizes sky and heaven.',
+    			imageId: 'rTqKo46',
+    		},
+    		{
+    			id: 6,
+    			name:
+    				'Gamcheon Culture Village in Busan, South Korea',
+    			description:
+    				'In 2009, the village was converted into a cultural hub by painting the houses and featuring exhibitions and art installations.',
+    			imageId: 'ZfQOOzf',
+    		},
+    	];
+    	```
 
-<!-- 0105.part.md -->
+    	</div>
 
-<!-- 0106.part.md -->
+    === "utils.js"
 
-```js
-export function getImageUrl(place) {
-    return 'https://i.imgur.com/' + place.imageId + 'l.jpg';
-}
-```
+    	```js
+    	export function getImageUrl(place) {
+    		return 'https://i.imgur.com/' + place.imageId + 'l.jpg';
+    	}
+    	```
 
-<!-- 0107.part.md -->
+    === "Результат"
 
-<!-- 0108.part.md -->
+    	![Результат](passing-data-deeply-with-context-4.png)
 
-```css
-ul {
-    list-style-type: none;
-    padding: 0px 10px;
-}
-li {
-    margin-bottom: 10px;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 20px;
-    align-items: center;
-}
-```
+    Обратите внимание, что компонентам в середине больше не нужно передавать `imageSize`.
 
-<!-- 0109.part.md -->
+## Ссылки
 
-Обратите внимание, что компонентам в середине больше не нужно передавать `imageSize`.
-
-\</Solution\>
-
-\</Challenges\>
-
-<!-- 0110.part.md -->
+-   [https://react.dev/learn/passing-data-deeply-with-context](https://react.dev/learn/passing-data-deeply-with-context)
