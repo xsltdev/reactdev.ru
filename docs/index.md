@@ -20,7 +20,7 @@ hide:
 
     **[:octicons-arrow-right-24: React 18](learn/index.md)**
 
-    [:octicons-arrow-right-24: React 16](tutorial/tutorial.md)
+    [:octicons-arrow-right-24: React 16](./archive/react16/tutorial.md)
 
 -   :material-language-typescript:{ .lg .middle } **Типизация**
 
