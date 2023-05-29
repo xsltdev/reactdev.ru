@@ -7,7 +7,7 @@
 		"prettier": "^2.1.2"
 	},
 	"scripts": {
-		"build": "mkdocs build && cp _redirects site/",
+		"build": "mkdocs build",
 		"serve": "mkdocs serve --dirtyreload",
 		"upgrade": "pip3 install --upgrade -r ./requirements.txt"
 	},
