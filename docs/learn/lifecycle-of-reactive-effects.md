@@ -2,16 +2,18 @@
 
 Эффекты имеют отличный от компонентов жизненный цикл. Компоненты могут монтироваться, обновляться и размонтироваться. Эффект может делать только две вещи: начать синхронизировать что-то, а затем прекратить синхронизацию. Этот цикл может происходить несколько раз, если ваш Эффект зависит от пропсов и состояния, которые меняются со временем. React предоставляет правило линтера для проверки того, что вы правильно указали зависимости вашего Эффекта. Благодаря этому ваш Эффект синхронизируется с последними пропсами и состоянием.
 
--   Чем жизненный цикл Эффекта отличается от жизненного цикла компонента
--   Как думать о каждом отдельном Эффекте в отдельности
--   Когда ваш Эффект должен повторно синхронизироваться и почему
--   Как определяются зависимости вашего Эффекта
--   Что значит для значения быть реактивным
--   Что означает пустой массив зависимостей
--   Как React проверяет правильность ваших зависимостей с помощью линтера
--   Что делать, если вы не согласны с линтером.
+!!!tip "Вы узнаете"
 
-## Жизненный цикл эффекта {/_the-lifecycle-of-an-effect_/}
+    -   Чем жизненный цикл Эффекта отличается от жизненного цикла компонента
+    -   Как думать о каждом отдельном Эффекте в отдельности
+    -   Когда ваш Эффект должен повторно синхронизироваться и почему
+    -   Как определяются зависимости вашего Эффекта
+    -   Что значит для значения быть реактивным
+    -   Что означает пустой массив зависимостей
+    -   Как React проверяет правильность ваших зависимостей с помощью линтера
+    -   Что делать, если вы не согласны с линтером.
+
+## Жизненный цикл эффекта
 
 Каждый компонент React проходит через один и тот же жизненный цикл:
 
@@ -77,13 +79,15 @@ return () => {
 
 <!-- 0006.part.md -->
 
-Интуитивно вы можете подумать, что React **начнет синхронизацию**, когда ваш компонент монтируется, и **остановит синхронизацию**, когда ваш компонент размонтируется. Однако, это еще не конец истории\! Иногда может потребоваться **запускать и останавливать синхронизацию несколько раз**, пока компонент остается смонтированным.
+Интуитивно вы можете подумать, что React **начнет синхронизацию**, когда ваш компонент монтируется, и **остановит синхронизацию**, когда ваш компонент размонтируется. Однако, это еще не конец истории! Иногда может потребоваться **запускать и останавливать синхронизацию несколько раз**, пока компонент остается смонтированным.
 
 Давайте рассмотрим, _почему_ это необходимо, _когда_ это происходит, и _как_ вы можете контролировать это поведение.
 
-Некоторые эффекты вообще не возвращают функцию очистки. [Чаще всего](synchronizing-with-effects.md#how-to-handle-the-effect-firing-twice-in-development) вы захотите вернуть такую функцию - но если вы этого не сделаете, React будет вести себя так, как будто вы вернули пустую функцию очистки.
+!!!note ""
 
-### Почему синхронизация может потребоваться более одного раза {/_why-synchronization-may-need-to-happen-more-than-once_/}
+    Некоторые эффекты вообще не возвращают функцию очистки. [Чаще всего](synchronizing-with-effects.md#how-to-handle-the-effect-firing-twice-in-development) вы захотите вернуть такую функцию - но если вы этого не сделаете, React будет вести себя так, как будто вы вернули пустую функцию очистки.
+
+### Почему синхронизация может потребоваться более одного раза
 
 Представьте, что компонент `ChatRoom` получает параметр `roomId`, который пользователь выбирает в выпадающем списке. Предположим, что изначально пользователь выбирает в качестве `roomId` комнату `"general"`. Ваше приложение отображает чат `общий`:
 
@@ -100,7 +104,7 @@ function ChatRoom({ roomId /* "general" */ }) {
 
 <!-- 0008.part.md -->
 
-После отображения пользовательского интерфейса React запустит ваш Эффект, чтобы **начать синхронизацию.** Он подключается к комнате ` general`:
+После отображения пользовательского интерфейса React запустит ваш Эффект, чтобы **начать синхронизацию.** Он подключается к комнате `general`:
 
 <!-- 0009.part.md -->
 
@@ -140,9 +144,9 @@ function ChatRoom({ roomId /* "travel" */ }) {
 1.  Прекратить синхронизацию со старым `roomId` (отсоединиться от `"общей"` комнаты).
 2.  Начать синхронизацию с новым `roomId` (подключиться к комнате `"travel"`)
 
-**К счастью, вы уже научили React делать обе эти вещи\!** Тело вашего эффекта определяет, как начать синхронизацию, а функция очистки - как остановить синхронизацию. Все, что теперь нужно сделать React, это вызвать их в правильном порядке и с правильными пропсами и состоянием. Давайте посмотрим, как именно это происходит.
+**К счастью, вы уже научили React делать обе эти вещи!** Тело вашего эффекта определяет, как начать синхронизацию, а функция очистки - как остановить синхронизацию. Все, что теперь нужно сделать React, это вызвать их в правильном порядке и с правильными пропсами и состоянием. Давайте посмотрим, как именно это происходит.
 
-### Как React повторно синхронизирует ваш эффект {/_how-react-re-synchronizes-your-effect_/}
+### Как React повторно синхронизирует ваш эффект
 
 Вспомните, что ваш компонент `ChatRoom` получил новое значение для своего параметра `roomId`. Раньше это было `"general"`, а теперь `"travel"`. React должен повторно синхронизировать ваш Effect, чтобы переподключить вас к другой комнате.
 
@@ -152,13 +156,18 @@ function ChatRoom({ roomId /* "travel" */ }) {
 
 ```js
 function ChatRoom({ roomId /* "general" */ }) {
-  useEffect(() => {
-    const connection = createConnection(serverUrl, roomId); // Connects to the "general" room
-    connection.connect();
-    return () => {
-      connection.disconnect(); // Disconnects from the "general" room
-    };
-    // ...
+    useEffect(() => {
+        const connection = createConnection(
+            serverUrl,
+            roomId
+        ); // Connects to the "general" room
+        connection.connect();
+        return () => {
+            connection.disconnect(); // Disconnects from the "general" room
+        };
+        // ...
+    });
+}
 ```
 
 <!-- 0014.part.md -->
@@ -169,21 +178,26 @@ function ChatRoom({ roomId /* "general" */ }) {
 
 ```js
 function ChatRoom({ roomId /* "travel" */ }) {
-  useEffect(() => {
-    const connection = createConnection(serverUrl, roomId); // Connects to the "travel" room
-    connection.connect();
-    // ...
+    useEffect(() => {
+        const connection = createConnection(
+            serverUrl,
+            roomId
+        ); // Connects to the "travel" room
+        connection.connect();
+        // ...
+    });
+}
 ```
 
 <!-- 0016.part.md -->
 
-Благодаря этому, вы теперь подключены к той же комнате, которую пользователь выбрал в пользовательском интерфейсе. Катастрофа предотвращена\!
+Благодаря этому, вы теперь подключены к той же комнате, которую пользователь выбрал в пользовательском интерфейсе. Катастрофа предотвращена!
 
 Каждый раз, когда ваш компонент будет рендериться с другим `roomId`, ваш Effect будет заново синхронизироваться. Например, допустим, пользователь меняет `roomId` с `"travel"` на `"music"`. React снова **остановит синхронизацию** вашего Эффекта, вызвав свою функцию очистки (отсоединив вас от комнаты `"travel"`). Затем он **начнет синхронизацию** снова, запустив свое тело с новым параметром `roomId` (подключив вас к комнате `"music"`).
 
 Наконец, когда пользователь переходит на другой экран, `ChatRoom` размонтируется. Теперь нет необходимости оставаться на связи. React **остановит синхронизацию** вашего Эффекта в последний раз и отключит вас от чата `музыкальной` комнаты.
 
-### Мышление с точки зрения Эффекта {/_thinking-from-the-effects-perspective_/}
+### Мышление с точки зрения Эффекта
 
 Давайте вспомним все, что произошло с точки зрения компонента `ChatRoom`:
 
@@ -229,102 +243,92 @@ useEffect(() => {
 
 Это может напомнить вам, как вы не думаете о том, монтируется или обновляется компонент, когда пишете логику рендеринга, которая создает JSX. Вы описываете, что должно быть на экране, а React [вычисляет остальное](reacting-to-input-with-state.md).
 
-### Как React проверяет, что ваш эффект может повторно синхронизироваться {/_how-react-verifies-that-your-effect-can-re-synchronize_/}
+### Как React проверяет, что ваш эффект может повторно синхронизироваться
 
 Вот живой пример, с которым вы можете поиграть. Нажмите "Open chat", чтобы смонтировать компонент `ChatRoom`:
 
-<!-- 0019.part.md -->
+=== "App.js"
 
-```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-const serverUrl = 'https://localhost:1234';
+    ```js
+    import { useState, useEffect } from 'react';
+    import { createConnection } from './chat.js';
 
-function ChatRoom({ roomId }) {
-    useEffect(() => {
-        const connection = createConnection(
-            serverUrl,
-            roomId
-        );
-        connection.connect();
-        return () => connection.disconnect();
-    }, [roomId]);
-    return <h1>Welcome to the {roomId} room!</h1>;
-}
+    const serverUrl = 'https://localhost:1234';
 
-export default function App() {
-    const [roomId, setRoomId] = useState('general');
-    const [show, setShow] = useState(false);
-    return (
-        <>
-            <label>
-                Choose the chat room:{' '}
-                <select
-                    value={roomId}
-                    onChange={(e) =>
-                        setRoomId(e.target.value)
-                    }
-                >
-                    <option value="general">general</option>
-                    <option value="travel">travel</option>
-                    <option value="music">music</option>
-                </select>
-            </label>
-            <button onClick={() => setShow(!show)}>
-                {show ? 'Close chat' : 'Open chat'}
-            </button>
-            {show && <hr />}
-            {show && <ChatRoom roomId={roomId} />}
-        </>
-    );
-}
-```
+    function ChatRoom({ roomId }) {
+    	useEffect(() => {
+    		const connection = createConnection(
+    			serverUrl,
+    			roomId
+    		);
+    		connection.connect();
+    		return () => connection.disconnect();
+    	}, [roomId]);
+    	return <h1>Welcome to the {roomId} room!</h1>;
+    }
 
-<!-- 0020.part.md -->
+    export default function App() {
+    	const [roomId, setRoomId] = useState('general');
+    	const [show, setShow] = useState(false);
+    	return (
+    		<>
+    			<label>
+    				Choose the chat room:{' '}
+    				<select
+    					value={roomId}
+    					onChange={(e) =>
+    						setRoomId(e.target.value)
+    					}
+    				>
+    					<option value="general">general</option>
+    					<option value="travel">travel</option>
+    					<option value="music">music</option>
+    				</select>
+    			</label>
+    			<button onClick={() => setShow(!show)}>
+    				{show ? 'Close chat' : 'Open chat'}
+    			</button>
+    			{show && <hr />}
+    			{show && <ChatRoom roomId={roomId} />}
+    		</>
+    	);
+    }
+    ```
 
-<!-- 0021.part.md -->
+    </div>
 
-```js
-export function createConnection(serverUrl, roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ Connecting to "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl +
-                    '...'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ Disconnected from "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl
-            );
-        },
-    };
-}
-```
+=== "chat.js"
 
-<!-- 0022.part.md -->
+    ```js
+    export function createConnection(serverUrl, roomId) {
+    	// A real implementation would actually connect to the server
+    	return {
+    		connect() {
+    			console.log(
+    				'✅ Connecting to "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl +
+    					'...'
+    			);
+    		},
+    		disconnect() {
+    			console.log(
+    				'❌ Disconnected from "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl
+    			);
+    		},
+    	};
+    }
+    ```
 
-<!-- 0023.part.md -->
+=== "Результат"
 
-```css
-input {
-    display: block;
-    margin-bottom: 20px;
-}
-button {
-    margin-left: 10px;
-}
-```
-
-<!-- 0024.part.md -->
+    ![Результат](lifecycle-of-reactive-effects-1.png)
 
 Обратите внимание, что когда компонент монтируется в первый раз, вы видите три журнала:
 
@@ -340,22 +344,27 @@ button {
 
 Однако есть и более необычные случаи, когда повторная синхронизация необходима. Например, попробуйте отредактировать `serverUrl` в приведенной выше песочнице, пока открыт чат. Обратите внимание, как Эффект повторно синхронизируется в ответ на ваши изменения в коде. В будущем React может добавить больше функций, которые полагаются на повторную синхронизацию.
 
-### Как React узнает, что ему нужно пересинхронизировать Эффект {/_how-react-knows-that-it-needs-to-re-synchronize-the-effect_/}
+### Как React узнает, что ему нужно пересинхронизировать Эффект
 
 Вам может быть интересно, как React узнал, что ваш Эффект нуждается в повторной синхронизации после изменения `roomId`. Это потому, что _вы сказали React_, что его код зависит от `roomId`, включив его в [список зависимостей:](synchronizing-with-effects.md).
 
 <!-- 0025.part.md -->
 
 ```js
-function ChatRoom({ roomId }) { // The roomId prop may change over time
-  useEffect(() => {
-    const connection = createConnection(serverUrl, roomId); // This Effect reads roomId
-    connection.connect();
-    return () => {
-      connection.disconnect();
-    };
-  }, [roomId]); // So you tell React that this Effect "depends on" roomId
-  // ...
+function ChatRoom({ roomId }) {
+    // The roomId prop may change over time
+    useEffect(() => {
+        const connection = createConnection(
+            serverUrl,
+            roomId
+        ); // This Effect reads roomId
+        connection.connect();
+        return () => {
+            connection.disconnect();
+        };
+    }, [roomId]); // So you tell React that this Effect "depends on" roomId
+    // ...
+}
 ```
 
 <!-- 0026.part.md -->
@@ -368,9 +377,9 @@ function ChatRoom({ roomId }) { // The roomId prop may change over time
 
 Каждый раз после рендеринга вашего компонента React будет просматривать массив зависимостей, которые вы передали. Если любое из значений в массиве отличается от значения в том же месте, которое вы передали во время предыдущего рендеринга, React будет повторно синхронизировать ваш Effect.
 
-Например, если вы передали `["general"]` во время первоначального рендера, а затем передали `["travel"]` во время следующего рендера, React сравнит `"general"` и `"travel"`. Это разные значения (по сравнению с [`Object.is`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is)), поэтому React пересинхронизирует ваш Effect. С другой стороны, если ваш компонент перерендерится, но `roomId` не изменится, ваш Эффект останется подключенным к той же комнате.
+Например, если вы передали `["general"]` во время первоначального рендера, а затем передали `["travel"]` во время следующего рендера, React сравнит `"general"` и `"travel"`. Это разные значения (по сравнению с [`Object.is`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is)), поэтому React пересинхронизирует ваш Effect. С другой стороны, если ваш компонент перерендерится, но `roomId` не изменится, ваш Эффект останется подключенным к той же комнате.
 
-### Каждый эффект представляет собой отдельный процесс синхронизации {/_each-effect-represents-a-separate-synchronization-process_/}
+### Каждый эффект представляет собой отдельный процесс синхронизации
 
 Не добавляйте несвязанную логику в свой Эффект только потому, что эта логика должна выполняться одновременно с уже написанным вами Эффектом. Например, допустим, вы хотите отправлять событие аналитики, когда пользователь посещает комнату. У вас уже есть Эффект, который зависит от `roomId`, поэтому у вас может возникнуть соблазн добавить вызов аналитики туда:
 
@@ -418,11 +427,11 @@ function ChatRoom({ roomId }) {
 
 <!-- 0030.part.md -->
 
-\*_Каждый Эффект в вашем коде должен представлять отдельный и независимый процесс синхронизации_.
+**Каждый Эффект в вашем коде должен представлять отдельный и независимый процесс синхронизации**.
 
 В приведенном выше примере удаление одного Эффекта не нарушит логику другого Эффекта. Это хороший признак того, что они синхронизируют разные вещи, и поэтому имеет смысл разделить их. С другой стороны, если разделить целостную часть логики на отдельные Эффекты, код может выглядеть "чище", но его будет [сложнее поддерживать](you-might-not-need-an-effect.md) Вот почему вы должны думать, являются ли процессы одинаковыми или отдельными, а не о том, выглядит ли код чище.
 
-## Эффекты "реагируют" на реактивные значения {/_effects-react-to-reactive-values_/}
+## Эффекты "реагируют" на реактивные значения
 
 Ваш эффект считывает две переменные (`serverUrl` и `roomId`), но вы указали только `roomId` в качестве зависимости:
 
@@ -450,7 +459,7 @@ function ChatRoom({ roomId }) {
 
 Почему `serverUrl` не должен быть зависимостью?
 
-Потому что `serverUrl` никогда не меняется при повторном рендеринге. Она всегда одна и та же, независимо от того, сколько раз компонент перерендерится и почему. Поскольку `serverUrl` никогда не меняется, не имеет смысла указывать его как зависимость. В конце концов, зависимости делают что-то только тогда, когда они изменяются во времени\!
+Потому что `serverUrl` никогда не меняется при повторном рендеринге. Она всегда одна и та же, независимо от того, сколько раз компонент перерендерится и почему. Поскольку `serverUrl` никогда не меняется, не имеет смысла указывать его как зависимость. В конце концов, зависимости делают что-то только тогда, когда они изменяются во времени!
 
 С другой стороны, `roomId` может быть другим при повторном рендеринге. **Показатели, состояние и другие значения, объявленные внутри компонента, являются _реактивными_, потому что они вычисляются во время рендеринга и участвуют в потоке данных React.**.
 
@@ -485,114 +494,104 @@ function ChatRoom({ roomId }) {
 
 Попробуйте изменить выбранную комнату чата или отредактировать URL сервера в этой песочнице:
 
-<!-- 0035.part.md -->
+=== "App.js"
 
-```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-function ChatRoom({ roomId }) {
-    const [serverUrl, setServerUrl] = useState(
-        'https://localhost:1234'
-    );
+    ```js
+    import { useState, useEffect } from 'react';
+    import { createConnection } from './chat.js';
 
-    useEffect(() => {
-        const connection = createConnection(
-            serverUrl,
-            roomId
-        );
-        connection.connect();
-        return () => connection.disconnect();
-    }, [roomId, serverUrl]);
+    function ChatRoom({ roomId }) {
+    	const [serverUrl, setServerUrl] = useState(
+    		'https://localhost:1234'
+    	);
 
-    return (
-        <>
-            <label>
-                Server URL:{' '}
-                <input
-                    value={serverUrl}
-                    onChange={(e) =>
-                        setServerUrl(e.target.value)
-                    }
-                />
-            </label>
-            <h1>Welcome to the {roomId} room!</h1>
-        </>
-    );
-}
+    	useEffect(() => {
+    		const connection = createConnection(
+    			serverUrl,
+    			roomId
+    		);
+    		connection.connect();
+    		return () => connection.disconnect();
+    	}, [roomId, serverUrl]);
 
-export default function App() {
-    const [roomId, setRoomId] = useState('general');
-    return (
-        <>
-            <label>
-                Choose the chat room:{' '}
-                <select
-                    value={roomId}
-                    onChange={(e) =>
-                        setRoomId(e.target.value)
-                    }
-                >
-                    <option value="general">general</option>
-                    <option value="travel">travel</option>
-                    <option value="music">music</option>
-                </select>
-            </label>
-            <hr />
-            <ChatRoom roomId={roomId} />
-        </>
-    );
-}
-```
+    	return (
+    		<>
+    			<label>
+    				Server URL:{' '}
+    				<input
+    					value={serverUrl}
+    					onChange={(e) =>
+    						setServerUrl(e.target.value)
+    					}
+    				/>
+    			</label>
+    			<h1>Welcome to the {roomId} room!</h1>
+    		</>
+    	);
+    }
 
-<!-- 0036.part.md -->
+    export default function App() {
+    	const [roomId, setRoomId] = useState('general');
+    	return (
+    		<>
+    			<label>
+    				Choose the chat room:{' '}
+    				<select
+    					value={roomId}
+    					onChange={(e) =>
+    						setRoomId(e.target.value)
+    					}
+    				>
+    					<option value="general">general</option>
+    					<option value="travel">travel</option>
+    					<option value="music">music</option>
+    				</select>
+    			</label>
+    			<hr />
+    			<ChatRoom roomId={roomId} />
+    		</>
+    	);
+    }
+    ```
 
-<!-- 0037.part.md -->
+    </div>
 
-```js
-export function createConnection(serverUrl, roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ Connecting to "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl +
-                    '...'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ Disconnected from "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl
-            );
-        },
-    };
-}
-```
+=== "chat.js"
 
-<!-- 0038.part.md -->
+    ```js
+    export function createConnection(serverUrl, roomId) {
+    	// A real implementation would actually connect to the server
+    	return {
+    		connect() {
+    			console.log(
+    				'✅ Connecting to "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl +
+    					'...'
+    			);
+    		},
+    		disconnect() {
+    			console.log(
+    				'❌ Disconnected from "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl
+    			);
+    		},
+    	};
+    }
+    ```
 
-<!-- 0039.part.md -->
+=== "Результат"
 
-```css
-input {
-    display: block;
-    margin-bottom: 20px;
-}
-button {
-    margin-left: 10px;
-}
-```
-
-<!-- 0040.part.md -->
+    ![Результат](lifecycle-of-reactive-effects-2.png)
 
 Всякий раз, когда вы изменяете реактивное значение, например `roomId` или `serverUrl`, эффект заново подключается к серверу чата.
 
-### Что означает эффект с пустыми зависимостями {/_what-an-effect-with-empty-dependencies-means_/}
+### Что означает эффект с пустыми зависимостями
 
 Что произойдет, если вы переместите `serverUrl` и `roomId` за пределы компонента?
 
@@ -621,93 +620,83 @@ function ChatRoom() {
 
 Теперь код вашего Эффекта не использует _любые_ реактивные значения, поэтому его зависимости могут быть пустыми (`[]`).
 
-С точки зрения компонента, пустой массив зависимостей `[]` означает, что этот Эффект подключается к чату только тогда, когда компонент монтируется, и отключается только тогда, когда компонент размонтируется. (Имейте в виду, что React все равно [повторно синхронизирует его дополнительный раз] (#how-react-verifies-that-your-effect-can-re-synchronize) в процессе разработки для стресс-тестирования вашей логики).
+С точки зрения компонента, пустой массив зависимостей `[]` означает, что этот Эффект подключается к чату только тогда, когда компонент монтируется, и отключается только тогда, когда компонент размонтируется. (Имейте в виду, что React все равно повторно синхронизирует его дополнительный раз в процессе разработки для стресс-тестирования вашей логики).
 
-<!-- 0043.part.md -->
+=== "App.js"
 
-```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-const serverUrl = 'https://localhost:1234';
-const roomId = 'general';
+    ```js
+    import { useState, useEffect } from 'react';
+    import { createConnection } from './chat.js';
 
-function ChatRoom() {
-    useEffect(() => {
-        const connection = createConnection(
-            serverUrl,
-            roomId
-        );
-        connection.connect();
-        return () => connection.disconnect();
-    }, []);
-    return <h1>Welcome to the {roomId} room!</h1>;
-}
+    const serverUrl = 'https://localhost:1234';
+    const roomId = 'general';
 
-export default function App() {
-    const [show, setShow] = useState(false);
-    return (
-        <>
-            <button onClick={() => setShow(!show)}>
-                {show ? 'Close chat' : 'Open chat'}
-            </button>
-            {show && <hr />}
-            {show && <ChatRoom />}
-        </>
-    );
-}
-```
+    function ChatRoom() {
+    	useEffect(() => {
+    		const connection = createConnection(
+    			serverUrl,
+    			roomId
+    		);
+    		connection.connect();
+    		return () => connection.disconnect();
+    	}, []);
+    	return <h1>Welcome to the {roomId} room!</h1>;
+    }
 
-<!-- 0044.part.md -->
+    export default function App() {
+    	const [show, setShow] = useState(false);
+    	return (
+    		<>
+    			<button onClick={() => setShow(!show)}>
+    				{show ? 'Close chat' : 'Open chat'}
+    			</button>
+    			{show && <hr />}
+    			{show && <ChatRoom />}
+    		</>
+    	);
+    }
+    ```
 
-<!-- 0045.part.md -->
+    </div>
 
-```js
-export function createConnection(serverUrl, roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ Connecting to "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl +
-                    '...'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ Disconnected from "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl
-            );
-        },
-    };
-}
-```
+=== "chat.js"
 
-<!-- 0046.part.md -->
+    ```js
+    export function createConnection(serverUrl, roomId) {
+    	// A real implementation would actually connect to the server
+    	return {
+    		connect() {
+    			console.log(
+    				'✅ Connecting to "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl +
+    					'...'
+    			);
+    		},
+    		disconnect() {
+    			console.log(
+    				'❌ Disconnected from "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl
+    			);
+    		},
+    	};
+    }
+    ```
 
-<!-- 0047.part.md -->
+=== "Результат"
 
-```css
-input {
-    display: block;
-    margin-bottom: 20px;
-}
-button {
-    margin-left: 10px;
-}
-```
+    ![Результат](lifecycle-of-reactive-effects-3.png)
 
-<!-- 0048.part.md -->
+Однако, если вы думаете с точки зрения Эффекта, вам вообще не нужно думать о монтировании и размонтировании. Важно то, что вы указали, что делает ваш Эффект, чтобы начать и прекратить синхронизацию. Сегодня у него нет реактивных зависимостей. Но если вы когда-нибудь захотите, чтобы пользователь со временем изменил `roomId` или `serverUrl` (и они станут реактивными), код вашего Эффекта не изменится. Вам нужно будет только добавить их в зависимости.
 
-Однако, если вы [думаете с точки зрения Эффекта] (#thinking-from-the-effects-perspective), вам вообще не нужно думать о монтировании и размонтировании. Важно то, что вы указали, что делает ваш Эффект, чтобы начать и прекратить синхронизацию. Сегодня у него нет реактивных зависимостей. Но если вы когда-нибудь захотите, чтобы пользователь со временем изменил `roomId` или `serverUrl` (и они станут реактивными), код вашего Эффекта не изменится. Вам нужно будет только добавить их в зависимости.
+### Все переменные, объявленные в теле компонента, являются реактивными
 
-### Все переменные, объявленные в теле компонента, являются реактивными {/_all-variables-declared-in-the-component-body-are-reactive_/}
-
-пропсы и состояние - не единственные реактивные значения. Значения, которые вы вычисляете на их основе, также реактивны. Если пропсы или состояние изменятся, ваш компонент перерисуется, и значения, вычисленные на их основе, также изменятся. Вот почему все переменные из тела компонента, используемые эффектом, должны быть в списке зависимостей эффекта.
+Пропсы и состояние - не единственные реактивные значения. Значения, которые вы вычисляете на их основе, также реактивны. Если пропсы или состояние изменятся, ваш компонент перерисуется, и значения, вычисленные на их основе, также изменятся. Вот почему все переменные из тела компонента, используемые эффектом, должны быть в списке зависимостей эффекта.
 
 Допустим, пользователь может выбрать сервер чата в выпадающем списке, но он также может настроить сервер по умолчанию в настройках. Предположим, что вы уже поместили состояние настроек в [контекст](scaling-up-with-reducer-and-context.md), поэтому вы читаете `settings` из этого контекста. Теперь вы вычисляете `serverUrl` на основе выбранного сервера из props и сервера по умолчанию:
 
@@ -741,125 +730,115 @@ function ChatRoom({ roomId, selectedServerUrl }) {
 
 Другими словами, Эффекты "реагируют" на все значения из тела компонента.
 
-#### Могут ли глобальные или изменяемые значения быть зависимостями? {/_can-global-or-mutable-values-be-dependencies_/}
+!!!note "Могут ли глобальные или изменяемые значения быть зависимостями?"
 
-Мутабельные значения (включая глобальные переменные) не являются реактивными.
+    Мутабельные значения (включая глобальные переменные) не являются реактивными.
 
-**Мутабельное значение, например [`location.pathname`](https://developer.mozilla.org/en-US/docs/Web/API/Location/pathname), не может быть зависимостью.** Оно мутабельно, поэтому может измениться в любой момент вне потока данных рендеринга React. Его изменение не вызовет повторного рендеринга вашего компонента. Поэтому, даже если вы укажете его в зависимостях, React _не будет знать_, что нужно пересинхронизировать Effect при его изменении. Это также нарушает правила React, поскольку чтение изменяемых данных во время рендеринга (а именно тогда вы рассчитываете зависимости) нарушает [чистоту рендеринга](keeping-components-pure.md). Вместо этого вы должны читать и подписываться на внешнее изменяемое значение с помощью [`useSyncExternalStore`](you-might-not-need-an-effect.md).
+    **Мутабельное значение, например [`location.pathname`](https://developer.mozilla.org/docs/Web/API/Location/pathname), не может быть зависимостью.** Оно мутабельно, поэтому может измениться в любой момент вне потока данных рендеринга React. Его изменение не вызовет повторного рендеринга вашего компонента. Поэтому, даже если вы укажете его в зависимостях, React _не будет знать_, что нужно пересинхронизировать Effect при его изменении. Это также нарушает правила React, поскольку чтение изменяемых данных во время рендеринга (а именно тогда вы рассчитываете зависимости) нарушает [чистоту рендеринга](keeping-components-pure.md). Вместо этого вы должны читать и подписываться на внешнее изменяемое значение с помощью [`useSyncExternalStore`](you-might-not-need-an-effect.md).
 
-**Изменчивое значение, такое как [`ref.current`](../reference/useRef.md) или то, что вы читаете из него, также не может быть зависимостью.** Сам объект ref, возвращаемый `useRef`, может быть зависимостью, но его свойство `current` намеренно изменчиво. Это позволяет вам [отслеживать что-то, не вызывая повторного рендеринга](referencing-values-with-refs.md). Но поскольку его изменение не вызывает повторного рендеринга, это не реактивное значение, и React не будет знать, что нужно повторно запустить ваш Эффект, когда оно изменится.
+    **Изменчивое значение, такое как [`ref.current`](../reference/useRef.md) или то, что вы читаете из него, также не может быть зависимостью.** Сам объект ref, возвращаемый `useRef`, может быть зависимостью, но его свойство `current` намеренно изменчиво. Это позволяет вам [отслеживать что-то, не вызывая повторного рендеринга](referencing-values-with-refs.md). Но поскольку его изменение не вызывает повторного рендеринга, это не реактивное значение, и React не будет знать, что нужно повторно запустить ваш Эффект, когда оно изменится.
 
-Как вы узнаете ниже на этой странице, линтер будет проверять эти проблемы автоматически.
+    Как вы узнаете ниже на этой странице, линтер будет проверять эти проблемы автоматически.
 
-### React проверяет, что вы указали каждое реактивное значение в качестве зависимости {/_react-verifies-that-you-specified-every-reactive-value-as-a-dependency_/}
+### React проверяет, что вы указали каждое реактивное значение в качестве зависимости
 
-Если ваш линтер [настроен на React,](editor-setup.md), он проверит, что каждое реактивное значение, используемое кодом вашего Эффекта, объявлено как зависимость. Например, это ошибка lint, потому что и `roomId`, и `serverUrl` являются реактивными:
+Если ваш линтер [настроен на React](editor-setup.md), он проверит, что каждое реактивное значение, используемое кодом вашего Эффекта, объявлено как зависимость. Например, это ошибка lint, потому что и `roomId`, и `serverUrl` являются реактивными:
 
-<!-- 0051.part.md -->
+=== "App.js"
 
-```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-function ChatRoom({ roomId }) {
-    // roomId is reactive
-    const [serverUrl, setServerUrl] = useState(
-        'https://localhost:1234'
-    ); // serverUrl is reactive
+    ```js
+    import { useState, useEffect } from 'react';
+    import { createConnection } from './chat.js';
 
-    useEffect(() => {
-        const connection = createConnection(
-            serverUrl,
-            roomId
-        );
-        connection.connect();
-        return () => connection.disconnect();
-    }, []); // <-- Something's wrong here!
+    function ChatRoom({ roomId }) {
+    	// roomId is reactive
+    	const [serverUrl, setServerUrl] = useState(
+    		'https://localhost:1234'
+    	); // serverUrl is reactive
 
-    return (
-        <>
-            <label>
-                Server URL:{' '}
-                <input
-                    value={serverUrl}
-                    onChange={(e) =>
-                        setServerUrl(e.target.value)
-                    }
-                />
-            </label>
-            <h1>Welcome to the {roomId} room!</h1>
-        </>
-    );
-}
+    	useEffect(() => {
+    		const connection = createConnection(
+    			serverUrl,
+    			roomId
+    		);
+    		connection.connect();
+    		return () => connection.disconnect();
+    	}, []); // <-- Something's wrong here!
 
-export default function App() {
-    const [roomId, setRoomId] = useState('general');
-    return (
-        <>
-            <label>
-                Choose the chat room:{' '}
-                <select
-                    value={roomId}
-                    onChange={(e) =>
-                        setRoomId(e.target.value)
-                    }
-                >
-                    <option value="general">general</option>
-                    <option value="travel">travel</option>
-                    <option value="music">music</option>
-                </select>
-            </label>
-            <hr />
-            <ChatRoom roomId={roomId} />
-        </>
-    );
-}
-```
+    	return (
+    		<>
+    			<label>
+    				Server URL:{' '}
+    				<input
+    					value={serverUrl}
+    					onChange={(e) =>
+    						setServerUrl(e.target.value)
+    					}
+    				/>
+    			</label>
+    			<h1>Welcome to the {roomId} room!</h1>
+    		</>
+    	);
+    }
 
-<!-- 0052.part.md -->
+    export default function App() {
+    	const [roomId, setRoomId] = useState('general');
+    	return (
+    		<>
+    			<label>
+    				Choose the chat room:{' '}
+    				<select
+    					value={roomId}
+    					onChange={(e) =>
+    						setRoomId(e.target.value)
+    					}
+    				>
+    					<option value="general">general</option>
+    					<option value="travel">travel</option>
+    					<option value="music">music</option>
+    				</select>
+    			</label>
+    			<hr />
+    			<ChatRoom roomId={roomId} />
+    		</>
+    	);
+    }
+    ```
 
-<!-- 0053.part.md -->
+    </div>
 
-```js
-export function createConnection(serverUrl, roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ Connecting to "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl +
-                    '...'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ Disconnected from "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl
-            );
-        },
-    };
-}
-```
+=== "chat.js"
 
-<!-- 0054.part.md -->
+    ```js
+    export function createConnection(serverUrl, roomId) {
+    	// A real implementation would actually connect to the server
+    	return {
+    		connect() {
+    			console.log(
+    				'✅ Connecting to "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl +
+    					'...'
+    			);
+    		},
+    		disconnect() {
+    			console.log(
+    				'❌ Disconnected from "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl
+    			);
+    		},
+    	};
+    }
+    ```
 
-<!-- 0055.part.md -->
+=== "Результат"
 
-```css
-input {
-    display: block;
-    margin-bottom: 20px;
-}
-button {
-    margin-left: 10px;
-}
-```
-
-<!-- 0056.part.md -->
+    ![Результат](lifecycle-of-reactive-effects-4.png)
 
 Это может выглядеть как ошибка React, но на самом деле React указывает на ошибку в вашем коде. И `roomId`, и `serverUrl` могут меняться со временем, но вы забываете пересинхронизировать ваш Effect при их изменении. Вы будете оставаться подключенным к первоначальным `roomId` и `serverUrl` даже после того, как пользователь выберет другие значения в пользовательском интерфейсе.
 
@@ -891,9 +870,11 @@ function ChatRoom({ roomId }) {
 
 Попробуйте это исправление в песочнице выше. Убедитесь, что ошибка линтера исчезла, а чат снова подключается при необходимости.
 
-В некоторых случаях React _знает_, что значение никогда не изменится, даже если оно объявлено внутри компонента. Например, функция [`set`](/reference/react/useState#setstate), возвращаемая из `useState`, и объект ref, возвращаемый [`useRef`](/reference/react/useRef), являются _стабильными_ - они гарантированно не изменятся при повторном рендере. Стабильные значения не являются реактивными, поэтому вы можете опустить их из списка. Включать их разрешается: они не изменятся, поэтому это не имеет значения.
+!!!note ""
 
-### Что делать, если вы не хотите пересинхронизировать {/_what-to-do-when-you-dont-want-to-re-synchronize_/}
+    В некоторых случаях React _знает_, что значение никогда не изменится, даже если оно объявлено внутри компонента. Например, функция [`set`](../reference/useState.md), возвращаемая из `useState`, и объект ref, возвращаемый [`useRef`](../reference/useRef.md), являются _стабильными_ - они гарантированно не изменятся при повторном рендере. Стабильные значения не являются реактивными, поэтому вы можете опустить их из списка. Включать их разрешается: они не изменятся, поэтому это не имеет значения.
+
+### Что делать, если вы не хотите пересинхронизировать
 
 В предыдущем примере вы исправили ошибку lint, указав `roomId` и `serverUrl` в качестве зависимостей.
 
@@ -956,40 +937,38 @@ function ChatRoom() {
 
 -   **Не полагайтесь на объекты и функции в качестве зависимостей.** Если вы создаете объекты и функции во время рендеринга, а затем считываете их из Эффекта, они будут разными при каждом рендеринге. Это заставит ваш Эффект каждый раз заново синхронизироваться. [Подробнее об удалении ненужных зависимостей из Эффектов](removing-effect-dependencies.md).
 
-Линтер - ваш друг, но его возможности ограничены. Линтер знает только, когда зависимости _неправильные_. Он не знает _лучшего_ способа решения каждого случая. Если линтер предлагает зависимость, но ее добавление вызывает цикл, это не значит, что линтер следует игнорировать. Вам нужно изменить код внутри (или снаружи) Effect так, чтобы это значение не было реактивным и не _нуждалось_ в зависимости.
+!!!warning ""
 
-Если у вас есть существующая кодовая база, у вас могут быть некоторые Эффекты, которые подавляют линтер подобным образом:
+    Линтер - ваш друг, но его возможности ограничены. Линтер знает только, когда зависимости _неправильные_. Он не знает _лучшего_ способа решения каждого случая. Если линтер предлагает зависимость, но ее добавление вызывает цикл, это не значит, что линтер следует игнорировать. Вам нужно изменить код внутри (или снаружи) Effect так, чтобы это значение не было реактивным и не _нуждалось_ в зависимости.
 
-<!-- 0063.part.md -->
+    Если у вас есть существующая кодовая база, у вас могут быть некоторые Эффекты, которые подавляют линтер подобным образом:
 
-```js
-useEffect(() => {
-    // ...
-    // 🔴 Avoid suppressing the linter like this:
-    // eslint-ignore-next-line react-hooks/exhaustive-deps
-}, []);
-```
+    <!-- 0063.part.md -->
 
-<!-- 0064.part.md -->
+    ```js
+    useEffect(() => {
+    	// ...
+    	// 🔴 Avoid suppressing the linter like this:
+    	// eslint-ignore-next-line react-hooks/exhaustive-deps
+    }, []);
+    ```
 
-На [следующих](separating-events-from-effects.md) [страницах](removing-effect-dependencies.md) вы узнаете, как исправить этот код, не нарушая правил. Всегда стоит исправлять!
+    На [следующих](separating-events-from-effects.md) [страницах](removing-effect-dependencies.md) вы узнаете, как исправить этот код, не нарушая правил. Всегда стоит исправлять!
 
-\<Recap\>
+!!!note "Итоги"
 
--   Компоненты могут монтироваться, обновляться и размонтироваться.
--   Каждый Эффект имеет отдельный жизненный цикл от окружающего компонента.
--   Каждый Эффект описывает отдельный процесс синхронизации, который может _запускаться_ и _останавливаться_.
--   Когда вы пишете и читаете Эффекты, думайте с точки зрения каждого отдельного Эффекта (как запустить и остановить синхронизацию), а не с точки зрения компонента (как он монтируется, обновляется или размонтируется).
--   Значения, объявленные внутри тела компонента, являются "реактивными".
--   Реактивные значения должны повторно синхронизировать Effect, поскольку они могут меняться со временем.
--   Линтер проверяет, что все реактивные значения, используемые внутри Эффекта, указаны как зависимости.
--   Все ошибки, отмеченные линтером, являются легитимными. Всегда есть способ исправить код, чтобы не нарушать правила.
+    -   Компоненты могут монтироваться, обновляться и размонтироваться.
+    -   Каждый Эффект имеет отдельный жизненный цикл от окружающего компонента.
+    -   Каждый Эффект описывает отдельный процесс синхронизации, который может _запускаться_ и _останавливаться_.
+    -   Когда вы пишете и читаете Эффекты, думайте с точки зрения каждого отдельного Эффекта (как запустить и остановить синхронизацию), а не с точки зрения компонента (как он монтируется, обновляется или размонтируется).
+    -   Значения, объявленные внутри тела компонента, являются "реактивными".
+    -   Реактивные значения должны повторно синхронизировать Effect, поскольку они могут меняться со временем.
+    -   Линтер проверяет, что все реактивные значения, используемые внутри Эффекта, указаны как зависимости.
+    -   Все ошибки, отмеченные линтером, являются легитимными. Всегда есть способ исправить код, чтобы не нарушать правила.
 
-\</Recap\>
+## Задачи
 
-\<Проблемы\>
-
-#### Исправить переподключение при каждом нажатии клавиши {/_fix-reconnecting-on-every-keystroke_/}
+### 1. Исправить переподключение при каждом нажатии клавиши
 
 В этом примере компонент `ChatRoom` подключается к чату, когда он монтируется, отключается, когда размонтируется, и снова подключается, когда вы выбираете другой чат. Такое поведение является правильным, поэтому необходимо, чтобы оно работало.
 
@@ -1207,9 +1186,9 @@ button {
 
 \</Solution\>
 
-#### Включение и выключение синхронизации {/_switch-synchronization-on-and-off_/}
+### 2. Включение и выключение синхронизации
 
-В этом примере Эффект подписывается на событие window [`pointermove`](https://developer.mozilla.org/en-US/docs/Web/API/Element/pointermove_event), чтобы переместить розовую точку на экране. Попробуйте навести курсор на область предварительного просмотра (или коснуться экрана, если вы пользуетесь мобильным устройством) и посмотрите, как розовая точка следует за вашим движением.
+В этом примере Эффект подписывается на событие window [`pointermove`](https://developer.mozilla.org/docs/Web/API/Element/pointermove_event), чтобы переместить розовую точку на экране. Попробуйте навести курсор на область предварительного просмотра (или коснуться экрана, если вы пользуетесь мобильным устройством) и посмотрите, как розовая точка следует за вашим движением.
 
 Также имеется флажок. Установка флажка переключает переменную состояния `canMove`, но эта переменная состояния не используется нигде в коде. Ваша задача - изменить код так, чтобы при значении `canMove`, равном `false` (флажок снят), точка переставала двигаться. После того, как вы снова включите флажок (и установите `canMove` в `true`), точка снова должна следовать за движением. Другими словами, то, может ли точка двигаться или нет, должно синхронизироваться с тем, установлен ли флажок.
 
@@ -1440,7 +1419,7 @@ body {
 
 \</Solution\>
 
-#### Исследуйте ошибку устаревшего значения {/_investigate-a-stale-value-bug_/}
+### 3. Исследуйте ошибку устаревшего значения
 
 В этом примере розовая точка должна двигаться, когда флажок включен, и прекращать движение, когда флажок выключен. Логика для этого уже реализована: обработчик события `handleMove` проверяет переменную состояния `canMove`.
 
@@ -1526,7 +1505,7 @@ body {
 
 \<Решение\>
 
-Проблема оригинального кода заключалась в подавлении линтера зависимостей. Если убрать подавление, вы увидите, что этот Effect зависит от функции `handleMove`. Это имеет смысл: `handleMove` объявлена внутри тела компонента, что делает ее реактивным значением. Каждое реактивное значение должно быть указано как зависимость, иначе оно может устареть со временем\!
+Проблема оригинального кода заключалась в подавлении линтера зависимостей. Если убрать подавление, вы увидите, что этот Effect зависит от функции `handleMove`. Это имеет смысл: `handleMove` объявлена внутри тела компонента, что делает ее реактивным значением. Каждое реактивное значение должно быть указано как зависимость, иначе оно может устареть со временем!
 
 Автор оригинального кода "соврал" React, сказав, что Effect не зависит (`[]`) ни от каких реактивных значений. Именно поэтому React не пересинхронизировал Effect после изменения `canMove` (и `handleMove` вместе с ним). Поскольку React не повторно синхронизировал Эффект, `handleMove`, присоединенная в качестве слушателя, является функцией `handleMove`, созданной во время первоначального рендеринга. Во время первоначального рендера `canMove` было `true`, поэтому `handleMove` из первоначального рендера всегда будет видеть это значение.
 
@@ -1686,7 +1665,7 @@ body {
 
 \</Solution\>
 
-#### Исправление переключателя соединений {/_fix-a-connection-switch_/}
+### 4. Исправление переключателя соединений
 
 В этом примере сервис чата в `chat.js` раскрывает два различных API: `createEncryptedConnection` и `createUnencryptedConnection`. Корневой компонент `App` позволяет пользователю выбрать, использовать шифрование или нет, а затем передает соответствующий метод API дочернему компоненту `ChatRoom` в качестве пропса `createConnection`.
 
@@ -1833,7 +1812,7 @@ label {
 
 \<Решение\>
 
-Если вы удалите подавление линтера, вы увидите ошибку lint. Проблема в том, что `createConnection` является prop, то есть это реактивное значение. Оно может меняться в течение времени\! (И действительно, так и должно быть - когда пользователь устанавливает флажок, родительский компонент передает другое значение параметра `createConnection`). Вот почему это должна быть зависимость. Включите его в список, чтобы исправить ошибку:
+Если вы удалите подавление линтера, вы увидите ошибку lint. Проблема в том, что `createConnection` является prop, то есть это реактивное значение. Оно может меняться в течение времени! (И действительно, так и должно быть - когда пользователь устанавливает флажок, родительский компонент передает другое значение параметра `createConnection`). Вот почему это должна быть зависимость. Включите его в список, чтобы исправить ошибку:
 
 <!-- 0109.part.md -->
 
@@ -2101,7 +2080,7 @@ label {
 
 \</Solution\>
 
-#### Заполнение цепочки полей выбора {/_populate-a-chain-of-select-boxes_/}
+### 5. Заполнение цепочки полей выбора
 
 В этом примере есть два поля выбора. Одно поле позволяет пользователю выбрать планету. Другое поле позволяет пользователю выбрать место _на этой планете._ Второе поле пока не работает. Ваша задача - заставить его показывать места на выбранной планете.
 
@@ -2790,4 +2769,6 @@ label {
 
 \</Challenges\>
 
-<!-- 0145.part.md -->
+## Ссылки
+
+-   [https://react.dev/learn/lifecycle-of-reactive-effects](https://react.dev/learn/lifecycle-of-reactive-effects)
