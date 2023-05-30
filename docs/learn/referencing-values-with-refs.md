@@ -2,12 +2,14 @@
 
 Когда вы хотите, чтобы компонент "запомнил" какую-то информацию, но не хотите, чтобы эта информация [запускала новые рендеры](render-and-commit.md), вы можете использовать _ref_.
 
--   Как добавить ссылку в свой компонент
--   Как обновить значение ссылки
--   Чем отличаются ссылки от состояния
--   Как безопасно использовать ссылки
+!!!tip "Вы узнаете"
 
-## Добавление ссылки в ваш компонент {/_adding-a-ref-to-your-component_/}
+    -   Как добавить ссылку в свой компонент
+    -   Как обновить значение ссылки
+    -   Чем отличаются ссылки от состояния
+    -   Как безопасно использовать ссылки
+
+## Добавление ссылки в ваш компонент
 
 Вы можете добавить ссылку в свой компонент, импортировав хук `useRef` из React:
 
@@ -41,36 +43,40 @@ const ref = useRef(0);
 
 <!-- 0006.part.md -->
 
-\<Illustration src="/images/docs/illustrations/i_ref.png" alt="Стрела с надписью "current" засунута в карман с надписью "ref"." /\>
-
 Вы можете получить доступ к текущему значению этой ссылки через свойство `ref.current`. Это значение намеренно мутабельно, то есть вы можете как читать, так и писать в него. Это как секретный карман вашего компонента, который React не отслеживает. (Именно это делает его "аварийным люком" из одностороннего потока данных React - подробнее об этом ниже\!)
 
 Здесь кнопка будет увеличивать `ref.current` при каждом нажатии:
 
 <!-- 0007.part.md -->
 
-```js
-import { useRef } from 'react';
+=== "App.js"
 
-export default function Counter() {
-    let ref = useRef(0);
+    ```js
+    import { useRef } from 'react';
 
-    function handleClick() {
-        ref.current = ref.current + 1;
-        alert('You clicked ' + ref.current + ' times!');
+    export default function Counter() {
+    	let ref = useRef(0);
+
+    	function handleClick() {
+    		ref.current = ref.current + 1;
+    		alert('You clicked ' + ref.current + ' times!');
+    	}
+
+    	return <button onClick={handleClick}>Click me!</button>;
     }
+    ```
 
-    return <button onClick={handleClick}>Click me!</button>;
-}
-```
+=== "Результат"
+
+    ![Результат](referencing-values-with-refs-1.png)
 
 <!-- 0008.part.md -->
 
 Ссылка указывает на число, но, как и [state](state-a-components-memory.md), вы можете указать на что угодно: строку, объект или даже функцию. В отличие от state, ref - это обычный объект JavaScript со свойством `current`, который можно читать и изменять.
 
-Обратите внимание, что **компонент не перерисовывается при каждом увеличении.** Как и state, refs сохраняется React между перерисовками. Однако, установка состояния перерисовывает компонент. Изменение ссылки не делает этого\!
+Обратите внимание, что **компонент не перерисовывается при каждом увеличении.** Как и state, refs сохраняется React между перерисовками. Однако, установка состояния перерисовывает компонент. Изменение ссылки не делает этого!
 
-## Пример: создание секундомера {/_example-building-a-stopwatch_/}
+## Пример: создание секундомера
 
 Вы можете комбинировать ссылки и состояние в одном компоненте. Например, давайте сделаем секундомер, который пользователь может запустить или остановить нажатием кнопки. Чтобы отобразить, сколько времени прошло с момента нажатия пользователем кнопки "Start", вам нужно будет отслеживать, когда была нажата кнопка Start и каково текущее время. **Эта информация используется для рендеринга, поэтому вы будете хранить ее в состоянии:**.
 
@@ -85,191 +91,207 @@ const [now, setNow] = useState(null);
 
 Когда пользователь нажмет кнопку "Start", вы будете использовать [`setInterval`](https://developer.mozilla.org/docs/Web/API/setInterval), чтобы обновлять время каждые 10 миллисекунд:
 
-<!-- 0011.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    ```js
+    import { useState } from 'react';
 
-export default function Stopwatch() {
-    const [startTime, setStartTime] = useState(null);
-    const [now, setNow] = useState(null);
+    export default function Stopwatch() {
+    	const [startTime, setStartTime] = useState(null);
+    	const [now, setNow] = useState(null);
 
-    function handleStart() {
-        // Start counting.
-        setStartTime(Date.now());
-        setNow(Date.now());
+    	function handleStart() {
+    		// Start counting.
+    		setStartTime(Date.now());
+    		setNow(Date.now());
 
-        setInterval(() => {
-            // Update the current time every 10ms.
-            setNow(Date.now());
-        }, 10);
+    		setInterval(() => {
+    			// Update the current time every 10ms.
+    			setNow(Date.now());
+    		}, 10);
+    	}
+
+    	let secondsPassed = 0;
+    	if (startTime != null && now != null) {
+    		secondsPassed = (now - startTime) / 1000;
+    	}
+
+    	return (
+    		<>
+    			<h1>Time passed: {secondsPassed.toFixed(3)}</h1>
+    			<button onClick={handleStart}>Start</button>
+    		</>
+    	);
     }
+    ```
 
-    let secondsPassed = 0;
-    if (startTime != null && now != null) {
-        secondsPassed = (now - startTime) / 1000;
-    }
+=== "Результат"
 
-    return (
-        <>
-            <h1>Time passed: {secondsPassed.toFixed(3)}</h1>
-            <button onClick={handleStart}>Start</button>
-        </>
-    );
-}
-```
+    ![Результат](referencing-values-with-refs-2.png)
 
 <!-- 0012.part.md -->
 
-Когда нажата кнопка "Stop", необходимо отменить существующий интервал, чтобы он перестал обновлять переменную состояния `now`. Вы можете сделать это, вызвав [`clearInterval`](https://developer.mozilla.org/en-US/docs/Web/API/clearInterval), но вам нужно передать ему ID интервала, который ранее был возвращен вызовом `setInterval`, когда пользователь нажал кнопку Start. Вам нужно где-то сохранить ID интервала. **Поскольку ID интервала не используется для рендеринга, вы можете хранить его в ссылке:**.
+Когда нажата кнопка "Stop", необходимо отменить существующий интервал, чтобы он перестал обновлять переменную состояния `now`. Вы можете сделать это, вызвав [`clearInterval`](https://developer.mozilla.org/docs/Web/API/clearInterval), но вам нужно передать ему ID интервала, который ранее был возвращен вызовом `setInterval`, когда пользователь нажал кнопку Start. Вам нужно где-то сохранить ID интервала. **Поскольку ID интервала не используется для рендеринга, вы можете хранить его в ссылке:**.
 
-<!-- 0013.part.md -->
+=== "App.js"
 
-```js
-import { useState, useRef } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Stopwatch() {
-    const [startTime, setStartTime] = useState(null);
-    const [now, setNow] = useState(null);
-    const intervalRef = useRef(null);
+    ```js
+    import { useState, useRef } from 'react';
 
-    function handleStart() {
-        setStartTime(Date.now());
-        setNow(Date.now());
+    export default function Stopwatch() {
+    	const [startTime, setStartTime] = useState(null);
+    	const [now, setNow] = useState(null);
+    	const intervalRef = useRef(null);
 
-        clearInterval(intervalRef.current);
-        intervalRef.current = setInterval(() => {
-            setNow(Date.now());
-        }, 10);
+    	function handleStart() {
+    		setStartTime(Date.now());
+    		setNow(Date.now());
+
+    		clearInterval(intervalRef.current);
+    		intervalRef.current = setInterval(() => {
+    			setNow(Date.now());
+    		}, 10);
+    	}
+
+    	function handleStop() {
+    		clearInterval(intervalRef.current);
+    	}
+
+    	let secondsPassed = 0;
+    	if (startTime != null && now != null) {
+    		secondsPassed = (now - startTime) / 1000;
+    	}
+
+    	return (
+    		<>
+    			<h1>Time passed: {secondsPassed.toFixed(3)}</h1>
+    			<button onClick={handleStart}>Start</button>
+    			<button onClick={handleStop}>Stop</button>
+    		</>
+    	);
     }
+    ```
 
-    function handleStop() {
-        clearInterval(intervalRef.current);
-    }
+    </div>
 
-    let secondsPassed = 0;
-    if (startTime != null && now != null) {
-        secondsPassed = (now - startTime) / 1000;
-    }
+=== "Результат"
 
-    return (
-        <>
-            <h1>Time passed: {secondsPassed.toFixed(3)}</h1>
-            <button onClick={handleStart}>Start</button>
-            <button onClick={handleStop}>Stop</button>
-        </>
-    );
-}
-```
+    ![Результат](referencing-values-with-refs-3.png)
 
 <!-- 0014.part.md -->
 
 Если часть информации используется для рендеринга, храните ее в состоянии. Если часть информации нужна только обработчикам событий и ее изменение не требует повторного рендеринга, использование ссылки может быть более эффективным.
 
-## Различия между refs и state {/_differences-between-refs-and-state_/}
+## Различия между refs и state
 
-Возможно, вы думаете, что ссылки кажутся менее "строгими", чем state - например, вы можете мутировать их вместо того, чтобы всегда использовать функцию установки состояния. Но в большинстве случаев вы захотите использовать state. Рефы - это "аварийный люк", который вам не часто понадобится. Вот как сравниваются state и refs:
+Возможно, вы думаете, что ссылки кажутся менее "строгими", чем `state` - например, вы можете мутировать их вместо того, чтобы всегда использовать функцию установки состояния. Но в большинстве случаев вы захотите использовать `state`. Рефы - это "аварийный люк", который вам не часто понадобится. Вот как сравниваются `state` и `refs`:
 
-| refs                                                                                 | state                                                                                                                                                          |
-| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ``useRef(initialValue)` возвращает `{ current: initialValue }`                       | ``useState(initialValue)` возвращает текущее значение переменной состояния и функцию-установщик состояния ( `[value, setValue]`)                               | . |
-| Не запускает повторный рендеринг при изменении.                                      | Срабатывает повторный рендеринг при изменении.                                                                                                                 |
-| Mutable - вы можете изменять и обновлять значение `current` вне процесса рендеринга. |                                                                                                                                                                | "Неизменяемый" - вы должны использовать функцию установки состояния для изменения переменных состояния, чтобы поставить в очередь на повторный рендеринг. |
-| Вы не должны читать (или записывать) значение `current` во время рендеринга.         | Вы можете читать состояние в любое время. Однако каждый рендер имеет свой собственный [snapshot](/learn/state-as-a-snapshot) состояния, которое не изменяется. |
+| refs                                                                                 | state                                                                                                                                                      |
+| ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useRef(initialValue)` возвращает `{ current: initialValue }`                        | `useState(initialValue)` возвращает текущее значение переменной состояния и функцию-установщик состояния ( `[value, setValue]`)                            |
+| Не запускает повторный рендеринг при изменении.                                      | Срабатывает повторный рендеринг при изменении.                                                                                                             |
+| Mutable - вы можете изменять и обновлять значение `current` вне процесса рендеринга. | Immutable - вы должны использовать функцию установки состояния для изменения состояния, чтобы поставить в очередь на повторный рендеринг.                  |
+| Вы не должны читать (или записывать) значение `current` во время рендеринга.         | Вы можете читать состояние в любое время. Однако каждый рендер имеет свой собственный [snapshot](state-as-a-snapshot.md) состояния, которое не изменяется. |
 
 Вот кнопка счетчика, которая реализована с использованием состояния:
 
-<!-- 0015.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
+    ```js
+    import { useState } from 'react';
 
-export default function Counter() {
-    const [count, setCount] = useState(0);
+    export default function Counter() {
+    	const [count, setCount] = useState(0);
 
-    function handleClick() {
-        setCount(count + 1);
+    	function handleClick() {
+    		setCount(count + 1);
+    	}
+
+    	return (
+    		<button onClick={handleClick}>
+    			You clicked {count} times
+    		</button>
+    	);
     }
+    ```
 
-    return (
-        <button onClick={handleClick}>
-            You clicked {count} times
-        </button>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](referencing-values-with-refs-3.png)
 
 <!-- 0016.part.md -->
 
 Поскольку значение `count` отображается, имеет смысл использовать для него значение состояния. Когда значение счетчика устанавливается с помощью `setCount()`, React перерисовывает компонент, и экран обновляется, чтобы отразить новый счетчик.
 
-Если бы вы попытались реализовать это с помощью ссылки, React никогда бы не перерисовал компонент, и вы бы никогда не увидели изменения счетчика\! Посмотрите, как нажатие на эту кнопку **не обновляет ее текст**:
+Если бы вы попытались реализовать это с помощью ссылки, React никогда бы не перерисовал компонент, и вы бы никогда не увидели изменения счетчика! Посмотрите, как нажатие на эту кнопку **не обновляет ее текст**:
 
-<!-- 0017.part.md -->
+=== "App.js"
 
-```js
-import { useRef } from 'react';
+    ```js
+    import { useRef } from 'react';
 
-export default function Counter() {
-    let countRef = useRef(0);
+    export default function Counter() {
+    	let countRef = useRef(0);
 
-    function handleClick() {
-        // This doesn't re-render the component!
-        countRef.current = countRef.current + 1;
+    	function handleClick() {
+    		// This doesn't re-render the component!
+    		countRef.current = countRef.current + 1;
+    	}
+
+    	return (
+    		<button onClick={handleClick}>
+    			You clicked {countRef.current} times
+    		</button>
+    	);
     }
+    ```
 
-    return (
-        <button onClick={handleClick}>
-            You clicked {countRef.current} times
-        </button>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](referencing-values-with-refs-4.png)
 
 <!-- 0018.part.md -->
 
 Вот почему чтение `ref.current` во время рендеринга приводит к ненадежному коду. Если вам это нужно, используйте вместо этого state.
 
-#### Как useRef работает внутри? {/_how-does-use-ref-work-inside_/}
+!!!note "Как useRef работает внутри?"
 
-Хотя и `useState` и `useRef` предоставляются React, в принципе `useRef` может быть реализован _поверх_ `useState`. Вы можете представить, что внутри React `useRef` реализован следующим образом:
+    Хотя и `useState` и `useRef` предоставляются React, в принципе `useRef` может быть реализован _поверх_ `useState`. Вы можете представить, что внутри React `useRef` реализован следующим образом:
 
-<!-- 0019.part.md -->
+    ```js
+    // Inside of React
+    function useRef(initialValue) {
+    	const [ref, unused] = useState({
+    		current: initialValue,
+    	});
+    	return ref;
+    }
+    ```
 
-```js
-// Inside of React
-function useRef(initialValue) {
-    const [ref, unused] = useState({
-        current: initialValue,
-    });
-    return ref;
-}
-```
+    Во время первого рендеринга `useRef` возвращает `{ current: initialValue }`. Этот объект хранится в памяти React, поэтому при следующем рендере будет возвращен тот же объект. Обратите внимание, что в этом примере сеттер состояния не используется. Он не нужен, потому что `useRef` всегда должен возвращать один и тот же объект!
 
-<!-- 0020.part.md -->
+    React предоставляет встроенную версию `useRef`, потому что это достаточно часто встречается на практике. Но вы можете думать о ней как об обычной переменной состояния без сеттера. Если вы знакомы с объектно-ориентированным программированием, refs может напомнить вам поля экземпляра, но вместо `this.something` вы напишите `somethingRef.current`.
 
-Во время первого рендеринга `useRef` возвращает `{ current: initialValue }`. Этот объект хранится в памяти React, поэтому при следующем рендере будет возвращен тот же объект. Обратите внимание, что в этом примере сеттер состояния не используется. Он не нужен, потому что `useRef` всегда должен возвращать один и тот же объект\!
-
-React предоставляет встроенную версию `useRef`, потому что это достаточно часто встречается на практике. Но вы можете думать о ней как об обычной переменной состояния без сеттера. Если вы знакомы с объектно-ориентированным программированием, refs может напомнить вам поля экземпляра, но вместо `this.something` вы напишите `somethingRef.current`.
-
-## Когда использовать ссылки {/_when-to-use-refs_/}
+## Когда использовать refs
 
 Как правило, вы используете refs, когда вашему компоненту нужно "выйти за пределы" React и взаимодействовать с внешними API - часто с API браузера, которые не влияют на внешний вид компонента. Вот несколько таких редких ситуаций:
 
 -   Хранение [идентификаторов таймаута](https://developer.mozilla.org/docs/Web/API/setTimeout)
--   Хранение и манипулирование [элементами DOM](https://developer.mozilla.org/docs/Web/API/Element), о чем мы расскажем на [следующей странице](/learn/manipulating-the-dom-with-refs)
+-   Хранение и манипулирование [элементами DOM](https://developer.mozilla.org/docs/Web/API/Element), о чем мы расскажем на [следующей странице](manipulating-the-dom-with-refs.md)
 -   Хранение других объектов, которые не нужны для вычисления JSX.
 
 Если вашему компоненту нужно хранить какое-то значение, но оно не влияет на логику рендеринга, выбирайте refs.
 
-## Лучшие практики для refs {/_best-practices-for-refs_/}
+## Лучшие практики для refs
 
 Следование этим принципам сделает ваши компоненты более предсказуемыми:
 
 -   **Рассматривайте ссылки как аварийный люк.** Ссылки полезны, когда вы работаете с внешними системами или API браузера. Если большая часть логики вашего приложения и потока данных зависит от ссылок, возможно, вам стоит пересмотреть свой подход.
--   **Не читайте и не записывайте `ref.current` во время рендеринга.** Если какая-то информация необходима во время рендеринга, используйте [state](/learn/state-a-components-memory) вместо этого. Поскольку React не знает, когда изменяется `ref.current`, даже чтение его во время рендеринга делает поведение вашего компонента труднопредсказуемым. (Единственным исключением из этого является код типа `if (!ref.current) ref.current = new Thing()`, который устанавливает ссылку только один раз во время первого рендеринга).
+-   **Не читайте и не записывайте `ref.current` во время рендеринга.** Если какая-то информация необходима во время рендеринга, используйте [state](state-a-components-memory.md) вместо этого. Поскольку React не знает, когда изменяется `ref.current`, даже чтение его во время рендеринга делает поведение вашего компонента труднопредсказуемым. (Единственным исключением из этого является код типа `if (!ref.current) ref.current = new Thing()`, который устанавливает ссылку только один раз во время первого рендеринга).
 
-Ограничения React state не распространяются на рефлексы. Например, состояние действует как [снимок для каждого рендера](/learn/state-as-a-snapshot) и [не обновляется синхронно](/learn/queueing-a-series-of-state-updates) Но когда вы изменяете текущее значение ссылки, оно немедленно меняется:
+Ограничения React state не распространяются на рефлексы. Например, состояние действует как [снимок для каждого рендера](state-as-a-snapshot.md) и [не обновляется синхронно](queueing-a-series-of-state-updates.md) Но когда вы изменяете текущее значение ссылки, оно немедленно меняется:
 
 <!-- 0021.part.md -->
 
@@ -282,391 +304,393 @@ console.log(ref.current); // 5
 
 Это происходит потому, что **ссылка сама по себе является обычным объектом JavaScript,** и поэтому ведет себя как обычный объект.
 
-Вам также не нужно беспокоиться о [избегании мутации](/learn/updating-objects-in-state), когда вы работаете с ref. До тех пор, пока объект, который вы мутируете, не используется для рендеринга, React не волнует, что вы делаете с рефлексом или его содержимым.
+Вам также не нужно беспокоиться о [избегании мутации](updating-objects-in-state.md), когда вы работаете с ref. До тех пор, пока объект, который вы мутируете, не используется для рендеринга, React не волнует, что вы делаете с рефлексом или его содержимым.
 
-## Ссылки и DOM {/_refs-and-the-dom_/}
+## Ссылки и DOM
 
-Вы можете указать ссылку на любое значение. Однако наиболее часто ссылка используется для доступа к элементу DOM. Например, это удобно, если вы хотите программно сфокусировать вход. Когда вы передаете ссылку в атрибут `ref` в JSX, например `<div ref={myRef}>`, React помещает соответствующий элемент DOM в `myRef.current`. Подробнее об этом вы можете прочитать в [Manipulating the DOM with Refs.](/learn/manipulating-the-dom-with-refs).
+Вы можете указать ссылку на любое значение. Однако наиболее часто ссылка используется для доступа к элементу DOM. Например, это удобно, если вы хотите программно сфокусировать вход. Когда вы передаете ссылку в атрибут `ref` в JSX, например `<div ref={myRef}>`, React помещает соответствующий элемент DOM в `myRef.current`. Подробнее об этом вы можете прочитать в [Manipulating the DOM with Refs.](manipulating-the-dom-with-refs.md).
 
-\<Recap\>
+!!!tip "Итоги"
 
--   Ссылки - это люк для хранения значений, которые не используются для рендеринга. Они нечасто вам понадобятся.
--   Ссылка - это обычный объект JavaScript с единственным свойством `current`, которое вы можете прочитать или установить.
--   Вы можете попросить React дать вам ссылку, вызвав хук `useRef`.
--   Как и состояние, ссылки позволяют сохранять информацию между повторными рендерингами компонента.
--   В отличие от состояния, установка `текущего` значения ссылки не вызывает повторного рендеринга.
--   Не читайте и не записывайте `ref.current` во время рендеринга. Это сделает ваш компонент трудно предсказуемым.
+    -   Ссылки - это люк для хранения значений, которые не используются для рендеринга. Они нечасто вам понадобятся.
+    -   Ссылка - это обычный объект JavaScript с единственным свойством `current`, которое вы можете прочитать или установить.
+    -   Вы можете попросить React дать вам ссылку, вызвав хук `useRef`.
+    -   Как и состояние, ссылки позволяют сохранять информацию между повторными рендерингами компонента.
+    -   В отличие от состояния, установка `текущего` значения ссылки не вызывает повторного рендеринга.
+    -   Не читайте и не записывайте `ref.current` во время рендеринга. Это сделает ваш компонент трудно предсказуемым.
 
-\</Recap\>
+## Задачи
 
-\<Проблемы\>
+### 1. Исправление неработающего входа в чат
 
-#### Исправление неработающего входа в чат {/_fix-a-broken-chat-input_/}
+Введите сообщение и нажмите "Отправить". Вы заметите, что перед появлением сообщения "Отправлено!" произойдет трехсекундная задержка. Во время этой задержки вы увидите кнопку "Отменить". Нажмите на нее. Эта кнопка "Отменить" должна остановить появление сообщения "Отправлено!". Она делает это, вызывая [`clearTimeout`](https://developer.mozilla.org/docs/Web/API/clearTimeout) для идентификатора таймаута, сохраненного во время `handleSend`. Однако даже после нажатия кнопки "Undo" сообщение "Sent\!" все равно появляется. Найдите причину неработоспособности и устраните ее.
 
-Введите сообщение и нажмите "Отправить". Вы заметите, что перед появлением сообщения "Отправлено\!" произойдет трехсекундная задержка. Во время этой задержки вы увидите кнопку "Отменить". Нажмите на нее. Эта кнопка "Отменить" должна остановить появление сообщения "Отправлено\!". Она делает это, вызывая [`clearTimeout`](https://developer.mozilla.org/en-US/docs/Web/API/clearTimeout) для идентификатора таймаута, сохраненного во время `handleSend`. Однако даже после нажатия кнопки "Undo" сообщение "Sent\!" все равно появляется. Найдите причину неработоспособности и устраните ее.
+=== "App.js"
 
-\< Подсказка\>
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-Обычные переменные, такие как `let timeoutID`, не "выживают" между повторными рендерами, потому что каждый рендер запускает ваш компонент (и инициализирует его переменные) с нуля. Должны ли вы хранить идентификатор таймаута в другом месте?
+    ```js
+    import { useState } from 'react';
 
-\</Hint\>
+    export default function Chat() {
+    	const [text, setText] = useState('');
+    	const [isSending, setIsSending] = useState(false);
+    	let timeoutID = null;
 
-<!-- 0023.part.md -->
+    	function handleSend() {
+    		setIsSending(true);
+    		timeoutID = setTimeout(() => {
+    			alert('Sent!');
+    			setIsSending(false);
+    		}, 3000);
+    	}
 
-```js
-import { useState } from 'react';
+    	function handleUndo() {
+    		setIsSending(false);
+    		clearTimeout(timeoutID);
+    	}
 
-export default function Chat() {
-    const [text, setText] = useState('');
-    const [isSending, setIsSending] = useState(false);
-    let timeoutID = null;
-
-    function handleSend() {
-        setIsSending(true);
-        timeoutID = setTimeout(() => {
-            alert('Sent!');
-            setIsSending(false);
-        }, 3000);
+    	return (
+    		<>
+    			<input
+    				disabled={isSending}
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<button
+    				disabled={isSending}
+    				onClick={handleSend}
+    			>
+    				{isSending ? 'Sending...' : 'Send'}
+    			</button>
+    			{isSending && (
+    				<button onClick={handleUndo}>Undo</button>
+    			)}
+    		</>
+    	);
     }
+    ```
 
-    function handleUndo() {
-        setIsSending(false);
-        clearTimeout(timeoutID);
-    }
+    </div>
 
-    return (
-        <>
-            <input
-                disabled={isSending}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <button
-                disabled={isSending}
-                onClick={handleSend}
-            >
-                {isSending ? 'Sending...' : 'Send'}
-            </button>
-            {isSending && (
-                <button onClick={handleUndo}>Undo</button>
-            )}
-        </>
-    );
-}
-```
+=== "Результат"
 
-<!-- 0024.part.md -->
+    ![Результат](referencing-values-with-refs-5.png)
 
-\<Решение\>
+???tip "Показать подсказку"
 
-Всякий раз, когда ваш компонент перестраивается (например, при установке состояния), все локальные переменные инициализируются с нуля. Вот почему вы не можете сохранить идентификатор таймаута в локальной переменной типа `timeoutID`, а затем ожидать, что другой обработчик событий "увидит" его в будущем. Вместо этого сохраните его в ссылке, которую React будет сохранять между рендерами.
+    Обычные переменные, такие как `let timeoutID`, не "выживают" между повторными рендерами, потому что каждый рендер запускает ваш компонент (и инициализирует его переменные) с нуля. Должны ли вы хранить идентификатор таймаута в другом месте?
 
-<!-- 0025.part.md -->
+???success "Показать решение"
 
-```js
-import { useState, useRef } from 'react';
+    Всякий раз, когда ваш компонент перестраивается (например, при установке состояния), все локальные переменные инициализируются с нуля. Вот почему вы не можете сохранить идентификатор таймаута в локальной переменной типа `timeoutID`, а затем ожидать, что другой обработчик событий "увидит" его в будущем. Вместо этого сохраните его в ссылке, которую React будет сохранять между рендерами.
 
-export default function Chat() {
-    const [text, setText] = useState('');
-    const [isSending, setIsSending] = useState(false);
-    const timeoutRef = useRef(null);
+    === "App.js"
 
-    function handleSend() {
-        setIsSending(true);
-        timeoutRef.current = setTimeout(() => {
-            alert('Sent!');
-            setIsSending(false);
-        }, 3000);
-    }
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-    function handleUndo() {
-        setIsSending(false);
-        clearTimeout(timeoutRef.current);
-    }
+    	```js
+    	import { useState, useRef } from 'react';
 
-    return (
-        <>
-            <input
-                disabled={isSending}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <button
-                disabled={isSending}
-                onClick={handleSend}
-            >
-                {isSending ? 'Sending...' : 'Send'}
-            </button>
-            {isSending && (
-                <button onClick={handleUndo}>Undo</button>
-            )}
-        </>
-    );
-}
-```
+    	export default function Chat() {
+    		const [text, setText] = useState('');
+    		const [isSending, setIsSending] = useState(false);
+    		const timeoutRef = useRef(null);
 
-<!-- 0026.part.md -->
+    		function handleSend() {
+    			setIsSending(true);
+    			timeoutRef.current = setTimeout(() => {
+    				alert('Sent!');
+    				setIsSending(false);
+    			}, 3000);
+    		}
 
-\</Solution\>
+    		function handleUndo() {
+    			setIsSending(false);
+    			clearTimeout(timeoutRef.current);
+    		}
 
-#### Исправьте компонент, который не смог перерисоваться {/_fix-a-component-failing-to-re-render_/}
+    		return (
+    			<>
+    				<input
+    					disabled={isSending}
+    					value={text}
+    					onChange={(e) => setText(e.target.value)}
+    				/>
+    				<button
+    					disabled={isSending}
+    					onClick={handleSend}
+    				>
+    					{isSending ? 'Sending...' : 'Send'}
+    				</button>
+    				{isSending && (
+    					<button onClick={handleUndo}>Undo</button>
+    				)}
+    			</>
+    		);
+    	}
+    	```
+
+    	</div>
+
+    === "Результат"
+
+    	![Результат](referencing-values-with-refs-6.png)
+
+### 2. Исправьте компонент, который не смог перерисоваться
 
 Эта кнопка должна переключаться между отображением "Вкл" и "Выкл". Однако она всегда показывает "Выключено". Что не так с этим кодом? Исправьте это.
 
 <!-- 0027.part.md -->
 
-```js
-import { useRef } from 'react';
+=== "App.js"
 
-export default function Toggle() {
-    const isOnRef = useRef(false);
+    ```js
+    import { useRef } from 'react';
 
-    return (
-        <button
-            onClick={() => {
-                isOnRef.current = !isOnRef.current;
-            }}
-        >
-            {isOnRef.current ? 'On' : 'Off'}
-        </button>
-    );
-}
-```
+    export default function Toggle() {
+    	const isOnRef = useRef(false);
+
+    	return (
+    		<button
+    			onClick={() => {
+    				isOnRef.current = !isOnRef.current;
+    			}}
+    		>
+    			{isOnRef.current ? 'On' : 'Off'}
+    		</button>
+    	);
+    }
+    ```
+
+=== "Результат"
+
+    ![Результат](referencing-values-with-refs-7.png)
 
 <!-- 0028.part.md -->
 
-\<Решение\>
+???success "Показать решение"
 
-В этом примере текущее значение ссылки используется для расчета вывода рендеринга: `{isOnRef.current ? 'On' : 'Off'}`. Это признак того, что данная информация не должна быть в ссылке, а должна быть помещена в состояние. Чтобы исправить это, удалите ссылку и используйте вместо нее state:
+    В этом примере текущее значение ссылки используется для расчета вывода рендеринга: `{isOnRef.current ? 'On' : 'Off'}`. Это признак того, что данная информация не должна быть в ссылке, а должна быть помещена в состояние. Чтобы исправить это, удалите ссылку и используйте вместо нее state:
 
-<!-- 0029.part.md -->
+    === "App.js"
 
-```js
-import { useState } from 'react';
+    	```js
+    	import { useState } from 'react';
 
-export default function Toggle() {
-    const [isOn, setIsOn] = useState(false);
+    	export default function Toggle() {
+    		const [isOn, setIsOn] = useState(false);
 
-    return (
-        <button
-            onClick={() => {
-                setIsOn(!isOn);
-            }}
-        >
-            {isOn ? 'On' : 'Off'}
-        </button>
-    );
-}
-```
+    		return (
+    			<button
+    				onClick={() => {
+    					setIsOn(!isOn);
+    				}}
+    			>
+    				{isOn ? 'On' : 'Off'}
+    			</button>
+    		);
+    	}
+    	```
 
-<!-- 0030.part.md -->
+    === "Результат"
 
-\</Solution\>
+    	![Результат](referencing-values-with-refs-7.png)
 
-#### Исправление дебаггинга {/_fix-debouncing_/}
+### 3. Исправление debounce
 
-В этом примере все обработчики нажатия на кнопку ["debounced".](https://redd.one/blog/debounce-vs-throttle) Чтобы увидеть, что это значит, нажмите на одну из кнопок. Обратите внимание, что через секунду появится сообщение. Если вы нажмете кнопку в ожидании сообщения, таймер сбросится. Таким образом, если вы будете нажимать одну и ту же кнопку много раз, сообщение появится только через секунду после того, как вы перестанете нажимать. Дебаунсинг позволяет отложить выполнение какого-либо действия до тех пор, пока пользователь не "перестанет делать что-то".
+В этом примере все обработчики нажатия на кнопку ["debounced"](https://redd.one/blog/debounce-vs-throttle). Чтобы увидеть, что это значит, нажмите на одну из кнопок. Обратите внимание, что через секунду появится сообщение. Если вы нажмете кнопку в ожидании сообщения, таймер сбросится. Таким образом, если вы будете нажимать одну и ту же кнопку много раз, сообщение появится только через секунду после того, как вы перестанете нажимать. Дебаунсинг позволяет отложить выполнение какого-либо действия до тех пор, пока пользователь не "перестанет делать что-то".
 
 Этот пример работает, но не совсем так, как было задумано. Кнопки не являются независимыми. Чтобы увидеть проблему, нажмите на одну из кнопок, а затем сразу же нажмите на другую. Можно было бы ожидать, что после задержки вы увидите сообщения обеих кнопок. Но отображается только сообщение последней кнопки. Сообщение первой кнопки теряется.
 
 Почему кнопки мешают друг другу? Найдите и устраните проблему.
 
-\< Подсказка\>
+=== "App.js"
 
-Переменная ID последнего таймаута является общей для всех компонентов `DebouncedButton`. Вот почему нажатие на одну кнопку сбрасывает таймаут другой кнопки. Можете ли вы хранить отдельный ID таймаута для каждой кнопки?
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-\</Hint\>
+    ```js
+    let timeoutID;
 
-<!-- 0031.part.md -->
+    function DebouncedButton({ onClick, children }) {
+    	return (
+    		<button
+    			onClick={() => {
+    				clearTimeout(timeoutID);
+    				timeoutID = setTimeout(() => {
+    					onClick();
+    				}, 1000);
+    			}}
+    		>
+    			{children}
+    		</button>
+    	);
+    }
 
-```js
-let timeoutID;
+    export default function Dashboard() {
+    	return (
+    		<>
+    			<DebouncedButton
+    				onClick={() => alert('Spaceship launched!')}
+    			>
+    				Launch the spaceship
+    			</DebouncedButton>
+    			<DebouncedButton
+    				onClick={() => alert('Soup boiled!')}
+    			>
+    				Boil the soup
+    			</DebouncedButton>
+    			<DebouncedButton
+    				onClick={() => alert('Lullaby sung!')}
+    			>
+    				Sing a lullaby
+    			</DebouncedButton>
+    		</>
+    	);
+    }
+    ```
 
-function DebouncedButton({ onClick, children }) {
-    return (
-        <button
-            onClick={() => {
-                clearTimeout(timeoutID);
-                timeoutID = setTimeout(() => {
-                    onClick();
-                }, 1000);
-            }}
-        >
-            {children}
-        </button>
-    );
-}
+    </div>
 
-export default function Dashboard() {
-    return (
-        <>
-            <DebouncedButton
-                onClick={() => alert('Spaceship launched!')}
-            >
-                Launch the spaceship
-            </DebouncedButton>
-            <DebouncedButton
-                onClick={() => alert('Soup boiled!')}
-            >
-                Boil the soup
-            </DebouncedButton>
-            <DebouncedButton
-                onClick={() => alert('Lullaby sung!')}
-            >
-                Sing a lullaby
-            </DebouncedButton>
-        </>
-    );
-}
-```
+=== "Решение"
 
-<!-- 0032.part.md -->
+    ![Решение](referencing-values-with-refs-8.png)
 
-<!-- 0033.part.md -->
+???tip "Показать подсказку"
 
-```css
-button {
-    display: block;
-    margin: 10px;
-}
-```
+    Переменная ID последнего таймаута является общей для всех компонентов `DebouncedButton`. Вот почему нажатие на одну кнопку сбрасывает таймаут другой кнопки. Можете ли вы хранить отдельный ID таймаута для каждой кнопки?
 
-<!-- 0034.part.md -->
+???success "Показать решение"
 
-\<Решение\>
+    Такая переменная, как `timeoutID`, является общей для всех компонентов. Вот почему нажатие на вторую кнопку сбрасывает таймаут первой кнопки. Чтобы исправить это, вы можете хранить таймаут в ссылке. Каждая кнопка получит свой собственный ref, поэтому они не будут конфликтовать друг с другом. Обратите внимание, что при быстром нажатии на две кнопки отображаются оба сообщения.
 
-Такая переменная, как `timeoutID`, является общей для всех компонентов. Вот почему нажатие на вторую кнопку сбрасывает таймаут первой кнопки. Чтобы исправить это, вы можете хранить таймаут в ссылке. Каждая кнопка получит свой собственный ref, поэтому они не будут конфликтовать друг с другом. Обратите внимание, что при быстром нажатии на две кнопки отображаются оба сообщения.
+    === "App.js"
 
-<!-- 0035.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useRef } from 'react';
+    	```js
+    	import { useRef } from 'react';
 
-function DebouncedButton({ onClick, children }) {
-    const timeoutRef = useRef(null);
-    return (
-        <button
-            onClick={() => {
-                clearTimeout(timeoutRef.current);
-                timeoutRef.current = setTimeout(() => {
-                    onClick();
-                }, 1000);
-            }}
-        >
-            {children}
-        </button>
-    );
-}
+    	function DebouncedButton({ onClick, children }) {
+    		const timeoutRef = useRef(null);
+    		return (
+    			<button
+    				onClick={() => {
+    					clearTimeout(timeoutRef.current);
+    					timeoutRef.current = setTimeout(() => {
+    						onClick();
+    					}, 1000);
+    				}}
+    			>
+    				{children}
+    			</button>
+    		);
+    	}
 
-export default function Dashboard() {
-    return (
-        <>
-            <DebouncedButton
-                onClick={() => alert('Spaceship launched!')}
-            >
-                Launch the spaceship
-            </DebouncedButton>
-            <DebouncedButton
-                onClick={() => alert('Soup boiled!')}
-            >
-                Boil the soup
-            </DebouncedButton>
-            <DebouncedButton
-                onClick={() => alert('Lullaby sung!')}
-            >
-                Sing a lullaby
-            </DebouncedButton>
-        </>
-    );
-}
-```
+    	export default function Dashboard() {
+    		return (
+    			<>
+    				<DebouncedButton
+    					onClick={() => alert('Spaceship launched!')}
+    				>
+    					Launch the spaceship
+    				</DebouncedButton>
+    				<DebouncedButton
+    					onClick={() => alert('Soup boiled!')}
+    				>
+    					Boil the soup
+    				</DebouncedButton>
+    				<DebouncedButton
+    					onClick={() => alert('Lullaby sung!')}
+    				>
+    					Sing a lullaby
+    				</DebouncedButton>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0036.part.md -->
+    	</div>
 
-<!-- 0037.part.md -->
+    === "Решение"
 
-```css
-button {
-    display: block;
-    margin: 10px;
-}
-```
+    	![Решение](referencing-values-with-refs-8.png)
 
-<!-- 0038.part.md -->
+### 4. Прочитать последнее состояние
 
-\</Solution\>
-
-#### Прочитать последнее состояние {/_read-the-latest-state_/}
-
-В этом примере после нажатия кнопки "Отправить" происходит небольшая задержка перед отображением сообщения. Введите "hello", нажмите "Отправить", а затем быстро отредактируйте ввод снова. Несмотря на ваши правки, оповещение все равно покажет "hello" (это было значение state [на момент](/learn/state-as-a-snapshot#state-over-time) нажатия кнопки).
+В этом примере после нажатия кнопки "Отправить" происходит небольшая задержка перед отображением сообщения. Введите "hello", нажмите "Отправить", а затем быстро отредактируйте ввод снова. Несмотря на ваши правки, оповещение все равно покажет "hello" (это было значение state [на момент](state-as-a-snapshot.md) нажатия кнопки).
 
 Обычно такое поведение - это то, что вы хотите видеть в приложении. Однако иногда могут возникнуть ситуации, когда вы хотите, чтобы асинхронный код считывал _последнюю_ версию некоторого состояния. Можете ли вы придумать, как сделать так, чтобы оповещение показывало _текущий_ текст ввода, а не тот, что был в момент нажатия?
 
-<!-- 0039.part.md -->
+=== "App.js"
 
-```js
-import { useState, useRef } from 'react';
+    ```js
+    import { useState, useRef } from 'react';
 
-export default function Chat() {
-    const [text, setText] = useState('');
+    export default function Chat() {
+    	const [text, setText] = useState('');
 
-    function handleSend() {
-        setTimeout(() => {
-            alert('Sending: ' + text);
-        }, 3000);
+    	function handleSend() {
+    		setTimeout(() => {
+    			alert('Sending: ' + text);
+    		}, 3000);
+    	}
+
+    	return (
+    		<>
+    			<input
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<button onClick={handleSend}>Send</button>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <input
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <button onClick={handleSend}>Send</button>
-        </>
-    );
-}
-```
+=== "Результат"
+
+    ![Результат](referencing-values-with-refs-9.png)
 
 <!-- 0040.part.md -->
 
-\<Решение\>
+???success "Показать решение"
 
-Состояние работает [как моментальный снимок] (/learn/state-as-a-snapshot), поэтому вы не можете прочитать последнее состояние из асинхронной операции, такой как таймаут. Однако вы можете сохранить последний введенный текст в ссылке. Ссылка является изменяемой, поэтому вы можете прочитать свойство `current` в любое время. Поскольку текущий текст также используется для рендеринга, в этом примере вам понадобится _и_ переменная состояния (для рендеринга), _и_ ссылка (чтобы прочитать ее в таймауте). Вам нужно будет обновить текущее значение ref вручную.
+    Состояние работает [как моментальный снимок](state-as-a-snapshot.md), поэтому вы не можете прочитать последнее состояние из асинхронной операции, такой как таймаут. Однако вы можете сохранить последний введенный текст в ссылке. Ссылка является изменяемой, поэтому вы можете прочитать свойство `current` в любое время. Поскольку текущий текст также используется для рендеринга, в этом примере вам понадобится _и_ переменная состояния (для рендеринга), _и_ ссылка (чтобы прочитать ее в таймауте). Вам нужно будет обновить текущее значение ref вручную.
 
-<!-- 0041.part.md -->
+    === "App.js"
 
-```js
-import { useState, useRef } from 'react';
+    	```js
+    	import { useState, useRef } from 'react';
 
-export default function Chat() {
-    const [text, setText] = useState('');
-    const textRef = useRef(text);
+    	export default function Chat() {
+    		const [text, setText] = useState('');
+    		const textRef = useRef(text);
 
-    function handleChange(e) {
-        setText(e.target.value);
-        textRef.current = e.target.value;
-    }
+    		function handleChange(e) {
+    			setText(e.target.value);
+    			textRef.current = e.target.value;
+    		}
 
-    function handleSend() {
-        setTimeout(() => {
-            alert('Sending: ' + textRef.current);
-        }, 3000);
-    }
+    		function handleSend() {
+    			setTimeout(() => {
+    				alert('Sending: ' + textRef.current);
+    			}, 3000);
+    		}
 
-    return (
-        <>
-            <input value={text} onChange={handleChange} />
-            <button onClick={handleSend}>Send</button>
-        </>
-    );
-}
-```
+    		return (
+    			<>
+    				<input value={text} onChange={handleChange} />
+    				<button onClick={handleSend}>Send</button>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0042.part.md -->
+    === "Результат"
 
-\</Solution\>
+    	![Результат](referencing-values-with-refs-9.png)
 
-\</Challenges\>
+## Ссылки
 
-<!-- 0043.part.md -->
+-   [https://react.dev/learn/referencing-values-with-refs](https://react.dev/learn/referencing-values-with-refs)

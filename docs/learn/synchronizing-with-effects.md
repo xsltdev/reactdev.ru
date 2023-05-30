@@ -2,45 +2,49 @@
 
 Некоторые компоненты нуждаются в синхронизации с внешними системами. Например, вы можете захотеть управлять компонентом, не относящимся к React, на основе состояния React, установить соединение с сервером или отправлять журнал аналитики, когда компонент появляется на экране. _Эффекты_ позволяют выполнить некоторый код после рендеринга, чтобы вы могли синхронизировать свой компонент с какой-либо системой вне React.
 
--   Что такое эффекты
--   Чем эффекты отличаются от событий
--   Как объявить эффект в своем компоненте
--   Как избежать повторного запуска эффекта без необходимости
--   Почему эффекты запускаются дважды в процессе разработки и как это исправить
+!!!tip "Вы узнаете"
 
-## Что такое эффекты и чем они отличаются от событий? {/_what-are-effects-and-how-are-they-different-from-events_/}
+    -   Что такое эффекты
+    -   Чем эффекты отличаются от событий
+    -   Как объявить эффект в своем компоненте
+    -   Как избежать повторного запуска эффекта без необходимости
+    -   Почему эффекты запускаются дважды в процессе разработки и как это исправить
+
+## Что такое эффекты и чем они отличаются от событий?
 
 Прежде чем перейти к эффектам, вам необходимо ознакомиться с двумя типами логики внутри компонентов React:
 
--   **Код рендеринга** (представленный в [Describing the UI](/learn/describing-the-ui)) находится на верхнем уровне вашего компонента. Именно здесь вы берете пропсы и состояние, преобразуете их и возвращаете JSX, который вы хотите видеть на экране. [Код рендеринга должен быть чистым.](/learn/keeping-components-pure) Подобно математической формуле, он должен только _вычислять_ результат, но не делать ничего другого.
+-   **Код рендеринга** (представленный в [Describing the UI](describing-the-ui.md)) находится на верхнем уровне вашего компонента. Именно здесь вы берете пропсы и состояние, преобразуете их и возвращаете JSX, который вы хотите видеть на экране. [Код рендеринга должен быть чистым](keeping-components-pure.md). Подобно математической формуле, он должен только _вычислять_ результат, но не делать ничего другого.
 
--   **Обработчики событий** (введенные в [Добавление интерактивности](/learn/adding-interactivity)) - это вложенные функции внутри ваших компонентов, которые _делают_ вещи, а не просто вычисляют их. Обработчик события может обновить поле ввода, отправить HTTP POST-запрос для покупки товара или перевести пользователя на другой экран. Обработчики событий содержат ["побочные эффекты"](https://en.wikipedia.org/wiki/Side_effect_\(computer_science\)] (они изменяют состояние программы), вызванные определенным действием пользователя (например, нажатием кнопки или набором текста).
+-   **Обработчики событий** (введенные в [Добавление интерактивности](adding-interactivity.md)) - это вложенные функции внутри ваших компонентов, которые _делают_ вещи, а не просто вычисляют их. Обработчик события может обновить поле ввода, отправить HTTP POST-запрос для покупки товара или перевести пользователя на другой экран. Обработчики событий содержат ["побочные эффекты"](https://en.wikipedia.org/wiki/Side_effect) (они изменяют состояние программы), вызванные определенным действием пользователя (например, нажатием кнопки или набором текста).
 
 Иногда этого недостаточно. Рассмотрим компонент `ChatRoom`, который должен подключаться к серверу чата всякий раз, когда он появляется на экране. Подключение к серверу не является чистым вычислением (это побочный эффект), поэтому оно не может происходить во время рендеринга. Однако не существует какого-то конкретного события, например, щелчка мыши, которое вызывает отображение `ChatRoom`.
 
-**_Эффекты_ позволяют указать побочные эффекты, которые вызваны самим рендерингом, а не конкретным событием.** Отправка сообщения в чат - это _событие_, потому что оно непосредственно вызвано нажатием пользователем определенной кнопки. Однако установка соединения с сервером - это _эффект_, потому что он должен произойти независимо от того, какое взаимодействие вызвало появление компонента. Эффекты запускаются в конце [commit](/learn/render-and-commit) после обновления экрана. Это подходящее время для синхронизации компонентов React с какой-либо внешней системой (например, сетью или сторонней библиотекой).
+**_Эффекты_ позволяют указать побочные эффекты, которые вызваны самим рендерингом, а не конкретным событием.** Отправка сообщения в чат - это _событие_, потому что оно непосредственно вызвано нажатием пользователем определенной кнопки. Однако установка соединения с сервером - это _эффект_, потому что он должен произойти независимо от того, какое взаимодействие вызвало появление компонента. Эффекты запускаются в конце [commit](render-and-commit.md) после обновления экрана. Это подходящее время для синхронизации компонентов React с какой-либо внешней системой (например, сетью или сторонней библиотекой).
 
-Здесь и далее в этом тексте "Эффект" с заглавной буквы относится к специфическому для React определению, приведенному выше, т.е. побочный эффект, вызванный рендерингом. Для обозначения более широкого понятия программирования мы будем говорить "побочный эффект".
+!!!note ""
 
-## Возможно, вам не нужен эффект {/_you-might-not-need-an-effect_/}
+    Здесь и далее в этом тексте "Эффект" с заглавной буквы относится к специфическому для React определению, приведенному выше, т.е. побочный эффект, вызванный рендерингом. Для обозначения более широкого понятия программирования мы будем говорить "побочный эффект".
 
-**Не спешите добавлять эффекты в свои компоненты.** Помните, что Eff
+## Возможно, вам не нужен эффект
+
+**Не спешите добавлять эффекты в свои компоненты.** Помните, что эффекты обычно используются для того, чтобы "выйти" из кода React и синхронизироваться с какой-либо внешней системой. Сюда входят API браузера, сторонние виджеты, сеть и так далее. Если ваш эффект только корректирует одно состояние на основе другого состояния, возможно, [вам не нужен эффект](you-might-not-need-an-effect.md).
 
 <!-- 0001.part.md -->
 
-## Как написать эффект {/_how-to-write-an-effect_/}
+## Как написать эффект
 
 Чтобы написать эффект, выполните следующие три шага:
 
-1.  ** Объявите эффект.** По умолчанию ваш эффект будет запускаться после каждого рендеринга.
-2.  2. **Укажите зависимости эффекта.** Большинство эффектов должны запускаться только _по мере необходимости_, а не после каждого рендера. Например, анимация затухания должна запускаться только при появлении компонента. Подключение и отключение к чату должно происходить только при появлении и исчезновении компонента или при изменении чата. Вы узнаете, как управлять этим, указывая _зависимости_.
+1.  **Объявите эффект.** По умолчанию ваш эффект будет запускаться после каждого рендеринга.
+2.  **Укажите зависимости эффекта.** Большинство эффектов должны запускаться только _по мере необходимости_, а не после каждого рендера. Например, анимация затухания должна запускаться только при появлении компонента. Подключение и отключение к чату должно происходить только при появлении и исчезновении компонента или при изменении чата. Вы узнаете, как управлять этим, указывая _зависимости_.
 3.  **Добавьте очистку при необходимости.** Некоторым эффектам необходимо указать, как остановить, отменить или очистить то, что они делали. Например, "connect" требует "disconnect", "subscribe" требует "unsubscribe", а "fetch" требует либо "cancel", либо "ignore". Вы узнаете, как это сделать, вернув функцию _cleanup function_.
 
 Давайте рассмотрим каждый из этих шагов подробно.
 
-### Шаг 1: Объявление эффекта {/_step-1-declare-an-effect_/}
+### Шаг 1: Объявление эффекта
 
-Чтобы объявить эффект в своем компоненте, импортируйте [`useEffect` Hook](/reference/react/useEffect) из React:
+Чтобы объявить эффект в своем компоненте, импортируйте [`useEffect` Hook](../reference/useEffect.md) из React:
 
 <!-- 0002.part.md -->
 
@@ -77,7 +81,7 @@ function MyComponent() {
 
 <!-- 0007.part.md -->
 
-Ваш пользовательский компонент `VideoPlayer` отображает встроенный тег браузера [`<video>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video):
+Ваш пользовательский компонент `VideoPlayer` отображает встроенный тег браузера [`<video>`](https://developer.mozilla.org/docs/Web/HTML/Element/video):
 
 <!-- 0008.part.md -->
 
@@ -90,66 +94,60 @@ function VideoPlayer({ src, isPlaying }) {
 
 <!-- 0009.part.md -->
 
-Однако тег браузера `<video>` не имеет свойства `isPlaying`. Единственный способ управлять им - вручную вызвать методы [`play()`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play) и [`pause()`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/pause) на элементе DOM. **Вам нужно синхронизировать значение параметра `isPlaying`, который говорит о том, должно ли видео _в данный момент_ проигрываться, с вызовами `play()` и `pause()`.**.
+Однако тег браузера `<video>` не имеет свойства `isPlaying`. Единственный способ управлять им - вручную вызвать методы [`play()`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/play) и [`pause()`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/pause) на элементе DOM. **Вам нужно синхронизировать значение параметра `isPlaying`, который говорит о том, должно ли видео _в данный момент_ проигрываться, с вызовами `play()` и `pause()`.**
 
-Сначала нам нужно [получить ссылку](/learn/manipulating-the-dom-with-refs) на DOM-узел `<video>`.
+Сначала нам нужно [получить ссылку](manipulating-the-dom-with-refs.md) на DOM-узел `<video>`.
 
 У вас может возникнуть соблазн попытаться вызвать `play()` или `pause()` во время рендеринга, но это неправильно:
 
-<!-- 0010.part.md -->
+=== "App.js"
 
-```js
-import { useState, useRef, useEffect } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-function VideoPlayer({ src, isPlaying }) {
-    const ref = useRef(null);
+    ```js
+    import { useState, useRef, useEffect } from 'react';
 
-    if (isPlaying) {
-        ref.current.play(); // Calling these while rendering isn't allowed.
-    } else {
-        ref.current.pause(); // Also, this crashes.
+    function VideoPlayer({ src, isPlaying }) {
+    	const ref = useRef(null);
+
+    	if (isPlaying) {
+    		ref.current.play(); // Calling these while rendering isn't allowed.
+    	} else {
+    		ref.current.pause(); // Also, this crashes.
+    	}
+
+    	return <video ref={ref} src={src} loop playsInline />;
     }
 
-    return <video ref={ref} src={src} loop playsInline />;
-}
+    export default function App() {
+    	const [isPlaying, setIsPlaying] = useState(false);
+    	return (
+    		<>
+    			<button
+    				onClick={() => setIsPlaying(!isPlaying)}
+    			>
+    				{isPlaying ? 'Pause' : 'Play'}
+    			</button>
+    			<VideoPlayer
+    				isPlaying={isPlaying}
+    				src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+    			/>
+    		</>
+    	);
+    }
+    ```
 
-export default function App() {
-    const [isPlaying, setIsPlaying] = useState(false);
-    return (
-        <>
-            <button
-                onClick={() => setIsPlaying(!isPlaying)}
-            >
-                {isPlaying ? 'Pause' : 'Play'}
-            </button>
-            <VideoPlayer
-                isPlaying={isPlaying}
-                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-            />
-        </>
-    );
-}
-```
+    </div>
 
-<!-- 0011.part.md -->
+=== "Результат"
 
-<!-- 0012.part.md -->
-
-```css
-button {
-    display: block;
-    margin-bottom: 20px;
-}
-video {
-    width: 250px;
-}
-```
+    ![Результат](synchronizing-with-effects-1.png)
 
 <!-- 0013.part.md -->
 
-Причина некорректности этого кода в том, что он пытается что-то сделать с узлом DOM во время рендеринга. В React, [рендеринг должен быть чистым вычислением](/learn/keeping-components-pure) JSX и не должен содержать побочных эффектов, таких как изменение DOM.
+Причина некорректности этого кода в том, что он пытается что-то сделать с узлом DOM во время рендеринга. В React, [рендеринг должен быть чистым вычислением](keeping-components-pure.md) JSX и не должен содержать побочных эффектов, таких как изменение DOM.
 
-Более того, когда `VideoPlayer` вызывается в первый раз, его DOM еще не существует\! Еще нет узла DOM для вызова `play()` или `pause()`, потому что React не знает, какой DOM создавать, пока вы не вернете JSX.
+Более того, когда `VideoPlayer` вызывается в первый раз, его DOM еще не существует! Еще нет узла DOM для вызова `play()` или `pause()`, потому что React не знает, какой DOM создавать, пока вы не вернете JSX.
 
 Решением здесь является **обернуть побочный эффект с помощью `useEffect`, чтобы переместить его из расчета рендеринга:**.
 
@@ -181,81 +179,71 @@ function VideoPlayer({ src, isPlaying }) {
 
 Нажмите Play/Pause несколько раз и посмотрите, как видеоплеер синхронизируется со значением `isPlaying`:
 
-<!-- 0016.part.md -->
+=== "App.js"
 
-```js
-import { useState, useRef, useEffect } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-function VideoPlayer({ src, isPlaying }) {
-    const ref = useRef(null);
+    ```js
+    import { useState, useRef, useEffect } from 'react';
 
-    useEffect(() => {
-        if (isPlaying) {
-            ref.current.play();
-        } else {
-            ref.current.pause();
-        }
-    });
+    function VideoPlayer({ src, isPlaying }) {
+    	const ref = useRef(null);
 
-    return <video ref={ref} src={src} loop playsInline />;
-}
+    	useEffect(() => {
+    		if (isPlaying) {
+    			ref.current.play();
+    		} else {
+    			ref.current.pause();
+    		}
+    	});
 
-export default function App() {
-    const [isPlaying, setIsPlaying] = useState(false);
-    return (
-        <>
-            <button
-                onClick={() => setIsPlaying(!isPlaying)}
-            >
-                {isPlaying ? 'Pause' : 'Play'}
-            </button>
-            <VideoPlayer
-                isPlaying={isPlaying}
-                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-            />
-        </>
-    );
-}
-```
+    	return <video ref={ref} src={src} loop playsInline />;
+    }
 
-<!-- 0017.part.md -->
+    export default function App() {
+    	const [isPlaying, setIsPlaying] = useState(false);
+    	return (
+    		<>
+    			<button
+    				onClick={() => setIsPlaying(!isPlaying)}
+    			>
+    				{isPlaying ? 'Pause' : 'Play'}
+    			</button>
+    			<VideoPlayer
+    				isPlaying={isPlaying}
+    				src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+    			/>
+    		</>
+    	);
+    }
+    ```
 
-<!-- 0018.part.md -->
+    </div>
 
-```css
-button {
-    display: block;
-    margin-bottom: 20px;
-}
-video {
-    width: 250px;
-}
-```
+=== "Результат"
 
-<!-- 0019.part.md -->
+    ![Результат](synchronizing-with-effects-2.png)
 
 В этом примере "внешней системой", которую вы синхронизировали с состоянием React, был медиа API браузера. Вы можете использовать аналогичный подход, чтобы обернуть унаследованный не-React код (например, плагины jQuery) в декларативные компоненты React.
 
 Обратите внимание, что управление видеоплеером на практике гораздо сложнее. Вызов `play()` может не сработать, пользователь может включить или приостановить воспроизведение, используя встроенные элементы управления браузера, и так далее. Этот пример является очень упрощенным и неполным.
 
-По умолчанию Effects запускаются после _каждого_ рендера. Вот почему код, подобный этому, **произведет бесконечный цикл:**.
+!!!warning "Внимание"
 
-<!-- 0020.part.md -->
+    По умолчанию Effects запускаются после _каждого_ рендера. Вот почему код, подобный этому, **произведет бесконечный цикл:**.
 
-```js
-const [count, setCount] = useState(0);
-useEffect(() => {
-    setCount(count + 1);
-});
-```
+    ```js
+    const [count, setCount] = useState(0);
+    useEffect(() => {
+    	setCount(count + 1);
+    });
+    ```
 
-<!-- 0021.part.md -->
+    Эффекты запускаются как _результат_ рендеринга. Установка состояния _триггерирует_ рендеринг. Установить состояние сразу в Эффекте - это все равно что включить розетку в розетку. Эффект запускается, он устанавливает состояние, что вызывает повторный рендеринг, который заставляет Эффект запуститься, он снова устанавливает состояние, что вызывает еще один повторный рендеринг, и так далее.
 
-Эффекты запускаются как _результат_ рендеринга. Установка состояния _триггерирует_ рендеринг. Установить состояние сразу в Эффекте - это все равно что включить розетку в розетку. Эффект запускается, он устанавливает состояние, что вызывает повторный рендеринг, который заставляет Эффект запуститься, он снова устанавливает состояние, что вызывает еще один повторный рендеринг, и так далее.
+    Эффекты обычно должны синхронизировать ваши компоненты с _внешней_ системой. Если внешней системы нет, и вы хотите только корректировать одно состояние на основе другого состояния, [возможно, вам не нужен Эффект](you-might-not-need-an-effect.md).
 
-Эффекты обычно должны синхронизировать ваши компоненты с _внешней_ системой. Если внешней системы нет, и вы хотите только корректировать одно состояние на основе другого состояния, [возможно, вам не нужен Эффект] (/learn/you-might-not-need-an-effect).
-
-### Шаг 2: Укажите зависимости Эффекта {/_step-2-specify-the-effect-dependencies_/}
+### Шаг 2: Укажите зависимости Эффекта
 
 По умолчанию эффекты запускаются после _каждого_ рендера. Часто это **не то, что вам нужно:**.
 
@@ -264,68 +252,59 @@ useEffect(() => {
 
 Чтобы продемонстрировать проблему, вот предыдущий пример с несколькими вызовами `console.log` и текстовым вводом, который обновляет состояние родительского компонента. Обратите внимание, как ввод текста приводит к повторному запуску эффекта:
 
-<!-- 0022.part.md -->
+=== "App.js"
 
-```js
-import { useState, useRef, useEffect } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-function VideoPlayer({ src, isPlaying }) {
-    const ref = useRef(null);
+    ```js
+    import { useState, useRef, useEffect } from 'react';
 
-    useEffect(() => {
-        if (isPlaying) {
-            console.log('Calling video.play()');
-            ref.current.play();
-        } else {
-            console.log('Calling video.pause()');
-            ref.current.pause();
-        }
-    });
+    function VideoPlayer({ src, isPlaying }) {
+    	const ref = useRef(null);
 
-    return <video ref={ref} src={src} loop playsInline />;
-}
+    	useEffect(() => {
+    		if (isPlaying) {
+    			console.log('Calling video.play()');
+    			ref.current.play();
+    		} else {
+    			console.log('Calling video.pause()');
+    			ref.current.pause();
+    		}
+    	});
 
-export default function App() {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [text, setText] = useState('');
-    return (
-        <>
-            <input
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <button
-                onClick={() => setIsPlaying(!isPlaying)}
-            >
-                {isPlaying ? 'Pause' : 'Play'}
-            </button>
-            <VideoPlayer
-                isPlaying={isPlaying}
-                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-            />
-        </>
-    );
-}
-```
+    	return <video ref={ref} src={src} loop playsInline />;
+    }
 
-<!-- 0023.part.md -->
+    export default function App() {
+    	const [isPlaying, setIsPlaying] = useState(false);
+    	const [text, setText] = useState('');
+    	return (
+    		<>
+    			<input
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => setIsPlaying(!isPlaying)}
+    			>
+    				{isPlaying ? 'Pause' : 'Play'}
+    			</button>
+    			<VideoPlayer
+    				isPlaying={isPlaying}
+    				src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+    			/>
+    		</>
+    	);
+    }
+    ```
 
-<!-- 0024.part.md -->
+    </div>
 
-```css
-input,
-button {
-    display: block;
-    margin-bottom: 20px;
-}
-video {
-    width: 250px;
-}
-```
+=== "Результат"
 
-<!-- 0025.part.md -->
+    ![Результат](synchronizing-with-effects-3.png)
 
-Вы можете попросить React **пропустить ненужный повторный запуск эффекта**, указав массив _зависимостей_ в качестве второго аргумента вызова `useEffect`. Начните с добавления пустого массива `[]` в приведенный выше пример в строке 14:
+Вы можете попросить React **пропустить ненужный повторный запуск эффекта**, указав массив _зависимостей_ в качестве второго аргумента вызова `useEffect`. Начните с добавления пустого массива `[]` в приведенный выше пример:
 
 <!-- 0026.part.md -->
 
@@ -339,66 +318,57 @@ useEffect(() => {
 
 Вы должны увидеть ошибку `React Hook useEffect has a missing dependency: 'isPlaying'`:
 
-<!-- 0028.part.md -->
+=== "App.js"
 
-```js
-import { useState, useRef, useEffect } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-function VideoPlayer({ src, isPlaying }) {
-    const ref = useRef(null);
+    ```js
+    import { useState, useRef, useEffect } from 'react';
 
-    useEffect(() => {
-        if (isPlaying) {
-            console.log('Calling video.play()');
-            ref.current.play();
-        } else {
-            console.log('Calling video.pause()');
-            ref.current.pause();
-        }
-    }, []); // This causes an error
+    function VideoPlayer({ src, isPlaying }) {
+    	const ref = useRef(null);
 
-    return <video ref={ref} src={src} loop playsInline />;
-}
+    	useEffect(() => {
+    		if (isPlaying) {
+    			console.log('Calling video.play()');
+    			ref.current.play();
+    		} else {
+    			console.log('Calling video.pause()');
+    			ref.current.pause();
+    		}
+    	}, []); // This causes an error
 
-export default function App() {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [text, setText] = useState('');
-    return (
-        <>
-            <input
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <button
-                onClick={() => setIsPlaying(!isPlaying)}
-            >
-                {isPlaying ? 'Pause' : 'Play'}
-            </button>
-            <VideoPlayer
-                isPlaying={isPlaying}
-                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-            />
-        </>
-    );
-}
-```
+    	return <video ref={ref} src={src} loop playsInline />;
+    }
 
-<!-- 0029.part.md -->
+    export default function App() {
+    	const [isPlaying, setIsPlaying] = useState(false);
+    	const [text, setText] = useState('');
+    	return (
+    		<>
+    			<input
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => setIsPlaying(!isPlaying)}
+    			>
+    				{isPlaying ? 'Pause' : 'Play'}
+    			</button>
+    			<VideoPlayer
+    				isPlaying={isPlaying}
+    				src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+    			/>
+    		</>
+    	);
+    }
+    ```
 
-<!-- 0030.part.md -->
+    </div>
 
-```css
-input,
-button {
-    display: block;
-    margin-bottom: 20px;
-}
-video {
-    width: 250px;
-}
-```
+=== "Результат"
 
-<!-- 0031.part.md -->
+    ![Результат](synchronizing-with-effects-4.png)
 
 Проблема в том, что код внутри вашего Effect _зависит_ от пропса `isPlaying`, чтобы решить, что делать, но эта зависимость не была явно объявлена. Чтобы решить эту проблему, добавьте `isPlaying` в массив зависимостей:
 
@@ -419,136 +389,130 @@ useEffect(() => {
 
 Теперь все зависимости объявлены, поэтому ошибки нет. Указание `[isPlaying]` в качестве массива зависимостей говорит React, что он должен пропустить повторный запуск вашего Эффекта, если `isPlaying` будет таким же, как и во время предыдущего рендеринга. С этим изменением ввод текста в поле ввода не приводит к повторному запуску эффекта, но нажатие кнопки Play/Pause приводит к повторному запуску:
 
-<!-- 0034.part.md -->
+=== "App.js"
 
-```js
-import { useState, useRef, useEffect } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-function VideoPlayer({ src, isPlaying }) {
-    const ref = useRef(null);
+    ```js
+    import { useState, useRef, useEffect } from 'react';
+
+    function VideoPlayer({ src, isPlaying }) {
+    	const ref = useRef(null);
+
+    	useEffect(() => {
+    		if (isPlaying) {
+    			console.log('Calling video.play()');
+    			ref.current.play();
+    		} else {
+    			console.log('Calling video.pause()');
+    			ref.current.pause();
+    		}
+    	}, [isPlaying]);
+
+    	return <video ref={ref} src={src} loop playsInline />;
+    }
+
+    export default function App() {
+    	const [isPlaying, setIsPlaying] = useState(false);
+    	const [text, setText] = useState('');
+    	return (
+    		<>
+    			<input
+    				value={text}
+    				onChange={(e) => setText(e.target.value)}
+    			/>
+    			<button
+    				onClick={() => setIsPlaying(!isPlaying)}
+    			>
+    				{isPlaying ? 'Pause' : 'Play'}
+    			</button>
+    			<VideoPlayer
+    				isPlaying={isPlaying}
+    				src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+    			/>
+    		</>
+    	);
+    }
+    ```
+
+    </div>
+
+=== "Результат"
+
+    ![Результат](synchronizing-with-effects-3.png)
+
+Массив зависимостей может содержать несколько зависимостей. React пропустит повторное выполнение Эффекта только в том случае, если _все_ указанные вами зависимости имеют точно такие же значения, как и во время предыдущего рендеринга. React сравнивает значения зависимостей, используя сравнение [`Object.is`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is). Подробности смотрите в справке [`useEffect`](../reference/useEffect.md).
+
+**Обратите внимание, что вы не можете "выбирать" свои зависимости.** Вы получите ошибку lint, если указанные вами зависимости не соответствуют тому, что ожидает React на основе кода внутри вашего Effect. Это поможет отловить множество ошибок в вашем коде. Если вы не хотите, чтобы какой-то код выполнялся повторно, [_отредактируйте код самого Эффекта_, чтобы он не нуждался в этой зависимости](lifecycle-of-reactive-effects.md).
+
+!!!warning ""
+
+    Поведение без массива зависимостей и с _пустым_ массивом зависимостей `[]` отличается:
+
+    <!-- 0038.part.md -->
+
+    ```js
+    useEffect(() => {
+    	// This runs after every render
+    });
 
     useEffect(() => {
-        if (isPlaying) {
-            console.log('Calling video.play()');
-            ref.current.play();
-        } else {
-            console.log('Calling video.pause()');
-            ref.current.pause();
-        }
+    	// This runs only on mount (when the component appears)
+    }, []);
+
+    useEffect(() => {
+    	// This runs on mount *and also*
+    	// if either a or b have changed since the last render
+    }, [a, b]);
+    ```
+
+    <!-- 0039.part.md -->
+
+    Мы подробно рассмотрим, что означает "mount" в следующем шаге.
+
+!!!note "Почему ссылка была исключена из массива зависимостей?"
+
+    Этот Эффект использует и `ref`, и `isPlaying`, но только `isPlaying` объявлен как зависимость:
+
+    <!-- 0040.part.md -->
+
+    ```js
+    function VideoPlayer({ src, isPlaying }) {
+    const ref = useRef(null);
+    useEffect(() => {
+    	if (isPlaying) {
+    	ref.current.play();
+    	} else {
+    	ref.current.pause();
+    	}
     }, [isPlaying]);
+    ```
 
-    return <video ref={ref} src={src} loop playsInline />;
-}
+    <!-- 0041.part.md -->
 
-export default function App() {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [text, setText] = useState('');
-    return (
-        <>
-            <input
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-            />
-            <button
-                onClick={() => setIsPlaying(!isPlaying)}
-            >
-                {isPlaying ? 'Pause' : 'Play'}
-            </button>
-            <VideoPlayer
-                isPlaying={isPlaying}
-                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-            />
-        </>
-    );
-}
-```
+    Это происходит потому, что объект `ref` имеет _стабильную идентичность:_ React гарантирует [вы всегда будете получать один и тот же объект](../reference/useRef.md) от одного и того же вызова `useRef` при каждом рендере. Он никогда не меняется, поэтому сам по себе никогда не вызовет повторного запуска Эффекта. Поэтому не имеет значения, включаете вы его или нет. Включение тоже не имеет значения:
 
-<!-- 0035.part.md -->
+    <!-- 0042.part.md -->
 
-<!-- 0036.part.md -->
+    ```js
+    function VideoPlayer({ src, isPlaying }) {
+    const ref = useRef(null);
+    useEffect(() => {
+    	if (isPlaying) {
+    	ref.current.play();
+    	} else {
+    	ref.current.pause();
+    	}
+    }, [isPlaying, ref]);
+    ```
 
-```css
-input,
-button {
-    display: block;
-    margin-bottom: 20px;
-}
-video {
-    width: 250px;
-}
-```
+    <!-- 0043.part.md -->
 
-<!-- 0037.part.md -->
+    Функции [`set`](../reference/useState.md), возвращаемые `useState`, также имеют стабильную идентичность, поэтому их часто можно увидеть опущенными из зависимостей. Если линтер позволяет вам опустить зависимость без ошибок, это безопасно.
 
-Массив зависимостей может содержать несколько зависимостей. React пропустит повторное выполнение Эффекта только в том случае, если _все_ указанные вами зависимости имеют точно такие же значения, как и во время предыдущего рендеринга. React сравнивает значения зависимостей, используя сравнение [`Object.is`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is). Подробности смотрите в справке [`useEffect`](/reference/react/useEffect#reference).
+    Опускание всегда стабильных зависимостей работает только тогда, когда линтер "видит", что объект стабилен. Например, если `ref` передается от родительского компонента, вам придется указать его в массиве зависимостей. Однако, это хорошо, потому что вы не можете знать, всегда ли родительский компонент передает один и тот же ref, или передает один из нескольких ref условно. Таким образом, ваш Effect _будет_ зависеть от того, какая ссылка передается.
 
-**Обратите внимание, что вы не можете "выбирать" свои зависимости.** Вы получите ошибку lint, если указанные вами зависимости не соответствуют тому, что ожидает React на основе кода внутри вашего Effect. Это поможет отловить множество ошибок в вашем коде. Если вы не хотите, чтобы какой-то код выполнялся повторно, [_отредактируйте код самого Эффекта_, чтобы он не нуждался в этой зависимости](/learn/lifecycle-of-reactive-effects#what-to-do-when-you-dont-want-to-re-synchronize).
-
-Поведение без массива зависимостей и с _пустым_ массивом зависимостей `[]` отличается:
-
-<!-- 0038.part.md -->
-
-```js
-useEffect(() => {
-    // This runs after every render
-});
-
-useEffect(() => {
-    // This runs only on mount (when the component appears)
-}, []);
-
-useEffect(() => {
-    // This runs on mount *and also* if either a or b have changed since the last render
-}, [a, b]);
-```
-
-<!-- 0039.part.md -->
-
-Мы подробно рассмотрим, что означает "mount" в следующем шаге.
-
-#### Почему ссылка была исключена из массива зависимостей? {/_why-was-the-ref-omitted-fromited-from-the-dependency-array_/}
-
-Этот Эффект использует \*и `ref`, и `isPlaying`, но только `isPlaying` объявлен как зависимость:
-
-<!-- 0040.part.md -->
-
-```js
-function VideoPlayer({ src, isPlaying }) {
-  const ref = useRef(null);
-  useEffect(() => {
-    if (isPlaying) {
-      ref.current.play();
-    } else {
-      ref.current.pause();
-    }
-  }, [isPlaying]);
-```
-
-<!-- 0041.part.md -->
-
-Это происходит потому, что объект `ref` имеет _стабильную идентичность:_ React гарантирует [вы всегда будете получать один и тот же объект](/reference/react/useRef#returns) от одного и того же вызова `useRef` при каждом рендере. Он никогда не меняется, поэтому сам по себе никогда не вызовет повторного запуска Эффекта. Поэтому не имеет значения, включаете вы его или нет. Включение тоже не имеет значения:
-
-<!-- 0042.part.md -->
-
-```js
-function VideoPlayer({ src, isPlaying }) {
-  const ref = useRef(null);
-  useEffect(() => {
-    if (isPlaying) {
-      ref.current.play();
-    } else {
-      ref.current.pause();
-    }
-  }, [isPlaying, ref]);
-```
-
-<!-- 0043.part.md -->
-
-Функции [`set`](/reference/react/useState#setstate), возвращаемые `useState`, также имеют стабильную идентичность, поэтому их часто можно увидеть опущенными из зависимостей. Если линтер позволяет вам опустить зависимость без ошибок, это безопасно.
-
-Опускание всегда стабильных зависимостей работает только тогда, когда линтер "видит", что объект стабилен. Например, если `ref` передается от родительского компонента, вам придется указать его в массиве зависимостей. Однако, это хорошо, потому что вы не можете знать, всегда ли родительский компонент передает один и тот же ref, или передает один из нескольких ref условно. Таким образом, ваш Effect _будет_ зависеть от того, какая ссылка передается.
-
-### Шаг 3: Добавьте очистку при необходимости {/_step-3-add-cleanup-if-needed_/}
+### Шаг 3: Добавьте очистку при необходимости
 
 Рассмотрим другой пример. Вы пишете компонент `ChatRoom`, который должен подключаться к серверу чата при его появлении. Вам предоставлен API `createConnection()`, который возвращает объект с методами `connect()` и `disconnect()`. Как сохранить компонент подключенным, пока он отображается пользователю?
 
@@ -582,55 +546,44 @@ useEffect(() => {
 
 Давайте попробуем запустить этот код:
 
-<!-- 0048.part.md -->
+=== "App.js"
 
-```js
-import { useEffect } from 'react';
-import { createConnection } from './chat.js';
+    ```js
+    import { useEffect } from 'react';
+    import { createConnection } from './chat.js';
 
-export default function ChatRoom() {
-    useEffect(() => {
-        const connection = createConnection();
-        connection.connect();
-    }, []);
-    return <h1>Welcome to the chat!</h1>;
-}
-```
+    export default function ChatRoom() {
+    	useEffect(() => {
+    		const connection = createConnection();
+    		connection.connect();
+    	}, []);
+    	return <h1>Welcome to the chat!</h1>;
+    }
+    ```
 
-<!-- 0049.part.md -->
+=== "chat.js"
 
-<!-- 0050.part.md -->
+    ```js
+    export function createConnection() {
+    	// A real implementation would actually connect to the server
+    	return {
+    		connect() {
+    			console.log('✅ Connecting...');
+    		},
+    		disconnect() {
+    			console.log('❌ Disconnected.');
+    		},
+    	};
+    }
+    ```
 
-```js
-export function createConnection() {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log('✅ Connecting...');
-        },
-        disconnect() {
-            console.log('❌ Disconnected.');
-        },
-    };
-}
-```
+=== "Результат"
 
-<!-- 0051.part.md -->
+    ![Результат](synchronizing-with-effects-5.png)
 
-<!-- 0052.part.md -->
+Этот Эффект выполняется только при монтировании, поэтому можно ожидать, что `✅ Connecting...` будет выведен в консоль один раз. Однако, если проверить консоль, то `✅ Connecting...` выводится дважды. Почему так происходит?
 
-```css
-input {
-    display: block;
-    margin-bottom: 20px;
-}
-```
-
-<!-- 0053.part.md -->
-
-Этот Эффект выполняется только при монтировании, поэтому можно ожидать, что ` ✅ Connecting...` будет выведен в консоль один раз. \*\*Однако, если проверить консоль, то `` ✅ Connecting...'' выводится дважды. Почему так происходит?
-
-Представьте, что компонент `ChatRoom` является частью большого приложения с множеством различных экранов. Пользователь начинает свое путешествие со страницы `ChatRoom`. Компонент монтируется и вызывает `connection.connect()`. Затем представьте, что пользователь переходит на другой экран - например, на страницу настроек. Компонент `ChatRoom` размонтируется. Наконец, пользователь нажимает кнопку Back, и `ChatRoom` снова монтируется. Это установит второе соединение - но первое соединение никогда не было разрушено\! По мере того как пользователь перемещается по приложению, соединения продолжают накапливаться.
+Представьте, что компонент `ChatRoom` является частью большого приложения с множеством различных экранов. Пользователь начинает свое путешествие со страницы `ChatRoom`. Компонент монтируется и вызывает `connection.connect()`. Затем представьте, что пользователь переходит на другой экран - например, на страницу настроек. Компонент `ChatRoom` размонтируется. Наконец, пользователь нажимает кнопку Back, и `ChatRoom` снова монтируется. Это установит второе соединение - но первое соединение никогда не было разрушено! По мере того как пользователь перемещается по приложению, соединения продолжают накапливаться.
 
 Подобные ошибки легко пропустить без тщательного ручного тестирования. Чтобы помочь вам быстро обнаружить их, в процессе разработки React перемонтирует каждый компонент один раз сразу после его первоначального монтирования.
 
@@ -654,64 +607,53 @@ useEffect(() => {
 
 React будет вызывать вашу функцию очистки каждый раз перед повторным запуском Effect и последний раз, когда компонент размонтируется (удаляется). Давайте посмотрим, что произойдет, когда функция очистки будет реализована:
 
-<!-- 0056.part.md -->
+=== "App.js"
 
-```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+    ```js
+    import { useState, useEffect } from 'react';
+    import { createConnection } from './chat.js';
 
-export default function ChatRoom() {
-    useEffect(() => {
-        const connection = createConnection();
-        connection.connect();
-        return () => connection.disconnect();
-    }, []);
-    return <h1>Welcome to the chat!</h1>;
-}
-```
+    export default function ChatRoom() {
+    	useEffect(() => {
+    		const connection = createConnection();
+    		connection.connect();
+    		return () => connection.disconnect();
+    	}, []);
+    	return <h1>Welcome to the chat!</h1>;
+    }
+    ```
 
-<!-- 0057.part.md -->
+=== "chat.js"
 
-<!-- 0058.part.md -->
+    ```js
+    export function createConnection() {
+    	// A real implementation would actually connect to the server
+    	return {
+    		connect() {
+    			console.log('✅ Connecting...');
+    		},
+    		disconnect() {
+    			console.log('❌ Disconnected.');
+    		},
+    	};
+    }
+    ```
 
-```js
-export function createConnection() {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log('✅ Connecting...');
-        },
-        disconnect() {
-            console.log('❌ Disconnected.');
-        },
-    };
-}
-```
+=== "Результат"
 
-<!-- 0059.part.md -->
-
-<!-- 0060.part.md -->
-
-```css
-input {
-    display: block;
-    margin-bottom: 20px;
-}
-```
-
-<!-- 0061.part.md -->
+    ![Результат](synchronizing-with-effects-6.png)
 
 Теперь в процессе разработки вы получите три консольных журнала:
 
-1.  ` ✅ Connecting...`.
-2.  `` ❌ Отключено.
-3.  ` ✅ Подключение...`
+1.  "✅ Connecting..."
+2.  "❌ Disconnected."
+3.  "✅ Connecting..."
 
-**Это правильное поведение при разработке.** Перемонтируя ваш компонент, React проверяет, что навигация в сторону и обратно не нарушит ваш код. Отсоединение, а затем повторное присоединение - это именно то, что должно произойти\! При хорошей реализации очистки не должно быть никакой видимой пользователю разницы между запуском Эффекта один раз и запуском, очисткой и повторным запуском. Есть дополнительная пара вызовов connect/disconnect, потому что React проверяет ваш код на наличие ошибок в процессе разработки. Это нормально - не пытайтесь заставить его исчезнуть\!
+**Это правильное поведение при разработке.** Перемонтируя ваш компонент, React проверяет, что навигация в сторону и обратно не нарушит ваш код. Отсоединение, а затем повторное присоединение - это именно то, что должно произойти! При хорошей реализации очистки не должно быть никакой видимой пользователю разницы между запуском Эффекта один раз и запуском, очисткой и повторным запуском. Есть дополнительная пара вызовов connect/disconnect, потому что React проверяет ваш код на наличие ошибок в процессе разработки. Это нормально - не пытайтесь заставить его исчезнуть!
 
-**В производстве вы увидите ` ✅ Connecting...` только один раз.** Перемонтирование компонентов происходит только в процессе разработки, чтобы помочь вам найти эффекты, требующие очистки. Вы можете отключить [Строгий режим] (/reference/react/StrictMode), чтобы отказаться от такого поведения при разработке, но мы рекомендуем оставить его включенным. Это позволит вам найти множество ошибок, подобных приведенной выше.
+**В производстве вы увидите `✅ Connecting...` только один раз.** Перемонтирование компонентов происходит только в процессе разработки, чтобы помочь вам найти эффекты, требующие очистки. Вы можете отключить [Строгий режим](../reference/StrictMode.md), чтобы отказаться от такого поведения при разработке, но мы рекомендуем оставить его включенным. Это позволит вам найти множество ошибок, подобных приведенной выше.
 
-## Как обрабатывать эффект, срабатывающий дважды в разработке? {/_how-to-handle-the-effect-firing-twice-in-development_/}
+## Как обрабатывать эффект, срабатывающий дважды в разработке?
 
 React намеренно перемонтирует ваши компоненты в процессе разработки, чтобы найти ошибки, как в последнем примере. **Правильный вопрос не "как запустить Эффект один раз", а "как исправить мой Эффект, чтобы он работал после перемонтирования "**.
 
@@ -719,7 +661,7 @@ React намеренно перемонтирует ваши компонент�
 
 Большинство эффектов, которые вы будете писать, будут соответствовать одному из общих шаблонов, приведенных ниже.
 
-### Управление не-React виджетами {/_controlling-non-react-widgets_/}
+### Управление не-React виджетами
 
 Иногда вам нужно добавить виджеты пользовательского интерфейса, которые не написаны на React. Например, допустим, вы добавляете на страницу компонент карты. У него есть метод `setZoomLevel()`, и вы хотите синхронизировать уровень масштабирования с переменной состояния `zoomLevel` в коде React. Ваш Effect будет выглядеть примерно так:
 
@@ -736,7 +678,7 @@ useEffect(() => {
 
 Обратите внимание, что в этом случае не требуется никакой очистки. В процессе разработки React вызовет Effect дважды, но это не проблема, потому что вызов `setZoomLevel` дважды с одним и тем же значением ничего не делает. Это может быть немного медленнее, но это не имеет значения, потому что в продакшене он не будет перемонтироваться без необходимости.
 
-Некоторые API не позволяют вызывать их дважды подряд. Например, метод [`showModal`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal) встроенного элемента [`<dialog>`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement) бросается, если вызвать его дважды. Реализуйте функцию очистки и заставьте ее закрыть диалог:
+Некоторые API не позволяют вызывать их дважды подряд. Например, метод [`showModal`](https://developer.mozilla.org/docs/Web/API/HTMLDialogElement/showModal) встроенного элемента [`<dialog>`](https://hcdev.ru/html/dialog/) бросается, если вызвать его дважды. Реализуйте функцию очистки и заставьте ее закрыть диалог:
 
 <!-- 0064.part.md -->
 
@@ -752,7 +694,7 @@ useEffect(() => {
 
 В процессе разработки ваш Effect будет вызывать `showModal()`, затем сразу же `close()`, а затем `showModal()` снова. Это имеет такое же видимое пользователю поведение, как и однократный вызов `showModal()`, как вы увидите в продакшене.
 
-### Подписка на события {/_subscribing-to-events_/}
+### Подписка на события
 
 Если ваш Effect подписался на что-то, функция очистки должна отменить подписку:
 
@@ -773,7 +715,7 @@ useEffect(() => {
 
 При разработке ваш Effect будет вызывать `addEventListener()`, затем сразу же `removeEventListener()`, а затем `addEventListener()` снова с тем же обработчиком. Таким образом, одновременно будет только одна активная подписка. Это имеет такое же видимое пользователю поведение, как и вызов `addEventListener()` один раз, как в продакшене.
 
-### Запуск анимации {/_triggering-animations_/}
+### Запуск анимации
 
 Если ваш Эффект что-то анимирует, функция очистки должна сбросить анимацию к начальным значениям:
 
@@ -793,9 +735,9 @@ useEffect(() => {
 
 В процессе разработки непрозрачность будет установлена на `1`, затем на `0`, а затем снова на `1`. Это должно иметь такое же видимое для пользователя поведение, как и установка значения `1` напрямую, что и будет происходить на производстве. Если вы используете стороннюю библиотеку анимации с поддержкой tweening, ваша функция очистки должна вернуть временную шкалу в исходное состояние.
 
-### Получение данных {/_fetching-data_/}
+### Получение данных
 
-Если ваш Effect выполняет выборку данных, функция очистки должна либо [прервать выборку](https://developer.mozilla.org/en-US/docs/Web/API/AbortController), либо игнорировать ее результат:
+Если ваш Effect выполняет выборку данных, функция очистки должна либо [прервать выборку](https://developer.mozilla.org/docs/Web/API/AbortController), либо игнорировать ее результат:
 
 <!-- 0070.part.md -->
 
@@ -820,7 +762,7 @@ useEffect(() => {
 
 <!-- 0071.part.md -->
 
-Вы не можете "отменить" сетевой запрос, который уже произошел, но ваша функция очистки должна гарантировать, что выборка, которая уже _не актуальна_, не будет продолжать влиять на ваше приложение. Если `userId` меняется с `'Alice'' на `'Bob'', очистка гарантирует, что ответ `'Alice'' будет проигнорирован, даже если он придет после ответа `'Bob''.
+Вы не можете "отменить" сетевой запрос, который уже произошел, но ваша функция очистки должна гарантировать, что выборка, которая уже _не актуальна_, не будет продолжать влиять на ваше приложение. Если `userId` меняется с `Alice` на `Bob`, очистка гарантирует, что ответ `Alice` будет проигнорирован, даже если он придет после ответа `Bob`.
 
 **В процессе разработки вы увидите две выборки на вкладке Network.** В этом нет ничего плохого. При вышеописанном подходе первый Effect будет немедленно очищен, поэтому его копия переменной `ignore` будет установлена в `true`. Таким образом, даже если есть дополнительный запрос, он не повлияет на состояние благодаря проверке `if (!ignore)`.
 
@@ -830,31 +772,34 @@ useEffect(() => {
 
 ```js
 function TodoList() {
-  const todos = useSomeDataLibrary(`/api/user/${userId}/todos`);
-  // ...
+    const todos = useSomeDataLibrary(
+        `/api/user/${userId}/todos`
+    );
+    // ...
+}
 ```
 
 <!-- 0073.part.md -->
 
 Это не только улучшит опыт разработки, но и сделает ваше приложение более быстрым. Например, пользователю, нажавшему кнопку "Назад", не придется ждать, пока некоторые данные снова загрузятся, потому что они будут кэшированы. Вы можете либо создать такой кэш самостоятельно, либо использовать одну из многочисленных альтернатив ручной выборки данных в Effects.
 
-#### Какие существуют альтернативы ручной выборке данных в Effects? {/_what-are-good-alternatives-to-data-fetching-in-effects_/}
+!!!note "Какие существуют альтернативы ручной выборке данных в Effects?"
 
-Написание вызовов `fetch` внутри Effects является [популярным способом получения данных](https://www.robinwieruch.de/react-hooks-fetch-data/), особенно в полностью клиентских приложениях. Однако это очень ручной подход, и у него есть существенные недостатки:
+    Написание вызовов `fetch` внутри Effects является [популярным способом получения данных](https://www.robinwieruch.de/react-hooks-fetch-data/), особенно в полностью клиентских приложениях. Однако это очень ручной подход, и у него есть существенные недостатки:
 
--   **Эффекты не запускаются на сервере.** Это означает, что первоначальный HTML, отрисованный на сервере, будет содержать только состояние загрузки без каких-либо данных. Клиентский компьютер должен будет загрузить весь JavaScript и отобразить ваше приложение только для того, чтобы обнаружить, что теперь ему нужно загрузить данные. Это не очень эффективно.
--   **Получение данных непосредственно в Effects позволяет легко создавать "сетевые водопады".** Вы рендерите родительский компонент, он получает некоторые данные, рендерит дочерние компоненты, а затем они начинают получать свои данные. Если сеть не очень быстрая, это значительно медленнее, чем параллельная выборка всех данных.
--   Например, если компонент размонтируется, а затем снова монтируется, ему придется снова получать данные.
--   **Это не очень эргономично.** Существует довольно много кода, связанного с написанием вызовов `fetch` таким образом, чтобы не страдать от ошибок типа [race conditions.](https://maxrozen.com/race-conditions-fetching-data-react-with-useeffect)
+    -   **Эффекты не запускаются на сервере.** Это означает, что первоначальный HTML, отрисованный на сервере, будет содержать только состояние загрузки без каких-либо данных. Клиентский компьютер должен будет загрузить весь JavaScript и отобразить ваше приложение только для того, чтобы обнаружить, что теперь ему нужно загрузить данные. Это не очень эффективно.
+    -   **Получение данных непосредственно в Effects позволяет легко создавать "сетевые водопады".** Вы рендерите родительский компонент, он получает некоторые данные, рендерит дочерние компоненты, а затем они начинают получать свои данные. Если сеть не очень быстрая, это значительно медленнее, чем параллельная выборка всех данных.
+    -   Например, если компонент размонтируется, а затем снова монтируется, ему придется снова получать данные.
+    -   **Это не очень эргономично.** Существует довольно много кода, связанного с написанием вызовов `fetch` таким образом, чтобы не страдать от ошибок типа [race conditions.](https://maxrozen.com/race-conditions-fetching-data-react-with-useeffect)
 
-Этот список недостатков не является специфическим для React. Он применим к выборке данных при подключении с помощью любой библиотеки. Как и в случае с маршрутизацией, выборка данных не является тривиальной задачей, поэтому мы рекомендуем следующие подходы:
+    Этот список недостатков не является специфическим для React. Он применим к выборке данных при подключении с помощью любой библиотеки. Как и в случае с маршрутизацией, выборка данных не является тривиальной задачей, поэтому мы рекомендуем следующие подходы:
 
--   **Если вы используете [фреймворк](/learn/start-a-new-react-project#production-grade-react-frameworks), используйте его встроенный механизм выборки данных.** Современные фреймворки React имеют встроенные механизмы выборки данных, которые эффективны и не страдают от описанных выше подводных камней.
--   В противном случае, рассмотрите возможность использования или создания кэша на стороне клиента.\*\* Популярные решения с открытым исходным кодом включают [React Query](https://tanstack.com/query/latest), [useSWR](https://swr.vercel.app/) и [React Router 6.4+.](https://beta.reactrouter.com/en/main/start/overview) Вы также можете создать собственное решение, в этом случае вы будете использовать Effects под капотом, но добавите логику для дедупликации запросов, кэширования ответов и избежания сетевых водопадов (путем предварительной загрузки данных или поднятия требований к данным в маршрутах).
+    -   **Если вы используете [фреймворк](start-a-new-react-project.md), используйте его встроенный механизм выборки данных.** Современные фреймворки React имеют встроенные механизмы выборки данных, которые эффективны и не страдают от описанных выше подводных камней.
+    -   В противном случае, рассмотрите возможность использования или создания кэша на стороне клиента. Популярные решения с открытым исходным кодом включают [React Query](https://tanstack.com/query/latest), [useSWR](https://swr.vercel.app/) и [React Router 6.4+.](https://beta.reactrouter.com/en/main/start/overview) Вы также можете создать собственное решение, в этом случае вы будете использовать Effects под капотом, но добавите логику для дедупликации запросов, кэширования ответов и избежания сетевых водопадов (путем предварительной загрузки данных или поднятия требований к данным в маршрутах).
 
-Вы можете продолжать получать данные непосредственно в Effects, если ни один из этих подходов вам не подходит.
+    Вы можете продолжать получать данные непосредственно в Effects, если ни один из этих подходов вам не подходит.
 
-### Отправка аналитики {/_sending-analytics_/}
+### Отправка аналитики
 
 Рассмотрим этот код, который отправляет событие аналитики при посещении страницы:
 
@@ -872,9 +817,9 @@ useEffect(() => {
 
 **В производстве не будет дублирующих журналов посещений.**.
 
-Для отладки событий аналитики, которые вы отправляете, вы можете развернуть свое приложение в среде staging (которая работает в режиме production) или временно отказаться от [Strict Mode](/reference/react/StrictMode) и его проверок ремонтирования только для разработки. Вы также можете отправлять аналитику из обработчиков событий изменения маршрута вместо Effects. Для более точной аналитики, [наблюдатели пересечений](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) могут помочь отследить, какие компоненты находятся в области просмотра и как долго они остаются видимыми.
+Для отладки событий аналитики, которые вы отправляете, вы можете развернуть свое приложение в среде staging (которая работает в режиме production) или временно отказаться от [Strict Mode](../reference/StrictMode.md) и его проверок ремонтирования только для разработки. Вы также можете отправлять аналитику из обработчиков событий изменения маршрута вместо Effects. Для более точной аналитики, [наблюдатели пересечений](https://developer.mozilla.org/docs/Web/API/Intersection_Observer_API) могут помочь отследить, какие компоненты находятся в области просмотра и как долго они остаются видимыми.
 
-### Не эффект: инициализация приложения {/_not-an-effect-initializing-the-application_/}
+### Не эффект: инициализация приложения
 
 Некоторая логика должна выполняться только один раз при запуске приложения. Вы можете поместить ее за пределы ваших компонентов:
 
@@ -896,7 +841,7 @@ function App() {
 
 Это гарантирует, что такая логика выполняется только один раз после загрузки страницы браузером.
 
-### Не эффект: покупка товара {/_not-an-effect-buying-a-product_/}
+### Не эффект: покупка товара
 
 Иногда, даже если вы напишите функцию очистки, нет способа предотвратить видимые пользователю последствия запуска эффекта дважды. Например, возможно, ваш Эффект отправляет POST-запрос типа "Покупка товара":
 
@@ -928,65 +873,71 @@ function handleClick() {
 
 **Это иллюстрирует, что если перемонтирование нарушает логику вашего приложения, то обычно это позволяет обнаружить существующие ошибки.** С точки зрения пользователя, посещение страницы не должно отличаться от ее посещения, щелчка по ссылке и нажатия кнопки Back. React проверяет, соблюдают ли ваши компоненты этот принцип, перемонтируя их один раз в процессе разработки.
 
-## Putting it all together {/_putting-it-all-together_/}
+## Собираем все вместе
 
 Эта игровая площадка поможет вам "почувствовать", как Эффекты работают на практике.
 
-В этом примере используется [`setTimeout`](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout), чтобы запланировать появление консольного журнала с введенным текстом через три секунды после запуска Эффекта. Функция очистки отменяет ожидающий таймаут. Начните с нажатия кнопки "Смонтировать компонент":
+В этом примере используется [`setTimeout`](https://developer.mozilla.org/docs/Web/API/setTimeout), чтобы запланировать появление консольного журнала с введенным текстом через три секунды после запуска Эффекта. Функция очистки отменяет ожидающий таймаут. Начните с нажатия кнопки "Смонтировать компонент":
 
-<!-- 0082.part.md -->
+=== "App.js"
 
-```js
-import { useState, useEffect } from 'react';
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-function Playground() {
-    const [text, setText] = useState('a');
+    ```js
+    import { useState, useEffect } from 'react';
 
-    useEffect(() => {
-        function onTimeout() {
-            console.log('⏰ ' + text);
-        }
+    function Playground() {
+    	const [text, setText] = useState('a');
 
-        console.log('🔵 Schedule "' + text + '" log');
-        const timeoutId = setTimeout(onTimeout, 3000);
+    	useEffect(() => {
+    		function onTimeout() {
+    			console.log('⏰ ' + text);
+    		}
 
-        return () => {
-            console.log('🟡 Cancel "' + text + '" log');
-            clearTimeout(timeoutId);
-        };
-    }, [text]);
+    		console.log('🔵 Schedule "' + text + '" log');
+    		const timeoutId = setTimeout(onTimeout, 3000);
 
-    return (
-        <>
-            <label>
-                What to log:{' '}
-                <input
-                    value={text}
-                    onChange={(e) =>
-                        setText(e.target.value)
-                    }
-                />
-            </label>
-            <h1>{text}</h1>
-        </>
-    );
-}
+    		return () => {
+    			console.log('🟡 Cancel "' + text + '" log');
+    			clearTimeout(timeoutId);
+    		};
+    	}, [text]);
 
-export default function App() {
-    const [show, setShow] = useState(false);
-    return (
-        <>
-            <button onClick={() => setShow(!show)}>
-                {show ? 'Unmount' : 'Mount'} the component
-            </button>
-            {show && <hr />}
-            {show && <Playground />}
-        </>
-    );
-}
-```
+    	return (
+    		<>
+    			<label>
+    				What to log:{' '}
+    				<input
+    					value={text}
+    					onChange={(e) =>
+    						setText(e.target.value)
+    					}
+    				/>
+    			</label>
+    			<h1>{text}</h1>
+    		</>
+    	);
+    }
 
-<!-- 0083.part.md -->
+    export default function App() {
+    	const [show, setShow] = useState(false);
+    	return (
+    		<>
+    			<button onClick={() => setShow(!show)}>
+    				{show ? 'Unmount' : 'Mount'} the component
+    			</button>
+    			{show && <hr />}
+    			{show && <Playground />}
+    		</>
+    	);
+    }
+    ```
+
+    </div>
+
+=== "Результат"
+
+    ![Результат](synchronizing-with-effects-7.png)
 
 Сначала вы увидите три журнала: `Schedule "a" log`, `Cancel "a" log`, и `Schedule "a" log` снова. Через три секунды появится также журнал с надписью `a`. Как вы узнали ранее, дополнительная пара schedule/cancel нужна потому, что React перемонтирует компонент один раз в процессе разработки, чтобы убедиться, что вы хорошо реализовали очистку.
 
@@ -994,368 +945,198 @@ export default function App() {
 
 Введите что-нибудь в поле ввода, а затем сразу же нажмите "Размонтировать компонент". Обратите внимание, как размонтирование очищает Эффект последнего рендера. Здесь он очищает последний таймаут, прежде чем у него появится шанс сработать.
 
-Наконец, отредактируйте компонент выше и закомментируйте функцию очистки, чтобы таймауты не отменялись. Попробуйте быстро набрать `abcde`. Что, по вашему мнению, произойдет через три секунды? Будет ли `console.log(text)` внутри тайм-аута печатать _последний_ `текст` и выдавать пять логов `abcde`? Попробуйте, чтобы проверить свою интуицию\!
+Наконец, отредактируйте компонент выше и закомментируйте функцию очистки, чтобы таймауты не отменялись. Попробуйте быстро набрать `abcde`. Что, по вашему мнению, произойдет через три секунды? Будет ли `console.log(text)` внутри тайм-аута печатать _последний_ `текст` и выдавать пять логов `abcde`? Попробуйте, чтобы проверить свою интуицию!
 
-Через три секунды вы должны увидеть последовательность логов (`a`, `ab`, `abc`, `abcd` и `abcde`), а не пять логов `abcde`. **Каждый Эффект "захватывает" значение `text` из соответствующего рендера.** Не имеет значения, что состояние `text` изменилось: Эффект из рендера с `text = 'ab'` всегда будет видеть `'ab'`. Другими словами, эффекты из каждого рендера изолированы друг от друга. Если вам интересно, как это работает, вы можете прочитать о [closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures).
+Через три секунды вы должны увидеть последовательность логов (`a`, `ab`, `abc`, `abcd` и `abcde`), а не пять логов `abcde`. **Каждый Эффект "захватывает" значение `text` из соответствующего рендера.** Не имеет значения, что состояние `text` изменилось: Эффект из рендера с `text = 'ab'` всегда будет видеть `'ab'`. Другими словами, эффекты из каждого рендера изолированы друг от друга. Если вам интересно, как это работает, вы можете прочитать о [closures](https://developer.mozilla.org/docs/Web/JavaScript/Closures).
 
-#### Каждый рендер имеет свои собственные Эффекты {/_each-render-has-its-own-effects_/}
+!!!note "Каждый рендер имеет свои собственные Эффекты"
 
-Вы можете думать об `useEffect` как о "прикреплении" части поведения к выводу рендера. Рассмотрим этот Эффект:
+    Вы можете думать об `useEffect` как о "прикреплении" части поведения к выводу рендера. Рассмотрим этот Эффект:
 
-<!-- 0084.part.md -->
+    ```js
+    export default function ChatRoom({ roomId }) {
+    	useEffect(() => {
+    		const connection = createConnection(roomId);
+    		connection.connect();
+    		return () => connection.disconnect();
+    	}, [roomId]);
 
-```js
-export default function ChatRoom({ roomId }) {
-    useEffect(() => {
-        const connection = createConnection(roomId);
-        connection.connect();
-        return () => connection.disconnect();
-    }, [roomId]);
+    	return <h1>Welcome to {roomId}!</h1>;
+    }
+    ```
 
-    return <h1>Welcome to {roomId}!</h1>;
-}
-```
+    Давайте посмотрим, что именно происходит, когда пользователь перемещается по приложению.
 
-<!-- 0085.part.md -->
+    ### Первоначальный рендер
 
-Давайте посмотрим, что именно происходит, когда пользователь перемещается по приложению.
+    Пользователь посещает `<ChatRoom roomId="general" />`. Давайте [мысленно заменим](state-as-a-snapshot.md) `roomId` на `'general'`:
 
-#### Initial render {/_initial-render_/}
+    ```js
+    // JSX for the first render (roomId = "general")
+    return <h1>Welcome to general!</h1>;
+    ```
 
-Пользователь посещает `<ChatRoom roomId="general" />`. Давайте [мысленно заменим](/learn/state-as-a-snapshot#rendering-takes-a-snapshot-in-time) `roomId` на `'general'`:
+    **Эффект также является частью вывода рендеринга.** Эффект первого рендеринга становится:
 
-<!-- 0086.part.md -->
+    ```js
+    // Effect for the first render (roomId = "general")
+    () => {
+    	const connection = createConnection('general');
+    	connection.connect();
+    	return () => connection.disconnect();
+    },
+    	// Dependencies for the first render (roomId = "general")
+    	['general'];
+    ```
 
-```js
-// JSX for the first render (roomId = "general")
-return <h1>Welcome to general!</h1>;
-```
+    React запускает этот Эффект, который подключается к чату `'general'`.
 
-<!-- 0087.part.md -->
+    ### Повторный рендеринг с теми же зависимостями
 
-** Эффект также является частью вывода рендеринга.** Эффект первого рендеринга становится:
+    Допустим, `<ChatRoom roomId="general" />` повторно рендерится. Вывод JSX будет таким же:
 
-<!-- 0088.part.md -->
+    ```js
+    // JSX for the second render (roomId = "general")
+    return <h1>Welcome to general!</h1>;
+    ```
 
-```js
-// Effect for the first render (roomId = "general")
-() => {
-    const connection = createConnection('general');
-    connection.connect();
-    return () => connection.disconnect();
-},
-    // Dependencies for the first render (roomId = "general")
-    ['general'];
-```
+    React видит, что вывод рендера не изменился, поэтому он не обновляет DOM.
 
-<!-- 0089.part.md -->
+    Эффект от второго рендеринга выглядит следующим образом:
 
-React запускает этот Эффект, который подключается к чату `'general'`.
+    ```js
+    // Effect for the second render (roomId = "general")
+    () => {
+    	const connection = createConnection('general');
+    	connection.connect();
+    	return () => connection.disconnect();
+    },
+    	// Dependencies for the second render (roomId = "general")
+    	['general'];
+    ```
 
-#### Re-render with same dependencies {/_re-render-with-same-dependencies_/}
+    React сравнивает `['general']` из второго рендера с `['general']` из первого рендера. **Поскольку все зависимости одинаковы, React _игнорирует_ Effect из второго рендера.** Он никогда не будет вызван.
 
-Допустим, `<ChatRoom roomId="general" />` повторно рендерится. Вывод JSX будет таким же:
+    ### Повторный рендеринг с различными зависимостями
 
-<!-- 0090.part.md -->
+    Затем пользователь посещает `<ChatRoom roomId="travel" />`. На этот раз компонент возвращает другой JSX:
 
-```js
-// JSX for the second render (roomId = "general")
-return <h1>Welcome to general!</h1>;
-```
+    ```js
+    // JSX for the third render (roomId = "travel")
+    return <h1>Welcome to travel!</h1>;
+    ```
 
-<!-- 0091.part.md -->
+    React обновляет DOM, чтобы изменить `"Welcome to general"` на `"Welcome to travel"`.
 
-React видит, что вывод рендера не изменился, поэтому он не обновляет DOM.
+    Эффект от третьего рендера выглядит следующим образом:
 
-Эффект от второго рендеринга выглядит следующим образом:
+    ```js
+    // Effect for the third render (roomId = "travel")
+    () => {
+    	const connection = createConnection('travel');
+    	connection.connect();
+    	return () => connection.disconnect();
+    },
+    	// Dependencies for the third render (roomId = "travel")
+    	['travel'];
+    ```
 
-<!-- 0092.part.md -->
+    React сравнивает `['travel']` из третьего рендера с `['general']` из второго рендера. Одна зависимость отличается: `Object.is('travel', 'general')` - `false`. Эффект не может быть пропущен.
 
-```js
-// Effect for the second render (roomId = "general")
-() => {
-    const connection = createConnection('general');
-    connection.connect();
-    return () => connection.disconnect();
-},
-    // Dependencies for the second render (roomId = "general")
-    ['general'];
-```
+    **Прежде чем React сможет применить эффект из третьего рендера, ему нужно очистить последний эффект, который _уже_ был запущен.** Эффект второго рендера был пропущен, поэтому React нужно очистить эффект первого рендера. Если вы прокрутите страницу до первого рендера, то увидите, что его очистка вызывает `disconnect()` для соединения, которое было создано с помощью `createConnection('general')`. Это отключает приложение от чата `'general'`.
 
-<!-- 0093.part.md -->
+    После этого React запускает третий эффект рендеринга. Он подключается к чату `'travel'`.
 
-React сравнивает `['general']` из второго рендера с `['general']` из первого рендера. **Поскольку все зависимости одинаковы, React _игнорирует_ Effect из второго рендера.** Он никогда не будет вызван.
+    ### Размонтирование
 
-#### Re-render with different dependencies {/_re-render-with-different-dependencies_/}
+    Наконец, допустим, пользователь переходит в другое место, и компонент `ChatRoom` размонтируется. React запускает функцию очистки последнего эффекта. Последний Эффект был создан на третьем рендере. Очистка третьего рендера уничтожает соединение `createConnection('travel')`. Поэтому приложение отсоединяется от комнаты `'travel'`.
 
-Затем пользователь посещает `<ChatRoom roomId="travel" />`. На этот раз компонент возвращает другой JSX:
+    ### Поведение только для разработчиков
 
-<!-- 0094.part.md -->
+    Когда включен [Строгий режим](../reference/StrictMode.md), React перемонтирует каждый компонент один раз после монтирования (состояние и DOM сохраняются). Это помогает найти эффекты, которые нуждаются в очистке, и выявляет ошибки, такие как условия гонки, на ранней стадии. Кроме того, React будет перемонтировать эффекты всякий раз, когда вы сохраняете файл в процессе разработки. Оба эти поведения предназначены только для разработки.
 
-```js
-// JSX for the third render (roomId = "travel")
-return <h1>Welcome to travel!</h1>;
-```
+!!!note "Итоги"
 
-<!-- 0095.part.md -->
+    -   В отличие от событий, эффекты вызываются самим рендерингом, а не конкретным взаимодействием.
+    -   Эффекты позволяют синхронизировать компонент с какой-либо внешней системой (сторонний API, сеть и т.д.).
+    -   По умолчанию эффекты запускаются после каждого рендеринга (включая начальный).
+    -   React пропустит эффект, если все его зависимости имеют те же значения, что и во время последнего рендера.
+    -   Вы не можете "выбрать" свои зависимости. Они определяются кодом внутри Эффекта.
+    -   Пустой массив зависимостей (`[]`) соответствует "монтированию" компонента, то есть его добавлению на экран.
+    -   В строгом режиме React монтирует компоненты дважды (только в разработке\!) для стресс-тестирования ваших Эффектов.
+    -   Если ваш Эффект сломается из-за повторного монтирования, вам необходимо реализовать функцию очистки.
+    -   React будет вызывать вашу функцию очистки перед следующим запуском Эффекта и во время повторного монтирования.
 
-React обновляет DOM, чтобы изменить `"Welcome to general"` на `"Welcome to travel"`.
+## Задачи
 
-Эффект от третьего рендера выглядит следующим образом:
-
-<!-- 0096.part.md -->
-
-```js
-// Effect for the third render (roomId = "travel")
-() => {
-    const connection = createConnection('travel');
-    connection.connect();
-    return () => connection.disconnect();
-},
-    // Dependencies for the third render (roomId = "travel")
-    ['travel'];
-```
-
-<!-- 0097.part.md -->
-
-React сравнивает `['travel']` из третьего рендера с `['general']` из второго рендера. Одна зависимость отличается: `Object.is('travel', 'general')` - `false`. Эффект не может быть пропущен.
-
-**Прежде чем React сможет применить эффект из третьего рендера, ему нужно очистить последний эффект, который _уже_ был запущен.** Эффект второго рендера был пропущен, поэтому React нужно очистить эффект первого рендера. Если вы прокрутите страницу до первого рендера, то увидите, что его очистка вызывает `disconnect()` для соединения, которое было создано с помощью `createConnection('general')`. Это отключает приложение от чата `'general'`.
-
-После этого React запускает третий эффект рендеринга. Он подключается к чату `'travel'`.
-
-#### Unmount {/_unmount_/}
-
-Наконец, допустим, пользователь переходит в другое место, и компонент `ChatRoom` размонтируется. React запускает функцию очистки последнего эффекта. Последний Эффект был создан на третьем рендере. Очистка третьего рендера уничтожает соединение `createConnection('travel')`. Поэтому приложение отсоединяется от комнаты `'travel'`.
-
-#### Поведение только для разработчиков {/_development-only-behaviors_/}
-
-Когда включен [Строгий режим](/reference/react/StrictMode), React перемонтирует каждый компонент один раз после монтирования (состояние и DOM сохраняются). Это [помогает найти эффекты, которые нуждаются в очистке](#step-3-add-cleanup-if-needed), и выявляет ошибки, такие как условия гонки, на ранней стадии. Кроме того, React будет перемонтировать эффекты всякий раз, когда вы сохраняете файл в процессе разработки. Оба эти поведения предназначены только для разработки.
-
-\<Recap\>
-
--   В отличие от событий, эффекты вызываются самим рендерингом, а не конкретным взаимодействием.
--   Эффекты позволяют синхронизировать компонент с какой-либо внешней системой (сторонний API, сеть и т.д.).
--   По умолчанию эффекты запускаются после каждого рендеринга (включая начальный).
--   React пропустит эффект, если все его зависимости имеют те же значения, что и во время последнего рендера.
--   Вы не можете "выбрать" свои зависимости. Они определяются кодом внутри Эффекта.
--   Пустой массив зависимостей (`[]`) соответствует "монтированию" компонента, то есть его добавлению на экран.
--   В строгом режиме React монтирует компоненты дважды (только в разработке\!) для стресс-тестирования ваших Эффектов.
--   Если ваш Эффект сломается из-за повторного монтирования, вам необходимо реализовать функцию очистки.
--   React будет вызывать вашу функцию очистки перед следующим запуском Эффекта и во время повторного монтирования.
-
-\</Recap\>
-
-\<Проблемы\>
-
-#### Focus a field on mount {/_focus-a-field-on-mount_/}
+### 1. Фокусировка на поле после монтирования
 
 В этом примере форма отображает компонент `<MyInput />`.
 
-Используйте метод [`focus()`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) input'а, чтобы заставить `MyInput` автоматически фокусироваться, когда он появляется на экране. Уже есть закомментированная реализация, но она не совсем работает. Разберитесь, почему он не работает, и исправьте это. (Если вы знакомы с атрибутом `autoFocus`, представьте, что его не существует: мы реализуем ту же функциональность с нуля).
+Используйте метод [`focus()`](https://developer.mozilla.org/docs/Web/API/HTMLElement/focus) input'а, чтобы заставить `MyInput` автоматически фокусироваться, когда он появляется на экране. Уже есть закомментированная реализация, но она не совсем работает. Разберитесь, почему он не работает, и исправьте это. (Если вы знакомы с атрибутом `autoFocus`, представьте, что его не существует: мы реализуем ту же функциональность с нуля).
 
-<!-- 0098.part.md -->
+=== "MyInput.js"
 
-```js
-import { useEffect, useRef } from 'react';
+    ```js
+    import { useEffect, useRef } from 'react';
 
-export default function MyInput({ value, onChange }) {
-    const ref = useRef(null);
+    export default function MyInput({ value, onChange }) {
+    	const ref = useRef(null);
 
-    // TODO: This doesn't quite work. Fix it.
-    // ref.current.focus()
+    	// TODO: This doesn't quite work. Fix it.
+    	// ref.current.focus()
 
-    return (
-        <input
-            ref={ref}
-            value={value}
-            onChange={onChange}
-        />
-    );
-}
-```
+    	return (
+    		<input
+    			ref={ref}
+    			value={value}
+    			onChange={onChange}
+    		/>
+    	);
+    }
+    ```
 
-<!-- 0099.part.md -->
+=== "Результат"
 
-<!-- 0100.part.md -->
-
-```js
-import { useState } from 'react';
-import MyInput from './MyInput.js';
-
-export default function Form() {
-    const [show, setShow] = useState(false);
-    const [name, setName] = useState('Taylor');
-    const [upper, setUpper] = useState(false);
-    return (
-        <>
-            <button onClick={() => setShow((s) => !s)}>
-                {show ? 'Hide' : 'Show'} form
-            </button>
-            <br />
-            <hr />
-            {show && (
-                <>
-                    <label>
-                        Enter your name:
-                        <MyInput
-                            value={name}
-                            onChange={(e) =>
-                                setName(e.target.value)
-                            }
-                        />
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={upper}
-                            onChange={(e) =>
-                                setUpper(e.target.checked)
-                            }
-                        />
-                        Make it uppercase
-                    </label>
-                    <p>
-                        Hello,{' '}
-                        <b>
-                            {upper
-                                ? name.toUpperCase()
-                                : name}
-                        </b>
-                    </p>
-                </>
-            )}
-        </>
-    );
-}
-```
-
-<!-- 0101.part.md -->
-
-<!-- 0102.part.md -->
-
-```css
-label {
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-body {
-    min-height: 150px;
-}
-```
-
-<!-- 0103.part.md -->
+    ![Результат](synchronizing-with-effects-8.png)
 
 Чтобы убедиться, что ваше решение работает, нажмите "Показать форму" и убедитесь, что ввод получает фокус (становится выделенным и курсор помещается внутрь). Нажмите "Скрыть форму" и снова "Показать форму". Убедитесь, что вход снова выделен.
 
 `MyInput` должен фокусироваться только _при монтаже_, а не после каждого рендера. Чтобы убедиться в правильности поведения, нажмите "Показать форму", а затем несколько раз нажмите на флажок "Сделать прописными". Нажатие на флажок не должно _не_ фокусировать ввод над ним.
 
-\<Решение\>
+???success "Показать решение"
 
-Вызов `ref.current.focus()` во время рендеринга является неправильным, потому что это _побочный эффект_. Побочные эффекты должны быть либо помещены в обработчик событий, либо объявлены с `useEffect`. В данном случае побочный эффект _вызван_ появлением компонента, а не каким-либо конкретным взаимодействием, поэтому имеет смысл поместить его в Effect.
+    Вызов `ref.current.focus()` во время рендеринга является неправильным, потому что это _побочный эффект_. Побочные эффекты должны быть либо помещены в обработчик событий, либо объявлены с `useEffect`. В данном случае побочный эффект _вызван_ появлением компонента, а не каким-либо конкретным взаимодействием, поэтому имеет смысл поместить его в Effect.
 
-Чтобы исправить ошибку, оберните вызов `ref.current.focus()` в объявление Effect. Затем, чтобы этот Эффект запускался только при монтировании, а не после каждого рендера, добавьте к нему пустые зависимости `[]`.
+    Чтобы исправить ошибку, оберните вызов `ref.current.focus()` в объявление Effect. Затем, чтобы этот Эффект запускался только при монтировании, а не после каждого рендера, добавьте к нему пустые зависимости `[]`.
 
-<!-- 0104.part.md -->
+    === "MyInput.js"
 
-```js
-import { useEffect, useRef } from 'react';
+    	```js
+    	import { useEffect, useRef } from 'react';
 
-export default function MyInput({ value, onChange }) {
-    const ref = useRef(null);
+    	export default function MyInput({ value, onChange }) {
+    		const ref = useRef(null);
 
-    useEffect(() => {
-        ref.current.focus();
-    }, []);
+    		useEffect(() => {
+    			ref.current.focus();
+    		}, []);
 
-    return (
-        <input
-            ref={ref}
-            value={value}
-            onChange={onChange}
-        />
-    );
-}
-```
+    		return (
+    			<input
+    				ref={ref}
+    				value={value}
+    				onChange={onChange}
+    			/>
+    		);
+    	}
+    	```
 
-<!-- 0105.part.md -->
+    === "Результат"
 
-<!-- 0106.part.md -->
+    	![Результат](synchronizing-with-effects-8.png)
 
-```js
-import { useState } from 'react';
-import MyInput from './MyInput.js';
-
-export default function Form() {
-    const [show, setShow] = useState(false);
-    const [name, setName] = useState('Taylor');
-    const [upper, setUpper] = useState(false);
-    return (
-        <>
-            <button onClick={() => setShow((s) => !s)}>
-                {show ? 'Hide' : 'Show'} form
-            </button>
-            <br />
-            <hr />
-            {show && (
-                <>
-                    <label>
-                        Enter your name:
-                        <MyInput
-                            value={name}
-                            onChange={(e) =>
-                                setName(e.target.value)
-                            }
-                        />
-                    </label>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={upper}
-                            onChange={(e) =>
-                                setUpper(e.target.checked)
-                            }
-                        />
-                        Make it uppercase
-                    </label>
-                    <p>
-                        Hello,{' '}
-                        <b>
-                            {upper
-                                ? name.toUpperCase()
-                                : name}
-                        </b>
-                    </p>
-                </>
-            )}
-        </>
-    );
-}
-```
-
-<!-- 0107.part.md -->
-
-<!-- 0108.part.md -->
-
-```css
-label {
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-body {
-    min-height: 150px;
-}
-```
-
-<!-- 0109.part.md -->
-
-\</Solution\>
-
-#### Фокусировка поля условно {/_focus-a-field-conditionally_/}
+### 2. Фокусировка поля условно
 
 Эта форма отображает два компонента `<MyInput />`.
 
@@ -1365,529 +1146,283 @@ body {
 
 <!-- 0110.part.md -->
 
-```js
-import { useEffect, useRef } from 'react';
+=== "App.js"
 
-export default function MyInput({
-    shouldFocus,
-    value,
-    onChange,
-}) {
-    const ref = useRef(null);
+    ```js
+    import { useEffect, useRef } from 'react';
 
-    // TODO: call focus() only if shouldFocus is true.
-    useEffect(() => {
-        ref.current.focus();
-    }, []);
+    export default function MyInput({
+    	shouldFocus,
+    	value,
+    	onChange,
+    }) {
+    	const ref = useRef(null);
 
-    return (
-        <input
-            ref={ref}
-            value={value}
-            onChange={onChange}
-        />
-    );
-}
-```
+    	// TODO: call focus() only if shouldFocus is true.
+    	useEffect(() => {
+    		ref.current.focus();
+    	}, []);
 
-<!-- 0111.part.md -->
+    	return (
+    		<input
+    			ref={ref}
+    			value={value}
+    			onChange={onChange}
+    		/>
+    	);
+    }
+    ```
 
-<!-- 0112.part.md -->
+=== "Результат"
 
-```js
-import { useState } from 'react';
-import MyInput from './MyInput.js';
-
-export default function Form() {
-    const [show, setShow] = useState(false);
-    const [firstName, setFirstName] = useState('Taylor');
-    const [lastName, setLastName] = useState('Swift');
-    const [upper, setUpper] = useState(false);
-    const name = firstName + ' ' + lastName;
-    return (
-        <>
-            <button onClick={() => setShow((s) => !s)}>
-                {show ? 'Hide' : 'Show'} form
-            </button>
-            <br />
-            <hr />
-            {show && (
-                <>
-                    <label>
-                        Enter your first name:
-                        <MyInput
-                            value={firstName}
-                            onChange={(e) =>
-                                setFirstName(e.target.value)
-                            }
-                            shouldFocus={true}
-                        />
-                    </label>
-                    <label>
-                        Enter your last name:
-                        <MyInput
-                            value={lastName}
-                            onChange={(e) =>
-                                setLastName(e.target.value)
-                            }
-                            shouldFocus={false}
-                        />
-                    </label>
-                    <p>
-                        Hello,{' '}
-                        <b>
-                            {upper
-                                ? name.toUpperCase()
-                                : name}
-                        </b>
-                    </p>
-                </>
-            )}
-        </>
-    );
-}
-```
-
-<!-- 0113.part.md -->
-
-<!-- 0114.part.md -->
-
-```css
-label {
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-body {
-    min-height: 150px;
-}
-```
-
-<!-- 0115.part.md -->
+    ![Результат](synchronizing-with-effects-9.png)
 
 Чтобы проверить ваше решение, нажмите "Показать форму" и "Скрыть форму" несколько раз. Когда форма появится, только _первый_ вход должен быть сфокусирован. Это происходит потому, что родительский компонент отображает первый вход с `shouldFocus={true}`, а второй вход с `shouldFocus={false}`. Также проверьте, что оба ввода по-прежнему работают и вы можете вводить текст в оба из них.
 
-\< Подсказка\>
+???tip "Показать подсказку"
 
-Вы не можете объявить эффект условно, но ваш эффект может включать условную логику.
+    Вы не можете объявить эффект условно, но ваш эффект может включать условную логику.
 
-\</Hint\>
+???success "Показать решение"
 
-\<Решение\>
+    Поместите условную логику внутрь Эффекта. Вам нужно будет указать `shouldFocus` как зависимость, потому что вы используете его внутри Эффекта. (Это означает, что если `shouldFocus` какого-либо ввода изменится с `false` на `true`, он сфокусируется после монтирования).
 
-Поместите условную логику внутрь Эффекта. Вам нужно будет указать `shouldFocus` как зависимость, потому что вы используете его внутри Эффекта. (Это означает, что если `shouldFocus` какого-либо ввода изменится с `false` на `true`, он сфокусируется после монтирования).
+    === "MyInput.js"
 
-<!-- 0116.part.md -->
+    	```js
+    	import { useEffect, useRef } from 'react';
 
-```js
-import { useEffect, useRef } from 'react';
+    	export default function MyInput({
+    		shouldFocus,
+    		value,
+    		onChange,
+    	}) {
+    		const ref = useRef(null);
 
-export default function MyInput({
-    shouldFocus,
-    value,
-    onChange,
-}) {
-    const ref = useRef(null);
+    		useEffect(() => {
+    			if (shouldFocus) {
+    				ref.current.focus();
+    			}
+    		}, [shouldFocus]);
 
-    useEffect(() => {
-        if (shouldFocus) {
-            ref.current.focus();
-        }
-    }, [shouldFocus]);
+    		return (
+    			<input
+    				ref={ref}
+    				value={value}
+    				onChange={onChange}
+    			/>
+    		);
+    	}
+    	```
 
-    return (
-        <input
-            ref={ref}
-            value={value}
-            onChange={onChange}
-        />
-    );
-}
-```
+    === "Результат"
 
-<!-- 0117.part.md -->
+    	![Результат](synchronizing-with-effects-10.png)
 
-<!-- 0118.part.md -->
+### 3. Исправьте интервал, который срабатывает дважды
 
-```js
-import { useState } from 'react';
-import MyInput from './MyInput.js';
-
-export default function Form() {
-    const [show, setShow] = useState(false);
-    const [firstName, setFirstName] = useState('Taylor');
-    const [lastName, setLastName] = useState('Swift');
-    const [upper, setUpper] = useState(false);
-    const name = firstName + ' ' + lastName;
-    return (
-        <>
-            <button onClick={() => setShow((s) => !s)}>
-                {show ? 'Hide' : 'Show'} form
-            </button>
-            <br />
-            <hr />
-            {show && (
-                <>
-                    <label>
-                        Enter your first name:
-                        <MyInput
-                            value={firstName}
-                            onChange={(e) =>
-                                setFirstName(e.target.value)
-                            }
-                            shouldFocus={true}
-                        />
-                    </label>
-                    <label>
-                        Enter your last name:
-                        <MyInput
-                            value={lastName}
-                            onChange={(e) =>
-                                setLastName(e.target.value)
-                            }
-                            shouldFocus={false}
-                        />
-                    </label>
-                    <p>
-                        Hello,{' '}
-                        <b>
-                            {upper
-                                ? name.toUpperCase()
-                                : name}
-                        </b>
-                    </p>
-                </>
-            )}
-        </>
-    );
-}
-```
-
-<!-- 0119.part.md -->
-
-<!-- 0120.part.md -->
-
-```css
-label {
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-body {
-    min-height: 150px;
-}
-```
-
-<!-- 0121.part.md -->
-
-\</Solution\>
-
-#### Исправьте интервал, который срабатывает дважды {/_fix-an-interval-that-fires-twice_/}
-
-Этот компонент `Counter` отображает счетчик, который должен увеличиваться каждую секунду. При монтировании он вызывает [`setInterval`.](https://developer.mozilla.org/en-US/docs/Web/API/setInterval) Это заставляет функцию `onTick` выполняться каждую секунду. Функция `onTick` увеличивает счетчик.
+Этот компонент `Counter` отображает счетчик, который должен увеличиваться каждую секунду. При монтировании он вызывает [`setInterval`.](https://developer.mozilla.org/docs/Web/API/setInterval) Это заставляет функцию `onTick` выполняться каждую секунду. Функция `onTick` увеличивает счетчик.
 
 Однако вместо того, чтобы увеличиваться один раз в секунду, она увеличивается дважды. Почему так происходит? Найдите причину ошибки и исправьте ее.
 
-\< Подсказка\>
+=== "Counter.js"
 
-Помните, что `setInterval` возвращает ID интервала, который вы можете передать в [`clearInterval`](https://developer.mozilla.org/en-US/docs/Web/API/clearInterval), чтобы остановить интервал.
+    ```js
+    import { useState, useEffect } from 'react';
 
-\</Hint\>
+    export default function Counter() {
+    	const [count, setCount] = useState(0);
 
-<!-- 0122.part.md -->
+    	useEffect(() => {
+    		function onTick() {
+    			setCount((c) => c + 1);
+    		}
 
-```js
-import { useState, useEffect } from 'react';
+    		setInterval(onTick, 1000);
+    	}, []);
 
-export default function Counter() {
-    const [count, setCount] = useState(0);
+    	return <h1>{count}</h1>;
+    }
+    ```
 
-    useEffect(() => {
-        function onTick() {
-            setCount((c) => c + 1);
-        }
+=== "Результат"
 
-        setInterval(onTick, 1000);
-    }, []);
+    ![Результат](synchronizing-with-effects-11.png)
 
-    return <h1>{count}</h1>;
-}
-```
+???tip "Показать подсказку"
 
-<!-- 0123.part.md -->
+    Помните, что `setInterval` возвращает ID интервала, который вы можете передать в [`clearInterval`](https://developer.mozilla.org/docs/Web/API/clearInterval), чтобы остановить интервал.
 
-<!-- 0124.part.md -->
+???success "Показать решение"
 
-```js
-import { useState } from 'react';
-import Counter from './Counter.js';
+    Когда включен [Строгий режим](../reference/StrictMode.md) (как в песочницах на этом сайте), React перемонтирует каждый компонент один раз в процессе разработки. Это приводит к тому, что интервал устанавливается дважды, и поэтому каждую секунду счетчик увеличивается дважды.
 
-export default function Form() {
-    const [show, setShow] = useState(false);
-    return (
-        <>
-            <button onClick={() => setShow((s) => !s)}>
-                {show ? 'Hide' : 'Show'} counter
-            </button>
-            <br />
-            <hr />
-            {show && <Counter />}
-        </>
-    );
-}
-```
+    Однако поведение React не является _причиной_ ошибки: ошибка уже существует в коде. Поведение React делает ошибку более заметной. Настоящая причина в том, что этот Эффект запускает процесс, но не предоставляет способа его очистки.
 
-<!-- 0125.part.md -->
+    Чтобы исправить этот код, сохраните идентификатор интервала, возвращаемый `setInterval`, и реализуйте функцию очистки с помощью [`clearInterval`](https://developer.mozilla.org/docs/Web/API/clearInterval):
 
-<!-- 0126.part.md -->
+    === "Counter.js"
 
-```css
-label {
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
+    ```js
+    import { useState, useEffect } from 'react';
 
-body {
-    min-height: 150px;
-}
-```
+    export default function Counter() {
+    	const [count, setCount] = useState(0);
 
-<!-- 0127.part.md -->
+    	useEffect(() => {
+    		function onTick() {
+    			setCount((c) => c + 1);
+    		}
 
-\<Решение\>
+    		const intervalId = setInterval(onTick, 1000);
+    		return () => clearInterval(intervalId);
+    	}, []);
 
-Когда включен [Строгий режим](/reference/react/StrictMode) (как в песочницах на этом сайте), React перемонтирует каждый компонент один раз в процессе разработки. Это приводит к тому, что интервал устанавливается дважды, и поэтому каждую секунду счетчик увеличивается дважды.
+    	return <h1>{count}</h1>;
+    }
+    ```
 
-Однако поведение React не является _причиной_ ошибки: ошибка уже существует в коде. Поведение React делает ошибку более заметной. Настоящая причина в том, что этот Эффект запускает процесс, но не предоставляет способа его очистки.
+    === "Результат"
 
-Чтобы исправить этот код, сохраните идентификатор интервала, возвращаемый `setInterval`, и реализуйте функцию очистки с помощью [`clearInterval`](https://developer.mozilla.org/en-US/docs/Web/API/clearInterval):
+    	![Результат](synchronizing-with-effects-11.png)
 
-<!-- 0128.part.md -->
+    В процессе разработки React все равно перемонтирует ваш компонент один раз, чтобы убедиться, что вы хорошо реализовали очистку. Поэтому будет вызван вызов `setInterval`, за которым сразу же последует `clearInterval`, и снова `setInterval`. В продакшене будет только один вызов `setInterval`. Видимое пользователю поведение в обоих случаях одинаково: счетчик увеличивается раз в секунду.
 
-```js
-import { useState, useEffect } from 'react';
+### 4. Исправление выборки внутри эффекта
 
-export default function Counter() {
-    const [count, setCount] = useState(0);
+Этот компонент показывает биографию для выбранного человека. Он загружает биографию, вызывая асинхронную функцию `fetchBio(person)` при монтировании и при каждом изменении `person`. Эта асинхронная функция возвращает [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise), который в конечном итоге разрешается в строку. Когда выборка завершена, вызывается `setBio` для отображения этой строки в поле выбора.
 
-    useEffect(() => {
-        function onTick() {
-            setCount((c) => c + 1);
-        }
+=== "App.js"
 
-        const intervalId = setInterval(onTick, 1000);
-        return () => clearInterval(intervalId);
-    }, []);
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-    return <h1>{count}</h1>;
-}
-```
+    ```js
+    import { useState, useEffect } from 'react';
+    import { fetchBio } from './api.js';
 
-<!-- 0129.part.md -->
+    export default function Page() {
+    	const [person, setPerson] = useState('Alice');
+    	const [bio, setBio] = useState(null);
 
-<!-- 0130.part.md -->
+    	useEffect(() => {
+    		setBio(null);
+    		fetchBio(person).then((result) => {
+    			setBio(result);
+    		});
+    	}, [person]);
 
-```js
-import { useState } from 'react';
-import Counter from './Counter.js';
+    	return (
+    		<>
+    			<select
+    				value={person}
+    				onChange={(e) => {
+    					setPerson(e.target.value);
+    				}}
+    			>
+    				<option value="Alice">Alice</option>
+    				<option value="Bob">Bob</option>
+    				<option value="Taylor">Taylor</option>
+    			</select>
+    			<hr />
+    			<p>
+    				<i>{bio ?? 'Loading...'}</i>
+    			</p>
+    		</>
+    	);
+    }
+    ```
 
-export default function App() {
-    const [show, setShow] = useState(false);
-    return (
-        <>
-            <button onClick={() => setShow((s) => !s)}>
-                {show ? 'Hide' : 'Show'} counter
-            </button>
-            <br />
-            <hr />
-            {show && <Counter />}
-        </>
-    );
-}
-```
+    </div>
 
-<!-- 0131.part.md -->
+=== "Результат"
 
-<!-- 0132.part.md -->
-
-```css
-label {
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-body {
-    min-height: 150px;
-}
-```
-
-<!-- 0133.part.md -->
-
-В процессе разработки React все равно перемонтирует ваш компонент один раз, чтобы убедиться, что вы хорошо реализовали очистку. Поэтому будет вызван вызов `setInterval`, за которым сразу же последует `clearInterval`, и снова `setInterval`. В продакшене будет только один вызов `setInterval`. Видимое пользователю поведение в обоих случаях одинаково: счетчик увеличивается раз в секунду.
-
-\</Solution\>
-
-#### Исправление выборки внутри эффекта {/_fix-fetching-inside-an-effect_/}
-
-Этот компонент показывает биографию для выбранного человека. Он загружает биографию, вызывая асинхронную функцию `fetchBio(person)` при монтировании и при каждом изменении `person`. Эта асинхронная функция возвращает [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), который в конечном итоге разрешается в строку. Когда выборка завершена, вызывается `setBio` для отображения этой строки в поле выбора.
-
-<!-- 0134.part.md -->
-
-```js
-import { useState, useEffect } from 'react';
-import { fetchBio } from './api.js';
-
-export default function Page() {
-    const [person, setPerson] = useState('Alice');
-    const [bio, setBio] = useState(null);
-
-    useEffect(() => {
-        setBio(null);
-        fetchBio(person).then((result) => {
-            setBio(result);
-        });
-    }, [person]);
-
-    return (
-        <>
-            <select
-                value={person}
-                onChange={(e) => {
-                    setPerson(e.target.value);
-                }}
-            >
-                <option value="Alice">Alice</option>
-                <option value="Bob">Bob</option>
-                <option value="Taylor">Taylor</option>
-            </select>
-            <hr />
-            <p>
-                <i>{bio ?? 'Loading...'}</i>
-            </p>
-        </>
-    );
-}
-```
-
-<!-- 0135.part.md -->
-
-<!-- 0136.part.md -->
-
-```js
-export async function fetchBio(person) {
-    const delay = person === 'Bob' ? 2000 : 200;
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve('This is ' + person + '’s bio.');
-        }, delay);
-    });
-}
-```
-
-<!-- 0137.part.md -->
+    ![Результат](synchronizing-with-effects-12.png)
 
 В этом коде есть ошибка. Начните с выбора "Алисы". Затем выберите "Боб" и сразу после этого выберите "Тейлор". Если вы сделаете это достаточно быстро, вы заметите эту ошибку: Тейлор выбран, но в абзаце ниже написано "Это биография Боба".
 
 Почему так происходит? Исправьте ошибку внутри этого Эффекта.
 
-\<Намек\>
+???tip "Показать подсказку"
 
-Если Эффект получает что-то асинхронно, он обычно нуждается в очистке.
+    Если Эффект получает что-то асинхронно, он обычно нуждается в очистке.
 
-\</Hint\>
+???success "Показать решение"
 
-\<Решение\>
+    Чтобы запустить ошибку, все должно произойти в таком порядке:
 
-Чтобы запустить ошибку, все должно произойти в таком порядке:
+    -   Выбор `'Bob'` вызывает `fetchBio('Bob')`.
+    -   Выбор `Тейлора` вызывает `fetchBio('Taylor')`
+    -   **Выборка `Тейлора` завершается _перед_ выборкой `Боба`**.
+    -   Эффект от рендеринга `Тейлора` вызывает `setBio('Это биография Тейлора')`.
+    -   Получение `Боба` завершается
+    -   Эффект от рендера `'Bob'` вызывает `setBio('Это биография Боба')`.
 
--   Выбор `'Bob'` вызывает `fetchBio('Bob')`.
--   Выбор `Тейлора` вызывает `` fetchBio('Taylor''`) ``
--   **Выборка `Тейлора` завершается _перед_ выборкой `Боба`**.
--   Эффект от рендеринга `Тейлора` вызывает `setBio('Это биография Тейлора''`)`\*.
--   Получение `Боба` завершается
--   Эффект от рендера `'Bob'` вызывает `setBio('Это биография Боба')`.
+    Вот почему вы видите биографию Боба, даже если выбран Тейлор. Подобные ошибки называются [состояние гонки](https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D0%B5_%D0%B3%D0%BE%D0%BD%D0%BA%D0%B8), потому что две асинхронные операции "гоняются" друг с другом, и они могут выполняться в неожиданном порядке.
 
-Вот почему вы видите биографию Боба, даже если выбран Тейлор. Подобные ошибки называются [race conditions](https://en.wikipedia.org/wiki/Race_condition), потому что две асинхронные операции "гоняются" друг с другом, и они могут выполняться в неожиданном порядке.
+    Чтобы исправить это состояние гонки, добавьте функцию очистки:
 
-Чтобы исправить это состояние гонки, добавьте функцию очистки:
+    === "App.js"
 
-<!-- 0138.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState, useEffect } from 'react';
-import { fetchBio } from './api.js';
+    	```js
+    	import { useState, useEffect } from 'react';
+    	import { fetchBio } from './api.js';
 
-export default function Page() {
-    const [person, setPerson] = useState('Alice');
-    const [bio, setBio] = useState(null);
-    useEffect(() => {
-        let ignore = false;
-        setBio(null);
-        fetchBio(person).then((result) => {
-            if (!ignore) {
-                setBio(result);
-            }
-        });
-        return () => {
-            ignore = true;
-        };
-    }, [person]);
+    	export default function Page() {
+    		const [person, setPerson] = useState('Alice');
+    		const [bio, setBio] = useState(null);
+    		useEffect(() => {
+    			let ignore = false;
+    			setBio(null);
+    			fetchBio(person).then((result) => {
+    				if (!ignore) {
+    					setBio(result);
+    				}
+    			});
+    			return () => {
+    				ignore = true;
+    			};
+    		}, [person]);
 
-    return (
-        <>
-            <select
-                value={person}
-                onChange={(e) => {
-                    setPerson(e.target.value);
-                }}
-            >
-                <option value="Alice">Alice</option>
-                <option value="Bob">Bob</option>
-                <option value="Taylor">Taylor</option>
-            </select>
-            <hr />
-            <p>
-                <i>{bio ?? 'Loading...'}</i>
-            </p>
-        </>
-    );
-}
-```
+    		return (
+    			<>
+    				<select
+    					value={person}
+    					onChange={(e) => {
+    						setPerson(e.target.value);
+    					}}
+    				>
+    					<option value="Alice">Alice</option>
+    					<option value="Bob">Bob</option>
+    					<option value="Taylor">Taylor</option>
+    				</select>
+    				<hr />
+    				<p>
+    					<i>{bio ?? 'Loading...'}</i>
+    				</p>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0139.part.md -->
+    	</div>
 
-<!-- 0140.part.md -->
+    === "Результат"
 
-```js
-export async function fetchBio(person) {
-    const delay = person === 'Bob' ? 2000 : 200;
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve('This is ' + person + '’s bio.');
-        }, delay);
-    });
-}
-```
+    	![Результат](synchronizing-with-effects-12.png)
 
-<!-- 0141.part.md -->
+    Каждый Эффект рендера имеет свою собственную переменную `ignore`. Изначально переменная `ignore` имеет значение `false`. Однако, если Эффект очищается (например, когда вы выбираете другого человека), его переменная `ignore` становится `true`. Таким образом, теперь не имеет значения, в каком порядке выполняются запросы. Только у Эффекта последнего человека `ignore` будет установлена в `false`, поэтому он вызовет `setBio(result)`. Прошлые Эффекты были очищены, поэтому проверка `if (!ignore)` не позволит им вызвать `setBio`:
 
-Каждый Эффект рендера имеет свою собственную переменную `ignore`. Изначально переменная `ignore` имеет значение `false`. Однако, если Эффект очищается (например, когда вы выбираете другого человека), его переменная `ignore` становится `true`. Таким образом, теперь не имеет значения, в каком порядке выполняются запросы. Только у Эффекта последнего человека `ignore` будет установлена в `false`, поэтому он вызовет `setBio(result)`. Прошлые Эффекты были очищены, поэтому проверка `if (!ignore)` не позволит им вызвать `setBio`:
+    -   Выбор `'Bob'` вызывает `fetchBio('Bob')`.
+    -   Выборка `'Taylor'` вызывает `fetchBio('Taylor')` **и очищает предыдущий эффект (эффект Боба)**.
+    -   Выборка `Тейлора` завершается _до_ выборки `Боба`.
+    -   Эффект из рендера `'Taylor'` вызывает `setBio('This is Taylor's bio')`.
+    -   Получение `Боба` завершается
+    -   Эффект из рендера `'Bob'` **ничего не делает, потому что его флаг `ignore` был установлен в `true`**.
 
--   Выбор `'Bob'` вызывает `fetchBio('Bob')`.
--   Выборка `'Taylor'` вызывает `fetchBio('Taylor'`)` **и очищает предыдущий эффект (эффект Боба)**.
--   Выборка `Тейлора` завершается _до_ выборки `Боба`.
--   Эффект из рендера `'Taylor'` вызывает `setBio('This is Taylor's bio')`.
--   Получение `Боба` завершается
--   Эффект из рендера `'Bob'` **ничего не делает, потому что его флаг `ignore` был установлен в `true`**.
+    Помимо игнорирования результата устаревшего вызова API, вы также можете использовать [`AbortController`](https://developer.mozilla.org/docs/Web/API/AbortController) для отмены запросов, которые больше не нужны. Однако одного этого недостаточно для защиты от условий гонки. После выборки может быть выполнено больше асинхронных шагов, поэтому использование явного флага типа `ignore` является наиболее надежным способом устранения проблем такого типа.
 
-Помимо игнорирования результата устаревшего вызова API, вы также можете использовать [`AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) для отмены запросов, которые больше не нужны. Однако одного этого недостаточно для защиты от условий гонки. После выборки может быть выполнено больше асинхронных шагов, поэтому использование явного флага типа `ignore` является наиболее надежным способом устранения проблем такого типа.
+## Ссылки
 
-\</Solution\>
-
-\</Challenges\>
-
-<!-- 0142.part.md -->
+-   [https://react.dev/learn/synchronizing-with-effects](https://react.dev/learn/synchronizing-with-effects)
