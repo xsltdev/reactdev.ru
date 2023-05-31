@@ -1297,42 +1297,43 @@ export function useChatRoom({
 
 ```js
 function ShippingForm({ country }) {
-  const [cities, setCities] = useState(null);
-  // This Effect fetches cities for a country
-  useEffect(() => {
-    let ignore = false;
-    fetch(`/api/cities?country=${country}`)
-      .then(response => response.json())
-      .then(json => {
-        if (!ignore) {
-          setCities(json);
+    const [cities, setCities] = useState(null);
+    // This Effect fetches cities for a country
+    useEffect(() => {
+        let ignore = false;
+        fetch(`/api/cities?country=${country}`)
+            .then((response) => response.json())
+            .then((json) => {
+                if (!ignore) {
+                    setCities(json);
+                }
+            });
+        return () => {
+            ignore = true;
+        };
+    }, [country]);
+
+    const [city, setCity] = useState(null);
+    const [areas, setAreas] = useState(null);
+    // This Effect fetches areas for the selected city
+    useEffect(() => {
+        if (city) {
+            let ignore = false;
+            fetch(`/api/areas?city=${city}`)
+                .then((response) => response.json())
+                .then((json) => {
+                    if (!ignore) {
+                        setAreas(json);
+                    }
+                });
+            return () => {
+                ignore = true;
+            };
         }
-      });
-    return () => {
-      ignore = true;
-    };
-  }, [country]);
+    }, [city]);
 
-  const [city, setCity] = useState(null);
-  const [areas, setAreas] = useState(null);
-  // This Effect fetches areas for the selected city
-  useEffect(() => {
-    if (city) {
-      let ignore = false;
-      fetch(`/api/areas?city=${city}`)
-        .then(response => response.json())
-        .then(json => {
-          if (!ignore) {
-            setAreas(json);
-          }
-        });
-      return () => {
-        ignore = true;
-      };
-    }
-  }, [city]);
-
-  // ...
+    // ...
+}
 ```
 
 <!-- 0094.part.md -->
@@ -1409,8 +1410,6 @@ function ShippingForm({ country }) {
     -   🔴 `useUpdateEffect(fn)`.
 
     Например, этот хук `useMount` пытается обеспечить выполнение некоторого кода только "при монтировании":
-
-    <!-- 0099.part.md -->
 
     ```js
     function ChatRoom({ roomId }) {
@@ -2136,186 +2135,182 @@ export default function Counter() {
 
 Вам нужно будет написать свой пользовательский Hook в файле `useCounter.js` и импортировать его в файл `Counter.js`.
 
-<!-- 0151.part.md -->
+=== "App.js"
 
-```js
-import { useState, useEffect } from 'react';
+    ```js
+    import { useState, useEffect } from 'react';
 
-export default function Counter() {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-        const id = setInterval(() => {
-            setCount((c) => c + 1);
-        }, 1000);
-        return () => clearInterval(id);
-    }, []);
-    return <h1>Seconds passed: {count}</h1>;
-}
-```
+    export default function Counter() {
+    	const [count, setCount] = useState(0);
+    	useEffect(() => {
+    		const id = setInterval(() => {
+    			setCount((c) => c + 1);
+    		}, 1000);
+    		return () => clearInterval(id);
+    	}, []);
+    	return <h1>Seconds passed: {count}</h1>;
+    }
+    ```
 
-<!-- 0152.part.md -->
+=== "useCounter"
 
-<!-- 0153.part.md -->
+    ```js
+    // Write your custom Hook in this file!
+    ```
 
-```js
-// Write your custom Hook in this file!
-```
+=== "Результат"
 
-<!-- 0154.part.md -->
+    ![Результат](reusing-logic-with-custom-hooks-10.png)
 
-\<Решение\>
+???success "Показать решение"
 
-Ваш код должен выглядеть следующим образом:
+    Ваш код должен выглядеть следующим образом:
 
-<!-- 0155.part.md -->
+    === "App.js"
 
-```js
-import { useCounter } from './useCounter.js';
+    	```js
+    	import { useCounter } from './useCounter.js';
 
-export default function Counter() {
-    const count = useCounter();
-    return <h1>Seconds passed: {count}</h1>;
-}
-```
+    	export default function Counter() {
+    		const count = useCounter();
+    		return <h1>Seconds passed: {count}</h1>;
+    	}
+    	```
 
-<!-- 0156.part.md -->
+    === "useCounter.js"
 
-<!-- 0157.part.md -->
+    	```js
+    	import { useState, useEffect } from 'react';
 
-```js
-import { useState, useEffect } from 'react';
+    	export function useCounter() {
+    		const [count, setCount] = useState(0);
+    		useEffect(() => {
+    			const id = setInterval(() => {
+    				setCount((c) => c + 1);
+    			}, 1000);
+    			return () => clearInterval(id);
+    		}, []);
+    		return count;
+    	}
+    	```
 
-export function useCounter() {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-        const id = setInterval(() => {
-            setCount((c) => c + 1);
-        }, 1000);
-        return () => clearInterval(id);
-    }, []);
-    return count;
-}
-```
+    === "Результат"
 
-<!-- 0158.part.md -->
+    	![Результат](reusing-logic-with-custom-hooks-10.png)
 
-Обратите внимание, что `App.js` больше не нужно импортировать `useState` или `useEffect`.
-
-\</Solution\>
+    Обратите внимание, что `App.js` больше не нужно импортировать `useState` или `useEffect`.
 
 ### 2. Сделайте задержку счетчика настраиваемой
 
 В этом примере есть переменная состояния `delay`, управляемая ползунком, но ее значение не используется. Передайте значение `delay` в ваш пользовательский хук `useCounter`, и измените хук `useCounter`, чтобы он использовал переданную `delay` вместо жесткого кодирования `1000` мс.
 
-<!-- 0159.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
-import { useCounter } from './useCounter.js';
+    ```js
+    import { useState } from 'react';
+    import { useCounter } from './useCounter.js';
 
-export default function Counter() {
-    const [delay, setDelay] = useState(1000);
-    const count = useCounter();
-    return (
-        <>
-            <label>
-                Tick duration: {delay} ms
-                <br />
-                <input
-                    type="range"
-                    value={delay}
-                    min="10"
-                    max="2000"
-                    onChange={(e) =>
-                        setDelay(Number(e.target.value))
-                    }
-                />
-            </label>
-            <hr />
-            <h1>Ticks: {count}</h1>
-        </>
-    );
-}
-```
+    export default function Counter() {
+    	const [delay, setDelay] = useState(1000);
+    	const count = useCounter();
+    	return (
+    		<>
+    			<label>
+    				Tick duration: {delay} ms
+    				<br />
+    				<input
+    					type="range"
+    					value={delay}
+    					min="10"
+    					max="2000"
+    					onChange={(e) =>
+    						setDelay(Number(e.target.value))
+    					}
+    				/>
+    			</label>
+    			<hr />
+    			<h1>Ticks: {count}</h1>
+    		</>
+    	);
+    }
+    ```
 
-<!-- 0160.part.md -->
+=== "useCounter.js"
 
-<!-- 0161.part.md -->
+    ```js
+    import { useState, useEffect } from 'react';
 
-```js
-import { useState, useEffect } from 'react';
+    export function useCounter() {
+    	const [count, setCount] = useState(0);
+    	useEffect(() => {
+    		const id = setInterval(() => {
+    			setCount((c) => c + 1);
+    		}, 1000);
+    		return () => clearInterval(id);
+    	}, []);
+    	return count;
+    }
+    ```
 
-export function useCounter() {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-        const id = setInterval(() => {
-            setCount((c) => c + 1);
-        }, 1000);
-        return () => clearInterval(id);
-    }, []);
-    return count;
-}
-```
+=== "Результат"
 
-<!-- 0162.part.md -->
+    ![Результат](reusing-logic-with-custom-hooks-11.png)
 
-\<Решение\>
+???success "Показать результат"
 
-Передайте `задержку` вашему хуку с помощью `useCounter(delay)`. Затем, внутри хука, используйте `delay` вместо жестко заданного значения `1000`. Вам нужно будет добавить `delay` в зависимости вашего Эффекта. Это гарантирует, что изменение `delay` сбросит интервал.
+    Передайте `задержку` вашему хуку с помощью `useCounter(delay)`. Затем, внутри хука, используйте `delay` вместо жестко заданного значения `1000`. Вам нужно будет добавить `delay` в зависимости вашего Эффекта. Это гарантирует, что изменение `delay` сбросит интервал.
 
-<!-- 0163.part.md -->
+    === "App.js"
 
-```js
-import { useState } from 'react';
-import { useCounter } from './useCounter.js';
+    	```js
+    	import { useState } from 'react';
+    	import { useCounter } from './useCounter.js';
 
-export default function Counter() {
-    const [delay, setDelay] = useState(1000);
-    const count = useCounter(delay);
-    return (
-        <>
-            <label>
-                Tick duration: {delay} ms
-                <br />
-                <input
-                    type="range"
-                    value={delay}
-                    min="10"
-                    max="2000"
-                    onChange={(e) =>
-                        setDelay(Number(e.target.value))
-                    }
-                />
-            </label>
-            <hr />
-            <h1>Ticks: {count}</h1>
-        </>
-    );
-}
-```
+    	export default function Counter() {
+    		const [delay, setDelay] = useState(1000);
+    		const count = useCounter(delay);
+    		return (
+    			<>
+    				<label>
+    					Tick duration: {delay} ms
+    					<br />
+    					<input
+    						type="range"
+    						value={delay}
+    						min="10"
+    						max="2000"
+    						onChange={(e) =>
+    							setDelay(Number(e.target.value))
+    						}
+    					/>
+    				</label>
+    				<hr />
+    				<h1>Ticks: {count}</h1>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0164.part.md -->
+    === "useCounter.js"
 
-<!-- 0165.part.md -->
+    	```js
+    	import { useState, useEffect } from 'react';
 
-```js
-import { useState, useEffect } from 'react';
+    	export function useCounter(delay) {
+    		const [count, setCount] = useState(0);
+    		useEffect(() => {
+    			const id = setInterval(() => {
+    				setCount((c) => c + 1);
+    			}, delay);
+    			return () => clearInterval(id);
+    		}, [delay]);
+    		return count;
+    	}
+    	```
 
-export function useCounter(delay) {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-        const id = setInterval(() => {
-            setCount((c) => c + 1);
-        }, delay);
-        return () => clearInterval(id);
-    }, [delay]);
-    return count;
-}
-```
+    === "Результат"
 
-<!-- 0166.part.md -->
-
-\</Solution\>
+    	![Результат](reusing-logic-with-custom-hooks-11.png)
 
 ### 3. Извлечение `useInterval` из `useCounter`
 
@@ -2337,99 +2332,95 @@ export function useCounter(delay) {
 
 Напишите `useInterval` в файле `useInterval.js` и импортируйте его в файл `useCounter.js`.
 
-<!-- 0169.part.md -->
+=== "App.js"
 
-```js
-import { useState } from 'react';
-import { useCounter } from './useCounter.js';
+    ```js
+    import { useState } from 'react';
+    import { useCounter } from './useCounter.js';
 
-export default function Counter() {
-    const count = useCounter(1000);
-    return <h1>Seconds passed: {count}</h1>;
-}
-```
+    export default function Counter() {
+    	const count = useCounter(1000);
+    	return <h1>Seconds passed: {count}</h1>;
+    }
+    ```
 
-<!-- 0170.part.md -->
+=== "useConter.js"
 
-<!-- 0171.part.md -->
+    ```js
+    import { useState, useEffect } from 'react';
 
-```js
-import { useState, useEffect } from 'react';
+    export function useCounter(delay) {
+    	const [count, setCount] = useState(0);
+    	useEffect(() => {
+    		const id = setInterval(() => {
+    			setCount((c) => c + 1);
+    		}, delay);
+    		return () => clearInterval(id);
+    	}, [delay]);
+    	return count;
+    }
+    ```
 
-export function useCounter(delay) {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-        const id = setInterval(() => {
-            setCount((c) => c + 1);
-        }, delay);
-        return () => clearInterval(id);
-    }, [delay]);
-    return count;
-}
-```
+=== "useInterval.js"
 
-<!-- 0172.part.md -->
+    ```js
+    // Write your Hook here!
+    ```
 
-<!-- 0173.part.md -->
+=== "Результат"
 
-```js
-// Write your Hook here!
-```
+    ![Результат](reusing-logic-with-custom-hooks-12.png)
 
 <!-- 0174.part.md -->
 
-\<Решение\>
+???success "Показать решение"
 
-Логика внутри `useInterval` должна установить и очистить интервал. Больше ничего делать не нужно.
+    Логика внутри `useInterval` должна установить и очистить интервал. Больше ничего делать не нужно.
 
-<!-- 0175.part.md -->
+    === "App.js"
 
-```js
-import { useCounter } from './useCounter.js';
+    	```js
+    	import { useCounter } from './useCounter.js';
 
-export default function Counter() {
-    const count = useCounter(1000);
-    return <h1>Seconds passed: {count}</h1>;
-}
-```
+    	export default function Counter() {
+    		const count = useCounter(1000);
+    		return <h1>Seconds passed: {count}</h1>;
+    	}
+    	```
 
-<!-- 0176.part.md -->
+    === "useCounter.js"
 
-<!-- 0177.part.md -->
+    	```js
+    	import { useState } from 'react';
+    	import { useInterval } from './useInterval.js';
 
-```js
-import { useState } from 'react';
-import { useInterval } from './useInterval.js';
+    	export function useCounter(delay) {
+    		const [count, setCount] = useState(0);
+    		useInterval(() => {
+    			setCount((c) => c + 1);
+    		}, delay);
+    		return count;
+    	}
+    	```
 
-export function useCounter(delay) {
-    const [count, setCount] = useState(0);
-    useInterval(() => {
-        setCount((c) => c + 1);
-    }, delay);
-    return count;
-}
-```
+    === "useInterval.js"
 
-<!-- 0178.part.md -->
+    	```js
+    	import { useEffect } from 'react';
 
-<!-- 0179.part.md -->
+    	export function useInterval(onTick, delay) {
+    		useEffect(() => {
+    			const id = setInterval(onTick, delay);
+    			return () => clearInterval(id);
+    		}, [onTick, delay]);
+    	}
+    	```
 
-```js
-import { useEffect } from 'react';
+    === "Результат"
 
-export function useInterval(onTick, delay) {
-    useEffect(() => {
-        const id = setInterval(onTick, delay);
-        return () => clearInterval(id);
-    }, [onTick, delay]);
-}
-```
+    	![Результат](reusing-logic-with-custom-hooks-12.png)
 
-<!-- 0180.part.md -->
-
-Обратите внимание, что в этом решении есть небольшая проблема, которую вы решите в следующей задаче.
-
-\</Solution\>
+    Обратите внимание, что в этом решении есть небольшая проблема, которую вы решите в следующей задаче.
 
 ### 4. Исправить интервал сброса
 
@@ -2464,174 +2455,128 @@ useEffect(() => {
 
 После устранения проблемы, вы должны ожидать, что фон страницы будет обновляться каждые две секунды.
 
-\<Hint\>
+=== "App.js"
 
-Похоже, что ваш хук `useInterval` принимает в качестве аргумента слушатель событий. Можете ли вы придумать, как обернуть этот слушатель событий так, чтобы он не был зависим от вашего Effect?
+    ```js
+    import { useCounter } from './useCounter.js';
+    import { useInterval } from './useInterval.js';
 
-\</Hint\>
+    export default function Counter() {
+    	const count = useCounter(1000);
 
-<!-- 0183.part.md -->
+    	useInterval(() => {
+    		const randomColor = `hsla(${
+    			Math.random() * 360
+    		}, 100%, 50%, 0.2)`;
+    		document.body.style.backgroundColor = randomColor;
+    	}, 2000);
 
-```js
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental",
-    "react-scripts": "latest"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
+    	return <h1>Seconds passed: {count}</h1>;
+    }
+    ```
 
-<!-- 0184.part.md -->
+=== "useCounter.js"
 
-<!-- 0185.part.md -->
+    ```js
+    import { useState } from 'react';
+    import { useInterval } from './useInterval.js';
 
-```js
-import { useCounter } from './useCounter.js';
-import { useInterval } from './useInterval.js';
+    export function useCounter(delay) {
+    	const [count, setCount] = useState(0);
+    	useInterval(() => {
+    		setCount((c) => c + 1);
+    	}, delay);
+    	return count;
+    }
+    ```
 
-export default function Counter() {
-    const count = useCounter(1000);
+=== "useInterval.js"
 
-    useInterval(() => {
-        const randomColor = `hsla(${
-            Math.random() * 360
-        }, 100%, 50%, 0.2)`;
-        document.body.style.backgroundColor = randomColor;
-    }, 2000);
+    ```js
+    import { useEffect } from 'react';
+    import { experimental_useEffectEvent as useEffectEvent } from 'react';
 
-    return <h1>Seconds passed: {count}</h1>;
-}
-```
+    export function useInterval(onTick, delay) {
+    	useEffect(() => {
+    		const id = setInterval(onTick, delay);
+    		return () => {
+    			clearInterval(id);
+    		};
+    	}, [onTick, delay]);
+    }
+    ```
 
-<!-- 0186.part.md -->
+=== "Результат"
 
-<!-- 0187.part.md -->
-
-```js
-import { useState } from 'react';
-import { useInterval } from './useInterval.js';
-
-export function useCounter(delay) {
-    const [count, setCount] = useState(0);
-    useInterval(() => {
-        setCount((c) => c + 1);
-    }, delay);
-    return count;
-}
-```
-
-<!-- 0188.part.md -->
-
-<!-- 0189.part.md -->
-
-```js
-import { useEffect } from 'react';
-import { experimental_useEffectEvent as useEffectEvent } from 'react';
-
-export function useInterval(onTick, delay) {
-    useEffect(() => {
-        const id = setInterval(onTick, delay);
-        return () => {
-            clearInterval(id);
-        };
-    }, [onTick, delay]);
-}
-```
+    ![Результат](reusing-logic-with-custom-hooks-12.png)
 
 <!-- 0190.part.md -->
 
-\<Решение\>
+???tip "Показать подсказку"
 
-Внутри `useInterval` оберните обратный вызов тика в событие эффекта, как вы делали [ранее на этой странице](reusing-logic-with-custom-hooks.md).
+    Похоже, что ваш хук `useInterval` принимает в качестве аргумента слушатель событий. Можете ли вы придумать, как обернуть этот слушатель событий так, чтобы он не был зависим от вашего Effect?
 
-Это позволит вам опустить `onTick` из зависимостей вашего Эффекта. Эффект не будет пересинхронизироваться при каждом повторном рендере компонента, поэтому интервал изменения цвета фона страницы не будет сбрасываться каждую секунду, прежде чем успеет сработать.
+???success "Показать решение"
 
-Благодаря этому изменению оба интервала работают, как и ожидалось, и не мешают друг другу:
+    Внутри `useInterval` оберните обратный вызов тика в событие эффекта, как вы делали [ранее на этой странице](reusing-logic-with-custom-hooks.md).
 
-<!-- 0191.part.md -->
+    Это позволит вам опустить `onTick` из зависимостей вашего Эффекта. Эффект не будет пересинхронизироваться при каждом повторном рендере компонента, поэтому интервал изменения цвета фона страницы не будет сбрасываться каждую секунду, прежде чем успеет сработать.
 
-```js
-{
-  "dependencies": {
-    "react": "experimental",
-    "react-dom": "experimental",
-    "react-scripts": "latest"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
-}
-```
+    Благодаря этому изменению оба интервала работают, как и ожидалось, и не мешают друг другу:
 
-<!-- 0192.part.md -->
+    === "App.js"
 
-<!-- 0193.part.md -->
+    	```js
+    	import { useCounter } from './useCounter.js';
+    	import { useInterval } from './useInterval.js';
 
-```js
-import { useCounter } from './useCounter.js';
-import { useInterval } from './useInterval.js';
+    	export default function Counter() {
+    		const count = useCounter(1000);
 
-export default function Counter() {
-    const count = useCounter(1000);
+    		useInterval(() => {
+    			const randomColor = `hsla(${
+    				Math.random() * 360
+    			}, 100%, 50%, 0.2)`;
+    			document.body.style.backgroundColor = randomColor;
+    		}, 2000);
 
-    useInterval(() => {
-        const randomColor = `hsla(${
-            Math.random() * 360
-        }, 100%, 50%, 0.2)`;
-        document.body.style.backgroundColor = randomColor;
-    }, 2000);
+    		return <h1>Seconds passed: {count}</h1>;
+    	}
+    	```
 
-    return <h1>Seconds passed: {count}</h1>;
-}
-```
+    === "useCounter.js"
 
-<!-- 0194.part.md -->
+    ```js
+    import { useState } from 'react';
+    import { useInterval } from './useInterval.js';
 
-<!-- 0195.part.md -->
+    export function useCounter(delay) {
+    	const [count, setCount] = useState(0);
+    	useInterval(() => {
+    		setCount((c) => c + 1);
+    	}, delay);
+    	return count;
+    }
+    ```
 
-```js
-import { useState } from 'react';
-import { useInterval } from './useInterval.js';
+    === "useInterval.js"
 
-export function useCounter(delay) {
-    const [count, setCount] = useState(0);
-    useInterval(() => {
-        setCount((c) => c + 1);
-    }, delay);
-    return count;
-}
-```
+    	```js
+    	import { useEffect } from 'react';
+    	import { experimental_useEffectEvent as useEffectEvent } from 'react';
 
-<!-- 0196.part.md -->
+    	export function useInterval(callback, delay) {
+    		const onTick = useEffectEvent(callback);
+    		useEffect(() => {
+    			const id = setInterval(onTick, delay);
+    			return () => clearInterval(id);
+    		}, [delay]);
+    	}
+    	```
 
-<!-- 0197.part.md -->
+    === "Результат"
 
-```js
-import { useEffect } from 'react';
-import { experimental_useEffectEvent as useEffectEvent } from 'react';
-
-export function useInterval(callback, delay) {
-    const onTick = useEffectEvent(callback);
-    useEffect(() => {
-        const id = setInterval(onTick, delay);
-        return () => clearInterval(id);
-    }, [delay]);
-}
-```
-
-<!-- 0198.part.md -->
-
-\</Solution\>
+    	![Результат](reusing-logic-with-custom-hooks-12.png)
 
 ### 5. Реализация шагающего движения
 
@@ -2643,205 +2588,183 @@ export function useInterval(callback, delay) {
 
 После реализации `useDelayedValue`, вы должны увидеть, как точки движутся друг за другом.
 
-\<Намек\>
+=== "App.js"
 
-Вам нужно будет хранить `delayedValue` как переменную состояния внутри вашего пользовательского Hook. Когда `значение` изменится, вы захотите запустить Эффект. Этот Эффект должен обновить `delayedValue` после `задержки`. Возможно, вам будет полезно вызвать `setTimeout`.
+    ```js
+    import { usePointerPosition } from './usePointerPosition.js';
 
-Нужно ли очистить этот Эффект? Почему или почему нет?
+    function useDelayedValue(value, delay) {
+    	// TODO: Implement this Hook
+    	return value;
+    }
 
-\</Hint\>
+    export default function Canvas() {
+    	const pos1 = usePointerPosition();
+    	const pos2 = useDelayedValue(pos1, 100);
+    	const pos3 = useDelayedValue(pos2, 200);
+    	const pos4 = useDelayedValue(pos3, 100);
+    	const pos5 = useDelayedValue(pos3, 50);
+    	return (
+    		<>
+    			<Dot position={pos1} opacity={1} />
+    			<Dot position={pos2} opacity={0.8} />
+    			<Dot position={pos3} opacity={0.6} />
+    			<Dot position={pos4} opacity={0.4} />
+    			<Dot position={pos5} opacity={0.2} />
+    		</>
+    	);
+    }
 
-<!-- 0199.part.md -->
+    function Dot({ position, opacity }) {
+    	return (
+    		<div
+    			style={{
+    				position: 'absolute',
+    				backgroundColor: 'pink',
+    				borderRadius: '50%',
+    				opacity,
+    				transform: `translate(${position.x}px, ${position.y}px)`,
+    				pointerEvents: 'none',
+    				left: -20,
+    				top: -20,
+    				width: 40,
+    				height: 40,
+    			}}
+    		/>
+    	);
+    }
+    ```
 
-```js
-import { usePointerPosition } from './usePointerPosition.js';
+=== "usePointerPosition.js"
 
-function useDelayedValue(value, delay) {
-    // TODO: Implement this Hook
-    return value;
-}
+    ```js
+    import { useState, useEffect } from 'react';
 
-export default function Canvas() {
-    const pos1 = usePointerPosition();
-    const pos2 = useDelayedValue(pos1, 100);
-    const pos3 = useDelayedValue(pos2, 200);
-    const pos4 = useDelayedValue(pos3, 100);
-    const pos5 = useDelayedValue(pos3, 50);
-    return (
-        <>
-            <Dot position={pos1} opacity={1} />
-            <Dot position={pos2} opacity={0.8} />
-            <Dot position={pos3} opacity={0.6} />
-            <Dot position={pos4} opacity={0.4} />
-            <Dot position={pos5} opacity={0.2} />
-        </>
-    );
-}
+    export function usePointerPosition() {
+    	const [position, setPosition] = useState({
+    		x: 0,
+    		y: 0,
+    	});
+    	useEffect(() => {
+    		function handleMove(e) {
+    			setPosition({ x: e.clientX, y: e.clientY });
+    		}
+    		window.addEventListener('pointermove', handleMove);
+    		return () =>
+    			window.removeEventListener(
+    				'pointermove',
+    				handleMove
+    			);
+    	}, []);
+    	return position;
+    }
+    ```
 
-function Dot({ position, opacity }) {
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                backgroundColor: 'pink',
-                borderRadius: '50%',
-                opacity,
-                transform: `translate(${position.x}px, ${position.y}px)`,
-                pointerEvents: 'none',
-                left: -20,
-                top: -20,
-                width: 40,
-                height: 40,
-            }}
-        />
-    );
-}
-```
+=== "Результат"
 
-<!-- 0200.part.md -->
-
-<!-- 0201.part.md -->
-
-```js
-import { useState, useEffect } from 'react';
-
-export function usePointerPosition() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    useEffect(() => {
-        function handleMove(e) {
-            setPosition({ x: e.clientX, y: e.clientY });
-        }
-        window.addEventListener('pointermove', handleMove);
-        return () =>
-            window.removeEventListener(
-                'pointermove',
-                handleMove
-            );
-    }, []);
-    return position;
-}
-```
-
-<!-- 0202.part.md -->
-
-<!-- 0203.part.md -->
-
-```css
-body {
-    min-height: 300px;
-}
-```
+    ![Результат](reusing-logic-with-custom-hooks-13.png)
 
 <!-- 0204.part.md -->
 
-\<Решение\>
+???tip "Показать подсказку"
 
-Вот рабочая версия. Вы храните `delayedValue` как переменную состояния. Когда `значение` обновляется, ваш Effect планирует таймаут для обновления `отложенного значения`. Вот почему `delayedValue` всегда "отстает" от фактического `value`.
+    Вам нужно будет хранить `delayedValue` как переменную состояния внутри вашего пользовательского Hook. Когда `значение` изменится, вы захотите запустить Эффект. Этот Эффект должен обновить `delayedValue` после `задержки`. Возможно, вам будет полезно вызвать `setTimeout`.
 
-<!-- 0205.part.md -->
+    Нужно ли очистить этот Эффект? Почему или почему нет?
 
-```js
-import { useState, useEffect } from 'react';
-import { usePointerPosition } from './usePointerPosition.js';
+???success "Показать решение"
 
-function useDelayedValue(value, delay) {
-    const [delayedValue, setDelayedValue] = useState(value);
+    Вот рабочая версия. Вы храните `delayedValue` как переменную состояния. Когда `значение` обновляется, ваш Effect планирует таймаут для обновления `отложенного значения`. Вот почему `delayedValue` всегда "отстает" от фактического `value`.
 
-    useEffect(() => {
-        setTimeout(() => {
-            setDelayedValue(value);
-        }, delay);
-    }, [value, delay]);
+    === "App.js"
 
-    return delayedValue;
-}
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-export default function Canvas() {
-    const pos1 = usePointerPosition();
-    const pos2 = useDelayedValue(pos1, 100);
-    const pos3 = useDelayedValue(pos2, 200);
-    const pos4 = useDelayedValue(pos3, 100);
-    const pos5 = useDelayedValue(pos3, 50);
-    return (
-        <>
-            <Dot position={pos1} opacity={1} />
-            <Dot position={pos2} opacity={0.8} />
-            <Dot position={pos3} opacity={0.6} />
-            <Dot position={pos4} opacity={0.4} />
-            <Dot position={pos5} opacity={0.2} />
-        </>
-    );
-}
+    	```js
+    	import { useState, useEffect } from 'react';
+    	import { usePointerPosition } from './usePointerPosition.js';
 
-function Dot({ position, opacity }) {
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                backgroundColor: 'pink',
-                borderRadius: '50%',
-                opacity,
-                transform: `translate(${position.x}px, ${position.y}px)`,
-                pointerEvents: 'none',
-                left: -20,
-                top: -20,
-                width: 40,
-                height: 40,
-            }}
-        />
-    );
-}
-```
+    	function useDelayedValue(value, delay) {
+    		const [delayedValue, setDelayedValue] = useState(value);
 
-<!-- 0206.part.md -->
+    		useEffect(() => {
+    			setTimeout(() => {
+    				setDelayedValue(value);
+    			}, delay);
+    		}, [value, delay]);
 
-<!-- 0207.part.md -->
+    		return delayedValue;
+    	}
 
-```js
-import { useState, useEffect } from 'react';
+    	export default function Canvas() {
+    		const pos1 = usePointerPosition();
+    		const pos2 = useDelayedValue(pos1, 100);
+    		const pos3 = useDelayedValue(pos2, 200);
+    		const pos4 = useDelayedValue(pos3, 100);
+    		const pos5 = useDelayedValue(pos3, 50);
+    		return (
+    			<>
+    				<Dot position={pos1} opacity={1} />
+    				<Dot position={pos2} opacity={0.8} />
+    				<Dot position={pos3} opacity={0.6} />
+    				<Dot position={pos4} opacity={0.4} />
+    				<Dot position={pos5} opacity={0.2} />
+    			</>
+    		);
+    	}
 
-export function usePointerPosition() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    useEffect(() => {
-        function handleMove(e) {
-            setPosition({ x: e.clientX, y: e.clientY });
-        }
-        window.addEventListener('pointermove', handleMove);
-        return () =>
-            window.removeEventListener(
-                'pointermove',
-                handleMove
-            );
-    }, []);
-    return position;
-}
-```
+    	function Dot({ position, opacity }) {
+    		return (
+    			<div
+    				style={{
+    					position: 'absolute',
+    					backgroundColor: 'pink',
+    					borderRadius: '50%',
+    					opacity,
+    					transform: `translate(${position.x}px, ${position.y}px)`,
+    					pointerEvents: 'none',
+    					left: -20,
+    					top: -20,
+    					width: 40,
+    					height: 40,
+    				}}
+    			/>
+    		);
+    	}
+    	```
 
-<!-- 0208.part.md -->
+    	</div>
 
-<!-- 0209.part.md -->
+    === "usePointerPosition.js"
 
-```css
-body {
-    min-height: 300px;
-}
-```
+    	```js
+    	import { useState, useEffect } from 'react';
 
-<!-- 0210.part.md -->
+    	export function usePointerPosition() {
+    		const [position, setPosition] = useState({
+    			x: 0,
+    			y: 0,
+    		});
+    		useEffect(() => {
+    			function handleMove(e) {
+    				setPosition({ x: e.clientX, y: e.clientY });
+    			}
+    			window.addEventListener('pointermove', handleMove);
+    			return () =>
+    				window.removeEventListener(
+    					'pointermove',
+    					handleMove
+    				);
+    		}, []);
+    		return position;
+    	}
+    	```
 
-Обратите внимание, что этот Эффект _не_ нуждается в очистке. Если бы вы вызвали `clearTimeout` в функции очистки, то при каждом изменении `значения` сбрасывался бы уже запланированный таймаут. Чтобы движение было непрерывным, нужно, чтобы срабатывали все таймауты.
+    === "Результат"
 
-\</Solution\>
+    	![Результат](reusing-logic-with-custom-hooks-13.png)
 
-\</Challenges\>
-
-<!-- 0211.part.md -->
+    Обратите внимание, что этот Эффект _не_ нуждается в очистке. Если бы вы вызвали `clearTimeout` в функции очистки, то при каждом изменении `значения` сбрасывался бы уже запланированный таймаут. Чтобы движение было непрерывным, нужно, чтобы срабатывали все таймауты.
 
 ## Ссылки
 
