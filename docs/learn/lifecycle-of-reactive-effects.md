@@ -974,217 +974,193 @@ function ChatRoom() {
 
 Однако существует проблема. Всякий раз, когда вы вводите текст в поле ввода сообщения внизу, `ChatRoom` _также_ переподключается к чату. (Вы можете заметить это, очистив консоль и введя текст в поле ввода). Исправьте проблему, чтобы этого не происходило.
 
-\<Hint\>
+=== "App.js"
 
-Возможно, вам понадобится добавить массив зависимостей для этого Эффекта. Какие зависимости должны быть там?
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-\</Hint\>
+    ```js
+    import { useState, useEffect } from 'react';
+    import { createConnection } from './chat.js';
 
-<!-- 0065.part.md -->
+    const serverUrl = 'https://localhost:1234';
 
-```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+    function ChatRoom({ roomId }) {
+    	const [message, setMessage] = useState('');
 
-const serverUrl = 'https://localhost:1234';
+    	useEffect(() => {
+    		const connection = createConnection(
+    			serverUrl,
+    			roomId
+    		);
+    		connection.connect();
+    		return () => connection.disconnect();
+    	});
 
-function ChatRoom({ roomId }) {
-    const [message, setMessage] = useState('');
+    	return (
+    		<>
+    			<h1>Welcome to the {roomId} room!</h1>
+    			<input
+    				value={message}
+    				onChange={(e) => setMessage(e.target.value)}
+    			/>
+    		</>
+    	);
+    }
 
-    useEffect(() => {
-        const connection = createConnection(
-            serverUrl,
-            roomId
-        );
-        connection.connect();
-        return () => connection.disconnect();
-    });
+    export default function App() {
+    	const [roomId, setRoomId] = useState('general');
+    	return (
+    		<>
+    			<label>
+    				Choose the chat room:{' '}
+    				<select
+    					value={roomId}
+    					onChange={(e) =>
+    						setRoomId(e.target.value)
+    					}
+    				>
+    					<option value="general">general</option>
+    					<option value="travel">travel</option>
+    					<option value="music">music</option>
+    				</select>
+    			</label>
+    			<hr />
+    			<ChatRoom roomId={roomId} />
+    		</>
+    	);
+    }
+    ```
 
-    return (
-        <>
-            <h1>Welcome to the {roomId} room!</h1>
-            <input
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-            />
-        </>
-    );
-}
+    </div>
 
-export default function App() {
-    const [roomId, setRoomId] = useState('general');
-    return (
-        <>
-            <label>
-                Choose the chat room:{' '}
-                <select
-                    value={roomId}
-                    onChange={(e) =>
-                        setRoomId(e.target.value)
-                    }
-                >
-                    <option value="general">general</option>
-                    <option value="travel">travel</option>
-                    <option value="music">music</option>
-                </select>
-            </label>
-            <hr />
-            <ChatRoom roomId={roomId} />
-        </>
-    );
-}
-```
+=== "chat.js"
 
-<!-- 0066.part.md -->
+    ```js
+    export function createConnection(serverUrl, roomId) {
+    	// A real implementation would actually connect to the server
+    	return {
+    		connect() {
+    			console.log(
+    				'✅ Connecting to "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl +
+    					'...'
+    			);
+    		},
+    		disconnect() {
+    			console.log(
+    				'❌ Disconnected from "' +
+    					roomId +
+    					'" room at ' +
+    					serverUrl
+    			);
+    		},
+    	};
+    }
+    ```
 
-<!-- 0067.part.md -->
+=== "Результат"
 
-```js
-export function createConnection(serverUrl, roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ Connecting to "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl +
-                    '...'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ Disconnected from "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl
-            );
-        },
-    };
-}
-```
+    ![Результат](lifecycle-of-reactive-effects-5.png)
 
-<!-- 0068.part.md -->
+???tip "Показать подсказку"
 
-<!-- 0069.part.md -->
+    Возможно, вам понадобится добавить массив зависимостей для этого Эффекта. Какие зависимости должны быть там?
 
-```css
-input {
-    display: block;
-    margin-bottom: 20px;
-}
-button {
-    margin-left: 10px;
-}
-```
+???success "Показать решение"
 
-<!-- 0070.part.md -->
+    У этого Эффекта вообще не было массива зависимостей, поэтому он пересинхронизировался после каждого повторного рендеринга. Сначала добавьте массив зависимостей. Затем убедитесь, что каждое реактивное значение, используемое эффектом, указано в массиве. Например, `roomId` является реактивным (потому что это пропс), поэтому он должен быть включен в массив. Это гарантирует, что когда пользователь выберет другую комнату, чат переподключится. С другой стороны, `serverUrl` определяется вне компонента. Поэтому его не нужно включать в массив.
 
-\<Решение\>
+    === "App.js"
 
-У этого Эффекта вообще не было массива зависимостей, поэтому он пересинхронизировался после каждого повторного рендеринга. Сначала добавьте массив зависимостей. Затем убедитесь, что каждое реактивное значение, используемое эффектом, указано в массиве. Например, `roomId` является реактивным (потому что это пропс), поэтому он должен быть включен в массив. Это гарантирует, что когда пользователь выберет другую комнату, чат переподключится. С другой стороны, `serverUrl` определяется вне компонента. Поэтому его не нужно включать в массив.
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-<!-- 0071.part.md -->
+    	```js
+    	import { useState, useEffect } from 'react';
+    	import { createConnection } from './chat.js';
 
-```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+    	const serverUrl = 'https://localhost:1234';
 
-const serverUrl = 'https://localhost:1234';
+    	function ChatRoom({ roomId }) {
+    		const [message, setMessage] = useState('');
 
-function ChatRoom({ roomId }) {
-    const [message, setMessage] = useState('');
+    		useEffect(() => {
+    			const connection = createConnection(
+    				serverUrl,
+    				roomId
+    			);
+    			connection.connect();
+    			return () => connection.disconnect();
+    		}, [roomId]);
 
-    useEffect(() => {
-        const connection = createConnection(
-            serverUrl,
-            roomId
-        );
-        connection.connect();
-        return () => connection.disconnect();
-    }, [roomId]);
+    		return (
+    			<>
+    				<h1>Welcome to the {roomId} room!</h1>
+    				<input
+    					value={message}
+    					onChange={(e) => setMessage(e.target.value)}
+    				/>
+    			</>
+    		);
+    	}
 
-    return (
-        <>
-            <h1>Welcome to the {roomId} room!</h1>
-            <input
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-            />
-        </>
-    );
-}
+    	export default function App() {
+    		const [roomId, setRoomId] = useState('general');
+    		return (
+    			<>
+    				<label>
+    					Choose the chat room:{' '}
+    					<select
+    						value={roomId}
+    						onChange={(e) =>
+    							setRoomId(e.target.value)
+    						}
+    					>
+    						<option value="general">general</option>
+    						<option value="travel">travel</option>
+    						<option value="music">music</option>
+    					</select>
+    				</label>
+    				<hr />
+    				<ChatRoom roomId={roomId} />
+    			</>
+    		);
+    	}
+    	```
 
-export default function App() {
-    const [roomId, setRoomId] = useState('general');
-    return (
-        <>
-            <label>
-                Choose the chat room:{' '}
-                <select
-                    value={roomId}
-                    onChange={(e) =>
-                        setRoomId(e.target.value)
-                    }
-                >
-                    <option value="general">general</option>
-                    <option value="travel">travel</option>
-                    <option value="music">music</option>
-                </select>
-            </label>
-            <hr />
-            <ChatRoom roomId={roomId} />
-        </>
-    );
-}
-```
+    	</div>
 
-<!-- 0072.part.md -->
+    === "chat.js"
 
-<!-- 0073.part.md -->
+    	```js
+    	export function createConnection(serverUrl, roomId) {
+    		// A real implementation would actually connect to the server
+    		return {
+    			connect() {
+    				console.log(
+    					'✅ Connecting to "' +
+    						roomId +
+    						'" room at ' +
+    						serverUrl +
+    						'...'
+    				);
+    			},
+    			disconnect() {
+    				console.log(
+    					'❌ Disconnected from "' +
+    						roomId +
+    						'" room at ' +
+    						serverUrl
+    				);
+    			},
+    		};
+    	}
+    	```
 
-```js
-export function createConnection(serverUrl, roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ Connecting to "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl +
-                    '...'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ Disconnected from "' +
-                    roomId +
-                    '" room at ' +
-                    serverUrl
-            );
-        },
-    };
-}
-```
+    === "Результат"
 
-<!-- 0074.part.md -->
-
-<!-- 0075.part.md -->
-
-```css
-input {
-    display: block;
-    margin-bottom: 20px;
-}
-button {
-    margin-left: 10px;
-}
-```
-
-<!-- 0076.part.md -->
-
-\</Solution\>
+    	![Результат](lifecycle-of-reactive-effects-5.png)
 
 ### 2. Включение и выключение синхронизации
 
@@ -1192,232 +1168,216 @@ button {
 
 Также имеется флажок. Установка флажка переключает переменную состояния `canMove`, но эта переменная состояния не используется нигде в коде. Ваша задача - изменить код так, чтобы при значении `canMove`, равном `false` (флажок снят), точка переставала двигаться. После того, как вы снова включите флажок (и установите `canMove` в `true`), точка снова должна следовать за движением. Другими словами, то, может ли точка двигаться или нет, должно синхронизироваться с тем, установлен ли флажок.
 
-\< Подсказка\>
+=== "App.js"
 
-Вы не можете объявить Эффект условно. Однако, код внутри Эффекта может использовать условия\!
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-\</Hint\>
+    ```js
+    import { useState, useEffect } from 'react';
 
-<!-- 0077.part.md -->
+    export default function App() {
+    	const [position, setPosition] = useState({
+    		x: 0,
+    		y: 0,
+    	});
+    	const [canMove, setCanMove] = useState(true);
 
-```js
-import { useState, useEffect } from 'react';
+    	useEffect(() => {
+    		function handleMove(e) {
+    			setPosition({ x: e.clientX, y: e.clientY });
+    		}
+    		window.addEventListener('pointermove', handleMove);
+    		return () =>
+    			window.removeEventListener(
+    				'pointermove',
+    				handleMove
+    			);
+    	}, []);
 
-export default function App() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    const [canMove, setCanMove] = useState(true);
+    	return (
+    		<>
+    			<label>
+    				<input
+    					type="checkbox"
+    					checked={canMove}
+    					onChange={(e) =>
+    						setCanMove(e.target.checked)
+    					}
+    				/>
+    				The dot is allowed to move
+    			</label>
+    			<hr />
+    			<div
+    				style={{
+    					position: 'absolute',
+    					backgroundColor: 'pink',
+    					borderRadius: '50%',
+    					opacity: 0.6,
+    					transform: `translate(${position.x}px, ${position.y}px)`,
+    					pointerEvents: 'none',
+    					left: -20,
+    					top: -20,
+    					width: 40,
+    					height: 40,
+    				}}
+    			/>
+    		</>
+    	);
+    }
+    ```
 
-    useEffect(() => {
-        function handleMove(e) {
-            setPosition({ x: e.clientX, y: e.clientY });
-        }
-        window.addEventListener('pointermove', handleMove);
-        return () =>
-            window.removeEventListener(
-                'pointermove',
-                handleMove
-            );
-    }, []);
+    </div>
 
-    return (
-        <>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={canMove}
-                    onChange={(e) =>
-                        setCanMove(e.target.checked)
-                    }
-                />
-                The dot is allowed to move
-            </label>
-            <hr />
-            <div
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'pink',
-                    borderRadius: '50%',
-                    opacity: 0.6,
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    pointerEvents: 'none',
-                    left: -20,
-                    top: -20,
-                    width: 40,
-                    height: 40,
-                }}
-            />
-        </>
-    );
-}
-```
+=== "Результат"
 
-<!-- 0078.part.md -->
+    ![Результат](lifecycle-of-reactive-effects-6.png)
 
-<!-- 0079.part.md -->
+???tip "Показать подсказку"
 
-```css
-body {
-    height: 200px;
-}
-```
+    Вы не можете объявить Эффект условно. Однако, код внутри Эффекта может использовать условия!
 
-<!-- 0080.part.md -->
+???success "Показать решение"
 
-\<Решение\>
+    Одно из решений - обернуть вызов `setPosition` в `if (canMove) { ... }` условие:
 
-Одно из решений - обернуть вызов `setPosition` в `if (canMove) { ... }` условие:
+    === "App.js"
 
-<!-- 0081.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState, useEffect } from 'react';
+    	```js
+    	import { useState, useEffect } from 'react';
 
-export default function App() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    const [canMove, setCanMove] = useState(true);
+    	export default function App() {
+    		const [position, setPosition] = useState({
+    			x: 0,
+    			y: 0,
+    		});
+    		const [canMove, setCanMove] = useState(true);
 
-    useEffect(() => {
-        function handleMove(e) {
-            if (canMove) {
-                setPosition({ x: e.clientX, y: e.clientY });
-            }
-        }
-        window.addEventListener('pointermove', handleMove);
-        return () =>
-            window.removeEventListener(
-                'pointermove',
-                handleMove
-            );
-    }, [canMove]);
+    		useEffect(() => {
+    			function handleMove(e) {
+    				if (canMove) {
+    					setPosition({ x: e.clientX, y: e.clientY });
+    				}
+    			}
+    			window.addEventListener('pointermove', handleMove);
+    			return () =>
+    				window.removeEventListener(
+    					'pointermove',
+    					handleMove
+    				);
+    		}, [canMove]);
 
-    return (
-        <>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={canMove}
-                    onChange={(e) =>
-                        setCanMove(e.target.checked)
-                    }
-                />
-                The dot is allowed to move
-            </label>
-            <hr />
-            <div
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'pink',
-                    borderRadius: '50%',
-                    opacity: 0.6,
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    pointerEvents: 'none',
-                    left: -20,
-                    top: -20,
-                    width: 40,
-                    height: 40,
-                }}
-            />
-        </>
-    );
-}
-```
+    		return (
+    			<>
+    				<label>
+    					<input
+    						type="checkbox"
+    						checked={canMove}
+    						onChange={(e) =>
+    							setCanMove(e.target.checked)
+    						}
+    					/>
+    					The dot is allowed to move
+    				</label>
+    				<hr />
+    				<div
+    					style={{
+    						position: 'absolute',
+    						backgroundColor: 'pink',
+    						borderRadius: '50%',
+    						opacity: 0.6,
+    						transform: `translate(${position.x}px, ${position.y}px)`,
+    						pointerEvents: 'none',
+    						left: -20,
+    						top: -20,
+    						width: 40,
+    						height: 40,
+    					}}
+    				/>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0082.part.md -->
+    	</div>
 
-<!-- 0083.part.md -->
+    === "Результат"
 
-```css
-body {
-    height: 200px;
-}
-```
+    	![Результат](lifecycle-of-reactive-effects-6.png)
 
-<!-- 0084.part.md -->
+    В качестве альтернативы можно обернуть логику _подписки на событие_ в `if (canMove) { ... }` условие:
 
-В качестве альтернативы можно обернуть логику _подписки на событие_ в `if (canMove) { ... }` условие:
+    === "App.js"
 
-<!-- 0085.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState, useEffect } from 'react';
+    	```js
+    	import { useState, useEffect } from 'react';
 
-export default function App() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    const [canMove, setCanMove] = useState(true);
+    	export default function App() {
+    		const [position, setPosition] = useState({
+    			x: 0,
+    			y: 0,
+    		});
+    		const [canMove, setCanMove] = useState(true);
 
-    useEffect(() => {
-        function handleMove(e) {
-            setPosition({ x: e.clientX, y: e.clientY });
-        }
-        if (canMove) {
-            window.addEventListener(
-                'pointermove',
-                handleMove
-            );
-            return () =>
-                window.removeEventListener(
-                    'pointermove',
-                    handleMove
-                );
-        }
-    }, [canMove]);
+    		useEffect(() => {
+    			function handleMove(e) {
+    				setPosition({ x: e.clientX, y: e.clientY });
+    			}
+    			if (canMove) {
+    				window.addEventListener(
+    					'pointermove',
+    					handleMove
+    				);
+    				return () =>
+    					window.removeEventListener(
+    						'pointermove',
+    						handleMove
+    					);
+    			}
+    		}, [canMove]);
 
-    return (
-        <>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={canMove}
-                    onChange={(e) =>
-                        setCanMove(e.target.checked)
-                    }
-                />
-                The dot is allowed to move
-            </label>
-            <hr />
-            <div
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'pink',
-                    borderRadius: '50%',
-                    opacity: 0.6,
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    pointerEvents: 'none',
-                    left: -20,
-                    top: -20,
-                    width: 40,
-                    height: 40,
-                }}
-            />
-        </>
-    );
-}
-```
+    		return (
+    			<>
+    				<label>
+    					<input
+    						type="checkbox"
+    						checked={canMove}
+    						onChange={(e) =>
+    							setCanMove(e.target.checked)
+    						}
+    					/>
+    					The dot is allowed to move
+    				</label>
+    				<hr />
+    				<div
+    					style={{
+    						position: 'absolute',
+    						backgroundColor: 'pink',
+    						borderRadius: '50%',
+    						opacity: 0.6,
+    						transform: `translate(${position.x}px, ${position.y}px)`,
+    						pointerEvents: 'none',
+    						left: -20,
+    						top: -20,
+    						width: 40,
+    						height: 40,
+    					}}
+    				/>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0086.part.md -->
+    	</div>
 
-<!-- 0087.part.md -->
+    === "Результат"
 
-```css
-body {
-    height: 200px;
-}
-```
+    	![Результат](lifecycle-of-reactive-effects-6.png)
 
-<!-- 0088.part.md -->
-
-В обоих случаях `canMove` является реактивной переменной, которую вы читаете внутри Эффекта. Именно поэтому она должна быть указана в списке зависимостей Эффекта. Это гарантирует, что Эффект повторно синхронизируется после каждого изменения ее значения.
-
-\</Solution\>
+    В обоих случаях `canMove` является реактивной переменной, которую вы читаете внутри Эффекта. Именно поэтому она должна быть указана в списке зависимостей Эффекта. Это гарантирует, что Эффект повторно синхронизируется после каждого изменения ее значения.
 
 ### 3. Исследуйте ошибку устаревшего значения
 
@@ -1425,245 +1385,229 @@ body {
 
 Однако по какой-то причине переменная состояния `canMove` внутри `handleMove` кажется "несвежей": она всегда `true`, даже после того, как вы установили флажок. Как такое возможно? Найдите ошибку в коде и исправьте ее.
 
-\< Подсказка\>
+=== "App.js"
 
-Если вы видите, что правило линтера подавляется, уберите подавление\! Именно там обычно и находятся ошибки.
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-\</Hint\>
+    ```js
+    import { useState, useEffect } from 'react';
 
-<!-- 0089.part.md -->
+    export default function App() {
+    	const [position, setPosition] = useState({
+    		x: 0,
+    		y: 0,
+    	});
+    	const [canMove, setCanMove] = useState(true);
 
-```js
-import { useState, useEffect } from 'react';
+    	function handleMove(e) {
+    		if (canMove) {
+    			setPosition({ x: e.clientX, y: e.clientY });
+    		}
+    	}
 
-export default function App() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    const [canMove, setCanMove] = useState(true);
+    	useEffect(() => {
+    		window.addEventListener('pointermove', handleMove);
+    		return () =>
+    			window.removeEventListener(
+    				'pointermove',
+    				handleMove
+    			);
+    		// eslint-disable-next-line react-hooks/exhaustive-deps
+    	}, []);
 
-    function handleMove(e) {
-        if (canMove) {
-            setPosition({ x: e.clientX, y: e.clientY });
-        }
+    	return (
+    		<>
+    			<label>
+    				<input
+    					type="checkbox"
+    					checked={canMove}
+    					onChange={(e) =>
+    						setCanMove(e.target.checked)
+    					}
+    				/>
+    				The dot is allowed to move
+    			</label>
+    			<hr />
+    			<div
+    				style={{
+    					position: 'absolute',
+    					backgroundColor: 'pink',
+    					borderRadius: '50%',
+    					opacity: 0.6,
+    					transform: `translate(${position.x}px, ${position.y}px)`,
+    					pointerEvents: 'none',
+    					left: -20,
+    					top: -20,
+    					width: 40,
+    					height: 40,
+    				}}
+    			/>
+    		</>
+    	);
     }
+    ```
 
-    useEffect(() => {
-        window.addEventListener('pointermove', handleMove);
-        return () =>
-            window.removeEventListener(
-                'pointermove',
-                handleMove
-            );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    </div>
 
-    return (
-        <>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={canMove}
-                    onChange={(e) =>
-                        setCanMove(e.target.checked)
-                    }
-                />
-                The dot is allowed to move
-            </label>
-            <hr />
-            <div
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'pink',
-                    borderRadius: '50%',
-                    opacity: 0.6,
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    pointerEvents: 'none',
-                    left: -20,
-                    top: -20,
-                    width: 40,
-                    height: 40,
-                }}
-            />
-        </>
-    );
-}
-```
+=== "Результат"
 
-<!-- 0090.part.md -->
+    ![Результат](lifecycle-of-reactive-effects-6.png)
 
-<!-- 0091.part.md -->
+???tip "Показать подсказку"
 
-```css
-body {
-    height: 200px;
-}
-```
+    Если вы видите, что правило линтера подавляется, уберите подавление! Именно там обычно и находятся ошибки.
 
-<!-- 0092.part.md -->
+???success "Показать решение"
 
-\<Решение\>
+    Проблема оригинального кода заключалась в подавлении линтера зависимостей. Если убрать подавление, вы увидите, что этот Effect зависит от функции `handleMove`. Это имеет смысл: `handleMove` объявлена внутри тела компонента, что делает ее реактивным значением. Каждое реактивное значение должно быть указано как зависимость, иначе оно может устареть со временем!
 
-Проблема оригинального кода заключалась в подавлении линтера зависимостей. Если убрать подавление, вы увидите, что этот Effect зависит от функции `handleMove`. Это имеет смысл: `handleMove` объявлена внутри тела компонента, что делает ее реактивным значением. Каждое реактивное значение должно быть указано как зависимость, иначе оно может устареть со временем!
+    Автор оригинального кода "соврал" React, сказав, что Effect не зависит (`[]`) ни от каких реактивных значений. Именно поэтому React не пересинхронизировал Effect после изменения `canMove` (и `handleMove` вместе с ним). Поскольку React не повторно синхронизировал Эффект, `handleMove`, присоединенная в качестве слушателя, является функцией `handleMove`, созданной во время первоначального рендеринга. Во время первоначального рендера `canMove` было `true`, поэтому `handleMove` из первоначального рендера всегда будет видеть это значение.
 
-Автор оригинального кода "соврал" React, сказав, что Effect не зависит (`[]`) ни от каких реактивных значений. Именно поэтому React не пересинхронизировал Effect после изменения `canMove` (и `handleMove` вместе с ним). Поскольку React не повторно синхронизировал Эффект, `handleMove`, присоединенная в качестве слушателя, является функцией `handleMove`, созданной во время первоначального рендеринга. Во время первоначального рендера `canMove` было `true`, поэтому `handleMove` из первоначального рендера всегда будет видеть это значение.
+    **Если вы никогда не подавляете линтер, вы никогда не увидите проблем с устаревшими значениями.** Есть несколько различных способов решения этой ошибки, но всегда следует начинать с удаления подавления линтера. Затем измените код, чтобы исправить ошибку lint.
 
-**Если вы никогда не подавляете линтер, вы никогда не увидите проблем с устаревшими значениями.** Есть несколько различных способов решения этой ошибки, но всегда следует начинать с удаления подавления линтера. Затем измените код, чтобы исправить ошибку lint.
+    Вы можете изменить зависимость Effect на `[handleMove]`, но так как это будет заново определенная функция для каждого рендера, то лучше вообще убрать массив зависимостей. Тогда Эффект _будет_ повторно синхронизироваться после каждого повторного рендера:
 
-Вы можете изменить зависимость Effect на `[handleMove]`, но так как это будет заново определенная функция для каждого рендера, то лучше вообще убрать массив зависимостей. Тогда Эффект _будет_ повторно синхронизироваться после каждого повторного рендера:
+    === "App.js"
 
-<!-- 0093.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState, useEffect } from 'react';
+    	```js
+    	import { useState, useEffect } from 'react';
 
-export default function App() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    const [canMove, setCanMove] = useState(true);
+    	export default function App() {
+    		const [position, setPosition] = useState({
+    			x: 0,
+    			y: 0,
+    		});
+    		const [canMove, setCanMove] = useState(true);
 
-    function handleMove(e) {
-        if (canMove) {
-            setPosition({ x: e.clientX, y: e.clientY });
-        }
-    }
+    		function handleMove(e) {
+    			if (canMove) {
+    				setPosition({ x: e.clientX, y: e.clientY });
+    			}
+    		}
 
-    useEffect(() => {
-        window.addEventListener('pointermove', handleMove);
-        return () =>
-            window.removeEventListener(
-                'pointermove',
-                handleMove
-            );
-    });
+    		useEffect(() => {
+    			window.addEventListener('pointermove', handleMove);
+    			return () =>
+    				window.removeEventListener(
+    					'pointermove',
+    					handleMove
+    				);
+    		});
 
-    return (
-        <>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={canMove}
-                    onChange={(e) =>
-                        setCanMove(e.target.checked)
-                    }
-                />
-                The dot is allowed to move
-            </label>
-            <hr />
-            <div
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'pink',
-                    borderRadius: '50%',
-                    opacity: 0.6,
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    pointerEvents: 'none',
-                    left: -20,
-                    top: -20,
-                    width: 40,
-                    height: 40,
-                }}
-            />
-        </>
-    );
-}
-```
+    		return (
+    			<>
+    				<label>
+    					<input
+    						type="checkbox"
+    						checked={canMove}
+    						onChange={(e) =>
+    							setCanMove(e.target.checked)
+    						}
+    					/>
+    					The dot is allowed to move
+    				</label>
+    				<hr />
+    				<div
+    					style={{
+    						position: 'absolute',
+    						backgroundColor: 'pink',
+    						borderRadius: '50%',
+    						opacity: 0.6,
+    						transform: `translate(${position.x}px, ${position.y}px)`,
+    						pointerEvents: 'none',
+    						left: -20,
+    						top: -20,
+    						width: 40,
+    						height: 40,
+    					}}
+    				/>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0094.part.md -->
+    	</div>
 
-<!-- 0095.part.md -->
+    === "Результат"
 
-```css
-body {
-    height: 200px;
-}
-```
+    ![Результат](lifecycle-of-reactive-effects-6.png)
 
-<!-- 0096.part.md -->
+    Это решение работает, но оно не идеально. Если вы поместите `console.log('Resubscribing')` внутрь Effect, вы заметите, что он переподписывается после каждого повторного рендеринга. Переподписка происходит быстро, но все же было бы неплохо не делать это так часто.
 
-Это решение работает, но оно не идеально. Если вы поместите `console.log('Resubscribing')` внутрь Effect, вы заметите, что он переподписывается после каждого повторного рендеринга. Переподписка происходит быстро, но все же было бы неплохо не делать это так часто.
+    Лучшим решением было бы переместить функцию `handleMove` _внутрь_ Эффекта. Тогда `handleMove` не будет реактивным значением, и ваш Эффект не будет зависеть от функции. Вместо этого он должен будет зависеть от `canMove`, которую ваш код теперь считывает изнутри Эффекта. Это соответствует тому поведению, которое вы хотели, поскольку теперь ваш Эффект будет синхронизирован со значением `canMove`:
 
-Лучшим решением было бы переместить функцию `handleMove` _внутрь_ Эффекта. Тогда `handleMove` не будет реактивным значением, и ваш Эффект не будет зависеть от функции. Вместо этого он должен будет зависеть от `canMove`, которую ваш код теперь считывает изнутри Эффекта. Это соответствует тому поведению, которое вы хотели, поскольку теперь ваш Эффект будет синхронизирован со значением `canMove`:
+    === "App.js"
 
-<!-- 0097.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState, useEffect } from 'react';
+    	```js
+    	import { useState, useEffect } from 'react';
 
-export default function App() {
-    const [position, setPosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    const [canMove, setCanMove] = useState(true);
+    	export default function App() {
+    		const [position, setPosition] = useState({
+    			x: 0,
+    			y: 0,
+    		});
+    		const [canMove, setCanMove] = useState(true);
 
-    useEffect(() => {
-        function handleMove(e) {
-            if (canMove) {
-                setPosition({ x: e.clientX, y: e.clientY });
-            }
-        }
+    		useEffect(() => {
+    			function handleMove(e) {
+    				if (canMove) {
+    					setPosition({ x: e.clientX, y: e.clientY });
+    				}
+    			}
 
-        window.addEventListener('pointermove', handleMove);
-        return () =>
-            window.removeEventListener(
-                'pointermove',
-                handleMove
-            );
-    }, [canMove]);
+    			window.addEventListener('pointermove', handleMove);
+    			return () =>
+    				window.removeEventListener(
+    					'pointermove',
+    					handleMove
+    				);
+    		}, [canMove]);
 
-    return (
-        <>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={canMove}
-                    onChange={(e) =>
-                        setCanMove(e.target.checked)
-                    }
-                />
-                The dot is allowed to move
-            </label>
-            <hr />
-            <div
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'pink',
-                    borderRadius: '50%',
-                    opacity: 0.6,
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    pointerEvents: 'none',
-                    left: -20,
-                    top: -20,
-                    width: 40,
-                    height: 40,
-                }}
-            />
-        </>
-    );
-}
-```
+    		return (
+    			<>
+    				<label>
+    					<input
+    						type="checkbox"
+    						checked={canMove}
+    						onChange={(e) =>
+    							setCanMove(e.target.checked)
+    						}
+    					/>
+    					The dot is allowed to move
+    				</label>
+    				<hr />
+    				<div
+    					style={{
+    						position: 'absolute',
+    						backgroundColor: 'pink',
+    						borderRadius: '50%',
+    						opacity: 0.6,
+    						transform: `translate(${position.x}px, ${position.y}px)`,
+    						pointerEvents: 'none',
+    						left: -20,
+    						top: -20,
+    						width: 40,
+    						height: 40,
+    					}}
+    				/>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0098.part.md -->
+    	</div>
 
-<!-- 0099.part.md -->
+    === "Результат"
 
-```css
-body {
-    height: 200px;
-}
-```
+    	![Результат](lifecycle-of-reactive-effects-6.png)
 
-<!-- 0100.part.md -->
+    Попробуйте добавить `console.log('Resubscribing')` в тело Effect и обратите внимание, что теперь он переподписывается только при переключении флажка (изменяется `canMove`) или при редактировании кода. Это лучше, чем предыдущий подход, который всегда переподписывался.
 
-Попробуйте добавить `console.log('Resubscribing')` в тело Effect и обратите внимание, что теперь он переподписывается только при переключении флажка (изменяется `canMove`) или при редактировании кода. Это лучше, чем предыдущий подход, который всегда переподписывался.
-
-Более общий подход к решению этой проблемы вы узнаете в [Отделение событий от эффектов](separating-events-from-effects.md).
-
-\</Solution\>
+    Более общий подход к решению этой проблемы вы узнаете в [Отделение событий от эффектов](separating-events-from-effects.md).
 
 ### 4. Исправление переключателя соединений
 
@@ -1671,414 +1615,395 @@ body {
 
 Обратите внимание, что изначально в консольных журналах говорится, что соединение не зашифровано. Попробуйте установить флажок: ничего не произойдет. Однако если после этого вы измените выбранную комнату, то чат снова подключится _и_ включит шифрование (как вы увидите из консольных сообщений). Это ошибка. Исправьте ошибку, чтобы переключение флажка _также_ приводило к переподключению чата.
 
-\<Hint\>
+=== "App.js"
 
-Подавление линтера всегда подозрительно. Может ли это быть багом?
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-\</Hint\>
+    ```js
+    import { useState } from 'react';
+    import ChatRoom from './ChatRoom.js';
+    import {
+    	createEncryptedConnection,
+    	createUnencryptedConnection,
+    } from './chat.js';
 
-<!-- 0101.part.md -->
+    export default function App() {
+    	const [roomId, setRoomId] = useState('general');
+    	const [isEncrypted, setIsEncrypted] = useState(false);
+    	return (
+    		<>
+    			<label>
+    				Choose the chat room:{' '}
+    				<select
+    					value={roomId}
+    					onChange={(e) =>
+    						setRoomId(e.target.value)
+    					}
+    				>
+    					<option value="general">general</option>
+    					<option value="travel">travel</option>
+    					<option value="music">music</option>
+    				</select>
+    			</label>
+    			<label>
+    				<input
+    					type="checkbox"
+    					checked={isEncrypted}
+    					onChange={(e) =>
+    						setIsEncrypted(e.target.checked)
+    					}
+    				/>
+    				Enable encryption
+    			</label>
+    			<hr />
+    			<ChatRoom
+    				roomId={roomId}
+    				createConnection={
+    					isEncrypted
+    						? createEncryptedConnection
+    						: createUnencryptedConnection
+    				}
+    			/>
+    		</>
+    	);
+    }
+    ```
 
-```js
-import { useState } from 'react';
-import ChatRoom from './ChatRoom.js';
-import {
-    createEncryptedConnection,
-    createUnencryptedConnection,
-} from './chat.js';
+    </div>
 
-export default function App() {
-    const [roomId, setRoomId] = useState('general');
-    const [isEncrypted, setIsEncrypted] = useState(false);
-    return (
-        <>
-            <label>
-                Choose the chat room:{' '}
-                <select
-                    value={roomId}
-                    onChange={(e) =>
-                        setRoomId(e.target.value)
-                    }
-                >
-                    <option value="general">general</option>
-                    <option value="travel">travel</option>
-                    <option value="music">music</option>
-                </select>
-            </label>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={isEncrypted}
-                    onChange={(e) =>
-                        setIsEncrypted(e.target.checked)
-                    }
-                />
-                Enable encryption
-            </label>
-            <hr />
-            <ChatRoom
-                roomId={roomId}
-                createConnection={
-                    isEncrypted
-                        ? createEncryptedConnection
-                        : createUnencryptedConnection
-                }
-            />
-        </>
-    );
-}
-```
+=== "ChatRoom.js"
 
-<!-- 0102.part.md -->
+    ```js
+    import { useState, useEffect } from 'react';
 
-<!-- 0103.part.md -->
+    export default function ChatRoom({
+    	roomId,
+    	createConnection,
+    }) {
+    	useEffect(() => {
+    		const connection = createConnection(roomId);
+    		connection.connect();
+    		return () => connection.disconnect();
+    		// eslint-disable-next-line react-hooks/exhaustive-deps
+    	}, [roomId]);
 
-```js
-import { useState, useEffect } from 'react';
+    	return <h1>Welcome to the {roomId} room!</h1>;
+    }
+    ```
 
-export default function ChatRoom({
-    roomId,
-    createConnection,
-}) {
-    useEffect(() => {
-        const connection = createConnection(roomId);
-        connection.connect();
-        return () => connection.disconnect();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [roomId]);
+=== "chat.js"
 
-    return <h1>Welcome to the {roomId} room!</h1>;
-}
-```
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-<!-- 0104.part.md -->
+    ```js
+    export function createEncryptedConnection(roomId) {
+    	// A real implementation would actually connect to the server
+    	return {
+    		connect() {
+    			console.log(
+    				'✅ 🔐 Connecting to "' +
+    					roomId +
+    					'... (encrypted)'
+    			);
+    		},
+    		disconnect() {
+    			console.log(
+    				'❌ 🔐 Disconnected from "' +
+    					roomId +
+    					'" room (encrypted)'
+    			);
+    		},
+    	};
+    }
 
-<!-- 0105.part.md -->
+    export function createUnencryptedConnection(roomId) {
+    	// A real implementation would actually connect to the server
+    	return {
+    		connect() {
+    			console.log(
+    				'✅ Connecting to "' +
+    					roomId +
+    					'... (unencrypted)'
+    			);
+    		},
+    		disconnect() {
+    			console.log(
+    				'❌ Disconnected from "' +
+    					roomId +
+    					'" room (unencrypted)'
+    			);
+    		},
+    	};
+    }
+    ```
 
-```js
-export function createEncryptedConnection(roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ 🔐 Connecting to "' +
-                    roomId +
-                    '... (encrypted)'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ 🔐 Disconnected from "' +
-                    roomId +
-                    '" room (encrypted)'
-            );
-        },
-    };
-}
+    </div>
 
-export function createUnencryptedConnection(roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ Connecting to "' +
-                    roomId +
-                    '... (unencrypted)'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ Disconnected from "' +
-                    roomId +
-                    '" room (unencrypted)'
-            );
-        },
-    };
-}
-```
+=== "Результат"
 
-<!-- 0106.part.md -->
+    ![Результат](lifecycle-of-reactive-effects-7.png)
 
-<!-- 0107.part.md -->
+???tip "Показать подсказку"
 
-```css
-label {
-    display: block;
-    margin-bottom: 10px;
-}
-```
+    Подавление линтера всегда подозрительно. Может ли это быть багом?
 
-<!-- 0108.part.md -->
+???success "Показать решение"
 
-\<Решение\>
+    Если вы удалите подавление линтера, вы увидите ошибку lint. Проблема в том, что `createConnection` является prop, то есть это реактивное значение. Оно может меняться в течение времени! (И действительно, так и должно быть - когда пользователь устанавливает флажок, родительский компонент передает другое значение параметра `createConnection`). Вот почему это должна быть зависимость. Включите его в список, чтобы исправить ошибку:
 
-Если вы удалите подавление линтера, вы увидите ошибку lint. Проблема в том, что `createConnection` является prop, то есть это реактивное значение. Оно может меняться в течение времени! (И действительно, так и должно быть - когда пользователь устанавливает флажок, родительский компонент передает другое значение параметра `createConnection`). Вот почему это должна быть зависимость. Включите его в список, чтобы исправить ошибку:
+    === "App.js"
 
-<!-- 0109.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState } from 'react';
-import ChatRoom from './ChatRoom.js';
-import {
-    createEncryptedConnection,
-    createUnencryptedConnection,
-} from './chat.js';
+    	```js
+    	import { useState } from 'react';
+    	import ChatRoom from './ChatRoom.js';
+    	import {
+    		createEncryptedConnection,
+    		createUnencryptedConnection,
+    	} from './chat.js';
 
-export default function App() {
-    const [roomId, setRoomId] = useState('general');
-    const [isEncrypted, setIsEncrypted] = useState(false);
-    return (
-        <>
-            <label>
-                Choose the chat room:{' '}
-                <select
-                    value={roomId}
-                    onChange={(e) =>
-                        setRoomId(e.target.value)
-                    }
-                >
-                    <option value="general">general</option>
-                    <option value="travel">travel</option>
-                    <option value="music">music</option>
-                </select>
-            </label>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={isEncrypted}
-                    onChange={(e) =>
-                        setIsEncrypted(e.target.checked)
-                    }
-                />
-                Enable encryption
-            </label>
-            <hr />
-            <ChatRoom
-                roomId={roomId}
-                createConnection={
-                    isEncrypted
-                        ? createEncryptedConnection
-                        : createUnencryptedConnection
-                }
-            />
-        </>
-    );
-}
-```
+    	export default function App() {
+    		const [roomId, setRoomId] = useState('general');
+    		const [isEncrypted, setIsEncrypted] = useState(false);
+    		return (
+    			<>
+    				<label>
+    					Choose the chat room:{' '}
+    					<select
+    						value={roomId}
+    						onChange={(e) =>
+    							setRoomId(e.target.value)
+    						}
+    					>
+    						<option value="general">general</option>
+    						<option value="travel">travel</option>
+    						<option value="music">music</option>
+    					</select>
+    				</label>
+    				<label>
+    					<input
+    						type="checkbox"
+    						checked={isEncrypted}
+    						onChange={(e) =>
+    							setIsEncrypted(e.target.checked)
+    						}
+    					/>
+    					Enable encryption
+    				</label>
+    				<hr />
+    				<ChatRoom
+    					roomId={roomId}
+    					createConnection={
+    						isEncrypted
+    							? createEncryptedConnection
+    							: createUnencryptedConnection
+    					}
+    				/>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0110.part.md -->
+    	</div>
 
-<!-- 0111.part.md -->
+    === "ChatRoom.js"
 
-```js
-import { useState, useEffect } from 'react';
+    	```js
+    	import { useState, useEffect } from 'react';
 
-export default function ChatRoom({
-    roomId,
-    createConnection,
-}) {
-    useEffect(() => {
-        const connection = createConnection(roomId);
-        connection.connect();
-        return () => connection.disconnect();
-    }, [roomId, createConnection]);
+    	export default function ChatRoom({
+    		roomId,
+    		createConnection,
+    	}) {
+    		useEffect(() => {
+    			const connection = createConnection(roomId);
+    			connection.connect();
+    			return () => connection.disconnect();
+    		}, [roomId, createConnection]);
 
-    return <h1>Welcome to the {roomId} room!</h1>;
-}
-```
+    		return <h1>Welcome to the {roomId} room!</h1>;
+    	}
+    	```
 
-<!-- 0112.part.md -->
+    === "chat.js"
 
-<!-- 0113.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-export function createEncryptedConnection(roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ 🔐 Connecting to "' +
-                    roomId +
-                    '... (encrypted)'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ 🔐 Disconnected from "' +
-                    roomId +
-                    '" room (encrypted)'
-            );
-        },
-    };
-}
+    	```js
+    	export function createEncryptedConnection(roomId) {
+    		// A real implementation would actually connect to the server
+    		return {
+    			connect() {
+    				console.log(
+    					'✅ 🔐 Connecting to "' +
+    						roomId +
+    						'... (encrypted)'
+    				);
+    			},
+    			disconnect() {
+    				console.log(
+    					'❌ 🔐 Disconnected from "' +
+    						roomId +
+    						'" room (encrypted)'
+    				);
+    			},
+    		};
+    	}
 
-export function createUnencryptedConnection(roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ Connecting to "' +
-                    roomId +
-                    '... (unencrypted)'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ Disconnected from "' +
-                    roomId +
-                    '" room (unencrypted)'
-            );
-        },
-    };
-}
-```
+    	export function createUnencryptedConnection(roomId) {
+    		// A real implementation would actually connect to the server
+    		return {
+    			connect() {
+    				console.log(
+    					'✅ Connecting to "' +
+    						roomId +
+    						'... (unencrypted)'
+    				);
+    			},
+    			disconnect() {
+    				console.log(
+    					'❌ Disconnected from "' +
+    						roomId +
+    						'" room (unencrypted)'
+    				);
+    			},
+    		};
+    	}
+    	```
 
-<!-- 0114.part.md -->
+    	</div>
 
-<!-- 0115.part.md -->
+    === "Результат"
 
-```css
-label {
-    display: block;
-    margin-bottom: 10px;
-}
-```
+    	![Результат](lifecycle-of-reactive-effects-8.png)
 
-<!-- 0116.part.md -->
+    Правильно, что `createConnection` является зависимостью. Однако, этот код немного хрупок, потому что кто-то может отредактировать компонент `App`, чтобы передать встроенную функцию в качестве значения этого пропса. В этом случае его значение будет отличаться каждый раз, когда компонент `App` пересматривается, поэтому Effect может слишком часто пересинхронизироваться. Чтобы избежать этого, вы можете передать `isEncrypted` вниз вместо этого:
 
-Правильно, что `createConnection` является зависимостью. Однако, этот код немного хрупок, потому что кто-то может отредактировать компонент `App`, чтобы передать встроенную функцию в качестве значения этого пропса. В этом случае его значение будет отличаться каждый раз, когда компонент `App` пересматривается, поэтому Effect может слишком часто пересинхронизироваться. Чтобы избежать этого, вы можете передать `isEncrypted` вниз вместо этого:
+    === "App.js"
 
-<!-- 0117.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-import { useState } from 'react';
-import ChatRoom from './ChatRoom.js';
+    	```js
+    	import { useState } from 'react';
+    	import ChatRoom from './ChatRoom.js';
 
-export default function App() {
-    const [roomId, setRoomId] = useState('general');
-    const [isEncrypted, setIsEncrypted] = useState(false);
-    return (
-        <>
-            <label>
-                Choose the chat room:{' '}
-                <select
-                    value={roomId}
-                    onChange={(e) =>
-                        setRoomId(e.target.value)
-                    }
-                >
-                    <option value="general">general</option>
-                    <option value="travel">travel</option>
-                    <option value="music">music</option>
-                </select>
-            </label>
-            <label>
-                <input
-                    type="checkbox"
-                    checked={isEncrypted}
-                    onChange={(e) =>
-                        setIsEncrypted(e.target.checked)
-                    }
-                />
-                Enable encryption
-            </label>
-            <hr />
-            <ChatRoom
-                roomId={roomId}
-                isEncrypted={isEncrypted}
-            />
-        </>
-    );
-}
-```
+    	export default function App() {
+    		const [roomId, setRoomId] = useState('general');
+    		const [isEncrypted, setIsEncrypted] = useState(false);
+    		return (
+    			<>
+    				<label>
+    					Choose the chat room:{' '}
+    					<select
+    						value={roomId}
+    						onChange={(e) =>
+    							setRoomId(e.target.value)
+    						}
+    					>
+    						<option value="general">general</option>
+    						<option value="travel">travel</option>
+    						<option value="music">music</option>
+    					</select>
+    				</label>
+    				<label>
+    					<input
+    						type="checkbox"
+    						checked={isEncrypted}
+    						onChange={(e) =>
+    							setIsEncrypted(e.target.checked)
+    						}
+    					/>
+    					Enable encryption
+    				</label>
+    				<hr />
+    				<ChatRoom
+    					roomId={roomId}
+    					isEncrypted={isEncrypted}
+    				/>
+    			</>
+    		);
+    	}
+    	```
 
-<!-- 0118.part.md -->
+    	</div>
 
-<!-- 0119.part.md -->
+    === "ChatRoom.js"
 
-```js
-import { useState, useEffect } from 'react';
-import {
-    createEncryptedConnection,
-    createUnencryptedConnection,
-} from './chat.js';
+    	```js
+    	import { useState, useEffect } from 'react';
+    	import {
+    		createEncryptedConnection,
+    		createUnencryptedConnection,
+    	} from './chat.js';
 
-export default function ChatRoom({ roomId, isEncrypted }) {
-    useEffect(() => {
-        const createConnection = isEncrypted
-            ? createEncryptedConnection
-            : createUnencryptedConnection;
-        const connection = createConnection(roomId);
-        connection.connect();
-        return () => connection.disconnect();
-    }, [roomId, isEncrypted]);
+    	export default function ChatRoom({ roomId, isEncrypted }) {
+    		useEffect(() => {
+    			const createConnection = isEncrypted
+    				? createEncryptedConnection
+    				: createUnencryptedConnection;
+    			const connection = createConnection(roomId);
+    			connection.connect();
+    			return () => connection.disconnect();
+    		}, [roomId, isEncrypted]);
 
-    return <h1>Welcome to the {roomId} room!</h1>;
-}
-```
+    		return <h1>Welcome to the {roomId} room!</h1>;
+    	}
+    	```
 
-<!-- 0120.part.md -->
+    === "chat.js"
 
-<!-- 0121.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-```js
-export function createEncryptedConnection(roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ 🔐 Connecting to "' +
-                    roomId +
-                    '... (encrypted)'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ 🔐 Disconnected from "' +
-                    roomId +
-                    '" room (encrypted)'
-            );
-        },
-    };
-}
+    	```js
+    	export function createEncryptedConnection(roomId) {
+    		// A real implementation would actually connect to the server
+    		return {
+    			connect() {
+    				console.log(
+    					'✅ 🔐 Connecting to "' +
+    						roomId +
+    						'... (encrypted)'
+    				);
+    			},
+    			disconnect() {
+    				console.log(
+    					'❌ 🔐 Disconnected from "' +
+    						roomId +
+    						'" room (encrypted)'
+    				);
+    			},
+    		};
+    	}
 
-export function createUnencryptedConnection(roomId) {
-    // A real implementation would actually connect to the server
-    return {
-        connect() {
-            console.log(
-                '✅ Connecting to "' +
-                    roomId +
-                    '... (unencrypted)'
-            );
-        },
-        disconnect() {
-            console.log(
-                '❌ Disconnected from "' +
-                    roomId +
-                    '" room (unencrypted)'
-            );
-        },
-    };
-}
-```
+    	export function createUnencryptedConnection(roomId) {
+    		// A real implementation would actually connect to the server
+    		return {
+    			connect() {
+    				console.log(
+    					'✅ Connecting to "' +
+    						roomId +
+    						'... (unencrypted)'
+    				);
+    			},
+    			disconnect() {
+    				console.log(
+    					'❌ Disconnected from "' +
+    						roomId +
+    						'" room (unencrypted)'
+    				);
+    			},
+    		};
+    	}
+    	```
 
-<!-- 0122.part.md -->
+    	</div>
 
-<!-- 0123.part.md -->
+    === "Результат"
 
-```css
-label {
-    display: block;
-    margin-bottom: 10px;
-}
-```
+    	![Результат](lifecycle-of-reactive-effects-8.png)
 
-<!-- 0124.part.md -->
-
-В этой версии компонент `App` передает булево свойство вместо функции. Внутри Effect вы сами решаете, какую функцию использовать. Поскольку `createEncryptedConnection` и `createUnencryptedConnection` объявлены вне компонента, они не являются реактивными и не нуждаются в зависимостях. Вы узнаете больше об этом в [Удаление зависимостей эффектов](removing-effect-dependencies.md).
-
-\</Solution\>
+    В этой версии компонент `App` передает булево свойство вместо функции. Внутри Effect вы сами решаете, какую функцию использовать. Поскольку `createEncryptedConnection` и `createUnencryptedConnection` объявлены вне компонента, они не являются реактивными и не нуждаются в зависимостях. Вы узнаете больше об этом в [Удаление зависимостей эффектов](removing-effect-dependencies.md).
 
 ### 5. Заполнение цепочки полей выбора
 
@@ -2088,686 +2013,292 @@ label {
 
 Если вы реализуете это правильно, выбор планеты должен заполнить список мест. Изменение планеты должно изменить список мест.
 
-\<Hint\>
+=== "App.js"
 
-Если у вас есть два независимых процесса синхронизации, вам нужно написать два отдельных Effects.
+    <div markdown style="max-height: 400px; overflow-y: auto;">
 
-\</Hint\>
+    ```js
+    import { useState, useEffect } from 'react';
+    import { fetchData } from './api.js';
 
-<!-- 0125.part.md -->
+    export default function Page() {
+    	const [planetList, setPlanetList] = useState([]);
+    	const [planetId, setPlanetId] = useState('');
 
-```js
-import { useState, useEffect } from 'react';
-import { fetchData } from './api.js';
+    	const [placeList, setPlaceList] = useState([]);
+    	const [placeId, setPlaceId] = useState('');
 
-export default function Page() {
-    const [planetList, setPlanetList] = useState([]);
-    const [planetId, setPlanetId] = useState('');
+    	useEffect(() => {
+    		let ignore = false;
+    		fetchData('/planets').then((result) => {
+    			if (!ignore) {
+    				console.log('Fetched a list of planets.');
+    				setPlanetList(result);
+    				setPlanetId(result[0].id); // Select the first planet
+    			}
+    		});
+    		return () => {
+    			ignore = true;
+    		};
+    	}, []);
 
-    const [placeList, setPlaceList] = useState([]);
-    const [placeId, setPlaceId] = useState('');
-
-    useEffect(() => {
-        let ignore = false;
-        fetchData('/planets').then((result) => {
-            if (!ignore) {
-                console.log('Fetched a list of planets.');
-                setPlanetList(result);
-                setPlanetId(result[0].id); // Select the first planet
-            }
-        });
-        return () => {
-            ignore = true;
-        };
-    }, []);
-
-    return (
-        <>
-            <label>
-                Pick a planet:{' '}
-                <select
-                    value={planetId}
-                    onChange={(e) => {
-                        setPlanetId(e.target.value);
-                    }}
-                >
-                    {planetList.map((planet) => (
-                        <option
-                            key={planet.id}
-                            value={planet.id}
-                        >
-                            {planet.name}
-                        </option>
-                    ))}
-                </select>
-            </label>
-            <label>
-                Pick a place:{' '}
-                <select
-                    value={placeId}
-                    onChange={(e) => {
-                        setPlaceId(e.target.value);
-                    }}
-                >
-                    {placeList.map((place) => (
-                        <option
-                            key={place.id}
-                            value={place.id}
-                        >
-                            {place.name}
-                        </option>
-                    ))}
-                </select>
-            </label>
-            <hr />
-            <p>
-                You are going to: {placeId || '???'} on{' '}
-                {planetId || '???'}{' '}
-            </p>
-        </>
-    );
-}
-```
-
-<!-- 0126.part.md -->
-
-<!-- 0127.part.md -->
-
-```js
-export function fetchData(url) {
-    if (url === '/planets') {
-        return fetchPlanets();
-    } else if (url.startsWith('/planets/')) {
-        const match = url.match(
-            /^\/planets\/([\w-]+)\/places(\/)?$/
-        );
-        if (!match || !match[1] || !match[1].length) {
-            throw Error(
-                'Expected URL like "/planets/earth/places". Received: "' +
-                    url +
-                    '".'
-            );
-        }
-        return fetchPlaces(match[1]);
-    } else
-        throw Error(
-            'Expected URL like "/planets" or "/planets/earth/places". Received: "' +
-                url +
-                '".'
-        );
-}
-
-async function fetchPlanets() {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve([
-                {
-                    id: 'earth',
-                    name: 'Earth',
-                },
-                {
-                    id: 'venus',
-                    name: 'Venus',
-                },
-                {
-                    id: 'mars',
-                    name: 'Mars',
-                },
-            ]);
-        }, 1000);
-    });
-}
-
-async function fetchPlaces(planetId) {
-    if (typeof planetId !== 'string') {
-        throw Error(
-            'fetchPlaces(planetId) expects a string argument. ' +
-                'Instead received: ' +
-                planetId +
-                '.'
-        );
+    	return (
+    		<>
+    			<label>
+    				Pick a planet:{' '}
+    				<select
+    					value={planetId}
+    					onChange={(e) => {
+    						setPlanetId(e.target.value);
+    					}}
+    				>
+    					{planetList.map((planet) => (
+    						<option
+    							key={planet.id}
+    							value={planet.id}
+    						>
+    							{planet.name}
+    						</option>
+    					))}
+    				</select>
+    			</label>
+    			<label>
+    				Pick a place:{' '}
+    				<select
+    					value={placeId}
+    					onChange={(e) => {
+    						setPlaceId(e.target.value);
+    					}}
+    				>
+    					{placeList.map((place) => (
+    						<option
+    							key={place.id}
+    							value={place.id}
+    						>
+    							{place.name}
+    						</option>
+    					))}
+    				</select>
+    			</label>
+    			<hr />
+    			<p>
+    				You are going to: {placeId || '???'} on{' '}
+    				{planetId || '???'}{' '}
+    			</p>
+    		</>
+    	);
     }
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            if (planetId === 'earth') {
-                resolve([
-                    {
-                        id: 'laos',
-                        name: 'Laos',
-                    },
-                    {
-                        id: 'spain',
-                        name: 'Spain',
-                    },
-                    {
-                        id: 'vietnam',
-                        name: 'Vietnam',
-                    },
-                ]);
-            } else if (planetId === 'venus') {
-                resolve([
-                    {
-                        id: 'aurelia',
-                        name: 'Aurelia',
-                    },
-                    {
-                        id: 'diana-chasma',
-                        name: 'Diana Chasma',
-                    },
-                    {
-                        id: 'kumsong-vallis',
-                        name: 'Kŭmsŏng Vallis',
-                    },
-                ]);
-            } else if (planetId === 'mars') {
-                resolve([
-                    {
-                        id: 'aluminum-city',
-                        name: 'Aluminum City',
-                    },
-                    {
-                        id: 'new-new-york',
-                        name: 'New New York',
-                    },
-                    {
-                        id: 'vishniac',
-                        name: 'Vishniac',
-                    },
-                ]);
-            } else
-                throw Error(
-                    'Unknown planet ID: ' + planetId
-                );
-        }, 1000);
-    });
-}
-```
+    ```
 
-<!-- 0128.part.md -->
+    </div>
 
-<!-- 0129.part.md -->
+=== "Результат"
 
-```css
-label {
-    display: block;
-    margin-bottom: 10px;
-}
-```
+    ![Результат](lifecycle-of-reactive-effects-9.png)
 
-<!-- 0130.part.md -->
+???tip "Показать подсказку"
 
-\<Решение\>
+    Если у вас есть два независимых процесса синхронизации, вам нужно написать два отдельных Effects.
 
-Существует два независимых процесса синхронизации:
+???success "Показать решение"
 
--   Первое поле выбора синхронизируется с удаленным списком планет.
--   Второе поле выбора синхронизируется с удаленным списком мест для текущего `planetId`.
+    Существует два независимых процесса синхронизации:
 
-Вот почему имеет смысл описать их как два отдельных Эффекта. Вот пример того, как это можно сделать:
+    -   Первое поле выбора синхронизируется с удаленным списком планет.
+    -   Второе поле выбора синхронизируется с удаленным списком мест для текущего `planetId`.
 
-<!-- 0131.part.md -->
+    Вот почему имеет смысл описать их как два отдельных Эффекта. Вот пример того, как это можно сделать:
 
-```js
-import { useState, useEffect } from 'react';
-import { fetchData } from './api.js';
+    === "App.js"
 
-export default function Page() {
-    const [planetList, setPlanetList] = useState([]);
-    const [planetId, setPlanetId] = useState('');
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-    const [placeList, setPlaceList] = useState([]);
-    const [placeId, setPlaceId] = useState('');
+    	```js
+    	import { useState, useEffect } from 'react';
+    	import { fetchData } from './api.js';
 
-    useEffect(() => {
-        let ignore = false;
-        fetchData('/planets').then((result) => {
-            if (!ignore) {
-                console.log('Fetched a list of planets.');
-                setPlanetList(result);
-                setPlanetId(result[0].id); // Select the first planet
-            }
-        });
-        return () => {
-            ignore = true;
-        };
-    }, []);
+    	export default function Page() {
+    		const [planetList, setPlanetList] = useState([]);
+    		const [planetId, setPlanetId] = useState('');
 
-    useEffect(() => {
-        if (planetId === '') {
-            // Nothing is selected in the first box yet
-            return;
-        }
+    		const [placeList, setPlaceList] = useState([]);
+    		const [placeId, setPlaceId] = useState('');
 
-        let ignore = false;
-        fetchData('/planets/' + planetId + '/places').then(
-            (result) => {
-                if (!ignore) {
-                    console.log(
-                        'Fetched a list of places on "' +
-                            planetId +
-                            '".'
-                    );
-                    setPlaceList(result);
-                    setPlaceId(result[0].id); // Select the first place
-                }
-            }
-        );
-        return () => {
-            ignore = true;
-        };
-    }, [planetId]);
+    		useEffect(() => {
+    			let ignore = false;
+    			fetchData('/planets').then((result) => {
+    				if (!ignore) {
+    					console.log('Fetched a list of planets.');
+    					setPlanetList(result);
+    					setPlanetId(result[0].id); // Select the first planet
+    				}
+    			});
+    			return () => {
+    				ignore = true;
+    			};
+    		}, []);
 
-    return (
-        <>
-            <label>
-                Pick a planet:{' '}
-                <select
-                    value={planetId}
-                    onChange={(e) => {
-                        setPlanetId(e.target.value);
-                    }}
-                >
-                    {planetList.map((planet) => (
-                        <option
-                            key={planet.id}
-                            value={planet.id}
-                        >
-                            {planet.name}
-                        </option>
-                    ))}
-                </select>
-            </label>
-            <label>
-                Pick a place:{' '}
-                <select
-                    value={placeId}
-                    onChange={(e) => {
-                        setPlaceId(e.target.value);
-                    }}
-                >
-                    {placeList.map((place) => (
-                        <option
-                            key={place.id}
-                            value={place.id}
-                        >
-                            {place.name}
-                        </option>
-                    ))}
-                </select>
-            </label>
-            <hr />
-            <p>
-                You are going to: {placeId || '???'} on{' '}
-                {planetId || '???'}{' '}
-            </p>
-        </>
-    );
-}
-```
+    		useEffect(() => {
+    			if (planetId === '') {
+    				// Nothing is selected in the first box yet
+    				return;
+    			}
 
-<!-- 0132.part.md -->
+    			let ignore = false;
+    			fetchData('/planets/' + planetId + '/places').then(
+    				(result) => {
+    					if (!ignore) {
+    						console.log(
+    							'Fetched a list of places on "' +
+    								planetId +
+    								'".'
+    						);
+    						setPlaceList(result);
+    						setPlaceId(result[0].id); // Select the first place
+    					}
+    				}
+    			);
+    			return () => {
+    				ignore = true;
+    			};
+    		}, [planetId]);
 
-<!-- 0133.part.md -->
+    		return (
+    			<>
+    				<label>
+    					Pick a planet:{' '}
+    					<select
+    						value={planetId}
+    						onChange={(e) => {
+    							setPlanetId(e.target.value);
+    						}}
+    					>
+    						{planetList.map((planet) => (
+    							<option
+    								key={planet.id}
+    								value={planet.id}
+    							>
+    								{planet.name}
+    							</option>
+    						))}
+    					</select>
+    				</label>
+    				<label>
+    					Pick a place:{' '}
+    					<select
+    						value={placeId}
+    						onChange={(e) => {
+    							setPlaceId(e.target.value);
+    						}}
+    					>
+    						{placeList.map((place) => (
+    							<option
+    								key={place.id}
+    								value={place.id}
+    							>
+    								{place.name}
+    							</option>
+    						))}
+    					</select>
+    				</label>
+    				<hr />
+    				<p>
+    					You are going to: {placeId || '???'} on{' '}
+    					{planetId || '???'}{' '}
+    				</p>
+    			</>
+    		);
+    	}
+    	```
 
-```js
-export function fetchData(url) {
-    if (url === '/planets') {
-        return fetchPlanets();
-    } else if (url.startsWith('/planets/')) {
-        const match = url.match(
-            /^\/planets\/([\w-]+)\/places(\/)?$/
-        );
-        if (!match || !match[1] || !match[1].length) {
-            throw Error(
-                'Expected URL like "/planets/earth/places". Received: "' +
-                    url +
-                    '".'
-            );
-        }
-        return fetchPlaces(match[1]);
-    } else
-        throw Error(
-            'Expected URL like "/planets" or "/planets/earth/places". Received: "' +
-                url +
-                '".'
-        );
-}
+    	</div>
 
-async function fetchPlanets() {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve([
-                {
-                    id: 'earth',
-                    name: 'Earth',
-                },
-                {
-                    id: 'venus',
-                    name: 'Venus',
-                },
-                {
-                    id: 'mars',
-                    name: 'Mars',
-                },
-            ]);
-        }, 1000);
-    });
-}
+    === "Результат"
 
-async function fetchPlaces(planetId) {
-    if (typeof planetId !== 'string') {
-        throw Error(
-            'fetchPlaces(planetId) expects a string argument. ' +
-                'Instead received: ' +
-                planetId +
-                '.'
-        );
-    }
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            if (planetId === 'earth') {
-                resolve([
-                    {
-                        id: 'laos',
-                        name: 'Laos',
-                    },
-                    {
-                        id: 'spain',
-                        name: 'Spain',
-                    },
-                    {
-                        id: 'vietnam',
-                        name: 'Vietnam',
-                    },
-                ]);
-            } else if (planetId === 'venus') {
-                resolve([
-                    {
-                        id: 'aurelia',
-                        name: 'Aurelia',
-                    },
-                    {
-                        id: 'diana-chasma',
-                        name: 'Diana Chasma',
-                    },
-                    {
-                        id: 'kumsong-vallis',
-                        name: 'Kŭmsŏng Vallis',
-                    },
-                ]);
-            } else if (planetId === 'mars') {
-                resolve([
-                    {
-                        id: 'aluminum-city',
-                        name: 'Aluminum City',
-                    },
-                    {
-                        id: 'new-new-york',
-                        name: 'New New York',
-                    },
-                    {
-                        id: 'vishniac',
-                        name: 'Vishniac',
-                    },
-                ]);
-            } else
-                throw Error(
-                    'Unknown planet ID: ' + planetId
-                );
-        }, 1000);
-    });
-}
-```
+    	![Результат](lifecycle-of-reactive-effects-10.png)
 
-<!-- 0134.part.md -->
+    Этот код немного повторяется. Однако это не причина объединять его в один Effect! Если бы вы сделали это, вам пришлось бы объединить обе зависимости Эффекта в один список, и тогда изменение планеты привело бы к повторному получению списка всех планет. Эффекты не являются инструментом для повторного использования кода.
 
-<!-- 0135.part.md -->
+    Вместо этого, чтобы сократить количество повторений, вы можете извлечь некоторую логику в пользовательский хук, как `useSelectOptions` ниже:
 
-```css
-label {
-    display: block;
-    margin-bottom: 10px;
-}
-```
+    === "App.js"
 
-<!-- 0136.part.md -->
+    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
-Этот код немного повторяется. Однако это не причина объединять его в один Effect\! Если бы вы сделали это, вам пришлось бы объединить обе зависимости Эффекта в один список, и тогда изменение планеты привело бы к повторному получению списка всех планет. Эффекты не являются инструментом для повторного использования кода.
+    	```js
+    	import { useState } from 'react';
+    	import { useSelectOptions } from './useSelectOptions.js';
 
-Вместо этого, чтобы сократить количество повторений, вы можете извлечь некоторую логику в пользовательский хук, как `useSelectOptions` ниже:
+    	export default function Page() {
+    		const [
+    			planetList,
+    			planetId,
+    			setPlanetId,
+    		] = useSelectOptions('/planets');
 
-<!-- 0137.part.md -->
+    		const [
+    			placeList,
+    			placeId,
+    			setPlaceId,
+    		] = useSelectOptions(
+    			planetId ? `/planets/${planetId}/places` : null
+    		);
 
-```js
-import { useState } from 'react';
-import { useSelectOptions } from './useSelectOptions.js';
+    		return (
+    			<>
+    				<label>
+    					Pick a planet:{' '}
+    					<select
+    						value={planetId}
+    						onChange={(e) => {
+    							setPlanetId(e.target.value);
+    						}}
+    					>
+    						{planetList?.map((planet) => (
+    							<option
+    								key={planet.id}
+    								value={planet.id}
+    							>
+    								{planet.name}
+    							</option>
+    						))}
+    					</select>
+    				</label>
+    				<label>
+    					Pick a place:{' '}
+    					<select
+    						value={placeId}
+    						onChange={(e) => {
+    							setPlaceId(e.target.value);
+    						}}
+    					>
+    						{placeList?.map((place) => (
+    							<option
+    								key={place.id}
+    								value={place.id}
+    							>
+    								{place.name}
+    							</option>
+    						))}
+    					</select>
+    				</label>
+    				<hr />
+    				<p>
+    					You are going to: {placeId || '...'} on{' '}
+    					{planetId || '...'}{' '}
+    				</p>
+    			</>
+    		);
+    	}
+    	```
 
-export default function Page() {
-    const [
-        planetList,
-        planetId,
-        setPlanetId,
-    ] = useSelectOptions('/planets');
+    	</div>
 
-    const [
-        placeList,
-        placeId,
-        setPlaceId,
-    ] = useSelectOptions(
-        planetId ? `/planets/${planetId}/places` : null
-    );
+    === "Результат"
 
-    return (
-        <>
-            <label>
-                Pick a planet:{' '}
-                <select
-                    value={planetId}
-                    onChange={(e) => {
-                        setPlanetId(e.target.value);
-                    }}
-                >
-                    {planetList?.map((planet) => (
-                        <option
-                            key={planet.id}
-                            value={planet.id}
-                        >
-                            {planet.name}
-                        </option>
-                    ))}
-                </select>
-            </label>
-            <label>
-                Pick a place:{' '}
-                <select
-                    value={placeId}
-                    onChange={(e) => {
-                        setPlaceId(e.target.value);
-                    }}
-                >
-                    {placeList?.map((place) => (
-                        <option
-                            key={place.id}
-                            value={place.id}
-                        >
-                            {place.name}
-                        </option>
-                    ))}
-                </select>
-            </label>
-            <hr />
-            <p>
-                You are going to: {placeId || '...'} on{' '}
-                {planetId || '...'}{' '}
-            </p>
-        </>
-    );
-}
-```
+    	![Результат](lifecycle-of-reactive-effects-10.png)
 
-<!-- 0138.part.md -->
-
-<!-- 0139.part.md -->
-
-```js
-import { useState, useEffect } from 'react';
-import { fetchData } from './api.js';
-
-export function useSelectOptions(url) {
-    const [list, setList] = useState(null);
-    const [selectedId, setSelectedId] = useState('');
-    useEffect(() => {
-        if (url === null) {
-            return;
-        }
-
-        let ignore = false;
-        fetchData(url).then((result) => {
-            if (!ignore) {
-                setList(result);
-                setSelectedId(result[0].id);
-            }
-        });
-        return () => {
-            ignore = true;
-        };
-    }, [url]);
-    return [list, selectedId, setSelectedId];
-}
-```
-
-<!-- 0140.part.md -->
-
-<!-- 0141.part.md -->
-
-```js
-export function fetchData(url) {
-    if (url === '/planets') {
-        return fetchPlanets();
-    } else if (url.startsWith('/planets/')) {
-        const match = url.match(
-            /^\/planets\/([\w-]+)\/places(\/)?$/
-        );
-        if (!match || !match[1] || !match[1].length) {
-            throw Error(
-                'Expected URL like "/planets/earth/places". Received: "' +
-                    url +
-                    '".'
-            );
-        }
-        return fetchPlaces(match[1]);
-    } else
-        throw Error(
-            'Expected URL like "/planets" or "/planets/earth/places". Received: "' +
-                url +
-                '".'
-        );
-}
-
-async function fetchPlanets() {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve([
-                {
-                    id: 'earth',
-                    name: 'Earth',
-                },
-                {
-                    id: 'venus',
-                    name: 'Venus',
-                },
-                {
-                    id: 'mars',
-                    name: 'Mars',
-                },
-            ]);
-        }, 1000);
-    });
-}
-
-async function fetchPlaces(planetId) {
-    if (typeof planetId !== 'string') {
-        throw Error(
-            'fetchPlaces(planetId) expects a string argument. ' +
-                'Instead received: ' +
-                planetId +
-                '.'
-        );
-    }
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            if (planetId === 'earth') {
-                resolve([
-                    {
-                        id: 'laos',
-                        name: 'Laos',
-                    },
-                    {
-                        id: 'spain',
-                        name: 'Spain',
-                    },
-                    {
-                        id: 'vietnam',
-                        name: 'Vietnam',
-                    },
-                ]);
-            } else if (planetId === 'venus') {
-                resolve([
-                    {
-                        id: 'aurelia',
-                        name: 'Aurelia',
-                    },
-                    {
-                        id: 'diana-chasma',
-                        name: 'Diana Chasma',
-                    },
-                    {
-                        id: 'kumsong-vallis',
-                        name: 'Kŭmsŏng Vallis',
-                    },
-                ]);
-            } else if (planetId === 'mars') {
-                resolve([
-                    {
-                        id: 'aluminum-city',
-                        name: 'Aluminum City',
-                    },
-                    {
-                        id: 'new-new-york',
-                        name: 'New New York',
-                    },
-                    {
-                        id: 'vishniac',
-                        name: 'Vishniac',
-                    },
-                ]);
-            } else
-                throw Error(
-                    'Unknown planet ID: ' + planetId
-                );
-        }, 1000);
-    });
-}
-```
-
-<!-- 0142.part.md -->
-
-<!-- 0143.part.md -->
-
-```css
-label {
-    display: block;
-    margin-bottom: 10px;
-}
-```
-
-<!-- 0144.part.md -->
-
-Посмотрите вкладку `useSelectOptions.js` в песочнице, чтобы увидеть, как это работает. В идеале, большинство эффектов в вашем приложении должны быть заменены пользовательскими хуками, написанными вами или сообществом. Пользовательские хуки скрывают логику синхронизации, поэтому вызывающий компонент не знает об эффекте. По мере того, как вы будете продолжать работать над своим приложением, у вас появится палитра хуков на выбор, и в конечном итоге вам не придется часто писать эффекты в своих компонентах.
-
-\</Solution\>
-
-\</Challenges\>
+    Посмотрите вкладку `useSelectOptions.js` в песочнице, чтобы увидеть, как это работает. В идеале, большинство эффектов в вашем приложении должны быть заменены пользовательскими хуками, написанными вами или сообществом. Пользовательские хуки скрывают логику синхронизации, поэтому вызывающий компонент не знает об эффекте. По мере того, как вы будете продолжать работать над своим приложением, у вас появится палитра хуков на выбор, и в конечном итоге вам не придется часто писать эффекты в своих компонентах.
 
 ## Ссылки
 
