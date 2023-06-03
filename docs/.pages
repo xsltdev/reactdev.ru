@@ -1,6 +1,7 @@
 nav:
     - 🏠: index.md
-    - learn
+    - React: learn
+    - API: reference
     - types
     - nextjs
     - graphql

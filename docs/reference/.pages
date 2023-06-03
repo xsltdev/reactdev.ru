@@ -1,3 +1,28 @@
-title: Справочник API
+title: API
 nav:
+    - index.md
+    - react:
+        - Хуки:
+            - hooks.md
+            - ... | use*.md
+        - Компоненты:
+            - components.md
+            - Fragment.md
+            - StrictMode.md
+            - Suspense.md
+        - API:
+            - createContext.md
+            - memo.md
+    - react-dom:
+        - API:
+            - createPortal.md
+            - flushSync.md
+        - Server API:
+            - Обзор Server API: server.md
+    - Экспериментальное:
+        - experimental_useEffectEvent.md
+    - Устарело:
+        - Component.md
+        - createRef.md
+        - PureComponent.md
     - ...
