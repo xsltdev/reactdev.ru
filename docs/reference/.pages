@@ -11,12 +11,18 @@ nav:
             - StrictMode.md
             - Suspense.md
         - API:
+            - apis.md
             - createContext.md
             - memo.md
     - react-dom:
+        - Компоненты:
+            - Обзор компонент: components-react-dom.md
         - API:
+            - Обзор API: apis-react-dom.md
             - createPortal.md
             - flushSync.md
+        - Client API:
+            - Обзор Client API: client.md
         - Server API:
             - Обзор Server API: server.md
     - Экспериментальное:

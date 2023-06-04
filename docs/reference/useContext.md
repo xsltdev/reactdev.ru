@@ -8,7 +8,7 @@
 const value = useContext(SomeContext);
 ```
 
-## Reference
+## Описание
 
 ### `useContext(SomeContext)`
 
@@ -1138,7 +1138,7 @@ function MyApp() {
 
 Если вы забыли указать `value`, это все равно, что передать `value={undefined}`.
 
-Вы также могли по ошибке использовать другое имя реквизита:
+Вы также могли по ошибке использовать другое имя пропса:
 
 <!-- 0071.part.md -->
 
