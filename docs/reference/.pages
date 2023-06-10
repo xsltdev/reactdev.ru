@@ -8,27 +8,55 @@ nav:
         - Компоненты:
             - components.md
             - Fragment.md
+            - Profiler.md
             - StrictMode.md
             - Suspense.md
         - API:
             - apis.md
             - createContext.md
+            - forwardRef.md
+            - lazy.md
             - memo.md
+            - startTransition.md
     - react-dom:
         - Компоненты:
             - Обзор компонент: components-react-dom.md
+            - components-common.md
+            - components-input.md
+            - components-option.md
+            - components-progress.md
+            - components-select.md
+            - components-textarea.md
         - API:
             - Обзор API: apis-react-dom.md
             - createPortal.md
             - flushSync.md
+            - findDOMNode.md
+            - hydrate.md
+            - render.md
+            - unmountComponentAtNode.md
         - Client API:
             - Обзор Client API: client.md
+            - client-createRoot.md
+            - client-hydrateRoot.md
         - Server API:
             - Обзор Server API: server.md
+            - renderToNodeStream.md
+            - renderToPipeableStream.md
+            - renderToReadableStream.md
+            - renderToStaticMarkup.md
+            - renderToStaticNodeStream.md
+            - renderToString.md
     - Экспериментальное:
         - experimental_useEffectEvent.md
     - Устарело:
+        - Обзор устаревших API: legacy.md
+        - Children.md
+        - cloneElement.md
         - Component.md
+        - createElement.md
+        - createFactory.md
         - createRef.md
+        - isValidElement.md
         - PureComponent.md
     - ...
