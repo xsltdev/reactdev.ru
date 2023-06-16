@@ -52,6 +52,9 @@ extra:
         - icon: fontawesome/brands/react
           link: 'https://reactdev.ru/'
           name: React docs
+        - icon: fontawesome/solid/mobile-screen
+          link: 'https://reactnativedev.ru/'
+          name: React Native docs
         - icon: fontawesome/brands/node-js
           link: 'https://nodejsdev.ru/'
           name: Node.js docs
