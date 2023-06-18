@@ -18,7 +18,9 @@ hide:
 
     Перевод официальной документации
 
-    **[:octicons-arrow-right-24: React 18](learn/index.md)**
+    **[:octicons-arrow-right-24: Учебник React 18](learn/index.md)**
+
+    [:octicons-arrow-right-24: API React 18](./reference/index.md)
 
     [:octicons-arrow-right-24: React 16](./archive/react16/tutorial.md)
 
