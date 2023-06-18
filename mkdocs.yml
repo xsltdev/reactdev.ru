@@ -64,6 +64,9 @@ extra:
         - icon: fontawesome/solid/code
           link: 'https://xsltdev.ru/'
           name: XSLT docs
+        - icon: fontawesome/solid/database
+          link: 'https://dbasedev.ru/'
+          name: Базы данных
 
 markdown_extensions:
     - admonition

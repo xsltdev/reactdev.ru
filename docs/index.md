@@ -123,7 +123,8 @@ hide:
     [![React Native](rn.svg){: style="height:16px;width:16px;vertical-align:middle;"} React Native](https://reactnativedev.ru/) &nbsp;&nbsp;&nbsp;
     [![Node.js](nodejs.svg){: style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;
     [![Python 3](python.svg){: style="height:16px;width:16px;vertical-align:middle;"} Python 3](https://py3dev.ru/) &nbsp;&nbsp;&nbsp;
-    [![XSLT](xslt.svg){: style="height:16px;width:16px;vertical-align:middle;"} XSLT](https://xsltdev.ru/)
+    [![XSLT](xslt.svg){: style="height:16px;width:16px;vertical-align:middle;"} XSLT](https://xsltdev.ru/) &nbsp;&nbsp;&nbsp;
+    [![БД](db.svg){: style="height:16px;width:16px;vertical-align:middle;"} Базы данных](https://dbasedev.ru/) &nbsp;&nbsp;&nbsp;
 
 <!--
 https://github.com/harryheman/React-Total
