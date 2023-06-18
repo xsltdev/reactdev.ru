@@ -6,31 +6,31 @@
 
 Вы можете вызвать:
 
-- [Промисы](#invoking-promises), которые будут выполнять переход `onDone` при разрешении `resolve` или переход `onError` при отклонении `reject`.
-- [Функции обратного вызова](#invoking-callbacks), которые могут отправлять события и получать события от родительской машины
-- [Наблюдаемые](#invoking-observables), которые могут отправлять события на родительский автомат, а также сигнализировать о его завершении
-- [Автоматы](#invoking-machines), которые также могут отправлять и получать события, а также уведомлять родительский автомат, когда он достигает своего [конечного состояния](final.md).
+-   [Промисы](#invoking-promises), которые будут выполнять переход `onDone` при разрешении `resolve` или переход `onError` при отклонении `reject`.
+-   [Функции обратного вызова](#invoking-callbacks), которые могут отправлять события и получать события от родительской машины
+-   [Наблюдаемые](#invoking-observables), которые могут отправлять события на родительский автомат, а также сигнализировать о его завершении
+-   [Автоматы](#invoking-machines), которые также могут отправлять и получать события, а также уведомлять родительский автомат, когда он достигает своего [конечного состояния](final.md).
 
 ## Свойство `invoke`
 
 Вызов определяется в конфигурации узла состояния с помощью свойства `invoke`, значением которого является объект, содержащий:
 
-- `src` — источник вызываемой службы, который может быть:
-  : - автомат
-  : - функция, которая возвращает `Promise`
-  : - функция, которая возвращает "обработчик обратного вызова"
-  : - функция, которая возвращает "наблюдаемого"
-  : - строка, которая относится к любой из 4 перечисленных опций, определенных в `options.services` данного аппарата.
-  : - вызываемый объект источника (_начиная с версии 4.12+_), который содержит исходную строку в `{type: src}`, а также любые другие метаданные.
-- `id` — уникальный идентификатор вызванной службы
-- `onDone` — (необязательно) переход, выполняемый, когда:
-  : - дочерний автомат достигает своего конечного состояния, или
-  : - вызванное обещание `Promise` разрешается, или
-  : - вызываемый "наблюдаемый" завершается
-- `onError` — (необязательно) переход, выполняемый, когда вызываемая служба обнаруживает ошибку выполнения.
-- `autoForward` — (необязательно) `true`, если все события, отправленные на этот автомат, также должны быть отправлены (или перенаправлены) вызванному дочернему автомату (по умолчанию `false`)
-  : - Избегайте установки `autoForward` в значение `true`, так как слепая пересылка всех событий может привести к неожиданному поведению или бесконечным циклам. Всегда предпочитайте явно отправлять события или использовать создателя действия `forward(...)` для прямой пересылки события вызываемому дочернему элементу (в настоящее время работает только для автомата).
-- `data` — (необязательно, используется только при вызове автоматов) объект, который отображает свойства контекста дочернего автомата на функцию, которая возвращает соответствующее значение из контекста родительского автомата.
+-   `src` — источник вызываемой службы, который может быть:
+    : - автомат
+    : - функция, которая возвращает `Promise`
+    : - функция, которая возвращает "обработчик обратного вызова"
+    : - функция, которая возвращает "наблюдаемого"
+    : - строка, которая относится к любой из 4 перечисленных опций, определенных в `options.services` данного аппарата.
+    : - вызываемый объект источника (_начиная с версии 4.12+_), который содержит исходную строку в `{type: src}`, а также любые другие метаданные.
+-   `id` — уникальный идентификатор вызванной службы
+-   `onDone` — (необязательно) переход, выполняемый, когда:
+    : - дочерний автомат достигает своего конечного состояния, или
+    : - вызванное обещание `Promise` разрешается, или
+    : - вызываемый "наблюдаемый" завершается
+-   `onError` — (необязательно) переход, выполняемый, когда вызываемая служба обнаруживает ошибку выполнения.
+-   `autoForward` — (необязательно) `true`, если все события, отправленные на этот автомат, также должны быть отправлены (или перенаправлены) вызванному дочернему автомату (по умолчанию `false`)
+    : - Избегайте установки `autoForward` в значение `true`, так как слепая пересылка всех событий может привести к неожиданному поведению или бесконечным циклам. Всегда предпочитайте явно отправлять события или использовать создателя действия `forward(...)` для прямой пересылки события вызываемому дочернему элементу (в настоящее время работает только для автомата).
+-   `data` — (необязательно, используется только при вызове автоматов) объект, который отображает свойства контекста дочернего автомата на функцию, которая возвращает соответствующее значение из контекста родительского автомата.
 
 !!!warning "Внимание"
 
@@ -61,8 +61,8 @@
 
 Поскольку каждый промис можно смоделировать как конечный автомат, XState может вызывать промисы "как есть". Промисы могут:
 
-- `resolve()`, который примет переход `onDone`
-- `reject()` (или выбросить ошибку), который примет переход `onError`
+-   `resolve()`, который примет переход `onDone`
+-   `reject()` (или выбросить ошибку), который примет переход `onError`
 
 Если состояние, в котором активирован вызываемый промис, выходит до того, как промис разрешается, то результат промиса отбрасывается.
 
@@ -71,49 +71,52 @@
 // This promise might resolve with, e.g.,
 // { name: 'David', location: 'Florida' }
 const fetchUser = (userId) =>
-  fetch(`url/to/user/${userId}`).then((response) =>
-    response.json()
-  );
+    fetch(`url/to/user/${userId}`).then((response) =>
+        response.json()
+    );
 
 const userMachine = createMachine({
-  id: 'user',
-  initial: 'idle',
-  context: {
-    userId: 42,
-    user: undefined,
-    error: undefined,
-  },
-  states: {
-    idle: {
-      on: {
-        FETCH: { target: 'loading' },
-      },
+    id: 'user',
+    initial: 'idle',
+    context: {
+        userId: 42,
+        user: undefined,
+        error: undefined,
     },
-    loading: {
-      invoke: {
-        id: 'getUser',
-        src: (context, event) => fetchUser(context.userId),
-        onDone: {
-          target: 'success',
-          actions: assign({
-            user: (context, event) => event.data,
-          }),
+    states: {
+        idle: {
+            on: {
+                FETCH: { target: 'loading' },
+            },
         },
-        onError: {
-          target: 'failure',
-          actions: assign({
-            error: (context, event) => event.data,
-          }),
+        loading: {
+            invoke: {
+                id: 'getUser',
+                src: (context, event) =>
+                    fetchUser(context.userId),
+                onDone: {
+                    target: 'success',
+                    actions: assign({
+                        user: (context, event) =>
+                            event.data,
+                    }),
+                },
+                onError: {
+                    target: 'failure',
+                    actions: assign({
+                        error: (context, event) =>
+                            event.data,
+                    }),
+                },
+            },
         },
-      },
+        success: {},
+        failure: {
+            on: {
+                RETRY: { target: 'loading' },
+            },
+        },
     },
-    success: {},
-    failure: {
-      on: {
-        RETRY: { target: 'loading' },
-      },
-    },
-  },
 });
 ```
 
@@ -192,8 +195,8 @@ const searchMachine = createMachine({
 
 Потоки событий, отправляемых на родительский автомат, можно моделировать с помощью обработчика обратного вызова, который представляет собой функцию, которая принимает два аргумента:
 
-- `callback` — вызывается с отправляемым событием
-- `onReceive` — вызывается с помощью слушателя, который прослушивает события от родителя
+-   `callback` — вызывается с отправляемым событием
+-   `onReceive` — вызывается с помощью слушателя, который прослушивает события от родителя
 
 Возвращаемое (необязательное) значение должно быть функцией, которая выполняет очистку (т. е. отмену подписки, предотвращение утечек памяти и т. д.) для вызванной службы при выходе из текущего состояния. Обратные вызовы **не могут** использовать синтаксис `async / await`, поскольку он автоматически помещает возвращаемое значение в `Promise`.
 
@@ -225,36 +228,39 @@ counting: {
 
 ```js
 const pingPongMachine = createMachine({
-  id: 'pinger',
-  initial: 'active',
-  states: {
-    active: {
-      invoke: {
-        id: 'ponger',
-        src: (context, event) => (callback, onReceive) => {
-          // Whenever parent sends 'PING',
-          // send parent 'PONG' event
-          onReceive((e) => {
-            if (e.type === 'PING') {
-              callback('PONG');
-            }
-          });
+    id: 'pinger',
+    initial: 'active',
+    states: {
+        active: {
+            invoke: {
+                id: 'ponger',
+                src: (context, event) => (
+                    callback,
+                    onReceive
+                ) => {
+                    // Whenever parent sends 'PING',
+                    // send parent 'PONG' event
+                    onReceive((e) => {
+                        if (e.type === 'PING') {
+                            callback('PONG');
+                        }
+                    });
+                },
+            },
+            entry: send({ type: 'PING' }, { to: 'ponger' }),
+            on: {
+                PONG: { target: 'done' },
+            },
         },
-      },
-      entry: send({ type: 'PING' }, { to: 'ponger' }),
-      on: {
-        PONG: { target: 'done' },
-      },
+        done: {
+            type: 'final',
+        },
     },
-    done: {
-      type: 'final',
-    },
-  },
 });
 
 interpret(pingPongMachine)
-  .onDone(() => done())
-  .start();
+    .onDone(() => done())
+    .start();
 ```
 
 ## Вызов наблюдаемых объектов
@@ -271,28 +277,31 @@ import { interval } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 const intervalMachine = createMachine({
-  id: 'interval',
-  initial: 'counting',
-  context: { myInterval: 1000 },
-  states: {
-    counting: {
-      invoke: {
-        src: (context, event) =>
-          interval(context.myInterval).pipe(
-            map((value) => ({ type: 'COUNT', value })),
-            take(5)
-          ),
-        onDone: 'finished',
-      },
-      on: {
-        COUNT: { actions: 'notifyCount' },
-        CANCEL: { target: 'finished' },
-      },
+    id: 'interval',
+    initial: 'counting',
+    context: { myInterval: 1000 },
+    states: {
+        counting: {
+            invoke: {
+                src: (context, event) =>
+                    interval(context.myInterval).pipe(
+                        map((value) => ({
+                            type: 'COUNT',
+                            value,
+                        })),
+                        take(5)
+                    ),
+                onDone: 'finished',
+            },
+            on: {
+                COUNT: { actions: 'notifyCount' },
+                CANCEL: { target: 'finished' },
+            },
+        },
+        finished: {
+            type: 'final',
+        },
     },
-    finished: {
-      type: 'final',
-    },
-  },
 });
 ```
 
@@ -325,54 +334,54 @@ const intervalMachine = createMachine({
 
 Автоматы обмениваются данными иерархически, а вызванные автоматы могут обмениваться данными:
 
-- От родителя к потомку — через действие `send(EVENT, {to: 'someChildId'})`
-- От потомка к родителю — через действие `sendParent(EVENT)`.
+-   От родителя к потомку — через действие `send(EVENT, {to: 'someChildId'})`
+-   От потомка к родителю — через действие `sendParent(EVENT)`.
 
 При выходе из состояния, в котором автомат был вызван — автомат останавливается.
 
 ```js
 import {
-  createMachine,
-  interpret,
-  send,
-  sendParent,
+    createMachine,
+    interpret,
+    send,
+    sendParent,
 } from 'xstate';
 
 // Invoked child machine
 const minuteMachine = createMachine({
-  id: 'timer',
-  initial: 'active',
-  states: {
-    active: {
-      after: {
-        60000: { target: 'finished' },
-      },
+    id: 'timer',
+    initial: 'active',
+    states: {
+        active: {
+            after: {
+                60000: { target: 'finished' },
+            },
+        },
+        finished: { type: 'final' },
     },
-    finished: { type: 'final' },
-  },
 });
 
 const parentMachine = createMachine({
-  id: 'parent',
-  initial: 'pending',
-  states: {
-    pending: {
-      invoke: {
-        src: minuteMachine,
-        // The onDone transition will be taken when the
-        // minuteMachine has reached its top-level final state.
-        onDone: 'timesUp',
-      },
+    id: 'parent',
+    initial: 'pending',
+    states: {
+        pending: {
+            invoke: {
+                src: minuteMachine,
+                // The onDone transition will be taken when the
+                // minuteMachine has reached its top-level final state.
+                onDone: 'timesUp',
+            },
+        },
+        timesUp: {
+            type: 'final',
+        },
     },
-    timesUp: {
-      type: 'final',
-    },
-  },
 });
 
 const service = interpret(parentMachine)
-  .onTransition((state) => console.log(state.value))
-  .start();
+    .onTransition((state) => console.log(state.value))
+    .start();
 // => 'pending'
 // ... after 1 minute
 // => 'timesUp'
@@ -384,32 +393,32 @@ const service = interpret(parentMachine)
 
 ```js
 const timerMachine = createMachine({
-  id: 'timer',
-  context: {
-    duration: 1000, // default duration
-  },
-  /* ... */
+    id: 'timer',
+    context: {
+        duration: 1000, // default duration
+    },
+    /* ... */
 });
 
 const parentMachine = createMachine({
-  id: 'parent',
-  initial: 'active',
-  context: {
-    customDuration: 3000,
-  },
-  states: {
-    active: {
-      invoke: {
-        id: 'timer',
-        src: timerMachine,
-        // Deriving child context from parent context
-        data: {
-          duration: (context, event) =>
-            context.customDuration,
-        },
-      },
+    id: 'parent',
+    initial: 'active',
+    context: {
+        customDuration: 3000,
     },
-  },
+    states: {
+        active: {
+            invoke: {
+                id: 'timer',
+                src: timerMachine,
+                // Deriving child context from parent context
+                data: {
+                    duration: (context, event) =>
+                        context.customDuration,
+                },
+            },
+        },
+    },
 });
 ```
 
@@ -441,58 +450,61 @@ data: (context, event) => ({
 
 ```js
 const secretMachine = createMachine({
-  id: 'secret',
-  initial: 'wait',
-  context: {
-    secret: '42',
-  },
-  states: {
-    wait: {
-      after: {
-        1000: { target: 'reveal' },
-      },
+    id: 'secret',
+    initial: 'wait',
+    context: {
+        secret: '42',
     },
-    reveal: {
-      type: 'final',
-      data: {
-        secret: (context, event) => context.secret,
-      },
+    states: {
+        wait: {
+            after: {
+                1000: { target: 'reveal' },
+            },
+        },
+        reveal: {
+            type: 'final',
+            data: {
+                secret: (context, event) => context.secret,
+            },
+        },
     },
-  },
 });
 
 const parentMachine = createMachine({
-  id: 'parent',
-  initial: 'pending',
-  context: {
-    revealedSecret: undefined,
-  },
-  states: {
-    pending: {
-      invoke: {
-        id: 'secret',
-        src: secretMachine,
-        onDone: {
-          target: 'success',
-          actions: assign({
-            revealedSecret: (context, event) => {
-              // event is:
-              // { type: 'done.invoke.secret', data: { secret: '42' } }
-              return event.data.secret;
+    id: 'parent',
+    initial: 'pending',
+    context: {
+        revealedSecret: undefined,
+    },
+    states: {
+        pending: {
+            invoke: {
+                id: 'secret',
+                src: secretMachine,
+                onDone: {
+                    target: 'success',
+                    actions: assign({
+                        revealedSecret: (
+                            context,
+                            event
+                        ) => {
+                            // event is:
+                            // { type: 'done.invoke.secret', data: { secret: '42' } }
+                            return event.data.secret;
+                        },
+                    }),
+                },
             },
-          }),
         },
-      },
+        success: {
+            type: 'final',
+        },
     },
-    success: {
-      type: 'final',
-    },
-  },
 });
 
 const service = interpret(parentMachine)
-  .onTransition((state) => console.log(state.context))
-  .start();
+    .onTransition((state) => console.log(state.context))
+    .start();
 // => { revealedSecret: undefined }
 // ...
 // => { revealedSecret: '42' }
@@ -500,8 +512,8 @@ const service = interpret(parentMachine)
 
 ### Отправка событий
 
-- Чтобы отправить событие с дочернего автомата на родительский, используйте `sendParent(event)` (принимает те же аргументы, что и `send(...)`)
-- Чтобы отправить событие с родительского автомата на дочерний, используйте `send(event, {to: <child ID>})`
+-   Чтобы отправить событие с дочернего автомата на родительский, используйте `sendParent(event)` (принимает те же аргументы, что и `send(...)`)
+-   Чтобы отправить событие с родительского автомата на дочерний, используйте `send(event, {to: <child ID>})`
 
 !!!warning "Внимание"
 
@@ -513,52 +525,52 @@ const service = interpret(parentMachine)
 
 ```js
 import {
-  createMachine,
-  interpret,
-  send,
-  sendParent,
+    createMachine,
+    interpret,
+    send,
+    sendParent,
 } from 'xstate';
 
 // Parent machine
 const pingMachine = createMachine({
-  id: 'ping',
-  initial: 'active',
-  states: {
-    active: {
-      invoke: {
-        id: 'pong',
-        src: pongMachine,
-      },
-      // Sends 'PING' event to child machine with ID 'pong'
-      entry: send({ type: 'PING' }, { to: 'pong' }),
-      on: {
-        PONG: {
-          actions: send(
-            { type: 'PING' },
-            { to: 'pong', delay: 1000 }
-          ),
+    id: 'ping',
+    initial: 'active',
+    states: {
+        active: {
+            invoke: {
+                id: 'pong',
+                src: pongMachine,
+            },
+            // Sends 'PING' event to child machine with ID 'pong'
+            entry: send({ type: 'PING' }, { to: 'pong' }),
+            on: {
+                PONG: {
+                    actions: send(
+                        { type: 'PING' },
+                        { to: 'pong', delay: 1000 }
+                    ),
+                },
+            },
         },
-      },
     },
-  },
 });
 
 // Invoked child machine
 const pongMachine = createMachine({
-  id: 'pong',
-  initial: 'active',
-  states: {
-    active: {
-      on: {
-        PING: {
-          // Sends 'PONG' event to parent machine
-          actions: sendParent('PONG', {
-            delay: 1000,
-          }),
+    id: 'pong',
+    initial: 'active',
+    states: {
+        active: {
+            on: {
+                PING: {
+                    // Sends 'PONG' event to parent machine
+                    actions: sendParent('PONG', {
+                        delay: 1000,
+                    }),
+                },
+            },
         },
-      },
     },
-  },
 });
 
 const service = interpret(pingMachine).start();
@@ -587,42 +599,47 @@ import { createMachine, send, actions } from 'xstate';
 const { respond } = actions;
 
 const authServerMachine = createMachine({
-  id: 'server',
-  initial: 'waitingForCode',
-  states: {
-    waitingForCode: {
-      on: {
-        CODE: {
-          actions: respond('TOKEN', { delay: 1000 }),
+    id: 'server',
+    initial: 'waitingForCode',
+    states: {
+        waitingForCode: {
+            on: {
+                CODE: {
+                    actions: respond('TOKEN', {
+                        delay: 1000,
+                    }),
+                },
+            },
         },
-      },
     },
-  },
 });
 
 const authClientMachine = createMachine({
-  id: 'client',
-  initial: 'idle',
-  states: {
-    idle: {
-      on: {
-        AUTH: { target: 'authorizing' },
-      },
+    id: 'client',
+    initial: 'idle',
+    states: {
+        idle: {
+            on: {
+                AUTH: { target: 'authorizing' },
+            },
+        },
+        authorizing: {
+            invoke: {
+                id: 'auth-server',
+                src: authServerMachine,
+            },
+            entry: send(
+                { type: 'CODE' },
+                { to: 'auth-server' }
+            ),
+            on: {
+                TOKEN: { target: 'authorized' },
+            },
+        },
+        authorized: {
+            type: 'final',
+        },
     },
-    authorizing: {
-      invoke: {
-        id: 'auth-server',
-        src: authServerMachine,
-      },
-      entry: send({ type: 'CODE' }, { to: 'auth-server' }),
-      on: {
-        TOKEN: { target: 'authorized' },
-      },
-    },
-    authorized: {
-      type: 'final',
-    },
-  },
 });
 ```
 
@@ -677,29 +694,29 @@ const userMachine = createMachine(
 
 ```js
 const machine = createMachine(
-  {
-    initial: 'searching',
-    states: {
-      searching: {
-        invoke: {
-          src: {
-            type: 'search',
-            endpoint: 'example.com',
-          },
-          // ...
+    {
+        initial: 'searching',
+        states: {
+            searching: {
+                invoke: {
+                    src: {
+                        type: 'search',
+                        endpoint: 'example.com',
+                    },
+                    // ...
+                },
+                // ...
+            },
         },
-        // ...
-      },
     },
-  },
-  {
-    services: {
-      search: (context, event, { src }) => {
-        console.log(src);
-        // => { endpoint: 'example.com' }
-      },
-    },
-  }
+    {
+        services: {
+            search: (context, event, { src }) => {
+                console.log(src);
+                // => { endpoint: 'example.com' }
+            },
+        },
+    }
 );
 ```
 
@@ -713,32 +730,33 @@ import { assert } from 'chai';
 import { userMachine } from '../path/to/userMachine';
 
 const mockFetchUser = async (userId) => {
-  // Mock however you want, but ensure that the same
-  // behavior and response format is used
-  return { name: 'Test', location: 'Anywhere' };
+    // Mock however you want, but ensure that the same
+    // behavior and response format is used
+    return { name: 'Test', location: 'Anywhere' };
 };
 
 const testUserMachine = userMachine.withConfig({
-  services: {
-    getUser: (context, event) => mockFetchUser(context.id),
-  },
+    services: {
+        getUser: (context, event) =>
+            mockFetchUser(context.id),
+    },
 });
 
 describe('userMachine', () => {
-  it('should go to the "success" state when a user is found', (done) => {
-    interpret(testUserMachine)
-      .onTransition((state) => {
-        if (state.matches('success')) {
-          assert.deepEqual(state.context.user, {
-            name: 'Test',
-            location: 'Anywhere',
-          });
+    it('should go to the "success" state when a user is found', (done) => {
+        interpret(testUserMachine)
+            .onTransition((state) => {
+                if (state.matches('success')) {
+                    assert.deepEqual(state.context.user, {
+                        name: 'Test',
+                        location: 'Anywhere',
+                    });
 
-          done();
-        }
-      })
-      .start();
-  });
+                    done();
+                }
+            })
+            .start();
+    });
 });
 ```
 
@@ -750,20 +768,20 @@ _Начиная с версии 4.7+_
 
 ```js
 const machine = createMachine({
-  // ...
-  invoke: [
-    { id: 'notifier', src: createNotifier },
-    { id: 'logger', src: createLogger },
-  ],
-  // ...
+    // ...
+    invoke: [
+        { id: 'notifier', src: createNotifier },
+        { id: 'logger', src: createLogger },
+    ],
+    // ...
 });
 
 const service = interpret(machine)
-  .onTransition((state) => {
-    state.children.notifier; // service from createNotifier()
-    state.children.logger; // service from createLogger()
-  })
-  .start();
+    .onTransition((state) => {
+        state.children.notifier; // service from createNotifier()
+        state.children.logger; // service from createLogger()
+    })
+    .start();
 ```
 
 При сериализации JSON объект `state.children` представляет собой сопоставление идентификаторов (ключей) службы с объектами, содержащими метаданные об этой службе.

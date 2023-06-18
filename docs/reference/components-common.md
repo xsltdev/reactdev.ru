@@ -1,6 +1,6 @@
 # Общие компоненты
 
-Все встроенные компоненты браузера, такие как [`<div>`](https://hcdev.ru/html/div/), поддерживают некоторые общие реквизиты и события.
+Все встроенные компоненты браузера, такие как [`<div>`](https://hcdev.ru/html/div/), поддерживают некоторые общие пропсы и события.
 
 ## Описание
 
@@ -12,16 +12,16 @@
 
 **Свойства**
 
-Эти специальные реквизиты React поддерживаются для всех встроенных компонентов:
+Эти специальные пропсы React поддерживаются для всех встроенных компонентов:
 
--   `children`: Узел React (элемент, строка, число, [портал](createPortal.md), пустой узел типа `null`, `undefined` и booleans, или массив других узлов React). Определяет содержимое внутри компонента. Когда вы используете JSX, вы обычно неявно указываете реквизит `children` путем вложения тегов типа `<div><span /></div>`.
+-   `children`: Узел React (элемент, строка, число, [портал](createPortal.md), пустой узел типа `null`, `undefined` и booleans, или массив других узлов React). Определяет содержимое внутри компонента. Когда вы используете JSX, вы обычно неявно указываете пропс `children` путем вложения тегов типа `<div><span /></div>`.
 -   `dangerouslySetInnerHTML`: Объект вида `{ __html: '<p>some html</p>' }` с необработанной HTML-строкой внутри. Переопределяет свойство [`innerHTML`](https://developer.mozilla.org/docs/Web/API/Element/innerHTML) узла DOM и отображает переданный HTML внутри. Это следует использовать с особой осторожностью! Если HTML внутри не является доверенным (например, если он основан на данных пользователя), вы рискуете получить [XSS](https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2%D1%8B%D0%B9_%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%B8%D0%BD%D0%B3) уязвимость.
 -   `ref`: Объект ссылки из [`useRef`](useRef.md) или [`createRef`](createRef.md), или функция обратного вызова `ref`, или строка для [legacy refs](https://reactjs.org/docs/refs-and-the-dom.html#legacy-api-string-refs). Ваш ref будет заполнен элементом DOM для этого узла.
 -   `suppressContentEditableWarning`: Булево значение. Если `true`, подавляет предупреждение, которое React показывает для элементов, имеющих одновременно `children` и `contentEditable={true}` (которые обычно не работают вместе). Используйте это, если вы создаете библиотеку ввода текста, которая управляет содержимым `contentEditable` вручную.
 -   `suppressHydrationWarning`: Булево значение. Если вы используете [серверный рендеринг,](server.md), обычно появляется предупреждение, когда сервер и клиент рендерят разное содержимое. В некоторых редких случаях (например, временные метки) очень трудно или невозможно гарантировать точное совпадение. Если вы установите `uppressHydrationWarning` в `true`, React не будет предупреждать вас о несоответствии атрибутов и содержимого этого элемента. Эта функция работает только на одном уровне и предназначена для использования в качестве аварийного люка. Не злоупотребляйте им. [Читайте о подавлении ошибок гидратации](client-hydrateRoot.md#suppressing-unavoidable-hydration-mismatch-errors).
 -   `style`: Объект со стилями CSS, например `{ fontWeight: 'bold', margin: 20 }`. Аналогично свойству DOM [`style`](https://developer.mozilla.org/docs/Web/API/HTMLElement/style), имена свойств CSS должны быть написаны в `camelCase`, например `fontWeight` вместо `font-weight`. В качестве значений можно передавать строки или числа. Если вы передаете число, например `width: 100`, React автоматически добавит `px` ("пиксели") к значению, если только это не [свойство без единиц измерения](https://github.com/facebook/react/blob/81d4ee9ca5c405dce62f64e61506b8e155f38d8d/packages/react-dom-bindings/src/shared/CSSProperty.js#L8-L57). Мы рекомендуем использовать `style` только для динамических стилей, где вы не используете kn.
 
-Эти стандартные реквизиты DOM также поддерживаются для всех встроенных компонентов:
+Эти стандартные пропсы DOM также поддерживаются для всех встроенных компонентов:
 
 -   [`accessKey`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/accesskey): Строка. Указывает комбинацию клавиш для элемента. [Обычно не рекомендуется](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/accesskey#accessibility_concerns).
 -   [`aria-*`](https://developer.mozilla.org/docs/Web/Accessibility/ARIA/Attributes): Атрибуты ARIA позволяют указать информацию дерева доступности для этого элемента. Полное руководство см. в [Атрибуты ARIA](https://developer.mozilla.org/docs/Web/Accessibility/ARIA/Attributes). В React все имена атрибутов ARIA точно такие же, как и в HTML.
@@ -40,11 +40,11 @@
 -   [`itemProp`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/itemprop): Строка. Указывает, какое свойство представляет элемент для краулеров структурированных данных.
 -   [`lang`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/lang): Строка. Указывает язык элемента.
 -   [`onAnimationEnd`](https://developer.mozilla.org/docs/Web/API/Element/animationend_event): Функция обработчика `AnimationEvent`. Срабатывает при завершении CSS-анимации.
--   `onAnimationEndCapture`: Версия `onAnimationEnd`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md.md#capture-phase-events)
+-   `onAnimationEndCapture`: Версия `onAnimationEnd`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
 -   [`onAnimationIteration`](https://developer.mozilla.org/docs/Web/API/Element/animationiteration_event): Функция обработчика `AnimationEvent`. Срабатывает, когда итерация CSS-анимации заканчивается и начинается другая.
--   `onAnimationIterationCapture`: Версия `onAnimationIteration`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md.md#capture-phase-events).
+-   `onAnimationIterationCapture`: Версия `onAnimationIteration`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
 -   [`onAnimationStart`](https://developer.mozilla.org/docs/Web/API/Element/animationstart_event): Функция обработчика `AnimationEvent`. Срабатывает при запуске CSS-анимации.
--   `onAnimationStartCapture`: `onAnimationStart`, но срабатывает в [фазе захвата](../learn/responding-to-events.md.md#capture-phase-events)
+-   `onAnimationStartCapture`: `onAnimationStart`, но срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
 -   [`onAuxClick`](https://developer.mozilla.org/docs/Web/API/Element/auxclick_event): Функция обработчика `MouseEvent`. Срабатывает, когда была нажата не основная кнопка указателя.
 -   `onAuxClickCapture`: Версия `onAuxClick`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
 -   `onBeforeInput`: Функция обработчика `InputEvent`. Срабатывает перед изменением значения редактируемого элемента. React пока _не_ использует собственное событие [`beforeinput`](https://developer.mozilla.org/docs/Web/API/HTMLElement/beforeinput_event), и вместо этого пытается заполнить его с помощью других событий.
@@ -138,7 +138,7 @@
 -   [`title`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/title): Строка. Определяет текст подсказки для элемента.
 -   [`translate`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/translate): Либо `yes`, либо `no`. Передача `no` исключает перевод содержимого элемента.
 
-Вы также можете передавать пользовательские атрибуты в качестве реквизитов, например, `mycustomprop="someValue"`. Это может быть полезно при интеграции со сторонними библиотеками. Имя пользовательского атрибута должно быть в нижнем регистре и не должно начинаться с `on`. Значение будет преобразовано в строку. Если вы передадите `null` или `undefined`, пользовательский атрибут будет удален.
+Вы также можете передавать пользовательские атрибуты в качестве пропсов, например, `mycustomprop="someValue"`. Это может быть полезно при интеграции со сторонними библиотеками. Имя пользовательского атрибута должно быть в нижнем регистре и не должно начинаться с `on`. Значение будет преобразовано в строку. Если вы передадите `null` или `undefined`, пользовательский атрибут будет удален.
 
 Эти события срабатывают только для элементов [`<form>`](https://developer.mozilla.org/docs/Web/HTML/Element/form):
 

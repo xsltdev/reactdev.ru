@@ -4,13 +4,13 @@
 
 ## Устаревшие API
 
--   [`Children`](Children.md) позволяет манипулировать и преобразовывать JSX, полученный в качестве реквизита `children`.
+-   [`Children`](Children.md) позволяет манипулировать и преобразовывать JSX, полученный в качестве пропса `children`.
 -   [`cloneElement`](cloneElement.md) позволяет создать элемент React, используя другой элемент в качестве отправной точки.
 -   [`Component`](Component.md) позволяет определить компонент React как класс JavaScript.
 -   [`createElement`](createElement.md) позволяет вам создать элемент React. Обычно вместо этого используется JSX.
 -   [`createRef`](createRef.md) создает объект ref, который может содержать произвольное значение.
 -   [`isValidElement`](isValidElement.md) проверяет, является ли значение элементом React. Обычно используется с [`cloneElement`.](cloneElement.md)
--   [`PureComponent`](PureComponent.md) аналогичен [`Component`,](Component.md), но он пропускает повторные рендеринги с теми же реквизитами.
+-   [`PureComponent`](PureComponent.md) аналогичен [`Component`,](Component.md), но он пропускает повторные рендеринги с теми же пропсами.
 
 ## Утратившие силу API
 
