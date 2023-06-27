@@ -257,6 +257,10 @@ export default function Form() {
     root2.render(<App />);
     ```
 
+## Видео
+
+<iframe width="100%" height="400px" src="https://www.youtube.com/embed/GNVI9Pr_RKQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ## Ссылки
 
 -   [https://react.dev/reference/react/useId](https://react.dev/reference/react/useId)
