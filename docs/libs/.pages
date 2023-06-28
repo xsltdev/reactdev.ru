@@ -1,6 +1,8 @@
 title: Библиотеки
 nav:
     - index.md
+    - nextjs
+    - graphql
     - cra.md
     - react-router.md
     - redux

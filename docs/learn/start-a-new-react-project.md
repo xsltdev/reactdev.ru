@@ -16,7 +16,7 @@
 npx create-next-app
 ```
 
-Если вы новичок в Next.js, ознакомьтесь с учебником [Next.js](../nextjs/index.md).
+Если вы новичок в Next.js, ознакомьтесь с учебником [Next.js](../libs/nextjs/index.md).
 
 Next.js поддерживается [Vercel](https://vercel.com/). Вы можете [развернуть приложение Next.js](https://nextjs.org/docs/deployment) на любом Node.js или бессерверном хостинге, или на своем собственном сервере. [Полностью статические приложения Next.js](https://nextjs.org/docs/advanced-features/static-html-export) могут быть развернуты на любом статическом хостинге.
 

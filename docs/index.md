@@ -38,7 +38,7 @@ hide:
 
     Фреймворки для старта нового проекта
 
-    [:octicons-arrow-right-24: Next.js](nextjs/index.md)
+    [:octicons-arrow-right-24: Next.js](libs/nextjs/index.md)
 
     [:octicons-arrow-right-24: Create React App](libs/cra.md)
 
@@ -64,7 +64,7 @@ hide:
 
     Библиотеки GraphQL API
 
-    [:octicons-arrow-right-24: GraphQL](graphql/index.md)
+    [:octicons-arrow-right-24: GraphQL](libs/graphql/index.md)
 
     :octicons-arrow-right-24: React Apollo Client <small>v3</small>
 

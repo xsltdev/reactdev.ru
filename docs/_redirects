@@ -1,1 +1,3 @@
 /tutorial/* /archive/react16/:splat 301
+/graphql/* /libs/graphql/:splat 301
+/nextjs/* /libs/nextjs/:splat 301

@@ -1,5 +1,11 @@
 # Библиотеки
 
+[Next.js](nextjs/index.md)
+: React фреймворк с SSR
+
+[GraphQL](graphql/index.md)
+: Библиотеки GraphQL API
+
 [Create React App](cra.md)
 : Интерфейс командной строки, позволяющий создавать предварительно настроенные React-проекты
 

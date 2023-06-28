@@ -2,9 +2,7 @@ nav:
     - 🏠: index.md
     - React: learn
     - API: reference
-    - types
-    - nextjs
-    - graphql
+    - TS React: types
     - libs
     - archive
     - Спасибо: https://boosty.to/bndby
