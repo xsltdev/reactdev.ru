@@ -15,8 +15,6 @@
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
     import AddTask from './AddTask.js';
@@ -72,8 +70,6 @@
     	{ id: 2, text: 'Lennon Wall pic', done: false },
     ];
     ```
-
-    </div>
 
 === "Результат"
 
@@ -424,8 +420,6 @@ const [tasks, dispatch] = useReducer(
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useReducer } from 'react';
     import AddTask from './AddTask.js';
@@ -510,8 +504,6 @@ const [tasks, dispatch] = useReducer(
     ];
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](extracting-state-logic-into-a-reducer-3.png)
@@ -519,8 +511,6 @@ const [tasks, dispatch] = useReducer(
 При желании можно даже переместить редуктор в другой файл:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useReducer } from 'react';
@@ -576,8 +566,6 @@ const [tasks, dispatch] = useReducer(
     	{ id: 2, text: 'Lennon Wall pic', done: false },
     ];
     ```
-
-    </div>
 
 === "taskReducer.js"
 
@@ -645,8 +633,6 @@ const [tasks, dispatch] = useReducer(
 Так же, как и в случае с [update objects](updating-objects-in-state.md#write-concise-update-logic-with-immer) и [arrays](updating-arrays-in-state.md#write-concise-update-logic-with-immer) в обычном состоянии, вы можете использовать библиотеку Immer, чтобы сделать редукторы более лаконичными. Здесь [`useImmerReducer`](https://github.com/immerjs/use-immer#useimmerreducer) позволяет вам мутировать состояние с помощью `push` или `arr[i] =` присваивания:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useImmerReducer } from 'use-immer';
@@ -728,8 +714,6 @@ const [tasks, dispatch] = useReducer(
     ];
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](extracting-state-logic-into-a-reducer-3.png)
@@ -756,8 +740,6 @@ const [tasks, dispatch] = useReducer(
 Замените эти два `// TODO` на код для `диспетчеризации` соответствующих действий. Чтобы увидеть ожидаемую форму и тип действий, проверьте редуктор в `messengerReducer.js`. Редуктор уже написан, поэтому вам не придется его изменять. Вам нужно только диспетчеризировать действия в `ContactList.js` и `Chat.js`.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useReducer } from 'react';
@@ -800,8 +782,6 @@ const [tasks, dispatch] = useReducer(
     	{ id: 2, name: 'Bob', email: 'bob@mail.com' },
     ];
     ```
-
-    </div>
 
 === "messengerReducer.js"
 
@@ -939,8 +919,6 @@ const [tasks, dispatch] = useReducer(
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useReducer } from 'react';
     	import Chat from './Chat.js';
@@ -982,8 +960,6 @@ const [tasks, dispatch] = useReducer(
     		{ id: 2, name: 'Bob', email: 'bob@mail.com' },
     	];
     	```
-
-    	</div>
 
     === "messengerReducer.js"
 
@@ -1093,8 +1069,6 @@ const [tasks, dispatch] = useReducer(
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useReducer } from 'react';
     import Chat from './Chat.js';
@@ -1136,8 +1110,6 @@ const [tasks, dispatch] = useReducer(
     	{ id: 2, name: 'Bob', email: 'bob@mail.com' },
     ];
     ```
-
-    </div>
 
 === "messengerReducer.js"
 

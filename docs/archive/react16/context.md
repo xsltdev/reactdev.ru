@@ -2,25 +2,11 @@
 description: Контекст позволяет передавать данные через дерево компонентов без необходимости передавать пропсы на промежуточных уровнях
 ---
 
-# Контекст
+# Контекст React
 
 Контекст позволяет передавать данные через дерево компонентов без необходимости передавать пропсы на промежуточных уровнях.
 
 В типичном React-приложении данные передаются сверху вниз (от родителя к дочернему компоненту) с помощью пропсов. Однако, этот способ может быть чересчур громоздким для некоторых типов пропсов (например, выбранный язык, UI-тема), которые необходимо передавать во многие компоненты в приложении. Контекст предоставляет способ делиться такими данными между компонентами без необходимости явно передавать пропсы через каждый уровень дерева.
-
-- [Когда использовать контекст](#when-to-use-context)
-- [Перед тем, как вы начнёте использовать контекст](#before-you-use-context)
-- [API](#api)
-  - [React.createContext](#reactcreatecontext)
-  - [Context.Provider](#contextprovider)
-  - [Class.contextType](#classcontexttype)
-  - [Context.Consumer](#contextconsumer)
-- [Примеры](#examples)
-  - [Динамический контекст](#dynamic-context)
-  - [Изменение контекста из вложенного компонента](#updating-context-from-a-nested-component)
-  - [Использование нескольких контекстов](#consuming-multiple-contexts)
-- [Предостережения](#caveats)
-- [Устаревший API](#legacy-api)
 
 ## Когда использовать контекст {#when-to-use-context}
 
@@ -28,29 +14,29 @@ description: Контекст позволяет передавать данны
 
 ```js
 class App extends React.Component {
-  render() {
-    return <Toolbar theme="dark" />;
-  }
+    render() {
+        return <Toolbar theme="dark" />;
+    }
 }
 
 function Toolbar(props) {
-  // highlight-range{1-5,8}
-  // Компонент Toolbar должен передать проп "theme" ниже,
-  // фактически не используя его. Учитывая, что у вас в приложении
-  // могут быть десятки компонентов, использующих UI-тему,
-  // вам придётся передавать проп "theme" через все компоненты.
-  // И в какой-то момент это станет большой проблемой.
-  return (
-    <div>
-      <ThemedButton theme={props.theme} />
-    </div>
-  );
+    // highlight-range{1-5,8}
+    // Компонент Toolbar должен передать проп "theme" ниже,
+    // фактически не используя его. Учитывая, что у вас в приложении
+    // могут быть десятки компонентов, использующих UI-тему,
+    // вам придётся передавать проп "theme" через все компоненты.
+    // И в какой-то момент это станет большой проблемой.
+    return (
+        <div>
+            <ThemedButton theme={props.theme} />
+        </div>
+    );
 }
 
 class ThemedButton extends React.Component {
-  render() {
-    return <Button theme={this.props.theme} />;
-  }
+    render() {
+        return <Button theme={this.props.theme} />;
+    }
 }
 ```
 
@@ -65,41 +51,41 @@ class ThemedButton extends React.Component {
 const ThemeContext = React.createContext('light');
 
 class App extends React.Component {
-  render() {
-    // highlight-range{1-4,6}
-    // Компонент Provider используется для передачи текущей
-    // UI-темы вниз по дереву. Любой компонент может использовать
-    // этот контекст и не важно, как глубоко он находится.
-    // В этом примере мы передаём "dark" в качестве значения контекста.
-    return (
-      <ThemeContext.Provider value="dark">
-        <Toolbar />
-      </ThemeContext.Provider>
-    );
-  }
+    render() {
+        // highlight-range{1-4,6}
+        // Компонент Provider используется для передачи текущей
+        // UI-темы вниз по дереву. Любой компонент может использовать
+        // этот контекст и не важно, как глубоко он находится.
+        // В этом примере мы передаём "dark" в качестве значения контекста.
+        return (
+            <ThemeContext.Provider value="dark">
+                <Toolbar />
+            </ThemeContext.Provider>
+        );
+    }
 }
 
 // highlight-range{1,2}
 // Компонент, который находится в середине,
 // больше не должен явно передавать тему вниз.
 function Toolbar() {
-  return (
-    <div>
-      <ThemedButton />
-    </div>
-  );
+    return (
+        <div>
+            <ThemedButton />
+        </div>
+    );
 }
 
 class ThemedButton extends React.Component {
-  // highlight-range{1-4,7}
-  // Определяем contextType, чтобы получить значение контекста.
-  // React найдёт (выше по дереву) ближайший Provider-компонент,
-  // предоставляющий этот контекст, и использует его значение.
-  // В этом примере значение UI-темы будет "dark".
-  static contextType = ThemeContext;
-  render() {
-    return <Button theme={this.context} />;
-  }
+    // highlight-range{1-4,7}
+    // Определяем contextType, чтобы получить значение контекста.
+    // React найдёт (выше по дереву) ближайший Provider-компонент,
+    // предоставляющий этот контекст, и использует его значение.
+    // В этом примере значение UI-темы будет "dark".
+    static contextType = ThemeContext;
+    render() {
+        return <Button theme={this.context} />;
+    }
 }
 ```
 
@@ -156,16 +142,19 @@ function Page(props) {
 
 ```js
 function Page(props) {
-  const user = props.user;
-  const content = <Feed user={user} />;
-  const topBar = (
-    <NavigationBar>
-      <Link href={user.permalink}>
-        <Avatar user={user} size={props.avatarSize} />
-      </Link>
-    </NavigationBar>
-  );
-  return <PageLayout topBar={topBar} content={content} />;
+    const user = props.user;
+    const content = <Feed user={user} />;
+    const topBar = (
+        <NavigationBar>
+            <Link href={user.permalink}>
+                <Avatar
+                    user={user}
+                    size={props.avatarSize}
+                />
+            </Link>
+        </NavigationBar>
+    );
+    return <PageLayout topBar={topBar} content={content} />;
 }
 ```
 
@@ -207,22 +196,22 @@ const MyContext = React.createContext(defaultValue);
 
 ```js
 class MyClass extends React.Component {
-  componentDidMount() {
-    let value = this.context;
-    /* выполнить побочный эффект на этапе монтирования, используя значение MyContext */
-  }
-  componentDidUpdate() {
-    let value = this.context;
-    /* ... */
-  }
-  componentWillUnmount() {
-    let value = this.context;
-    /* ... */
-  }
-  render() {
-    let value = this.context;
-    /* отрендерить что-то, используя значение MyContext */
-  }
+    componentDidMount() {
+        let value = this.context;
+        /* выполнить побочный эффект на этапе монтирования, используя значение MyContext */
+    }
+    componentDidUpdate() {
+        let value = this.context;
+        /* ... */
+    }
+    componentWillUnmount() {
+        let value = this.context;
+        /* ... */
+    }
+    render() {
+        let value = this.context;
+        /* отрендерить что-то, используя значение MyContext */
+    }
 }
 MyClass.contextType = MyContext;
 ```
@@ -237,11 +226,11 @@ MyClass.contextType = MyContext;
 
 ```js
 class MyClass extends React.Component {
-  static contextType = MyContext;
-  render() {
-    let value = this.context;
-    /* отрендерить что-то, используя значение MyContext */
-  }
+    static contextType = MyContext;
+    render() {
+        let value = this.context;
+        /* отрендерить что-то, используя значение MyContext */
+    }
 }
 ```
 
@@ -271,19 +260,19 @@ class MyClass extends React.Component {
 
 ```js
 export const themes = {
-  light: {
-    foreground: '#000000',
-    background: '#eeeeee',
-  },
-  dark: {
-    foreground: '#ffffff',
-    background: '#222222',
-  },
+    light: {
+        foreground: '#000000',
+        background: '#eeeeee',
+    },
+    dark: {
+        foreground: '#ffffff',
+        background: '#222222',
+    },
 };
 
 // highlight-range{1-3}
 export const ThemeContext = React.createContext(
-  themes.dark // значение по умолчанию
+    themes.dark // значение по умолчанию
 );
 ```
 
@@ -293,17 +282,19 @@ export const ThemeContext = React.createContext(
 import { ThemeContext } from './theme-context';
 
 class ThemedButton extends React.Component {
-  // highlight-range{3,12}
-  render() {
-    let props = this.props;
-    let theme = this.context;
-    return (
-      <button
-        {...props}
-        style={{ backgroundColor: theme.background }}
-      />
-    );
-  }
+    // highlight-range{3,12}
+    render() {
+        let props = this.props;
+        let theme = this.context;
+        return (
+            <button
+                {...props}
+                style={{
+                    backgroundColor: theme.background,
+                }}
+            />
+        );
+    }
 }
 ThemedButton.contextType = ThemeContext;
 
@@ -318,48 +309,52 @@ import ThemedButton from './themed-button';
 
 // Промежуточный компонент, который использует ThemedButton
 function Toolbar(props) {
-  return (
-    <ThemedButton onClick={props.changeTheme}>
-      Change Theme
-    </ThemedButton>
-  );
+    return (
+        <ThemedButton onClick={props.changeTheme}>
+            Change Theme
+        </ThemedButton>
+    );
 }
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      theme: themes.light,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            theme: themes.light,
+        };
 
-    this.toggleTheme = () => {
-      this.setState((state) => ({
-        theme:
-          state.theme === themes.dark
-            ? themes.light
-            : themes.dark,
-      }));
-    };
-  }
+        this.toggleTheme = () => {
+            this.setState((state) => ({
+                theme:
+                    state.theme === themes.dark
+                        ? themes.light
+                        : themes.dark,
+            }));
+        };
+    }
 
-  render() {
-    //highlight-range{1-4}
-    // ThemedButton внутри ThemeProvider использует
-    // значение светлой UI-темы из состояния, в то время как
-    // ThemedButton, который находится вне ThemeProvider,
-    // использует тёмную UI-тему из значения по умолчанию
-    //highlight-range{3-5,7}
-    return (
-      <Page>
-        <ThemeContext.Provider value={this.state.theme}>
-          <Toolbar changeTheme={this.toggleTheme} />
-        </ThemeContext.Provider>
-        <Section>
-          <ThemedButton />
-        </Section>
-      </Page>
-    );
-  }
+    render() {
+        //highlight-range{1-4}
+        // ThemedButton внутри ThemeProvider использует
+        // значение светлой UI-темы из состояния, в то время как
+        // ThemedButton, который находится вне ThemeProvider,
+        // использует тёмную UI-тему из значения по умолчанию
+        //highlight-range{3-5,7}
+        return (
+            <Page>
+                <ThemeContext.Provider
+                    value={this.state.theme}
+                >
+                    <Toolbar
+                        changeTheme={this.toggleTheme}
+                    />
+                </ThemeContext.Provider>
+                <Section>
+                    <ThemedButton />
+                </Section>
+            </Page>
+        );
+    }
 }
 
 ReactDOM.render(<App />, document.root);
@@ -377,8 +372,8 @@ ReactDOM.render(<App />, document.root);
 // которую ожидают потребители контекста.
 // highlight-range{2-3}
 export const ThemeContext = React.createContext({
-  theme: themes.dark,
-  toggleTheme: () => {},
+    theme: themes.dark,
+    toggleTheme: () => {},
 });
 ```
 
@@ -388,21 +383,23 @@ export const ThemeContext = React.createContext({
 import { ThemeContext } from './theme-context';
 
 function ThemeTogglerButton() {
-  // highlight-range{1-2,5}
-  // ThemeTogglerButton получает из контекста
-  // не только значение UI-темы, но и функцию toggleTheme.
-  return (
-    <ThemeContext.Consumer>
-      {({ theme, toggleTheme }) => (
-        <button
-          onClick={toggleTheme}
-          style={{ backgroundColor: theme.background }}
-        >
-          Toggle Theme
-        </button>
-      )}
-    </ThemeContext.Consumer>
-  );
+    // highlight-range{1-2,5}
+    // ThemeTogglerButton получает из контекста
+    // не только значение UI-темы, но и функцию toggleTheme.
+    return (
+        <ThemeContext.Consumer>
+            {({ theme, toggleTheme }) => (
+                <button
+                    onClick={toggleTheme}
+                    style={{
+                        backgroundColor: theme.background,
+                    }}
+                >
+                    Toggle Theme
+                </button>
+            )}
+        </ThemeContext.Consumer>
+    );
 }
 
 export default ThemeTogglerButton;
@@ -415,44 +412,44 @@ import { ThemeContext, themes } from './theme-context';
 import ThemeTogglerButton from './theme-toggler-button';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.toggleTheme = () => {
-      this.setState((state) => ({
-        theme:
-          state.theme === themes.dark
-            ? themes.light
-            : themes.dark,
-      }));
-    };
+        this.toggleTheme = () => {
+            this.setState((state) => ({
+                theme:
+                    state.theme === themes.dark
+                        ? themes.light
+                        : themes.dark,
+            }));
+        };
 
-    // highlight-range{1-2,5}
-    // Состояние хранит функцию для обновления контекста,
-    // которая будет также передана в Provider-компонент.
-    this.state = {
-      theme: themes.light,
-      toggleTheme: this.toggleTheme,
-    };
-  }
+        // highlight-range{1-2,5}
+        // Состояние хранит функцию для обновления контекста,
+        // которая будет также передана в Provider-компонент.
+        this.state = {
+            theme: themes.light,
+            toggleTheme: this.toggleTheme,
+        };
+    }
 
-  render() {
-    // highlight-range{1,3}
-    // Всё состояние передаётся в качестве значения контекста
-    return (
-      <ThemeContext.Provider value={this.state}>
-        <Content />
-      </ThemeContext.Provider>
-    );
-  }
+    render() {
+        // highlight-range{1,3}
+        // Всё состояние передаётся в качестве значения контекста
+        return (
+            <ThemeContext.Provider value={this.state}>
+                <Content />
+            </ThemeContext.Provider>
+        );
+    }
 }
 
 function Content() {
-  return (
-    <div>
-      <ThemeTogglerButton />
-    </div>
-  );
+    return (
+        <div>
+            <ThemeTogglerButton />
+        </div>
+    );
 }
 
 ReactDOM.render(<App />, document.root);
@@ -468,48 +465,51 @@ const ThemeContext = React.createContext('light');
 
 // Контекст активного пользователя
 const UserContext = React.createContext({
-  name: 'Guest',
+    name: 'Guest',
 });
 
 class App extends React.Component {
-  render() {
-    const { signedInUser, theme } = this.props;
+    render() {
+        const { signedInUser, theme } = this.props;
 
-    // Компонент App, который предоставляет начальные значения контекстов
-    // highlight-range{2-3,5-6}
-    return (
-      <ThemeContext.Provider value={theme}>
-        <UserContext.Provider value={signedInUser}>
-          <Layout />
-        </UserContext.Provider>
-      </ThemeContext.Provider>
-    );
-  }
+        // Компонент App, который предоставляет начальные значения контекстов
+        // highlight-range{2-3,5-6}
+        return (
+            <ThemeContext.Provider value={theme}>
+                <UserContext.Provider value={signedInUser}>
+                    <Layout />
+                </UserContext.Provider>
+            </ThemeContext.Provider>
+        );
+    }
 }
 
 function Layout() {
-  return (
-    <div>
-      <Sidebar />
-      <Content />
-    </div>
-  );
+    return (
+        <div>
+            <Sidebar />
+            <Content />
+        </div>
+    );
 }
 
 // Компонент, который может использовать несколько контекстов
 function Content() {
-  // highlight-range{2-10}
-  return (
-    <ThemeContext.Consumer>
-      {(theme) => (
-        <UserContext.Consumer>
-          {(user) => (
-            <ProfilePage user={user} theme={theme} />
-          )}
-        </UserContext.Consumer>
-      )}
-    </ThemeContext.Consumer>
-  );
+    // highlight-range{2-10}
+    return (
+        <ThemeContext.Consumer>
+            {(theme) => (
+                <UserContext.Consumer>
+                    {(user) => (
+                        <ProfilePage
+                            user={user}
+                            theme={theme}
+                        />
+                    )}
+                </UserContext.Consumer>
+            )}
+        </ThemeContext.Consumer>
+    );
 }
 ```
 
@@ -521,16 +521,16 @@ function Content() {
 
 ```js
 class App extends React.Component {
-  render() {
-    // highlight-range{2}
-    return (
-      <MyContext.Provider
-        value={{ something: 'something' }}
-      >
-        <Toolbar />
-      </MyContext.Provider>
-    );
-  }
+    render() {
+        // highlight-range{2}
+        return (
+            <MyContext.Provider
+                value={{ something: 'something' }}
+            >
+                <Toolbar />
+            </MyContext.Provider>
+        );
+    }
 }
 ```
 
@@ -538,22 +538,22 @@ class App extends React.Component {
 
 ```js
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    // highlight-range{2}
-    this.state = {
-      value: { something: 'something' },
-    };
-  }
+    constructor(props) {
+        super(props);
+        // highlight-range{2}
+        this.state = {
+            value: { something: 'something' },
+        };
+    }
 
-  render() {
-    // highlight-range{2}
-    return (
-      <Provider value={this.state.value}>
-        <Toolbar />
-      </Provider>
-    );
-  }
+    render() {
+        // highlight-range{2}
+        return (
+            <Provider value={this.state.value}>
+                <Toolbar />
+            </Provider>
+        );
+    }
 }
 ```
 

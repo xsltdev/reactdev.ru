@@ -105,8 +105,6 @@ JSON API возвращает некоторые данные, которые в
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     function ProductCategoryRow({ category }) {
     	return (
@@ -231,8 +229,6 @@ JSON API возвращает некоторые данные, которые в
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![результат](thinking-in-react-1.png)
@@ -350,8 +346,6 @@ function FilterableProductTable({ products }) {
 <!-- 0013.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -510,8 +504,6 @@ function FilterableProductTable({ products }) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![результат](thinking-in-react-2.png)
@@ -597,8 +589,6 @@ function FilterableProductTable({ products }) {
 <!-- 0023.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -771,8 +761,6 @@ function FilterableProductTable({ products }) {
     	return <FilterableProductTable products={PRODUCTS} />;
     }
     ```
-
-    </div>
 
 === "Результат"
 

@@ -403,8 +403,6 @@ setFriendCount((fc) => fc * 2);
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { getFinalState } from './processQueue.js';
 
@@ -472,8 +470,6 @@ setFriendCount((fc) => fc * 2);
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](queueing-a-series-of-state-updates-7.png)
@@ -525,8 +521,6 @@ setFriendCount((fc) => fc * 2);
     	```
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { getFinalState } from './processQueue.js';
@@ -595,15 +589,11 @@ setFriendCount((fc) => fc * 2);
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](queueing-a-series-of-state-updates-8.png)
 
     Теперь вы знаете, как работает эта часть React!
-
-<!-- 0041.part.md -->
 
 ## Ссылки
 

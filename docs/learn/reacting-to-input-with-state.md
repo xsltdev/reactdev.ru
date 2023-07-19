@@ -29,8 +29,6 @@ React предоставляет декларативный способ ман�
 
 === "index.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     async function handleFormSubmit(e) {
     	e.preventDefault();
@@ -102,8 +100,6 @@ React предоставляет декларативный способ ман�
     form.onsubmit = handleFormSubmit;
     textarea.oninput = handleTextareaChange;
     ```
-
-    </div>
 
 === "index.html"
 
@@ -199,8 +195,6 @@ React был создан для решения этой проблемы.
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     export default function Form({
     	// Try 'submitting', 'error', 'success':
@@ -240,8 +234,6 @@ React был создан для решения этой проблемы.
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -395,8 +387,6 @@ const [status, setStatus] = useState('typing');
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -474,8 +464,6 @@ const [status, setStatus] = useState('typing');
     	});
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -620,8 +608,6 @@ const [status, setStatus] = useState('typing');
 
 === "index.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     function handleFormSubmit(e) {
     	e.preventDefault();
@@ -688,11 +674,7 @@ const [status, setStatus] = useState('typing');
     lastNameInput.oninput = handleLastNameChange;
     ```
 
-    </div>
-
 === "index.html"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```html
     <form id="form">
@@ -735,8 +717,6 @@ const [status, setStatus] = useState('typing');
     	}
     </style>
     ```
-
-    </div>
 
 === "Результат"
 
@@ -783,11 +763,7 @@ const [status, setStatus] = useState('typing');
 
     Наконец, вы должны использовать [условный рендеринг](conditional-rendering.md), чтобы показывать или скрывать входы в зависимости от `isEditing`.
 
-    <!-- 0049.part.md -->
-
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -843,8 +819,6 @@ const [status, setStatus] = useState('typing');
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](reacting-to-input-with-state-10.png)
@@ -858,8 +832,6 @@ const [status, setStatus] = useState('typing');
 <!-- 0053.part.md -->
 
 === "index.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     function handleFormSubmit(e) {
@@ -925,11 +897,7 @@ const [status, setStatus] = useState('typing');
     lastNameInput.oninput = handleLastNameChange;
     ```
 
-    </div>
-
 === "index.html"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```html
     <form id="form">
@@ -973,8 +941,6 @@ const [status, setStatus] = useState('typing');
     </style>
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](reacting-to-input-with-state-11.png)
@@ -984,8 +950,6 @@ const [status, setStatus] = useState('typing');
 Если вам трудно сообразить, с чего начать, то в приведенной ниже заглушке уже есть большая часть структуры. Если вы начнете здесь, заполните недостающую логику в функции `updateDOM`. (При необходимости ссылайтесь на исходный код).
 
 === "index.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     let firstName = 'Jane';
@@ -1057,11 +1021,7 @@ const [status, setStatus] = useState('typing');
     lastNameInput.oninput = handleLastNameChange;
     ```
 
-    </div>
-
 === "index.html"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```html
     <form id="form">
@@ -1105,8 +1065,6 @@ const [status, setStatus] = useState('typing');
     </style>
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](reacting-to-input-with-state-12.png)
@@ -1115,11 +1073,7 @@ const [status, setStatus] = useState('typing');
 
     Отсутствующая логика включала переключение отображения входов и содержимого, а также обновление меток:
 
-    <!-- 0063.part.md -->
-
     === "index.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	let firstName = 'Jane';
@@ -1200,11 +1154,7 @@ const [status, setStatus] = useState('typing');
     	lastNameInput.oninput = handleLastNameChange;
     	```
 
-    	</div>
-
     === "index.html"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```html
     	<form id="form">
@@ -1247,8 +1197,6 @@ const [status, setStatus] = useState('typing');
     		}
     	</style>
     	```
-
-    	</div>
 
     === "Результат"
 

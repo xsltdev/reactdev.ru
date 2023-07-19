@@ -139,8 +139,6 @@ function ChatRoom({ roomId }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -205,8 +203,6 @@ function ChatRoom({ roomId }) {
     }
     ```
 
-    </div>
-
 === "chat.js"
 
     ```js
@@ -239,8 +235,6 @@ function ChatRoom({ roomId }) {
 В этом примере внешней системой является сам DOM браузера. Обычно вы указываете слушателей событий с помощью JSX, но вы не можете прослушивать глобальный объект [`window`](https://developer.mozilla.org/docs/Web/API/Window) таким образом. Эффект позволяет вам подключиться к объекту `window` и прослушивать его события. Прослушивание события `pointermove` позволяет отслеживать положение курсора (или пальца) и обновлять красную точку, чтобы она двигалась вместе с ним.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -283,15 +277,11 @@ function ChatRoom({ roomId }) {
     }
     ```
 
-    </div>
-
 #### 3. Запуск анимации
 
 В этом примере внешней системой является библиотека анимации в `animation.js`. Она предоставляет класс JavaScript под названием `FadeInAnimation`, который принимает узел DOM в качестве аргумента и раскрывает методы `start()` и `stop()` для управления анимацией. Этот компонент [использует ссылку](../learn/manipulating-the-dom-with-refs.md) для доступа к базовому узлу DOM. Эффект считывает узел DOM из ссылки и автоматически запускает анимацию для этого узла при появлении компонента.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect, useRef } from 'react';
@@ -339,8 +329,6 @@ function ChatRoom({ roomId }) {
     	);
     }
     ```
-
-    </div>
 
 === "animation.js"
 
@@ -581,8 +569,6 @@ function ChatRoom({ roomId }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
     import { useChatRoom } from './useChatRoom.js';
@@ -640,8 +626,6 @@ function ChatRoom({ roomId }) {
     	);
     }
     ```
-
-    </div>
 
 === "useChatRoom.js"
 
@@ -1222,8 +1206,6 @@ useEffect(() => {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -1296,8 +1278,6 @@ useEffect(() => {
     }
     ```
 
-    </div>
-
 === "chat.js"
 
     ```js
@@ -1344,8 +1324,6 @@ useEffect(() => {
 В этом примере и `serverUrl` и `roomId` жестко закодированы. Поскольку они объявлены вне компонента, они не являются реактивными значениями, а значит, не являются зависимостями. Список зависимостей пуст, поэтому Effect не запускается при повторном рендере.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1396,8 +1374,6 @@ useEffect(() => {
     }
     ```
 
-    </div>
-
 === "chat.js"
 
     ```js
@@ -1442,8 +1418,6 @@ useEffect(() => {
 В этом примере Effect повторно запускается при изменении `serverUrl` и `roomId`, что вполне разумно. Однако он _также_ запускается повторно, когда вы изменяете `message`, что, вероятно, нежелательно. Вот почему обычно указывается массив зависимостей.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1516,8 +1490,6 @@ useEffect(() => {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -1626,8 +1598,6 @@ function ChatRoom({ roomId }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -1681,8 +1651,6 @@ function ChatRoom({ roomId }) {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -1751,8 +1719,6 @@ function ChatRoom({ roomId }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -1810,8 +1776,6 @@ function ChatRoom({ roomId }) {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 

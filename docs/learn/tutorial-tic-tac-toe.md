@@ -23,8 +23,6 @@
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -184,8 +182,6 @@
     	return null;
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -1181,8 +1177,6 @@ export default function Board() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -1253,8 +1247,6 @@ export default function Board() {
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -1420,8 +1412,6 @@ function handleClick(i) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -1501,8 +1491,6 @@ function handleClick(i) {
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -1599,8 +1587,6 @@ export default function Board() {
 <!-- 0109.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1714,8 +1700,6 @@ export default function Board() {
     	return null;
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -1922,8 +1906,6 @@ export default function Game() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -2059,8 +2041,6 @@ export default function Game() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![результат](tutorial-tic-tac-toe-10.png)
@@ -2144,8 +2124,6 @@ export default function Game() {
 <!-- 0137.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -2302,8 +2280,6 @@ export default function Game() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![результат](tutorial-tic-tac-toe-11.png)
@@ -2388,13 +2364,7 @@ const moves = history.map((squares, move) => {
 });
 ```
 
-<!-- 0148.part.md -->
-
-<!-- 0149.part.md -->
-
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -2551,8 +2521,6 @@ const moves = history.map((squares, move) => {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![результат](tutorial-tic-tac-toe-12.png)
@@ -2641,8 +2609,6 @@ export default function Game() {
 <!-- 0161.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -2806,8 +2772,6 @@ export default function Game() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![результат](tutorial-tic-tac-toe-13.png)
@@ -2867,8 +2831,6 @@ export default function Game() {
 <!-- 0167.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -3029,8 +2991,6 @@ export default function Game() {
     	return null;
     }
     ```
-
-    </div>
 
 === "Результат"
 

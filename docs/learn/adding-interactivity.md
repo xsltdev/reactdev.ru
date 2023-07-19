@@ -1,3 +1,7 @@
+---
+description: В React данные, которые изменяются со временем, называются состояние. Вы можете добавить состояние в любой компонент и обновлять его по мере необходимости
+---
+
 # Добавление интерактивности
 
 Некоторые элементы на экране обновляются в ответ на ввод пользователя. Например, щелчок по галерее изображений переключает активное изображение. В React данные, которые изменяются со временем, называются _состояние_. Вы можете добавить состояние в любой компонент и обновлять его по мере необходимости. В этой главе вы узнаете, как писать компоненты, которые обрабатывают взаимодействия, обновляют свое состояние и отображают различные результаты с течением времени.
@@ -81,8 +85,6 @@ const [showMore, setShowMore] = useState(false);
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
     import { sculptureList } from './data.js';
@@ -125,11 +127,7 @@ const [showMore, setShowMore] = useState(false);
     }
     ```
 
-    </div>
-
 === "data.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export const sculptureList = [
@@ -244,8 +242,6 @@ const [showMore, setShowMore] = useState(false);
     ];
     ```
 
-    </div>
-
 !!!note "Готовы изучить эту тему?"
 
     Прочитайте [Состояние: память компонента](state-a-components-memory.md), чтобы узнать, как запомнить значение и обновлять его при взаимодействии.
@@ -284,8 +280,6 @@ console.log(count); // Still 0!
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -322,8 +316,6 @@ console.log(count); // Still 0!
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -443,8 +435,6 @@ console.log(score); // 0
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -541,8 +531,6 @@ console.log(score); // 0
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](adding-interactivity-5.png)
@@ -554,8 +542,6 @@ console.log(score); // 0
 <!-- 0033.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useImmer } from 'use-immer';
@@ -640,8 +626,6 @@ console.log(score); // 0
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](adding-interactivity-5.png)
@@ -657,8 +641,6 @@ console.log(score); // 0
 <!-- 0039.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -722,8 +704,6 @@ console.log(score); // 0
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](adding-interactivity-6.png)
@@ -735,8 +715,6 @@ console.log(score); // 0
 <!-- 0041.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -797,8 +775,6 @@ console.log(score); // 0
     	);
     }
     ```
-
-    </div>
 
 === "package.json"
 

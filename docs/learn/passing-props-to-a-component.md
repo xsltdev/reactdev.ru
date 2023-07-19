@@ -108,8 +108,6 @@ function Avatar({ person, size }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { getImageUrl } from './utils.js';
 
@@ -153,8 +151,6 @@ function Avatar({ person, size }) {
     	);
     }
     ```
-
-    </div>
 
 === "utils.js"
 
@@ -389,8 +385,6 @@ function Profile(props) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import Clock from './Clock.js';
@@ -439,8 +433,6 @@ function Profile(props) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](passing-props-to-a-component-4.png)
@@ -472,8 +464,6 @@ function Profile(props) {
 <!-- 0045.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { getImageUrl } from './utils.js';
@@ -537,8 +527,6 @@ function Profile(props) {
     }
     ```
 
-    </div>
-
 === "utils.js"
 
     ```js
@@ -562,8 +550,6 @@ function Profile(props) {
     Обратите внимание, что параметр `imageSize` имеет значение по умолчанию, поэтому мы не передаем его компоненту.
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { getImageUrl } from './utils.js';
@@ -634,8 +620,6 @@ function Profile(props) {
     	}
     	```
 
-    	</div>
-
     === "utils.js"
 
     	```js
@@ -648,15 +632,11 @@ function Profile(props) {
 
     	![Результат](passing-props-to-a-component-5.png)
 
-    <!-- 0056.part.md -->
-
     Обратите внимание, что вам не нужен отдельный параметр `awardCount`, если `awards` - это массив. Тогда вы можете использовать `awards.length` для подсчета количества наград. Помните, что параметр может принимать любые значения, в том числе и массивы тоже!
 
     Другое решение, более похожее на предыдущие примеры на этой странице, заключается в том, чтобы сгруппировать всю информацию о человеке в одном объекте и передать этот объект как один параметр:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { getImageUrl } from './utils.js';
@@ -727,8 +707,6 @@ function Profile(props) {
     		);
     	}
     	```
-
-    	</div>
 
     === "utils.js"
 

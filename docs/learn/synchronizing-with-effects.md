@@ -102,8 +102,6 @@ function VideoPlayer({ src, isPlaying }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useRef, useEffect } from 'react';
 
@@ -136,8 +134,6 @@ function VideoPlayer({ src, isPlaying }) {
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -181,8 +177,6 @@ function VideoPlayer({ src, isPlaying }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useRef, useEffect } from 'react';
 
@@ -218,8 +212,6 @@ function VideoPlayer({ src, isPlaying }) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](synchronizing-with-effects-2.png)
@@ -253,8 +245,6 @@ function VideoPlayer({ src, isPlaying }) {
 Чтобы продемонстрировать проблему, вот предыдущий пример с несколькими вызовами `console.log` и текстовым вводом, который обновляет состояние родительского компонента. Обратите внимание, как ввод текста приводит к повторному запуску эффекта:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useRef, useEffect } from 'react';
@@ -298,8 +288,6 @@ function VideoPlayer({ src, isPlaying }) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](synchronizing-with-effects-3.png)
@@ -319,8 +307,6 @@ useEffect(() => {
 Вы должны увидеть ошибку `React Hook useEffect has a missing dependency: 'isPlaying'`:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useRef, useEffect } from 'react';
@@ -364,8 +350,6 @@ useEffect(() => {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](synchronizing-with-effects-4.png)
@@ -390,8 +374,6 @@ useEffect(() => {
 Теперь все зависимости объявлены, поэтому ошибки нет. Указание `[isPlaying]` в качестве массива зависимостей говорит React, что он должен пропустить повторный запуск вашего Эффекта, если `isPlaying` будет таким же, как и во время предыдущего рендеринга. С этим изменением ввод текста в поле ввода не приводит к повторному запуску эффекта, но нажатие кнопки Play/Pause приводит к повторному запуску:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useRef, useEffect } from 'react';
@@ -434,8 +416,6 @@ useEffect(() => {
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -881,8 +861,6 @@ function handleClick() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
 
@@ -932,8 +910,6 @@ function handleClick() {
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -1294,8 +1270,6 @@ function handleClick() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { fetchBio } from './api.js';
@@ -1332,8 +1306,6 @@ function handleClick() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](synchronizing-with-effects-12.png)
@@ -1362,8 +1334,6 @@ function handleClick() {
     Чтобы исправить это состояние гонки, добавьте функцию очистки:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1405,8 +1375,6 @@ function handleClick() {
     		);
     	}
     	```
-
-    	</div>
 
     === "Результат"
 

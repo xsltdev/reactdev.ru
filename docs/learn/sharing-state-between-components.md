@@ -21,8 +21,6 @@
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -66,8 +64,6 @@
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -131,8 +127,6 @@ function Panel({ title, children, isActive }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -175,8 +169,6 @@ function Panel({ title, children, isActive }) {
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -227,8 +219,6 @@ const [activeIndex, setActiveIndex] = useState(0);
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -278,8 +268,6 @@ const [activeIndex, setActiveIndex] = useState(0);
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -426,8 +414,6 @@ const [activeIndex, setActiveIndex] = useState(0);
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
     import { foods, filterItems } from './data.js';
@@ -473,11 +459,7 @@ const [activeIndex, setActiveIndex] = useState(0);
     }
     ```
 
-    </div>
-
 === "data.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export function filterItems(items, query) {
@@ -525,8 +507,6 @@ const [activeIndex, setActiveIndex] = useState(0);
     ];
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](sharing-state-between-components-6.png)
@@ -540,8 +520,6 @@ const [activeIndex, setActiveIndex] = useState(0);
     Поднимите состояние `query` в компонент `FilterableList`. Вызовите `filterItems(foods, query)` для получения отфильтрованного списка и передайте его вниз в `List`. Теперь изменение ввода запроса отражается в списке:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -596,8 +574,6 @@ const [activeIndex, setActiveIndex] = useState(0);
 
     === "data.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	export function filterItems(items, query) {
     		query = query.toLowerCase();
@@ -643,8 +619,6 @@ const [activeIndex, setActiveIndex] = useState(0);
     		},
     	];
     	```
-
-    	</div>
 
     === "Результат"
 

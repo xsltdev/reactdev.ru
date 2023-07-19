@@ -255,3 +255,14 @@ h3 {
 	margin-bottom: 0;
 	margin-top: 0;
 }
+
+/* auto scroll for code */
+.md-typeset .highlight {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.md-typeset .highlighttable {
+	margin-top: 0;
+	margin-bottom: 0;
+}

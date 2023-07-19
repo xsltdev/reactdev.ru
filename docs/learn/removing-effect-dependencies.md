@@ -38,8 +38,6 @@ function ChatRoom({ roomId }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -81,8 +79,6 @@ function ChatRoom({ roomId }) {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -139,8 +135,6 @@ function ChatRoom({ roomId }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -182,8 +176,6 @@ function ChatRoom({ roomId }) {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -380,8 +372,6 @@ function ChatRoom() {
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState, useEffect } from 'react';
 
@@ -431,8 +421,6 @@ function ChatRoom() {
     		);
     	}
     	```
-
-    	</div>
 
     === "Результат"
 
@@ -963,8 +951,6 @@ useEffect(() => {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -1021,8 +1007,6 @@ useEffect(() => {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -1191,8 +1175,6 @@ console.log(Object.is(roomId1, roomId2)); // true
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -1246,8 +1228,6 @@ console.log(Object.is(roomId1, roomId2)); // true
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -1515,8 +1495,6 @@ function ChatRoom({ getOptions }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect, useRef } from 'react';
     import { experimental_useEffectEvent as useEffectEvent } from 'react';
@@ -1580,11 +1558,7 @@ function ChatRoom({ getOptions }) {
     }
     ```
 
-    </div>
-
 === "animations.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export class FadeInAnimation {
@@ -1632,8 +1606,6 @@ function ChatRoom({ getOptions }) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](removing-effect-dependencies-9.png)
@@ -1647,8 +1619,6 @@ function ChatRoom({ getOptions }) {
     Ваш Эффект должен считывать последнее значение `duration`, но вы не хотите, чтобы он "реагировал" на изменения `duration`. Вы используете `duration` для запуска анимации, но запуск анимации не является реактивным. Извлеките нереактивную строку кода в событие эффекта и вызовите эту функцию из вашего эффекта.
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect, useRef } from 'react';
@@ -1717,11 +1687,7 @@ function ChatRoom({ getOptions }) {
     	}
     	```
 
-    	</div>
-
     === "animation.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	export class FadeInAnimation {
@@ -1763,8 +1729,6 @@ function ChatRoom({ getOptions }) {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](removing-effect-dependencies-9.png)
@@ -1778,8 +1742,6 @@ function ChatRoom({ getOptions }) {
 Относитесь к `chat.js` как к внешней сторонней библиотеке: вы можете обратиться к ней, чтобы проверить ее API, но не редактируйте ее.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1831,8 +1793,6 @@ function ChatRoom({ getOptions }) {
     }
     ```
 
-    </div>
-
 === "ChatRoom.js"
 
     ```js
@@ -1851,8 +1811,6 @@ function ChatRoom({ getOptions }) {
     ```
 
 === "chat.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export function createConnection({ serverUrl, roomId }) {
@@ -1891,8 +1849,6 @@ function ChatRoom({ getOptions }) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](removing-effect-dependencies-10.png)
@@ -1908,8 +1864,6 @@ function ChatRoom({ getOptions }) {
     Наименее инвазивное решение - это считывать `roomId` и `serverUrl` прямо вне Эффекта, а затем сделать Эффект зависимым от этих примитивных значений (которые не могут измениться непреднамеренно). Внутри эффекта создайте объект и передайте его в `createConnection`:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1961,8 +1915,6 @@ function ChatRoom({ getOptions }) {
     	}
     	```
 
-    	</div>
-
     === "ChatRoom.js"
 
     	```js
@@ -1985,8 +1937,6 @@ function ChatRoom({ getOptions }) {
     	```
 
     === "chat.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	export function createConnection({ serverUrl, roomId }) {
@@ -2025,8 +1975,6 @@ function ChatRoom({ getOptions }) {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](removing-effect-dependencies-10.png)
@@ -2034,8 +1982,6 @@ function ChatRoom({ getOptions }) {
     Еще лучше было бы заменить пропс объекта `options` на более конкретные пропсы `roomId` и `serverUrl`:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -2085,8 +2031,6 @@ function ChatRoom({ getOptions }) {
     	}
     	```
 
-    	</div>
-
     === "ChatRoom.js"
 
     	```js
@@ -2108,8 +2052,6 @@ function ChatRoom({ getOptions }) {
     	```
 
     === "chat.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	export function createConnection({ serverUrl, roomId }) {
@@ -2148,8 +2090,6 @@ function ChatRoom({ getOptions }) {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](removing-effect-dependencies-10.png)
@@ -2165,8 +2105,6 @@ function ChatRoom({ getOptions }) {
 Не изменяйте никакой код в файле `chat.js`. Кроме этого, вы можете изменять любой код, если он приводит к такому же поведению. Например, вы можете счесть полезным изменить, какие пропсы передаются вниз.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -2247,8 +2185,6 @@ function ChatRoom({ getOptions }) {
     }
     ```
 
-    </div>
-
 === "ChatRoom.js"
 
     ```js
@@ -2272,8 +2208,6 @@ function ChatRoom({ getOptions }) {
     ```
 
 === "chat.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export function createEncryptedConnection({
@@ -2400,8 +2334,6 @@ function ChatRoom({ getOptions }) {
     	};
     }
     ```
-
-    </div>
 
 === "notifications.js"
 
@@ -2566,8 +2498,6 @@ function ChatRoom({ getOptions }) {
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState } from 'react';
     	import ChatRoom from './ChatRoom.js';
@@ -2630,11 +2560,7 @@ function ChatRoom({ getOptions }) {
     	}
     	```
 
-    	</div>
-
     === "ChatRoom.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -2676,11 +2602,7 @@ function ChatRoom({ getOptions }) {
     	}
     	```
 
-    	</div>
-
     === "chat.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	export function createEncryptedConnection({
@@ -2807,8 +2729,6 @@ function ChatRoom({ getOptions }) {
     		};
     	}
     	```
-
-    	</div>
 
     === "notifications.js"
 

@@ -22,8 +22,6 @@
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -102,8 +100,6 @@
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](managing-state-1.png)
@@ -121,8 +117,6 @@
 <!-- 0005.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -168,8 +162,6 @@
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](managing-state-2.png)
@@ -179,8 +171,6 @@
 <!-- 0009.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -225,8 +215,6 @@
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](managing-state-3.png)
@@ -246,8 +234,6 @@
 <!-- 0013.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -298,8 +284,6 @@
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -497,8 +481,6 @@ React позволяет отменить поведение по умолчан
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useReducer } from 'react';
     import AddTask from './AddTask.js';
@@ -583,8 +565,6 @@ React позволяет отменить поведение по умолчан
     ];
     ```
 
-    </div>
-
 === "AddTask.js"
 
     ```js
@@ -613,8 +593,6 @@ React позволяет отменить поведение по умолчан
     ```
 
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -689,8 +667,6 @@ React позволяет отменить поведение по умолчан
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -833,8 +809,6 @@ React позволяет отменить поведение по умолчан
 
 === "TasksContext.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import {
     	createContext,
@@ -905,8 +879,6 @@ React позволяет отменить поведение по умолчан
     ];
     ```
 
-    </div>
-
 === "AddTask.js"
 
     ```js
@@ -943,8 +915,6 @@ React позволяет отменить поведение по умолчан
     ```
 
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useContext } from 'react';
@@ -1030,8 +1000,6 @@ React позволяет отменить поведение по умолчан
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 

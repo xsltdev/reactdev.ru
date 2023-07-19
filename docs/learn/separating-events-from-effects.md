@@ -82,8 +82,6 @@ function ChatRoom({ roomId }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection, sendMessage } from './chat.js';
@@ -145,8 +143,6 @@ function ChatRoom({ roomId }) {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -328,8 +324,6 @@ function ChatRoom({ roomId, theme }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection, sendMessage } from './chat.js';
@@ -390,8 +384,6 @@ function ChatRoom({ roomId, theme }) {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -527,8 +519,6 @@ function ChatRoom({ roomId, theme }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { experimental_useEffectEvent as useEffectEvent } from 'react';
@@ -595,11 +585,7 @@ function ChatRoom({ roomId, theme }) {
     }
     ```
 
-    </div>
-
 === "chat.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export function createConnection(serverUrl, roomId) {
@@ -633,8 +619,6 @@ function ChatRoom({ roomId, theme }) {
     	};
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -815,8 +799,6 @@ function Page({ url }) {
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState, useEffect } from 'react';
 
@@ -875,8 +857,6 @@ function Page({ url }) {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](separating-events-from-effects-3.png)
@@ -890,8 +870,6 @@ function Page({ url }) {
     С `useEffectEvent` нет необходимости "врать" линтеру, и код работает так, как вы ожидаете:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -950,8 +928,6 @@ function Page({ url }) {
     		);
     	}
     	```
-
-    	</div>
 
     === "Результат"
 
@@ -1056,8 +1032,6 @@ function useTimer(callback, delay) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
 
@@ -1108,8 +1082,6 @@ function useTimer(callback, delay) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](separating-events-from-effects-4.png)
@@ -1125,8 +1097,6 @@ function useTimer(callback, delay) {
     Если вы удалите комментарий о подавлении, React скажет вам, что код этого Эффекта зависит от `increment`, но вы "солгали" React, утверждая, что этот Эффект не зависит ни от каких реактивных значений (`[]`). Добавьте `increment` в массив зависимостей:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1177,8 +1147,6 @@ function useTimer(callback, delay) {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](separating-events-from-effects-4.png)
@@ -1192,8 +1160,6 @@ function useTimer(callback, delay) {
 Есть небольшая проблема с этим пользовательским интерфейсом. Вы можете заметить, что если вы продолжаете нажимать на кнопки плюс или минус быстрее, чем один раз в секунду, то сам таймер как бы приостанавливается. Он возобновляется только после того, как пройдет секунда с момента последнего нажатия любой из кнопок. Выясните, почему это происходит, и устраните проблему, чтобы таймер тикал _каждую_ секунду без перерывов.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1245,8 +1211,6 @@ function useTimer(callback, delay) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](separating-events-from-effects-5.png)
@@ -1262,8 +1226,6 @@ function useTimer(callback, delay) {
     Чтобы решить эту проблему, извлеките из Эффекта событие Эффекта `onTick`:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1319,8 +1281,6 @@ function useTimer(callback, delay) {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](separating-events-from-effects-5.png)
@@ -1332,8 +1292,6 @@ function useTimer(callback, delay) {
 В этом примере вы можете настроить интервальную задержку. Она хранится в переменной состояния `delay`, которая обновляется двумя кнопками. Однако, даже если вы будете нажимать кнопку "плюс 100 мс", пока `delay` не станет равной 1000 миллисекунд (то есть секунде), вы заметите, что таймер все равно увеличивается очень быстро (каждые 100 мс). Как будто ваши изменения `задержки` игнорируются. Найдите и исправьте ошибку.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1413,8 +1371,6 @@ function useTimer(callback, delay) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](separating-events-from-effects-6.png)
@@ -1428,8 +1384,6 @@ function useTimer(callback, delay) {
     Проблема приведенного выше примера заключается в том, что он извлек событие Effect Event под названием `onMount`, не задумываясь о том, что на самом деле должен делать код. Вы должны извлекать события Effect Events только по определенной причине: когда вы хотите сделать часть вашего кода нереактивной. Однако вызов `setInterval` _должен_ быть реактивным по отношению к переменной состояния `delay`. Если `delay` меняется, вы хотите установить интервал с нуля! Чтобы исправить этот код, перенесите весь реактивный код обратно в Effect:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1505,8 +1459,6 @@ function useTimer(callback, delay) {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](separating-events-from-effects-6.png)
@@ -1522,8 +1474,6 @@ function useTimer(callback, delay) {
 Исправьте это так, чтобы при быстром переключении с "общего" на "путешествия" и затем на "музыку" вы видели два уведомления, первое из которых было бы "Добро пожаловать в путешествие", а второе - "Добро пожаловать в музыку". (Для дополнительной сложности, если вы _уже_ сделали так, чтобы уведомления показывали правильные комнаты, измените код так, чтобы отображалось только последнее уведомление).
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1593,8 +1543,6 @@ function useTimer(callback, delay) {
     }
     ```
 
-    </div>
-
 === "chat.js"
 
     ```js
@@ -1647,8 +1595,6 @@ function useTimer(callback, delay) {
     Чтобы решить эту проблему, вместо чтения _последнего_ `roomId` внутри события эффекта, сделайте его параметром события эффекта, как `connectedRoomId` ниже. Затем передавайте `roomId` из вашего Эффекта, вызывая `onConnected(roomId)`:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1723,8 +1669,6 @@ function useTimer(callback, delay) {
     	}
     	```
 
-    	</div>
-
     === "chat.js"
 
     	```js
@@ -1769,8 +1713,6 @@ function useTimer(callback, delay) {
     Чтобы решить дополнительную проблему, сохраните идентификатор таймаута уведомления и очистите его в функции очистки вашего Эффекта:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1850,8 +1792,6 @@ function useTimer(callback, delay) {
     		);
     	}
     	```
-
-    	</div>
 
     === "chat.js"
 

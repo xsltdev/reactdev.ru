@@ -297,10 +297,6 @@ export default function Form() {
 
 В этом примере нажатие на кнопку прокручивает изображение в окне просмотра. Он использует ссылку на DOM-узел list, а затем вызывает API DOM [`querySelectorAll`](https://developer.mozilla.org/docs/Web/API/Document/querySelectorAll), чтобы найти изображение, которое мы хотим прокрутить.
 
-<!-- 0027.part.md -->
-
-<div markdown style="max-height: 400px; overflow-y: auto;">
-
 ```js
 import { useRef } from 'react';
 
@@ -359,8 +355,6 @@ export default function CatFriends() {
     );
 }
 ```
-
-</div>
 
 #### Воспроизведение и приостановка видео
 

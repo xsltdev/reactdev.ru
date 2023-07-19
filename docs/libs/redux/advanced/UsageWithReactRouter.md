@@ -1,4 +1,4 @@
-# Использование с React Router
+# Использование Redux с React Router
 
 Итак, вы хотите использовать маршрутизацию с Вашим Redux-приложением. Для этого вы можете использовать [React Router](https://github.com/reactjs/react-router).
 
@@ -26,7 +26,7 @@ npm install --save react-router-dom`
 
 ```js
 app.get('/*', (req, res) => {
-  res.sendfile(path.join(__dirname, 'index.html'));
+    res.sendfile(path.join(__dirname, 'index.html'));
 });
 ```
 
@@ -48,8 +48,8 @@ devServer: {
 
 ```js
 import {
-  BrowserRouter as Router,
-  Route,
+    BrowserRouter as Router,
+    Route,
 } from 'react-router-dom';
 ```
 
@@ -57,9 +57,9 @@ import {
 
 ```js
 const Root = () => (
-  <Router>
-    <Route path="/" component={App} />
-  </Router>
+    <Router>
+        <Route path="/" component={App} />
+    </Router>
 );
 ```
 
@@ -75,11 +75,11 @@ import { Provider } from 'react-redux';
 
 ```js
 const Root = ({ store }) => (
-  <Provider store={store}>
-    <Router>
-      <Route path="/" component={App} />
-    </Router>
-  </Provider>
+    <Provider store={store}>
+        <Router>
+            <Route path="/" component={App} />
+        </Router>
+    </Provider>
 );
 ```
 
@@ -98,21 +98,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import {
-  BrowserRouter as Router,
-  Route,
+    BrowserRouter as Router,
+    Route,
 } from 'react-router-dom';
 import App from './App';
 
 const Root = ({ store }) => (
-  <Provider store={store}>
-    <Router>
-      <Route path="/:filter?" component={App} />
-    </Router>
-  </Provider>
+    <Provider store={store}>
+        <Router>
+            <Route path="/:filter?" component={App} />
+        </Router>
+    </Provider>
 );
 
 Root.propTypes = {
-  store: PropTypes.object.isRequired,
+    store: PropTypes.object.isRequired,
 };
 
 export default Root;
@@ -132,8 +132,8 @@ import Root from './components/Root';
 const store = createStore(todoApp);
 
 render(
-  <Root store={store} />,
-  document.getElementById('root')
+    <Root store={store} />,
+    document.getElementById('root')
 );
 ```
 
@@ -148,16 +148,16 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const FilterLink = ({ filter, children }) => (
-  <NavLink
-    exact
-    to={filter === 'SHOW_ALL' ? '/' : `/${filter}`}
-    activeStyle={{
-      textDecoration: 'none',
-      color: 'black',
-    }}
-  >
-    {children}
-  </NavLink>
+    <NavLink
+        exact
+        to={filter === 'SHOW_ALL' ? '/' : `/${filter}`}
+        activeStyle={{
+            textDecoration: 'none',
+            color: 'black',
+        }}
+    >
+        {children}
+    </NavLink>
 );
 
 export default FilterLink;
@@ -171,20 +171,22 @@ import FilterLink from '../containers/FilterLink';
 import { VisibilityFilters } from '../actions';
 
 const Footer = () => (
-  <p>
-    Show:{' '}
-    <FilterLink filter={VisibilityFilters.SHOW_ALL}>
-      All
-    </FilterLink>
-    {', '}
-    <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>
-      Active
-    </FilterLink>
-    {', '}
-    <FilterLink filter={VisibilityFilters.SHOW_COMPLETED}>
-      Completed
-    </FilterLink>
-  </p>
+    <p>
+        Show:{' '}
+        <FilterLink filter={VisibilityFilters.SHOW_ALL}>
+            All
+        </FilterLink>
+        {', '}
+        <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>
+            Active
+        </FilterLink>
+        {', '}
+        <FilterLink
+            filter={VisibilityFilters.SHOW_COMPLETED}
+        >
+            Completed
+        </FilterLink>
+    </p>
 );
 
 export default Footer;
@@ -200,10 +202,13 @@ _containers/VisibleTodoList.js_
 
 ```js
 const mapStateToProps = (state, ownProps) => {
-  return {
-    todos: getVisibleTodos(state.todos, ownProps.filter),
-    // ранее было getVisibleTodos(state.todos, state.visibilityFilter)
-  };
+    return {
+        todos: getVisibleTodos(
+            state.todos,
+            ownProps.filter
+        ),
+        // ранее было getVisibleTodos(state.todos, state.visibilityFilter)
+    };
 };
 ```
 
@@ -219,15 +224,15 @@ _components/App.js_
 
 ```js
 const App = ({ match: { params } }) => {
-  return (
-    <div>
-      <AddTodo />
-      <VisibleTodoList
-        filter={params.filter || 'SHOW_ALL'}
-      />
-      <Footer />
-    </div>
-  );
+    return (
+        <div>
+            <AddTodo />
+            <VisibleTodoList
+                filter={params.filter || 'SHOW_ALL'}
+            />
+            <Footer />
+        </div>
+    );
 };
 ```
 

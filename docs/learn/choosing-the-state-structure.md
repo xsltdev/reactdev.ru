@@ -110,8 +110,6 @@ const [position, setPosition] = useState({ x: 0, y: 0 });
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -157,8 +155,6 @@ const [position, setPosition] = useState({ x: 0, y: 0 });
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-2.png)
@@ -172,8 +168,6 @@ const [position, setPosition] = useState({ x: 0, y: 0 });
 <!-- 0011.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -221,8 +215,6 @@ const [position, setPosition] = useState({ x: 0, y: 0 });
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-3.png)
@@ -251,8 +243,6 @@ const isSent = status === 'sent';
 <!-- 0015.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -298,8 +288,6 @@ const isSent = status === 'sent';
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-4.png)
@@ -311,8 +299,6 @@ const isSent = status === 'sent';
 <!-- 0019.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -356,8 +342,6 @@ const isSent = status === 'sent';
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -415,8 +399,6 @@ const fullName = firstName + ' ' + lastName;
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -455,8 +437,6 @@ const fullName = firstName + ' ' + lastName;
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-6.png)
@@ -468,8 +448,6 @@ const fullName = firstName + ' ' + lastName;
 <!-- 0035.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -532,8 +510,6 @@ const fullName = firstName + ' ' + lastName;
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-7.png)
@@ -545,8 +521,6 @@ const fullName = firstName + ' ' + lastName;
 <!-- 0039.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -611,8 +585,6 @@ const fullName = firstName + ' ' + lastName;
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-8.png)
@@ -642,8 +614,6 @@ const fullName = firstName + ' ' + lastName;
 <!-- 0043.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -687,11 +657,7 @@ const fullName = firstName + ' ' + lastName;
     }
     ```
 
-    </div>
-
 === "places.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export const initialTravelPlan = {
@@ -956,8 +922,6 @@ const fullName = firstName + ' ' + lastName;
     };
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-9.png)
@@ -973,8 +937,6 @@ const fullName = firstName + ' ' + lastName;
 <!-- 0047.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1022,11 +984,7 @@ const fullName = firstName + ' ' + lastName;
     }
     ```
 
-    </div>
-
 === "places.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export const initialTravelPlan = {
@@ -1283,8 +1241,6 @@ const fullName = firstName + ' ' + lastName;
     };
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-10.png)
@@ -1301,8 +1257,6 @@ const fullName = firstName + ' ' + lastName;
 <!-- 0051.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1385,11 +1339,7 @@ const fullName = firstName + ' ' + lastName;
     }
     ```
 
-    </div>
-
 === "places.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export const initialTravelPlan = {
@@ -1646,8 +1596,6 @@ const fullName = firstName + ' ' + lastName;
     };
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-11.png)
@@ -1664,7 +1612,6 @@ const fullName = firstName + ' ' + lastName;
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useImmer } from 'use-immer';
@@ -1747,11 +1694,9 @@ const fullName = firstName + ' ' + lastName;
     	}
     	```
 
-    	</div>
 
     === "places.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	export const initialTravelPlan = {
@@ -2008,7 +1953,6 @@ const fullName = firstName + ' ' + lastName;
     	};
     	```
 
-    	</div>
 
     === "package.json"
 
@@ -2112,8 +2056,6 @@ const fullName = firstName + ' ' + lastName;
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
     import AddItem from './AddItem.js';
@@ -2184,8 +2126,6 @@ const fullName = firstName + ' ' + lastName;
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](choosing-the-state-structure-15.png)
@@ -2199,8 +2139,6 @@ const fullName = firstName + ' ' + lastName;
     Хотя вы могли бы тщательно изменить каждый обработчик событий, чтобы правильно обновлять счетчики `total` и `packed`, основная проблема заключается в том, что эти переменные состояния вообще существуют. Они избыточны, потому что вы всегда можете вычислить количество элементов (упакованных или всего) из массива `items`. Удалите избыточное состояние, чтобы исправить ошибку:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -2267,8 +2205,6 @@ const fullName = firstName + ' ' + lastName;
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](choosing-the-state-structure-16.png)
@@ -2282,8 +2218,6 @@ const fullName = firstName + ' ' + lastName;
 Этот код работает, но есть небольшой сбой в пользовательском интерфейсе. Когда вы нажимаете "Star" или "Unstar", подсветка на мгновение исчезает. Однако она снова появляется, как только вы перемещаете указатель или переключаетесь на другую букву с клавиатуры. Почему это происходит? Исправьте это, чтобы подсветка не исчезала после нажатия кнопки.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -2336,8 +2270,6 @@ const fullName = firstName + ' ' + lastName;
     	);
     }
     ```
-
-    </div>
 
 === "Letter.js"
 
@@ -2405,8 +2337,6 @@ const fullName = firstName + ' ' + lastName;
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState } from 'react';
     	import { initialLetters } from './data.js';
@@ -2457,8 +2387,6 @@ const fullName = firstName + ' ' + lastName;
     		);
     	}
     	```
-
-    	</div>
 
     === "Letter.js"
 
@@ -2526,8 +2454,6 @@ const fullName = firstName + ' ' + lastName;
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
     import { letters } from './data.js';
@@ -2570,8 +2496,6 @@ const fullName = firstName + ' ' + lastName;
     	);
     }
     ```
-
-    </div>
 
 === "Letter.js"
 
@@ -2634,8 +2558,6 @@ const fullName = firstName + ' ' + lastName;
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState } from 'react';
     	import { letters } from './data.js';
@@ -2684,8 +2606,6 @@ const fullName = firstName + ' ' + lastName;
     		);
     	}
     	```
-
-    	</div>
 
     === "Letter.js"
 
@@ -2744,8 +2664,6 @@ const fullName = firstName + ' ' + lastName;
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState } from 'react';
     	import { letters } from './data.js';
@@ -2794,8 +2712,6 @@ const fullName = firstName + ' ' + lastName;
     		);
     	}
     	```
-
-    	</div>
 
     === "Letter.js"
 

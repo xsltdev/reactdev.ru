@@ -103,8 +103,6 @@ setArtists(
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -141,8 +139,6 @@ setArtists(
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-1.png)
@@ -171,8 +167,6 @@ setArtists([
 <!-- 0013.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -214,8 +208,6 @@ setArtists([
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-2.png)
@@ -243,8 +235,6 @@ setArtists(artists.filter((a) => a.id !== artist.id));
 <!-- 0017.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -302,8 +292,6 @@ setArtists(artists.filter((a) => a.id !== artist.id));
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-3.png)
@@ -319,8 +307,6 @@ setArtists(artists.filter((a) => a.id !== artist.id));
 <!-- 0021.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -364,8 +350,6 @@ setArtists(artists.filter((a) => a.id !== artist.id));
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-4.png)
@@ -381,8 +365,6 @@ setArtists(artists.filter((a) => a.id !== artist.id));
 <!-- 0025.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -430,8 +412,6 @@ setArtists(artists.filter((a) => a.id !== artist.id));
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-5.png)
@@ -447,8 +427,6 @@ setArtists(artists.filter((a) => a.id !== artist.id));
 Например:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -484,8 +462,6 @@ setArtists(artists.filter((a) => a.id !== artist.id));
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-6.png)
@@ -517,8 +493,6 @@ setList(nextList);
 В этом примере два отдельных списка произведений искусства имеют одинаковое начальное состояние. Они должны быть изолированы, но из-за мутации их состояние случайно стало общим, и установка флажка в одном списке влияет на другой список:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -594,8 +568,6 @@ setList(nextList);
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-7.png)
@@ -642,8 +614,6 @@ setMyList(
 При таком подходе ни один из существующих элементов состояния не изменяется, и ошибка исправлена:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -729,8 +699,6 @@ setMyList(
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-7.png)
@@ -749,8 +717,6 @@ setMyList(
 Вот пример Art Bucket List, переписанный с помощью Immer:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -827,8 +793,6 @@ setMyList(
     }
     ```
 
-    </div>
-
 === "package.json"
 
     ```json
@@ -891,8 +855,6 @@ updateMyTodos((draft) => {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -940,8 +902,6 @@ updateMyTodos((draft) => {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-8.png)
@@ -953,8 +913,6 @@ updateMyTodos((draft) => {
     Вы можете использовать функцию `map` для создания нового массива, а затем использовать синтаксис распространения объектов `...` для создания копии измененного объекта для нового массива:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1016,8 +974,6 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](updating-arrays-in-state-9.png)
@@ -1029,8 +985,6 @@ updateMyTodos((draft) => {
 <!-- 0055.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1093,8 +1047,6 @@ updateMyTodos((draft) => {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-10.png)
@@ -1108,8 +1060,6 @@ updateMyTodos((draft) => {
     <!-- 0059.part.md -->
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1195,8 +1145,6 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](updating-arrays-in-state-11.png)
@@ -1208,8 +1156,6 @@ updateMyTodos((draft) => {
 <!-- 0063.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1262,8 +1208,6 @@ updateMyTodos((draft) => {
     }
     ```
 
-    </div>
-
 === "AddTodo.js"
 
     ```js
@@ -1292,8 +1236,6 @@ updateMyTodos((draft) => {
     ```
 
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1369,8 +1311,6 @@ updateMyTodos((draft) => {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-arrays-in-state-12.png)
@@ -1384,8 +1324,6 @@ updateMyTodos((draft) => {
     <!-- 0071.part.md -->
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1442,8 +1380,6 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    	</div>
-
     === "AddTodo.js"
 
     	```js
@@ -1472,8 +1408,6 @@ updateMyTodos((draft) => {
     	```
 
     === "TaskList.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1549,8 +1483,6 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](updating-arrays-in-state-13.png)
@@ -1562,8 +1494,6 @@ updateMyTodos((draft) => {
 <!-- 0079.part.md -->
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1617,8 +1547,6 @@ updateMyTodos((draft) => {
     }
     ```
 
-    </div>
-
 === "AddTodo.js"
 
     ```js
@@ -1647,8 +1575,6 @@ updateMyTodos((draft) => {
     ```
 
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1724,8 +1650,6 @@ updateMyTodos((draft) => {
     }
     ```
 
-    </div>
-
 === "package.json"
 
     ```json
@@ -1756,8 +1680,6 @@ updateMyTodos((draft) => {
     С Immer вы можете писать код мутативным способом, пока вы мутируете только части `draft`, который дает вам Immer. Здесь все мутации выполняются над `draft`, так что код работает:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1817,8 +1739,6 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    	</div>
-
     === "AddTodo.js"
 
     	```js
@@ -1847,8 +1767,6 @@ updateMyTodos((draft) => {
     	```
 
     === "TaskList.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1924,8 +1842,6 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    	</div>
-
     === "package.json"
 
     	```json
@@ -1956,8 +1872,6 @@ updateMyTodos((draft) => {
     Например, в этой версии `handleAddTodo` реализована путем мутации Immer `draft`, а `handleChangeTodo` и `handleDeleteTodo` используют немутативные методы `map` и `filter`:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -2014,8 +1928,6 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    	</div>
-
     === "AddTodo.js"
 
     	```js
@@ -2044,8 +1956,6 @@ updateMyTodos((draft) => {
     	```
 
     === "TaskList.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -2120,8 +2030,6 @@ updateMyTodos((draft) => {
     		);
     	}
     	```
-
-    	</div>
 
     === "package.json"
 

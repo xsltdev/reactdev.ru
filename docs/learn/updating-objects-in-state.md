@@ -231,8 +231,6 @@ onPointerMove={e => {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -287,8 +285,6 @@ onPointerMove={e => {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-objects-in-state-3.png)
@@ -337,8 +333,6 @@ setPerson({
 Обратите внимание, что вы не объявили отдельную переменную состояния для каждого поля ввода. Для больших форм очень удобно хранить все данные, сгруппированные в одном объекте — при условии, что вы правильно их обновляете!
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -403,8 +397,6 @@ setPerson({
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-objects-in-state-4.png)
@@ -418,8 +410,6 @@ setPerson({
     Вы также можете использовать скобки `[` и `]` внутри определения объекта, чтобы указать свойство с динамическим именем. Вот тот же пример, но с одним обработчиком событий вместо трех разных:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -472,8 +462,6 @@ setPerson({
     		);
     	}
     	```
-
-    	</div>
 
     === "Результат"
 
@@ -547,8 +535,6 @@ setPerson({
 Это немного многословно, но для многих случаев подходит:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -646,8 +632,6 @@ setPerson({
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-objects-in-state-5.png)
@@ -737,8 +721,6 @@ updatePerson((draft) => {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useImmer } from 'use-immer';
 
@@ -822,8 +804,6 @@ updatePerson((draft) => {
     }
     ```
 
-    </div>
-
 === "package.json"
 
     ```json
@@ -887,8 +867,6 @@ updatePerson((draft) => {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -943,8 +921,6 @@ updatePerson((draft) => {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](updating-objects-in-state-6.png)
@@ -954,8 +930,6 @@ updatePerson((draft) => {
     Вот версия, в которой исправлены обе ошибки:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1015,8 +989,6 @@ updatePerson((draft) => {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](updating-objects-in-state-6.png)
@@ -1034,8 +1006,6 @@ updatePerson((draft) => {
 Найдите ошибку и исправьте ее.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1088,11 +1058,7 @@ updatePerson((draft) => {
     }
     ```
 
-    </div>
-
 === "Box.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1158,8 +1124,6 @@ updatePerson((draft) => {
     }
     ```
 
-    </div>
-
 === "Background.js"
 
     ```js
@@ -1196,8 +1160,6 @@ updatePerson((draft) => {
     Исправление заключается в удалении мутации из `handleMove` и использовании синтаксиса распространения для копирования формы. Обратите внимание, что `+=` - это мутация, поэтому вам нужно переписать ее, чтобы использовать обычную операцию `+`.
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1255,11 +1217,7 @@ updatePerson((draft) => {
     	}
     	```
 
-    	</div>
-
     === "Box.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1325,8 +1283,6 @@ updatePerson((draft) => {
     	}
     	```
 
-    	</div>
-
     === "Background.js"
 
     	```js
@@ -1357,8 +1313,6 @@ updatePerson((draft) => {
 Это тот же пример с ошибкой, что и в предыдущей задаче. На этот раз исправьте мутацию, используя Immer. Для вашего удобства функция `useImmer` уже импортирована, поэтому вам нужно изменить переменную состояния `shape`, чтобы использовать ее.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1412,11 +1366,7 @@ updatePerson((draft) => {
     }
     ```
 
-    </div>
-
 === "Box.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1482,8 +1432,6 @@ updatePerson((draft) => {
     }
     ```
 
-    </div>
-
 === "Background.js"
 
     ```js
@@ -1538,8 +1486,6 @@ updatePerson((draft) => {
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useImmer } from 'use-immer';
     	import Background from './Background.js';
@@ -1592,11 +1538,7 @@ updatePerson((draft) => {
     	}
     	```
 
-    	</div>
-
     === "Box.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1661,8 +1603,6 @@ updatePerson((draft) => {
     		);
     	}
     	```
-
-    	</div>
 
     === "Background.js"
 

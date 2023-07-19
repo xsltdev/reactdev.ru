@@ -249,8 +249,6 @@ useEffect(() => {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -296,8 +294,6 @@ useEffect(() => {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -496,8 +492,6 @@ function ChatRoom({ roomId }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -555,8 +549,6 @@ function ChatRoom({ roomId }) {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -624,8 +616,6 @@ function ChatRoom() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -658,8 +648,6 @@ function ChatRoom() {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -746,8 +734,6 @@ function ChatRoom({ roomId, selectedServerUrl }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -806,8 +792,6 @@ function ChatRoom({ roomId, selectedServerUrl }) {
     	);
     }
     ```
-
-    </div>
 
 === "chat.js"
 
@@ -976,8 +960,6 @@ function ChatRoom() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { createConnection } from './chat.js';
@@ -1031,8 +1013,6 @@ function ChatRoom() {
     }
     ```
 
-    </div>
-
 === "chat.js"
 
     ```js
@@ -1073,8 +1053,6 @@ function ChatRoom() {
     У этого Эффекта вообще не было массива зависимостей, поэтому он пересинхронизировался после каждого повторного рендеринга. Сначала добавьте массив зависимостей. Затем убедитесь, что каждое реактивное значение, используемое эффектом, указано в массиве. Например, `roomId` является реактивным (потому что это пропс), поэтому он должен быть включен в массив. Это гарантирует, что когда пользователь выберет другую комнату, чат переподключится. С другой стороны, `serverUrl` определяется вне компонента. Поэтому его не нужно включать в массив.
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1129,8 +1107,6 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "chat.js"
 
     	```js
@@ -1169,8 +1145,6 @@ function ChatRoom() {
 Также имеется флажок. Установка флажка переключает переменную состояния `canMove`, но эта переменная состояния не используется нигде в коде. Ваша задача - изменить код так, чтобы при значении `canMove`, равном `false` (флажок снят), точка переставала двигаться. После того, как вы снова включите флажок (и установите `canMove` в `true`), точка снова должна следовать за движением. Другими словами, то, может ли точка двигаться или нет, должно синхронизироваться с тем, установлен ли флажок.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1226,8 +1200,6 @@ function ChatRoom() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](lifecycle-of-reactive-effects-6.png)
@@ -1241,8 +1213,6 @@ function ChatRoom() {
     Одно из решений - обернуть вызов `setPosition` в `if (canMove) { ... }` условие:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1300,8 +1270,6 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](lifecycle-of-reactive-effects-6.png)
@@ -1309,8 +1277,6 @@ function ChatRoom() {
     В качестве альтернативы можно обернуть логику _подписки на событие_ в `if (canMove) { ... }` условие:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1371,8 +1337,6 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](lifecycle-of-reactive-effects-6.png)
@@ -1386,8 +1350,6 @@ function ChatRoom() {
 Однако по какой-то причине переменная состояния `canMove` внутри `handleMove` кажется "несвежей": она всегда `true`, даже после того, как вы установили флажок. Как такое возможно? Найдите ошибку в коде и исправьте ее.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1447,8 +1409,6 @@ function ChatRoom() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](lifecycle-of-reactive-effects-6.png)
@@ -1468,8 +1428,6 @@ function ChatRoom() {
     Вы можете изменить зависимость Effect на `[handleMove]`, но так как это будет заново определенная функция для каждого рендера, то лучше вообще убрать массив зависимостей. Тогда Эффект _будет_ повторно синхронизироваться после каждого повторного рендера:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1528,19 +1486,15 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
-    ![Результат](lifecycle-of-reactive-effects-6.png)
+    	![Результат](lifecycle-of-reactive-effects-6.png)
 
     Это решение работает, но оно не идеально. Если вы поместите `console.log('Resubscribing')` внутрь Effect, вы заметите, что он переподписывается после каждого повторного рендеринга. Переподписка происходит быстро, но все же было бы неплохо не делать это так часто.
 
     Лучшим решением было бы переместить функцию `handleMove` _внутрь_ Эффекта. Тогда `handleMove` не будет реактивным значением, и ваш Эффект не будет зависеть от функции. Вместо этого он должен будет зависеть от `canMove`, которую ваш код теперь считывает изнутри Эффекта. Это соответствует тому поведению, которое вы хотели, поскольку теперь ваш Эффект будет синхронизирован со значением `canMove`:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1599,8 +1553,6 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](lifecycle-of-reactive-effects-6.png)
@@ -1616,8 +1568,6 @@ function ChatRoom() {
 Обратите внимание, что изначально в консольных журналах говорится, что соединение не зашифровано. Попробуйте установить флажок: ничего не произойдет. Однако если после этого вы измените выбранную комнату, то чат снова подключится _и_ включит шифрование (как вы увидите из консольных сообщений). Это ошибка. Исправьте ошибку, чтобы переключение флажка _также_ приводило к переподключению чата.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1669,8 +1619,6 @@ function ChatRoom() {
     }
     ```
 
-    </div>
-
 === "ChatRoom.js"
 
     ```js
@@ -1692,8 +1640,6 @@ function ChatRoom() {
     ```
 
 === "chat.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export function createEncryptedConnection(roomId) {
@@ -1737,8 +1683,6 @@ function ChatRoom() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](lifecycle-of-reactive-effects-7.png)
@@ -1752,8 +1696,6 @@ function ChatRoom() {
     Если вы удалите подавление линтера, вы увидите ошибку lint. Проблема в том, что `createConnection` является prop, то есть это реактивное значение. Оно может меняться в течение времени! (И действительно, так и должно быть - когда пользователь устанавливает флажок, родительский компонент передает другое значение параметра `createConnection`). Вот почему это должна быть зависимость. Включите его в список, чтобы исправить ошибку:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1805,8 +1747,6 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "ChatRoom.js"
 
     	```js
@@ -1827,8 +1767,6 @@ function ChatRoom() {
     	```
 
     === "chat.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	export function createEncryptedConnection(roomId) {
@@ -1872,8 +1810,6 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](lifecycle-of-reactive-effects-8.png)
@@ -1881,8 +1817,6 @@ function ChatRoom() {
     Правильно, что `createConnection` является зависимостью. Однако, этот код немного хрупок, потому что кто-то может отредактировать компонент `App`, чтобы передать встроенную функцию в качестве значения этого пропса. В этом случае его значение будет отличаться каждый раз, когда компонент `App` пересматривается, поэтому Effect может слишком часто пересинхронизироваться. Чтобы избежать этого, вы можете передать `isEncrypted` вниз вместо этого:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1926,8 +1860,6 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "ChatRoom.js"
 
     	```js
@@ -1952,8 +1884,6 @@ function ChatRoom() {
     	```
 
     === "chat.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	export function createEncryptedConnection(roomId) {
@@ -1997,8 +1927,6 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](lifecycle-of-reactive-effects-8.png)
@@ -2014,8 +1942,6 @@ function ChatRoom() {
 Если вы реализуете это правильно, выбор планеты должен заполнить список мест. Изменение планеты должно изменить список мест.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -2090,8 +2016,6 @@ function ChatRoom() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](lifecycle-of-reactive-effects-9.png)
@@ -2110,8 +2034,6 @@ function ChatRoom() {
     Вот почему имеет смысл описать их как два отдельных Эффекта. Вот пример того, как это можно сделать:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -2211,8 +2133,6 @@ function ChatRoom() {
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](lifecycle-of-reactive-effects-10.png)
@@ -2222,8 +2142,6 @@ function ChatRoom() {
     Вместо этого, чтобы сократить количество повторений, вы можете извлечь некоторую логику в пользовательский хук, как `useSelectOptions` ниже:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -2291,8 +2209,6 @@ function ChatRoom() {
     		);
     	}
     	```
-
-    	</div>
 
     === "Результат"
 

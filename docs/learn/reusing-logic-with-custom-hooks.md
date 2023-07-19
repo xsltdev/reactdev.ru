@@ -68,8 +68,6 @@ React поставляется с несколькими встроенными 
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
 
@@ -110,8 +108,6 @@ React поставляется с несколькими встроенными 
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -194,8 +190,6 @@ function useOnlineStatus() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useOnlineStatus } from './useOnlineStatus.js';
 
@@ -235,11 +229,7 @@ function useOnlineStatus() {
     }
     ```
 
-    </div>
-
 === "useOnlineStatus.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -269,8 +259,6 @@ function useOnlineStatus() {
     	return isOnline;
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -402,8 +390,6 @@ function SaveButton() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -444,8 +430,6 @@ function SaveButton() {
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -1497,8 +1481,6 @@ function ShippingForm({ country }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useOnlineStatus } from './useOnlineStatus.js';
 
@@ -1538,11 +1520,7 @@ function ShippingForm({ country }) {
     }
     ```
 
-    </div>
-
 === "useOnlineStatus.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1572,8 +1550,6 @@ function ShippingForm({ country }) {
     	return isOnline;
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -1701,8 +1677,6 @@ function SaveButton() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect, useRef } from 'react';
 
@@ -1770,8 +1744,6 @@ function SaveButton() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](reusing-logic-with-custom-hooks-9.png)
@@ -1779,8 +1751,6 @@ function SaveButton() {
 Чтобы сделать компонент более читаемым, вы можете извлечь логику в пользовательский хук `useFadeIn`:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect, useRef } from 'react';
@@ -1812,11 +1782,7 @@ function SaveButton() {
     }
     ```
 
-    </div>
-
 === "useFadeIn.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useEffect } from 'react';
@@ -1862,8 +1828,6 @@ function SaveButton() {
     	}, [ref, duration]);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -2678,8 +2642,6 @@ useEffect(() => {
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState, useEffect } from 'react';
     	import { usePointerPosition } from './usePointerPosition.js';
@@ -2732,8 +2694,6 @@ useEffect(() => {
     		);
     	}
     	```
-
-    	</div>
 
     === "usePointerPosition.js"
 

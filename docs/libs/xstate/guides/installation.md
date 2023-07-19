@@ -1,4 +1,4 @@
-# Установка
+# Установка XState
 
 Вы можете установить XState из NPM или Yarn, или вы можете встроить `<script>` прямо из CDN.
 
@@ -14,8 +14,8 @@ yarn add xstate@latest --save
 
 Вы можете включить XState прямо из [unpkg CDN](https://unpkg.com/xstate@4/dist/):
 
-- XState core: [https://unpkg.com/xstate@4/dist/xstate.js](https://unpkg.com/xstate@4/dist/xstate.js)
-- XState web: [https://unpkg.com/xstate@4/dist/xstate.web.js](https://unpkg.com/xstate@4/dist/xstate.web.js)
+-   XState core: [https://unpkg.com/xstate@4/dist/xstate.js](https://unpkg.com/xstate@4/dist/xstate.js)
+-   XState web: [https://unpkg.com/xstate@4/dist/xstate.web.js](https://unpkg.com/xstate@4/dist/xstate.web.js)
 
 ```html
 <script src="https://unpkg.com/xstate@4/dist/xstate.js"></script>
@@ -28,7 +28,7 @@ yarn add xstate@latest --save
 const { createMachine, actions, interpret } = XState;
 
 const lightMachine = createMachine({
-  // ...
+    // ...
 });
 
 const lightService = interpret(lightMachine);

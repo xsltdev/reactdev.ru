@@ -14,8 +14,6 @@
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useReducer } from 'react';
     import AddTask from './AddTask.js';
@@ -100,8 +98,6 @@
     ];
     ```
 
-    </div>
-
 === "AddTask.js"
 
     ```js
@@ -130,8 +126,6 @@
     ```
 
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -206,8 +200,6 @@
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -279,8 +271,6 @@ const [tasks, dispatch] = useReducer(
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useReducer } from 'react';
     import AddTask from './AddTask.js';
@@ -365,8 +355,6 @@ const [tasks, dispatch] = useReducer(
     ];
     ```
 
-    </div>
-
 === "TasksContext.js"
 
     ```js
@@ -404,8 +392,6 @@ const [tasks, dispatch] = useReducer(
     ```
 
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -481,8 +467,6 @@ const [tasks, dispatch] = useReducer(
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](scaling-up-with-reducer-and-context-1.png)
@@ -522,8 +506,6 @@ export default function TaskApp() {
 Пока что вы передаете информацию как через пропс, так и в контексте:
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useReducer } from 'react';
@@ -615,8 +597,6 @@ export default function TaskApp() {
     ];
     ```
 
-    </div>
-
 === "TasksContext.js"
 
     ```js
@@ -654,8 +634,6 @@ export default function TaskApp() {
     ```
 
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -731,8 +709,6 @@ export default function TaskApp() {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](scaling-up-with-reducer-and-context-1.png)
@@ -806,8 +782,6 @@ export default function AddTask() {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useReducer } from 'react';
     import AddTask from './AddTask.js';
@@ -871,8 +845,6 @@ export default function AddTask() {
     ];
     ```
 
-    </div>
-
 === "TasksContext.js"
 
     ```js
@@ -883,8 +855,6 @@ export default function AddTask() {
     ```
 
 === "AddTask.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useContext } from 'react';
@@ -919,11 +889,7 @@ export default function AddTask() {
     let nextId = 3;
     ```
 
-    </div>
-
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useContext } from 'react';
@@ -1009,8 +975,6 @@ export default function AddTask() {
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -1086,8 +1050,6 @@ export function TasksProvider({ children }) {
 
 === "TasksContext.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { createContext, useReducer } from 'react';
 
@@ -1146,11 +1108,7 @@ export function TasksProvider({ children }) {
     ];
     ```
 
-    </div>
-
 === "AddTask.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useContext } from 'react';
@@ -1185,11 +1143,7 @@ export function TasksProvider({ children }) {
     let nextId = 3;
     ```
 
-    </div>
-
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useContext } from 'react';
@@ -1276,8 +1230,6 @@ export function TasksProvider({ children }) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](scaling-up-with-reducer-and-context-1.png)
@@ -1332,8 +1284,6 @@ const dispatch = useTasksDispatch();
     ```
 
 === "TasksContext.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import {
@@ -1406,11 +1356,7 @@ const dispatch = useTasksDispatch();
     ];
     ```
 
-    </div>
-
 === "AddTask.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1445,11 +1391,7 @@ const dispatch = useTasksDispatch();
     let nextId = 3;
     ```
 
-    </div>
-
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1535,8 +1477,6 @@ const dispatch = useTasksDispatch();
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 

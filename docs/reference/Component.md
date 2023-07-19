@@ -1153,8 +1153,6 @@ export default class Counter extends Component {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
     import ChatRoom from './ChatRoom.js';
@@ -1187,11 +1185,7 @@ export default class Counter extends Component {
     }
     ```
 
-    </div>
-
 === "ChatRoom.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { Component } from 'react';
@@ -1255,8 +1249,6 @@ export default class Counter extends Component {
     	}
     }
     ```
-
-    </div>
 
 === "chat.js"
 

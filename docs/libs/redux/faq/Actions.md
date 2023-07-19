@@ -1,4 +1,4 @@
-# Экшены
+# FAQ по экшенам
 
 ## Почему `type` должен быть строкой или по крайней мере сериализуемым? Почему мои типы экшенов должны быть константами?
 
@@ -10,16 +10,16 @@
 
 **Документация**
 
-- [Рецепты: Упрощенный шаблон](../recipes/ReducingBoilerplate.md#actions)
+-   [Рецепты: Упрощенный шаблон](../recipes/ReducingBoilerplate.md#actions)
 
 **Обсуждения**
 
-- [#384: Recommend that Action constants be named in the past tense](https://github.com/reactjs/redux/issues/384)
-- [#628: Solution for simple action creation with less boilerplate](https://github.com/reactjs/redux/issues/628)
-- [#1024: Proposal: Declarative reducers](https://github.com/reactjs/redux/issues/1024)
-- [#1167: Reducer without switch](https://github.com/reactjs/redux/issues/1167)
-- [Stack Overflow: Why do you need 'Actions' as data in Redux?](http://stackoverflow.com/q/34759047/62937)
-- [Stack Overflow: What is the point of the constants in Redux?](http://stackoverflow.com/q/34965856/62937)
+-   [#384: Recommend that Action constants be named in the past tense](https://github.com/reactjs/redux/issues/384)
+-   [#628: Solution for simple action creation with less boilerplate](https://github.com/reactjs/redux/issues/628)
+-   [#1024: Proposal: Declarative reducers](https://github.com/reactjs/redux/issues/1024)
+-   [#1167: Reducer without switch](https://github.com/reactjs/redux/issues/1167)
+-   [Stack Overflow: Why do you need 'Actions' as data in Redux?](http://stackoverflow.com/q/34759047/62937)
+-   [Stack Overflow: What is the point of the constants in Redux?](http://stackoverflow.com/q/34965856/62937)
 
 ## Всегда ли редьюсеры и экшены преобразуются "один к одному"?
 
@@ -27,14 +27,14 @@
 
 **Документация**
 
-- [Основы: Редьюсеры](../basics/Reducers.md)
+-   [Основы: Редьюсеры](../basics/Reducers.md)
 
 **Обсуждения**
 
-- [Twitter: most common Redux misconception](https://twitter.com/dan_abramov/status/682923564006248448)
-- [#1167: Reducer without switch](https://github.com/reactjs/redux/issues/1167)
-- [Reduxible #8: Reducers and action creators aren't a one-to-one mapping](https://github.com/reduxible/reduxible/issues/8)
-- [Stack Overflow: Can I dispatch multiple actions without Redux Thunk middleware?](http://stackoverflow.com/questions/35493352/can-i-dispatch-multiple-actions-without-redux-thunk-middleware/35642783)
+-   [Twitter: most common Redux misconception](https://twitter.com/dan_abramov/status/682923564006248448)
+-   [#1167: Reducer without switch](https://github.com/reactjs/redux/issues/1167)
+-   [Reduxible #8: Reducers and action creators aren't a one-to-one mapping](https://github.com/reduxible/reduxible/issues/8)
+-   [Stack Overflow: Can I dispatch multiple actions without Redux Thunk middleware?](http://stackoverflow.com/questions/35493352/can-i-dispatch-multiple-actions-without-redux-thunk-middleware/35642783)
 
 ## Как я могу выполнять "побочные эффекты", такие как AJAX вызовы? Зачем нам нужны вещи типа “генераторов экшенов, “thunks” или “мидлвар” для осуществления асинхронного поведения?
 
@@ -56,33 +56,33 @@ Redux вдохновлен функциональным программиров
 
 **Документация**
 
-- [Продвинутое использование: Асинхронные экшены](../advanced/AsyncActions.md)
-- [Продвинутое использование: Асинхронные потоки](../advanced/AsyncFlow.md)
-- [Продвинутое использование: Мидлвары](../advanced/Middleware.md)
+-   [Продвинутое использование: Асинхронные экшены](../advanced/AsyncActions.md)
+-   [Продвинутое использование: Асинхронные потоки](../advanced/AsyncFlow.md)
+-   [Продвинутое использование: Мидлвары](../advanced/Middleware.md)
 
 **Статьи**
 
-- [Redux Side-Effects and You](https://medium.com/@fward/redux-side-effects-and-you-66f2e0842fc3)
-- [Pure functionality and side effects in Redux](http://blog.hivejs.org/building-the-ui-2/)
-- [From Flux to Redux: Async Actions the easy way](http://danmaz74.me/2015/08/19/from-flux-to-redux-async-actions-the-easy-way/)
-- [React/Redux Links: "Redux Side Effects" category](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md)
-- [Gist: Redux-Thunk examples](https://gist.github.com/markerikson/ea4d0a6ce56ee479fe8b356e099f857e)
+-   [Redux Side-Effects and You](https://medium.com/@fward/redux-side-effects-and-you-66f2e0842fc3)
+-   [Pure functionality and side effects in Redux](http://blog.hivejs.org/building-the-ui-2/)
+-   [From Flux to Redux: Async Actions the easy way](http://danmaz74.me/2015/08/19/from-flux-to-redux-async-actions-the-easy-way/)
+-   [React/Redux Links: "Redux Side Effects" category](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md)
+-   [Gist: Redux-Thunk examples](https://gist.github.com/markerikson/ea4d0a6ce56ee479fe8b356e099f857e)
 
 **Обсуждения**
 
-- [#291: Trying to put API calls in the right place](https://github.com/reactjs/redux/issues/291)
-- [#455: Modeling side effects](https://github.com/reactjs/redux/issues/455)
-- [#533: Simpler introduction to async action creators](https://github.com/reactjs/redux/issues/533)
-- [#569: Proposal: API for explicit side effects](https://github.com/reactjs/redux/pull/569)
-- [#1139: An alternative side effect model based on generators and sagas](https://github.com/reactjs/redux/issues/1139)
-- [Stack Overflow: Why do we need middleware for async flow in Redux?](http://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux)
-- [Stack Overflow: How to dispatch a Redux action with a timeout?](http://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559)
-- [Stack Overflow: Where should I put synchronous side effects linked to actions in redux?](http://stackoverflow.com/questions/32982237/where-should-i-put-synchronous-side-effects-linked-to-actions-in-redux/33036344)
-- [Stack Overflow: How to handle complex side-effects in Redux?](http://stackoverflow.com/questions/32925837/how-to-handle-complex-side-effects-in-redux/33036594)
-- [Stack Overflow: How to unit test async Redux actions to mock ajax response](http://stackoverflow.com/questions/33011729/how-to-unit-test-async-redux-actions-to-mock-ajax-response/33053465)
-- [Stack Overflow: How to fire AJAX calls in response to the state changes with Redux?](http://stackoverflow.com/questions/35262692/how-to-fire-ajax-calls-in-response-to-the-state-changes-with-redux/35675447)
-- [Reddit: Help performing Async API calls with Redux-Promise Middleware.](https://www.reddit.com/r/reactjs/comments/469iyc/help_performing_async_api_calls_with_reduxpromise/)
-- [Twitter: possible comparison between sagas, loops, and other approaches](https://twitter.com/dan_abramov/status/689639582120415232)
+-   [#291: Trying to put API calls in the right place](https://github.com/reactjs/redux/issues/291)
+-   [#455: Modeling side effects](https://github.com/reactjs/redux/issues/455)
+-   [#533: Simpler introduction to async action creators](https://github.com/reactjs/redux/issues/533)
+-   [#569: Proposal: API for explicit side effects](https://github.com/reactjs/redux/pull/569)
+-   [#1139: An alternative side effect model based on generators and sagas](https://github.com/reactjs/redux/issues/1139)
+-   [Stack Overflow: Why do we need middleware for async flow in Redux?](http://stackoverflow.com/questions/34570758/why-do-we-need-middleware-for-async-flow-in-redux)
+-   [Stack Overflow: How to dispatch a Redux action with a timeout?](http://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559)
+-   [Stack Overflow: Where should I put synchronous side effects linked to actions in redux?](http://stackoverflow.com/questions/32982237/where-should-i-put-synchronous-side-effects-linked-to-actions-in-redux/33036344)
+-   [Stack Overflow: How to handle complex side-effects in Redux?](http://stackoverflow.com/questions/32925837/how-to-handle-complex-side-effects-in-redux/33036594)
+-   [Stack Overflow: How to unit test async Redux actions to mock ajax response](http://stackoverflow.com/questions/33011729/how-to-unit-test-async-redux-actions-to-mock-ajax-response/33053465)
+-   [Stack Overflow: How to fire AJAX calls in response to the state changes with Redux?](http://stackoverflow.com/questions/35262692/how-to-fire-ajax-calls-in-response-to-the-state-changes-with-redux/35675447)
+-   [Reddit: Help performing Async API calls with Redux-Promise Middleware.](https://www.reddit.com/r/reactjs/comments/469iyc/help_performing_async_api_calls_with_reduxpromise/)
+-   [Twitter: possible comparison between sagas, loops, and other approaches](https://twitter.com/dan_abramov/status/689639582120415232)
 
 ## Какой асинхронный мидлвар должен я использовать? Как вы выбираете между thunks, sagas, observables или что-то еще?
 
@@ -90,9 +90,9 @@ Redux вдохновлен функциональным программиров
 
 В качестве общего правила:
 
-- Thunks лучше всего подходят для сложной синхронной логики (особенно кода, который требует доступа ко всему состоянию хранилища Redux) и простой асинхронной логики (как базовые вызовы AJAX). С использованием `async/await` может быть разумно использовать thunk для некоторой более сложной логики, основанной на промисах.
-- Саги лучше всего подходят для сложной асинхронной логики и несвязанного поведение типа «фонового потока», особенно если вам необходимо слушать отправленные экшены (что нельзя сделать с помощью thunks). Они требуют знания ES6 генераторов и операторов «эффектов» «redux-saga».
-- Observables решают те же проблемы, что и саги, но полагаются на RxJS для реализации асинхронного поведения. Они требуют знакомства с RxJS API.
+-   Thunks лучше всего подходят для сложной синхронной логики (особенно кода, который требует доступа ко всему состоянию хранилища Redux) и простой асинхронной логики (как базовые вызовы AJAX). С использованием `async/await` может быть разумно использовать thunk для некоторой более сложной логики, основанной на промисах.
+-   Саги лучше всего подходят для сложной асинхронной логики и несвязанного поведение типа «фонового потока», особенно если вам необходимо слушать отправленные экшены (что нельзя сделать с помощью thunks). Они требуют знания ES6 генераторов и операторов «эффектов» «redux-saga».
+-   Observables решают те же проблемы, что и саги, но полагаются на RxJS для реализации асинхронного поведения. Они требуют знакомства с RxJS API.
 
 Мы рекомендуем, чтобы большинство пользователей Redux начинали с thunks, а затем добавляли дополнительную библиотеку побочных эффектов, такую как sagas или observables, если их приложение действительно требует обработки для более сложной асинхронной логики.
 
@@ -100,25 +100,25 @@ Redux вдохновлен функциональным программиров
 
 **Статьи**
 
-- [Decembersoft: What is the right way to do asynchronous operations in Redux?](https://decembersoft.com/posts/what-is-the-right-way-to-do-asynchronous-operations-in-redux/)
-- [Decembersoft: Redux-Thunk vs Redux-Saga](https://decembersoft.com/posts/redux-thunk-vs-redux-saga/)
-- [Redux-Thunk vs Redux-Saga: an overview](https://medium.com/@shoshanarosenfield/redux-thunk-vs-redux-saga-93fe82878b2d)
-- [Redux-Saga V.S. Redux-Observable](https://hackmd.io/s/H1xLHUQ8e#side-by-side-comparison)
+-   [Decembersoft: What is the right way to do asynchronous operations in Redux?](https://decembersoft.com/posts/what-is-the-right-way-to-do-asynchronous-operations-in-redux/)
+-   [Decembersoft: Redux-Thunk vs Redux-Saga](https://decembersoft.com/posts/redux-thunk-vs-redux-saga/)
+-   [Redux-Thunk vs Redux-Saga: an overview](https://medium.com/@shoshanarosenfield/redux-thunk-vs-redux-saga-93fe82878b2d)
+-   [Redux-Saga V.S. Redux-Observable](https://hackmd.io/s/H1xLHUQ8e#side-by-side-comparison)
 
 **Обсуждения**
 
-- [Reddit: discussion of using thunks and sagas together, and pros and cons of sagas](https://www.reddit.com/r/reactjs/comments/8vglo0/react_developer_map_by_adamgolab/e1nr597/)
-- [Stack Overflow: Pros/cons of using redux-saga with ES6 generators vs redux-thunk with ES2017 async/await](https://stackoverflow.com/questions/34930735/pros-cons-of-using-redux-saga-with-es6-generators-vs-redux-thunk-with-es2017-asy)
-- [Stack Overflow: Why use Redux-Observable over Redux-Saga?](https://stackoverflow.com/questions/40021344/why-use-redux-observable-over-redux-saga/40027778#40027778)
+-   [Reddit: discussion of using thunks and sagas together, and pros and cons of sagas](https://www.reddit.com/r/reactjs/comments/8vglo0/react_developer_map_by_adamgolab/e1nr597/)
+-   [Stack Overflow: Pros/cons of using redux-saga with ES6 generators vs redux-thunk with ES2017 async/await](https://stackoverflow.com/questions/34930735/pros-cons-of-using-redux-saga-with-es6-generators-vs-redux-thunk-with-es2017-asy)
+-   [Stack Overflow: Why use Redux-Observable over Redux-Saga?](https://stackoverflow.com/questions/40021344/why-use-redux-observable-over-redux-saga/40027778#40027778)
 
 ## Должен ли я отправлять несколько экшенов подряд от одного генератора экшенов?
 
 Нет точного правила, как вы должны структурировать свои экшены. Использование такого асинхронного мидлвара, как Redux Thunk, конечно, позволяет выполнять такие операции, как
 
-- отправка нескольких различных, но взаимосвязанных экшенов подряд;
-- обработка экшенов, отображающих прогресс AJAX запроса;
-- обработка экшенов, основанных на состоянии;
-- обработка других экшенов и проверка обновленного состояния сразу же после этого.
+-   отправка нескольких различных, но взаимосвязанных экшенов подряд;
+-   обработка экшенов, отображающих прогресс AJAX запроса;
+-   обработка экшенов, основанных на состоянии;
+-   обработка других экшенов и проверка обновленного состояния сразу же после этого.
 
 В целом, спросите себя, эти экшены взаимосвязаны, но самостоятельны или на самом деле должны быть представлены одним экшеном? Делайте то, что имеет смысл для вашей конкретной ситуации, но старайтесь соблюдать баланс между читабельностью редьюсеров и логом экшенов. Например, для экшена, который содержит все новое дерево состояния, можно сделать ваш редьюсер однострочным, но недостаток в том, что теперь вы не можете проследить историю _причин_, по которым изменения произошли, поэтому отладка становится сложнее. С другой стороны, если вы генерируете ваши экшены в цикле, чтобы держать их разделенными, то, если вы захотите ввести новый тип экшена, то оно будет обрабатываться по-другому.
 
@@ -126,17 +126,17 @@ Redux вдохновлен функциональным программиров
 
 **Документация**
 
-- [FAQ: Производительность - Уменьшение количество обновлений стора](Performance.md#performance-update-events)
+-   [FAQ: Производительность - Уменьшение количество обновлений стора](Performance.md#performance-update-events)
 
 **Статьи**
 
-- [Idiomatic Redux: Thoughts on Thunks, Sagas, Abstraction, and Reusability](http://blog.isquaredsoftware.com/2017/01/idiomatic-redux-thoughts-on-thunks-sagas-abstraction-and-reusability/#multiple-dispatching)
+-   [Idiomatic Redux: Thoughts on Thunks, Sagas, Abstraction, and Reusability](http://blog.isquaredsoftware.com/2017/01/idiomatic-redux-thoughts-on-thunks-sagas-abstraction-and-reusability/#multiple-dispatching)
 
 **Обсуждения**
 
-- [#597: Valid to dispatch multiple actions from an event handler?](https://github.com/reactjs/redux/issues/597)
-- [#959: Multiple actions one dispatch?](https://github.com/reactjs/redux/issues/959)
-- [Stack Overflow: Should I use one or several action types to represent this async action?](http://stackoverflow.com/questions/33637740/should-i-use-one-or-several-action-types-to-represent-this-async-action/33816695)
-- [Stack Overflow: Do events and actions have a 1:1 relationship in Redux?](http://stackoverflow.com/questions/35406707/do-events-and-actions-have-a-11-relationship-in-redux/35410524)
-- [Stack Overflow: Should actions be handled by reducers to related actions or generated by action creators themselves?](http://stackoverflow.com/questions/33220776/should-actions-like-showing-hiding-loading-screens-be-handled-by-reducers-to-rel/33226443#33226443)
-- [Twitter: "Good thread on the problems with Redux Thunk..."](https://twitter.com/dan_abramov/status/800310164792414208)
+-   [#597: Valid to dispatch multiple actions from an event handler?](https://github.com/reactjs/redux/issues/597)
+-   [#959: Multiple actions one dispatch?](https://github.com/reactjs/redux/issues/959)
+-   [Stack Overflow: Should I use one or several action types to represent this async action?](http://stackoverflow.com/questions/33637740/should-i-use-one-or-several-action-types-to-represent-this-async-action/33816695)
+-   [Stack Overflow: Do events and actions have a 1:1 relationship in Redux?](http://stackoverflow.com/questions/35406707/do-events-and-actions-have-a-11-relationship-in-redux/35410524)
+-   [Stack Overflow: Should actions be handled by reducers to related actions or generated by action creators themselves?](http://stackoverflow.com/questions/33220776/should-actions-like-showing-hiding-loading-screens-be-handled-by-reducers-to-rel/33226443#33226443)
+-   [Twitter: "Good thread on the problems with Redux Thunk..."](https://twitter.com/dan_abramov/status/800310164792414208)

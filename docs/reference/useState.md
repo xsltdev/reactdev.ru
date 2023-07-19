@@ -495,10 +495,6 @@ export default function Form() {
 
 В этом примере состояние более вложенное. Когда вы обновляете вложенное состояние, вам необходимо создать копию объекта, который вы обновляете, а также любых объектов, "содержащих" его на пути вверх. Прочитайте [обновление вложенного объекта](../learn/updating-objects-in-state.md), чтобы узнать больше.
 
-<!-- 0043.part.md -->
-
-<div markdown style="max-height: 400px; overflow-y: auto;">
-
 ```js
 import { useState } from 'react';
 
@@ -595,15 +591,11 @@ export default function Form() {
 }
 ```
 
-</div>
-
 #### 3. Список (массив)
 
 В этом примере переменная состояния `todos` содержит массив. Каждый обработчик кнопки вызывает `setTodos` со следующей версией этого массива. Синтаксис распространения `[...todos]`, `todos.map()` и `todos.filter()` гарантируют, что массив состояний заменяется, а не изменяется.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -660,8 +652,6 @@ export default function Form() {
     }
     ```
 
-    </div>
-
 === "AddTodo.js"
 
     ```js
@@ -690,8 +680,6 @@ export default function Form() {
     ```
 
 === "TaskList.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -766,8 +754,6 @@ export default function Form() {
     	);
     }
     ```
-
-    </div>
 
 #### 4. Написание краткой логики обновления с помощью Immer
 

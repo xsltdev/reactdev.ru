@@ -732,8 +732,6 @@ export default function Section({ children }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import Heading from './Heading.js';
     import Section from './Section.js';
@@ -787,8 +785,6 @@ export default function Section({ children }) {
     	);
     }
     ```
-
-    </div>
 
 === "Section.js"
 
@@ -911,8 +907,6 @@ export default function Section({ children }) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
     import { places } from './data.js';
@@ -975,8 +969,6 @@ export default function Section({ children }) {
     }
     ```
 
-    </div>
-
 === "Context.js"
 
     ```js
@@ -984,8 +976,6 @@ export default function Section({ children }) {
     ```
 
 === "data.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export const places = [
@@ -1042,8 +1032,6 @@ export default function Section({ children }) {
     ];
     ```
 
-    </div>
-
 === "utils.js"
 
     ```js
@@ -1063,8 +1051,6 @@ export default function Section({ children }) {
     Создайте и экспортируйте `ImageSizeContext` из `Context.js`. Затем оберните список в `<ImageSizeContext.Provider value={imageSize}>`, чтобы передать значение вниз, и `useContext(ImageSizeContext)`, чтобы прочитать его в `PlaceImage`:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useContext } from 'react';
@@ -1127,8 +1113,6 @@ export default function Section({ children }) {
     	}
     	```
 
-    	</div>
-
     === "Context.js"
 
     	```js
@@ -1138,8 +1122,6 @@ export default function Section({ children }) {
     	```
 
     === "data.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	export const places = [
@@ -1195,8 +1177,6 @@ export default function Section({ children }) {
     		},
     	];
     	```
-
-    	</div>
 
     === "utils.js"
 

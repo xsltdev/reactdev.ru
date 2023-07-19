@@ -1,4 +1,4 @@
-# Контекст
+# Контекст XState
 
 Хотя _конечные_ состояния четко определены в конечных автоматах и ​​диаграммах состояний, состояние, которое представляет _количественные данные_ (например, произвольные строки, числа, объекты и т. д.), которые могут быть потенциально бесконечными, представлено как [расширенное состояние](https://en.wikipedia.org/wiki/UML_state_machine#Extended_states). Это делает диаграммы состояний более полезными для реальных приложений.
 
@@ -9,51 +9,51 @@ import { createMachine, assign } from 'xstate';
 
 // Action to increment the context amount
 const addWater = assign({
-  amount: (context, event) => context.amount + 1,
+    amount: (context, event) => context.amount + 1,
 });
 
 // Guard to check if the glass is full
 function glassIsFull(context, event) {
-  return context.amount >= 10;
+    return context.amount >= 10;
 }
 
 const glassMachine = createMachine(
-  {
-    id: 'glass',
-    // the initial context (extended state) of the statechart
-    context: {
-      amount: 0,
+    {
+        id: 'glass',
+        // the initial context (extended state) of the statechart
+        context: {
+            amount: 0,
+        },
+        initial: 'empty',
+        states: {
+            empty: {
+                on: {
+                    FILL: {
+                        target: 'filling',
+                        actions: 'addWater',
+                    },
+                },
+            },
+            filling: {
+                // Transient transition
+                always: {
+                    target: 'full',
+                    cond: 'glassIsFull',
+                },
+                on: {
+                    FILL: {
+                        target: 'filling',
+                        actions: 'addWater',
+                    },
+                },
+            },
+            full: {},
+        },
     },
-    initial: 'empty',
-    states: {
-      empty: {
-        on: {
-          FILL: {
-            target: 'filling',
-            actions: 'addWater',
-          },
-        },
-      },
-      filling: {
-        // Transient transition
-        always: {
-          target: 'full',
-          cond: 'glassIsFull',
-        },
-        on: {
-          FILL: {
-            target: 'filling',
-            actions: 'addWater',
-          },
-        },
-      },
-      full: {},
-    },
-  },
-  {
-    actions: { addWater },
-    guards: { glassIsFull },
-  }
+    {
+        actions: { addWater },
+        guards: { glassIsFull },
+    }
 );
 ```
 
@@ -61,10 +61,10 @@ const glassMachine = createMachine(
 
 ```js
 const nextState = glassMachine.transition(
-  glassMachine.initialState,
-  {
-    type: 'FILL',
-  }
+    glassMachine.initialState,
+    {
+        type: 'FILL',
+    }
 );
 
 nextState.context;
@@ -77,20 +77,20 @@ nextState.context;
 
 ```js
 const counterMachine = createMachine({
-  id: 'counter',
-  // initial context
-  context: {
-    count: 0,
-    message: 'Currently empty',
-    user: {
-      name: 'David',
+    id: 'counter',
+    // initial context
+    context: {
+        count: 0,
+        message: 'Currently empty',
+        user: {
+            name: 'David',
+        },
+        allowedToIncrement: true,
+        // ... etc.
     },
-    allowedToIncrement: true,
-    // ... etc.
-  },
-  states: {
-    // ...
-  },
+    states: {
+        // ...
+    },
 });
 ```
 
@@ -98,15 +98,15 @@ const counterMachine = createMachine({
 
 ```js
 const createCounterMachine = (count, time) => {
-  return createMachine({
-    id: 'counter',
-    // values provided from function arguments
-    context: {
-      count,
-      time,
-    },
-    // ...
-  });
+    return createMachine({
+        id: 'counter',
+        // values provided from function arguments
+        context: {
+            count,
+            time,
+        },
+        // ...
+    });
 };
 
 const counterMachine = createCounterMachine(42, Date.now());
@@ -116,14 +116,14 @@ const counterMachine = createCounterMachine(42, Date.now());
 
 ```js
 const counterMachine = createMachine({
-  /* ... */
+    /* ... */
 });
 
 // retrieved dynamically
 const someContext = { count: 42, time: Date.now() };
 
 const dynamicCounterMachine = counterMachine.withContext(
-  someContext
+    someContext
 );
 ```
 
@@ -188,8 +188,8 @@ import { createMachine, assign } from 'xstate';
 
 Объект мета-данных содержит:
 
-- `state` — текущее состояние при нормальном переходе (`undefined` для перехода начального состояния)
-- `action` — связанное действие `assign`
+-   `state` — текущее состояние при нормальном переходе (`undefined` для перехода начального состояния)
+-   `action` — связанное действие `assign`
 
 !!!warning "Внимание"
 
@@ -203,34 +203,40 @@ import { createMachine, assign } from 'xstate';
 
 ```js
 const counterMachine = createMachine({
-  id: 'counter',
-  context: { count: 0 },
-  initial: 'active',
-  states: {
-    active: {
-      on: {
-        INC_TWICE: {
-          actions: [
-            (context) =>
-              console.log(`Before: ${context.count}`),
-            assign({
-              count: (context) => context.count + 1,
-            }), // count === 1
-            assign({
-              count: (context) => context.count + 1,
-            }), // count === 2
-            (context) =>
-              console.log(`After: ${context.count}`),
-          ],
+    id: 'counter',
+    context: { count: 0 },
+    initial: 'active',
+    states: {
+        active: {
+            on: {
+                INC_TWICE: {
+                    actions: [
+                        (context) =>
+                            console.log(
+                                `Before: ${context.count}`
+                            ),
+                        assign({
+                            count: (context) =>
+                                context.count + 1,
+                        }), // count === 1
+                        assign({
+                            count: (context) =>
+                                context.count + 1,
+                        }), // count === 2
+                        (context) =>
+                            console.log(
+                                `After: ${context.count}`
+                            ),
+                    ],
+                },
+            },
         },
-      },
     },
-  },
 });
 
 interpret(counterMachine)
-  .start()
-  .send({ type: 'INC_TWICE' });
+    .start()
+    .send({ type: 'INC_TWICE' });
 // => "Before: 2"
 // => "After: 2"
 ```
@@ -243,51 +249,58 @@ interpret(counterMachine)
 
 ```js
 const counterMachine = createMachine({
-  id: 'counter',
-  context: { count: 0, prevCount: undefined },
-  initial: 'active',
-  states: {
-    active: {
-      on: {
-        INC_TWICE: {
-          actions: [
-            (context) =>
-              console.log(`Before: ${context.prevCount}`),
-            assign({
-              count: (context) => context.count + 1,
-              prevCount: (context) => context.count,
-            }), // count === 1, prevCount === 0
-            assign({
-              count: (context) => context.count + 1,
-            }), // count === 2
-            (context) =>
-              console.log(`After: ${context.count}`),
-          ],
+    id: 'counter',
+    context: { count: 0, prevCount: undefined },
+    initial: 'active',
+    states: {
+        active: {
+            on: {
+                INC_TWICE: {
+                    actions: [
+                        (context) =>
+                            console.log(
+                                `Before: ${context.prevCount}`
+                            ),
+                        assign({
+                            count: (context) =>
+                                context.count + 1,
+                            prevCount: (context) =>
+                                context.count,
+                        }), // count === 1, prevCount === 0
+                        assign({
+                            count: (context) =>
+                                context.count + 1,
+                        }), // count === 2
+                        (context) =>
+                            console.log(
+                                `After: ${context.count}`
+                            ),
+                    ],
+                },
+            },
         },
-      },
     },
-  },
 });
 
 interpret(counterMachine)
-  .start()
-  .send({ type: 'INC_TWICE' });
+    .start()
+    .send({ type: 'INC_TWICE' });
 // => "Before: 0"
 // => "After: 2"
 ```
 
 Преимущества от этого:
 
-1. Расширенное состояние (контекст) моделируется более явно
-2. Отсутствуют неявные промежуточные состояния, предотвращающие появление трудноуловимых ошибок.
-3. Порядок действий более независим (Логирование «До» может идти даже после логирования «После»!)
-4. Облегчает тестирование и изучение состояния
+1.  Расширенное состояние (контекст) моделируется более явно
+2.  Отсутствуют неявные промежуточные состояния, предотвращающие появление трудноуловимых ошибок.
+3.  Порядок действий более независим (Логирование «До» может идти даже после логирования «После»!)
+4.  Облегчает тестирование и изучение состояния
 
 ## Примечания
 
-- 🚫 Никогда не изменяйте контекст `context` автомата извне. У всего есть причина, и каждое изменение контекста должно происходить явно из-за события.
-- Предпочтителен синтаксис объекта `assign({...})`. Это позволяет будущим инструментам анализа предсказывать, _как_ определенные свойства могут измениться декларативно.
-- Задания `assign` можно складывать, и они будут выполняться последовательно:
+-   🚫 Никогда не изменяйте контекст `context` автомата извне. У всего есть причина, и каждое изменение контекста должно происходить явно из-за события.
+-   Предпочтителен синтаксис объекта `assign({...})`. Это позволяет будущим инструментам анализа предсказывать, _как_ определенные свойства могут измениться декларативно.
+-   Задания `assign` можно складывать, и они будут выполняться последовательно:
 
 ```js
 // ...
@@ -298,7 +311,7 @@ interpret(counterMachine)
 // ...
 ```
 
-- Как и в случае с `actions`, лучше всего представлять действия `assign()` в виде строк или функций, а затем ссылаться на них в параметрах автомата:
+-   Как и в случае с `actions`, лучше всего представлять действия `assign()` в виде строк или функций, а затем ссылаться на них в параметрах автомата:
 
 ```js hl_lines="6"
 const countMachine = createMachine({
@@ -335,8 +348,8 @@ const countMachine = createMachine({
 });
 ```
 
-- В идеале `context` должен быть представлен как простой объект JavaScript, т. е. он должен быть сериализуемым как JSON.
-- Поскольку вызываются действия `assign()`, контекст обновляется перед выполнением других действий. Это означает, что другие действия на том же шаге получат обновленный контекст, а не тот, который был до выполнения действия `assign()`. Вы не должны полагаться на порядок действий для своих состояний, но имейте это в виду.
+-   В идеале `context` должен быть представлен как простой объект JavaScript, т. е. он должен быть сериализуемым как JSON.
+-   Поскольку вызываются действия `assign()`, контекст обновляется перед выполнением других действий. Это означает, что другие действия на том же шаге получат обновленный контекст, а не тот, который был до выполнения действия `assign()`. Вы не должны полагаться на порядок действий для своих состояний, но имейте это в виду.
 
 ## TypeScript
 
@@ -344,19 +357,19 @@ const countMachine = createMachine({
 
 ```ts
 interface CounterContext {
-  count: number;
-  user?: {
-    name: string;
-  };
+    count: number;
+    user?: {
+        name: string;
+    };
 }
 
 const machine = createMachine<CounterContext>({
-  // ...
-  context: {
-    count: 0,
-    user: undefined,
-  },
-  // ...
+    // ...
+    context: {
+        count: 0,
+        user: undefined,
+    },
+    // ...
 });
 ```
 
@@ -364,14 +377,14 @@ const machine = createMachine<CounterContext>({
 
 ```ts
 const context = {
-  count: 0,
-  user: { name: '' },
+    count: 0,
+    user: { name: '' },
 };
 
 const machine = createMachine<typeof context>({
-  // ...
-  context,
-  // ...
+    // ...
+    context,
+    // ...
 });
 ```
 
@@ -409,15 +422,15 @@ const machine = createMachine<CounterContext>({
 ```ts hl_lines="3"
 // ...
 on: {
-  INCREMENT: {
-    // Generics guarantee proper inference
-    actions: assign<CounterContext, CounterEvent>({
-      count: (context) => {
-        // context: { count: number }
-        return context.count + 1;
-      },
-    });
-  }
+    INCREMENT: {
+        // Generics guarantee proper inference
+        actions: assign<CounterContext, CounterEvent>({
+            count: (context) => {
+                // context: { count: number }
+                return context.count + 1;
+            },
+        });
+    }
 }
 // ...
 ```
@@ -428,12 +441,12 @@ on: {
 
 ```js
 const machine = createMachine({
-  // ...
-  context: {
-    count: 0,
-    user: undefined,
     // ...
-  },
+    context: {
+        count: 0,
+        user: undefined,
+        // ...
+    },
 });
 ```
 
@@ -441,15 +454,15 @@ const machine = createMachine({
 
 ```js
 const createSomeMachine = (count, user) => {
-  return createMachine({
-    // ...
-    // Provided from arguments; your implementation may vary
-    context: {
-      count,
-      user,
-      // ...
-    },
-  });
+    return createMachine({
+        // ...
+        // Provided from arguments; your implementation may vary
+        context: {
+            count,
+            user,
+            // ...
+        },
+    });
 };
 ```
 
@@ -457,20 +470,20 @@ const createSomeMachine = (count, user) => {
 
 ```js
 const machine = createMachine({
-  // ...
-  // Provided from arguments; your implementation may vary
-  context: {
-    count: 0,
-    user: undefined,
     // ...
-  },
+    // Provided from arguments; your implementation may vary
+    context: {
+        count: 0,
+        user: undefined,
+        // ...
+    },
 });
 
 const myMachine = machine.withContext({
-  count: 10,
-  user: {
-    name: 'David',
-  },
+    count: 10,
+    user: {
+        name: 'David',
+    },
 });
 ```
 
@@ -478,20 +491,21 @@ const myMachine = machine.withContext({
 
 ```js
 const machine = createMachine({
-  // ...
-  context: {
-    count: 0,
-    user: undefined,
     // ...
-  },
-  // ...
-  on: {
-    INCREMENT: {
-      actions: assign({
-        count: (context, event) => context.count + 1,
-      }),
+    context: {
+        count: 0,
+        user: undefined,
+        // ...
     },
-  },
+    // ...
+    on: {
+        INCREMENT: {
+            actions: assign({
+                count: (context, event) =>
+                    context.count + 1,
+            }),
+        },
+    },
 });
 ```
 

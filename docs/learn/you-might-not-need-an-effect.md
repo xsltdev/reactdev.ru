@@ -940,8 +940,6 @@ function useData(url) {
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useEffect } from 'react';
     import { initialTodos, createTodo } from './todos.js';
@@ -1022,8 +1020,6 @@ function useData(url) {
     }
     ```
 
-    </div>
-
 === "todos.js"
 
     ```js
@@ -1059,8 +1055,6 @@ function useData(url) {
     В итоге ваш результат должен выглядеть следующим образом:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1127,8 +1121,6 @@ function useData(url) {
     	}
     	```
 
-    	</div>
-
     === "todos.js"
 
     	```js
@@ -1160,8 +1152,6 @@ function useData(url) {
 Ваша задача - удалить эффект, который пересчитывает список `visibleTodos` в компоненте `TodoList`. Однако, вам нужно убедиться, что `getVisibleTodos()` _не_ повторно запускается (и поэтому не печатает никаких логов), когда вы вводите данные в input.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1223,8 +1213,6 @@ function useData(url) {
 
 === "todos.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     let nextId = 0;
     let calls = 0;
@@ -1255,8 +1243,6 @@ function useData(url) {
     ];
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](you-might-not-need-an-effect-2.png)
@@ -1270,8 +1256,6 @@ function useData(url) {
     Удалите переменную state и Effect, а вместо этого добавьте вызов `useMemo` для кэширования результата вызова `getVisibleTodos()`:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useMemo } from 'react';
@@ -1328,11 +1312,7 @@ function useData(url) {
     	}
     	```
 
-    	</div>
-
     === "todos.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	let nextId = 0;
@@ -1364,8 +1344,6 @@ function useData(url) {
     	];
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](you-might-not-need-an-effect-2.png)
@@ -1375,8 +1353,6 @@ function useData(url) {
     Есть и другое решение, которое не требует использования `useMemo`. Поскольку переменная состояния `text` не может повлиять на список дел, вы можете выделить форму `NewTodo` в отдельный компонент и переместить переменную состояния `text` в него:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useMemo } from 'react';
@@ -1443,11 +1419,7 @@ function useData(url) {
     	}
     	```
 
-    	</div>
-
     === "todos.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	let nextId = 0;
@@ -1479,8 +1451,6 @@ function useData(url) {
     	];
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](you-might-not-need-an-effect-2.png)
@@ -1494,8 +1464,6 @@ function useData(url) {
 Когда вы выбираете контакт с помощью кнопок вверху, форма сбрасывается, чтобы отразить данные этого контакта. Это делается с помощью эффекта внутри `EditContact.js`. Удалите этот эффект. Найдите другой способ сброса формы при изменении `savedContact.id`.
 
 === "EditContact.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState } from 'react';
@@ -1545,8 +1513,6 @@ function useData(url) {
     ];
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](you-might-not-need-an-effect-3.png)
@@ -1560,8 +1526,6 @@ function useData(url) {
     Разделите компонент `EditContact` на две части. Переместите все состояние формы во внутренний компонент `EditForm`. Экспортируйте внешний компонент `EditContact` и заставьте его передавать `savedContact.id` в качестве `ключа` внутреннему компоненту `EditContact`. В результате внутренний компонент `EditForm` сбросит все состояние формы и пересоздаст DOM каждый раз, когда вы выбираете другой контакт.
 
     === "EditContact.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState } from 'react';
@@ -1611,8 +1575,6 @@ function useData(url) {
     	];
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](you-might-not-need-an-effect-3.png)
@@ -1626,8 +1588,6 @@ function useData(url) {
 В чем первопричина этой проблемы? И как вы можете ее устранить?
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useEffect } from 'react';
@@ -1682,8 +1642,6 @@ function useData(url) {
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](you-might-not-need-an-effect-4.png)
@@ -1697,8 +1655,6 @@ function useData(url) {
     Переменная состояния `showForm` определяет, показывать ли форму или диалог "Спасибо". Однако, вы отправляете сообщение не потому, что диалог "Спасибо" был _показан_. Вы хотите отправить сообщение, потому что пользователь _отправил форму._ Удалите вводящий в заблуждение Эффект и переместите вызов `sendMessage` в обработчик события `handleSubmit`:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useEffect } from 'react';
@@ -1747,8 +1703,6 @@ function useData(url) {
     		console.log('Sending message: ' + message);
     	}
     	```
-
-    	</div>
 
     === "Результат"
 

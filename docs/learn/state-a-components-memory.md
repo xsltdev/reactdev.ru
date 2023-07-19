@@ -47,8 +47,6 @@
 
 === "data.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     export const sculptureList = [
     	{
@@ -161,8 +159,6 @@
     	},
     ];
     ```
-
-    </div>
 
 === "Результат"
 
@@ -272,8 +268,6 @@ function handleClick() {
 
 === "data.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     export const sculptureList = [
     	{
@@ -386,8 +380,6 @@ function handleClick() {
     	},
     ];
     ```
-
-    </div>
 
 === "Результат"
 
@@ -492,8 +484,6 @@ const [index, setIndex] = useState(0);
 
 === "data.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     export const sculptureList = [
     	{
@@ -607,8 +597,6 @@ const [index, setIndex] = useState(0);
     ];
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](state-a-components-memory-2.png)
@@ -625,11 +613,7 @@ const [index, setIndex] = useState(0);
 
     Этот пример **не использует React**, но он дает представление о том, как `useState` работает внутри:
 
-    <!-- 0031.part.md -->
-
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	let componentHooks = [];
@@ -836,8 +820,6 @@ const [index, setIndex] = useState(0);
     	updateDOM();
     	```
 
-    	</div>
-
     === "index.html"
 
     	```html
@@ -930,8 +912,6 @@ const [index, setIndex] = useState(0);
     ```
 
 === "data.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     export const sculptureList = [
@@ -1046,8 +1026,6 @@ const [index, setIndex] = useState(0);
     ];
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](state-a-components-memory-3.png)
@@ -1125,8 +1103,6 @@ const [index, setIndex] = useState(0);
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState } from 'react';
     	import { sculptureList } from './data.js';
@@ -1185,8 +1161,6 @@ const [index, setIndex] = useState(0);
     		);
     	}
     	```
-
-    	</div>
 
     === "Результат"
 

@@ -100,8 +100,6 @@ myRef.current.scrollIntoView();
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useRef } from 'react';
 
@@ -177,8 +175,6 @@ myRef.current.scrollIntoView();
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](manipulating-the-dom-with-refs-2.png)
@@ -206,8 +202,6 @@ myRef.current.scrollIntoView();
     В данном примере показано, как можно использовать этот подход для прокрутки к произвольному узлу в длинном списке:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useRef } from 'react';
@@ -281,8 +275,6 @@ myRef.current.scrollIntoView();
     		});
     	}
     	```
-
-    	</div>
 
     === "Результат"
 
@@ -479,8 +471,6 @@ React устанавливает `ref.current` во время фиксации.
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState, useRef } from 'react';
 
@@ -525,8 +515,6 @@ React устанавливает `ref.current` во время фиксации.
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](manipulating-the-dom-with-refs-6.png)
@@ -552,8 +540,6 @@ React устанавливает `ref.current` во время фиксации.
     Это даст команду React синхронно обновить DOM сразу после выполнения кода, обернутого в `flushSync`. В результате, последний todo уже будет в DOM к тому моменту, когда вы попытаетесь перейти к нему:
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useRef } from 'react';
@@ -602,8 +588,6 @@ React устанавливает `ref.current` во время фиксации.
     	}
     	```
 
-    	</div>
-
     === "Результат"
 
     	![Результат](manipulating-the-dom-with-refs-6.png)
@@ -621,8 +605,6 @@ React устанавливает `ref.current` во время фиксации.
 Попробуйте нажать "Toggle with setState" несколько раз. Сообщение должно исчезнуть и появиться снова. Затем нажмите "Удалить из DOM". Это приведет к принудительному удалению. Наконец, нажмите "Toggle with setState":
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { useState, useRef } from 'react';
@@ -652,8 +634,6 @@ React устанавливает `ref.current` во время фиксации.
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -721,8 +701,6 @@ React устанавливает `ref.current` во время фиксации.
 
     === "App.js"
 
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
-
     	```js
     	import { useState, useRef } from 'react';
 
@@ -761,8 +739,6 @@ React устанавливает `ref.current` во время фиксации.
     		);
     	}
     	```
-
-    	</div>
 
     === "Результат"
 
@@ -844,8 +820,6 @@ node.scrollIntoView({
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -897,8 +871,6 @@ node.scrollIntoView({
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](manipulating-the-dom-with-refs-11.png)
@@ -922,8 +894,6 @@ node.scrollIntoView({
     Обратите внимание, что вызов `flushSync` необходим для того, чтобы заставить React обновить DOM перед прокруткой. В противном случае `selectedRef.current` всегда будет указывать на ранее выбранный элемент.
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useRef, useState } from 'react';
@@ -995,8 +965,6 @@ node.scrollIntoView({
     		});
     	}
     	```
-
-    	</div>
 
     === "Результат"
 

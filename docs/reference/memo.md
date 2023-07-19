@@ -58,8 +58,6 @@ export default Greeting;
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { memo, useState } from 'react';
 
@@ -105,8 +103,6 @@ export default Greeting;
     });
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](memo-1.png)
@@ -138,8 +134,6 @@ export default Greeting;
 Даже если компонент мемоизирован, он все равно будет перерисовываться при изменении своего состояния. Мемоизация имеет отношение только к пропсам, которые передаются компоненту от его родителя.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import { memo, useState } from 'react';
@@ -219,8 +213,6 @@ export default Greeting;
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](memo-2.png)
@@ -232,8 +224,6 @@ export default Greeting;
 Даже если компонент мемоизирован, он все равно будет перерисовываться при изменении контекста, который он использует. Мемоизация имеет отношение только к пропсам, которые передаются компоненту от его родителя.
 
 === "App.js"
-
-    <div markdown style="max-height: 400px; overflow-y: auto;">
 
     ```js
     import {
@@ -271,8 +261,6 @@ export default Greeting;
     	return <h3 className={theme}>Hello, {name}!</h3>;
     });
     ```
-
-    </div>
 
 === "Результат"
 

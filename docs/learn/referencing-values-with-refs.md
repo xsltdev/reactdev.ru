@@ -135,8 +135,6 @@ const [now, setNow] = useState(null);
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState, useRef } from 'react';
 
@@ -173,8 +171,6 @@ const [now, setNow] = useState(null);
     	);
     }
     ```
-
-    </div>
 
 === "Результат"
 
@@ -327,8 +323,6 @@ console.log(ref.current); // 5
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     import { useState } from 'react';
 
@@ -371,8 +365,6 @@ console.log(ref.current); // 5
     }
     ```
 
-    </div>
-
 === "Результат"
 
     ![Результат](referencing-values-with-refs-5.png)
@@ -386,8 +378,6 @@ console.log(ref.current); // 5
     Всякий раз, когда ваш компонент перестраивается (например, при установке состояния), все локальные переменные инициализируются с нуля. Вот почему вы не можете сохранить идентификатор таймаута в локальной переменной типа `timeoutID`, а затем ожидать, что другой обработчик событий "увидит" его в будущем. Вместо этого сохраните его в ссылке, которую React будет сохранять между рендерами.
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useState, useRef } from 'react';
@@ -430,8 +420,6 @@ console.log(ref.current); // 5
     		);
     	}
     	```
-
-    	</div>
 
     === "Результат"
 
@@ -507,8 +495,6 @@ console.log(ref.current); // 5
 
 === "App.js"
 
-    <div markdown style="max-height: 400px; overflow-y: auto;">
-
     ```js
     let timeoutID;
 
@@ -550,8 +536,6 @@ console.log(ref.current); // 5
     }
     ```
 
-    </div>
-
 === "Решение"
 
     ![Решение](referencing-values-with-refs-8.png)
@@ -565,8 +549,6 @@ console.log(ref.current); // 5
     Такая переменная, как `timeoutID`, является общей для всех компонентов. Вот почему нажатие на вторую кнопку сбрасывает таймаут первой кнопки. Чтобы исправить это, вы можете хранить таймаут в ссылке. Каждая кнопка получит свой собственный ref, поэтому они не будут конфликтовать друг с другом. Обратите внимание, что при быстром нажатии на две кнопки отображаются оба сообщения.
 
     === "App.js"
-
-    	<div markdown style="max-height: 400px; overflow-y: auto;">
 
     	```js
     	import { useRef } from 'react';
@@ -609,8 +591,6 @@ console.log(ref.current); // 5
     		);
     	}
     	```
-
-    	</div>
 
     === "Решение"
 
