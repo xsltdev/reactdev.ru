@@ -5,7 +5,7 @@ Markdown
 MarkupSafe
 mkdocs
 pymdown-extensions
-mkdocs-material
+mkdocs-material==9.2.0b3
 mkdocs-awesome-pages-plugin
 mkdocs-minify-plugin
 PyYAML

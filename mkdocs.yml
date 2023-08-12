@@ -27,6 +27,7 @@ theme:
               name: Светлая тема
     language: ru
     features:
+        - navigation.prune
         - navigation.tabs
         - navigation.tracking
         - navigation.top
