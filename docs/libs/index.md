@@ -1,4 +1,4 @@
-# Библиотеки
+# Экосистема React
 
 [Next.js](nextjs/index.md)
 : React фреймворк с SSR
