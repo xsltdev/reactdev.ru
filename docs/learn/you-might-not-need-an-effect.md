@@ -1209,8 +1209,6 @@ function useData(url) {
     }
     ```
 
-    </div>
-
 === "todos.js"
 
     ```js
