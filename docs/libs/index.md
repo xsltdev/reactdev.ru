@@ -9,7 +9,7 @@
 [Create React App](cra.md)
 : Интерфейс командной строки, позволяющий создавать предварительно настроенные React-проекты
 
-[React Router](react-router.md)
+**[React Router](react-router.6/index.md)** <small>v6</small>, [React Router](react-router.md) <small>v5</small>
 : Маршрутизатор
 
 [Redux](redux/index.md)
@@ -18,7 +18,7 @@
 [Redux Toolkit](redux-toolkit.md)
 : Пакет, облегчающий работу с Redux
 
-[React Query](react-query)
+[React Query](react-query.md)
 : Библиотека для получения, кэширования, синхронизации и обновления "серверного" состояния в React-приложениях
 
 [React Spring](react-spring.md)

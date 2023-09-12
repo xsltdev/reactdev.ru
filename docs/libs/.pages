@@ -5,6 +5,7 @@ nav:
     - graphql
     - cra.md
     - react-router.md
+    - react-router.6
     - redux
     - redux-toolkit.md
     - react-query.md

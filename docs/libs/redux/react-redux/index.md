@@ -32,7 +32,7 @@ Redux - приложение это:
 
 Redux вдохновлен [Flux](https://facebook.github.io/flux/) методологией и языком программирования [Elm](https://elm-lang.org/).
 
-Под капотом, Redux использует старую фичу реакта - context, которая обрела вторую жизнь в версии реакта 16.3 - "[New context API](/handbook/context/)".
+Под капотом, Redux использует старую фичу реакта - context, которая обрела вторую жизнь в версии реакта 16.3 - "New context API".
 
 Есть старый context, который использует Redux, и есть новое Context API, не путайте.
 

@@ -2,7 +2,7 @@
 
 ## Наш первый конечный автомат
 
-Предположим, мы хотим смоделировать [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) как конечный автомат. Сначала установите XState с помощью NPM или Yarn:
+Предположим, мы хотим смоделировать [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) как конечный автомат. Сначала установите XState с помощью NPM или Yarn:
 
 ```bash
 npm install xstate --save
@@ -20,21 +20,21 @@ const promiseMachine = createMachine(/* ... */);
 
 Мы передадим [конфигурацию автомата](./machines.md#configuration) `createMachine`. Нам потребуется предоставить:
 
-- `id` — для идентификации автомата
-- `initial` — для указания узла начального состояния, в котором должен находиться этот автомат
-- `states` — для определения каждого из дочерних состояний:
+-   `id` — для идентификации автомата
+-   `initial` — для указания узла начального состояния, в котором должен находиться этот автомат
+-   `states` — для определения каждого из дочерних состояний:
 
 ```js
 import { createMachine } from 'xstate';
 
 const promiseMachine = createMachine({
-  id: 'promise',
-  initial: 'pending',
-  states: {
-    pending: {},
-    resolved: {},
-    rejected: {},
-  },
+    id: 'promise',
+    initial: 'pending',
+    states: {
+        pending: {},
+        resolved: {},
+        rejected: {},
+    },
 });
 ```
 
@@ -44,18 +44,18 @@ const promiseMachine = createMachine({
 import { createMachine } from 'xstate';
 
 const promiseMachine = createMachine({
-  id: 'promise',
-  initial: 'pending',
-  states: {
-    pending: {
-      on: {
-        RESOLVE: { target: 'resolved' },
-        REJECT: { target: 'rejected' },
-      },
+    id: 'promise',
+    initial: 'pending',
+    states: {
+        pending: {
+            on: {
+                RESOLVE: { target: 'resolved' },
+                REJECT: { target: 'rejected' },
+            },
+        },
+        resolved: {},
+        rejected: {},
     },
-    resolved: {},
-    rejected: {},
-  },
 });
 ```
 
@@ -65,22 +65,22 @@ const promiseMachine = createMachine({
 import { createMachine } from 'xstate';
 
 const promiseMachine = createMachine({
-  id: 'promise',
-  initial: 'pending',
-  states: {
-    pending: {
-      on: {
-        RESOLVE: { target: 'resolved' },
-        REJECT: { target: 'rejected' },
-      },
+    id: 'promise',
+    initial: 'pending',
+    states: {
+        pending: {
+            on: {
+                RESOLVE: { target: 'resolved' },
+                REJECT: { target: 'rejected' },
+            },
+        },
+        resolved: {
+            type: 'final',
+        },
+        rejected: {
+            type: 'final',
+        },
     },
-    resolved: {
-      type: 'final',
-    },
-    rejected: {
-      type: 'final',
-    },
-  },
 });
 ```
 
@@ -103,11 +103,11 @@ sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-ori
 import { createMachine, interpret } from 'xstate';
 
 const promiseMachine = createMachine({
-  /* ... */
+    /* ... */
 });
 
 const promiseService = interpret(
-  promiseMachine
+    promiseMachine
 ).onTransition((state) => console.log(state.value));
 
 // Start the service
@@ -120,32 +120,36 @@ promiseService.send({ type: 'RESOLVE' });
 
 ### В React
 
-Если бы мы хотели использовать наш автомат внутри компонента React, мы могли бы использовать хук [`useMachine`](../packages/xstate-react.md):
+Если бы мы хотели использовать наш автомат внутри компонента React, мы могли бы использовать хук `useMachine`:
 
-> Дополнительно нам нужно установить пакет `@xstate/react`
+Дополнительно нам нужно установить пакет `@xstate/react`
 
 ```tsx
 import { useMachine } from '@xstate/react';
 
 const Component = () => {
-  const [state, send] = useMachine(promiseMachine);
+    const [state, send] = useMachine(promiseMachine);
 
-  return (
-    <div>
-      {/** You can listen to what state the service is in */}
-      {state.matches('pending') && <p>Loading...</p>}
-      {state.matches('rejected') && <p>Promise Rejected</p>}
-      {state.matches('resolved') && <p>Promise Resolved</p>}
-      <div>
-        {/** You can send events to the running service */}
-        <button onClick={() => send('RESOLVE')}>
-          Resolve
-        </button>
-        <button onClick={() => send('REJECT')}>
-          Reject
-        </button>
-      </div>
-    </div>
-  );
+    return (
+        <div>
+            {/** You can listen to what state the service is in */}
+            {state.matches('pending') && <p>Loading...</p>}
+            {state.matches('rejected') && (
+                <p>Promise Rejected</p>
+            )}
+            {state.matches('resolved') && (
+                <p>Promise Resolved</p>
+            )}
+            <div>
+                {/** You can send events to the running service */}
+                <button onClick={() => send('RESOLVE')}>
+                    Resolve
+                </button>
+                <button onClick={() => send('REJECT')}>
+                    Reject
+                </button>
+            </div>
+        </div>
+    );
 };
 ```

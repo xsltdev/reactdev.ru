@@ -1,6 +1,10 @@
-# React Router DOM
+# React Router DOM v5
 
-Перевод документации по [React Router v5.x :octicons-tag-24:](https://v5.reactrouter.com/web/guides/quick-start)
+!!!danger "Внимание"
+
+    Это перевод документации по [React Router v5.x :octicons-tag-24:](https://v5.reactrouter.com/web/guides/quick-start)
+
+    **Перевод шестой версии здесь &mdash; [React Router v6](./react-router.6/index.md)**
 
 ## Примеры
 
@@ -13,45 +17,47 @@ _Обратите внимание_: за сценой `<Link>` рендерит
 ```js
 import React from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
 } from 'react-router-dom';
 
 export const App = () => (
-  <Router>
-    <header>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Главная</Link>
-          </li>
-          <li>
-            <Link to="/about">Контакты</Link>
-          </li>
-          <li>
-            <Link to="/users">Пользователи</Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <Router>
+        <header>
+            <nav>
+                <ul>
+                    <li>
+                        <Link to="/">Главная</Link>
+                    </li>
+                    <li>
+                        <Link to="/about">Контакты</Link>
+                    </li>
+                    <li>
+                        <Link to="/users">
+                            Пользователи
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
+        </header>
 
-    <main>
-      {/* <Switch> рендерит первый <Route>, совпавший с URL */}
-      <Switch>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/users">
-          <Users />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
-    </main>
-  </Router>
+        <main>
+            {/* <Switch> рендерит первый <Route>, совпавший с URL */}
+            <Switch>
+                <Route path="/about">
+                    <About />
+                </Route>
+                <Route path="/users">
+                    <Users />
+                </Route>
+                <Route path="/">
+                    <Home />
+                </Route>
+            </Switch>
+        </main>
+    </Router>
 );
 
 const Home = () => <h2>Главная</h2>;
@@ -68,46 +74,46 @@ const Users = () => <h2>Пользователи</h2>;
 ```js
 import React from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    useRouteMatch,
+    useParams,
 } from 'react-router-dom';
 
 export const App = () => (
-  <Router>
-    <header>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Главная</Link>
-          </li>
-          <li>
-            <Link to="/about">Контакты</Link>
-          </li>
-          <li>
-            <Link to="/topics">Темы</Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <Router>
+        <header>
+            <nav>
+                <ul>
+                    <li>
+                        <Link to="/">Главная</Link>
+                    </li>
+                    <li>
+                        <Link to="/about">Контакты</Link>
+                    </li>
+                    <li>
+                        <Link to="/topics">Темы</Link>
+                    </li>
+                </ul>
+            </nav>
+        </header>
 
-    <main>
-      <Switch>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/topics">
-          <Topics />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
-    </main>
-  </Router>
+        <main>
+            <Switch>
+                <Route path="/about">
+                    <About />
+                </Route>
+                <Route path="/topics">
+                    <Topics />
+                </Route>
+                <Route path="/">
+                    <Home />
+                </Route>
+            </Switch>
+        </main>
+    </Router>
 );
 
 const Home = () => <h2>Главная</h2>;
@@ -115,49 +121,53 @@ const Home = () => <h2>Главная</h2>;
 const About = () => <h2>Контакты</h2>;
 
 function Topics() {
-  const match = useRouteMatch();
+    const match = useRouteMatch();
 
-  return (
-    <>
-      <h2>Темы</h2>
+    return (
+        <>
+            <h2>Темы</h2>
 
-      <nav>
-        <ul>
-          <li>
-            <Link to={`${match.url}/components`}>
-              Компоненты
-            </Link>
-          </li>
-          <li>
-            <Link to={`${match.url}/props-vs-state`}>
-              Пропы против состояния
-            </Link>
-          </li>
-        </ul>
-      </nav>
+            <nav>
+                <ul>
+                    <li>
+                        <Link
+                            to={`${match.url}/components`}
+                        >
+                            Компоненты
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to={`${match.url}/props-vs-state`}
+                        >
+                            Пропы против состояния
+                        </Link>
+                    </li>
+                </ul>
+            </nav>
 
-      {/* Страница Topics имеет собственный <Switch> с маршрутами,
+            {/* Страница Topics имеет собственный <Switch> с маршрутами,
           основанными на URL /topics. Вы можете думать о втором
           <Route> как о странице для остальных тем
           или как о странице, отображаемой,
           когда ни одна из тем не выбрана */}
-      <div>
-        <Switch>
-          <Route path={`${match.path}/:topicId`}>
-            <Topic />
-          </Route>
-          <Route path={match.path}>
-            <h3>Пожалуйста, выберите тему.</h3>
-          </Route>
-        </Switch>
-      </div>
-    </>
-  );
+            <div>
+                <Switch>
+                    <Route path={`${match.path}/:topicId`}>
+                        <Topic />
+                    </Route>
+                    <Route path={match.path}>
+                        <h3>Пожалуйста, выберите тему.</h3>
+                    </Route>
+                </Switch>
+            </div>
+        </>
+    );
 }
 
 function Topic() {
-  const { topicId } = useParams();
-  return <h3>Идентификатор выбранной темы: {topicId}</h3>;
+    const { topicId } = useParams();
+    return <h3>Идентификатор выбранной темы: {topicId}</h3>;
 }
 ```
 
@@ -165,9 +175,9 @@ function Topic() {
 
 В `React Router` существует 3 категории компонентов:
 
-- роутеры (routers), например, `<BrowserRouter>` или `<HashRouter>`
-- маршруты (route matchers), например, `<Route>` или `<Switch>`
-- и навигация (navigation), например, `<Link>`, `<NavLink>` или `<Redirect>`
+-   роутеры (routers), например, `<BrowserRouter>` или `<HashRouter>`
+-   маршруты (route matchers), например, `<Route>` или `<Switch>`
+-   и навигация (navigation), например, `<Link>`, `<NavLink>` или `<Redirect>`
 
 Все компоненты, используемые в веб-приложении, должны быть импортированы из `react-router-dom`.
 
@@ -175,8 +185,8 @@ function Topic() {
 
 Любая маршрутизация начинается с роутера. Для веб-проектов `react-router-dom` предоставляет `<BrowserRouter>` и `<HashRouter>`. Основное отличие между ними состоит в способе хранения URL и взаимодействия с сервером.
 
-- `<BrowserRouter>` использует обычные URL. В этом случае URL выглядят как обычно, но требуется определенная настройка сервера. В частности, сервер должен обслуживать все страницы, используемые на клиенте. `Create React App` поддерживает это из коробки в режиме разработки и содержит инструкции для правильной настройки сервера.
-- `<HashRouter>` хранить текущую локацию в хэш-части URL (после символа "#"), поэтому URL выглядит примерно так: `http://example.com/#/your/page`. Поскольку хэш не отправляется серверу, его специальная настройка не требуется.
+-   `<BrowserRouter>` использует обычные URL. В этом случае URL выглядят как обычно, но требуется определенная настройка сервера. В частности, сервер должен обслуживать все страницы, используемые на клиенте. `Create React App` поддерживает это из коробки в режиме разработки и содержит инструкции для правильной настройки сервера.
+-   `<HashRouter>` хранить текущую локацию в хэш-части URL (после символа "#"), поэтому URL выглядит примерно так: `http://example.com/#/your/page`. Поскольку хэш не отправляется серверу, его специальная настройка не требуется.
 
 Для использования роутера необходимо обернуть в него компонент верхнего уровня:
 
@@ -188,10 +198,10 @@ import { BrowserRouter } from 'react-router-dom';
 const App = () => <h1>Привет, React Router</h1>;
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById('root')
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>,
+    document.getElementById('root')
 );
 ```
 
@@ -205,47 +215,47 @@ ReactDOM.render(
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
+    BrowserRouter as Router,
+    Switch,
+    Route,
 } from 'react-router-dom';
 
 const App = () => (
-  <main>
-    <Switch>
-      {/* Если текущим URL является /about, рандерится данный маршрут,
+    <main>
+        <Switch>
+            {/* Если текущим URL является /about, рандерится данный маршрут,
           остальные игнорируются */}
-      <Route path="/about">
-        <About />
-      </Route>
+            <Route path="/about">
+                <About />
+            </Route>
 
-      {/* Обратите внимание на порядок расположения этих двух маршрутов.
+            {/* Обратите внимание на порядок расположения этих двух маршрутов.
           Более специфический path="/contact/:id" находится перед path="/contact" */}
-      <Route path="/contact/:id">
-        <Contact />
-      </Route>
-      <Route path="/contact">
-        <AllContacts />
-      </Route>
+            <Route path="/contact/:id">
+                <Contact />
+            </Route>
+            <Route path="/contact">
+                <AllContacts />
+            </Route>
 
-      {/* Если ни один из предыдущих роутеров не совпал,
+            {/* Если ни один из предыдущих роутеров не совпал,
           рендерится данный маршрут (он является резервным).
 
           Важно: маршрут с path="/" всегда будет совпадать с
           URL, поскольку все URL начинаются с /. Поэтому
           мы поместили его последним */}
-      <Route path="/">
-        <Home />
-      </Route>
-    </Switch>
-  </main>
+            <Route path="/">
+                <Home />
+            </Route>
+        </Switch>
+    </main>
 );
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
-  document.getElementById('root')
+    <Router>
+        <App />
+    </Router>,
+    document.getElementById('root')
 );
 ```
 
@@ -264,7 +274,7 @@ _Обратите внимание_, что `<Route path>` ищет совпад
 
 ```js
 <NavLink to="/react" activeClassName="hurray">
-  React
+    React
 </NavLink>
 
 // Когда URL является /react, рендерится это:
@@ -286,17 +296,17 @@ _Обратите внимание_, что `<Route path>` ищет совпад
 
 `React Router` предоставляет несколько хуков для доступа к состоянию роутера и навигации внутри компонентов.
 
-- [`useHistory`](#usehistory)
-- [`useLocation`](#uselocation)
-- [`useParams`](#useparams)
-- [`useRouteMatch`](#useroutematch)
+-   [`useHistory`](#usehistory)
+-   [`useLocation`](#uselocation)
+-   [`useParams`](#useparams)
+-   [`useRouteMatch`](#useroutematch)
 
 Указанные хуки предоставляют доступ к следующим объектам:
 
-- `history`
-- `location`
-- `match`
-- `matchPath`
+-   `history`
+-   `location`
+-   `match`
+-   `matchPath`
 
 #### useHistory
 
@@ -306,17 +316,17 @@ _Обратите внимание_, что `<Route path>` ищет совпад
 import { useHistory } from 'react-router-dom';
 
 function HomeButton() {
-  const history = useHistory();
+    const history = useHistory();
 
-  function handleClick() {
-    history.push('/home');
-  }
+    function handleClick() {
+        history.push('/home');
+    }
 
-  return (
-    <button type="button" onClick={handleClick}>
-      Вернуться на главную
-    </button>
-  );
+    return (
+        <button type="button" onClick={handleClick}>
+            Вернуться на главную
+        </button>
+    );
 }
 ```
 
@@ -335,10 +345,10 @@ function HomeButton() {
 `location`
 : `object` - текущая локация. Может иметь следующие свойства:
 
-- `pathname`: string - адрес URL
-- `search`: string - строка запроса URL
-- `hash`: string - хэш-фрагмент URL
-- `state`: object - специфичное для локации состояние, переданное, например, с помощью `push(path, state)` при помещении локации в стек. Доступно только в браузере и истории, хранящейся в памяти
+-   `pathname`: string - адрес URL
+-   `search`: string - строка запроса URL
+-   `hash`: string - хэш-фрагмент URL
+-   `state`: object - специфичное для локации состояние, переданное, например, с помощью `push(path, state)` при помещении локации в стек. Доступно только в браузере и истории, хранящейся в памяти
 
 `push(path, [state])`
 : `func` - помещает новое вхождение в стек истории
@@ -368,28 +378,28 @@ function HomeButton() {
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router,
-  Switch,
-  useLocation,
+    BrowserRouter as Router,
+    Switch,
+    useLocation,
 } from 'react-router-dom';
 
 function usePageViews() {
-  let location = useLocation();
-  React.useEffect(() => {
-    ga.send(['pageview', location.pathname]);
-  }, [location]);
+    let location = useLocation();
+    React.useEffect(() => {
+        ga.send(['pageview', location.pathname]);
+    }, [location]);
 }
 
 function App() {
-  usePageViews();
-  return <Switch>...</Switch>;
+    usePageViews();
+    return <Switch>...</Switch>;
 }
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
-  node
+    <Router>
+        <App />
+    </Router>,
+    node
 );
 ```
 
@@ -411,10 +421,10 @@ ReactDOM.render(
 
 Объект локации доступен в:
 
-- Компоненте `Route` как `this.props.location` (`props.location`)
-- Пропе `render` компонента `Route` как `({ location }) => ()`
-- Потомках (`children`) компонента `Route` как `({ location }) => ()`
-- `withRouter` как `this.props.location`
+-   Компоненте `Route` как `this.props.location` (`props.location`)
+-   Пропе `render` компонента `Route` как `({ location }) => ()`
+-   Потомках (`children`) компонента `Route` как `({ location }) => ()`
+-   `withRouter` как `this.props.location`
 
 Он также доступен в `history.location`.
 
@@ -422,11 +432,11 @@ ReactDOM.render(
 
 Вы можете использовать `location` для навигации вместо строк в:
 
-- `Link to` для веба
-- `Link to` для React Native
-- `Redirect to`
-- `history.push`
-- `history.replace`
+-   `Link to` для веба
+-   `Link to` для React Native
+-   `Redirect to`
+-   `history.push`
+-   `history.replace`
 
 Обычно, во всех перечисленных случаях мы используем строку, однако, когда необходимо добавить некоторое "состояние локации", которое будет доступным при возвращении приложения в данную локацию, можно использовать объект локации. Это может пригодиться в случае, когда определенные части интерфейса зависят от истории навигации, а не от путей (например, модульные окна).
 
@@ -448,8 +458,8 @@ history.replace(location)
 
 Наконец, `location` можно передавать в следующие компоненты:
 
-- `Route`
-- `Switch`
+-   `Route`
+-   `Switch`
 
 Это предотвратит использование ими актуальной локации из состоянии роутера. Это может быть полезным для анимации и отложенной навигации, а также для замены локации, в которой рендерится компонент.
 
@@ -461,29 +471,29 @@ history.replace(location)
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useParams,
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    useParams,
 } from 'react-router-dom';
 
 function BlogPost() {
-  const { slug } = useParams();
-  return <div>Отображается пост {slug}</div>;
+    const { slug } = useParams();
+    return <div>Отображается пост {slug}</div>;
 }
 
 ReactDOM.render(
-  <Router>
-    <Switch>
-      <Route exact path="/">
-        <HomePage />
-      </Route>
-      <Route path="/blog/:slug">
-        <BlogPost />
-      </Route>
-    </Switch>
-  </Router>,
-  node
+    <Router>
+        <Switch>
+            <Route exact path="/">
+                <HomePage />
+            </Route>
+            <Route path="/blog/:slug">
+                <BlogPost />
+            </Route>
+        </Switch>
+    </Router>,
+    node
 );
 ```
 
@@ -497,15 +507,15 @@ ReactDOM.render(
 import { Route } from 'react-router-dom';
 
 function BlogPost() {
-  return (
-    <Route
-      path="/blog/:slug"
-      render={({ match }) => {
-        // работаем с match...
-        return <div />;
-      }}
-    />
-  );
+    return (
+        <Route
+            path="/blog/:slug"
+            render={({ match }) => {
+                // работаем с match...
+                return <div />;
+            }}
+        />
+    );
 }
 ```
 
@@ -515,23 +525,23 @@ function BlogPost() {
 import { useRouteMatch } from 'react-router-dom';
 
 function BlogPost() {
-  const match = useRouteMatch('/blog/:slug');
+    const match = useRouteMatch('/blog/:slug');
 
-  // работаем с match...
-  return <div />;
+    // работаем с match...
+    return <div />;
 }
 ```
 
 `useRouteMatch`:
 
-- без аргументов: возвращает объект совпадения текущего `<Route>`
-- принимает один аргумент, эквивалентный пропу `matchPath.argument`. Это может быть `pathname` в виде строки, как в приведенном выше примере, или объект с пропами, принимаемыми `<Route>`, как в следующем примере:
+-   без аргументов: возвращает объект совпадения текущего `<Route>`
+-   принимает один аргумент, эквивалентный пропу `matchPath.argument`. Это может быть `pathname` в виде строки, как в приведенном выше примере, или объект с пропами, принимаемыми `<Route>`, как в следующем примере:
 
 ```js
 const match = useRouteMatch({
-  path: '/BLOG/:slug/',
-  strict: true,
-  sensitive: true,
+    path: '/BLOG/:slug/',
+    strict: true,
+    sensitive: true,
 });
 ```
 
@@ -553,12 +563,12 @@ const match = useRouteMatch({
 
 Доступ к объекту совпадения можно получить в:
 
-- `Route` как `this.props.match` (`props.match`)
-- Пропе `render` компонента `Route` как `({ match }) => ()`
-- Потомках `Route` как `({ match }) => ()`
-  - `withRouter` как `this.props.match`
-  - `matchPath` в виде возвращаемого значения
-  - `useRouteMatch` в виде возвращаемого значения
+-   `Route` как `this.props.match` (`props.match`)
+-   Пропе `render` компонента `Route` как `({ match }) => ()`
+-   Потомках `Route` как `({ match }) => ()`
+    -   `withRouter` как `this.props.match`
+    -   `matchPath` в виде возвращаемого значения
+    -   `useRouteMatch` в виде возвращаемого значения
 
 Если `Route` не имеет пропа `path` и поэтому всегда совпадает, мы получаем его ближайшего предка. Тоже самое справделиво для `withRouter`.
 
@@ -600,9 +610,9 @@ const path = `${match.url}/relative-path`;
 import { matchPath } from 'react-router';
 
 const match = matchPath('/users/123', {
-  path: '/users/:id',
-  exact: true,
-  strict: false,
+    path: '/users/:id',
+    exact: true,
+    strict: false,
 });
 ```
 
@@ -626,9 +636,9 @@ const match = matchPath('/users/123', {
 
 ```js
 matchPath('/users/2', {
-  path: '/users/:id',
-  exact: true,
-  strict: true,
+    path: '/users/:id',
+    exact: true,
+    strict: true,
 });
 
 //  {
@@ -647,11 +657,11 @@ matchPath('/users/2', {
 
 Общий низкоуровневый интерфейс для компонентов роутера. Обычно, используется один из следующих роутеров:
 
-- `<BrowserRouter>`
-- `<HashRouter>`
-- `<MemoryRouter>`
-- `<StaticRouter>`
-- `<NativeRouter>`
+-   `<BrowserRouter>`
+-   `<HashRouter>`
+-   `<MemoryRouter>`
+-   `<StaticRouter>`
+-   `<NativeRouter>`
 
 Одним из случаев использования низкоуровневого `<Router>` является синхронизация пользовательской истории с такими библиотеками для управления состоянием приложения, как `Redux` или `MobX`. _Обратите внимание_, что делать этого не рекомендуется.
 
@@ -669,12 +679,12 @@ matchPath('/users/2', {
 
 ```js
 <BrowserRouter
-  basename={optionalString}
-  forceRefresh={optionalBool}
-  getUserConfirmation={optionalFunc}
-  keyLength={optionalNumber}
+    basename={optionalString}
+    forceRefresh={optionalBool}
+    getUserConfirmation={optionalFunc}
+    keyLength={optionalNumber}
 >
-  <App />
+    <App />
 </BrowserRouter>
 ```
 
@@ -696,11 +706,11 @@ matchPath('/users/2', {
 
 ```js
 <BrowserRouter
-  getUserConfirmation={(message, callback) => {
-    // поведение по умолчанию
-    const allowTransition = window.confirm(message);
-    callback(allowTransition);
-  }}
+    getUserConfirmation={(message, callback) => {
+        // поведение по умолчанию
+        const allowTransition = window.confirm(message);
+        callback(allowTransition);
+    }}
 />
 ```
 
@@ -721,11 +731,11 @@ _Обратите внимание_, что хэш-история не подд�
 
 ```js
 <HashRouter
-  basename={optionalString}
-  getUserConfirmation={optionalFunc}
-  hashType={optionalString}
+    basename={optionalString}
+    getUserConfirmation={optionalFunc}
+    hashType={optionalString}
 >
-  <App />
+    <App />
 </HashRouter>
 ```
 
@@ -747,9 +757,9 @@ _Обратите внимание_, что хэш-история не подд�
 
 Доступные значения:
 
-- `slash` - `#/` и `#/sunshine/lollipops` (значение по умолчанию)
-- `noslash` - `#` и `#sunshine/lollipops`
-- `hashbang` - `#!/` и `#!/sunshine/lollipops` (признан устаревшим в Chrome)
+-   `slash` - `#/` и `#/sunshine/lollipops` (значение по умолчанию)
+-   `noslash` - `#` и `#sunshine/lollipops`
+-   `hashbang` - `#!/` и `#!/sunshine/lollipops` (признан устаревшим в Chrome)
 
 `children`
 : `node` - дочерний элемент
@@ -760,12 +770,12 @@ _Обратите внимание_, что хэш-история не подд�
 
 ```js
 <MemoryRouter
-  initialEntries={optionalArray}
-  initialIndex={optionalNumber}
-  getUserConfirmation={optionalFunc}
-  keyLength={optionalNumber}
+    initialEntries={optionalArray}
+    initialIndex={optionalNumber}
+    getUserConfirmation={optionalFunc}
+    keyLength={optionalNumber}
 >
-  <App />
+    <App />
 </MemoryRouter>
 ```
 
@@ -776,10 +786,14 @@ _Обратите внимание_, что хэш-история не подд�
 
 ```js
 <MemoryRouter
-  initialEntries={['/one', '/two', { pathname: '/three' }]}
-  initialIndex={1}
+    initialEntries={[
+        '/one',
+        '/two',
+        { pathname: '/three' },
+    ]}
+    initialIndex={1}
 >
-  <App />
+    <App />
 </MemoryRouter>
 ```
 
@@ -807,29 +821,27 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router';
 
-http
-  .createServer((req, res) => {
+http.createServer((req, res) => {
     // Данный объект контекста содержит результаты рендеринга
     const context = {};
 
     const html = ReactDOMServer.renderToString(
-      <StaticRouter location={req.url} context={context}>
-        <App />
-      </StaticRouter>
+        <StaticRouter location={req.url} context={context}>
+            <App />
+        </StaticRouter>
     );
 
     // context.url будет содержать URL для перенаправления при использовании <Redirect>
     if (context.url) {
-      res.writeHead(302, {
-        Location: context.url,
-      });
-      res.end();
+        res.writeHead(302, {
+            Location: context.url,
+        });
+        res.end();
     } else {
-      res.write(html);
-      res.end();
+        res.write(html);
+        res.end();
     }
-  })
-  .listen(3000);
+}).listen(3000);
 ```
 
 Пропcы:
@@ -857,7 +869,7 @@ const context = {}
 
 ```js
 if (context.status === '404') {
-  // ...
+    // ...
 }
 ```
 
@@ -866,7 +878,7 @@ if (context.status === '404') {
 
 ### `<Link>`
 
-- `<NavLink>`
+-   `<NavLink>`
 
 Обеспечивает декларативный и доступный способ навигации в приложении.
 
@@ -900,12 +912,12 @@ if (context.status === '404') {
 
 ```js
 <Link
-  to={{
-    pathname: '/courses',
-    search: '?sort=name',
-    hash: '#the-hash',
-    state: { fromDashboard: true },
-  }}
+    to={{
+        pathname: '/courses',
+        search: '?sort=name',
+        hash: '#the-hash',
+        state: { fromDashboard: true },
+    }}
 />
 ```
 
@@ -937,9 +949,9 @@ const FancyLink = React.forwardRef((props, ref) => (
 
 другие:
 
-- `title`,
-- `id`,
-- `className` и т. д.
+-   `title`,
+-   `id`,
+-   `className` и т. д.
 
 ### `<NavLink>`
 
@@ -956,7 +968,7 @@ const FancyLink = React.forwardRef((props, ref) => (
 
 ```js
 <NavLink to="/faq" activeClassName="selected">
-  Часто задаваемые вопросы
+    Часто задаваемые вопросы
 </NavLink>
 ```
 
@@ -965,13 +977,13 @@ const FancyLink = React.forwardRef((props, ref) => (
 
 ```js
 <NavLink
-  to="/faq"
-  activeStyle={{
-    fontWeight: 'bold',
-    color: 'red',
-  }}
+    to="/faq"
+    activeStyle={{
+        fontWeight: 'bold',
+        color: 'red',
+    }}
 >
-  Часто задаваемые вопросы
+    Часто задаваемые вопросы
 </NavLink>
 ```
 
@@ -986,18 +998,18 @@ const FancyLink = React.forwardRef((props, ref) => (
 
 ```js
 <NavLink
-  to="/events/123"
-  isActive={(match, location) => {
-    if (!match) {
-      return false;
-    }
+    to="/events/123"
+    isActive={(match, location) => {
+        if (!match) {
+            return false;
+        }
 
-    // событие считается активным только при условии, что его идентификатор является нечетным числом
-    const eventID = parseInt(match.params.eventID);
-    return !isNaN(eventID) && eventID % 2 === 1;
-  }}
+        // событие считается активным только при условии, что его идентификатор является нечетным числом
+        const eventID = parseInt(match.params.eventID);
+        return !isNaN(eventID) && eventID % 2 === 1;
+    }}
 >
-  Событие 123
+    Событие 123
 </NavLink>
 ```
 
@@ -1019,17 +1031,17 @@ const FancyLink = React.forwardRef((props, ref) => (
 import { Route } from 'react-router';
 
 const routes = (
-  <div>
-    <Route path="/about">
-      <About />
-    </Route>
-    <Route path="/:user">
-      <User />
-    </Route>
-    <Route>
-      <NoMatch />
-    </Route>
-  </div>
+    <div>
+        <Route path="/about">
+            <About />
+        </Route>
+        <Route path="/:user">
+            <User />
+        </Route>
+        <Route>
+            <NoMatch />
+        </Route>
+    </div>
 );
 ```
 
@@ -1041,20 +1053,20 @@ const routes = (
 import { Route, Switch } from 'react-router';
 
 const routes = (
-  <Switch>
-    <Route exact path="/">
-      <Home />
-    </Route>
-    <Route path="/about">
-      <About />
-    </Route>
-    <Route path="/:user">
-      <User />
-    </Route>
-    <Route>
-      <NoMatch />
-    </Route>
-  </Switch>
+    <Switch>
+        <Route exact path="/">
+            <Home />
+        </Route>
+        <Route path="/about">
+            <About />
+        </Route>
+        <Route path="/:user">
+            <User />
+        </Route>
+        <Route>
+            <NoMatch />
+        </Route>
+    </Switch>
 );
 ```
 
@@ -1072,20 +1084,20 @@ const routes = (
 import { Redirect, Route, Switch } from 'react-router';
 
 let routes = (
-  <Switch>
-    <Route exact path="/">
-      <Home />
-    </Route>
+    <Switch>
+        <Route exact path="/">
+            <Home />
+        </Route>
 
-    <Route path="/users">
-      <Users />
-    </Route>
-    <Redirect from="/accounts" to="/users" />
+        <Route path="/users">
+            <Users />
+        </Route>
+        <Redirect from="/accounts" to="/users" />
 
-    <Route>
-      <NoMatch />
-    </Route>
-  </Switch>
+        <Route>
+            <NoMatch />
+        </Route>
+    </Switch>
 );
 ```
 
@@ -1099,22 +1111,22 @@ let routes = (
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router,
-  Route,
+    BrowserRouter as Router,
+    Route,
 } from 'react-router-dom';
 
 ReactDOM.render(
-  <Router>
-    <div>
-      <Route exact path="/">
-        <Home />
-      </Route>
-      <Route path="/news">
-        <NewsFeed />
-      </Route>
-    </div>
-  </Router>,
-  node
+    <Router>
+        <div>
+            <Route exact path="/">
+                <Home />
+            </Route>
+            <Route path="/news">
+                <NewsFeed />
+            </Route>
+        </div>
+    </Router>,
+    node
 );
 ```
 
@@ -1142,9 +1154,9 @@ ReactDOM.render(
 
 Рекомендуемым способом рендеринга является использование дочерних элементов как в приведенном выше примере. Тем не менее, существует и другие способы:
 
-- `<Route component>`
-- `<Route render>`
-- `<Route children>`
+-   `<Route component>`
+-   `<Route render>`
+-   `<Route children>`
 
 Следует придерживаться одного стиля.
 
@@ -1152,9 +1164,9 @@ ReactDOM.render(
 
 Все 3 метода рендеринга принимают следующие пропы:
 
-- `match`
-- `location`
-- `history`
+-   `match`
+-   `location`
+-   `history`
 
 #### component
 
@@ -1164,20 +1176,20 @@ ReactDOM.render(
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router,
-  Route,
+    BrowserRouter as Router,
+    Route,
 } from 'react-router-dom';
 
 // Все пропы маршрута (match, location и history) доступны для User
 const User = (props) => (
-  <h1>Привет, {props.match.params.username}!</h1>
+    <h1>Привет, {props.match.params.username}!</h1>
 );
 
 ReactDOM.render(
-  <Router>
-    <Route path="/user/:username" component={User} />
-  </Router>,
-  node
+    <Router>
+        <Route path="/user/:username" component={User} />
+    </Router>,
+    node
 );
 ```
 
@@ -1193,36 +1205,39 @@ ReactDOM.render(
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router,
-  Route,
+    BrowserRouter as Router,
+    Route,
 } from 'react-router-dom';
 
 // встроенный рендеринг
 ReactDOM.render(
-  <Router>
-    <Route path="/home" render={() => <div>Главная</div>} />
-  </Router>,
-  node
+    <Router>
+        <Route
+            path="/home"
+            render={() => <div>Главная</div>}
+        />
+    </Router>,
+    node
 );
 
 // композиция
 // Вы можете распаковать routeProps, чтобы сделать их доступными для Component
 const FadingRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(routeProps) => (
-      <FadeIn>
-        <Component {...routeProps} />
-      </FadeIn>
-    )}
-  />
+    <Route
+        {...rest}
+        render={(routeProps) => (
+            <FadeIn>
+                <Component {...routeProps} />
+            </FadeIn>
+        )}
+    />
 );
 
 ReactDOM.render(
-  <Router>
-    <FadingRoute path="/cool" component={Something} />
-  </Router>,
-  node
+    <Router>
+        <FadingRoute path="/cool" component={Something} />
+    </Router>,
+    node
 );
 ```
 
@@ -1236,30 +1251,30 @@ ReactDOM.render(
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router,
-  Link,
-  Route,
+    BrowserRouter as Router,
+    Link,
+    Route,
 } from 'react-router-dom';
 
 const ListItemLink = ({ to, ...rest }) => (
-  <Route
-    path={to}
-    children={({ match }) => (
-      <li className={match ? 'active' : ''}>
-        <Link to={to} {...rest} />
-      </li>
-    )}
-  />
+    <Route
+        path={to}
+        children={({ match }) => (
+            <li className={match ? 'active' : ''}>
+                <Link to={to} {...rest} />
+            </li>
+        )}
+    />
 );
 
 ReactDOM.render(
-  <Router>
-    <ul>
-      <ListItemLink to="/somewhere" />
-      <ListItemLink to="/somewhere-else" />
-    </ul>
-  </Router>,
-  node
+    <Router>
+        <ul>
+            <ListItemLink to="/somewhere" />
+            <ListItemLink to="/somewhere-else" />
+        </ul>
+    </Router>,
+    node
 );
 ```
 
@@ -1296,7 +1311,7 @@ ReactDOM.render(
 
 ```js
 <Route exact path="/one">
-  <About />
+    <About />
 </Route>
 ```
 
@@ -1315,11 +1330,11 @@ ReactDOM.render(
 
 ```js
 <Route exact path="/">
-  {loggedIn ? (
-    <Redirect to="/dashboard" />
-  ) : (
-    <PublicHomePage />
-  )}
+    {loggedIn ? (
+        <Redirect to="/dashboard" />
+    ) : (
+        <PublicHomePage />
+    )}
 </Route>
 ```
 
@@ -1333,11 +1348,11 @@ ReactDOM.render(
 
 ```js
 <Redirect
-  to={{
-    pathname: '/login',
-    search: '?utm=your+face',
-    state: { referrer: currentLocation },
-  }}
+    to={{
+        pathname: '/login',
+        search: '?utm=your+face',
+        state: { referrer: currentLocation },
+    }}
 />
 ```
 
@@ -1381,8 +1396,8 @@ ReactDOM.render(
 
 ```js
 <Prompt
-  when={formIsHalfFilledOut}
-  message="Вы уверены, что хотите покинуть страницу?"
+    when={formIsHalfFilledOut}
+    message="Вы уверены, что хотите покинуть страницу?"
 />
 ```
 
@@ -1396,15 +1411,15 @@ ReactDOM.render(
 
 ```js
 <Prompt
-  message={(location, action) => {
-    if (action === 'POP') {
-      console.log('Возвращаемся назад...');
-    }
+    message={(location, action) => {
+        if (action === 'POP') {
+            console.log('Возвращаемся назад...');
+        }
 
-    return location.pathname.startsWith('/app')
-      ? true
-      : `Вы уверены, что хотите перейти к ${location.pathname}?`;
-  }}
+        return location.pathname.startsWith('/app')
+            ? true
+            : `Вы уверены, что хотите перейти к ${location.pathname}?`;
+    }}
 />
 ```
 
@@ -1419,8 +1434,8 @@ ReactDOM.render(
 import { generatePath } from 'react-router';
 
 generatePath('/user/:id/:entity(posts|comments)', {
-  id: 1,
-  entity: 'posts',
+    id: 1,
+    entity: 'posts',
 });
 // Возвращается /user/1/posts
 ```
@@ -1437,7 +1452,7 @@ generatePath('/user/:id/:entity(posts|comments)', {
 
 ```js
 generatePath('/user/:id/:entity(posts|comments)', {
-  id: 1,
+    id: 1,
 });
 // TypeError: Expected "entity" to be defined (Ожидалось, что "entity" будет определено)
 ```
@@ -1453,24 +1468,26 @@ import { withRouter } from 'react-router';
 
 // Простой компонент, отображающий название пути текущей локации
 class ShowTheLocation extends React.Component {
-  static propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
-  };
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired,
+    };
 
-  render() {
-    const { match, location, history } = this.props;
+    render() {
+        const { match, location, history } = this.props;
 
-    return (
-      <div>Вы находитесь здесь: {location.pathname}</div>
-    );
-  }
+        return (
+            <div>
+                Вы находитесь здесь: {location.pathname}
+            </div>
+        );
+    }
 }
 
 // Создаем новый компонент, который "подключен" к роутеру
 const ShowTheLocationWithRouter = withRouter(
-  ShowTheLocation
+    ShowTheLocation
 );
 ```
 
@@ -1478,7 +1495,7 @@ _Обратите внимание_, `withRouter` не подписываетс�
 
 _Статические методы и свойства_ (не принадлежащие React) оборачиваемого компонента автоматически копируются в "подключенный" компонент.
 
-- `Component.WrappedComponent` - оборачиваемый компонент преобразуется в статическое свойство `WrappedComponent` возвращаемого компонента, что, помимо прочего, может использоваться для тестирования компонента в изоляции.
+-   `Component.WrappedComponent` - оборачиваемый компонент преобразуется в статическое свойство `WrappedComponent` возвращаемого компонента, что, помимо прочего, может использоваться для тестирования компонента в изоляции.
 
 ```js
 // MyComponent.js
@@ -1489,21 +1506,23 @@ import MyComponent from './MyComponent'
 render(<MyComponent.WrappedComponent location={{...}} ... />)
 ```
 
-- `wrappedComponentRef`: func - функция, передаваемая оборачиваемому компоненту в качестве пропа `ref`
+-   `wrappedComponentRef`: func - функция, передаваемая оборачиваемому компоненту в качестве пропа `ref`
 
 ```js
 class Container extends React.Component {
-  componentDidMount() {
-    this.component.doSomething();
-  }
+    componentDidMount() {
+        this.component.doSomething();
+    }
 
-  render() {
-    return (
-      <MyComponent
-        wrappedComponentRef={(c) => (this.component = c)}
-      />
-    );
-  }
+    render() {
+        return (
+            <MyComponent
+                wrappedComponentRef={(c) =>
+                    (this.component = c)
+                }
+            />
+        );
+    }
 }
 ```
 
@@ -1531,16 +1550,16 @@ class Container extends React.Component {
 ```js
 const context = {};
 const markup = ReactDOMServer.renderToString(
-  <StaticRouter location={req.url} context={context}>
-    <App />
-  </StaticRouter>
+    <StaticRouter location={req.url} context={context}>
+        <App />
+    </StaticRouter>
 );
 
 if (context.url) {
-  // где-то был отрендерен <Redirect>
-  redirect(301, context.url);
+    // где-то был отрендерен <Redirect>
+    redirect(301, context.url);
 } else {
-  // все в порядке, отправляем ответ
+    // все в порядке, отправляем ответ
 }
 ```
 
@@ -1550,47 +1569,48 @@ if (context.url) {
 
 ```js
 const RedirectWithStatus = ({ from, to, status }) => (
-  <Route
-    render={({ staticContext }) => {
-      // на клиенте отсутствует `staticContext`
-      // так что следует выполнить проверку
-      if (staticContext) staticContext.status = status;
+    <Route
+        render={({ staticContext }) => {
+            // на клиенте отсутствует `staticContext`
+            // так что следует выполнить проверку
+            if (staticContext)
+                staticContext.status = status;
 
-      return <Redirect from={from} to={to} />;
-    }}
-  />
+            return <Redirect from={from} to={to} />;
+        }}
+    />
 );
 
 // где-то в приложении
 const App = () => (
-  <Switch>
-    {/* другие маршруты */}
-    <RedirectWithStatus
-      status={301}
-      from="/users"
-      to="/profiles"
-    />
-    <RedirectWithStatus
-      status={302}
-      from="/courses"
-      to="/dashboard"
-    />
-  </Switch>
+    <Switch>
+        {/* другие маршруты */}
+        <RedirectWithStatus
+            status={301}
+            from="/users"
+            to="/profiles"
+        />
+        <RedirectWithStatus
+            status={302}
+            from="/courses"
+            to="/dashboard"
+        />
+    </Switch>
 );
 
 // на сервере
 const context = {};
 
 const markup = ReactDOMServer.renderToString(
-  <StaticRouter context={context}>
-    <App />
-  </StaticRouter>
+    <StaticRouter context={context}>
+        <App />
+    </StaticRouter>
 );
 
 if (context.url) {
-  // мы можем использовать `context.status`,
-  // который мы добавили в RedirectWithStatus
-  redirect(context.status, context.url);
+    // мы можем использовать `context.status`,
+    // который мы добавили в RedirectWithStatus
+    redirect(context.status, context.url);
 }
 ```
 
@@ -1600,12 +1620,13 @@ if (context.url) {
 
 ```js
 const Status = ({ code, children }) => (
-  <Route
-    render={({ staticContext }) => {
-      if (staticContext) staticContext.status = status;
-      return children;
-    }}
-  />
+    <Route
+        render={({ staticContext }) => {
+            if (staticContext)
+                staticContext.status = status;
+            return children;
+        }}
+    />
 );
 ```
 
@@ -1613,19 +1634,19 @@ const Status = ({ code, children }) => (
 
 ```js
 const NotFound = () => (
-  <Status code={404}>
-    <div>
-      <h1>Запрашиваемая страница отсутствует.</h1>
-    </div>
-  </Status>
+    <Status code={404}>
+        <div>
+            <h1>Запрашиваемая страница отсутствует.</h1>
+        </div>
+    </Status>
 );
 
 const App = () => (
-  <Switch>
-    <Route path="/about" component={About} />
-    <Route path="/dashboard" component={Dashboard} />
-    <Route component={NotFound} />
-  </Switch>
+    <Switch>
+        <Route path="/about" component={About} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route component={NotFound} />
+    </Switch>
 );
 ```
 
@@ -1691,11 +1712,11 @@ const App = () => (
 
 ```js
 const routes = [
-  {
-    path: '/',
-    component: Root,
-    loadData: () => getSomeData(),
-  },
+    {
+        path: '/',
+        component: Root,
+        loadData: () => getSomeData(),
+    },
 ];
 ```
 
@@ -1705,11 +1726,11 @@ const routes = [
 import { routes } from './routes.js';
 
 const App = () => (
-  <Switch>
-    {routes.map((route) => (
-      <Route {...route} />
-    ))}
-  </Switch>
+    <Switch>
+        {routes.map((route) => (
+            <Route {...route} />
+        ))}
+    </Switch>
 );
 ```
 
@@ -1723,15 +1744,15 @@ const promises = [];
 // используем `some` для имитации поведения `<Switch>` при выборе
 // первого совпадения
 routes.some((route) => {
-  // используем `matchPath`
-  const match = matchPath(req.path, route);
-  if (match) promises.push(route.loadData(match));
-  return match;
+    // используем `matchPath`
+    const match = matchPath(req.path, route);
+    if (match) promises.push(route.loadData(match));
+    return match;
 });
 
 Promise.all(promises).then((data) => {
-  // обрабатываем данные, чтобы клиент
-  // имел к ним доступ при рендеринге приложения
+    // обрабатываем данные, чтобы клиент
+    // имел к ним доступ при рендеринге приложения
 });
 ```
 
@@ -1757,10 +1778,10 @@ import loadable from '@loadable/component';
 import Loading from './Loading.js';
 
 export const LoadableComponent = loadable(
-  () => import('./Dashboard.js'),
-  {
-    fallback: <Loading />,
-  }
+    () => import('./Dashboard.js'),
+    {
+        fallback: <Loading />,
+    }
 );
 ```
 
@@ -1777,13 +1798,13 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export default function ScrollToTop() {
-  const { pathname } = useLocation();
+    const { pathname } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
 
-  return null;
+    return null;
 }
 ```
 
@@ -1791,10 +1812,10 @@ export default function ScrollToTop() {
 
 ```js
 const App = () => (
-  <Router>
-    <ScrollToTop />
-    <App />
-  </Router>
+    <Router>
+        <ScrollToTop />
+        <App />
+    </Router>
 );
 ```
 
@@ -1804,19 +1825,19 @@ const App = () => (
 import { useEffect } from 'react';
 
 function ScrollToTopOnMount() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 }
 
 // рендерим данный компонент где-либо в приложении с помощью:
 // <Route path="..." children={<LongContent />} />
 const LongContent = () => (
-  <div>
-    <ScrollToTopOnMount />
+    <div>
+        <ScrollToTopOnMount />
 
-    <h1>Страница с длинным контентом</h1>
-    <p>...</p>
-  </div>
+        <h1>Страница с длинным контентом</h1>
+        <p>...</p>
+    </div>
 );
 ```

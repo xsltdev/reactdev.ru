@@ -76,7 +76,7 @@ hide:
 
     Библиотеки менеджеров состояния
 
-    [:octicons-arrow-right-24: React Query](libs/react-query)
+    [:octicons-arrow-right-24: React Query](libs/react-query.md)
 
     [:octicons-arrow-right-24: XState](libs/xstate/index.md) <small>v4</small>
 
@@ -92,7 +92,9 @@ hide:
 
     Библиотеки организации маршрутизации
 
-    [:octicons-arrow-right-24: React Router](libs/react-router.md)
+    **[:octicons-arrow-right-24: React Router](libs/react-router.6/index.md)** <small>v6</small>
+
+    [:octicons-arrow-right-24: React Router](libs/react-router.md) <small>v5</small>
 
 -   :simple-stylelint:{ .lg .middle } **Стилизация**
 
