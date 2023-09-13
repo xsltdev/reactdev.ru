@@ -76,7 +76,7 @@ hide:
 
     Библиотеки менеджеров состояния
 
-    [:octicons-arrow-right-24: React Query](libs/react-query)
+    [:octicons-arrow-right-24: React Query](libs/react-query.md)
 
     [:octicons-arrow-right-24: XState](libs/xstate/index.md) <small>v4</small>
 
@@ -92,7 +92,9 @@ hide:
 
     Библиотеки организации маршрутизации
 
-    [:octicons-arrow-right-24: React Router](libs/react-router.md)
+    **[:octicons-arrow-right-24: React Router](libs/react-router.6/index.md)** <small>v6</small>
+
+    [:octicons-arrow-right-24: React Router](libs/react-router.md) <small>v5</small>
 
 -   :simple-stylelint:{ .lg .middle } **Стилизация**
 
@@ -122,6 +124,7 @@ hide:
     [![Typescript](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Typescript](https://scriptdev.ru/) &nbsp;&nbsp;&nbsp;
     [![Angular](angular.svg){: style="height:16px;width:16px;vertical-align:middle;"} Angular](https://angdev.ru/) &nbsp;&nbsp;&nbsp;
     **[![React](react.svg){: style="height:16px;width:16px;vertical-align:middle;"} React](https://reactdev.ru/)** &nbsp;&nbsp;&nbsp;
+    [![Solid](solid.svg){: style="height:16px;width:16px;vertical-align:middle;"} Solid](https://soliddev.ru/) &nbsp;&nbsp;&nbsp;
     [![React Native](rn.svg){: style="height:16px;width:16px;vertical-align:middle;"} React Native](https://reactnativedev.ru/) &nbsp;&nbsp;&nbsp;
     [![Node.js](nodejs.svg){: style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;
     [![Python 3](python.svg){: style="height:16px;width:16px;vertical-align:middle;"} Python 3](https://py3dev.ru/) &nbsp;&nbsp;&nbsp;
