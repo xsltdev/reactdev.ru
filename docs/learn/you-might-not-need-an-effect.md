@@ -1,3 +1,7 @@
+---
+description: Эффекты - это люк для выхода из парадигмы React. Они позволяют вам "выйти за пределы" React и синхронизировать ваши компоненты с какой-либо внешней системой, например, с не-React виджетом, сетью или DOM браузера
+---
+
 # Возможно, вам не нужен эффект
 
 Эффекты - это люк для выхода из парадигмы React. Они позволяют вам "выйти за пределы" React и синхронизировать ваши компоненты с какой-либо внешней системой, например, с не-React виджетом, сетью или DOM браузера. Если внешняя система не задействована (например, если вы хотите обновить состояние компонента при изменении некоторых пропсов или состояния), вам не нужен Эффект. Удаление ненужных Эффектов сделает ваш код проще для понимания, быстрее для выполнения и менее подверженным ошибкам.
@@ -1464,51 +1468,65 @@ function useData(url) {
 === "EditContact.js"
 
     ```js
-    import { useState } from 'react';
-    import ContactList from './ContactList.js';
-    import EditContact from './EditContact.js';
+    import { useState, useEffect } from 'react';
 
-    export default function ContactManager() {
-    	const [contacts, setContacts] = useState(
-    		initialContacts
-    	);
-    	const [selectedId, setSelectedId] = useState(0);
-    	const selectedContact = contacts.find(
-    		(c) => c.id === selectedId
-    	);
+    export default function EditContact({
+    	savedContact,
+    	onSave,
+    }) {
+    	const [name, setName] = useState(savedContact.name);
+    	const [email, setEmail] = useState(savedContact.email);
 
-    	function handleSave(updatedData) {
-    		const nextContacts = contacts.map((c) => {
-    			if (c.id === updatedData.id) {
-    				return updatedData;
-    			} else {
-    				return c;
-    			}
-    		});
-    		setContacts(nextContacts);
-    	}
+    	useEffect(() => {
+    		setName(savedContact.name);
+    		setEmail(savedContact.email);
+    	}, [savedContact]);
 
     	return (
-    		<div>
-    			<ContactList
-    				contacts={contacts}
-    				selectedId={selectedId}
-    				onSelect={(id) => setSelectedId(id)}
-    			/>
-    			<hr />
-    			<EditContact
-    				savedContact={selectedContact}
-    				onSave={handleSave}
-    			/>
-    		</div>
+    		<section>
+    			<label>
+    				Name:{' '}
+    				<input
+    					type="text"
+    					value={name}
+    					onChange={(e) =>
+    						setName(e.target.value)
+    					}
+    				/>
+    			</label>
+    			<label>
+    				Email:{' '}
+    				<input
+    					type="email"
+    					value={email}
+    					onChange={(e) =>
+    						setEmail(e.target.value)
+    					}
+    				/>
+    			</label>
+    			<button
+    				onClick={() => {
+    					const updatedData = {
+    						id: savedContact.id,
+    						name: name,
+    						email: email,
+    					};
+    					onSave(updatedData);
+    				}}
+    			>
+    				Save
+    			</button>
+    			<button
+    				onClick={() => {
+    					setName(savedContact.name);
+    					setEmail(savedContact.email);
+    				}}
+    			>
+    				Reset
+    			</button>
+    		</section>
     	);
     }
-
-    const initialContacts = [
-    	{ id: 0, name: 'Taylor', email: 'taylor@mail.com' },
-    	{ id: 1, name: 'Alice', email: 'alice@mail.com' },
-    	{ id: 2, name: 'Bob', email: 'bob@mail.com' },
-    ];
     ```
 
 === "Результат"
@@ -1527,50 +1545,62 @@ function useData(url) {
 
     	```js
     	import { useState } from 'react';
-    	import ContactList from './ContactList.js';
-    	import EditContact from './EditContact.js';
 
-    	export default function ContactManager() {
-    		const [contacts, setContacts] = useState(
-    			initialContacts
-    		);
-    		const [selectedId, setSelectedId] = useState(0);
-    		const selectedContact = contacts.find(
-    			(c) => c.id === selectedId
-    		);
-
-    		function handleSave(updatedData) {
-    			const nextContacts = contacts.map((c) => {
-    				if (c.id === updatedData.id) {
-    					return updatedData;
-    				} else {
-    					return c;
-    				}
-    			});
-    			setContacts(nextContacts);
-    		}
-
+    	export default function EditContact(props) {
     		return (
-    			<div>
-    				<ContactList
-    					contacts={contacts}
-    					selectedId={selectedId}
-    					onSelect={(id) => setSelectedId(id)}
-    				/>
-    				<hr />
-    				<EditContact
-    					savedContact={selectedContact}
-    					onSave={handleSave}
-    				/>
-    			</div>
+    			<EditForm {...props} key={props.savedContact.id} />
     		);
     	}
 
-    	const initialContacts = [
-    		{ id: 0, name: 'Taylor', email: 'taylor@mail.com' },
-    		{ id: 1, name: 'Alice', email: 'alice@mail.com' },
-    		{ id: 2, name: 'Bob', email: 'bob@mail.com' },
-    	];
+    	function EditForm({ savedContact, onSave }) {
+    		const [name, setName] = useState(savedContact.name);
+    		const [email, setEmail] = useState(savedContact.email);
+
+    		return (
+    			<section>
+    				<label>
+    					Name:{' '}
+    					<input
+    						type="text"
+    						value={name}
+    						onChange={(e) =>
+    							setName(e.target.value)
+    						}
+    					/>
+    				</label>
+    				<label>
+    					Email:{' '}
+    					<input
+    						type="email"
+    						value={email}
+    						onChange={(e) =>
+    							setEmail(e.target.value)
+    						}
+    					/>
+    				</label>
+    				<button
+    					onClick={() => {
+    						const updatedData = {
+    							id: savedContact.id,
+    							name: name,
+    							email: email,
+    						};
+    						onSave(updatedData);
+    					}}
+    				>
+    					Save
+    				</button>
+    				<button
+    					onClick={() => {
+    						setName(savedContact.name);
+    						setEmail(savedContact.email);
+    					}}
+    				>
+    					Reset
+    				</button>
+    			</section>
+    		);
+    	}
     	```
 
     === "Результат"
