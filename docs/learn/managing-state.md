@@ -716,7 +716,7 @@ React позволяет отменить поведение по умолчан
     }
     ```
 
-=== "LevelContext.js"
+=== "Section.js"
 
     ```js
     import { useContext } from 'react';
@@ -765,7 +765,7 @@ React позволяет отменить поведение по умолчан
     }
     ```
 
-=== "Section.js"
+=== "LevelContext.js"
 
     ```js
     import { createContext } from 'react';
