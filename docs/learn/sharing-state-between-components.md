@@ -570,8 +570,6 @@ const [activeIndex, setActiveIndex] = useState(0);
     	}
     	```
 
-    	</div>
-
     === "data.js"
 
     	```js
