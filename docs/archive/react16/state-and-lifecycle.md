@@ -6,15 +6,20 @@
 
 ```js
 function tick() {
-  const element = (
-    <div>
-      <h1>Привет, мир!</h1>
-      <h2>Сейчас {new Date().toLocaleTimeString()}.</h2>
-    </div>
-  )
-  ReactDOM.render(element, document.getElementById('root'))
+    const element = (
+        <div>
+            <h1>Привет, мир!</h1>
+            <h2>
+                Сейчас {new Date().toLocaleTimeString()}.
+            </h2>
+        </div>
+    );
+    ReactDOM.render(
+        element,
+        document.getElementById('root')
+    );
 }
-setInterval(tick, 1000)
+setInterval(tick, 1000);
 ```
 
 [**Посмотреть на CodePen**](https://codepen.io/gaearon/pen/gwoJZk?editors=0010)
@@ -25,20 +30,22 @@ setInterval(tick, 1000)
 
 ```js
 function Clock(props) {
-  return (
-    <div>
-      <h1>Привет, мир!</h1>
-      <h2>Сейчас {props.date.toLocaleTimeString()}.</h2>
-    </div>
-  )
+    return (
+        <div>
+            <h1>Привет, мир!</h1>
+            <h2>
+                Сейчас {props.date.toLocaleTimeString()}.
+            </h2>
+        </div>
+    );
 }
 function tick() {
-  ReactDOM.render(
-    <Clock date={new Date()} />,
-    document.getElementById('root')
-  )
+    ReactDOM.render(
+        <Clock date={new Date()} />,
+        document.getElementById('root')
+    );
 }
-setInterval(tick, 1000)
+setInterval(tick, 1000);
 ```
 
 [**Посмотреть на CodePen**](https://codepen.io/gaearon/pen/dpdoYR?editors=0010)
@@ -48,12 +55,12 @@ setInterval(tick, 1000)
 В идеале мы бы хотели реализовать `Clock` таким образом, чтобы компонент сам себя обновлял:
 
 ```js
-ReactDOM.render(<Clock />, document.getElementById('root'))
+ReactDOM.render(<Clock />, document.getElementById('root'));
 ```
 
 Для этого добавим так называемое «состояние» (state) в компонент `Clock`.
 
-«Состояние» очень похоже на уже знакомые нам пропсы, отличие в том, что состояние контролируется и доступно только конкретному компоненту.
+«Состояние» очень похоже на уже знакомые нам пропсы, отличие в том, что состояние управляется и доступно только конкретному компоненту.
 
 ## Преобразование функционального компонента в классовый {#converting-a-function-to-a-class}
 
@@ -71,16 +78,17 @@ ReactDOM.render(<Clock />, document.getElementById('root'))
 
 ```js
 class Clock extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1>Привет, мир!</h1>
-        <h2>
-          Сейчас {this.props.date.toLocaleTimeString()}.
-        </h2>
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div>
+                <h1>Привет, мир!</h1>
+                <h2>
+                    Сейчас{' '}
+                    {this.props.date.toLocaleTimeString()}.
+                </h2>
+            </div>
+        );
+    }
 }
 ```
 
@@ -98,16 +106,17 @@ class Clock extends React.Component {
 
 ```js
 class Clock extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1>Привет, мир!</h1>
-        <h2>
-          Сейчас {this.state.date.toLocaleTimeString()}.
-        </h2>
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div>
+                <h1>Привет, мир!</h1>
+                <h2>
+                    Сейчас{' '}
+                    {this.state.date.toLocaleTimeString()}.
+                </h2>
+            </div>
+        );
+    }
 }
 ```
 
@@ -115,20 +124,21 @@ class Clock extends React.Component {
 
 ```js
 class Clock extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { date: new Date() }
-  }
-  render() {
-    return (
-      <div>
-        <h1>Привет, мир!</h1>
-        <h2>
-          Сейчас {this.state.date.toLocaleTimeString()}.
-        </h2>
-      </div>
-    )
-  }
+    constructor(props) {
+        super(props);
+        this.state = { date: new Date() };
+    }
+    render() {
+        return (
+            <div>
+                <h1>Привет, мир!</h1>
+                <h2>
+                    Сейчас{' '}
+                    {this.state.date.toLocaleTimeString()}.
+                </h2>
+            </div>
+        );
+    }
 }
 ```
 
@@ -146,7 +156,7 @@ class Clock extends React.Component {
 3.&nbsp;Удалим проп `date` из элемента `<Clock />`:
 
 ```js
-ReactDOM.render(<Clock />, document.getElementById('root'))
+ReactDOM.render(<Clock />, document.getElementById('root'));
 ```
 
 Позже мы вернём код таймера обратно и на этот раз поместим его в сам компонент.
@@ -155,22 +165,23 @@ ReactDOM.render(<Clock />, document.getElementById('root'))
 
 ```js
 class Clock extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { date: new Date() }
-  }
-  render() {
-    return (
-      <div>
-        <h1>Привет, мир!</h1>
-        <h2>
-          Сейчас {this.state.date.toLocaleTimeString()}.
-        </h2>
-      </div>
-    )
-  }
+    constructor(props) {
+        super(props);
+        this.state = { date: new Date() };
+    }
+    render() {
+        return (
+            <div>
+                <h1>Привет, мир!</h1>
+                <h2>
+                    Сейчас{' '}
+                    {this.state.date.toLocaleTimeString()}.
+                </h2>
+            </div>
+        );
+    }
 }
-ReactDOM.render(<Clock />, document.getElementById('root'))
+ReactDOM.render(<Clock />, document.getElementById('root'));
 ```
 
 [**Посмотреть на CodePen**](https://codepen.io/gaearon/pen/KgQpJd?editors=0010)
@@ -189,22 +200,23 @@ ReactDOM.render(<Clock />, document.getElementById('root'))
 
 ```js
 class Clock extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { date: new Date() }
-  }
-  componentDidMount() {}
-  componentWillUnmount() {}
-  render() {
-    return (
-      <div>
-        <h1>Привет, мир!</h1>
-        <h2>
-          Сейчас {this.state.date.toLocaleTimeString()}.
-        </h2>
-      </div>
-    )
-  }
+    constructor(props) {
+        super(props);
+        this.state = { date: new Date() };
+    }
+    componentDidMount() {}
+    componentWillUnmount() {}
+    render() {
+        return (
+            <div>
+                <h1>Привет, мир!</h1>
+                <h2>
+                    Сейчас{' '}
+                    {this.state.date.toLocaleTimeString()}.
+                </h2>
+            </div>
+        );
+    }
 }
 ```
 
@@ -239,33 +251,34 @@ class Clock extends React.Component {
 
 ```js
 class Clock extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { date: new Date() }
-  }
-  componentDidMount() {
-    this.timerID = setInterval(() => this.tick(), 1000)
-  }
-  componentWillUnmount() {
-    clearInterval(this.timerID)
-  }
-  tick() {
-    this.setState({
-      date: new Date(),
-    })
-  }
-  render() {
-    return (
-      <div>
-        <h1>Привет, мир!</h1>
-        <h2>
-          Сейчас {this.state.date.toLocaleTimeString()}.
-        </h2>
-      </div>
-    )
-  }
+    constructor(props) {
+        super(props);
+        this.state = { date: new Date() };
+    }
+    componentDidMount() {
+        this.timerID = setInterval(() => this.tick(), 1000);
+    }
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+    tick() {
+        this.setState({
+            date: new Date(),
+        });
+    }
+    render() {
+        return (
+            <div>
+                <h1>Привет, мир!</h1>
+                <h2>
+                    Сейчас{' '}
+                    {this.state.date.toLocaleTimeString()}.
+                </h2>
+            </div>
+        );
+    }
 }
-ReactDOM.render(<Clock />, document.getElementById('root'))
+ReactDOM.render(<Clock />, document.getElementById('root'));
 ```
 
 [**Посмотреть на CodePen**](https://codepen.io/gaearon/pen/amqdNA?editors=0010)
@@ -294,14 +307,14 @@ ReactDOM.render(<Clock />, document.getElementById('root'))
 
 ```js
 // Неправильно
-this.state.comment = 'Привет'
+this.state.comment = 'Привет';
 ```
 
 Вместо этого используйте `setState()`:
 
 ```js
 // Правильно
-this.setState({ comment: 'Привет' })
+this.setState({ comment: 'Привет' });
 ```
 
 Конструктор — это единственное место, где вы можете присвоить значение `this.state` напрямую.
@@ -317,8 +330,8 @@ React может сгруппировать несколько вызовов `s
 ```js
 // Неправильно
 this.setState({
-  counter: this.state.counter + this.props.increment,
-})
+    counter: this.state.counter + this.props.increment,
+});
 ```
 
 Правильно будет использовать второй вариант вызова `setState()`, который принимает функцию, а не объект. Эта функция получит предыдущее состояние в качестве первого аргумента и значения пропсов непосредственно во время обновления в качестве второго аргумента:
@@ -326,8 +339,8 @@ this.setState({
 ```js
 // Правильно
 this.setState((state, props) => ({
-  counter: state.counter + props.increment,
-}))
+    counter: state.counter + props.increment,
+}));
 ```
 
 В данном примере мы использовали [стрелочную функцию](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Functions/Arrow_functions), но можно использовать и обычные функции:
@@ -335,10 +348,10 @@ this.setState((state, props) => ({
 ```js
 // Правильно
 this.setState(function (state, props) {
-  return {
-    counter: state.counter + props.increment,
-  }
-})
+    return {
+        counter: state.counter + props.increment,
+    };
+});
 ```
 
 ### Обновления состояния объединяются {#state-updates-are-merged}
@@ -399,7 +412,9 @@ this.setState(function (state, props) {
 
 ```js
 function FormattedDate(props) {
-  return <h2>Сейчас {props.date.toLocaleTimeString()}.</h2>
+    return (
+        <h2>Сейчас {props.date.toLocaleTimeString()}.</h2>
+    );
 }
 ```
 
@@ -413,16 +428,16 @@ function FormattedDate(props) {
 
 ```js
 function App() {
-  return (
-    <div>
-      <Clock />
-      <Clock />
-      <Clock />
-    </div>
-  )
+    return (
+        <div>
+            <Clock />
+            <Clock />
+            <Clock />
+        </div>
+    );
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 [**Посмотреть на CodePen**](https://codepen.io/gaearon/pen/vXdGmd?editors=0010)

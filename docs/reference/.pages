@@ -18,7 +18,13 @@ nav:
             - lazy.md
             - memo.md
             - startTransition.md
+        - Директивы:
+            - use-client.md
+            #- use-server.md
     - react-dom:
+        #- Хуки:
+            #- useFormState.md
+            #- useFormStatus.md
         - Компоненты:
             - Обзор компонент: components-react-dom.md
             - components-common.md
