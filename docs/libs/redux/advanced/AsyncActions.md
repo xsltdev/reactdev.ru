@@ -398,7 +398,7 @@ export function fetchPosts(subreddit) {
 
 !!!note "Примечание по `fetch`"
 
-    Мы используем [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) в примерах. Это новое API для создания тевых запросов, которое заменяет `XMLHttpRequest` в большинстве стандартных случаев. Поскольку большинство браузеров до сих р не поддерживают его нативно, мы полагаем, что вы для этого используете библиотеку [`cross-fetch`](https://github.com/lquixada/cross-fetch):
+    Мы используем [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) в примерах. Это новое API для создания сетевых запросов, которое заменяет `XMLHttpRequest` в большинстве стандартных случаев. Поскольку большинство браузеров до сих пор не поддерживают его нативно, мы полагаем, что вы для этого используете библиотеку [`cross-fetch`](https://github.com/lquixada/cross-fetch):
 
     ```js
     // Добавьте это в каждый файл, где вы используете `fetch`
@@ -409,10 +409,10 @@ export function fetchPosts(subreddit) {
 
     Помните, что любой полифил `fetch` предполагает, что полифил [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) уже присутствует. Самый простой способ убедиться, что вы подключили Promise-полифил — это подключить ES6-полифил Babel во входной точке, прежде чем любой другой код запустится:
 
-```js
-// Добавьте это в самом начале вашего приложения
-import 'babel-core/polyfill';
-```
+	```js
+	// Добавьте это в самом начале вашего приложения
+	import 'babel-core/polyfill';
+	```
 
 Как мы добавляем мидлвар Redux Thunk в механизм диспетчера? Для этого мы используем метод [`applyMiddleware()`](../api/applyMiddleware.md) из Redux, как показано ниже:
 
