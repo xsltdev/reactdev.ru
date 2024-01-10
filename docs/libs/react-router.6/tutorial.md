@@ -63,26 +63,26 @@ VITE v3.0.7  ready in 175 ms
 
 👉 **Создание и рендеринг [браузерного маршрутизатора][createbrowserrouter] в `main.jsx`**
 
-```js
-import * as React from 'react';
-import * as ReactDOM from 'react-dom/client';
+```jsx title="src/main.jsx" hl_lines="3-6 9-14 18"
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
 import {
-    createBrowserRouter,
-    RouterProvider,
-} from 'react-router-dom';
-import './index.css';
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import "./index.css";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <div>Hello world!</div>,
-    },
+  {
+    path: "/",
+    element: <div>Hello world!</div>,
+  },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
 ```
 
@@ -103,53 +103,49 @@ touch src/routes/root.jsx
 
 👉 **Создание корневого компонента макета**
 
-```js
+```jsx title="src/routes/root.jsx"
 export default function Root() {
-    return (
-        <>
-            <div id="sidebar">
-                <h1>React Router Contacts</h1>
-                <div>
-                    <form id="search-form" role="search">
-                        <input
-                            id="q"
-                            aria-label="Search contacts"
-                            placeholder="Search"
-                            type="search"
-                            name="q"
-                        />
-                        <div
-                            id="search-spinner"
-                            aria-hidden
-                            hidden={true}
-                        />
-                        <div
-                            className="sr-only"
-                            aria-live="polite"
-                        ></div>
-                    </form>
-                    <form method="post">
-                        <button type="submit">New</button>
-                    </form>
-                </div>
-                <nav>
-                    <ul>
-                        <li>
-                            <a href={`/contacts/1`}>
-                                Your Name
-                            </a>
-                        </li>
-                        <li>
-                            <a href={`/contacts/2`}>
-                                Your Friend
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div id="detail"></div>
-        </>
-    );
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        <div>
+          <form id="search-form" role="search">
+            <input
+              id="q"
+              aria-label="Search contacts"
+              placeholder="Search"
+              type="search"
+              name="q"
+            />
+            <div
+              id="search-spinner"
+              aria-hidden
+              hidden={true}
+            />
+            <div
+              className="sr-only"
+              aria-live="polite"
+            ></div>
+          </form>
+          <form method="post">
+            <button type="submit">New</button>
+          </form>
+        </div>
+        <nav>
+          <ul>
+            <li>
+              <a href={`/contacts/1`}>Your Name</a>
+            </li>
+            <li>
+              <a href={`/contacts/2`}>Your Friend</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div id="detail"></div>
+    </>
+  );
 }
 ```
 
@@ -157,21 +153,21 @@ export default function Root() {
 
 👉 **Установите `<Root>` в качестве [`element`](https://reactrouter.com/en/main/route/route#element)** корневого маршрута.
 
-```js
+```jsx title="src/main.jsx" hl_lines="2 7"
 /* existing imports */
-import Root from './routes/root';
+import Root from "./routes/root";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-    },
+  {
+    path: "/",
+    element: <Root />,
+  },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
 ```
 
@@ -201,42 +197,43 @@ touch src/error-page.jsx
 
 ---
 
-```js
-import { useRouteError } from 'react-router-dom';
-export default function ErrorPage() {
-    const error = useRouteError();
-    console.error(error);
+```jsx title="src/error-page.jsx"
+import { useRouteError } from "react-router-dom";
 
-    return (
-        <div id="error-page">
-            <h1>Oops!</h1>
-            <p>Sorry, an unexpected error has occurred.</p>
-            <p>
-                <i>{error.statusText || error.message}</i>
-            </p>
-        </div>
-    );
+export default function ErrorPage() {
+  const error = useRouteError();
+  console.error(error);
+
+  return (
+    <div id="error-page">
+      <h1>Oops!</h1>
+      <p>Sorry, an unexpected error has occurred.</p>
+      <p>
+        <i>{error.statusText || error.message}</i>
+      </p>
+    </div>
+  );
 }
 ```
 
 👉 **Установите `<ErrorPage>` в качестве [`errorElement`][errorelement] на корневом маршруте**.
 
-```js
+```jsx title="src/main.jsx" hl_lines="2 8"
 /* previous imports */
-import ErrorPage from './error-page';
+import ErrorPage from "./error-page";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
 ```
 
@@ -264,97 +261,96 @@ touch src/routes/contact.jsx
 
 Это просто набор элементов, не стесняйтесь копировать/вставлять.
 
-```js
-import { Form } from 'react-router-dom';
+```jsx title="src/routes/contact.jsx"
+import { Form } from "react-router-dom";
+
 export default function Contact() {
-    const contact = {
-        first: 'Your',
-        last: 'Name',
-        avatar: 'https://placekitten.com/g/200/200',
-        twitter: 'your_handle',
-        notes: 'Some notes',
-        favorite: true,
-    };
+  const contact = {
+    first: "Your",
+    last: "Name",
+    avatar: "https://placekitten.com/g/200/200",
+    twitter: "your_handle",
+    notes: "Some notes",
+    favorite: true,
+  };
 
-    return (
-        <div id="contact">
-            <div>
-                <img
-                    key={contact.avatar}
-                    src={contact.avatar || null}
-                />
-            </div>
+  return (
+    <div id="contact">
+      <div>
+        <img
+          key={contact.avatar}
+          src={contact.avatar || null}
+        />
+      </div>
 
-            <div>
-                <h1>
-                    {contact.first || contact.last ? (
-                        <>
-                            {contact.first} {contact.last}
-                        </>
-                    ) : (
-                        <i>No Name</i>
-                    )}{' '}
-                    <Favorite contact={contact} />
-                </h1>
+      <div>
+        <h1>
+          {contact.first || contact.last ? (
+            <>
+              {contact.first} {contact.last}
+            </>
+          ) : (
+            <i>No Name</i>
+          )}{" "}
+          <Favorite contact={contact} />
+        </h1>
 
-                {contact.twitter && (
-                    <p>
-                        <a
-                            target="_blank"
-                            href={`https://twitter.com/${contact.twitter}`}
-                        >
-                            {contact.twitter}
-                        </a>
-                    </p>
-                )}
+        {contact.twitter && (
+          <p>
+            <a
+              target="_blank"
+              href={`https://twitter.com/${contact.twitter}`}
+            >
+              {contact.twitter}
+            </a>
+          </p>
+        )}
 
-                {contact.notes && <p>{contact.notes}</p>}
+        {contact.notes && <p>{contact.notes}</p>}
 
-                <div>
-                    <Form action="edit">
-                        <button type="submit">Edit</button>
-                    </Form>
-                    <Form
-                        method="post"
-                        action="destroy"
-                        onSubmit={(event) => {
-                            if (
-                                !confirm(
-                                    'Please confirm you want to delete this record.'
-                                )
-                            ) {
-                                event.preventDefault();
-                            }
-                        }}
-                    >
-                        <button type="submit">
-                            Delete
-                        </button>
-                    </Form>
-                </div>
-            </div>
+        <div>
+          <Form action="edit">
+            <button type="submit">Edit</button>
+          </Form>
+          <Form
+            method="post"
+            action="destroy"
+            onSubmit={(event) => {
+              if (
+                !confirm(
+                  "Please confirm you want to delete this record."
+                )
+              ) {
+                event.preventDefault();
+              }
+            }}
+          >
+            <button type="submit">Delete</button>
+          </Form>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 function Favorite({ contact }) {
-    // yes, this is a `let` for later
-    let favorite = contact.favorite;
-    return (
-        <Form method="post">
-            <button
-                name="favorite"
-                value={favorite ? 'false' : 'true'}
-                aria-label={
-                    favorite
-                        ? 'Remove from favorites'
-                        : 'Add to favorites'
-                }
-            >
-                {favorite ? '★' : '☆'}
-            </button>
-        </Form>
-    );
+  // yes, this is a `let` for later
+  let favorite = contact.favorite;
+  return (
+    <Form method="post">
+      <button
+        name="favorite"
+        value={favorite ? "false" : "true"}
+        aria-label={
+          favorite
+            ? "Remove from favorites"
+            : "Add to favorites"
+        }
+      >
+        {favorite ? "★" : "☆"}
+      </button>
+    </Form>
+  );
 }
 ```
 
@@ -362,20 +358,20 @@ function Favorite({ contact }) {
 
 👉 **Импортируем компонент contact и создаем новый маршрут**
 
-```js
+```jsx title="src/main.jsx" hl_lines="2 10-13"
 /* existing imports */
-import Contact from './routes/contact';
+import Contact from "./routes/contact";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: 'contacts/:contactId',
-        element: <Contact />,
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "contacts/:contactId",
+    element: <Contact />,
+  },
 ]);
 
 /* existing code */
@@ -397,19 +393,19 @@ const router = createBrowserRouter([
 
 👉 **Переместить маршрут контактов в дочернее состояние корневого маршрута**
 
-```js
+```jsx title="src/main.jsx" hl_lines="6-11"
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                path: 'contacts/:contactId',
-                element: <Contact />,
-            },
-        ],
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+      },
+    ],
+  },
 ]);
 ```
 
@@ -419,17 +415,18 @@ const router = createBrowserRouter([
 
 👉 **Рендеринг [`<Outlet>`][outlet]**.
 
-```js
-import { Outlet } from 'react-router-dom';
+```jsx title="src/routes/root.jsx" hl_lines="1 8"
+import { Outlet } from "react-router-dom";
+
 export default function Root() {
-    return (
-        <>
-            {/* all the other elements */}
-            <div id="detail">
-                <Outlet />
-            </div>
-        </>
-    );
+  return (
+    <>
+      {/* all the other elements */}
+      <div id="detail">
+        <Outlet />
+      </div>
+    </>
+  );
 }
 ```
 
@@ -441,33 +438,30 @@ export default function Root() {
 
 👉 **Изменим боковую панель `<a href>` на `<Link to>`**
 
-```js
-import { Outlet, Link } from 'react-router-dom';
+```jsx title="src/routes/root.jsx" hl_lines="1 12 15"
+import { Outlet, Link } from "react-router-dom";
+
 export default function Root() {
-    return (
-        <>
-            <div id="sidebar">
-                {/* other elements */}
+  return (
+    <>
+      <div id="sidebar">
+        {/* other elements */}
 
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to={`contacts/1`}>
-                                Your Name
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to={`contacts/2`}>
-                                Your Friend
-                            </Link>
-                        </li>
-                    </ul>
-                </nav>
+        <nav>
+          <ul>
+            <li>
+              <Link to={`contacts/1`}>Your Name</Link>
+            </li>
+            <li>
+              <Link to={`contacts/2`}>Your Friend</Link>
+            </li>
+          </ul>
+        </nav>
 
-                {/* other elements */}
-            </div>
-        </>
-    );
+        {/* other elements */}
+      </div>
+    </>
+  );
 }
 ```
 
@@ -488,97 +482,87 @@ export default function Root() {
 
 👉 **Экспорт загрузчика из `root.jsx`**
 
-```js
-import { Outlet, Link } from 'react-router-dom';
-import { getContacts } from '../contacts';
+```jsx title="src/routes/root.jsx" hl_lines="2 4-7"
+import { Outlet, Link } from "react-router-dom";
+import { getContacts } from "../contacts";
 
 export async function loader() {
-    const contacts = await getContacts();
-    return { contacts };
+  const contacts = await getContacts();
+  return { contacts };
 }
 ```
 
 👉 **Настройка загрузчика на маршруте**.
 
-```js
+```jsx title="src/main.jsx" hl_lines="2 9"
 /* other imports */
-import Root, { loader as rootLoader } from './routes/root';
+import Root, { loader as rootLoader } from "./routes/root";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-        loader: rootLoader,
-        children: [
-            {
-                path: 'contacts/:contactId',
-                element: <Contact />,
-            },
-        ],
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+      },
+    ],
+  },
 ]);
 ```
 
 👉 **Доступ к данным и их визуализация**.
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="4 11 19-40"
 import {
-    Outlet,
-    Link,
-    useLoaderData,
-} from 'react-router-dom';
-import { getContacts } from '../contacts';
+  Outlet,
+  Link,
+  useLoaderData,
+} from "react-router-dom";
+import { getContacts } from "../contacts";
 
 /* other code */
 
 export default function Root() {
-    const { contacts } = useLoaderData();
-    return (
-        <>
-            <div id="sidebar">
-                <h1>React Router Contacts</h1>
-                {/* other code */}
+  const { contacts } = useLoaderData();
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        {/* other code */}
 
-                <nav>
-                    {contacts.length ? (
-                        <ul>
-                            {contacts.map((contact) => (
-                                <li key={contact.id}>
-                                    <Link
-                                        to={`contacts/${contact.id}`}
-                                    >
-                                        {contact.first ||
-                                        contact.last ? (
-                                            <>
-                                                {
-                                                    contact.first
-                                                }{' '}
-                                                {
-                                                    contact.last
-                                                }
-                                            </>
-                                        ) : (
-                                            <i>No Name</i>
-                                        )}{' '}
-                                        {contact.favorite && (
-                                            <span>★</span>
-                                        )}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+        <nav>
+          {contacts.length ? (
+            <ul>
+              {contacts.map((contact) => (
+                <li key={contact.id}>
+                  <Link to={`contacts/${contact.id}`}>
+                    {contact.first || contact.last ? (
+                      <>
+                        {contact.first} {contact.last}
+                      </>
                     ) : (
-                        <p>
-                            <i>No contacts</i>
-                        </p>
-                    )}
-                </nav>
+                      <i>No Name</i>
+                    )}{" "}
+                    {contact.favorite && <span>★</span>}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              <i>No contacts</i>
+            </p>
+          )}
+        </nav>
 
-                {/* other code */}
-            </div>
-        </>
-    );
+        {/* other code */}
+      </div>
+    </>
+  );
 }
 ```
 
@@ -608,65 +592,66 @@ React Router эмулирует навигацию по HTML-формам как
 
 👉 **Создайте действие и измените `<form>` на `<Form>`**.
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="5 7 9-12 24-26"
 import {
-    Outlet,
-    Link,
-    useLoaderData,
-    Form,
-} from 'react-router-dom';
-import { getContacts, createContact } from '../contacts';
+  Outlet,
+  Link,
+  useLoaderData,
+  Form,
+} from "react-router-dom";
+import { getContacts, createContact } from "../contacts";
 
 export async function action() {
-    const contact = await createContact();
-    return { contact };
+  const contact = await createContact();
+  return { contact };
 }
 
 /* other code */
 
 export default function Root() {
-    const { contacts } = useLoaderData();
-    return (
-        <>
-            <div id="sidebar">
-                <h1>React Router Contacts</h1>
-                <div>
-                    {/* other code */}
-                    <Form method="post">
-                        <button type="submit">New</button>
-                    </Form>
-                </div>
+  const { contacts } = useLoaderData();
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        <div>
+          {/* other code */}
+          <Form method="post">
+            <button type="submit">New</button>
+          </Form>
+        </div>
 
-                {/* other code */}
-            </div>
-        </>
-    );
+        {/* other code */}
+      </div>
+    </>
+  );
 }
 ```
 
 👉 **Импорт и установка действия на маршруте**.
 
-```js
+```jsx title="src/main.jsx" hl_lines="5 14"
 /* other imports */
+
 import Root, {
-    loader as rootLoader,
-    action as rootAction,
-} from './routes/root';
+  loader as rootLoader,
+  action as rootAction,
+} from "./routes/root";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-        loader: rootLoader,
-        action: rootAction,
-        children: [
-            {
-                path: 'contacts/:contactId',
-                element: <Contact />,
-            },
-        ],
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+      },
+    ],
+  },
 ]);
 ```
 
@@ -690,7 +675,7 @@ const router = createBrowserRouter([
 
 Если просмотреть конфигурацию маршрута, то он выглядит следующим образом:
 
-```js
+```jsx
 [
     {
         path: 'contacts/:contactId',
@@ -707,44 +692,44 @@ const router = createBrowserRouter([
 
 👉 **Добавляем загрузчик на страницу контактов и получаем доступ к данным с помощью `useLoaderData`**
 
-```js
-import { Form, useLoaderData } from 'react-router-dom';
-import { getContact } from '../contacts';
+```jsx title="src/routes/contact.jsx" hl_lines="1-2 4-6 10"
+import { Form, useLoaderData } from "react-router-dom";
+import { getContact } from "../contacts";
 
 export async function loader({ params }) {
-    const contact = await getContact(params.contactId);
-    return { contact };
+  const contact = await getContact(params.contactId);
+  return { contact };
 }
 
 export default function Contact() {
-    const { contact } = useLoaderData();
-    // existing code
+  const { contact } = useLoaderData();
+  // existing code
 }
 ```
 
 👉 **Настройка загрузчика на маршруте**.
 
-```js
+```jsx title="src/main.jsx" hl_lines="3 17"
 /* existing code */
 import Contact, {
-    loader as contactLoader,
-} from './routes/contact';
+  loader as contactLoader,
+} from "./routes/contact";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-        loader: rootLoader,
-        action: rootAction,
-        children: [
-            {
-                path: 'contacts/:contactId',
-                element: <Contact />,
-                loader: contactLoader,
-            },
-        ],
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+        loader: contactLoader,
+      },
+    ],
+  },
 ]);
 
 /* existing code */
@@ -758,100 +743,101 @@ const router = createBrowserRouter([
 
 👉 **Создаем компонент edit**
 
-```touch
-src/routes/edit.jsx
+```sh
+touch src/routes/edit.jsx
 ```
 
 👉 **Добавить пользовательский интерфейс страницы редактирования**
 
 Ничего такого, чего бы мы не видели раньше, не стесняйтесь копировать/вставлять:
 
-```js
-import { Form, useLoaderData } from 'react-router-dom';
-export default function EditContact() {
-    const { contact } = useLoaderData();
+```jsx title="src/routes/edit.jsx"
+import { Form, useLoaderData } from "react-router-dom";
 
-    return (
-        <Form method="post" id="contact-form">
-            <p>
-                <span>Name</span>
-                <input
-                    placeholder="First"
-                    aria-label="First name"
-                    type="text"
-                    name="first"
-                    defaultValue={contact.first}
-                />
-                <input
-                    placeholder="Last"
-                    aria-label="Last name"
-                    type="text"
-                    name="last"
-                    defaultValue={contact.last}
-                />
-            </p>
-            <label>
-                <span>Twitter</span>
-                <input
-                    type="text"
-                    name="twitter"
-                    placeholder="@jack"
-                    defaultValue={contact.twitter}
-                />
-            </label>
-            <label>
-                <span>Avatar URL</span>
-                <input
-                    placeholder="https://example.com/avatar.jpg"
-                    aria-label="Avatar URL"
-                    type="text"
-                    name="avatar"
-                    defaultValue={contact.avatar}
-                />
-            </label>
-            <label>
-                <span>Notes</span>
-                <textarea
-                    name="notes"
-                    defaultValue={contact.notes}
-                    rows={6}
-                />
-            </label>
-            <p>
-                <button type="submit">Save</button>
-                <button type="button">Cancel</button>
-            </p>
-        </Form>
-    );
+export default function EditContact() {
+  const { contact } = useLoaderData();
+
+  return (
+    <Form method="post" id="contact-form">
+      <p>
+        <span>Name</span>
+        <input
+          placeholder="First"
+          aria-label="First name"
+          type="text"
+          name="first"
+          defaultValue={contact.first}
+        />
+        <input
+          placeholder="Last"
+          aria-label="Last name"
+          type="text"
+          name="last"
+          defaultValue={contact.last}
+        />
+      </p>
+      <label>
+        <span>Twitter</span>
+        <input
+          type="text"
+          name="twitter"
+          placeholder="@jack"
+          defaultValue={contact.twitter}
+        />
+      </label>
+      <label>
+        <span>Avatar URL</span>
+        <input
+          placeholder="https://example.com/avatar.jpg"
+          aria-label="Avatar URL"
+          type="text"
+          name="avatar"
+          defaultValue={contact.avatar}
+        />
+      </label>
+      <label>
+        <span>Notes</span>
+        <textarea
+          name="notes"
+          defaultValue={contact.notes}
+          rows={6}
+        />
+      </label>
+      <p>
+        <button type="submit">Save</button>
+        <button type="button">Cancel</button>
+      </p>
+    </Form>
+  );
 }
 ```
 
 👉 **Добавить новый маршрут редактирования**.
 
-```js
+```jsx title="src/main.jsx" hl_lines="2 17-21"
 /* existing code */
-import EditContact from './routes/edit';
+import EditContact from "./routes/edit";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-        loader: rootLoader,
-        action: rootAction,
-        children: [
-            {
-                path: 'contacts/:contactId',
-                element: <Contact />,
-                loader: contactLoader,
-            },
-            {
-                path: 'contacts/:contactId/edit',
-                element: <EditContact />,
-                loader: contactLoader,
-            },
-        ],
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+        loader: contactLoader,
+      },
+      {
+        path: "contacts/:contactId/edit",
+        element: <EditContact />,
+        loader: contactLoader,
+      },
+    ],
+  },
 ]);
 
 /* existing code */
@@ -871,19 +857,19 @@ const router = createBrowserRouter([
 
 👉 **Добавить действие в модуль редактирования**
 
-```js
+```jsx title="src/routes/edit.jsx" hl_lines="4 6 8-13"
 import {
-    Form,
-    useLoaderData,
-    redirect,
-} from 'react-router-dom';
-import { updateContact } from '../contacts';
+  Form,
+  useLoaderData,
+  redirect,
+} from "react-router-dom";
+import { updateContact } from "../contacts";
 
 export async function action({ request, params }) {
-    const formData = await request.formData();
-    const updates = Object.fromEntries(formData);
-    await updateContact(params.contactId, updates);
-    return redirect(`/contacts/${params.contactId}`);
+  const formData = await request.formData();
+  const updates = Object.fromEntries(formData);
+  await updateContact(params.contactId, updates);
+  return redirect(`/contacts/${params.contactId}`);
 }
 
 /* existing code */
@@ -891,33 +877,33 @@ export async function action({ request, params }) {
 
 👉 **Привязать действие к маршруту**.
 
-```js
+```jsx title="src/main.jsx" hl_lines="3 23"
 /* existing code */
 import EditContact, {
-    action as editAction,
-} from './routes/edit';
+  action as editAction,
+} from "./routes/edit";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-        loader: rootLoader,
-        action: rootAction,
-        children: [
-            {
-                path: 'contacts/:contactId',
-                element: <Contact />,
-                loader: contactLoader,
-            },
-            {
-                path: 'contacts/:contactId/edit',
-                element: <EditContact />,
-                loader: contactLoader,
-                action: editAction,
-            },
-        ],
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+        loader: contactLoader,
+      },
+      {
+        path: "contacts/:contactId/edit",
+        element: <EditContact />,
+        loader: contactLoader,
+        action: editAction,
+      },
+    ],
+  },
 ]);
 
 /* existing code */
@@ -935,13 +921,13 @@ const router = createBrowserRouter([
 
 Откройте файл `src/routes/edit.jsx` и посмотрите на элементы формы. Обратите внимание, что у каждого из них есть имя:
 
-```js
+```jsx title="src/routes/edit.jsx" hl_lines="5"
 <input
-    placeholder="First"
-    aria-label="First name"
-    type="text"
-    name="first"
-    defaultValue={contact.first}
+  placeholder="First"
+  aria-label="First name"
+  type="text"
+  name="first"
+  defaultValue={contact.first}
 />
 ```
 
@@ -949,18 +935,18 @@ const router = createBrowserRouter([
 
 Каждое поле в форме доступно с помощью `formData.get(name)`. Например, для поля ввода, приведенного выше, можно получить доступ к имени и фамилии следующим образом:
 
-```js
+```js hl_lines="3-4"
 export async function action({ request, params }) {
-    const formData = await request.formData();
-    const firstName = formData.get('first');
-    const lastName = formData.get('last');
-    // ...
+  const formData = await request.formData();
+  const firstName = formData.get("first");
+  const lastName = formData.get("last");
+  // ...
 }
 ```
 
 Поскольку у нас несколько полей формы, мы использовали [`Object.fromEntries`][fromentries], чтобы собрать их все в объект, что как раз и нужно нашей функции `updateContact`.
 
-```js
+```js hl_lines="2-3"
 const updates = Object.fromEntries(formData);
 updates.first; // "Some"
 updates.last; // "Name"
@@ -970,12 +956,12 @@ updates.last; // "Name"
 
 После того как мы завершили действие, обратите внимание на [`redirect`][redirect] в конце:
 
-```js
+```jsx title="src/routes/edit.jsx" hl_lines="5"
 export async function action({ request, params }) {
-    const formData = await request.formData();
-    const updates = Object.fromEntries(formData);
-    await updateContact(params.contactId, updates);
-    return redirect(`/contacts/${params.contactId}`);
+  const formData = await request.formData();
+  const updates = Object.fromEntries(formData);
+  await updateContact(params.contactId, updates);
+  return redirect(`/contacts/${params.contactId}`);
 }
 ```
 
@@ -989,19 +975,19 @@ export async function action({ request, params }) {
 
 👉 **Перенаправление на страницу редактирования новой записи**.
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="6 12"
 import {
-    Outlet,
-    Link,
-    useLoaderData,
-    Form,
-    redirect,
-} from 'react-router-dom';
-import { getContacts, createContact } from '../contacts';
+  Outlet,
+  Link,
+  useLoaderData,
+  Form,
+  redirect,
+} from "react-router-dom";
+import { getContacts, createContact } from "../contacts";
 
 export async function action() {
-    const contact = await createContact();
-    return redirect(`/contacts/${contact.id}/edit`);
+  const contact = await createContact();
+  return redirect(`/contacts/${contact.id}/edit`);
 }
 ```
 
@@ -1021,51 +1007,48 @@ export async function action() {
 
 👉 **Использование `NavLink` в боковой панели**
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="3 20-31"
 import {
-    Outlet,
-    NavLink,
-    useLoaderData,
-    Form,
-    redirect,
-} from 'react-router-dom';
+  Outlet,
+  NavLink,
+  useLoaderData,
+  Form,
+  redirect,
+} from "react-router-dom";
 
 export default function Root() {
-    return (
-        <>
-            <div id="sidebar">
-                {/* other code */}
+  return (
+    <>
+      <div id="sidebar">
+        {/* other code */}
 
-                <nav>
-                    {contacts.length ? (
-                        <ul>
-                            {contacts.map((contact) => (
-                                <li key={contact.id}>
-                                    <NavLink
-                                        to={`contacts/${contact.id}`}
-                                        className={({
-                                            isActive,
-                                            isPending,
-                                        }) =>
-                                            isActive
-                                                ? 'active'
-                                                : isPending
-                                                ? 'pending'
-                                                : ''
-                                        }
-                                    >
-                                        {/* other code */}
-                                    </NavLink>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>{/* other code */}</p>
-                    )}
-                </nav>
-            </div>
-        </>
-    );
+        <nav>
+          {contacts.length ? (
+            <ul>
+              {contacts.map((contact) => (
+                <li key={contact.id}>
+                  <NavLink
+                    to={`contacts/${contact.id}`}
+                    className={({ isActive, isPending }) =>
+                      isActive
+                        ? "active"
+                        : isPending
+                        ? "pending"
+                        : ""
+                    }
+                  >
+                    {/* other code */}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>{/* other code */}</p>
+          )}
+        </nav>
+      </div>
+    </>
+  );
 }
 ```
 
@@ -1081,33 +1064,31 @@ React Router управляет всем состоянием за кулиса�
 
 👉 **`useNavigation` для добавления глобального отложенного пользовательского интерфейса**
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="3 10 17-19"
 import {
-    // existing code
-    useNavigation,
-} from 'react-router-dom';
+  // existing code
+  useNavigation,
+} from "react-router-dom";
 
 // existing code
 
 export default function Root() {
-    const { contacts } = useLoaderData();
-    const navigation = useNavigation();
+  const { contacts } = useLoaderData();
+  const navigation = useNavigation();
 
-    return (
-        <>
-            <div id="sidebar">{/* existing code */}</div>
-            <div
-                id="detail"
-                className={
-                    navigation.state === 'loading'
-                        ? 'loading'
-                        : ''
-                }
-            >
-                <Outlet />
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div id="sidebar">{/* existing code */}</div>
+      <div
+        id="detail"
+        className={
+          navigation.state === "loading" ? "loading" : ""
+        }
+      >
+        <Outlet />
+      </div>
+    </>
+  );
 }
 ```
 
@@ -1123,21 +1104,21 @@ export default function Root() {
 
 Если просмотреть код маршрута контактов, то можно обнаружить, что кнопка удаления выглядит следующим образом:
 
-```js
+```jsx title="src/routes/contact.jsx" hl_lines="3"
 <Form
-    method="post"
-    action="destroy"
-    onSubmit={(event) => {
-        if (
-            !confirm(
-                'Please confirm you want to delete this record.'
-            )
-        ) {
-            event.preventDefault();
-        }
-    }}
+  method="post"
+  action="destroy"
+  onSubmit={(event) => {
+    if (
+      !confirm(
+        "Please confirm you want to delete this record."
+      )
+    ) {
+      event.preventDefault();
+    }
+  }}
 >
-    <button type="submit">Delete</button>
+  <button type="submit">Delete</button>
 </Form>
 ```
 
@@ -1151,40 +1132,40 @@ export default function Root() {
 
 👉 **Создание модуля маршрута "уничтожить "**
 
-```touch
-src/routes/destroy.jsx
+```sh
+touch src/routes/destroy.jsx
 ```
 
 👉 **Добавить действие уничтожения**
 
-```js
-import { redirect } from 'react-router-dom';
-import { deleteContact } from '../contacts';
+```jsx title="src/routes/destroy.jsx"
+import { redirect } from "react-router-dom";
+import { deleteContact } from "../contacts";
 
 export async function action({ params }) {
-    await deleteContact(params.contactId);
-    return redirect('/');
+  await deleteContact(params.contactId);
+  return redirect("/");
 }
 ```
 
 👉 **Добавить маршрут уничтожения в конфигурацию маршрутов**.
 
-```js
+```jsx title="src/main.jsx" hl_lines="2 10-13"
 /* existing code */
-import { action as destroyAction } from './routes/destroy';
+import { action as destroyAction } from "./routes/destroy";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        /* existing root route props */
-        children: [
-            /* existing routes */
-            {
-                path: 'contacts/:contactId/destroy',
-                action: destroyAction,
-            },
-        ],
-    },
+  {
+    path: "/",
+    /* existing root route props */
+    children: [
+      /* existing routes */
+      {
+        path: "contacts/:contactId/destroy",
+        action: destroyAction,
+      },
+    ],
+  },
 ]);
 
 /* existing code */
@@ -1208,11 +1189,11 @@ const router = createBrowserRouter([
 
 Просто для интереса, бросьте ошибку в действие destroy:
 
-```js
+```jsx title="src/routes/destroy.jsx" hl_lines="2"
 export async function action({ params }) {
-    throw new Error('oh dang!');
-    await deleteContact(params.contactId);
-    return redirect('/');
+  throw new Error("oh dang!");
+  await deleteContact(params.contactId);
+  return redirect("/");
 }
 ```
 
@@ -1222,14 +1203,14 @@ export async function action({ params }) {
 
 Давайте создадим контекстное сообщение об ошибке для маршрута уничтожения:
 
-```js
+```jsx title="src/main.jsx" hl_lines="6"
 [
-    /* other routes */
-    {
-        path: 'contacts/:contactId/destroy',
-        action: destroyAction,
-        errorElement: <div>Oops! There was an error.</div>,
-    },
+  /* other routes */
+  {
+    path: "contacts/:contactId/destroy",
+    action: destroyAction,
+    errorElement: <div>Oops! There was an error.</div>,
+  },
 ];
 ```
 
@@ -1251,48 +1232,48 @@ export async function action({ params }) {
 
 👉 **Создание модуля индексного маршрута**
 
-```touch
-src/routes/index.jsx
+```
+touch src/routes/index.jsx
 ```
 
 👉 **Заполнить элементы компонента index**.
 
 Не стесняйтесь копировать-вставлять, ничего особенного здесь нет.
 
-```js
+```jsx title="src/routes/index.jsx"
 export default function Index() {
-    return (
-        <p id="zero-state">
-            This is a demo for React Router.
-            <br />
-            Check out{' '}
-            <a href="https://reactrouter.com">
-                the docs at reactrouter.com
-            </a>
-            .
-        </p>
-    );
+  return (
+    <p id="zero-state">
+      This is a demo for React Router.
+      <br />
+      Check out{" "}
+      <a href="https://reactrouter.com">
+        the docs at reactrouter.com
+      </a>
+      .
+    </p>
+  );
 }
 ```
 
 👉 **Настройка индексного маршрута**.
 
-```js
+```jsx title="src/main.jsx" hl_lines="2 12"
 // existing code
-import Index from './routes/index';
+import Index from "./routes/index";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-        loader: rootLoader,
-        action: rootAction,
-        children: [
-            { index: true, element: <Index /> },
-            /* existing routes */
-        ],
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      { index: true, element: <Index /> },
+      /* existing routes */
+    ],
+  },
 ]);
 ```
 
@@ -1310,35 +1291,35 @@ const router = createBrowserRouter([
 
 👉 **Добавьте обработчик нажатия на кнопку отмены с помощью `useNavigate`**
 
-```js
+```jsx title="src/routes/edit.jsx" hl_lines="5 10 20-22"
 import {
-    Form,
-    useLoaderData,
-    redirect,
-    useNavigate,
-} from 'react-router-dom';
+  Form,
+  useLoaderData,
+  redirect,
+  useNavigate,
+} from "react-router-dom";
 
 export default function EditContact() {
-    const { contact } = useLoaderData();
-    const navigate = useNavigate();
+  const { contact } = useLoaderData();
+  const navigate = useNavigate();
 
-    return (
-        <Form method="post" id="contact-form">
-            {/* existing code */}
+  return (
+    <Form method="post" id="contact-form">
+      {/* existing code */}
 
-            <p>
-                <button type="submit">Save</button>
-                <button
-                    type="button"
-                    onClick={() => {
-                        navigate(-1);
-                    }}
-                >
-                    Cancel
-                </button>
-            </p>
-        </Form>
-    );
+      <p>
+        <button type="submit">Save</button>
+        <button
+          type="button"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          Cancel
+        </button>
+      </p>
+    </Form>
+  );
 }
 ```
 
@@ -1366,17 +1347,17 @@ http://127.0.0.1:5173/?q=ryan
 
 Если мы рассмотрим форму поиска, то она выглядит следующим образом:
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="1 7"
 <form id="search-form" role="search">
-    <input
-        id="q"
-        aria-label="Search contacts"
-        placeholder="Search"
-        type="search"
-        name="q"
-    />
-    <div id="search-spinner" aria-hidden hidden={true} />
-    <div className="sr-only" aria-live="polite"></div>
+  <input
+    id="q"
+    aria-label="Search contacts"
+    placeholder="Search"
+    type="search"
+    name="q"
+  />
+  <div id="search-spinner" aria-hidden hidden={true} />
+  <div className="sr-only" aria-live="polite"></div>
 </form>
 ```
 
@@ -1390,28 +1371,28 @@ http://127.0.0.1:5173/?q=ryan
 
 👉 **Измените `<form>` на `<Form>`**.
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="1 11"
 <Form id="search-form" role="search">
-    <input
-        id="q"
-        aria-label="Search contacts"
-        placeholder="Search"
-        type="search"
-        name="q"
-    />
-    <div id="search-spinner" aria-hidden hidden={true} />
-    <div className="sr-only" aria-live="polite"></div>
+  <input
+    id="q"
+    aria-label="Search contacts"
+    placeholder="Search"
+    type="search"
+    name="q"
+  />
+  <div id="search-spinner" aria-hidden hidden={true} />
+  <div className="sr-only" aria-live="polite"></div>
 </Form>
 ```
 
 👉 **Фильтровать список при наличии URLSearchParams**.
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="1-4"
 export async function loader({ request }) {
-    const url = new URL(request.url);
-    const q = url.searchParams.get('q');
-    const contacts = await getContacts(q);
-    return { contacts };
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const contacts = await getContacts(q);
+  return { contacts };
 }
 ```
 
@@ -1433,42 +1414,43 @@ export async function loader({ request }) {
 
 👉 **Возвратите `q` из вашего загрузчика и установите его в качестве значения по умолчанию для поля поиска**
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="7 11 26"
 // existing code
+
 export async function loader({ request }) {
-    const url = new URL(request.url);
-    const q = url.searchParams.get('q');
-    const contacts = await getContacts(q);
-    return { contacts, q };
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const contacts = await getContacts(q);
+  return { contacts, q };
 }
 
 export default function Root() {
-    const { contacts, q } = useLoaderData();
-    const navigation = useNavigation();
+  const { contacts, q } = useLoaderData();
+  const navigation = useNavigation();
 
-    return (
-        <>
-            <div id="sidebar">
-                <h1>React Router Contacts</h1>
-                <div>
-                    <Form id="search-form" role="search">
-                        <input
-                            id="q"
-                            aria-label="Search contacts"
-                            placeholder="Search"
-                            type="search"
-                            name="q"
-                            defaultValue={q}
-                        />
-                        {/* existing code */}
-                    </Form>
-                    {/* existing code */}
-                </div>
-                {/* existing code */}
-            </div>
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        <div>
+          <Form id="search-form" role="search">
+            <input
+              id="q"
+              aria-label="Search contacts"
+              placeholder="Search"
+              type="search"
+              name="q"
+              defaultValue={q}
+            />
             {/* existing code */}
-        </>
-    );
+          </Form>
+          {/* existing code */}
+        </div>
+        {/* existing code */}
+      </div>
+      {/* existing code */}
+    </>
+  );
 }
 ```
 
@@ -1480,19 +1462,20 @@ export default function Root() {
 
 👉 **Синхронизация значения ввода с параметрами поиска URL**
 
-```js
-import { useEffect } from 'react';
+```jsx title="src/routes/root.jsx" hl_lines="1 9-11"
+import { useEffect } from "react";
+
 // existing code
 
 export default function Root() {
-    const { contacts, q } = useLoaderData();
-    const navigation = useNavigation();
+  const { contacts, q } = useLoaderData();
+  const navigation = useNavigation();
 
-    useEffect(() => {
-        document.getElementById('q').value = q;
-    }, [q]);
+  useEffect(() => {
+    document.getElementById("q").value = q;
+  }, [q]);
 
-    // existing code
+  // existing code
 }
 ```
 
@@ -1504,53 +1487,53 @@ export default function Root() {
 
     Обратите внимание, что для управления входом теперь требуется три точки синхронизации, а не одна. Поведение идентично, но код стал сложнее.
 
-    ```js
-    import { useEffect, useState } from 'react';
+    ```jsx title="src/routes/root.jsx" hl_lines="1 6 15 18-20 34-37"
+    import { useEffect, useState } from "react";
     // existing code
 
     export async function loader({ request }) {
-    	const url = new URL(request.url);
-    	const q = url.searchParams.get('q') || '';
-    	const contacts = await getContacts(q);
-    	return { contacts, q };
+      const url = new URL(request.url);
+      const q = url.searchParams.get("q") || "";
+      const contacts = await getContacts(q);
+      return { contacts, q };
     }
 
     // existing code
 
     export default function Root() {
-    	const { contacts, q } = useLoaderData();
-    	const [query, setQuery] = useState(q);
-    	const navigation = useNavigation();
+      const { contacts, q } = useLoaderData();
+      const [query, setQuery] = useState(q);
+      const navigation = useNavigation();
 
-    	useEffect(() => {
-    		setQuery(q);
-    	}, [q]);
+      useEffect(() => {
+        setQuery(q);
+      }, [q]);
 
-    	return (
-    		<>
-    			<div id="sidebar">
-    				<h1>React Router Contacts</h1>
-    				<div>
-    					<Form id="search-form" role="search">
-    						<input
-    							id="q"
-    							aria-label="Search contacts"
-    							placeholder="Search"
-    							type="search"
-    							name="q"
-    							value={query}
-    							onChange={(e) => {
-    								setQuery(e.target.value);
-    							}}
-    						/>
-    						{/* existing code */}
-    					</Form>
-    					{/* existing code */}
-    				</div>
-    				{/* existing code */}
-    			</div>
-    		</>
-    	);
+      return (
+        <>
+          <div id="sidebar">
+            <h1>React Router Contacts</h1>
+            <div>
+              <Form id="search-form" role="search">
+                <input
+                  id="q"
+                  aria-label="Search contacts"
+                  placeholder="Search"
+                  type="search"
+                  name="q"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                  }}
+                />
+                {/* existing code */}
+              </Form>
+              {/* existing code */}
+            </div>
+            {/* existing code */}
+          </div>
+        </>
+      );
     }
     ```
 
@@ -1560,46 +1543,44 @@ export default function Root() {
 
 Мы уже видели `useNavigate`, для этого воспользуемся его родственником, [`useSubmit`][usesubmit].
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="4 10 25-27"
 // existing code
 import {
-    // existing code
-    useSubmit,
-} from 'react-router-dom';
+  // existing code
+  useSubmit,
+} from "react-router-dom";
 
 export default function Root() {
-    const { contacts, q } = useLoaderData();
-    const navigation = useNavigation();
-    const submit = useSubmit();
+  const { contacts, q } = useLoaderData();
+  const navigation = useNavigation();
+  const submit = useSubmit();
 
-    return (
-        <>
-            <div id="sidebar">
-                <h1>React Router Contacts</h1>
-                <div>
-                    <Form id="search-form" role="search">
-                        <input
-                            id="q"
-                            aria-label="Search contacts"
-                            placeholder="Search"
-                            type="search"
-                            name="q"
-                            defaultValue={q}
-                            onChange={(event) => {
-                                submit(
-                                    event.currentTarget.form
-                                );
-                            }}
-                        />
-                        {/* existing code */}
-                    </Form>
-                    {/* existing code */}
-                </div>
-                {/* existing code */}
-            </div>
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        <div>
+          <Form id="search-form" role="search">
+            <input
+              id="q"
+              aria-label="Search contacts"
+              placeholder="Search"
+              type="search"
+              name="q"
+              defaultValue={q}
+              onChange={(event) => {
+                submit(event.currentTarget.form);
+              }}
+            />
             {/* existing code */}
-        </>
-    );
+          </Form>
+          {/* existing code */}
+        </div>
+        {/* existing code */}
+      </div>
+      {/* existing code */}
+    </>
+  );
 }
 ```
 
@@ -1615,50 +1596,49 @@ export default function Root() {
 
 👉 **Добавляем крутилку поиска**
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="8-12 26 32"
 // existing code
+
 export default function Root() {
-    const { contacts, q } = useLoaderData();
-    const navigation = useNavigation();
-    const submit = useSubmit();
+  const { contacts, q } = useLoaderData();
+  const navigation = useNavigation();
+  const submit = useSubmit();
 
-    const searching =
-        navigation.location &&
-        new URLSearchParams(navigation.location.search).has(
-            'q'
-        );
-
-    useEffect(() => {
-        document.getElementById('q').value = q;
-    }, [q]);
-
-    return (
-        <>
-            <div id="sidebar">
-                <h1>React Router Contacts</h1>
-                <div>
-                    <Form id="search-form" role="search">
-                        <input
-                            id="q"
-                            className={
-                                searching ? 'loading' : ''
-                            }
-                            // existing code
-                        />
-                        <div
-                            id="search-spinner"
-                            aria-hidden
-                            hidden={!searching}
-                        />
-                        {/* existing code */}
-                    </Form>
-                    {/* existing code */}
-                </div>
-                {/* existing code */}
-            </div>
-            {/* existing code */}
-        </>
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has(
+      "q"
     );
+
+  useEffect(() => {
+    document.getElementById("q").value = q;
+  }, [q]);
+
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        <div>
+          <Form id="search-form" role="search">
+            <input
+              id="q"
+              className={searching ? "loading" : ""}
+              // existing code
+            />
+            <div
+              id="search-spinner"
+              aria-hidden
+              hidden={!searching}
+            />
+            {/* existing code */}
+          </Form>
+          {/* existing code */}
+        </div>
+        {/* existing code */}
+      </div>
+      {/* existing code */}
+    </>
+  );
 }
 ```
 
@@ -1676,41 +1656,37 @@ export default function Root() {
 
 👉 **Использование `replace` в `submit`**
 
-```js
+```jsx title="src/routes/root.jsx" hl_lines="16-19"
 // existing code
-export default function Root() {
-    // existing code
 
-    return (
-        <>
-            <div id="sidebar">
-                <h1>React Router Contacts</h1>
-                <div>
-                    <Form id="search-form" role="search">
-                        <input
-                            id="q"
-                            // existing code
-                            onChange={(event) => {
-                                const isFirstSearch =
-                                    q == null;
-                                submit(
-                                    event.currentTarget
-                                        .form,
-                                    {
-                                        replace: !isFirstSearch,
-                                    }
-                                );
-                            }}
-                        />
-                        {/* existing code */}
-                    </Form>
-                    {/* existing code */}
-                </div>
-                {/* existing code */}
-            </div>
+export default function Root() {
+  // existing code
+
+  return (
+    <>
+      <div id="sidebar">
+        <h1>React Router Contacts</h1>
+        <div>
+          <Form id="search-form" role="search">
+            <input
+              id="q"
+              // existing code
+              onChange={(event) => {
+                const isFirstSearch = q == null;
+                submit(event.currentTarget.form, {
+                  replace: !isFirstSearch,
+                });
+              }}
+            />
             {/* existing code */}
-        </>
-    );
+          </Form>
+          {/* existing code */}
+        </div>
+        {/* existing code */}
+      </div>
+      {/* existing code */}
+    </>
+  );
 }
 ```
 
@@ -1728,34 +1704,34 @@ export default function Root() {
 
 👉 **Измените форму `<Favorite>` на форму поиска**
 
-```js
+```jsx title="src/routes/contact.jsx" hl_lines="4 10 14 26"
 import {
-    useLoaderData,
-    Form,
-    useFetcher,
-} from 'react-router-dom';
+  useLoaderData,
+  Form,
+  useFetcher,
+} from "react-router-dom";
 
 // existing code
 
 function Favorite({ contact }) {
-    const fetcher = useFetcher();
-    let favorite = contact.favorite;
+  const fetcher = useFetcher();
+  let favorite = contact.favorite;
 
-    return (
-        <fetcher.Form method="post">
-            <button
-                name="favorite"
-                value={favorite ? 'false' : 'true'}
-                aria-label={
-                    favorite
-                        ? 'Remove from favorites'
-                        : 'Add to favorites'
-                }
-            >
-                {favorite ? '★' : '☆'}
-            </button>
-        </fetcher.Form>
-    );
+  return (
+    <fetcher.Form method="post">
+      <button
+        name="favorite"
+        value={favorite ? "false" : "true"}
+        aria-label={
+          favorite
+            ? "Remove from favorites"
+            : "Add to favorites"
+        }
+      >
+        {favorite ? "★" : "☆"}
+      </button>
+    </fetcher.Form>
+  );
 }
 ```
 
@@ -1763,19 +1739,19 @@ function Favorite({ contact }) {
 
 👉 **Создание действия**
 
-```js
+```jsx title="src/routes/contact.jsx" hl_lines="2 4-9"
 // existing code
-import { getContact, updateContact } from '../contacts';
+import { getContact, updateContact } from "../contacts";
 
 export async function action({ request, params }) {
-    let formData = await request.formData();
-    return updateContact(params.contactId, {
-        favorite: formData.get('favorite') === 'true',
-    });
+  let formData = await request.formData();
+  return updateContact(params.contactId, {
+    favorite: formData.get("favorite") === "true",
+  });
 }
 
 export default function Contact() {
-    // existing code
+  // existing code
 }
 ```
 
@@ -1783,31 +1759,31 @@ export default function Contact() {
 
 👉 **Конфигурируем новое действие маршрута**
 
-```js
+```jsx title="src/main.jsx" hl_lines="4 20"
 // existing code
 import Contact, {
-    loader as contactLoader,
-    action as contactAction,
-} from './routes/contact';
+  loader as contactLoader,
+  action as contactAction,
+} from "./routes/contact";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        errorElement: <ErrorPage />,
-        loader: rootLoader,
-        action: rootAction,
-        children: [
-            { index: true, element: <Index /> },
-            {
-                path: 'contacts/:contactId',
-                element: <Contact />,
-                loader: contactLoader,
-                action: contactAction,
-            },
-            /* existing code */
-        ],
-    },
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    action: rootAction,
+    children: [
+      { index: true, element: <Index /> },
+      {
+        path: "contacts/:contactId",
+        element: <Contact />,
+        loader: contactLoader,
+        action: contactAction,
+      },
+      /* existing code */
+    ],
+  },
 ]);
 ```
 
@@ -1829,32 +1805,32 @@ const router = createBrowserRouter([
 
 👉 **Считываем оптимистичное значение из `fetcher.formData`**
 
-```js
+```jsx title="src/routes/contact.jsx" hl_lines="7-9"
 // existing code
+
 function Favorite({ contact }) {
-    const fetcher = useFetcher();
+  const fetcher = useFetcher();
 
-    let favorite = contact.favorite;
-    if (fetcher.formData) {
-        favorite =
-            fetcher.formData.get('favorite') === 'true';
-    }
+  let favorite = contact.favorite;
+  if (fetcher.formData) {
+    favorite = fetcher.formData.get("favorite") === "true";
+  }
 
-    return (
-        <fetcher.Form method="post">
-            <button
-                name="favorite"
-                value={favorite ? 'false' : 'true'}
-                aria-label={
-                    favorite
-                        ? 'Remove from favorites'
-                        : 'Add to favorites'
-                }
-            >
-                {favorite ? '★' : '☆'}
-            </button>
-        </fetcher.Form>
-    );
+  return (
+    <fetcher.Form method="post">
+      <button
+        name="favorite"
+        value={favorite ? "false" : "true"}
+        aria-label={
+          favorite
+            ? "Remove from favorites"
+            : "Add to favorites"
+        }
+      >
+        {favorite ? "★" : "☆"}
+      </button>
+    </fetcher.Form>
+  );
 }
 ```
 
@@ -1872,16 +1848,16 @@ function Favorite({ contact }) {
 
 👉 **Выбросить ответ 404 в загрузчик**
 
-```js
+```jsx title="src/routes/contact.jsx" hl_lines="2-9"
 export async function loader({ params }) {
-    const contact = await getContact(params.contactId);
-    if (!contact) {
-        throw new Response('', {
-            status: 404,
-            statusText: 'Not Found',
-        });
-    }
-    return { contact };
+  const contact = await getContact(params.contactId);
+  if (!contact) {
+    throw new Response("", {
+      status: 404,
+      statusText: "Not Found",
+    });
+  }
+  return { contact };
 }
 ```
 
@@ -1905,30 +1881,30 @@ export async function loader({ params }) {
 
 👉 **Вернуть дочерние маршруты в маршрут без пути**
 
-```js
+```jsx title="src/main.jsx" hl_lines="9-21"
 createBrowserRouter([
-    {
-        path: '/',
-        element: <Root />,
-        loader: rootLoader,
-        action: rootAction,
+  {
+    path: "/",
+    element: <Root />,
+    loader: rootLoader,
+    action: rootAction,
+    errorElement: <ErrorPage />,
+    children: [
+      {
         errorElement: <ErrorPage />,
         children: [
-            {
-                errorElement: <ErrorPage />,
-                children: [
-                    { index: true, element: <Index /> },
-                    {
-                        path: 'contacts/:contactId',
-                        element: <Contact />,
-                        loader: contactLoader,
-                        action: contactAction,
-                    },
-                    /* the rest of the routes */
-                ],
-            },
+          { index: true, element: <Index /> },
+          {
+            path: "contacts/:contactId",
+            element: <Contact />,
+            loader: contactLoader,
+            action: contactAction,
+          },
+          /* the rest of the routes */
         ],
-    },
+      },
+    ],
+  },
 ]);
 ```
 
@@ -1938,43 +1914,43 @@ createBrowserRouter([
 
 И последний прием: многие предпочитают настраивать маршруты с помощью JSX. Это можно сделать с помощью функции `createRoutesFromElements`. Функциональной разницы между JSX и объектами при конфигурировании маршрутов нет, это просто стилистическое предпочтение.
 
-```js
+```jsx
 import {
-    createRoutesFromElements,
-    createBrowserRouter,
-    Route,
-} from 'react-router-dom';
+  createRoutesFromElements,
+  createBrowserRouter,
+  Route,
+} from "react-router-dom";
 
 const router = createBrowserRouter(
-    createRoutesFromElements(
+  createRoutesFromElements(
+    <Route
+      path="/"
+      element={<Root />}
+      loader={rootLoader}
+      action={rootAction}
+      errorElement={<ErrorPage />}
+    >
+      <Route errorElement={<ErrorPage />}>
+        <Route index element={<Index />} />
         <Route
-            path="/"
-            element={<Root />}
-            loader={rootLoader}
-            action={rootAction}
-            errorElement={<ErrorPage />}
-        >
-            <Route errorElement={<ErrorPage />}>
-                <Route index element={<Index />} />
-                <Route
-                    path="contacts/:contactId"
-                    element={<Contact />}
-                    loader={contactLoader}
-                    action={contactAction}
-                />
-                <Route
-                    path="contacts/:contactId/edit"
-                    element={<EditContact />}
-                    loader={contactLoader}
-                    action={editAction}
-                />
-                <Route
-                    path="contacts/:contactId/destroy"
-                    action={destroyAction}
-                />
-            </Route>
-        </Route>
-    )
+          path="contacts/:contactId"
+          element={<Contact />}
+          loader={contactLoader}
+          action={contactAction}
+        />
+        <Route
+          path="contacts/:contactId/edit"
+          element={<EditContact />}
+          loader={contactLoader}
+          action={editAction}
+        />
+        <Route
+          path="contacts/:contactId/destroy"
+          action={destroyAction}
+        />
+      </Route>
+    </Route>
+  )
 );
 ```
 
