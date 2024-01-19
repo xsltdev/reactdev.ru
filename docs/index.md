@@ -126,6 +126,7 @@ hide:
     **[![React](react.svg){: style="height:16px;width:16px;vertical-align:middle;"} React](https://reactdev.ru/)** &nbsp;&nbsp;&nbsp;
     [![Solid](solid.svg){: style="height:16px;width:16px;vertical-align:middle;"} Solid](https://soliddev.ru/) &nbsp;&nbsp;&nbsp;
     [![React Native](rn.svg){: style="height:16px;width:16px;vertical-align:middle;"} React Native](https://reactnativedev.ru/) &nbsp;&nbsp;&nbsp;
+	[![PWA](pwa.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} PWA](https://pwadev.ru/) &nbsp;&nbsp;&nbsp;
     [![Node.js](nodejs.svg){: style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;
     [![Python 3](python.svg){: style="height:16px;width:16px;vertical-align:middle;"} Python 3](https://py3dev.ru/) &nbsp;&nbsp;&nbsp;
     [![XSLT](xslt.svg){: style="height:16px;width:16px;vertical-align:middle;"} XSLT](https://xsltdev.ru/) &nbsp;&nbsp;&nbsp;
