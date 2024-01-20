@@ -1,6 +1,6 @@
-site_name: Справочник React
+site_name: React
 site_url: https://reactdev.ru/
-site_description: Справочник React разработчика с примерами кода
+site_description: Справочник React с примерами кода
 site_author: reactdev.ru
 copyright: (☭) Народное достояние с 2021 года
 
@@ -11,20 +11,26 @@ theme:
     name: material
     custom_dir: overrides
     palette:
+        - media: '(prefers-color-scheme)'
+          primary: cyan
+          accent: cyan
+          toggle:
+              icon: material/brightness-auto
+              name: Переключиться на светлую тему
         - media: '(prefers-color-scheme: light)'
           scheme: default
           primary: cyan
           accent: cyan
           toggle:
               icon: material/toggle-switch-off-outline
-              name: Тёмная тема
+              name: Переключиться на тёмную тему
         - media: '(prefers-color-scheme: dark)'
           scheme: slate
           primary: cyan
           accent: cyan
           toggle:
               icon: material/toggle-switch
-              name: Светлая тема
+              name: Переключиться на системную тему
     language: ru
     features:
         - navigation.prune
@@ -41,36 +47,15 @@ theme:
 extra:
     generator: false
     social:
-        - icon: fontawesome/brands/html5
-          link: 'https://hcdev.ru/'
-          name: HTML and CSS docs
-        - icon: fontawesome/brands/js
-          link: 'https://scriptdev.ru/'
-          name: Javascript
-        - icon: fontawesome/brands/angular
-          link: 'https://angdev.ru/'
-          name: Angular docs
-        - icon: fontawesome/brands/react
-          link: 'https://reactdev.ru/'
-          name: React docs
-        - icon: simple/solid
-          link: 'https://soliddev.ru/'
-          name: Solid sdocs
-        - icon: fontawesome/solid/mobile-screen
-          link: 'https://reactnativedev.ru/'
-          name: React Native docs
-        - icon: fontawesome/brands/node-js
-          link: 'https://nodejsdev.ru/'
-          name: Node.js docs
-        - icon: fontawesome/brands/python
-          link: 'https://py3dev.ru/'
-          name: Python 3 docs
-        - icon: fontawesome/solid/code
-          link: 'https://xsltdev.ru/'
-          name: XSLT docs
-        - icon: fontawesome/solid/database
-          link: 'https://dbasedev.ru/'
-          name: Базы данных
+        - icon: fontawesome/brands/github
+          link: https://github.com/xsltdev
+          name: GitHub
+        - icon: fontawesome/regular/heart
+          link: https://boosty.to/bndby
+          name: Boosty
+        - icon: fontawesome/brands/linkedin
+          link: https://www.linkedin.com/in/bndby/
+          name: LinkedIn
 
 markdown_extensions:
     - admonition
@@ -105,6 +90,15 @@ plugins:
               - en
     - awesome-pages
     - social
+    - minify:
+          minify_html: true
+          htmlmin_opts:
+              remove_comments: true
+          cache_safe: true
+    - glightbox:
+          auto_caption: true
+          skip_classes:
+              - nolightbox
 
 extra_css:
     - '/assets/stylesheets/styles.css?5'

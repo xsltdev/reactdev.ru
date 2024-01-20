@@ -120,17 +120,17 @@ hide:
 
 !!!abstract "Справочники"
 
-    [![HTML](html.svg){: style="height:16px;width:16px;vertical-align:middle;"} HTML + CSS](https://hcdev.ru/) &nbsp;&nbsp;&nbsp;
-    [![Typescript](ts.svg){: style="height:16px;width:16px;vertical-align:middle;"} Typescript](https://scriptdev.ru/) &nbsp;&nbsp;&nbsp;
-    [![Angular](angular.svg){: style="height:16px;width:16px;vertical-align:middle;"} Angular](https://angdev.ru/) &nbsp;&nbsp;&nbsp;
-    **[![React](react.svg){: style="height:16px;width:16px;vertical-align:middle;"} React](https://reactdev.ru/)** &nbsp;&nbsp;&nbsp;
-    [![Solid](solid.svg){: style="height:16px;width:16px;vertical-align:middle;"} Solid](https://soliddev.ru/) &nbsp;&nbsp;&nbsp;
-    [![React Native](rn.svg){: style="height:16px;width:16px;vertical-align:middle;"} React Native](https://reactnativedev.ru/) &nbsp;&nbsp;&nbsp;
-	[![PWA](pwa.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} PWA](https://pwadev.ru/) &nbsp;&nbsp;&nbsp;
-    [![Node.js](nodejs.svg){: style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;
-    [![Python 3](python.svg){: style="height:16px;width:16px;vertical-align:middle;"} Python 3](https://py3dev.ru/) &nbsp;&nbsp;&nbsp;
-    [![XSLT](xslt.svg){: style="height:16px;width:16px;vertical-align:middle;"} XSLT](https://xsltdev.ru/) &nbsp;&nbsp;&nbsp;
-    [![БД](db.svg){: style="height:16px;width:16px;vertical-align:middle;"} Базы данных](https://dbasedev.ru/) &nbsp;&nbsp;&nbsp;
+    [![HTML](html.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} HTML + CSS](https://hcdev.ru/) &nbsp;&nbsp;&nbsp;
+    [![Typescript](ts.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Typescript](https://scriptdev.ru/) &nbsp;&nbsp;&nbsp;
+    [![Angular](angular.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Angular](https://angdev.ru/) &nbsp;&nbsp;&nbsp;
+    **[![React](react.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} React](https://reactdev.ru/)** &nbsp;&nbsp;&nbsp;
+    [![Solid](solid.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Solid](https://soliddev.ru/) &nbsp;&nbsp;&nbsp;
+    [![React Native](rn.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} React Native](https://reactnativedev.ru/) &nbsp;&nbsp;&nbsp;
+    [![PWA](pwa.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} PWA](https://pwadev.ru/) &nbsp;&nbsp;&nbsp;
+    [![Node.js](nodejs.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Node.js](https://nodejsdev.ru/) &nbsp;&nbsp;&nbsp;
+    [![Python 3](python.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Python 3](https://py3dev.ru/) &nbsp;&nbsp;&nbsp;
+    [![XSLT](xslt.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} XSLT](https://xsltdev.ru/) &nbsp;&nbsp;&nbsp;
+    [![БД](db.svg){: class="nolightbox" style="height:16px;width:16px;vertical-align:middle;"} Базы данных](https://dbasedev.ru/) &nbsp;&nbsp;&nbsp;
 
 <!--
 https://github.com/harryheman/React-Total
