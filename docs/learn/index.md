@@ -1,8 +1,12 @@
+---
+description: Добро пожаловать в документацию по React! На этой странице вы познакомитесь с 80% концепций React, которые вы будете использовать ежедневно
+---
+
 # Быстрый старт
 
-**Перевод официальной документации React v18**.
+<big>**Перевод официальной документации React v18**.
 
-Добро пожаловать в документацию по React! На этой странице вы познакомитесь с 80% концепций React, которые вы будете использовать ежедневно.
+Добро пожаловать в документацию по React! На этой странице вы познакомитесь с 80% концепций React, которые вы будете использовать ежедневно.</big>
 
 !!!tip "Вы узнаете"
 
@@ -13,21 +17,17 @@
     -   Как реагировать на события и обновлять экран
     -   Как обмениваться данными между компонентами
 
-## Создание и вложение компонентов
+## Создание и вложение компонентов {#components}
 
-Приложения React состоят из _компонентов_. Компонент — это часть пользовательского интерфейса, которая имеет свою собственную логику и внешний вид. Компонент может быть маленьким, как кнопка, или большим, как целая страница.
+Приложения React состоят из _компонентов_. **Компонент** — это часть пользовательского интерфейса, которая имеет свою собственную логику и внешний вид. Компонент может быть маленьким, как кнопка, или большим, как целая страница.
 
 Компоненты React — это функции JavaScript, которые возвращают разметку:
-
-<!-- 0001.part.md -->
 
 ```js
 function MyButton() {
     return <button>I'm a button</button>;
 }
 ```
-
-<!-- 0002.part.md -->
 
 Теперь, когда вы объявили `MyButton`, вы можете вложить его в другой компонент:
 
@@ -46,8 +46,6 @@ export default function MyApp() {
 
 Посмотрите на результат:
 
-<!-- 0003.part.md -->
-
 === "App.js"
 
     ```js
@@ -65,19 +63,17 @@ export default function MyApp() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](index-1.png)
-
-<!-- 0004.part.md -->
+    <iframe src="https://codesandbox.io/embed/nh2zj3?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts" ></iframe>
 
 Ключевые слова `export default` указывают основной компонент в файле. Если вы не знакомы с каким-либо разделом синтаксиса JavaScript, в [MDN](https://developer.mozilla.org/ru/docs/web/javascript/reference/statements/export) и [javascript.info](https://learn.javascript.ru/import-export) есть отличные рекомендации.
 
-## Запись разметки с помощью JSX
+## Запись разметки с помощью JSX {#writing-markup-with-jsx}
 
 Синтаксис разметки, который вы видели выше, называется _JSX_. Он необязателен, но большинство проектов React используют JSX для удобства. Все [инструменты, которые мы рекомендуем для локальной разработки](installation.md) поддерживают JSX из коробки.
 
-В JSX более строгие требования, чем в HTML. Вы должны закрывать теги типа `<br />`. Ваш компонент также не может возвращать несколько JSX-тегов. Вы должны обернуть их в общего родителя, например, в `<div>...</div>` или пустую обертку `<>...</>`:
+В JSX более строгие требования, чем в HTML. Вы должны закрывать теги типа `<br />`. Ваш компонент также не может возвращать несколько JSX-тегов. Вы должны обернуть их в общего родителя, например, в `<div>...</div>` или пустую обертку <code>&lt;>...&lt;/></code>:
 
 ```js
 function AboutPage() {
@@ -96,21 +92,15 @@ function AboutPage() {
 
 Если вам нужно перевести много HTML в JSX, вы можете использовать [онлайн-конвертер](https://transform.tools/html-to-jsx).
 
-## Добавление стилей
+## Добавление стилей {#adding-styles}
 
 В React вы указываете CSS-класс с помощью `className`. Он работает так же, как атрибут HTML [`class`](https://developer.mozilla.org/ru/docs/Web/HTML/Global_attributes/class):
-
-<!-- 0005.part.md -->
 
 ```js
 <img className="avatar" />
 ```
 
-<!-- 0006.part.md -->
-
 Затем вы пишете правила CSS для него в отдельном файле CSS:
-
-<!-- 0007.part.md -->
 
 ```css
 /* In your CSS */
@@ -119,11 +109,9 @@ function AboutPage() {
 }
 ```
 
-<!-- 0008.part.md -->
+React не предписывает, как добавлять файлы CSS. В простейшем случае вы добавляете тег [`<link>`](https://hcdev.ru/html/link) в HTML. Если вы используете инструмент сборки или фреймворк, обратитесь к его документации, чтобы узнать, как добавить CSS-файл в ваш проект.
 
-React не предписывает, как добавлять файлы CSS. В простейшем случае вы добавляете тег [`<link>`](https://developer.mozilla.org/ru/docs/Web/HTML/Element/link) в HTML. Если вы используете инструмент сборки или фреймворк, обратитесь к его документации, чтобы узнать, как добавить CSS-файл в ваш проект.
-
-## Отображение данных
+## Отображение данных {#displaying-data}
 
 JSX позволяет вам поместить разметку в JavaScript. Фигурные скобки позволяют вам "вернуться назад" в JavaScript, чтобы вы могли вставить некоторую переменную из вашего кода и отобразить ее пользователю. Например, это выведет `user.name`:
 
@@ -137,9 +125,7 @@ return <h1>{user.name}</h1>;
 return <img className="avatar" src={user.imageUrl} />;
 ```
 
-Внутри фигурных скобок JSX можно поместить и более сложные выражения, например, [конкатенация строк](https://learn.javascript.ru/operators):
-
-<!-- 0009.part.md -->
+Внутри фигурных скобок JSX можно поместить и более сложные выражения, например, [конкатенация строк](https://learn.javascript.ru/operators#slozhenie-strok-pri-pomoschi-binarnogo):
 
 === "App.js"
 
@@ -168,19 +154,15 @@ return <img className="avatar" src={user.imageUrl} />;
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](index-2.png)
-
-<!-- 0012.part.md -->
+    <iframe src="https://codesandbox.io/embed/zjtyvn?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 В приведенном выше примере `style={{}}` — это не специальный синтаксис, а обычный объект `{}` внутри фигурных скобок JSX `style={ }`. Вы можете использовать атрибут `style`, когда ваши стили зависят от переменных JavaScript.
 
-## Условный рендеринг
+## Условный рендеринг {#conditional-rendering}
 
 В React нет специального синтаксиса для написания условий. Вместо этого вы будете использовать те же приемы, что и при написании обычного кода JavaScript. Например, вы можете использовать оператор [`if`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Statements/if...else) для условного включения JSX:
-
-<!-- 0013.part.md -->
 
 ```js
 let content;
@@ -192,37 +174,25 @@ if (isLoggedIn) {
 return <div>{content}</div>;
 ```
 
-<!-- 0014.part.md -->
-
 Если вы предпочитаете более компактный код, вы можете использовать [условный оператор `?`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Conditional_Operator). В отличие от `if`, он работает внутри JSX:
-
-<!-- 0015.part.md -->
 
 ```js
 <div>{isLoggedIn ? <AdminPanel /> : <LoginForm />}</div>
 ```
 
-<!-- 0016.part.md -->
-
 Когда ветвь `else` не нужна, можно также использовать более короткий [логический синтаксис `&&`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Logical_AND#short-circuit_evaluation):
-
-<!-- 0017.part.md -->
 
 ```js
 <div>{isLoggedIn && <AdminPanel />}</div>
 ```
 
-<!-- 0018.part.md -->
-
 Все эти подходы также работают для условного указания атрибутов. Если вы не знакомы с некоторым синтаксисом JavaScript, вы можете начать с постоянного использования `if...else`.
 
-## Рендеринг списков
+## Рендеринг списков {#rendering-lists}
 
 Для отображения списков компонентов вы будете использовать такие возможности JavaScript, как [цикл `for`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Statements/for) и [функция массива `map()`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/map).
 
 Например, допустим, у вас есть массив продуктов:
-
-<!-- 0019.part.md -->
 
 ```js
 const products = [
@@ -232,11 +202,7 @@ const products = [
 ];
 ```
 
-<!-- 0020.part.md -->
-
 Внутри вашего компонента используйте функцию `map()` для преобразования массива товаров в массив элементов `<li>`:
-
-<!-- 0021.part.md -->
 
 ```js
 const listItems = products.map((product) => (
@@ -246,11 +212,7 @@ const listItems = products.map((product) => (
 return <ul>{listItems}</ul>;
 ```
 
-<!-- 0022.part.md -->
-
 Обратите внимание, что `<li>` имеет атрибут `key`. Для каждого элемента списка вы должны передать строку или число, которое однозначно идентифицирует этот элемент среди его родственников. Обычно ключ должен исходить из ваших данных, например, ID базы данных. React использует ваши ключи, чтобы узнать, что произошло, если вы позже вставите, удалите или измените порядок элементов.
-
-<!-- 0023.part.md -->
 
 === "App.js"
 
@@ -279,13 +241,11 @@ return <ul>{listItems}</ul>;
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![рендер списка](index-3.png)
+    <iframe src="https://codesandbox.io/embed/2dmxxm?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-<!-- 0024.part.md -->
-
-## Реагирование на события
+## Реагирование на события {#responding-to-events}
 
 Вы можете реагировать на события, объявляя функции _обработчика событий_ внутри ваших компонентов:
 
@@ -301,7 +261,7 @@ function MyButton() {
 
 Обратите внимание, что `onClick={handleClick}` не имеет круглых скобок в конце! Не нужно _вызывать_ функцию обработчика события: вам нужно только _передать ее дальше_. React вызовет ваш обработчик события, когда пользователь нажмет на кнопку.
 
-## Обновление экрана
+## Обновление экрана {#updating-the-screen}
 
 Часто вы хотите, чтобы ваш компонент "запоминал" некоторую информацию и отображал ее. Например, вы хотите подсчитать, сколько раз была нажата кнопка. Чтобы сделать это, добавьте _state_ в ваш компонент.
 
@@ -344,8 +304,6 @@ React снова вызовет функцию вашего компонента
 
 Если вы отобразите один и тот же компонент несколько раз, каждый из них получит свое собственное состояние. Нажмите на каждую кнопку отдельно:
 
-<!-- 0031.part.md -->
-
 === "App.js"
 
     ```js
@@ -376,21 +334,19 @@ React снова вызовет функцию вашего компонента
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![рендер](index-4.png)
-
-<!-- 0034.part.md -->
+    <iframe src="https://codesandbox.io/embed/ryf69v?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что каждая кнопка "помнит" свое состояние `count` и не влияет на другие кнопки.
 
-## Использование хуков
+## Использование хуков {#using-hooks}
 
 Функции, начинающиеся с `use`, называются _Hooks_. `useState` — это встроенный хук, предоставляемый React. Вы можете найти другие встроенные хуки в [Справочник API](../reference/index.md). Вы также можете написать свои собственные хуки, комбинируя существующие.
 
 Хуки имеют более строгие ограничения, чем другие функции. Вы можете вызывать хуки только _сверху_ ваших компонентов (или других хуков). Если вы хотите использовать `useState` в условии или цикле, создайте новый компонент и поместите его туда.
 
-## Обмен данными между компонентами
+## Обмен данными между компонентами {#sharing-data-between-components}
 
 В предыдущем примере каждая `MyButton` имела свой собственный независимый `count`, и при нажатии на каждую кнопку изменялся только `count` для нажатой кнопки:
 
@@ -512,16 +468,18 @@ function MyButton({ count, onClick }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](index-5.png)
+    <iframe src="https://codesandbox.io/embed/jmpn67?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-## Следующие шаги
+## Следующие шаги {#next-steps}
 
 К этому моменту вы уже знаете основы написания кода на React!
 
 Просмотрите [Учебник: крестики-нолики](tutorial-tic-tac-toe.md), чтобы применить их на практике и создать свое первое мини-приложение на React.
 
-## Ссылки
+:material-information-outline: Источник &mdash; [https://react.dev/learn](https://react.dev/learn)
 
--   [https://react.dev/learn](https://react.dev/learn)
+!!!danger "Перевод"
+
+    Перевод этого учебника сделан благодаря [подписчикам на Бусти](https://boosty.to/bndby).
