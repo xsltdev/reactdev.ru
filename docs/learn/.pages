@@ -21,6 +21,7 @@ nav:
         - conditional-rendering.md
         - rendering-lists.md
         - keeping-components-pure.md
+        - understanding-your-ui-as-a-tree.md
     - "Добавление интерактивности":
         - adding-interactivity.md
         - responding-to-events.md
