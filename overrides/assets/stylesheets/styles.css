@@ -102,13 +102,6 @@ h3 {
 	opacity: 0.85;
 }
 
-/* Google button */
-.gsc-search-button-v2 svg {
-	fill: #ffffff;
-	min-width: 13px;
-	min-height: 13px;
-}
-
 /* MDN examples */
 .interactive {
 	box-sizing: border-box;
@@ -162,6 +155,9 @@ h3 {
 .md-typeset .highlight {
 	max-height: 400px;
 	overflow-y: auto;
+	border-radius: 0 15px 15px 15px;
+	box-shadow: 0 5px 15px #ddd;
+	border: 1px solid #e8e8e8;
 }
 
 .md-typeset .highlighttable {
