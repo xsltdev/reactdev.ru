@@ -185,7 +185,7 @@ description: В этом уроке вы создадите небольшую �
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/q2z497?view=Editor+%2B+Preview&module=%2Fsrc%2Findex.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -207,7 +207,7 @@ description: В этом уроке вы создадите небольшую �
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/j67kkz?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -408,7 +408,7 @@ export default function Board() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/4n6z76?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -563,7 +563,7 @@ export default function Board() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/hnfrzc?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -706,7 +706,7 @@ function Square() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/9tcmyz?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -834,7 +834,7 @@ function Square({ value }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/84sswn?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -1106,7 +1106,7 @@ export default function Board() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/52z5dj?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -1326,7 +1326,7 @@ function handleClick(i) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/p47pm8?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -1519,7 +1519,7 @@ export default function Board() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/6frjc5?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -1823,7 +1823,7 @@ export default function Game() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/lmq6xq?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2056,7 +2056,7 @@ export default function Game() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/wlg766?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2281,7 +2281,7 @@ const moves = history.map((squares, move) => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/45tjv9?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2510,7 +2510,7 @@ export default function Game() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/lmwsyf?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2722,7 +2722,7 @@ export default function Game() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/q2z497?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
