@@ -9,6 +9,7 @@ nav:
         - start-a-new-react-project.md
         - add-react-to-an-existing-project.md
         - editor-setup.md
+        - typescript.md
         - react-developer-tools.md
     - "Разработка UI":
         - describing-the-ui.md
