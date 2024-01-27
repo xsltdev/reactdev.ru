@@ -1,6 +1,10 @@
+---
+description: Компоненты часто должны изменять то, что отображается на экране в результате взаимодействия. Ввод текста в форму должен обновить поле ввода, нажатие кнопки "next" на карусели изображений должно изменить отображаемое изображение, нажатие кнопки "buy" должно поместить товар в корзину
+---
+
 # Состояние: память компонента
 
-Компоненты часто должны изменять то, что отображается на экране в результате взаимодействия. Ввод текста в форму должен обновить поле ввода, нажатие кнопки "next" на карусели изображений должно изменить отображаемое изображение, нажатие кнопки "buy" должно поместить товар в корзину. Компоненты должны "запоминать" вещи: текущее значение ввода, текущее изображение, корзину. В React такая специфическая для компонентов память называется "состояние" (_state_).
+<big>Компоненты часто должны изменять то, что отображается на экране в результате взаимодействия. Ввод текста в форму должен обновить поле ввода, нажатие кнопки "next" на карусели изображений должно изменить отображаемое изображение, нажатие кнопки "buy" должно поместить товар в корзину. Компоненты должны "запоминать" вещи: текущее значение ввода, текущее изображение, корзину. В React такая специфическая для компонентов память называется **состояние** (_state_).</big>
 
 !!!tip "Вы узнаете"
 
@@ -9,11 +13,9 @@
     -   Как добавить более одной переменной состояния
     -   Почему состояние называется локальным
 
-## Когда обычной переменной недостаточно
+## Когда обычной переменной недостаточно {#when-a-regular-variable-isnt-enough}
 
 Вот компонент, который отображает изображение скульптуры. Нажатие на кнопку "Next" должно показать следующую скульптуру, изменив `index` на `1`, затем `2` и так далее. Однако, это **не работает** (вы можете попробовать!):
-
-<!-- 0001.part.md -->
 
 === "App.js"
 
@@ -160,11 +162,9 @@
     ];
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-a-components-memory-1.png)
-
-<!-- 0006.part.md -->
+    <iframe src="https://codesandbox.io/embed/d6z6j2?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обработчик события `handleClick` обновляет локальную переменную `index`. Но две вещи не позволяют увидеть это изменение:
 
@@ -181,47 +181,33 @@
 1.  Переменная **state** для сохранения данных между рендерами.
 2.  Функция **state setter** для обновления переменной и запуска React для повторного рендеринга компонента.
 
-## Добавление переменной состояния
+## Добавление переменной состояния {#adding-a-state-variable}
 
 Чтобы добавить переменную состояния, импортируйте `useState` из React в верхней части файла:
-
-<!-- 0007.part.md -->
 
 ```js
 import { useState } from 'react';
 ```
 
-<!-- 0008.part.md -->
-
 Затем замените эту строку:
-
-<!-- 0009.part.md -->
 
 ```js
 let index = 0;
 ```
 
-<!-- 0010.part.md -->
-
 с
-
-<!-- 0011.part.md -->
 
 ```js
 const [index, setIndex] = useState(0);
 ```
 
-<!-- 0012.part.md -->
-
 `index` - это переменная состояния, а `setIndex` - функция-установщик.
 
-!!!note ""
+!!!note "Синтаксис деструктуризации"
 
     Синтаксис `[` и `]` здесь называется [деструктуризация массива](https://learn.javascript.ru/destructuring-assignment) и позволяет вам читать значения из массива. Массив, возвращаемый `useState`, всегда содержит ровно два элемента.
 
 Вот как они работают вместе в `handleClick`:
-
-<!-- 0013.part.md -->
 
 ```js
 function handleClick() {
@@ -229,11 +215,7 @@ function handleClick() {
 }
 ```
 
-<!-- 0014.part.md -->
-
 Теперь нажатием кнопки "Далее" переключите текущую скульптуру:
-
-<!-- 0015.part.md -->
 
 === "App.js"
 
@@ -381,13 +363,11 @@ function handleClick() {
     ];
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-a-components-memory-1.png)
+    <iframe src="https://codesandbox.io/embed/przztr?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-<!-- 0020.part.md -->
-
-### Встречайте свой первый хук
+### Встречайте свой первый хук {#meet-your-first-hook}
 
 В React функция `useState`, как и любая другая функция, начинающаяся с "`use`", называется хуком.
 
@@ -399,21 +379,17 @@ _Хуки_ - это специальные функции, которые дос
 
     **Хуки-функции, начинающиеся с `use`, можно вызывать только на верхнем уровне ваших компонентов или [ваших собственных хуков](reusing-logic-with-custom-hooks.md)** Вы не можете вызывать хуки внутри условий, циклов или других вложенных функций. Hooks - это функции, но полезно думать о них как о безусловных декларациях о потребностях вашего компонента. Вы "используете" функции React в верхней части вашего компонента подобно тому, как вы "импортируете" модули в верхней части вашего файла.
 
-### Анатомия `useState`
+### Анатомия `useState` {#anatomy-of-usestate}
 
 Когда вы вызываете [`useState`](../reference/useState.md), вы говорите React, что хотите, чтобы этот компонент что-то запомнил:
-
-<!-- 0021.part.md -->
 
 ```js
 const [index, setIndex] = useState(0);
 ```
 
-<!-- 0022.part.md -->
-
 В данном случае вы хотите, чтобы React запомнил `index`.
 
-!!!note ""
+!!!note "Нейминг"
 
     Принято называть эту пару так: `const [something, setSomething]`. Вы можете назвать ее как угодно, но соглашения облегчают понимание в разных проектах.
 
@@ -426,20 +402,16 @@ const [index, setIndex] = useState(0);
 
 Вот как это происходит в действии:
 
-<!-- 0023.part.md -->
-
 ```js
 const [index, setIndex] = useState(0);
 ```
-
-<!-- 0024.part.md -->
 
 1.  Поскольку вы передали `0` в `useState` в качестве начального значения для `index`, он вернет `[0, setIndex]`. React помнит, что `0` - это последнее значение состояния.
 2.  **Вы обновляете состояние.** Когда пользователь нажимает на кнопку, вызывается `setIndex(index + 1)`. `index` - это `0`, поэтому вызывается `setIndex(1)`. Это указывает React на то, что `index` теперь `1`, и вызывает другой рендер.
 3.  **Второй рендер вашего компонента.** React все еще видит `useState(0)`, но поскольку React _помнит_, что вы установили `index` в `1`, он возвращает `[1, setIndex]` вместо этого.
 4.  И так далее!
 
-## Предоставление компоненту нескольких переменных состояния
+## Предоставление компоненту нескольких переменных состояния {#giving-a-component-multiple-state-variables}
 
 В одном компоненте можно иметь столько переменных состояния, сколько угодно типов. Этот компонент имеет две переменные состояния, число `index` и булево значение `showMore`, которое переключается, когда вы нажимаете кнопку "Показать подробности":
 
@@ -597,9 +569,9 @@ const [index, setIndex] = useState(0);
     ];
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-a-components-memory-2.png)
+    <iframe src="https://codesandbox.io/embed/fr74xd?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Это хорошая идея иметь несколько переменных состояния, если их состояние не связано, как `index` и `showMore` в этом примере. Но если вы обнаружите, что часто изменяете две переменные состояния вместе, может быть проще объединить их в одну. Например, если у вас есть форма с большим количеством полей, удобнее иметь одну переменную состояния, которая хранит объект, чем переменную состояния для каждого поля. Прочитайте [Выбор структуры состояния](choosing-the-state-structure.md) для получения дополнительных советов.
 
@@ -845,13 +817,13 @@ const [index, setIndex] = useState(0);
     	</style>
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](state-a-components-memory-2.png)
+    	<iframe src="https://codesandbox.io/embed/jcfwvj?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Вам не обязательно понимать это, чтобы использовать React, но вы можете найти эту модель мышления полезной.
 
-## Состояние изолированное и частное
+## Состояние изолированное и частное {#state-is-isolated-and-private}
 
 Состояние является локальным для экземпляра компонента на экране. Другими словами, **если вы дважды отобразите один и тот же компонент, каждая копия будет иметь полностью изолированное состояние!** Изменение одного из них не повлияет на другой.
 
@@ -1026,9 +998,9 @@ const [index, setIndex] = useState(0);
     ];
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-a-components-memory-3.png)
+    <iframe src="https://codesandbox.io/embed/5rx42k?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Именно это отличает состояние от обычных переменных, которые вы можете объявить в верхней части вашего модуля. Состояние не привязано к определенному вызову функции или месту в коде, оно "локально" для конкретного места на экране. Вы отобразили два компонента `<Gallery />`, поэтому их состояние хранится отдельно.
 
@@ -1046,9 +1018,9 @@ const [index, setIndex] = useState(0);
     -   У вас может быть более одной переменной состояния. Внутри React сопоставляет их по порядку.
     -   Состояние является приватным для компонента. Если вы рендерите его в двух местах, каждая копия получает свое собственное состояние.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Завершение галереи
+### 1. Завершение галереи {#complete-the-gallery}
 
 При нажатии кнопки "Next" на последней скульптуре происходит сбой кода. Исправьте логику, чтобы предотвратить сбой. Вы можете сделать это, добавив дополнительную логику в обработчик события или отключив кнопку, когда действие невозможно.
 
@@ -1093,9 +1065,9 @@ const [index, setIndex] = useState(0);
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-a-components-memory-4.png)
+    <iframe src="https://codesandbox.io/embed/68r2tw?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -1162,13 +1134,13 @@ const [index, setIndex] = useState(0);
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](state-a-components-memory-5.png)
+    	<iframe src="https://codesandbox.io/embed/pq3l89?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Обратите внимание, что `hasPrev` и `hasNext` используются _как_ для возвращаемого JSX, так и внутри обработчиков событий! Эта удобная схема работает потому, что функции обработчиков событий ["закрывают"](https://developer.mozilla.org/docs/Web/JavaScript/Closures) любые переменные, объявленные во время рендеринга.
 
-### 2. Исправление застрявших вводов формы
+### 2. Исправление застрявших вводов формы {#fix-stuck-form-inputs}
 
 Когда вы вводите текст в поля ввода, ничего не появляется. Как будто входные значения "застряли" с пустыми строками. "Значение" первого `<input>` установлено так, чтобы всегда соответствовать переменной `firstName`, а "значение" второго `<input>` установлено так, чтобы всегда соответствовать переменной `lastName`. Это правильно. Оба входа имеют обработчики событий `onChange`, которые пытаются обновить переменные на основе последнего введенного пользователем значения (`e.target.value`). Однако переменные, похоже, не "запоминают" свои значения между повторными рендерингами. Исправьте это, используя вместо них переменные состояния.
 
@@ -1213,9 +1185,9 @@ const [index, setIndex] = useState(0);
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-a-components-memory-6.png)
+    <iframe src="https://codesandbox.io/embed/fly8vs?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -1264,11 +1236,11 @@ const [index, setIndex] = useState(0);
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](state-a-components-memory-7.png)
+    	<iframe src="https://codesandbox.io/embed/zt7wpg?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 3. Устранение сбоя
+### 3. Устранение сбоя {#fix-a-crash}
 
 Вот небольшая форма, которая должна позволить пользователю оставить отзыв. Когда отзыв отправлен, предполагается отобразить сообщение с благодарностью. Однако при этом происходит сбой с сообщением об ошибке: "Rendered lesser hooks than expected". Можете ли вы заметить ошибку и исправить ее?
 
@@ -1307,9 +1279,9 @@ const [index, setIndex] = useState(0);
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-a-components-memory-8.png)
+    <iframe src="https://codesandbox.io/embed/tqs6gz?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -1356,9 +1328,9 @@ const [index, setIndex] = useState(0);
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](state-a-components-memory-9.png)
+    	<iframe src="https://codesandbox.io/embed/7f5p95?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Помните, что хуки должны вызываться безоговорочно и всегда в одном и том же порядке!
 
@@ -1397,15 +1369,15 @@ const [index, setIndex] = useState(0);
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](state-a-components-memory-9.png)
+    	<iframe src="https://codesandbox.io/embed/f7cyrs?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Попробуйте перенести второй вызов `useState` после условия `if` и обратите внимание, как это снова нарушает его.
 
     Если ваш linter [настроен на React](editor-setup.md), то при такой ошибке вы должны увидеть ошибку lint. Если вы не видите ошибки при локальной проверке ошибочного кода, вам необходимо настроить линтинг для вашего проекта.
 
-### 4. Удалите ненужное состояние
+### 4. Удалите ненужное состояние {#remove-unnecessary-state}
 
 При нажатии на кнопку этот пример должен запросить имя пользователя, а затем вывести приветствие. Вы попытались использовать state для хранения имени, но по какой-то причине всегда выводится "Hello, !".
 
@@ -1413,31 +1385,16 @@ const [index, setIndex] = useState(0);
 
 Можете ли вы объяснить, почему эта переменная состояния была ненужной?
 
-```js
-import { useState } from 'react';
-
-export default function FeedbackForm() {
-    const [name, setName] = useState('');
-
-    function handleClick() {
-        setName(prompt('What is your name?'));
-        alert(`Hello, ${name}!`);
-    }
-
-    return <button onClick={handleClick}>Greet</button>;
-}
-```
-
-???success "Показать решение"
-
-    Вот исправленная версия, которая использует обычную переменную `name`, объявленную в функции, которой она нужна:
+=== "App.js"
 
     ```js
     import { useState } from 'react';
 
     export default function FeedbackForm() {
+    	const [name, setName] = useState('');
+
     	function handleClick() {
-    		const name = prompt('What is your name?');
+    		setName(prompt('What is your name?'));
     		alert(`Hello, ${name}!`);
     	}
 
@@ -1445,8 +1402,33 @@ export default function FeedbackForm() {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/yzsjkn?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+???success "Показать решение"
+
+    Вот исправленная версия, которая использует обычную переменную `name`, объявленную в функции, которой она нужна:
+
+    === "App.js"
+
+    	```js
+    	import { useState } from 'react';
+
+    	export default function FeedbackForm() {
+    		function handleClick() {
+    			const name = prompt('What is your name?');
+    			alert(`Hello, ${name}!`);
+    		}
+
+    		return <button onClick={handleClick}>Greet</button>;
+    	}
+    	```
+
+    === "CodeSandbox"
+
+    	<iframe src="https://codesandbox.io/embed/kqs44g?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
     Переменная состояния необходима только для сохранения информации между повторными рендерингами компонента. В рамках одного обработчика событий обычная переменная будет работать нормально. Не вводите переменные состояния, если обычная переменная работает хорошо.
 
-## Ссылки
-
--   [https://react.dev/learn/state-a-components-memory](https://react.dev/learn/state-a-components-memory)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/state-a-components-memory](https://react.dev/learn/state-a-components-memory)</small>

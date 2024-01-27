@@ -1,6 +1,10 @@
+---
+description: React позволяет добавлять обработчики событий в JSX. Обработчики событий - это ваши собственные функции, которые будут запускаться в ответ на такие взаимодействия, как нажатие, наведение курсора, фокусировка ввода формы и так далее
+---
+
 # Реакция на события
 
-React позволяет добавлять _обработчики событий_ в JSX. Обработчики событий - это ваши собственные функции, которые будут запускаться в ответ на такие взаимодействия, как нажатие, наведение курсора, фокусировка ввода формы и так далее.
+<big>React позволяет добавлять **обработчики событий** в JSX. Обработчики событий &mdash; это ваши собственные функции, которые будут запускаться в ответ на такие взаимодействия, как нажатие, наведение курсора, фокусировка ввода формы и так далее.</big>
 
 !!!tip "Вы узнаете"
 
@@ -8,11 +12,9 @@ React позволяет добавлять _обработчики событи
     -   Как передать логику обработки событий от родительского компонента
     -   Как распространяются события и как их остановить
 
-## Добавление обработчиков событий
+## Добавление обработчиков событий {#adding-event-handlers}
 
 Чтобы добавить обработчик событий, вы сначала определите функцию, а затем [передадите ее как параметр](passing-props-to-a-component.md) в соответствующий JSX тег. Например, вот кнопка, которая еще ничего не делает:
-
-<!-- 0001.part.md -->
 
 === "App.js"
 
@@ -22,11 +24,9 @@ React позволяет добавлять _обработчики событи
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-1.png)
-
-<!-- 0002.part.md -->
+    <iframe src="https://codesandbox.io/embed/5sf9j5?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Вы можете заставить его показывать сообщение, когда пользователь нажимает на кнопку, выполнив следующие три шага:
 
@@ -46,9 +46,9 @@ React позволяет добавлять _обработчики событи
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-2.png)
+    <iframe src="https://codesandbox.io/embed/fkr7y6?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Вы определили функцию `handleClick`, а затем [передали ее как параметр](passing-props-to-a-component.md) в `<button>`. `handleClick` - это **обработчик события.** Функции обработчика события:
 
@@ -59,19 +59,13 @@ React позволяет добавлять _обработчики событи
 
 В качестве альтернативы вы можете определить обработчик события в JSX:
 
-<!-- 0007.part.md -->
-
 ```js
 <button onClick={function handleClick() {
   alert('You clicked me!');
 }}>
 ```
 
-<!-- 0008.part.md -->
-
 Или, более кратко, с помощью стрелочной функции:
-
-<!-- 0009.part.md -->
 
 ```js
 <button onClick={() => {
@@ -119,13 +113,11 @@ React позволяет добавлять _обработчики событи
     -   `<button onClick={handleClick}>` передает функцию `handleClick`.
     -   `<button onClick={() => alert('...')}>` передает функцию `() => alert('...')`.
 
-    [Подробнее о стрелочных функциях.](https://javascript.info/arrow-functions-basics)
+    [Подробнее о стрелочных функциях.](https://learn.javascript.ru/arrow-functions-basics)
 
-### Чтение пропсов в обработчиках событий
+### Чтение пропсов в обработчиках событий {#reading-props-in-event-handlers}
 
 Поскольку обработчики событий объявлены внутри компонента, они имеют доступ к пропсам компонента. Вот кнопка, которая при нажатии показывает оповещение со своим пропсом `message`:
-
-<!-- 0015.part.md -->
 
 === "App.js"
 
@@ -152,21 +144,17 @@ React позволяет добавлять _обработчики событи
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-3.png)
-
-<!-- 0018.part.md -->
+    <iframe src="https://codesandbox.io/embed/c83g7z?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Это позволяет этим двум кнопкам показывать разные сообщения. Попробуйте изменить передаваемые им сообщения.
 
-### Передача обработчиков событий как пропсов
+### Передача обработчиков событий как пропсов {#passing-event-handlers-as-props}
 
 Часто требуется, чтобы родительский компонент указывал обработчик событий дочернего компонента. Рассмотрим кнопки: в зависимости от того, где вы используете компонент `Button`, вы можете захотеть выполнить разные функции - возможно, одна воспроизводит фильм, а другая загружает изображение.
 
 Для этого в качестве обработчика события передайте пропс, который компонент получает от своего родителя, следующим образом:
-
-<!-- 0019.part.md -->
 
 === "App.js"
 
@@ -205,30 +193,26 @@ React позволяет добавлять _обработчики событи
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-4.png)
-
-<!-- 0022.part.md -->
+    <iframe src="https://codesandbox.io/embed/55w5tp?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Здесь компонент `Toolbar` отображает `PlayButton` и `UploadButton`:
 
 -   `PlayButton` передает `handlePlayClick` как свойство `onClick` для `Button` внутри.
--   `UploadButton` передает `() => alert('Uploading!')` как свойство `onClick` внутренней `кнопке`.
+-   `UploadButton` передает `() => alert('Uploading!')` как свойство `onClick` внутренней `Button`.
 
 Наконец, ваш компонент `Button` принимает свойство `onClick`. Он передает это свойство непосредственно встроенному браузеру `<button>` с `onClick={onClick}`. Это указывает React на вызов переданной функции по щелчку.
 
 Если вы используете [систему дизайна](https://uxdesign.cc/everything-you-need-to-know-about-design-systems-54b109851969), то обычно такие компоненты, как кнопки, содержат стиль, но не определяют поведение. Вместо этого такие компоненты, как `PlayButton` и `UploadButton`, передают обработчики событий вниз.
 
-### Именование параметров обработчика событий
+### Именование параметров обработчика событий {#naming-event-handler-props}
 
 Встроенные компоненты, такие как `<button>` и `<div>`, поддерживают только [имена событий браузера](../reference/components-common.md), такие как `onClick`. Однако, когда вы создаете свои собственные компоненты, вы можете называть их пропсы обработчиков событий как угодно.
 
 По соглашению, пропсы обработчиков событий должны начинаться с `on`, за которым следует заглавная буква.
 
 Например, пропс `onClick` компонента `Button` можно было бы назвать `onSmash`:
-
-<!-- 0023.part.md -->
 
 === "App.js"
 
@@ -251,17 +235,13 @@ React позволяет добавлять _обработчики событи
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-3.png)
-
-<!-- 0026.part.md -->
+    <iframe src="https://codesandbox.io/embed/n3hncy?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 В этом примере `<button onClick={onSmash}>` показывает, что браузеру `<button>` (строчная буква) по-прежнему нужен пропс `onClick`, но имя пропса, полученное вашим пользовательским компонентом `Button`, зависит от вас!
 
 Если ваш компонент поддерживает множество взаимодействий, вы можете назвать пропсы обработчиков событий для концепций, специфичных для конкретного приложения. Например, компонент `Toolbar` получает обработчики событий `onPlayMovie` и `onUploadImage`:
-
-<!-- 0027.part.md -->
 
 === "App.js"
 
@@ -293,11 +273,9 @@ React позволяет добавлять _обработчики событи
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-3.png)
-
-<!-- 0030.part.md -->
+    <iframe src="https://codesandbox.io/embed/npwq4p?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что компоненту `App` не нужно знать, _что_ `Toolbar` будет делать с `onPlayMovie` или `onUploadImage`. Это деталь реализации `Toolbar`. Здесь `Toolbar` передает их как обработчики `onClick` для своих `Button`, но позже он также может вызвать их по нажатию клавиш. Именование пропсов в честь специфических для приложения взаимодействий, таких как `onPlayMovie`, дает вам возможность гибко изменять их использование в дальнейшем.
 
@@ -305,13 +283,11 @@ React позволяет добавлять _обработчики событи
 
     Убедитесь, что вы используете соответствующие HTML-теги для обработчиков событий. Например, для обработки кликов используйте [`<button onClick={handleClick}>`](https://developer.mozilla.org/docs/Web/HTML/Element/button) вместо `<div onClick={handleClick}>`. Использование настоящего браузерного `<button>` позволяет использовать встроенные поведенческие характеристики браузера, такие как навигация по клавиатуре. Если вам не нравится стандартная стилизация кнопки в браузере и вы хотите сделать ее более похожей на ссылку или другой элемент пользовательского интерфейса, вы можете добиться этого с помощью CSS. [Узнайте больше](https://developer.mozilla.org/docs/Learn/Accessibility/HTML) о написании доступной разметки.
 
-## Распространение событий
+## Распространение событий {#event-propagation}
 
 Обработчики событий также будут улавливать события от всех дочерних компонентов, которые могут быть у вашего компонента. Мы говорим, что событие "бурлит" или "распространяется" вверх по дереву: оно начинается с того места, где произошло событие, а затем поднимается вверх по дереву.
 
 Этот `<div>` содержит две кнопки. И `<div>` _и_ каждая кнопка имеют свои собственные обработчики `onClick`. Как вы думаете, какие обработчики сработают при нажатии на кнопку?
-
-<!-- 0031.part.md -->
 
 === "App.js"
 
@@ -335,11 +311,9 @@ React позволяет добавлять _обработчики событи
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-5.png)
-
-<!-- 0034.part.md -->
+    <iframe src="https://codesandbox.io/embed/qqwck7?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Если вы нажмете на любую из кнопок, сначала сработает ее `onClick`, а затем `onClick` родительской `<div>`. Таким образом, появятся два сообщения. Если щелкнуть на самой панели инструментов, то будет запущена только `onClick` родительской `<div>`.
 
@@ -347,13 +321,11 @@ React позволяет добавлять _обработчики событи
 
     Все события распространяются в React, кроме `onScroll`, которое действует только на тег JSX, к которому вы его прикрепили.
 
-### Остановка распространения
+### Остановка распространения {#stopping-propagation}
 
 Обработчики событий получают объект **event** в качестве единственного аргумента. По традиции он обычно называется `e`, что означает "событие". Вы можете использовать этот объект для чтения информации о событии.
 
 Этот объект события также позволяет остановить распространение. Если вы хотите, чтобы событие не достигло родительских компонентов, вам нужно вызвать `e.stopPropagation()`, как это делает компонент `Button`:
-
-<!-- 0035.part.md -->
 
 === "App.js"
 
@@ -390,11 +362,9 @@ React позволяет добавлять _обработчики событи
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-5.png)
-
-<!-- 0038.part.md -->
+    <iframe src="https://codesandbox.io/embed/qqwck7?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Когда вы нажимаете на кнопку:
 
@@ -411,8 +381,6 @@ React позволяет добавлять _обработчики событи
 
     В редких случаях вам может понадобиться перехватить все события на дочерних элементах, даже если они прекратили распространение. Например, вы хотите регистрировать каждый клик в аналитике, независимо от логики распространения. Вы можете сделать это, добавив `Capture` в конце имени события:
 
-    <!-- 0039.part.md -->
-
     ```js
     <div
     	onClickCapture={() => {
@@ -424,8 +392,6 @@ React позволяет добавлять _обработчики событи
     </div>
     ```
 
-    <!-- 0040.part.md -->
-
     Каждое событие распространяется в три фазы:
 
     1.  Оно перемещается вниз, вызывая все обработчики `onClickCapture`.
@@ -434,7 +400,7 @@ React позволяет добавлять _обработчики событи
 
     События захвата полезны для такого кода, как маршрутизаторы или аналитика, но вы, вероятно, не будете использовать их в коде приложений.
 
-### Передача обработчиков как альтернатива распространению
+### Передача обработчиков как альтернатива распространению {#passing-handlers-as-alternative-to-propagation}
 
 Обратите внимание, как этот обработчик кликов выполняет строку кода _и затем_ вызывает `onClick`, переданный родителем:
 
@@ -457,11 +423,9 @@ function Button({ onClick, children }) {
 
 Если вы полагаетесь на распространение и вам сложно отследить, какие обработчики выполняются и почему, попробуйте применить этот подход.
 
-### Предотвращение поведения по умолчанию
+### Предотвращение поведения по умолчанию {#preventing-default-behavior}
 
 Некоторые события браузера имеют поведение по умолчанию, связанное с ними. Например, событие отправки `<form>`, которое происходит при нажатии на кнопку внутри него, по умолчанию перезагружает всю страницу:
-
-<!-- 0043.part.md -->
 
 === "App.js"
 
@@ -476,15 +440,11 @@ function Button({ onClick, children }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-6.png)
-
-<!-- 0046.part.md -->
+    <iframe src="https://codesandbox.io/embed/82l6vk?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Чтобы этого не произошло, можно вызвать `e.preventDefault()` на объекте события:
-
-<!-- 0047.part.md -->
 
 === "App.js"
 
@@ -504,18 +464,16 @@ function Button({ onClick, children }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-6.png)
-
-<!-- 0050.part.md -->
+    <iframe src="https://codesandbox.io/embed/k4hpgf?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Не путайте `e.stopPropagation()` и `e.preventDefault()`. Они оба полезны, но не связаны между собой:
 
 -   [`e.stopPropagation()`](https://developer.mozilla.org/docs/Web/API/Event/stopPropagation) останавливает срабатывание обработчиков событий, прикрепленных к вышеуказанным тегам.
 -   [`e.preventDefault()`](https://developer.mozilla.org/docs/Web/API/Event/preventDefault) предотвращает поведение браузера по умолчанию для тех немногих событий, в которых он есть.
 
-## Могут ли обработчики событий иметь побочные эффекты?
+## Могут ли обработчики событий иметь побочные эффекты? {#can-event-handlers-have-side-effects}
 
 Конечно! Обработчики событий - лучшее место для побочных эффектов.
 
@@ -533,13 +491,11 @@ function Button({ onClick, children }) {
     -   События могут иметь нежелательное поведение браузера по умолчанию. Вызовите `e.preventDefault()`, чтобы предотвратить это.
     -   Явный вызов свойства обработчика события из дочернего обработчика является хорошей альтернативой распространению.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Исправьте обработчик события
+### 1. Исправьте обработчик события {#fix-an-event-handler}
 
 Щелчок на этой кнопке должен переключить фон страницы между белым и черным. Однако при нажатии ничего не происходит. Исправьте проблему. (Не беспокойтесь о логике внутри `handleClick` - эта часть в порядке).
-
-<!-- 0051.part.md -->
 
 === "App.js"
 
@@ -562,9 +518,9 @@ function Button({ onClick, children }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-7.png)
+    <iframe src="https://codesandbox.io/embed/rqrlpx?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -591,9 +547,9 @@ function Button({ onClick, children }) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](responding-to-events-7.png)
+    	<iframe src="https://codesandbox.io/embed/2mqhfm?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     В качестве альтернативы можно обернуть вызов в другую функцию, например `<button onClick={() => handleClick()}>`:
 
@@ -618,17 +574,15 @@ function Button({ onClick, children }) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](responding-to-events-7.png)
+    	<iframe src="https://codesandbox.io/embed/g425qm?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 2. Подключение событий
+### 2. Подключение событий {#wire-up-the-events}
 
 Этот компонент `ColorSwitch` отображает кнопку. Он должен менять цвет страницы. Подключите его к обработчику события `onChangeColor`, который он получает от родителя, чтобы щелчок по кнопке изменил цвет.
 
 После того, как вы это сделаете, обратите внимание, что нажатие на кнопку также увеличивает счетчик нажатий на страницу. Ваш коллега, написавший родительский компонент, настаивает, что `onChangeColor` не увеличивает никаких счетчиков. Что еще может происходить? Исправьте это так, чтобы нажатие на кнопку _только_ изменяло цвет и _не_ увеличивало счетчик.
-
-<!-- 0057.part.md -->
 
 === "App.js"
 
@@ -638,9 +592,9 @@ function Button({ onClick, children }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](responding-to-events-8.png)
+    <iframe src="https://codesandbox.io/embed/8wmsj8?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -665,10 +619,8 @@ function Button({ onClick, children }) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](responding-to-events-9.png)
+    	<iframe src="https://codesandbox.io/embed/j2d5jw?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-## Ссылки
-
--   [https://react.dev/learn/responding-to-events](https://react.dev/learn/responding-to-events)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/responding-to-events](https://react.dev/learn/responding-to-events)</small>
