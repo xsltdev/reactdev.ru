@@ -1,6 +1,10 @@
+---
+description: Компоненты — это одна из основных концепций React. Они являются фундаментом, на котором вы строите пользовательские интерфейсы (UI), что делает их идеальным местом для начала вашего путешествия по React
+---
+
 # Ваш первый компонент
 
-**Компоненты** — это одна из основных концепций React. Они являются фундаментом, на котором вы строите пользовательские интерфейсы (UI), что делает их идеальным местом для начала вашего путешествия по React!
+<big>**Компоненты** — это одна из основных концепций React. Они являются фундаментом, на котором вы строите пользовательские интерфейсы (UI), что делает их идеальным местом для начала вашего путешествия по React!</big>
 
 !!!tip "Вы узнаете"
 
@@ -8,11 +12,9 @@
     -   Какую роль играют компоненты в приложении React
     -   Как написать свой первый компонент React
 
-## Компоненты: UI строительные блоки
+## Компоненты: UI строительные блоки {#components-ui-building-blocks}
 
-В Интернете HTML позволяет нам создавать богатые структурированные документы с помощью встроенного набора тегов, таких как `<h1>` и `<li>`:
-
-<!-- 0001.part.md -->
+В Интернете HTML позволяет нам создавать богатые структурированные документы с помощью встроенного набора тегов, таких как [`<h1>`](https://hcdev.ru/html/h1/) и [`<li>`](https://hcdev.ru/html/li/):
 
 ```html
 <article>
@@ -25,15 +27,11 @@
 </article>
 ```
 
-<!-- 0002.part.md -->
-
-Эта разметка представляет статью `<article>`, ее заголовок `<h1>` и (сокращенное) оглавление в виде упорядоченного списка `<ol>`. Подобная разметка в сочетании с CSS для стиля и JavaScript для интерактивности лежит в основе каждой боковой панели, аватара, модала, выпадающего окна — всех элементов пользовательского интерфейса, которые вы видите в Интернете.
+Эта разметка представляет статью [`<article>`](https://hcdev.ru/html/article/), ее заголовок `<h1>` и (сокращенное) оглавление в виде упорядоченного списка [`<ol>`](https://hcdev.ru/html/ol/). Подобная разметка в сочетании с CSS для стиля и JavaScript для интерактивности лежит в основе каждой боковой панели, аватара, модала, выпадающего окна — всех элементов пользовательского интерфейса, которые вы видите в Интернете.
 
 React позволяет объединять разметку, CSS и JavaScript в пользовательские "компоненты", **повторно используемые элементы пользовательского интерфейса для вашего приложения.** Код оглавления, который вы видели выше, можно превратить в компонент `<TableOfContents />`, который можно отображать на каждой странице. Под капотом он по-прежнему использует те же HTML-теги, такие как `<article>`, `<h1>` и т. д.
 
 Как и в случае с HTML-тегами, вы можете компоновать, упорядочивать и вкладывать компоненты для создания целых страниц. Например, страница документации, которую вы читаете, состоит из компонентов React:
-
-<!-- 0003.part.md -->
 
 ```js
 <PageLayout>
@@ -49,15 +47,11 @@ React позволяет объединять разметку, CSS и JavaScrip
 </PageLayout>
 ```
 
-<!-- 0004.part.md -->
-
 По мере роста вашего проекта вы заметите, что многие из ваших конструкций могут быть составлены путем повторного использования уже написанных компонентов, что ускорит вашу разработку. Наше оглавление выше может быть добавлено на любой экран с помощью `<TableOfContents />`! Вы даже можете начать свой проект с тысяч компонентов, которыми поделилось сообщество разработчиков React, например, [Chakra UI](https://chakra-ui.com/) и [Material UI](https://material-ui.com/).
 
-## Определение компонента
+## Определение компонента {#defining-a-component}
 
 Традиционно при создании веб-страниц веб-разработчики размечали содержимое, а затем добавляли взаимодействие, добавляя немного JavaScript. Это отлично работало, когда взаимодействие было просто необходимостью в Интернете. Теперь от него ждут многие сайты и все приложения. React ставит интерактивность на первое место, используя при этом ту же технологию: **компонент React — это функция JavaScript, которую вы можете _посыпать разметкой_.** Вот как это выглядит:
-
-<!-- 0005.part.md -->
 
 === "App.js"
 
@@ -72,19 +66,17 @@ React позволяет объединять разметку, CSS и JavaScrip
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](your-first-component-1.png)
-
-<!-- 0008.part.md -->
+    <iframe src="https://codesandbox.io/embed/c269cw?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 А вот как создать компонент:
 
-### Шаг 1: Экспорт компонента
+### Шаг 1: Экспорт компонента {#step-1-export-the-component}
 
 Префикс `export default` — это [стандартный синтаксис JavaScript](https://developer.mozilla.org/docs/web/javascript/reference/statements/export) (не специфичный для React). Он позволяет отметить главную функцию в файле, чтобы впоследствии ее можно было импортировать из других файлов. Подробнее об импорте в [импорт и экспорт компонент](importing-and-exporting-components.md)!
 
-### Шаг 2: Определить функцию
+### Шаг 2: Определить функцию {#step-2-define-the-function}
 
 С помощью `function Profile() { }` вы определяете функцию JavaScript с именем `Profile`.
 
@@ -92,13 +84,11 @@ React позволяет объединять разметку, CSS и JavaScrip
 
     Компоненты React являются обычными функциями JavaScript, но **их имена должны начинаться с заглавной буквы**, иначе они не будут работать!
 
-### Шаг 3: Добавить разметку
+### Шаг 3: Добавить разметку {#step-3-add-markup}
 
 Компонент возвращает тег `<img />` с атрибутами `src` и `alt`. `<img />` написан как HTML, но на самом деле это JavaScript под капотом! Этот синтаксис называется [JSX](writing-markup-with-jsx.md), и он позволяет встраивать разметку внутрь JavaScript.
 
 Выражения return могут быть написаны на одной строке. Но если ваша разметка не находится на одной строке с ключевым словом `return`, вы должны заключить его в пару круглых скобок:
-
-<!-- 0011.part.md -->
 
 ```js
 return (
@@ -111,17 +101,13 @@ return (
 );
 ```
 
-<!-- 0012.part.md -->
-
 !!!warning "Внимание"
 
     Без круглых скобок любой код в строках после `return` [будет проигнорирован](https://stackoverflow.com/questions/2846283/what-are-the-rules-for-javascripts-automatic-semicolon-insertion-asi)!
 
-## Использование компонента
+## Использование компонента {#using-a-component}
 
 Теперь, когда вы определили свой компонент `Profile`, вы можете вложить его в другие компоненты. Например, вы можете экспортировать компонент `Gallery`, который использует несколько компонентов `Profile`:
-
-<!-- 0013.part.md -->
 
 === "App.js"
 
@@ -147,22 +133,18 @@ return (
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](your-first-component-2.png)
+    <iframe src="https://codesandbox.io/embed/xgy8t9?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-<!-- 0016.part.md -->
-
-### Что видит браузер
+### Что видит браузер {#what-the-browser-sees}
 
 Обратите внимание на разницу в корпусе:
 
 -   `<section>` строчная, поэтому React знает, что мы ссылаемся на HTML-тег.
 -   `<Profile />` начинается с заглавной буквы `P`, поэтому React знает, что мы хотим использовать наш компонент под названием `Profile`.
 
-А `Профиль` содержит еще больше HTML: `<img />`. В итоге, вот что видит браузер:
-
-<!-- 0017.part.md -->
+А `Profile` содержит еще больше HTML: `<img />`. В итоге, вот что видит браузер:
 
 ```html
 <section>
@@ -182,9 +164,7 @@ return (
 </section>
 ```
 
-<!-- 0018.part.md -->
-
-### Вложение и организация компонентов
+### Вложение и организация компонентов {#nesting-and-organizing-components}
 
 Компоненты — это обычные функции JavaScript, поэтому вы можете хранить несколько компонентов в одном файле. Это удобно, когда компоненты относительно небольшие или тесно связаны друг с другом. Если этот файл станет тесноват, вы всегда можете переместить `Profile` в отдельный файл. Как это сделать, вы узнаете в ближайшее время на [странице об импорте](importing-and-exporting-components.md).
 
@@ -193,8 +173,6 @@ return (
 !!!warning "Внимание"
 
     Компоненты могут рендерить другие компоненты, но **вы никогда не должны вкладывать их определения друг в друга:**.
-
-    <!-- 0019.part.md -->
 
     ```js
     export default function Gallery() {
@@ -206,11 +184,7 @@ return (
     }
     ```
 
-    <!-- 0020.part.md -->
-
     Приведенный выше фрагмент [очень медленный и вызывает ошибки](preserving-and-resetting-state.md) Вместо этого определите каждый компонент на верхнем уровне:
-
-    <!-- 0021.part.md -->
 
     ```js
     export default function Gallery() {
@@ -222,8 +196,6 @@ return (
     	// ...
     }
     ```
-
-    <!-- 0022.part.md -->
 
     Когда дочернему компоненту нужны данные от родительского, [передайте их параметрами](passing-props-to-a-component.md) вместо вложенных определений.
 
@@ -247,9 +219,9 @@ return (
     	1.  Их имена всегда начинаются с заглавной буквы.
     	2.  Они возвращают JSX-разметку.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Экспорт компонента
+### 1. Экспорт компонента {#export-the-component}
 
 Этот код не работает, потому что корневой компонент не экспортируется:
 
@@ -266,11 +238,9 @@ return (
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](your-first-component-3.png)
-
-<!-- 0026.part.md -->
+    <iframe src="https://codesandbox.io/embed/3kp7gh?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Попробуйте исправить это сами, прежде чем смотреть на решение!
 
@@ -291,13 +261,13 @@ return (
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](your-first-component-4.png)
+    	<iframe src="https://codesandbox.io/embed/d3f72l?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Вам может быть интересно, почему одного написания `export` недостаточно для исправления этого примера. Вы можете узнать разницу между `export` и `export default` в [Импорт и экспорт компонентов](importing-and-exporting-components.md).
 
-### 2. Исправьте оператор возврата
+### 2. Исправьте оператор возврата {#fix-the-return-statement}
 
 Что-то не так в этом выражении `return`. Можете ли вы исправить это?
 
@@ -335,13 +305,9 @@ export default function Profile() {
     }
     ```
 
-<!-- 0042.part.md -->
-
-### 3. Заметить ошибку
+### 3. Заметить ошибку {#spot-the-mistake}
 
 Что-то не так в том, как объявлен и используется компонент `Profile`. Можете ли вы найти ошибку? Постарайтесь вспомнить, как React отличает компоненты от обычных HTML-тегов!
-
-<!-- 0043.part.md -->
 
 ```js
 function profile() {
@@ -364,8 +330,6 @@ export default function Gallery() {
     );
 }
 ```
-
-<!-- 0046.part.md -->
 
 ???success "Показать решение"
 
@@ -395,9 +359,7 @@ export default function Gallery() {
     }
     ```
 
-<!-- 0050.part.md -->
-
-### 4. Ваш собственный компонент
+### 4. Ваш собственный компонент {#your-own-component}
 
 Напишите компонент с нуля. Вы можете дать ему любое допустимое имя и вернуть любую разметку. Если у вас нет идей, вы можете написать компонент `Congratulations`, который показывает `<h1>Хорошая работа!</h1>`. Не забудьте экспортировать это!
 
@@ -413,6 +375,4 @@ export default function Gallery() {
     }
     ```
 
-## Ссылки
-
--   [https://react.dev/learn/your-first-component](https://react.dev/learn/your-first-component)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/your-first-component](https://react.dev/learn/your-first-component)</small>

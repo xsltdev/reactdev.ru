@@ -478,8 +478,8 @@ function MyButton({ count, onClick }) {
 
 Просмотрите [Учебник: крестики-нолики](tutorial-tic-tac-toe.md), чтобы применить их на практике и создать свое первое мини-приложение на React.
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn](https://react.dev/learn)
-
 !!!danger "Перевод"
 
     Перевод этого учебника сделан благодаря [подписчикам на Бусти](https://boosty.to/bndby).
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn](https://react.dev/learn)</small>

@@ -474,4 +474,4 @@ interface MyComponentProps {
 
 -   [TypeScript Community Discord](https://discord.com/invite/typescript) - отличное место, где можно задать вопросы и получить помощь по проблемам TypeScript и React.
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn/typescript](https://react.dev/learn/typescript)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/typescript](https://react.dev/learn/typescript)</small>

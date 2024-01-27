@@ -2736,4 +2736,4 @@ export default function Game() {
 
 На протяжении всего этого урока вы затрагивали такие понятия React, как элементы, компоненты, пропсы и состояние. Теперь, когда вы увидели, как эти концепции работают при создании игры, ознакомьтесь с [Мыслим как React](thinking-in-react.md), чтобы увидеть, как те же концепции React работают при создании пользовательского интерфейса приложения.
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn/tutorial-tic-tac-toe](https://react.dev/learn/tutorial-tic-tac-toe)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/tutorial-tic-tac-toe](https://react.dev/learn/tutorial-tic-tac-toe)</small>

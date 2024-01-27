@@ -741,4 +741,4 @@ function FilterableProductTable({ products }) {
 
 Это было очень краткое введение в то, как думать о создании компонентов и приложений с помощью React. Вы можете [начать проект React](installation.md) прямо сейчас или [углубиться в синтаксис](describing-the-ui.md), использованный в этом руководстве.
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn/thinking-in-react](https://react.dev/learn/thinking-in-react)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/thinking-in-react](https://react.dev/learn/thinking-in-react)</small>

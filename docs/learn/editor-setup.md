@@ -59,4 +59,4 @@ description: Правильно настроенный редактор може
 
     Если в вашей предустановке ESLint есть правила форматирования, они могут конфликтовать с Prettier. Мы рекомендуем отключить все правила форматирования в вашей предустановке ESLint с помощью [`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier), чтобы ESLint использовался только для отлова логических ошибок. Если вы хотите, чтобы файлы были отформатированы до слияния запроса на выгрузку, используйте [`prettier --check`](https://prettier.io/docs/en/cli.html#--check) для вашей непрерывной интеграции.
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn/editor-setup](https://react.dev/learn/editor-setup)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/editor-setup](https://react.dev/learn/editor-setup)</small>

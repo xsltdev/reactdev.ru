@@ -39,4 +39,4 @@ description: React с самого начала был разработан дл
 
 Обратитесь к руководству [Быстрый старт](index.md) для ознакомления с наиболее важными концепциями React, с которыми вы будете сталкиваться каждый день.
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn/installation](https://react.dev/learn/installation)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/installation](https://react.dev/learn/installation)</small>

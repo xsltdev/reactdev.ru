@@ -1,6 +1,10 @@
+---
+description: По мере того, как вы создаете все больше и больше компонентов, часто имеет смысл начать разделять их на разные файлы. Это позволяет легко сканировать файлы и повторно использовать компоненты в большем количестве мест
+---
+
 # Импорт и экспорт компонентов
 
-Магия компонентов заключается в возможности их повторного использования: вы можете создавать компоненты, которые состоят из других компонентов. Но по мере того, как вы создаете все больше и больше компонентов, часто имеет смысл начать разделять их на разные файлы. Это позволяет легко сканировать файлы и повторно использовать компоненты в большем количестве мест.
+<big>Магия компонентов заключается в возможности их повторного использования: вы можете создавать компоненты, которые состоят из других компонентов. Но по мере того, как вы создаете все больше и больше компонентов, часто имеет смысл начать разделять их на разные файлы. Это позволяет легко сканировать файлы и повторно использовать компоненты в большем количестве мест.</big>
 
 !!!tip "Вы узнаете"
 
@@ -10,11 +14,9 @@
     -   Как импортировать и экспортировать несколько компонентов из одного файла
     -   Как разделить компоненты на несколько файлов
 
-## Корневой файл компонента
+## Корневой файл компонента {#the-root-component-file}
 
-В [ваш первый компонент](your-first-component.md) вы создали компонент `Profile` и компонент `Gallery`, который его отображает:
-
-<!-- 0001.part.md -->
+В [вашем первом компоненте](your-first-component.md) вы создали компонент `Profile` и компонент `Gallery`, который его отображает:
 
 === "App.js"
 
@@ -40,15 +42,13 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](importing-and-exporting-components-1.png)
+    <iframe src="https://codesandbox.io/embed/xgy8t9?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-<!-- 0004.part.md -->
+Сейчас они находятся в **корневом файле компонента,** названном в данном примере `App.js`. В [Create React App](https://create-react-app.dev/) ваше приложение находится в `src/App.js`. Однако, в зависимости от вашей конфигурации, ваш корневой компонент может находиться в другом файле. Если вы используете фреймворк с файловой маршрутизацией, например Next.js, ваш корневой компонент будет разным для каждой страницы.
 
-В настоящее время они находятся в **корневом файле компонента,** названном в данном примере `App.js`. В [Create React App](https://create-react-app.dev/) ваше приложение находится в `src/App.js`. Однако, в зависимости от вашей конфигурации, ваш корневой компонент может находиться в другом файле. Если вы используете фреймворк с файловой маршрутизацией, например Next.js, ваш корневой компонент будет разным для каждой страницы.
-
-## Экспорт и импорт компонента
+## Экспорт и импорт компонента {#exporting-and-importing-a-component}
 
 Что если в будущем вы захотите изменить целевой экран и поместить туда список научных книг? Или разместить все профили в другом месте? Имеет смысл перенести `Gallery` и `Profile` из корневого файла компонента. Это сделает их более модульными и пригодными для повторного использования в других файлах. Вы можете переместить компонент в три этапа:
 
@@ -57,8 +57,6 @@
 3.  **Импортируйте** его в файл, где вы будете использовать компонент (используя соответствующую технику для импорта [default](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/import#importing_defaults) или [named](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/import#import_a_single_export_from_a_module) exports).
 
 Здесь `Profile` и `Gallery` были перенесены из `App.js` в новый файл `Gallery.js`. Теперь вы можете изменить `App.js`, чтобы импортировать `Gallery` из `Gallery.js`:
-
-<!-- 0005.part.md -->
 
 === "App.js"
 
@@ -96,9 +94,7 @@
 
 === "Результат"
 
-    ![Результат](importing-and-exporting-components-2.png)
-
-<!-- 0010.part.md -->
+    <iframe src="https://codesandbox.io/embed/nfmfwy?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что теперь этот пример разбит на два составных файла:
 
@@ -130,23 +126,21 @@
     | Синтаксис    | Утверждение экспорта                  | Утверждение импорта                     |
     | ------------ | ------------------------------------- | --------------------------------------- |
     | По умолчанию | `export default function Button() {}` | `import Button from './Button.js';`     |
-    | Named        | `export function Button() {}`         | `import { Button } from './Button.js';` |
+    | Именованный  | `export function Button() {}`         | `import { Button } from './Button.js';` |
 
     Когда вы пишете импорт _по умолчанию_, вы можете поместить любое имя после `import`. Например, вы можете написать `import Banana from './Button.js'` вместо этого, и это все равно предоставит вам тот же экспорт по умолчанию. В отличие от этого, при именованном импорте имя должно совпадать с обеих сторон. Вот почему они называются _именованными_ импортами!
 
     **Люди часто используют экспорт по умолчанию, если файл экспортирует только один компонент, и используют именованный экспорт, если он экспортирует несколько компонентов и значений.** Независимо от того, какой стиль кодирования вы предпочитаете, всегда давайте осмысленные имена вашим компонентным функциям и файлам, которые их содержат. Компоненты без имен, такие как `export default () => {}`, не рекомендуется использовать, поскольку они затрудняют отладку.
 
-## Экспорт и импорт нескольких компонентов из одного файла
+## Экспорт и импорт нескольких компонентов из одного файла {#exporting-and-importing-multiple-components-from-the-same-file}
 
-Что если вы хотите показать только один `Профиль` вместо галереи? Вы можете экспортировать и компонент `Profile`. Но `Gallery.js` уже имеет экспорт по _умолчанию_, а вы не можете иметь _два_ экспорта по умолчанию. Вы можете создать новый файл с экспортом по умолчанию, или добавить _именной_ экспорт для `Profile`. **Файл может иметь только один экспорт по умолчанию, но может иметь множество именованных экспортов!**.
+Что если вы хотите показать только один `Профиль` вместо галереи? Вы можете экспортировать и компонент `Profile`. Но `Gallery.js` уже имеет экспорт по _умолчанию_, а вы не можете иметь _два_ экспорта по умолчанию. Вы можете создать новый файл с экспортом по умолчанию, или добавить _именной_ экспорт для `Profile`. **Файл может иметь только один экспорт по умолчанию, но может иметь множество именованных экспортов!**
 
-!!!note ""
+!!!note "Стиль экспорта"
 
     Чтобы уменьшить потенциальную путаницу между экспортом по умолчанию и именованным экспортом, некоторые команды предпочитают придерживаться только одного стиля (по умолчанию или именованного), или избегать их смешивания в одном файле. Делайте то, что подходит именно вам!
 
 Во-первых, **экспортируйте** `Profile` из `Gallery.js`, используя именованный экспорт (без ключевого слова `default`):
-
-<!-- 0013.part.md -->
 
 ```js
 export function Profile() {
@@ -154,21 +148,13 @@ export function Profile() {
 }
 ```
 
-<!-- 0014.part.md -->
-
 Затем **импортируйте** `Profile` из `Gallery.js` в `App.js`, используя именованный импорт (с фигурными скобками):
-
-<!-- 0015.part.md -->
 
 ```js
 import { Profile } from './Gallery.js';
 ```
 
-<!-- 0016.part.md -->
-
 Наконец, **render** `<Profile />` из компонента `App`:
-
-<!-- 0017.part.md -->
 
 ```js
 export default function App() {
@@ -176,11 +162,7 @@ export default function App() {
 }
 ```
 
-<!-- 0018.part.md -->
-
 Теперь `Gallery.js` содержит два экспорта: экспорт по умолчанию `Gallery` и именованный экспорт `Profile`. `App.js` импортирует их оба. Попробуйте изменить `<Profile />` на `<Gallery />` и обратно в этом примере:
-
-<!-- 0019.part.md -->
 
 === "App.j"
 
@@ -219,9 +201,7 @@ export default function App() {
 
 === "Результат"
 
-    ![Результат](importing-and-exporting-components-3.png)
-
-<!-- 0024.part.md -->
+    <iframe src="https://codesandbox.io/embed/5qcqj6?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Теперь вы используете смесь экспорта по умолчанию и именованных экспортов:
 
@@ -242,9 +222,9 @@ export default function App() {
     -   Когда и как использовать импорт и экспорт по умолчанию и по имени
     -   Как экспортировать несколько компонентов из одного файла
 
-## Задача
+## Задача {#challenges}
 
-### 1. Разделяйте компоненты дальше
+### 1. Разделяйте компоненты дальше {#split-the-components-further}
 
 В настоящее время `Gallery.js` экспортирует и `Profile` и `Gallery`, что немного запутывает.
 
@@ -252,14 +232,12 @@ export default function App() {
 
 Вы можете использовать либо экспорт по умолчанию, либо именованный экспорт для `Profile`, но убедитесь, что вы используете соответствующий синтаксис импорта как в `App.js`, так и в `Gallery.js`! Вы можете обратиться к таблице из глубокого погружения выше:
 
-| Синтаксис | Утверждение экспорта                  | Утверждение импорта                     |
-| --------- | ------------------------------------- | --------------------------------------- |
-| Default   | `export default function Button() {}` | `import Button from './Button.js'';`    |
-| Named     | `export function Button() {}`         | `import { Button } from './Button.js''` |
+| Синтаксис    | Утверждение экспорта                  | Утверждение импорта                     |
+| ------------ | ------------------------------------- | --------------------------------------- |
+| По-умолчанию | `export default function Button() {}` | `import Button from './Button.js'';`    |
+| Именованный  | `export function Button() {}`         | `import { Button } from './Button.js''` |
 
 Не забывайте импортировать свои компоненты там, где они вызываются. Разве `Gallery` не использует `Profile` тоже?
-
-<!-- 0025.part.md -->
 
 === "App.js"
 
@@ -309,9 +287,7 @@ export default function App() {
 
 === "Результат"
 
-    ![Результат](importing-and-exporting-components-4.png)
-
-<!-- 0032.part.md -->
+    <iframe src="https://codesandbox.io/embed/w759z8?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 После того, как вы заставите его работать с одним видом экспорта, заставьте его работать с другим видом.
 
@@ -371,7 +347,7 @@ export default function App() {
 
     === "Результат"
 
-    	![Результат](importing-and-exporting-components-5.png)
+    	<iframe src="https://codesandbox.io/embed/kz3qn4?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение 2"
 
@@ -425,8 +401,6 @@ export default function App() {
 
     === "Результат"
 
-    	![Результат](importing-and-exporting-components-5.png)
+    	<iframe src="https://codesandbox.io/embed/l2py7r?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-## Ссылки
-
--   [https://react.dev/learn/importing-and-exporting-components](https://react.dev/learn/importing-and-exporting-components)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/importing-and-exporting-components](https://react.dev/learn/importing-and-exporting-components)</small>

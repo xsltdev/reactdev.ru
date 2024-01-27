@@ -142,4 +142,4 @@ root.render(<h1>Hello, world</h1>);
 
 [React Native](https://reactnative.dev/) также может быть интегрирован в существующие нативные приложения постепенно. Если у вас есть существующее нативное приложение для Android (Java или Kotlin) или iOS (Objective-C или Swift), [следуйте этому руководству](https://reactnative.dev/docs/integration-with-existing-apps), чтобы добавить в него экран React Native.
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn/add-react-to-an-existing-project](https://react.dev/learn/add-react-to-an-existing-project)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/add-react-to-an-existing-project](https://react.dev/learn/add-react-to-an-existing-project)</small>

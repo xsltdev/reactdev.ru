@@ -82,4 +82,4 @@ react-devtools
 
     [Подробнее об отладке React Native.](https://reactnative.dev/docs/debugging)
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn/react-developer-tools](https://react.dev/learn/react-developer-tools)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/react-developer-tools](https://react.dev/learn/react-developer-tools)</small>

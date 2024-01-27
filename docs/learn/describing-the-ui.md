@@ -496,4 +496,4 @@ _Пример дерева зависимостей модулей._
 
 Или, если вы уже знакомы с этими темами, почему бы не прочитать [Добаление интерактивности](adding-interactivity.md)?
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn/describing-the-ui](https://react.dev/learn/describing-the-ui)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/describing-the-ui](https://react.dev/learn/describing-the-ui)</small>

@@ -118,4 +118,4 @@ Next.js поддерживается [Vercel](https://vercel.com/). Вы мож�
 
     Server Components и `Suspense` — это скорее особенности React, чем особенности Next.js. Однако их внедрение на уровне фреймворка требует участия и нетривиальной работы по реализации. На данный момент наиболее полной реализацией является Next.js App Router. Команда React работает с разработчиками бандлеров, чтобы облегчить внедрение этих функций в следующее поколение фреймворков.
 
-:material-information-outline: Источник &mdash; [https://react.dev/learn/start-a-new-react-project](https://react.dev/learn/start-a-new-react-project)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/start-a-new-react-project](https://react.dev/learn/start-a-new-react-project)</small>
