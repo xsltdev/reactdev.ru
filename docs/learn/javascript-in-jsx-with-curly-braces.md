@@ -1,6 +1,10 @@
+---
+description: Иногда вы захотите добавить немного логики JavaScript или сослаться на динамическое свойство внутри этой разметки. В этой ситуации вы можете использовать фигурные скобки в JSX, чтобы открыть окно для JavaScript
+---
+
 # JavaScript в JSX с фигурными скобками
 
-JSX позволяет вам писать HTML-подобную разметку внутри файла JavaScript, сохраняя логику рендеринга и содержимое в одном месте. Иногда вы захотите добавить немного логики JavaScript или сослаться на динамическое свойство внутри этой разметки. В этой ситуации вы можете использовать фигурные скобки в JSX, чтобы открыть окно для JavaScript.
+<big>JSX позволяет вам писать HTML-подобную разметку внутри файла JavaScript, сохраняя логику рендеринга и содержимое в одном месте. Иногда вы захотите добавить немного логики JavaScript или сослаться на динамическое свойство внутри этой разметки. В этой ситуации вы можете использовать **фигурные скобки** в JSX, чтобы использовать JavaScript.</big>
 
 !!!tip "Вы узнаете"
 
@@ -9,11 +13,9 @@ JSX позволяет вам писать HTML-подобную разметк�
     -   Как вызвать функцию JavaScript в JSX с помощью фигурных скобок
     -   Как использовать объект JavaScript внутри JSX с фигурными скобками
 
-## Передача строк с кавычками
+## Передача строк с кавычками {#passing-strings-with-quotes}
 
 Когда вы хотите передать строковый атрибут в JSX, вы заключаете его в одинарные или двойные кавычки:
-
-<!-- 0001.part.md -->
 
 === "App.js"
 
@@ -29,17 +31,13 @@ JSX позволяет вам писать HTML-подобную разметк�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](javascript-in-jsx-with-curly-braces-1.png)
-
-<!-- 0004.part.md -->
+    <iframe src="https://codesandbox.io/embed/c3tksl?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Здесь `"https://i.imgur.com/7vQD0fPs.jpg"` и `"Gregorio Y. Zara"` передаются как строки.
 
-Но что если вы хотите динамически указать текст `src` или `alt`? Вы можете **использовать значение из JavaScript, заменив `и` на `{` и ``}`**:
-
-<!-- 0005.part.md -->
+Но что если вы хотите динамически указать текст `src` или `alt`? Вы можете **использовать значение из JavaScript, заменив `"` и `"` на `{` и `}`**:
 
 === "App.js"
 
@@ -57,19 +55,15 @@ JSX позволяет вам писать HTML-подобную разметк�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](javascript-in-jsx-with-curly-braces-1.png)
-
-<!-- 0008.part.md -->
+    <iframe src="https://codesandbox.io/embed/k9s9n2?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание на разницу между `className="avatar"`, которая определяет имя CSS-класса `"avatar"`, который делает изображение круглым, и `src={avatar}`, которая читает значение переменной JavaScript под названием `avatar`. Это потому, что фигурные скобки позволяют вам работать с JavaScript прямо в вашей разметке!
 
-## Использование фигурных скобок: Окно в мир JavaScript
+## Использование фигурных скобок: Окно в мир JavaScript {#using-curly-braces-a-window-into-the-javascript-world}
 
 JSX - это особый способ написания JavaScript. Это означает, что можно использовать JavaScript внутри него - с фигурными скобками `{ }`. В приведенном ниже примере сначала объявляется имя ученого, `name`, затем оно помещается в фигурные скобки внутри `<h1>`:
-
-<!-- 0009.part.md -->
 
 === "App.js"
 
@@ -80,17 +74,13 @@ JSX - это особый способ написания JavaScript. Это о�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](javascript-in-jsx-with-curly-braces-2.png)
-
-<!-- 0010.part.md -->
+    <iframe src="https://codesandbox.io/embed/hyqdsw?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Попробуйте изменить значение `name` с `Грегорио Й. Зара` на `Хеди Ламарр`. Видите, как изменился заголовок списка?
 
 Любое выражение JavaScript будет работать между фигурными скобками, включая вызовы функций, таких как `formatDate()`:
-
-<!-- 0011.part.md -->
 
 === "App.js"
 
@@ -108,26 +98,22 @@ JSX - это особый способ написания JavaScript. Это о�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](javascript-in-jsx-with-curly-braces-3.png)
+    <iframe src="https://codesandbox.io/embed/3lkz77?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-<!-- 0012.part.md -->
-
-### Где использовать фигурные скобки
+### Где использовать фигурные скобки {#where-to-use-curly-braces}
 
 В JSX фигурные скобки можно использовать только двумя способами:
 
 1.  **В качестве текста** непосредственно внутри тега JSX: `<h1>{name}'s To Do List</h1>` работает, а <code>&lt;{tag}&gt;Gregorio Y. Zara's To Do List&lt;/{tag}&gt;</code> не работает.
 2.  **Атрибуты** сразу после знака `=`: `src={avatar}` прочитает переменную `avatar`, но `src="{avatar}"` передаст строку `"{avatar}"`.
 
-## Использование "двойных завитушек": CSS и другие объекты в JSX
+## Использование "двойных завитушек": CSS и другие объекты в JSX {#using-double-curlies-css-and-other-objects-in-jsx}
 
 Помимо строк, чисел и других выражений JavaScript, в JSX можно передавать даже объекты. Объекты также обозначаются фигурными скобками, например `{ name: "Hedy Lamarr", inventions: 5 }`. Поэтому, чтобы передать объект JS в JSX, вы должны обернуть объект в другую пару фигурных скобок: `person={{ name: "Hedy Lamarr", inventions: 5 }}`.
 
 Подобное можно увидеть при использовании встроенных стилей CSS в JSX. React не требует использования встроенных стилей (классы CSS отлично подходят для большинства случаев). Но когда вам нужен встроенный стиль, вы передаете объект в атрибут `style`:
-
-<!-- 0013.part.md -->
 
 === "App.js"
 
@@ -148,19 +134,15 @@ JSX - это особый способ написания JavaScript. Это о�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](javascript-in-jsx-with-curly-braces-4.png)
-
-<!-- 0016.part.md -->
+    <iframe src="https://codesandbox.io/embed/6twv9v?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Попробуйте изменить значения `backgroundColor` и `color`.
 
 Вы действительно можете увидеть объект JavaScript внутри фигурных скобок, если напишете его так:
 
-<!-- 0017.part.md -->
-
-```js
+```js hl_lines="2-5"
 <ul style={
   {
     backgroundColor: 'black',
@@ -169,19 +151,15 @@ JSX - это особый способ написания JavaScript. Это о�
 }>
 ```
 
-<!-- 0018.part.md -->
-
 Когда в следующий раз вы увидите `{{` и `}}` в JSX, знайте, что это не что иное, как объект внутри JSX curlies!
 
 !!!warning "Внимание"
 
     Инлайн-свойства `style` записываются в camelCase. Например, HTML `<ul style="background-color: black">` будет записан как `<ul style={{ backgroundColor: 'black' }}>` в вашем компоненте.
 
-## Больше веселья с объектами JavaScript и фигурными скобками
+## Больше веселья с объектами JavaScript и фигурными скобками {#more-fun-with-javascript-objects-and-curly-braces}
 
 Вы можете поместить несколько выражений в один объект и ссылаться на них в JSX внутри фигурных скобок:
-
-<!-- 0019.part.md -->
 
 === "App.js"
 
@@ -213,15 +191,11 @@ JSX - это особый способ написания JavaScript. Это о�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](javascript-in-jsx-with-curly-braces-5.png)
-
-<!-- 0022.part.md -->
+    <iframe src="https://codesandbox.io/embed/vppdcf?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 В этом примере объект JavaScript `person` содержит строку `name` и объект `theme`:
-
-<!-- 0023.part.md -->
 
 ```js
 const person = {
@@ -233,18 +207,13 @@ const person = {
 };
 ```
 
-<!-- 0024.part.md -->
-
 Компонент может использовать эти значения из `person` следующим образом:
-
-<!-- 0025.part.md -->
 
 ```js
 <div style={person.theme}>
-  <h1>{person.name}'s Todos</h1>
+    <h1>{person.name}'s Todos</h1>
+</div>
 ```
-
-<!-- 0026.part.md -->
 
 JSX очень минимален как язык шаблонов, потому что он позволяет организовать данные и логику с помощью JavaScript.
 
@@ -257,13 +226,11 @@ JSX очень минимален как язык шаблонов, потому
     -   Они работают внутри содержимого тега JSX или сразу после `=` в атрибутах.
     -   `{{` и `}}` - это не специальный синтаксис: это объект JavaScript, помещенный в фигурные скобки JSX.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Исправьте ошибку
+### 1. Исправьте ошибку {#fix-the-mistake}
 
 Этот код аварийно завершается с ошибкой `Objects are not valid as a React child`:
-
-<!-- 0027.part.md -->
 
 === "App.js"
 
@@ -295,11 +262,9 @@ JSX очень минимален как язык шаблонов, потому
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](javascript-in-jsx-with-curly-braces-6.png)
-
-<!-- 0030.part.md -->
+    <iframe src="https://codesandbox.io/embed/4skw7f?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Можете ли вы найти проблему?
 
@@ -312,8 +277,6 @@ JSX очень минимален как язык шаблонов, потому
     Это происходит потому, что в данном примере в разметку помещается _сам объект_, а не строка: `<h1>{person}'s Todos</h1>` пытается отобразить весь объект `person`! Включение необработанных объектов в текстовое содержимое приводит к ошибке, потому что React не знает, как вы хотите их отобразить.
 
     Чтобы исправить это, замените `<h1>{person}'s Todos</h1>` на `<h1>{person.name}'s Todos</h1>`:
-
-    <!-- 0031.part.md -->
 
     === "App.js"
 
@@ -345,17 +308,13 @@ JSX очень минимален как язык шаблонов, потому
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](javascript-in-jsx-with-curly-braces-5.png)
+    	<iframe src="https://codesandbox.io/embed/vppdcf?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-<!-- 0034.part.md -->
-
-### 2. Извлечение информации в объект
+### 2. Извлечение информации в объект {#extract-information-into-an-object}
 
 Извлеките URL изображения в объект `person`.
-
-<!-- 0035.part.md -->
 
 === "App.js"
 
@@ -387,11 +346,9 @@ JSX очень минимален как язык шаблонов, потому
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](javascript-in-jsx-with-curly-braces-5.png)
-
-<!-- 0038.part.md -->
+    <iframe src="https://codesandbox.io/embed/vppdcf?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -428,11 +385,11 @@ JSX очень минимален как язык шаблонов, потому
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](javascript-in-jsx-with-curly-braces-5.png)
+    	<iframe src="https://codesandbox.io/embed/zyjp7m?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 3. Запишите выражение внутри фигурных скобок JSX
+### 3. Запишите выражение внутри фигурных скобок JSX {#write-an-expression-inside-jsx-curly-braces}
 
 В приведенном ниже объекте полный URL изображения разделен на четыре части: базовый URL, `imageId`, `imageSize` и расширение файла.
 
@@ -473,11 +430,9 @@ JSX очень минимален как язык шаблонов, потому
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](javascript-in-jsx-with-curly-braces-7.png)
-
-<!-- 0046.part.md -->
+    <iframe src="https://codesandbox.io/embed/53y3sy?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Чтобы проверить, что ваше исправление сработало, попробуйте изменить значение `imageSize` на `'b'`. Размер изображения должен измениться после вашей правки.
 
@@ -527,9 +482,9 @@ JSX очень минимален как язык шаблонов, потому
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](javascript-in-jsx-with-curly-braces-5.png)
+    	<iframe src="https://codesandbox.io/embed/zft27p?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Вы также можете перенести это выражение в отдельную функцию, как `getImageUrl` ниже:
 
@@ -580,12 +535,10 @@ JSX очень минимален как язык шаблонов, потому
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](javascript-in-jsx-with-curly-braces-5.png)
+    	<iframe src="https://codesandbox.io/embed/gw42dp?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Переменные и функции помогут вам сохранить простоту разметки!
 
-## Ссылки
-
--   [https://react.dev/learn/javascript-in-jsx-with-curly-braces](https://react.dev/learn/javascript-in-jsx-with-curly-braces)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/javascript-in-jsx-with-curly-braces](https://react.dev/learn/javascript-in-jsx-with-curly-braces)</small>

@@ -62,11 +62,11 @@
 	HEADERS
 */
 h2 {
-	border-bottom: 3px solid #f6f6f6;
+	border-bottom: 3px solid #78787822;
 }
 
 h3 {
-	border-bottom: 1px solid #f6f6f6;
+	border-bottom: 1px solid #78787822;
 }
 
 /*
@@ -155,9 +155,9 @@ h3 {
 .md-typeset .highlight {
 	max-height: 539.3px;
 	overflow-y: auto;
-	border-radius: 0 15px 15px 15px;
-	box-shadow: 0 5px 15px #ddd;
-	border: 1px solid #e8e8e8;
+	border-radius: 0 0 15px 15px;
+	box-shadow: 0 5px 25px #78787860;
+	border: 1px solid #78787840;
 }
 
 .md-typeset .highlighttable {
