@@ -1,6 +1,10 @@
+---
+description: Некоторые функции JavaScript являются чистыми. Чистые функции выполняют только вычисления и ничего более. Если вы будете писать свои компоненты только как чистые функции, вы сможете избежать целого класса непонятных ошибок и непредсказуемого поведения по мере роста вашей кодовой базы
+---
+
 # Поддержание чистоты компонентов
 
-Некоторые функции JavaScript являются _чистыми._ Чистые функции выполняют только вычисления и ничего более. Если вы будете писать свои компоненты только как чистые функции, вы сможете избежать целого класса непонятных ошибок и непредсказуемого поведения по мере роста вашей кодовой базы. Однако, чтобы получить эти преимущества, необходимо следовать нескольким правилам.
+<big>Некоторые функции JavaScript являются _чистыми._ Чистые функции выполняют только вычисления и ничего более. Если вы будете писать свои компоненты только как чистые функции, вы сможете избежать целого класса непонятных ошибок и непредсказуемого поведения по мере роста вашей кодовой базы. Однако, чтобы получить эти преимущества, необходимо следовать нескольким правилам.</big>
 
 !!!tip "Вы узнаете"
 
@@ -8,7 +12,7 @@
     -   Как сохранить чистоту компонентов, не допуская изменений на этапе рендеринга
     -   Как использовать режим Strict Mode для поиска ошибок в ваших компонентах
 
-## Чистота: Компоненты как формулы
+## Чистота: Компоненты как формулы {#purity-components-as-formulas}
 
 В компьютерной науке (и особенно в мире функционального программирования) [чистая функция](https://ru.wikipedia.org/wiki/%D0%A7%D0%B8%D1%81%D1%82%D0%BE%D1%82%D0%B0_%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B8) — это функция со следующими характеристиками:
 
@@ -29,21 +33,15 @@
 
 Если бы мы сделали это в виде функции JavaScript, то это выглядело бы следующим образом:
 
-<!-- 0001.part.md -->
-
 ```js
 function double(number) {
     return 2 * number;
 }
 ```
 
-<!-- 0002.part.md -->
-
 В приведенном выше примере `double` — это **чистая функция.** Если вы передадите ей `3`, она вернет `6`. Всегда.
 
 React разработан на основе этой концепции. **React предполагает, что каждый написанный вами компонент является чистой функцией.** Это означает, что написанные вами компоненты React должны всегда возвращать один и тот же JSX при одинаковых входных данных:
-
-<!-- 0003.part.md -->
 
 === "App.js"
 
@@ -79,9 +77,7 @@ React разработан на основе этой концепции. **Reac
 
 === "Результат"
 
-    ![Результат](keeping-components-pure-1.png)
-
-<!-- 0004.part.md -->
+    <iframe src="https://codesandbox.io/embed/r2rqjg?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Когда вы передаете `drinkers={2}` в `Recipe`, он вернет JSX, содержащий `2 чашки воды`. Всегда.
 
@@ -93,13 +89,11 @@ React разработан на основе этой концепции. **Reac
 
 ![Рецепт чая для x человек: возьмите x чашек воды, добавьте x ложек чая и 0.5x ложек специй, и 0.5x чашек молока](i_puritea-recipe.png)
 
-## Побочные эффекты: (не)запланированные последствия
+## Побочные эффекты: (не)запланированные последствия {#side-effects-unintended-consequences}
 
 Процесс рендеринга в React всегда должен быть чистым. Компоненты должны только _возвращать_ свой JSX, но не _изменять_ какие-либо объекты или переменные, существовавшие до рендеринга — это сделает их нечистыми!
 
 Вот компонент, который нарушает это правило:
-
-<!-- 0005.part.md -->
 
 === "App.js"
 
@@ -125,17 +119,13 @@ React разработан на основе этой концепции. **Reac
 
 === "Результат"
 
-    ![Результат](keeping-components-pure-2.png)
-
-<!-- 0006.part.md -->
+    <iframe src="https://codesandbox.io/embed/p4p73k?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Этот компонент читает и записывает переменную `guest`, объявленную вне его. Это означает, что **вызов этого компонента несколько раз будет выдавать разные JSX!** И более того, если _другие_ компоненты будут читать `guest`, они тоже будут выдавать разные JSX, в зависимости от того, когда они были вызваны! Это не предсказуемо.
 
 Возвращаясь к нашей формуле $y = 2x$, теперь, даже если $x = 2$, мы не можем доверять, что $y = 4$. Наши тесты могут не сработать, наши пользователи будут озадачены, самолеты будут падать с неба — вы видите, как это может привести к запутанным ошибкам!
 
 Вы можете исправить этот компонент, [передав `guest` как prop вместо этого](passing-props-to-a-component.md):
-
-<!-- 0007.part.md -->
 
 === "App.js"
 
@@ -157,19 +147,17 @@ React разработан на основе этой концепции. **Reac
 
 === "Результат"
 
-    ![Результат](keeping-components-pure-3.png)
-
-<!-- 0008.part.md -->
+    <iframe src="https://codesandbox.io/embed/3mjqv8?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Теперь ваш компонент чист, поскольку JSX, который он возвращает, зависит только от пропса `guest`.
 
 В целом, вы не должны ожидать, что ваши компоненты будут отображаться в каком-то определенном порядке. Не имеет значения, вызываете ли вы $y = 2x$ до или после $y = 5x$: обе формулы будут разрешены независимо друг от друга. Точно так же каждый компонент должен "думать только за себя", и не пытаться координировать свою работу с другими или зависеть от них во время рендеринга. Рендеринг — это как школьный экзамен: каждый компонент должен вычислять JSX самостоятельно!
 
-!!!note "Обнаружение нечистых вычислений с помощью StrictMode"
+!!!note "Обнаружение не чистых вычислений с помощью StrictMode"
 
     Хотя вы, возможно, еще не использовали их все, в React есть три вида входных данных, которые вы можете читать во время рендеринга: [props](passing-props-to-a-component.md), [state](state-a-components-memory.md), и [context](passing-data-deeply-with-context.md). Вы всегда должны рассматривать эти входы как доступные только для чтения.
 
-    Когда вы хотите _изменить_ что-то в ответ на ввод пользователя, вам следует [set state](state-a-components-memory.md) вместо записи в переменную. Вы никогда не должны изменять уже существующие переменные или объекты во время рендеринга вашего компонента.
+    Когда вы хотите _изменить_ что-то в ответ на ввод пользователя, вам следует [установить состояние](state-a-components-memory.md) вместо записи в переменную. Вы никогда не должны изменять уже существующие переменные или объекты во время рендеринга вашего компонента.
 
     React предлагает "Строгий режим", в котором он дважды вызывает функцию каждого компонента во время разработки. **Вызывая функции компонента дважды, "Строгий режим" помогает найти компоненты, которые нарушают эти правила.**
 
@@ -177,13 +165,11 @@ React разработан на основе этой концепции. **Reac
 
     Строгий режим не имеет эффекта в производстве, поэтому он не замедлит работу приложения для ваших пользователей. Чтобы перейти в строгий режим, вы можете обернуть ваш корневой компонент в `<React.StrictMode>`. Некоторые фреймворки делают это по умолчанию.
 
-### Локальная мутация: Маленький секрет вашего компонента
+### Локальная мутация: Маленький секрет вашего компонента {#local-mutation-your-components-little-secret}
 
 В приведенном выше примере проблема заключалась в том, что компонент изменял _предшествующую_ переменную во время рендеринга. Это часто называют **"мутацией "**, чтобы звучало немного страшнее. Чистые функции не мутируют переменные вне области видимости функции или объекты, которые были созданы до вызова — это делает их нечистыми!
 
-Однако **совершенно нормально изменять переменные и объекты, которые вы _только что_ создали во время рендеринга.** В этом примере вы создаете массив `[]`, присваиваете его переменной `cups`, а затем `толкаете` в него дюжину чашек:
-
-<!-- 0009.part.md -->
+Однако **совершенно нормально изменять переменные и объекты, которые вы _только что_ создали во время рендеринга.** В этом примере вы создаете массив `[]`, присваиваете его переменной `cups`, а затем `push` в него дюжину чашек:
 
 === "App.js"
 
@@ -203,15 +189,13 @@ React разработан на основе этой концепции. **Reac
 
 === "Результат"
 
-    ![Результат](keeping-components-pure-4.png)
-
-<!-- 0010.part.md -->
+    <iframe src="https://codesandbox.io/embed/5z5rkz?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Если бы переменная `cups` или массив `[]` были созданы вне функции `TeaGathering`, это было бы огромной проблемой! Вы бы изменяли _предшествующий_ объект, заталкивая элементы в этот массив.
 
 Однако, все в порядке, потому что вы создали их _во время того же рендера_, внутри `TeaGathering`. Никакой код вне `TeaGathering` никогда не узнает, что это произошло. Это называется **"локальная мутация "** — это как маленький секрет вашего компонента.
 
-## Где вы _можете_ вызвать побочные эффекты
+## Где вы можете вызвать побочные эффекты {#where-you-can-cause-side-effects}
 
 Хотя функциональное программирование в значительной степени полагается на чистоту, в какой-то момент, где-то, _что-то_ должно измениться. В этом и заключается смысл программирования! Эти изменения — обновление экрана, запуск анимации, изменение данных — называются **боковыми эффектами.** Они происходят _"на стороне "_, не во время рендеринга.
 
@@ -241,17 +225,15 @@ React разработан на основе этой концепции. **Reac
     -   Стремитесь выразить логику вашего компонента в JSX, который вы возвращаете. Когда вам нужно "что-то изменить", вы обычно хотите сделать это в обработчике событий. В крайнем случае, вы можете использовать `Effect`.
     -   Написание чистых функций требует некоторой практики, но оно раскрывает всю мощь парадигмы React.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Починить сломанные часы
+### 1. Починить сломанные часы {#fix-a-broken-clock}
 
 Этот компонент пытается установить CSS-класс `<h1>` на `night` в период с полуночи до шести часов утра, и на `day` во все остальное время. Однако это не срабатывает. Можете ли вы исправить этот компонент?
 
 Вы можете проверить, работает ли ваше решение, временно изменив часовой пояс компьютера. Когда текущее время находится между полуночью и шестью часами утра, часы должны иметь инвертированные цвета!
 
 Рендеринг — это _вычисление_, он не должен пытаться "делать" вещи. Можете ли вы выразить ту же идею по-другому?
-
-<!-- 0012.part.md -->
 
 === "Clock.js"
 
@@ -269,9 +251,7 @@ React разработан на основе этой концепции. **Reac
 
 === "Результат"
 
-    ![Результат](keeping-components-pure-5.png)
-
-<!-- 0017.part.md -->
+    <iframe src="https://codesandbox.io/embed/jw7tx8?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -280,8 +260,6 @@ React разработан на основе этой концепции. **Reac
 ???success "Показать решение"
 
     Вы можете исправить этот компонент, вычислив `className` и включив его в вывод рендера:
-
-    <!-- 0018.part.md -->
 
     === "App.js"
 
@@ -304,19 +282,17 @@ React разработан на основе этой концепции. **Reac
 
     === "Результат"
 
-    	![Результат](keeping-components-pure-6.png)
+    	<iframe src="https://codesandbox.io/embed/c57g3c?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     В этом примере побочный эффект (изменение DOM) был совсем не нужен. Вам нужно было только вернуть JSX.
 
-### 2. Исправление сломанного профиля
+### 2. Исправление сломанного профиля {#fix-a-broken-profile}
 
 Два компонента `Profile` отображаются бок о бок с разными данными. Нажмите "Свернуть" на первом профиле, а затем "Развернуть" его. Вы заметите, что теперь в обоих профилях отображается один и тот же человек. Это ошибка.
 
 Найдите причину ошибки и исправьте ее.
 
 Код ошибки находится в файле `Profile.js`. Убедитесь, что вы прочитали его сверху вниз!
-
-<!-- 0024.part.md -->
 
 === "Profile.js"
 
@@ -411,9 +387,7 @@ React разработан на основе этой концепции. **Reac
 
 === "Результат"
 
-    ![Результат](keeping-components-pure-7.png)
-
-<!-- 0033.part.md -->
+    <iframe src="https://codesandbox.io/embed/7m8vf7?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -424,8 +398,6 @@ React разработан на основе этой концепции. **Reac
     Проблема в том, что компонент `Profile` записывает в заранее существующую переменную `currentPerson`, а компоненты `Header` и `Avatar` читают из нее. Это делает _все три компонента_ нечистыми и трудно предсказуемыми.
 
     Чтобы исправить ошибку, удалите переменную `currentPerson`. Вместо этого передайте всю информацию из `Profile` в `Header` и `Avatar` через props. Вам нужно будет добавить параметр `person` в оба компонента и передавать его по всему пути вниз.
-
-    <!-- 0034.part.md -->
 
     === "Profile.js"
 
@@ -486,19 +458,15 @@ React разработан на основе этой концепции. **Reac
 
     === "Результат"
 
-    	![Результат](keeping-components-pure-8.png)
-
-    <!-- 0043.part.md -->
+    	<iframe src="https://codesandbox.io/embed/p9mqyf?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Помните, что React не гарантирует, что функции компонентов будут выполняться в каком-либо определенном порядке, поэтому вы не можете взаимодействовать между ними, задавая переменные. Все взаимодействие должно происходить через параметры.
 
-### 3. Почините сломанный лоток для историй
+### 3. Почините сломанный лоток для историй {#fix-a-broken-story-tray}
 
 Генеральный директор вашей компании просит вас добавить "истории" в ваше приложение онлайн-часов, и вы не можете отказать. Вы написали компонент `StoryTray`, который принимает список `stories`, за которым следует заполнитель "Create Story".
 
 Вы реализовали заполнитель "Create Story", поместив еще одну фальшивую историю в конец массива `stories`, который вы получаете в качестве пропса. Но по какой-то причине "Create Story" появляется более одного раза. Исправьте эту проблему.
-
-<!-- 0044.part.md -->
 
 === "StoryTray.js"
 
@@ -521,9 +489,7 @@ React разработан на основе этой концепции. **Reac
 
 === "Результат"
 
-    ![Результат](keeping-components-pure-9.png)
-
-<!-- 0051.part.md -->
+    <iframe src="https://codesandbox.io/embed/p9t23v?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -532,8 +498,6 @@ React разработан на основе этой концепции. **Reac
     Функция `StoryTray` не является чистой. Вызывая `push` на полученном массиве `stories` (prop!), она мутирует объект, который был создан _до_ того, как `StoryTray` начал рендеринг. Это делает его глючным и очень трудно предсказуемым.
 
     Самое простое исправление — не трогать массив вообще, и рендерить "Create Story" отдельно:
-
-    <!-- 0052.part.md -->
 
     === "StoryTray.js"
 
@@ -552,13 +516,9 @@ React разработан на основе этой концепции. **Reac
 
     === "Результат"
 
-    	![Результат](keeping-components-pure-10.png)
-
-    <!-- 0057.part.md -->
+    	<iframe src="https://codesandbox.io/embed/4lnckq?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     В качестве альтернативы вы можете создать _новый_ массив (скопировав существующий), прежде чем поместить в него элемент:
-
-    <!-- 0058.part.md -->
 
     === "StoryTray.js"
 
@@ -585,16 +545,10 @@ React разработан на основе этой концепции. **Reac
 
     === "Результат"
 
-    	![Результат](keeping-components-pure-10.png)
-
-    <!-- 0063.part.md -->
+    	<iframe src="https://codesandbox.io/embed/c6krr9?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Это позволяет сохранить локальность мутации и чистоту функции рендеринга. Однако все равно нужно быть осторожным: например, если вы попытаетесь изменить любой из существующих элементов массива, вам придется клонировать и эти элементы.
 
     Полезно помнить, какие операции над массивами изменяют их, а какие нет. Например, `push`, `pop`, `reverse` и `sort` изменяют исходный массив, а `slice`, `filter` и `map` создают новый.
 
-<!-- 0064.part.md -->
-
-## Ссылки
-
--   [https://react.dev/learn/keeping-components-pure](https://react.dev/learn/keeping-components-pure)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/keeping-components-pure](https://react.dev/learn/keeping-components-pure)</small>
