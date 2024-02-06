@@ -1,6 +1,10 @@
+---
+description: Переменные состояния могут выглядеть как обычные переменные JavaScript, которые можно читать и записывать. Однако состояние ведет себя скорее как моментальный снимок. Установка состояния не изменяет уже имеющуюся переменную состояния, а вместо этого вызывает повторный рендеринг
+---
+
 # Состояние как моментальный снимок
 
-Переменные состояния могут выглядеть как обычные переменные JavaScript, которые можно читать и записывать. Однако состояние ведет себя скорее как моментальный снимок. Установка состояния не изменяет уже имеющуюся переменную состояния, а вместо этого вызывает повторный рендеринг.
+<big>Переменные состояния могут выглядеть как обычные переменные JavaScript, которые можно читать и записывать. Однако состояние ведет себя скорее как **моментальный снимок**. Установка состояния не изменяет уже имеющуюся переменную состояния, а вместо этого вызывает повторный рендеринг.</big>
 
 !!!tip "Вы узнаете"
 
@@ -9,13 +13,11 @@
     -   Почему состояние не обновляется сразу после его установки
     -   Как обработчики событий получают доступ к "снимку" состояния
 
-## Установка состояния запускает рендеринг
+## Установка состояния запускает рендеринг {#setting-state-triggers-renders}
 
 Вы можете думать о том, что ваш пользовательский интерфейс меняется непосредственно в ответ на событие пользователя, например, на клик. В React эта мысленная модель работает несколько иначе. На предыдущей странице вы видели, что [установка состояния запрашивает повторный рендеринг](render-and-commit.md#step-1-trigger-a-render) в React. Это означает, что для того, чтобы интерфейс отреагировал на событие, необходимо _обновить состояние_.
 
 В этом примере, когда вы нажимаете кнопку "отправить", `setIsSent(true)` сообщает React о необходимости повторного рендеринга пользовательского интерфейса:
-
-<!-- 0001.part.md -->
 
 === "App.js"
 
@@ -51,9 +53,9 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-as-a-snapshot-1.png)
+    <iframe src="https://codesandbox.io/embed/7gs8vj?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Вот что происходит, когда вы нажимаете на кнопку:
 
@@ -63,9 +65,9 @@
 
 Давайте подробнее рассмотрим связь между состоянием и рендерингом.
 
-## Рендеринг делает моментальный снимок времени
+## Рендеринг делает моментальный снимок времени {#rendering-takes-a-snapshot-in-time}
 
-["Rendering"](render-and-commit.md#step-2-react-renders-your-components) означает, что React вызывает ваш компонент, который является функцией. JSX, который вы возвращаете из этой функции, — это как снимок пользовательского интерфейса во времени. Его пропсы, обработчики событий и локальные переменные были рассчитаны _используя его состояние на момент рендеринга_.
+["Рендеринг"](render-and-commit.md#step-2-react-renders-your-components) означает, что React вызывает ваш компонент, который является функцией. JSX, который вы возвращаете из этой функции, — это как снимок пользовательского интерфейса во времени. Его пропсы, обработчики событий и локальные переменные были рассчитаны _используя его состояние на момент рендеринга_.
 
 В отличие от фотографии или кадра фильма, возвращаемый вами "снимок" пользовательского интерфейса является интерактивным. Он включает в себя логику, например, обработчики событий, которые определяют, что происходит в ответ на входные данные. React обновляет экран в соответствии с этим снимком и подключает обработчики событий. В результате нажатие кнопки вызовет обработчик нажатия из вашего JSX.
 
@@ -110,15 +112,13 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-as-a-snapshot-2.png)
+    <iframe src="https://codesandbox.io/embed/tty55g?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что `number` увеличивается только один раз за клик!
 
 **Установка состояния изменяет его только для _следующего_ рендера.** Во время первого рендера `number` было `0`. Вот почему в обработчике `onClick` того рендера значение `number` все еще `0`, даже после вызова `setNumber(number + 1)`:
-
-<!-- 0009.part.md -->
 
 ```js
 <button
@@ -132,12 +132,10 @@
 </button>
 ```
 
-<!-- 0010.part.md -->
-
 Вот что обработчик нажатия этой кнопки говорит React сделать:
 
 1.  `setNumber(number + 1)`: `number` - это `0`, поэтому `setNumber(0 + 1)`.
-    -   React готовится изменить `число` на `1` при следующем рендере.
+    -   React готовится изменить `number` на `1` при следующем рендере.
 2.  `setNumber(number + 1)`: `number` - `0`, поэтому `setNumber(0 + 1)`.
     -   React готовится изменить `number` на `1` при следующем рендере.
 3.  `setNumber(number + 1)`: `number` - `0`, поэтому `setNumber(0 + 1)`.
@@ -147,8 +145,6 @@
 
 Вы также можете представить себе это, мысленно заменив переменные состояния их значениями в коде. Поскольку переменная состояния `number` равна `0` для _этого рендера_, его обработчик событий выглядит следующим образом:
 
-<!-- 0011.part.md -->
-
 ```js
 <button
     onClick={() => {
@@ -160,13 +156,9 @@
     +3
 </button>
 ```
-
-<!-- 0012.part.md -->
 
 Для следующего рендера `number` будет `1`, поэтому _обработчик клика этого рендера_ будет выглядеть следующим образом:
 
-<!-- 0013.part.md -->
-
 ```js
 <button
     onClick={() => {
@@ -179,11 +171,9 @@
 </button>
 ```
 
-<!-- 0014.part.md -->
-
 Вот почему повторное нажатие на кнопку установит счетчик на `2`, затем на `3` при следующем нажатии и т. д.
 
-## Состояние с течением времени
+## Состояние с течением времени {#state-over-time}
 
 Что ж, это было забавно. Попробуйте угадать, о чем предупредит нажатие на эту кнопку:
 
@@ -211,22 +201,16 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-as-a-snapshot-3.png)
-
-<!-- 0018.part.md -->
+    <iframe src="https://codesandbox.io/embed/ffhp6h?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Если использовать предыдущий метод подстановки, то можно догадаться, что оповещение показывает "0":
-
-<!-- 0019.part.md -->
 
 ```js
 setNumber(0 + 5);
 alert(0);
 ```
-
-<!-- 0020.part.md -->
 
 Но что если поставить таймер на оповещение, чтобы оно срабатывало только после того, как компонент перерендерится? Будет ли он говорить "0" или "5"? Угадайте!
 
@@ -256,15 +240,11 @@ alert(0);
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-as-a-snapshot-3.png)
-
-<!-- 0024.part.md -->
+    <iframe src="https://codesandbox.io/embed/sz392q?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Удивлены? Если вы используете метод подстановки, вы можете увидеть "снимок" состояния, переданного в оповещение.
-
-<!-- 0025.part.md -->
 
 ```js
 setNumber(0 + 5);
@@ -272,8 +252,6 @@ setTimeout(() => {
     alert(0);
 }, 3000);
 ```
-
-<!-- 0026.part.md -->
 
 Состояние, хранящееся в React, может измениться к моменту запуска оповещения, но оно было запланировано с использованием снимка состояния на момент взаимодействия пользователя с ним!
 
@@ -285,8 +263,6 @@ setTimeout(() => {
 2.  До истечения пятисекундной задержки вы изменяете значение поля "Кому" на "Бобу".
 
 Что вы ожидаете увидеть в сообщении `alert`? Будет ли оно отображать: "Вы сказали "Привет" Алисе"? Или "Вы поздоровались с Бобом"? Сделайте предположение, основываясь на том, что вы знаете, а затем попробуйте:
-
-<!-- 0027.part.md -->
 
 === "App.js"
 
@@ -327,9 +303,9 @@ setTimeout(() => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-as-a-snapshot-4.png)
+    <iframe src="https://codesandbox.io/embed/kkhtcq?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 **React сохраняет значения состояния "фиксированными" в обработчиках событий одного рендера.** Вам не нужно беспокоиться о том, изменилось ли состояние во время выполнения кода.
 
@@ -345,9 +321,9 @@ setTimeout(() => {
     -   Вы можете мысленно подставлять состояние в обработчики событий, аналогично тому, как вы думаете о рендеринге JSX.
     -   Обработчики событий, созданные в прошлом, имеют значения состояния из рендера, в котором они были созданы.
 
-## Задача
+## Задача {#challenges}
 
-### 1. Реализация светофора
+### 1. Реализация светофора {#implement-a-traffic-light}
 
 Здесь представлен компонент светофора для пешеходного перехода, который включается при нажатии на кнопку:
 
@@ -380,11 +356,9 @@ setTimeout(() => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](state-as-a-snapshot-5.png)
-
-<!-- 0034.part.md -->
+    <iframe src="https://codesandbox.io/embed/mzqnh7?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Добавьте `alert` в обработчик нажатия. Когда свет зеленый и говорит "Идти", щелчок по кнопке должен говорить "Следующая остановка". Когда свет красный и говорит "Стоп", нажатие на кнопку должно говорить "Следующим будет идти".
 
@@ -392,7 +366,7 @@ setTimeout(() => {
 
 ???success "Показать решение"
 
-    Ваше `оповещение` должно выглядеть следующим образом:
+    Ваше `alert` должно выглядеть следующим образом:
 
     === "App.js"
 
@@ -424,9 +398,9 @@ setTimeout(() => {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](state-as-a-snapshot-5.png)
+    	<iframe src="https://codesandbox.io/embed/22v7p2?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Поместите ли вы его до или после вызова `setWalk`, не имеет никакого значения. Значение `walk` в этом рендере фиксировано. Вызов `setWalk` изменит его только для _следующего_ рендера, но не повлияет на обработчик события предыдущего рендера.
 
@@ -454,8 +428,4 @@ setTimeout(() => {
 
     Таким образом, нажатие "Change to Stop" ставит в очередь рендеринг с `walk`, установленным в `false`, и предупреждает "Stop is next".
 
-<!-- 0043.part.md -->
-
-## Ссылки
-
--   [https://react.dev/learn/state-as-a-snapshot](https://react.dev/learn/state-as-a-snapshot)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/state-as-a-snapshot](https://react.dev/learn/state-as-a-snapshot)</small>
