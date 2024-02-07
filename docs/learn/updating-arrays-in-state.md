@@ -4,19 +4,17 @@ description: В JavaScript массивы являются изменяемым�
 
 # Обновление массивов в состоянии
 
-<big>
-В JavaScript массивы являются изменяемыми, но при хранении их в состоянии вы должны относиться к ним как к неизменяемым. Как и в случае с объектами, когда вы хотите обновить массив, хранящийся в состоянии, вам нужно создать новый массив (или сделать копию существующего), а затем установить состояние для использования нового массива.
-</big>
+<big>В JavaScript массивы являются изменяемыми, но при хранении их в состоянии вы должны относиться к ним как к неизменяемым. Как и в случае с объектами, когда вы хотите обновить массив, хранящийся в состоянии, вам нужно создать новый массив (или сделать копию существующего), а затем установить состояние для использования нового массива.</big>
 
 !!!tip "Вы узнаете"
 
-    -   Как добавлять, удалять или изменять элементы в массиве в React state
+    -   Как добавлять, удалять или изменять элементы в массиве в состоянии React
     -   Как обновить объект внутри массива
     -   Как сделать копирование массива менее повторяющимся с помощью Immer
 
 ## Обновление массивов без мутации {#updating-arrays-without-mutation}
 
-В JavaScript массивы - это просто еще один вид объектов. [Как и с объектами](updating-objects-in-state.md), **вы должны рассматривать массивы в React state как доступные только для чтения.** Это означает, что вы не должны переназначать элементы внутри массива, например `arr[0] = 'bird'`, а также не должны использовать методы, которые изменяют массив, такие как `push()` и `pop()`.
+В JavaScript массивы - это просто еще один вид объектов. [Как и с объектами](updating-objects-in-state.md), **вы должны рассматривать массивы в React state как доступные только для чтения**. Это означает, что вы не должны переназначать элементы внутри массива, например `arr[0] = 'bird'`, а также не должны использовать методы, которые изменяют массив, такие как `push()` и `pop()`.
 
 Вместо этого, каждый раз, когда вы хотите обновить массив, вы должны передавать _новый_ массив в вашу функцию установки состояния. Для этого вы можете создать новый массив из исходного массива вашего состояния, вызвав его не изменяющие методы, такие как `filter()` и `map()`. Затем вы можете установить свое состояние на полученный новый массив.
 
@@ -82,9 +80,9 @@ description: В JavaScript массивы являются изменяемым�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-1.png)
+    <iframe src="https://codesandbox.io/embed/s46kl6?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Вместо этого создайте _новый_ массив, который содержит существующие элементы _и_ новый элемент в конце. Существует несколько способов сделать это, но самый простой - использовать [spread синтаксис `...`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Spread_syntax#spread_in_array_literals):
 
@@ -139,9 +137,9 @@ setArtists(
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-1.png)
+    <iframe src="https://codesandbox.io/embed/yy44zn?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Spread синтаксис массива также позволяет добавлять элемент, помещая его _перед_ исходным `...artists`:
 
@@ -200,9 +198,9 @@ setArtists([
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-2.png)
+    <iframe src="https://codesandbox.io/embed/gzr5t6?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Несколько раз нажмите кнопку "Удалить" и посмотрите на ее обработчик нажатия.
 
@@ -276,9 +274,9 @@ setArtists(artists.filter((a) => a.id !== artist.id));
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-3.png)
+    <iframe src="https://codesandbox.io/embed/jtr9d8?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ### Замена элементов в массиве {#replacing-items-in-an-array}
 
@@ -330,9 +328,9 @@ setArtists(artists.filter((a) => a.id !== artist.id));
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-4.png)
+    <iframe src="https://codesandbox.io/embed/dshfhy?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ### Вставка в массив {#inserting-into-an-array}
 
@@ -388,9 +386,9 @@ setArtists(artists.filter((a) => a.id !== artist.id));
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-5.png)
+    <iframe src="https://codesandbox.io/embed/slvv47?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ### Внесение других изменений в массив {#making-other-changes-to-an-array}
 
@@ -436,9 +434,9 @@ setArtists(artists.filter((a) => a.id !== artist.id));
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-6.png)
+    <iframe src="https://codesandbox.io/embed/2f2652?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Здесь вы используете spread-синтаксис `[...list]`, чтобы сначала создать копию исходного массива. Теперь, когда у вас есть копия, вы можете использовать такие мутирующие методы, как `nextList.reverse()` или `nextList.sort()`, или даже назначить отдельные элементы с помощью `nextList[0] = "something"`.
 
@@ -536,9 +534,9 @@ setList(nextList);
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-7.png)
+    <iframe src="https://codesandbox.io/embed/z569tj?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Проблема возникает в коде, подобном этому:
 
@@ -657,9 +655,9 @@ setMyList(
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-7.png)
+    <iframe src="https://codesandbox.io/embed/sn8rk7?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 В общем, **вы должны мутировать только те объекты, которые вы только что создали.** Если вы вставляете _новый_ объект, вы можете мутировать его, но если вы имеете дело с чем-то, что уже находится в состоянии, вам нужно сделать копию.
 
@@ -749,32 +747,11 @@ setMyList(
     }
     ```
 
-=== "package.json"
+=== "CodeSandbox"
 
-    ```json
-    {
-    	"dependencies": {
-    		"immer": "1.7.3",
-    		"react": "latest",
-    		"react-dom": "latest",
-    		"react-scripts": "latest",
-    		"use-immer": "0.5.1"
-    	},
-    	"scripts": {
-    		"start": "react-scripts start",
-    		"build": "react-scripts build",
-    		"test": "react-scripts test --env=jsdom",
-    		"eject": "react-scripts eject"
-    	},
-    	"devDependencies": {}
-    }
-    ```
+    <iframe src="https://codesandbox.io/embed/k2pfly?view=Editor+%2B+Preview&module=%2Fpackage.json" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="upbeat-fog-k2pfly" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-=== "Результат"
-
-    ![Результат](updating-arrays-in-state-7.png)
-
-Обратите внимание, что с Immer, **мутация типа `artwork.seen = nextSeen` теперь в порядке:**.
+Обратите внимание, что с Immer, **мутация типа `artwork.seen = nextSeen` теперь в порядке:**
 
 ```js
 updateMyTodos((draft) => {
@@ -797,7 +774,7 @@ updateMyTodos((draft) => {
 
 ## Задачи {#challenges}
 
-### 1. Обновление элемента в корзине
+### 1. Обновление элемента в корзине {#update-an-item-in-the-shopping-cart}
 
 Заполните логику `handleIncreaseClick` так, чтобы нажатие "+" увеличивало соответствующее число:
 
@@ -850,9 +827,9 @@ updateMyTodos((draft) => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-8.png)
+    <iframe src="https://codesandbox.io/embed/m59pxc?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -920,11 +897,11 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](updating-arrays-in-state-9.png)
+    	<iframe src="https://codesandbox.io/embed/kkwj9n?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 2. Удаление товара из корзины
+### 2. Удаление товара из корзины {#remove-an-item-from-the-shopping-cart}
 
 В этой корзине есть рабочая кнопка "+", но кнопка "-" ничего не делает. Вам нужно добавить обработчик события, чтобы нажатие на нее уменьшало `count` соответствующего товара. Если вы нажмете "-", когда счетчик будет равен 1, товар должен автоматически удалиться из корзины. Убедитесь, что он никогда не показывает 0.
 
@@ -991,15 +968,13 @@ updateMyTodos((draft) => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-10.png)
+    <iframe src="https://codesandbox.io/embed/kzq2m8?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
     Вы можете сначала использовать `map` для создания нового массива, а затем `filter` для удаления продуктов с `count`, установленным в `0`:
-
-    <!-- 0059.part.md -->
 
     === "App.js"
 
@@ -1087,11 +1062,11 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](updating-arrays-in-state-11.png)
+    	<iframe src="https://codesandbox.io/embed/y9yttz?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 3. Исправьте мутации, используя немутационные методы
+### 3. Исправьте мутации, используя немутационные методы {#fix-the-mutations-using-non-mutative-methods}
 
 В этом примере все обработчики событий в `App.js` используют мутацию. В результате редактирование и удаление `todos` не работает. Перепишите `handleAddTodo`, `handleChangeTodo` и `handleDeleteTodo`, чтобы они использовали немутационные методы:
 
@@ -1251,9 +1226,9 @@ updateMyTodos((draft) => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-arrays-in-state-12.png)
+    <iframe src="https://codesandbox.io/embed/zhntxc?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -1419,11 +1394,11 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](updating-arrays-in-state-13.png)
+    	<iframe src="https://codesandbox.io/embed/6hs78d?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 4. Исправьте мутации с помощью Immer
+### 4. Исправьте мутации с помощью Immer {#fix-the-mutations-using-immer}
 
 Это тот же пример, что и в предыдущей задаче. На этот раз исправьте мутации с помощью Immer. Для вашего удобства, `useImmer` уже импортирован, поэтому вам нужно изменить переменную состояния `todos`, чтобы использовать его.
 
@@ -1584,30 +1559,9 @@ updateMyTodos((draft) => {
     }
     ```
 
-=== "package.json"
+=== "CodeSandbox"
 
-    ```json
-    {
-    	"dependencies": {
-    		"immer": "1.7.3",
-    		"react": "latest",
-    		"react-dom": "latest",
-    		"react-scripts": "latest",
-    		"use-immer": "0.5.1"
-    	},
-    	"scripts": {
-    		"start": "react-scripts start",
-    		"build": "react-scripts build",
-    		"test": "react-scripts test --env=jsdom",
-    		"eject": "react-scripts eject"
-    	},
-    	"devDependencies": {}
-    }
-    ```
-
-=== "Результат"
-
-    ![Результат](updating-arrays-in-state-14.png)
+    <iframe src="https://codesandbox.io/embed/rs5nkk?view=Editor+%2B+Preview&module=%2Fpackage.json" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="wonderful-gould-rs5nkk" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -1776,30 +1730,9 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    === "package.json"
+    === "CodeSandbox"
 
-    	```json
-    	{
-    		"dependencies": {
-    			"immer": "1.7.3",
-    			"react": "latest",
-    			"react-dom": "latest",
-    			"react-scripts": "latest",
-    			"use-immer": "0.5.1"
-    		},
-    		"scripts": {
-    			"start": "react-scripts start",
-    			"build": "react-scripts build",
-    			"test": "react-scripts test --env=jsdom",
-    			"eject": "react-scripts eject"
-    		},
-    		"devDependencies": {}
-    	}
-    	```
-
-    === "Результат"
-
-    	![Результат](updating-arrays-in-state-15.png)
+    	<iframe src="https://codesandbox.io/embed/6qyz5s?view=Editor+%2B+Preview&module=%2Fpackage.json" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="elastic-wave-6qyz5s" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Вы также можете смешивать и сочетать мутативные и немутативные подходы в Immer.
 
@@ -1965,33 +1898,10 @@ updateMyTodos((draft) => {
     	}
     	```
 
-    === "package.json"
+    === "CodeSandbox"
 
-    	```json
-    	{
-    		"dependencies": {
-    			"immer": "1.7.3",
-    			"react": "latest",
-    			"react-dom": "latest",
-    			"react-scripts": "latest",
-    			"use-immer": "0.5.1"
-    		},
-    		"scripts": {
-    			"start": "react-scripts start",
-    			"build": "react-scripts build",
-    			"test": "react-scripts test --env=jsdom",
-    			"eject": "react-scripts eject"
-    		},
-    		"devDependencies": {}
-    	}
-    	```
-
-    === "Результат"
-
-    	![Результат](updating-arrays-in-state-16.png)
+    	<iframe src="https://codesandbox.io/embed/m4xw2k?view=Editor+%2B+Preview&module=%2Fpackage.json" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="brave-williamson-m4xw2k" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     С Immer вы можете выбрать стиль, который кажется наиболее естественным для каждого отдельного случая.
 
-## Ссылки
-
--   [https://react.dev/learn/updating-arrays-in-state](https://react.dev/learn/updating-arrays-in-state)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/updating-arrays-in-state](https://react.dev/learn/updating-arrays-in-state)</small>

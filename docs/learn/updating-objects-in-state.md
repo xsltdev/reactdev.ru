@@ -1,67 +1,53 @@
+---
+description: Состояние может хранить любые значения JavaScript, включая объекты. Но вы не должны изменять объекты, которые хранятся в состоянии React, напрямую. Вместо этого, когда вы хотите обновить объект, вам нужно создать новый
+---
+
 # Обновление объектов в состоянии
 
-Состояние может хранить любые значения JavaScript, включая объекты. Но вы не должны изменять объекты, которые хранятся в состоянии React, напрямую. Вместо этого, когда вы хотите обновить объект, вам нужно создать новый (или сделать копию существующего), а затем настроить состояние на использование этой копии.
+<big>Состояние может хранить любые значения JavaScript, включая объекты. Но вы не должны изменять объекты, которые хранятся в состоянии React, напрямую. Вместо этого, когда вы хотите обновить объект, вам нужно создать новый (или сделать копию существующего), а затем настроить состояние на использование этой копии.</big>
 
 !!!tip "Вы узнаете"
 
-    -   Как правильно обновить объект в React state
+    -   Как правильно обновить объект в состоянии React
     -   Как обновить вложенный объект без его мутирования
     -   Что такое неизменяемость и как ее не нарушить
     -   Как сделать копирование объектов менее повторяющимся с помощью Immer
 
-## Что такое мутация?
+## Что такое мутация? {#whats-a-mutation}
 
 В состоянии можно хранить любые значения JavaScript.
-
-<!-- 0001.part.md -->
 
 ```js
 const [x, setX] = useState(0);
 ```
 
-<!-- 0002.part.md -->
-
 До сих пор вы работали с числами, строками и булевыми числами. Эти типы значений JavaScript являются "неизменяемыми", то есть неизменяемыми или "только для чтения". Чтобы _заменить_ значение, можно вызвать повторный рендеринг:
-
-<!-- 0003.part.md -->
 
 ```js
 setX(5);
 ```
 
-<!-- 0004.part.md -->
-
 Состояние `x` изменилось с `0` на `5`, но само число `0` не изменилось. В JavaScript невозможно внести какие-либо изменения во встроенные примитивные значения, такие как числа, строки и булевы.
 
 Теперь рассмотрим объект в состоянии:
-
-<!-- 0005.part.md -->
 
 ```js
 const [position, setPosition] = useState({ x: 0, y: 0 });
 ```
 
-<!-- 0006.part.md -->
-
 Технически, можно изменить содержимое _самого объекта_. **Это называется мутацией:**.
-
-<!-- 0007.part.md -->
 
 ```js
 position.x = 5;
 ```
 
-<!-- 0008.part.md -->
-
 Однако, хотя объекты в React state технически являются изменяемыми, вы должны относиться к ним **как** к неизменяемым, как к числам, булевым числам и строкам. Вместо того чтобы изменять их, вы всегда должны заменять их.
 
-## Рассматривать состояние как доступное только для чтения
+## Рассматривайте состояние как доступное только для чтения {#treat-state-as-read-only}
 
 Другими словами, вы должны _относиться к любому объекту JavaScript, который вы помещаете в состояние, как к объекту только для чтения_.
 
 В этом примере в состоянии находится объект, представляющий текущее положение указателя. Красная точка должна перемещаться при касании или перемещении курсора по области предварительного просмотра. Но точка остается в исходном положении:
-
-<!-- 0009.part.md -->
 
 === "App.js"
 
@@ -101,15 +87,11 @@ position.x = 5;
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-objects-in-state-1.png)
-
-<!-- 0012.part.md -->
+    <iframe src="https://codesandbox.io/embed/pytl78?view=Editor+%2B+Preview" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Проблема заключается в этом фрагменте кода.
-
-<!-- 0013.part.md -->
 
 ```js
 onPointerMove={e => {
@@ -118,13 +100,9 @@ onPointerMove={e => {
 }}
 ```
 
-<!-- 0014.part.md -->
-
-Этот код изменяет объект, назначенный на `position` из [предыдущего рендера.](state-as-a-snapshot.md#rendering-takes-a-snapshot-in-time) Но без использования функции установки состояния React не знает, что объект изменился. Поэтому React ничего не делает в ответ. Это все равно что пытаться изменить заказ после того, как вы уже поели. Хотя мутирование состояния может работать в некоторых случаях, мы не рекомендуем этого делать. Вы должны рассматривать значение состояния, к которому вы имеете доступ во время рендеринга, как доступное только для чтения.
+Этот код изменяет объект, назначенный на `position` из [предыдущего рендера](state-as-a-snapshot.md#rendering-takes-a-snapshot-in-time). Но без использования функции установки состояния React не знает, что объект изменился. Поэтому React ничего не делает в ответ. Это все равно что пытаться изменить заказ после того, как вы уже поели. Хотя мутирование состояния может работать в некоторых случаях, мы не рекомендуем этого делать. Вы должны рассматривать значение состояния, к которому вы имеете доступ во время рендеринга, как доступное только для чтения.
 
 Чтобы действительно [вызвать повторный рендеринг](state-as-a-snapshot.md#setting-state-triggers-renders) в этом случае, **создайте _новый_ объект и передайте его в функцию установки состояния:**.
-
-<!-- 0015.part.md -->
 
 ```js
 onPointerMove={e => {
@@ -135,16 +113,12 @@ onPointerMove={e => {
 }}
 ```
 
-<!-- 0016.part.md -->
-
 С помощью `setPosition` вы говорите React:
 
 -   Замените `position` на этот новый объект.
 -   И снова отобразите этот компонент
 
 Обратите внимание, что красная точка теперь следует за вашим указателем, когда вы касаетесь или наводите курсор на область предварительного просмотра:
-
-<!-- 0017.part.md -->
 
 === "App.js"
 
@@ -186,11 +160,9 @@ onPointerMove={e => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-objects-in-state-2.png)
-
-<!-- 0020.part.md -->
+    <iframe src="https://codesandbox.io/embed/5tfwx3?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Локальная мутация — это нормально"
 
@@ -221,13 +193,11 @@ onPointerMove={e => {
 
     Мутация является проблемой только тогда, когда вы изменяете _существующие_ объекты, которые уже находятся в состоянии. Мутация только что созданного объекта - это нормально, потому что _на него пока не ссылается никакой другой код._ Изменение объекта не окажет случайного влияния на что-то, что от него зависит. Это называется "локальной мутацией". Вы даже можете делать локальную мутацию [во время рендеринга](keeping-components-pure.md#local-mutation-your-components-little-secret) Очень удобно и совершенно нормально!
 
-## Копирование объектов с синтаксисом `...`
+## Копирование объектов с синтаксисом `...` {#copying-objects-with-the-spread-syntax}
 
 В предыдущем примере объект `position` всегда создается свежим из текущей позиции курсора. Но часто возникает необходимость включить _существующие_ данные как часть нового создаваемого объекта. Например, вы можете захотеть обновить _только одно_ поле в форме, но сохранить прежние значения для всех остальных полей.
 
 Такие поля ввода не работают, потому что обработчики `onChange` изменяют состояние:
-
-<!-- 0027.part.md -->
 
 === "App.js"
 
@@ -285,25 +255,17 @@ onPointerMove={e => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-objects-in-state-3.png)
-
-<!-- 0030.part.md -->
+    <iframe src="https://codesandbox.io/embed/xjd24m?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Например, эта строка мутирует состояние из прошлого рендеринга:
-
-<!-- 0031.part.md -->
 
 ```js
 person.firstName = e.target.value;
 ```
 
-<!-- 0032.part.md -->
-
 Надежный способ добиться нужного вам поведения — создать новый объект и передать его в `setPerson`. Но здесь вы хотите также **копировать в него существующие данные**, поскольку изменилось только одно из полей:
-
-<!-- 0033.part.md -->
 
 ```js
 setPerson({
@@ -313,11 +275,7 @@ setPerson({
 });
 ```
 
-<!-- 0034.part.md -->
-
-Вы можете использовать синтаксис `...` [распространение объекта](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Spread_syntax#spread_in_object_literals), чтобы не копировать каждое свойство отдельно.
-
-<!-- 0035.part.md -->
+Вы можете использовать спреад-синтаксис `...` [распространение объекта](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Spread_syntax#spread_in_object_literals), чтобы не копировать каждое свойство отдельно.
 
 ```js
 setPerson({
@@ -325,8 +283,6 @@ setPerson({
     firstName: e.target.value, // But override this one
 });
 ```
-
-<!-- 0036.part.md -->
 
 Теперь форма работает!
 
@@ -397,11 +353,9 @@ setPerson({
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-objects-in-state-4.png)
-
-<!-- 0040.part.md -->
+    <iframe src="https://codesandbox.io/embed/x4ltt8?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что синтаксис распространения `...` является "неглубоким" - он копирует объекты только на один уровень вглубь. Это делает его быстрым, но это также означает, что если вы хотите обновить вложенное свойство, вам придется использовать его несколько раз.
 
@@ -463,19 +417,15 @@ setPerson({
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](updating-objects-in-state-4.png)
-
-    <!-- 0044.part.md -->
+    	<iframe src="https://codesandbox.io/embed/vhvm8s?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Здесь `e.target.name` относится к свойству `name`, заданному DOM-элементу `<input>`.
 
-## Обновление вложенного объекта
+## Обновление вложенного объекта {#updating-a-nested-object}
 
 Рассмотрим структуру вложенного объекта следующим образом:
-
-<!-- 0045.part.md -->
 
 ```js
 const [person, setPerson] = useState({
@@ -488,21 +438,13 @@ const [person, setPerson] = useState({
 });
 ```
 
-<!-- 0046.part.md -->
-
 Если вы хотите обновить `person.artwork.city`, то понятно, как это сделать с помощью мутации:
-
-<!-- 0047.part.md -->
 
 ```js
 person.artwork.city = 'New Delhi';
 ```
 
-<!-- 0048.part.md -->
-
 Но в React состояние рассматривается как неизменяемое! Чтобы изменить `city`, вам сначала нужно создать новый объект `artwork` (предварительно заполненный данными из предыдущего объекта), а затем создать новый объект `person`, который указывает на новый `artwork`:
-
-<!-- 0049.part.md -->
 
 ```js
 const nextArtwork = {
@@ -513,11 +455,7 @@ const nextPerson = { ...person, artwork: nextArtwork };
 setPerson(nextPerson);
 ```
 
-<!-- 0050.part.md -->
-
 Или записанный как вызов одной функции:
-
-<!-- 0051.part.md -->
 
 ```js
 setPerson({
@@ -529,8 +467,6 @@ setPerson({
     },
 });
 ```
-
-<!-- 0052.part.md -->
 
 Это немного многословно, но для многих случаев подходит:
 
@@ -632,11 +568,9 @@ setPerson({
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-objects-in-state-5.png)
-
-<!-- 0056.part.md -->
+    <iframe src="https://codesandbox.io/embed/3zdnr9?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Объекты на самом деле не являются вложенными"
 
@@ -690,19 +624,15 @@ setPerson({
 
     Если бы вы изменили `obj3.artwork.city`, это повлияло бы и на `obj2.artwork.city`, и на `obj1.city`. Это происходит потому, что `obj3.artwork`, `obj2.artwork` и `obj1` являются одним и тем же объектом. Это трудно заметить, когда вы думаете об объектах как о "вложенных". Вместо этого они представляют собой отдельные объекты, "указывающие" друг на друга с помощью свойств.
 
-### Напишите лаконичную логику обновления с помощью Immer
+### Напишите лаконичную логику обновления с помощью Immer {#write-concise-update-logic-with-immer}
 
 Если ваше состояние глубоко вложенное, вы можете рассмотреть возможность [сглаживания](choosing-the-state-structure.md#avoid-deeply-nested-state). Но если вы не хотите менять структуру состояния, вы можете предпочесть быстрый путь к вложенным спредам. [Immer](https://github.com/immerjs/use-immer) - это популярная библиотека, которая позволяет вам писать, используя удобный, но мутирующий синтаксис, и заботится о создании копий за вас. С Immer написанный вами код выглядит так, как будто вы "нарушаете правила" и мутируете объект:
-
-<!-- 0063.part.md -->
 
 ```js
 updatePerson((draft) => {
     draft.artwork.city = 'Lagos';
 });
 ```
-
-<!-- 0064.part.md -->
 
 Но в отличие от обычной мутации, она не переписывает прошлое состояние!
 
@@ -716,8 +646,6 @@ updatePerson((draft) => {
 2.  Затем замените `import { useState } из 'react'` на `import { useImmer } из 'use-immer'`.
 
 Вот вышеприведенный пример, преобразованный в Immer:
-
-<!-- 0065.part.md -->
 
 === "App.js"
 
@@ -804,32 +732,9 @@ updatePerson((draft) => {
     }
     ```
 
-=== "package.json"
+=== "CodeSandbox"
 
-    ```json
-    {
-    	"dependencies": {
-    		"immer": "1.7.3",
-    		"react": "latest",
-    		"react-dom": "latest",
-    		"react-scripts": "latest",
-    		"use-immer": "0.5.1"
-    	},
-    	"scripts": {
-    		"start": "react-scripts start",
-    		"build": "react-scripts build",
-    		"test": "react-scripts test --env=jsdom",
-    		"eject": "react-scripts eject"
-    	},
-    	"devDependencies": {}
-    }
-    ```
-
-=== "Результат"
-
-    ![Результат](updating-objects-in-state-5.png)
-
-<!-- 0070.part.md -->
+    <iframe src="https://codesandbox.io/embed/522ghd?view=Editor+%2B+Preview&module=%2Fpackage.json" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="optimistic-panna-522ghd" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, насколько более лаконичными стали обработчики событий. Вы можете смешивать и сочетать `useState` и `useImmer` в одном компоненте сколько угодно. Immer — отличный способ сохранить обработчики обновлений лаконичными, особенно если в вашем состоянии есть вложенность, и копирование объектов приводит к повторяющемуся коду.
 
@@ -855,13 +760,11 @@ updatePerson((draft) => {
     -   Чтобы обновить вложенный объект, вам нужно создать копии по всему пути вверх от того места, которое вы обновляете.
     -   Чтобы уменьшить количество повторяющегося кода копирования, используйте Immer.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Исправление некорректных обновлений состояния
+### 1. Исправление некорректных обновлений состояния {#fix-incorrect-state-updates}
 
 В этой форме есть несколько ошибок. Несколько раз нажмите на кнопку, увеличивающую оценку. Заметьте, что он не увеличивается. Затем отредактируйте имя и фамилию и заметите, что оценка внезапно "подхватила" ваши изменения. Наконец, отредактируйте фамилию, и заметите, что оценка полностью исчезла.
-
-<!-- 0071.part.md -->
 
 Ваша задача — исправить все эти ошибки. Исправляя их, объясните, почему происходит каждая из них.
 
@@ -921,9 +824,9 @@ updatePerson((draft) => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-objects-in-state-6.png)
+    <iframe src="https://codesandbox.io/embed/rztj2r?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -989,15 +892,15 @@ updatePerson((draft) => {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](updating-objects-in-state-6.png)
+    	<iframe src="https://codesandbox.io/embed/pr37rg?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Проблема с `handlePlusClick` заключалась в том, что он мутировал объект `player`. В результате React не знал, что есть причина для повторного рендеринга, и не обновлял счет на экране. Вот почему, когда вы редактировали первое имя, состояние обновлялось, вызывая повторный рендеринг, который _также_ обновлял счет на экране.
 
     Проблема с `handleLastNameChange` заключалась в том, что он не копировал существующие поля `...player` в новый объект. Вот почему счет терялся после редактирования фамилии.
 
-### 2. Найти и исправить мутацию
+### 2. Найти и исправить мутацию {#find-and-fix-the-mutation}
 
 Имеется перетаскиваемый ящик на статичном фоне. Вы можете изменить цвет поля с помощью кнопки select.
 
@@ -1145,9 +1048,9 @@ updatePerson((draft) => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](updating-objects-in-state-7.png)
+    <iframe src="https://codesandbox.io/embed/dtjnrl?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -1304,11 +1207,11 @@ updatePerson((draft) => {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](updating-objects-in-state-8.png)
+    	<iframe src="https://codesandbox.io/embed/vf5x9l?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 3. Обновление объекта с помощью Immer
+### 3. Обновление объекта с помощью Immer {#update-an-object-with-immer}
 
 Это тот же пример с ошибкой, что и в предыдущей задаче. На этот раз исправьте мутацию, используя Immer. Для вашего удобства функция `useImmer` уже импортирована, поэтому вам нужно изменить переменную состояния `shape`, чтобы использовать ее.
 
@@ -1453,32 +1356,9 @@ updatePerson((draft) => {
     }
     ```
 
-=== "package.json"
+=== "CodeSandbox"
 
-    ```json
-    {
-    	"dependencies": {
-    		"immer": "1.7.3",
-    		"react": "latest",
-    		"react-dom": "latest",
-    		"react-scripts": "latest",
-    		"use-immer": "0.5.1"
-    	},
-    	"scripts": {
-    		"start": "react-scripts start",
-    		"build": "react-scripts build",
-    		"test": "react-scripts test --env=jsdom",
-    		"eject": "react-scripts eject"
-    	},
-    	"devDependencies": {}
-    }
-    ```
-
-=== "Результат"
-
-    ![Результат](updating-objects-in-state-8.png)
-
-<!-- 0105.part.md -->
+    <iframe src="https://codesandbox.io/embed/59wcld?view=Editor+%2B+Preview&module=%2Fpackage.json" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="pedantic-ramanujan-59wcld" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -1625,31 +1505,8 @@ updatePerson((draft) => {
     	}
     	```
 
-    === "package.json"
+    === "CodeSandbox"
 
-    	```json
-    	{
-    		"dependencies": {
-    			"immer": "1.7.3",
-    			"react": "latest",
-    			"react-dom": "latest",
-    			"react-scripts": "latest",
-    			"use-immer": "0.5.1"
-    		},
-    		"scripts": {
-    			"start": "react-scripts start",
-    			"build": "react-scripts build",
-    			"test": "react-scripts test --env=jsdom",
-    			"eject": "react-scripts eject"
-    		},
-    		"devDependencies": {}
-    	}
-    	```
+    	<iframe src="https://codesandbox.io/embed/2f8vcv?view=Editor+%2B+Preview&module=%2Fpackage.json" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="priceless-hertz-2f8vcv" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-    === "Результат"
-
-    	![Результат](updating-objects-in-state-8.png)
-
-## Ссылки
-
--   [https://react.dev/learn/updating-objects-in-state](https://react.dev/learn/updating-objects-in-state)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/updating-objects-in-state](https://react.dev/learn/updating-objects-in-state)</small>

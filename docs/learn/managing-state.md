@@ -1,6 +1,10 @@
+---
+description: вы узнаете, как правильно структурировать состояние, как поддерживать логику обновления состояния и как обмениваться состоянием между удаленными компонентами
+---
+
 # Управление состоянием
 
-По мере роста приложения необходимо более тщательно подходить к организации состояния и потоков данных между компонентами. Избыточное или дублирующееся состояние является распространенным источником ошибок. В этой главе вы узнаете, как правильно структурировать состояние, как поддерживать логику обновления состояния и как обмениваться состоянием между удаленными компонентами.
+<big>По мере роста приложения необходимо более тщательно подходить к организации состояния и потоков данных между компонентами. Избыточное или дублирующееся состояние является распространенным источником ошибок. В этой главе вы узнаете, как правильно структурировать состояние, как поддерживать логику обновления состояния и как обмениваться состоянием между удаленными компонентами.</big>
 
 !!!tip "В этом разделе"
 
@@ -12,13 +16,11 @@
     -   [Как передавать информацию без "бурения пропсов"](passing-data-deeply-with-context.md)
     -   [Как масштабировать управление состояниями по мере роста вашего приложения](scaling-up-with-reducer-and-context.md)
 
-## Реакция на ввод с состоянием
+## Реакция на ввод с состоянием {#reacting-to-input-with-state}
 
 В React вы не будете изменять пользовательский интерфейс из кода напрямую. Например, вы не будете писать команды типа "отключить кнопку", "включить кнопку", "показать сообщение об успехе" и т. д. Вместо этого вы будете описывать пользовательский интерфейс, который вы хотите видеть для различных визуальных состояний вашего компонента ("начальное состояние", "состояние набора текста", "состояние успеха"), а затем запускать изменения состояния в ответ на ввод пользователя. Это похоже на то, как дизайнеры думают о пользовательском интерфейсе.
 
 Вот форма викторины, построенная с использованием React. Обратите внимание, как она использует переменную состояния `status` для определения того, включать или отключать кнопку отправки, а также показывать ли вместо нее сообщение об успехе.
-
-<!-- 0001.part.md -->
 
 === "App.js"
 
@@ -100,21 +102,19 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](managing-state-1.png)
+    <iframe src="https://codesandbox.io/embed/yy99mt?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Готовы изучить эту тему?"
 
-    Прочитайте [Reacting to Input with State](reacting-to-input-with-state.md), чтобы узнать, как подходить к взаимодействию с учетом состояния.
+    Прочитайте [Реагирование на ввод с помощью состояния](reacting-to-input-with-state.md), чтобы узнать, как подходить к взаимодействию с учетом состояния.
 
-## Выбор структуры состояния
+## Выбор структуры состояния {#choosing-the-state-structure}
 
 Правильное структурирование состояния может сделать разницу между компонентом, который приятно модифицировать и отлаживать, и компонентом, который является постоянным источником ошибок. Самый важный принцип заключается в том, что состояние не должно содержать избыточной или дублирующейся информации. Если есть ненужное состояние, легко забыть обновить его, что приведет к ошибкам!
 
 Например, в этой форме есть **избыточная** переменная состояния `fullName`:
-
-<!-- 0005.part.md -->
 
 === "App.js"
 
@@ -162,13 +162,11 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](managing-state-2.png)
+    <iframe src="https://codesandbox.io/embed/gd6wny?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Вы можете удалить его и упростить код, вычисляя `fullName` во время рендеринга компонента:
-
-<!-- 0009.part.md -->
 
 === "App.js"
 
@@ -215,9 +213,9 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](managing-state-3.png)
+    <iframe src="https://codesandbox.io/embed/85x6yf?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Это может показаться незначительным изменением, но многие ошибки в приложениях React исправляются именно таким образом.
 
@@ -225,13 +223,11 @@
 
     Прочитайте [Выбор структуры состояния](choosing-the-state-structure.md), чтобы узнать, как спроектировать форму состояния, чтобы избежать ошибок.
 
-## Разделение состояния между компонентами
+## Разделение состояния между компонентами {#sharing-state-between-components}
 
 Иногда вы хотите, чтобы состояние двух компонентов всегда менялось вместе. Для этого удалите состояние из обоих компонентов, переместите его к их ближайшему общему родителю, а затем передайте его вниз через пропсы. Это известно как "поднимать состояние вверх", и это одна из самых распространенных вещей, которые вы будете делать при написании кода React.
 
 В этом примере только одна панель должна быть активна одновременно. Чтобы достичь этого, вместо того чтобы хранить активное состояние внутри каждой отдельной панели, родительский компонент хранит состояние и определяет пропсы для своих дочерних элементов.
-
-<!-- 0013.part.md -->
 
 === "App.js"
 
@@ -285,21 +281,19 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](managing-state-4.png)
+    <iframe src="https://codesandbox.io/embed/kyxl65?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Готовы изучить эту тему?"
 
-    Прочитайте [Sharing State Between Components](sharing-state-between-components.md), чтобы узнать, как поднять состояние вверх и синхронизировать компоненты.
+    Прочитайте [Совместное использование состояния между компонентами](sharing-state-between-components.md), чтобы узнать, как поднять состояние вверх и синхронизировать компоненты.
 
-## Сохранение и сброс состояния
+## Сохранение и сброс состояния {#preserving-and-resetting-state}
 
 Когда вы перерисовываете компонент, React должен решить, какие части дерева сохранить (и обновить), а какие отбросить или создать заново. В большинстве случаев автоматическое поведение React работает достаточно хорошо. По умолчанию React сохраняет те части дерева, которые "совпадают" с ранее отрисованным деревом компонентов.
 
 Однако иногда это не то, что вам нужно. В этом приложении для чата при наборе сообщения и последующем переключении получателя ввод не сбрасывается. В результате пользователь может случайно отправить сообщение не тому человеку:
-
-<!-- 0017.part.md -->
 
 === "App.js"
 
@@ -378,13 +372,11 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](managing-state-5.png)
+    <iframe src="https://codesandbox.io/embed/mr8p2r?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-React позволяет отменить поведение по умолчанию и _принудить_ компонент сбросить свое состояние, передав ему другой `ключ`, например `<Ключ чата={email} />`. Это говорит React, что если получатель другой, то он должен рассматриваться как _другой_ компонент `Chat`, который должен быть создан заново с новыми данными (и UI, как входы). Теперь переключение между получателями сбрасывает поле ввода - даже если вы отображаете один и тот же компонент.
-
-<!-- 0025.part.md -->
+React позволяет отменить поведение по умолчанию и _принудить_ компонент сбросить свое состояние, передав ему другой `key`, например `<Chat key={email} />`. Это говорит React, что если получатель другой, то он должен рассматриваться как _другой_ компонент `Chat`, который должен быть создан заново с новыми данными (и UI, как входы). Теперь переключение между получателями сбрасывает поле ввода - даже если вы отображаете один и тот же компонент.
 
 === "App.js"
 
@@ -463,21 +455,17 @@ React позволяет отменить поведение по умолчан
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](managing-state-6.png)
-
-<!-- 0032.part.md -->
+    <iframe src="https://codesandbox.io/embed/v23tny?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Готовы изучить эту тему?"
 
-    Прочитайте [Preserving and Resetting State](preserving-and-resetting-state.md), чтобы узнать о времени жизни состояния и о том, как им управлять.
+    Прочитайте [Сохранение и сброс состояния](preserving-and-resetting-state.md), чтобы узнать о времени жизни состояния и о том, как им управлять.
 
-## Извлечение логики состояния в редуктор
+## Извлечение логики состояния в редуктор {#extracting-state-logic-into-a-reducer}
 
 Компоненты с большим количеством обновлений состояния, распределенных по множеству обработчиков событий, могут стать непомерно сложными. Для таких случаев вы можете объединить всю логику обновления состояния за пределами вашего компонента в одной функции, называемой "reducer". Ваши обработчики событий становятся лаконичными, поскольку они указывают только "действия" пользователя. В нижней части файла функция reducer определяет, как состояние должно обновляться в ответ на каждое действие!
-
-<!-- 0033.part.md -->
 
 === "App.js"
 
@@ -668,23 +656,19 @@ React позволяет отменить поведение по умолчан
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](managing-state-7.png)
-
-<!-- 0040.part.md -->
+    <iframe src="https://codesandbox.io/embed/6xhlj2?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Готовы изучить эту тему?"
 
-    Читайте [Extracting State Logic into a Reducer](extracting-state-logic-into-a-reducer.md), чтобы узнать, как консолидировать логику в функции `reducer`.
+    Читайте [Извлечение логики состояний в редуктор](extracting-state-logic-into-a-reducer.md), чтобы узнать, как консолидировать логику в функции `reducer`.
 
-## Передача данных глубоко с контекстом
+## Передача данных глубоко с контекстом {#passing-data-deeply-with-context}
 
 Обычно вы передаете информацию от родительского компонента к дочернему компоненту через props. Но передача пропсов может стать неудобной, если вам нужно передать какой-то пропс через множество компонентов, или если многим компонентам нужна одна и та же информация. Context позволяет родительскому компоненту сделать некоторую информацию доступной для любого компонента в дереве под ним - независимо от того, насколько глубоко он находится - без явной передачи ее через props.
 
 Здесь компонент `Heading` определяет уровень своего заголовка, "спрашивая" ближайший `Section` о его уровне. Каждый `Section` отслеживает свой собственный уровень, спрашивая родительский `Section` и добавляя к нему один. Каждый `Section` предоставляет информацию всем компонентам ниже него без передачи пропсов - он делает это через контекст.
-
-<!-- 0041.part.md -->
 
 === "App.js"
 
@@ -773,21 +757,19 @@ React позволяет отменить поведение по умолчан
     export const LevelContext = createContext(0);
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](managing-state-8.png)
+    <iframe src="https://codesandbox.io/embed/yz5t28?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Готовы изучить эту тему?"
 
     Читайте [Передача данных глубоко с контекстом](passing-data-deeply-with-context.md), чтобы узнать об использовании контекста в качестве альтернативы передаче пропсов.
 
-## Масштабирование с помощью редуктора и контекста
+## Масштабирование с помощью редуктора и контекста {#scaling-up-with-reducer-and-context}
 
 Редукторы позволяют консолидировать логику обновления состояния компонента. Контекст позволяет передавать информацию другим компонентам. Вы можете объединить редукторы и контекст для управления состоянием сложного экрана.
 
 При таком подходе родительский компонент со сложным состоянием управляет им с помощью редуктора. Другие компоненты, находящиеся в глубине дерева, могут читать его состояние через контекст. Они также могут отправлять действия для обновления этого состояния.
-
-<!-- 0051.part.md -->
 
 === "App.js"
 
@@ -1001,22 +983,18 @@ React позволяет отменить поведение по умолчан
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](managing-state-9.png)
+    <iframe src="https://codesandbox.io/embed/kxzxpz?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Готовы изучить эту тему?"
 
-    Прочитайте [Scaling Up with Reducer and Context](scaling-up-with-reducer-and-context.md), чтобы узнать, как управление состояниями масштабируется в растущем приложении.
+    Прочитайте [Расширение с помощью редуктора и контекста](scaling-up-with-reducer-and-context.md), чтобы узнать, как управление состояниями масштабируется в растущем приложении.
 
-## Что дальше?
+## Что дальше? {#whats-next}
 
-Перейдите по ссылке [Reacting to Input with State](reacting-to-input-with-state.md), чтобы начать читать эту главу страница за страницей!
+Перейдите по ссылке [Реагирование на ввод с помощью состояния](reacting-to-input-with-state.md), чтобы начать читать эту главу страница за страницей!
 
-Или, если вы уже знакомы с этими темами, почему бы не прочитать о [Escape Hatches](escape-hatches.md)?
+Или, если вы уже знакомы с этими темами, почему бы не прочитать о [Внешний доступ](escape-hatches.md)?
 
-<!-- 0061.part.md -->
-
-## Ссылки
-
--   [https://react.dev/learn/managing-state](https://react.dev/learn/managing-state)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/managing-state](https://react.dev/learn/managing-state)</small>
