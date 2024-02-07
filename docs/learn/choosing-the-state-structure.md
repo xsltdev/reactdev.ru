@@ -1,6 +1,10 @@
+---
+description: Правильное структурирование состояния может сделать разницу между компонентом, который приятно модифицировать и отлаживать, и компонентом, который является постоянным источником ошибок. Вот несколько советов, которые следует учитывать при структурировании состояния
+---
+
 # Выбор структуры состояния
 
-Правильное структурирование состояния может сделать разницу между компонентом, который приятно модифицировать и отлаживать, и компонентом, который является постоянным источником ошибок. Вот несколько советов, которые следует учитывать при структурировании состояния.
+<big>Правильное **структурирование состояния** может сделать разницу между компонентом, который приятно модифицировать и отлаживать, и компонентом, который является постоянным источником ошибок. Вот несколько советов, которые следует учитывать при структурировании состояния.</big>
 
 !!!tip "Вы узнаете"
 
@@ -8,7 +12,7 @@
     -   Чего следует избегать при организации состояния
     -   Как исправить распространенные проблемы со структурой состояния
 
-## Принципы структурирования состояния
+## Принципы структурирования состояния {#principles-for-structuring-state}
 
 Когда вы пишете компонент, который хранит некоторое состояние, вам придется сделать выбор, сколько переменных состояния использовать и какова должна быть форма их данных. Хотя можно писать корректные программы даже с неоптимальной структурой состояния, есть несколько принципов, которые помогут вам сделать лучший выбор:
 
@@ -22,34 +26,24 @@
 
 Теперь давайте посмотрим, как эти принципы применяются на практике.
 
-## Состояние, связанное с группой
+## Группируйте связанные состояния {#group-related-state}
 
 Иногда вы можете сомневаться, использовать ли одну или несколько переменных состояния.
 
 Стоит ли вам это делать?
-
-<!-- 0001.part.md -->
 
 ```js
 const [x, setX] = useState(0);
 const [y, setY] = useState(0);
 ```
 
-<!-- 0002.part.md -->
-
 Или это?
-
-<!-- 0003.part.md -->
 
 ```js
 const [position, setPosition] = useState({ x: 0, y: 0 });
 ```
 
-<!-- 0004.part.md -->
-
 Технически, вы можете использовать любой из этих подходов. Но **если некоторые две переменные состояния всегда изменяются вместе, хорошей идеей будет объединить их в одну переменную состояния.** Тогда вы не забудете всегда синхронизировать их, как в этом примере, где перемещение курсора обновляет обе координаты красной точки:
-
-<!-- 0005.part.md -->
 
 === "App.js"
 
@@ -94,7 +88,7 @@ const [position, setPosition] = useState({ x: 0, y: 0 });
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-1.png)
+    <iframe src="https://codesandbox.io/embed/swps3c?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Еще один случай, когда вы группируете данные в объект или массив, - это когда вы не знаете, сколько частей состояния вам понадобится. Например, это полезно, когда у вас есть форма, в которой пользователь может добавлять пользовательские поля.
 
@@ -102,11 +96,9 @@ const [position, setPosition] = useState({ x: 0, y: 0 });
 
     Если ваша переменная состояния является объектом, помните, что [вы не можете обновить только одно поле в нем](updating-objects-in-state.md) без явного копирования других полей. Например, вы не можете сделать `setPosition({ x: 100 })` в приведенном выше примере, потому что у него не будет свойства `y` вообще! Вместо этого, если бы вы хотели установить только `x`, вы бы либо сделали `setPosition({ ...position, x: 100 })`, либо разделили их на две переменные состояния и сделали `setX(100)`.
 
-## Избегайте противоречий в состоянии
+## Избегайте противоречий в состоянии {#avoid-contradictions-in-state}
 
 Вот форма обратной связи с отелем с переменными состояния `isSending` и `isSent`:
-
-<!-- 0009.part.md -->
 
 === "App.js"
 
@@ -157,15 +149,11 @@ const [position, setPosition] = useState({ x: 0, y: 0 });
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-2.png)
-
-<!-- 0010.part.md -->
+    <iframe src="https://codesandbox.io/embed/l597td?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Хотя этот код работает, он оставляет дверь открытой для "невозможных" состояний. Например, если вы забудете вызвать `setIsSent` и `setIsSending` вместе, вы можете оказаться в ситуации, когда одновременно `isSending` и `isSent` будут `true`. Чем сложнее ваш компонент, тем труднее понять, что произошло.
 
 **Поскольку `isSending` и `isSent` никогда не должны быть `true` одновременно, лучше заменить их одной переменной состояния `status`, которая может принимать одно из _трех_ допустимых состояний:** `'typing'` (начальное), `'sending'` и `'sent'`:
-
-<!-- 0011.part.md -->
 
 === "App.js"
 
@@ -217,30 +205,22 @@ const [position, setPosition] = useState({ x: 0, y: 0 });
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-3.png)
-
-<!-- 0012.part.md -->
+    <iframe src="https://codesandbox.io/embed/gsy35f?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Вы все еще можете объявить некоторые константы для удобства чтения:
-
-<!-- 0013.part.md -->
 
 ```js
 const isSending = status === 'sending';
 const isSent = status === 'sent';
 ```
 
-<!-- 0014.part.md -->
-
 Но они не являются переменными состояния, поэтому вам не нужно беспокоиться о том, что они будут рассинхронизированы друг с другом.
 
-## Избегайте избыточного состояния
+## Избегайте избыточного состояния {#avoid-redundant-state}
 
 Если вы можете вычислить некоторую информацию из пропсов компонента или его существующих переменных состояния во время рендеринга, вам **не следует** помещать эту информацию в состояние компонента.
 
 Например, возьмем эту форму. Она работает, но можете ли вы найти в ней избыточное состояние?
-
-<!-- 0015.part.md -->
 
 === "App.js"
 
@@ -290,13 +270,11 @@ const isSent = status === 'sent';
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-4.png)
+    <iframe src="https://codesandbox.io/embed/gd6wny?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Эта форма имеет три переменные состояния: `firstName`, `lastName` и `fullName`. Однако `fullName` является избыточной. **Вы всегда можете вычислить `fullName` из `firstName` и `lastName` во время рендеринга, поэтому удалите ее из state.**.
 
 Вот как это можно сделать:
-
-<!-- 0019.part.md -->
 
 === "App.js"
 
@@ -345,17 +323,13 @@ const isSent = status === 'sent';
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-5.png)
+    <iframe src="https://codesandbox.io/embed/85x6yf?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Здесь `fullName` не является _не_ переменной состояния. Вместо этого она вычисляется во время рендеринга:
-
-<!-- 0023.part.md -->
 
 ```js
 const fullName = firstName + ' ' + lastName;
 ```
-
-<!-- 0024.part.md -->
 
 В результате обработчикам изменений не нужно делать ничего особенного, чтобы обновить его. Когда вы вызываете `setFirstName` или `setLastName`, вы вызываете повторный рендеринг, а затем следующее `fullName` будет вычислено на основе свежих данных.
 
@@ -391,11 +365,9 @@ const fullName = firstName + ' ' + lastName;
     }
     ```
 
-## Избегайте дублирования в состоянии
+## Избегайте дублирования в состоянии {#avoid-duplication-in-state}
 
 Этот компонент списка меню позволяет выбрать одну туристическую закуску из нескольких:
-
-<!-- 0031.part.md -->
 
 === "App.js"
 
@@ -439,13 +411,11 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-6.png)
+    <iframe src="https://codesandbox.io/embed/n7x824?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 В настоящее время он хранит выбранный элемент как объект в переменной состояния `selectedItem`. Однако это не очень хорошо: **содержимое `selectedItem` является тем же объектом, что и один из элементов списка `items`.** Это означает, что информация о самом элементе дублируется в двух местах.
 
 Почему это является проблемой? Давайте сделаем каждый элемент редактируемым:
-
-<!-- 0035.part.md -->
 
 === "App.js"
 
@@ -512,13 +482,11 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-7.png)
+    <iframe src="https://codesandbox.io/embed/qwm2gy?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что если вы сначала нажмете "Выбрать" на элементе, а затем **отредактируете его**, ввод обновляется, но метка внизу не отражает правки.Это потому, что у вас дублируется состояние, и вы забыли обновить `selectedItem`.
 
 Хотя вы могли бы обновить `selectedItem` тоже, проще устранить дублирование. В этом примере вместо объекта `selectedItem` (который создает дублирование с объектами внутри `items`), вы храните `selectedId` в состоянии, а _потом_ получаете `selectedItem` путем поиска элемента с этим ID в массиве `items`:
-
-<!-- 0039.part.md -->
 
 === "App.js"
 
@@ -587,31 +555,27 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-8.png)
-
-<!-- 0042.part.md -->
+    <iframe src="https://codesandbox.io/embed/8mhwpl?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 (В качестве альтернативы можно удерживать выбранный индекс в состоянии).
 
 Раньше состояние дублировалось следующим образом:
 
--   `items = [{ id: 0, title: 'pretzels'}, ...]`.
--   `selectedItem = { id: 0, title: 'pretzels'}`.
+-   `items = [{ id: 0, title: 'pretzels'}, ...]`
+-   `selectedItem = { id: 0, title: 'pretzels'}`
 
 Но после изменения это выглядит следующим образом:
 
 -   `items = [{ id: 0, title: 'pretzels'}, ...]`
--   `selectedId = 0`.
+-   `selectedId = 0`
 
 Дублирование исчезло, и вы сохранили только основное состояние!
 
 Теперь, если вы отредактируете _выбранный_ элемент, сообщение ниже будет немедленно обновлено. Это происходит потому, что `setItems` вызывает повторный рендеринг, и `items.find(...)` найдет элемент с обновленным заголовком. Вам не нужно было хранить _выбранный элемент_ в состоянии, потому что только _выбранный ID_ является существенным. Остальное можно вычислить во время рендеринга.
 
-## Избегайте глубоко вложенного состояния
+## Избегайте глубоко вложенного состояния {#avoid-deeply-nested-state}
 
 Представьте себе план путешествия, состоящий из планет, континентов и стран. У вас может возникнуть соблазн структурировать его состояние с помощью вложенных объектов и массивов, как в этом примере:
-
-<!-- 0043.part.md -->
 
 === "App.js"
 
@@ -924,17 +888,13 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-9.png)
-
-<!-- 0046.part.md -->
+    <iframe src="https://codesandbox.io/embed/vmm64f?view=Editor+%2B+Preview&module=%2Fsrc%2Fplaces.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Теперь предположим, что вы хотите добавить кнопку для удаления места, которое вы уже посетили. Как бы вы это сделали? [Обновление состояния вложенных объектов](updating-objects-in-state.md#updating-a-nested-object) включает создание копий объектов по всей цепочке вверх от той части, которая изменилась. Удаление глубоко вложенного места потребует копирования всей цепочки родительских мест. Такой код может быть очень многословным.
 
 **Если состояние слишком вложенное, чтобы его можно было легко обновить, подумайте о том, чтобы сделать его "плоским".** Вот один из способов реструктуризации этих данных. Вместо древовидной структуры, где каждое `место` имеет массив _его дочерних мест_, вы можете сделать так, чтобы каждое место содержало массив _идентификаторов дочерних мест_. Затем хранить отображение от каждого идентификатора места к соответствующему месту.
 
 Такая реструктуризация данных может напомнить вам таблицу базы данных:
-
-<!-- 0047.part.md -->
 
 === "App.js"
 
@@ -1243,9 +1203,9 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-10.png)
+    <iframe src="https://codesandbox.io/embed/q63dwl?view=Editor+%2B+Preview&module=%2Fsrc%2Fplaces.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-**Теперь, когда состояние "плоское" (также известное как "нормализованное"), обновлять вложенные элементы стало проще.**.
+**Теперь, когда состояние "плоское" (также известное как "нормализованное"), обновлять вложенные элементы стало проще.**
 
 Чтобы удалить место, теперь вам нужно обновить только два уровня состояния:
 
@@ -1253,8 +1213,6 @@ const fullName = firstName + ' ' + lastName;
 -   Обновленная версия корневого объекта "table" должна включать обновленную версию родительского места.
 
 Вот пример того, как это можно сделать:
-
-<!-- 0051.part.md -->
 
 === "App.js"
 
@@ -1598,17 +1556,13 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-11.png)
-
-<!-- 0056.part.md -->
+    <iframe src="https://codesandbox.io/embed/fwxl88?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Вкладывать состояние можно сколько угодно, но если сделать его "плоским", это решит множество проблем. Это облегчает обновление состояния и помогает избежать дублирования в различных частях вложенного объекта.
 
 !!!note "Улучшение использования памяти"
 
     В идеале, для улучшения использования памяти вы также должны удалить удаленные элементы (и их детей!) из объекта "table". В данной версии это сделано. Она также [использует Immer](updating-objects-in-state.md#write-concise-update-logic-with-immer), чтобы сделать логику обновления более лаконичной.
-
-    <!-- 0057.part.md -->
 
     === "App.js"
 
@@ -1953,31 +1907,9 @@ const fullName = firstName + ' ' + lastName;
     	};
     	```
 
-
-    === "package.json"
-
-    	```json
-    	{
-    		"dependencies": {
-    			"immer": "1.7.3",
-    			"react": "latest",
-    			"react-dom": "latest",
-    			"react-scripts": "latest",
-    			"use-immer": "0.5.1"
-    		},
-    		"scripts": {
-    			"start": "react-scripts start",
-    			"build": "react-scripts build",
-    			"test": "react-scripts test --env=jsdom",
-    			"eject": "react-scripts eject"
-    		},
-    		"devDependencies": {}
-    	}
-    	```
-
     === "Результат"
 
-    	![Результат](choosing-the-state-structure-12.png)
+    	<iframe src="https://codesandbox.io/embed/gfwsly?view=Editor+%2B+Preview&module=%2Fpackage.json" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="fervent-wave-gfwsly" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Иногда вложенность состояния можно уменьшить, переместив часть вложенного состояния в дочерние компоненты. Это хорошо работает для эфемерного состояния пользовательского интерфейса, которое не нужно хранить, например, наведение курсора на элемент.
 
@@ -1991,13 +1923,11 @@ const fullName = firstName + ' ' + lastName;
     -   Для шаблонов пользовательского интерфейса, таких как выбор, храните ID или индекс в состоянии, а не сам объект.
     -   Если обновление глубоко вложенного состояния является сложным, попробуйте сгладить его.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Исправление компонента, который не обновляется
+### 1. Исправление компонента, который не обновляется {#fix-a-component-thats-not-updating}
 
 Этот компонент `Clock` получает два пропса: `color` и `time`. Когда вы выбираете другой цвет в поле выбора, компонент `Clock` получает другой пропс `color` от своего родительского компонента. Однако по какой-то причине отображаемый цвет не обновляется. Почему? Устраните проблему.
-
-<!-- 0065.part.md -->
 
 === "Clock.js"
 
@@ -2012,7 +1942,7 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-13.png)
+    <iframe src="https://codesandbox.io/embed/4qhgyl?view=Editor+%2B+Preview&module=%2Fsrc%2FClock.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -2032,7 +1962,7 @@ const fullName = firstName + ' ' + lastName;
 
     === "Результат"
 
-    	![Результат](choosing-the-state-structure-14.png)
+    	<iframe src="https://codesandbox.io/embed/958fy6?view=Editor+%2B+Preview&module=%2Fsrc%2FClock.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Или, используя синтаксис деструктуризации:
 
@@ -2048,9 +1978,9 @@ const fullName = firstName + ' ' + lastName;
 
     === "Результат"
 
-    	![Результат](choosing-the-state-structure-14.png)
+    	<iframe src="https://codesandbox.io/embed/n5hk9l?view=Editor+%2B+Preview&module=%2Fsrc%2FClock.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 2. Исправьте сломанный упаковочный лист
+### 2. Исправьте сломанный упаковочный лист {#fix-a-broken-packing-list}
 
 Этот упаковочный лист имеет нижний колонтитул, который показывает, сколько предметов упаковано, и сколько предметов в целом. Поначалу кажется, что это работает, но на самом деле это ошибка. Например, если вы пометите предмет как упакованный, а затем удалите его, счетчик не будет обновлен правильно. Исправьте счетчик так, чтобы он всегда был корректным.
 
@@ -2128,7 +2058,7 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-15.png)
+    <iframe src="https://codesandbox.io/embed/tg3xtr?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -2207,11 +2137,11 @@ const fullName = firstName + ' ' + lastName;
 
     === "Результат"
 
-    	![Результат](choosing-the-state-structure-16.png)
+    	<iframe src="https://codesandbox.io/embed/qrrrww?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Обратите внимание, что после этого изменения обработчики событий занимаются только вызовом `setItems`. Количество элементов теперь вычисляется во время следующего рендеринга из `items`, поэтому они всегда актуальны.
 
-### 3. Исправление исчезающего выбора
+### 3. Исправление исчезающего выбора {#fix-the-disappearing-selection}
 
 Есть список `letters` в состоянии. Когда вы наводите курсор или фокус на определенное письмо - оно выделяется. Текущее выделенное письмо хранится в переменной состояния `highlightedLetter`. Вы можете "выделять" и "снимать выделение" отдельных писем, что приводит к обновлению массива `letters` в состоянии.
 
@@ -2327,7 +2257,7 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-17.png)
+    <iframe src="https://codesandbox.io/embed/yy7qzg?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -2444,9 +2374,9 @@ const fullName = firstName + ' ' + lastName;
 
     === "Результат"
 
-    	![Результат](choosing-the-state-structure-18.png)
+    	<iframe src="https://codesandbox.io/embed/vwz6qv?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 4. Реализация множественного выбора
+### 4. Реализация множественного выбора {#implement-multiple-selection}
 
 В этом примере каждое `Letter` имеет свойство `isSelected` и обработчик `onToggle`, который отмечает его как выбранное. Это работает, но состояние хранится как `selectedId` (либо `null`, либо `ID`), поэтому в каждый момент времени может быть выбрано только одно письмо.
 
@@ -2546,7 +2476,7 @@ const fullName = firstName + ' ' + lastName;
 
 === "Результат"
 
-    ![Результат](choosing-the-state-structure-19.png)
+    <iframe src="https://codesandbox.io/embed/j5jrjh?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -2656,11 +2586,11 @@ const fullName = firstName + ' ' + lastName;
 
     === "Результат"
 
-    	![Результат](choosing-the-state-structure-20.png)
+    	<iframe src="https://codesandbox.io/embed/2grml5?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Одним из небольших недостатков использования массива является то, что для каждого элемента вы вызываете `selectedIds.includes(letter.id)`, чтобы проверить, выбран ли он. Если массив очень большой, это может стать проблемой производительности, поскольку поиск в массиве с помощью [`includes()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/includes) занимает линейное время, а вы выполняете этот поиск для каждого отдельного элемента.
 
-    Чтобы решить эту проблему, вы можете держать в состоянии [Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set), что обеспечивает быструю операцию [`has()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set/has):
+    Чтобы решить эту проблему, вы можете держать в состоянии [`Set`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set), что обеспечивает быструю операцию [`has()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set/has):
 
     === "App.js"
 
@@ -2762,12 +2692,10 @@ const fullName = firstName + ' ' + lastName;
 
     === "Результат"
 
-    	![Результат](choosing-the-state-structure-21.png)
+    	<iframe src="https://codesandbox.io/embed/8zrqzs?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Теперь каждый элемент выполняет проверку `selectedIds.has(letter.id)`, что очень быстро.
 
     Помните, что [не следует мутировать объекты в состоянии](updating-objects-in-state.md), и это относится и к наборам. Вот почему функция `handleToggle` сначала создает _копию_ набора, а затем обновляет эту копию.
 
-## Ссылки
-
--   [https://react.dev/learn/choosing-the-state-structure](https://react.dev/learn/choosing-the-state-structure)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/choosing-the-state-structure](https://react.dev/learn/choosing-the-state-structure)</small>

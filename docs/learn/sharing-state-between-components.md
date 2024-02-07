@@ -1,13 +1,17 @@
+---
+description: Чтобы сделать это, удалите состояние из обоих компонентов, переместите его в их ближайшего общего родителя, а затем передайте его им через props. Это известно как поднятие состояния вверх, и это одна из самых распространенных вещей, которые вы будете делать при написании кода React
+---
+
 # Совместное использование состояния между компонентами
 
-Иногда требуется, чтобы состояние двух компонентов всегда изменялось вместе. Чтобы сделать это, удалите состояние из обоих компонентов, переместите его в их ближайшего общего родителя, а затем передайте его им через `props`. Это известно как _поднятие состояния вверх_, и это одна из самых распространенных вещей, которые вы будете делать при написании кода React.
+<big>Иногда требуется, чтобы состояние двух компонентов всегда изменялось вместе. Чтобы сделать это, удалите состояние из обоих компонентов, переместите его в их ближайшего общего родителя, а затем передайте его им через `props`. Это известно как **поднятие состояния вверх**, и это одна из самых распространенных вещей, которые вы будете делать при написании кода React.</big>
 
 !!!tip "Вы узнаете"
 
     -   Как делиться состоянием между компонентами, поднимая его вверх
     -   Что такое управляемые и неуправляемые компоненты
 
-## Поднятие состояния на примере
+## Поднятие состояния на примере {#lifting-state-up-by-example}
 
 В этом примере родительский компонент `Accordion` отображает две отдельные `Panel`:
 
@@ -65,9 +69,9 @@
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](sharing-state-between-components-1.png)
+    <iframe src="https://codesandbox.io/embed/9r8r22?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что нажатие на кнопку одной панели не влияет на другую - они независимы.
 
@@ -89,21 +93,15 @@
 
 Это позволит компоненту `Accordion` координировать обе `Panel` и разворачивать только одну за раз.
 
-### Шаг 1: Удалите состояние из дочерних компонентов
+### Шаг 1: Удалите состояние из дочерних компонентов {#step-1-remove-state-from-the-child-components}
 
 Вы передадите контроль над `isActive` панели ее родительскому компоненту. Это означает, что родительский компонент будет передавать `isActive` в `Panel` в качестве пропса. Начните с **удаления этой строки** из компонента `Panel`:
-
-<!-- 0005.part.md -->
 
 ```js
 const [isActive, setIsActive] = useState(false);
 ```
 
-<!-- 0006.part.md -->
-
 И вместо этого добавьте `isActive` в список пропсов `Panel`:
-
-<!-- 0007.part.md -->
 
 ```js
 function Panel({ title, children, isActive }) {
@@ -111,17 +109,15 @@ function Panel({ title, children, isActive }) {
 }
 ```
 
-<!-- 0008.part.md -->
-
 Теперь родительский компонент `Panel` может _контролировать_ `isActive`, [передавая его как prop.](passing-props-to-a-component.md) И наоборот, компонент `Panel` теперь не имеет _контроля_ над значением `isActive` - теперь это зависит от родительского компонента!
 
-### Шаг 2: Передача жестко закодированных данных от общего родителя
+### Шаг 2: Передача жестко закодированных данных от общего родителя {#step-2-pass-hardcoded-data-from-the-common-parent}
 
 Чтобы поднять состояние вверх, вы должны найти ближайший общий родительский компонент _обоих_ дочерних компонентов, которые вы хотите скоординировать:
 
--   `Аккордеон` _(ближайший общий родитель)_.
-    -   `Панель`
-    -   `Панель`
+-   `Accordion` _(ближайший общий родитель)_.
+    -   `Panel`
+    -   `Panel`
 
 В данном примере это компонент `Accordion`. Поскольку он находится над обеими панелями и может управлять их пропсами, он станет "источником истины" для того, какая панель в данный момент активна. Заставьте компонент `Accordion` передавать жестко закодированное значение `isActive` (например, `true`) обеим панелям:
 
@@ -170,31 +166,25 @@ function Panel({ title, children, isActive }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](sharing-state-between-components-2.png)
+    <iframe src="https://codesandbox.io/embed/96nfgq?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Попробуйте отредактировать жестко закодированные значения `isActive` в компоненте `Accordion` и посмотрите результат на экране.
 
-### Шаг 3: Добавьте состояние к общему родителю
+### Шаг 3: Добавьте состояние к общему родителю {#step-3-add-state-to-the-common-parent}
 
 Поднятие состояния вверх часто меняет природу того, что вы храните в качестве состояния.
 
-В данном случае только одна панель должна быть активна одновременно. Это означает, что общий родительский компонент `Accordion` должен отслеживать, _какая_ панель является активной. Вместо значения `boolean`, он может использовать число в качестве индекса активной `панели` для переменной state:
-
-<!-- 0013.part.md -->
+В данном случае только одна панель должна быть активна одновременно. Это означает, что общий родительский компонент `Accordion` должен отслеживать, _какая_ панель является активной. Вместо значения `boolean`, он может использовать число в качестве индекса активной `Panel` для переменной state:
 
 ```js
 const [activeIndex, setActiveIndex] = useState(0);
 ```
 
-<!-- 0014.part.md -->
-
 Когда `activeIndex` равен `0`, активна первая панель, а когда `1` - вторая.
 
-Нажатие на кнопку "Показать" в любой `панели` должно изменить активный индекс в `аккордеоне`. Панель `Panel` не может установить состояние `activeIndex` напрямую, потому что оно определено внутри `Accordion`. Компонент `Accordion` должен _явно разрешить_ компоненту `Panel` изменить свое состояние путем [передачи обработчика события в качестве пропса](responding-to-events.md#passing-event-handlers-as-props):
-
-<!-- 0015.part.md -->
+Нажатие на кнопку "Показать" в любой `Panel` должно изменить активный индекс в `Accordion`. Панель `Panel` не может установить состояние `activeIndex` напрямую, потому что оно определено внутри `Accordion`. Компонент `Accordion` должен _явно разрешить_ компоненту `Panel` изменить свое состояние путем [передачи обработчика события в качестве пропса](responding-to-events.md#passing-event-handlers-as-props):
 
 ```js
 <>
@@ -212,8 +202,6 @@ const [activeIndex, setActiveIndex] = useState(0);
     </Panel>
 </>
 ```
-
-<!-- 0016.part.md -->
 
 Теперь `<button>` внутри `Panel` будет использовать пропс `onShow` в качестве обработчика события щелчка:
 
@@ -269,9 +257,9 @@ const [activeIndex, setActiveIndex] = useState(0);
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](sharing-state-between-components-3.png)
+    <iframe src="https://codesandbox.io/embed/kyxl65?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Это завершает подъем состояния вверх! Перемещение состояния в общий родительский компонент позволило скоординировать две панели. Использование активного индекса вместо двух флагов "показано" обеспечило, что только одна панель активна в данный момент времени. А передача обработчика события дочернему компоненту позволила ему изменять состояние родительского компонента.
 
@@ -295,17 +283,15 @@ const [activeIndex, setActiveIndex] = useState(0);
 
     При написании компонента подумайте, какая информация в нем должна быть управляемой (через пропсы), а какая - неуправляемой (через состояние). Но вы всегда можете передумать и рефакторить позже.
 
-## Единый источник истины для каждого состояния
+## Единый источник истины для каждого состояния {#a-single-source-of-truth-for-each-state}
 
 В приложении React многие компоненты будут иметь свое собственное состояние. Некоторые состояния могут "жить" рядом с листовыми компонентами (компоненты в нижней части приложения).
-
-<!-- 0021.part.md -->
 
 **Этот принцип также известен как наличие ["единого источника истины"](https://en.wikipedia.org/wiki/Single_source_of_truth)**. Он не означает, что все состояние живет в одном месте, но что для _каждой_ части состояния существует _конкретный_ компонент, который хранит эту часть информации. Вместо того, чтобы дублировать общее состояние между компонентами, _поднимите его_ к их общему общему родителю, и _передайте его вниз_ дочерним компонентам, которым оно необходимо.
 
 Ваше приложение будет меняться по мере работы над ним. Часто бывает, что вы перемещаете состояние вниз или назад вверх, в то время как вы все еще выясняете, где "живет" каждая часть состояния. Это все часть процесса!
 
-Чтобы увидеть, как это выглядит на практике с несколькими другими компонентами, прочитайте [Thinking in React](thinking-in-react.md).
+Чтобы увидеть, как это выглядит на практике с несколькими другими компонентами, прочитайте [Мыслим как React](thinking-in-react.md).
 
 !!!note "Итого"
 
@@ -314,9 +300,9 @@ const [activeIndex, setActiveIndex] = useState(0);
     -   Наконец, передайте обработчики событий, чтобы дочерние компоненты могли изменять состояние родительского.
     -   Полезно рассматривать компоненты как "управляемые" (управляемые пропсами) или "неуправляемые" (управляемые состоянием).
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Синхронизированные входы
+### 1. Синхронизированные входы {#synced-inputs}
 
 Эти два входа являются независимыми. Сделайте их синхронизированными: редактирование одного входа должно обновить другой вход с тем же текстом, и наоборот.
 
@@ -350,9 +336,9 @@ const [activeIndex, setActiveIndex] = useState(0);
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](sharing-state-between-components-4.png)
+    <iframe src="https://codesandbox.io/embed/v43d4g?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -400,11 +386,11 @@ const [activeIndex, setActiveIndex] = useState(0);
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](sharing-state-between-components-5.png)
+    	<iframe src="https://codesandbox.io/embed/x5r95x?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 2. Фильтрация списка
+### 2. Фильтрация списка {#filtering-a-list}
 
 В этом примере `SearchBar` имеет собственное состояние `query`, которое управляет вводом текста. Его родительский компонент `FilterableList` отображает `список` элементов, но он не учитывает поисковый запрос.
 
@@ -507,9 +493,9 @@ const [activeIndex, setActiveIndex] = useState(0);
     ];
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](sharing-state-between-components-6.png)
+    <iframe src="https://codesandbox.io/embed/2rhfg8?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -618,10 +604,8 @@ const [activeIndex, setActiveIndex] = useState(0);
     	];
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](sharing-state-between-components-7.png)
+    	<iframe src="https://codesandbox.io/embed/dp4xwp?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-## Ссылки
-
--   [https://react.dev/learn/sharing-state-between-components](https://react.dev/learn/sharing-state-between-components)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/sharing-state-between-components](https://react.dev/learn/sharing-state-between-components)</small>
