@@ -1,6 +1,10 @@
+---
+description: Состояние изолировано между компонентами. React отслеживает, какое состояние принадлежит тому или иному компоненту, основываясь на их месте в дереве пользовательского интерфейса
+---
+
 # Сохранение и сброс состояния
 
-Состояние изолировано между компонентами. React отслеживает, какое состояние принадлежит тому или иному компоненту, основываясь на их месте в дереве пользовательского интерфейса. Вы можете контролировать, когда сохранять состояние, а когда сбрасывать его между повторными рендерами.
+<big>Состояние изолировано между компонентами. React отслеживает, какое состояние принадлежит тому или иному компоненту, основываясь на их месте в дереве пользовательского интерфейса. Вы можете контролировать, когда сохранять состояние, а когда сбрасывать его между повторными рендерами.</big>
 
 !!!tip "Вы узнаете"
 
@@ -19,7 +23,7 @@ React также использует древовидные структуры 
 
 Из компонентов React создает дерево UI, которое React DOM использует для рендеринга DOM
 
-## Состояние привязано к позиции в дереве
+## Состояние привязано к позиции в дереве {#state-is-tied-to-a-position-in-the-tree}
 
 Когда вы передаете компоненту состояние, вы можете подумать, что это состояние "живет" внутри компонента. Но на самом деле состояние хранится внутри React. React связывает каждую часть состояния, которую он хранит, с нужным компонентом по тому, где этот компонент находится в дереве пользовательского интерфейса.
 
@@ -64,9 +68,9 @@ React также использует древовидные структуры 
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-1.png)
+    <iframe src="https://codesandbox.io/embed/v2qcqv?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Вот как они выглядят в виде дерева:
 
@@ -118,9 +122,9 @@ React также использует древовидные структуры 
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-1.png)
+    <iframe src="https://codesandbox.io/embed/79lrxv?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Как вы можете видеть, при обновлении одного счетчика обновляется только состояние этого компонента:
 
@@ -179,9 +183,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-2.png)
+    <iframe src="https://codesandbox.io/embed/g4zcfc?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что в момент, когда вы прекращаете рендеринг второго счетчика, его состояние полностью исчезает. Это потому, что когда React удаляет компонент, он уничтожает его состояние.
 
@@ -197,7 +201,7 @@ React будет сохранять состояние до тех пор, по�
 
 **React сохраняет состояние компонента до тех пор, пока он отображается в своей позиции в дереве пользовательского интерфейса.** Если компонент удаляется, или другой компонент отображается в той же позиции, React удаляет его состояние.
 
-## Тот же компонент в той же позиции сохраняет состояние
+## Тот же компонент в той же позиции сохраняет состояние {#same-component-at-the-same-position-preserves-state}
 
 В этом примере есть два разных тега `<Counter />`:
 
@@ -256,9 +260,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-3.png)
+    <iframe src="https://codesandbox.io/embed/6f2zp8?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Когда вы устанавливаете или снимаете флажок, состояние счетчика не сбрасывается. Независимо от того, является ли `isFancy` `true` или `false`, у вас всегда будет `<Counter />` в качестве первого дочернего элемента `div`, возвращаемого из корневого компонента `App`:
 
@@ -340,15 +344,15 @@ React будет сохранять состояние до тех пор, по�
         }
         ```
 
-    === "Результат"
+    === "CodeSandbox"
 
-        ![Результат](preserving-and-resetting-state-4.png)
+        <iframe src="https://codesandbox.io/embed/d26lsn?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Можно было бы ожидать, что состояние сбросится, когда вы поставите галочку, но этого не происходит! Это происходит потому, что **оба этих тега `<Counter />` отображаются в одной и той же позиции.** React не знает, где вы размещаете условия в вашей функции. Все, что он "видит" - это дерево, которое вы возвращаете.
 
     В обоих случаях компонент `App` возвращает `<div>` с `<Counter />` в качестве первого дочернего элемента. Для React эти два счетчика имеют одинаковый "адрес": первый ребенок первого ребенка корня. Вот как React сопоставляет их между предыдущим и следующим рендерами, независимо от того, как вы структурируете свою логику.
 
-## Разные компоненты в одной и той же позиции сбрасывают состояние
+## Разные компоненты в одной и той же позиции сбрасывают состояние {#different-components-at-the-same-position-reset-state}
 
 В этом примере установка флажка заменит `<Counter>` на `<p>`:
 
@@ -400,9 +404,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-5.png)
+    <iframe src="https://codesandbox.io/embed/sxz2lq?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Здесь вы переключаетесь между _различными_ типами компонентов в одной и той же позиции. Изначально первый дочерний компонент `<div>` содержал `Counter`. Но когда вы поменяли местами `p`, React удалил `Counter` из дерева пользовательского интерфейса и уничтожил его состояние.
 
@@ -475,9 +479,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-4.png)
+    <iframe src="https://codesandbox.io/embed/rx57gr?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Состояние счетчика сбрасывается, когда вы нажимаете на флажок. Хотя вы отображаете `Counter`, первый ребенок `div` меняется с `div` на `секцию`. Когда дочерний `div` был удален из DOM, все дерево под ним (включая `Counter` и его состояние) также было уничтожено.
 
@@ -531,13 +535,13 @@ React будет сохранять состояние до тех пор, по�
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](preserving-and-resetting-state-6.png)
+    	<iframe src="https://codesandbox.io/embed/8kntyv?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Каждый раз, когда вы нажимаете на кнопку, состояние ввода исчезает! Это происходит потому, что _различная_ функция `MyTextField` создается для каждого рендера `MyComponent`. Вы рендерите _разный_ компонент в той же позиции, поэтому React сбрасывает все состояние ниже. Это приводит к ошибкам и проблемам с производительностью. Чтобы избежать этой проблемы, _всегда объявляйте функции компонента на верхнем уровне и не вкладывайте их определения_.
 
-## Сброс состояния в одной и той же позиции
+## Сброс состояния в одной и той же позиции {#resetting-state-at-the-same-position}
 
 По умолчанию React сохраняет состояние компонента, пока он остается в той же позиции. Обычно это именно то, что вам нужно, поэтому это имеет смысл как поведение по умолчанию. Но иногда вам может понадобиться сбросить состояние компонента. Рассмотрим это приложение, позволяющее двум игрокам следить за своими результатами во время каждого хода:
 
@@ -592,9 +596,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-7.png)
+    <iframe src="https://codesandbox.io/embed/rn3mk9?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 В настоящее время, когда вы меняете игрока, счет сохраняется. Два `счетчика` появляются в одной и той же позиции, поэтому React воспринимает их как _один и тот же_ `счетчик`, чей параметр `персона` изменился.
 
@@ -605,7 +609,7 @@ React будет сохранять состояние до тех пор, по�
 1.  Рендерить компоненты в разных позициях
 2.  Придать каждому компоненту явную идентичность с помощью `key`.
 
-### Вариант 1: Рендеринг компонента в разных позициях
+### Вариант 1: Рендеринг компонента в разных позициях {#option-1-rendering-a-component-in-different-positions}
 
 Если вы хотите, чтобы эти два `Counter` были независимыми, вы можете отобразить их в двух разных позициях:
 
@@ -657,9 +661,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-7.png)
+    <iframe src="https://codesandbox.io/embed/g9f9r8?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 -   Изначально `isPlayerA` имеет значение `true`. Поэтому первая позиция содержит состояние `Counter`, а вторая пуста.
 -   Когда вы нажимаете кнопку "Следующий игрок", первая позиция очищается, но вторая теперь содержит `Counter`.
@@ -680,7 +684,7 @@ React будет сохранять состояние до тех пор, по�
 
 Это решение удобно, когда у вас есть только несколько независимых компонентов, отображаемых в одном месте. В этом примере их всего два, поэтому нет необходимости рендерить оба отдельно в JSX.
 
-### Вариант 2: Сброс состояния с помощью ключа
+### Вариант 2: Сброс состояния с помощью ключа {#option-2-resetting-state-with-a-key}
 
 Существует и другой, более общий способ сброса состояния компонента.
 
@@ -739,13 +743,11 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-7.png)
+    <iframe src="https://codesandbox.io/embed/wvssxq?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-При переключении между Тейлором и Сарой состояние не сохраняется. Это происходит потому, что **вы дали им разные "ключи":**.
-
-<!-- 0044.part.md -->
+При переключении между Тейлором и Сарой состояние не сохраняется. Это происходит потому, что **вы дали им разные "ключи":**
 
 ```js
 {
@@ -757,15 +759,13 @@ React будет сохранять состояние до тех пор, по�
 }
 ```
 
-<!-- 0045.part.md -->
-
 Указание `key` говорит React использовать сам `key` как часть позиции, а не их порядок внутри родителя. Вот почему, даже если вы отображаете их в одном и том же месте в JSX, React воспринимает их как два разных счетчика, и поэтому они никогда не будут иметь общего состояния. Каждый раз, когда счетчик появляется на экране, создается его состояние. Каждый раз, когда он удаляется, его состояние уничтожается. Переключение между ними сбрасывает их состояние снова и снова.
 
 !!!note ""
 
     Помните, что ключи не являются глобально уникальными. Они определяют только позицию _в пределах родителя_.
 
-### Сброс формы с помощью ключа
+### Сброс формы с помощью ключа {#resetting-a-form-with-a-key}
 
 Сброс состояния с помощью ключа особенно полезен при работе с формами.
 
@@ -848,21 +848,17 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-8.png)
+    <iframe src="https://codesandbox.io/embed/ydhypj?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Попробуйте ввести что-нибудь в поле ввода, а затем нажмите "Алиса" или "Боб", чтобы выбрать другого адресата. Вы заметите, что состояние ввода сохраняется, потому что `<Chat>` отображается в той же позиции в дереве.
 
 **В многих приложениях это может быть желаемым поведением, но не в приложении чата!** Вы же не хотите, чтобы пользователь отправил сообщение, которое он уже набрал, не тому человеку из-за случайного нажатия. Чтобы исправить это, добавьте `key`:
 
-<!-- 0054.part.md -->
-
 ```js
 <Chat key={to.id} contact={to} />
 ```
-
-<!-- 0055.part.md -->
 
 Это гарантирует, что при выборе другого получателя компонент `Chat` будет воссоздан с нуля, включая все состояния в дереве под ним. React также создаст элементы DOM заново, вместо того чтобы использовать их повторно.
 
@@ -945,9 +941,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-8.png)
+    <iframe src="https://codesandbox.io/embed/h7w6tn?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Сохранение состояния для удаленных компонентов"
 
@@ -966,9 +962,9 @@ React будет сохранять состояние до тех пор, по�
     -   Вы можете заставить поддерево сбросить свое состояние, задав ему другой ключ.
     -   Не вставляйте определения компонентов, иначе вы случайно сбросите состояние.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Исправление исчезающего текста ввода
+### 1. Исправление исчезающего текста ввода {#fix-disappearing-input-text}
 
 Этот пример показывает сообщение при нажатии на кнопку. Однако при нажатии кнопки также происходит случайный сброс ввода. Почему так происходит? Исправьте, чтобы нажатие кнопки не сбрасывало вводимый текст.
 
@@ -1021,9 +1017,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-9.png)
+    <iframe src="https://codesandbox.io/embed/jcrkrx?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -1078,9 +1074,9 @@ React будет сохранять состояние до тех пор, по�
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](preserving-and-resetting-state-9.png)
+    	<iframe src="https://codesandbox.io/embed/k8ldvz?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Технически, вы также можете добавить `null` перед `<Form />` в ветке `else`, чтобы соответствовать структуре ветки `if`:
 
@@ -1134,13 +1130,13 @@ React будет сохранять состояние до тех пор, по�
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](preserving-and-resetting-state-9.png)
+    	<iframe src="https://codesandbox.io/embed/rggqk8?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Таким образом, `Form` всегда является вторым дочерним элементом, поэтому он остается в той же позиции и сохраняет свое состояние. Но этот подход гораздо менее очевиден и создает риск того, что кто-то другой удалит этот `null`.
 
-### 2. Поменять местами два поля формы
+### 2. Поменять местами два поля формы {#swap-two-form-fields}
 
 Эта форма позволяет вводить имя и фамилию. В ней также есть флажок, контролирующий, какое поле будет первым. Если установить флажок, поле "Фамилия" появится перед полем "Имя".
 
@@ -1200,9 +1196,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-10.png)
+    <iframe src="https://codesandbox.io/embed/phrlrf?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -1266,11 +1262,11 @@ React будет сохранять состояние до тех пор, по�
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](preserving-and-resetting-state-10.png)
+    	<iframe src="https://codesandbox.io/embed/944jky?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 3. Сброс детальной формы
+### 3. Сброс детальной формы {#reset-a-detail-form}
 
 Это редактируемый список контактов. Вы можете редактировать данные выбранного контакта, а затем либо нажать "Сохранить", чтобы обновить его, либо "Сбросить", чтобы отменить изменения.
 
@@ -1416,9 +1412,9 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-11.png)
+    <iframe src="https://codesandbox.io/embed/7jcxsq?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -1565,11 +1561,11 @@ React будет сохранять состояние до тех пор, по�
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](preserving-and-resetting-state-11.png)
+    	<iframe src="https://codesandbox.io/embed/k5pfmv?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 4. Очистить изображение во время его загрузки
+### 4. Очистить изображение во время его загрузки {#clear-an-image-while-its-loading}
 
 Когда вы нажимаете кнопку "Далее", браузер начинает загрузку следующего изображения. Однако, поскольку оно отображается в том же теге `img`, по умолчанию вы будете видеть предыдущее изображение, пока не загрузится следующее. Это может быть нежелательно, если важно, чтобы текст всегда совпадал с изображением. Измените это так, чтобы при нажатии кнопки "Next" предыдущее изображение сразу же убиралось.
 
@@ -1635,9 +1631,9 @@ React будет сохранять состояние до тех пор, по�
     ];
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-12.png)
+    <iframe src="https://codesandbox.io/embed/pqp7xl?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -1709,13 +1705,13 @@ React будет сохранять состояние до тех пор, по�
     	];
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](preserving-and-resetting-state-12.png)
+    	<iframe src="https://codesandbox.io/embed/rv37rh?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 5. Исправьте неуместное состояние в списке
+### 5. Исправьте неуместное состояние в списке {#fix-misplaced-state-in-the-list}
 
-В этом списке каждый `контакт` имеет состояние, которое определяет, была ли для него нажата галочка "Показать почту". Нажмите "Показать почту" для Алисы, а затем установите флажок "Показывать в обратном порядке". Вы заметите, что письмо _Тейлора_ теперь развернуто, а письмо Алисы, которое переместилось в самый низ, кажется свернутым.
+В этом списке каждый `Contact` имеет состояние, которое определяет, была ли для него нажата галочка "Показать почту". Нажмите "Показать почту" для Алисы, а затем установите флажок "Показывать в обратном порядке". Вы заметите, что письмо _Тейлора_ теперь развернуто, а письмо Алисы, которое переместилось в самый низ, кажется свернутым.
 
 Исправьте это так, чтобы развернутое состояние было связано с каждым контактом, независимо от выбранного порядка.
 
@@ -1792,23 +1788,19 @@ React будет сохранять состояние до тех пор, по�
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](preserving-and-resetting-state-13.png)
+    <iframe src="https://codesandbox.io/embed/nrqlxz?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
     Проблема в том, что в этом примере в качестве `key` использовался индекс:
 
-    <!-- 0114.part.md -->
-
     ```js
     {displayedContacts.map((contact, i) =>
-    <li key={i}>
+    	<li key={i}>
     )}
     ```
-
-    <!-- 0115.part.md -->
 
     Однако вы хотите, чтобы состояние было связано с _каждым конкретным контактом_.
 
@@ -1887,12 +1879,10 @@ React будет сохранять состояние до тех пор, по�
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](preserving-and-resetting-state-13.png)
+    	<iframe src="https://codesandbox.io/embed/wyy5pq?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Состояние ассоциируется с позицией дерева. Ключ `key` позволяет указать именованную позицию вместо того, чтобы полагаться на порядок.
 
-## Ссылки
-
--   [https://react.dev/learn/preserving-and-resetting-state](https://react.dev/learn/preserving-and-resetting-state)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/preserving-and-resetting-state](https://react.dev/learn/preserving-and-resetting-state)</small>
