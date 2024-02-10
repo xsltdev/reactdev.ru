@@ -1,6 +1,10 @@
+---
+description: Когда вы хотите, чтобы компонент запомнил какую-то информацию, но не хотите, чтобы эта информация запускала новые рендеры, вы можете использовать ref
+---
+
 # Ссылка на значения с помощью Refs
 
-Когда вы хотите, чтобы компонент "запомнил" какую-то информацию, но не хотите, чтобы эта информация [запускала новые рендеры](render-and-commit.md), вы можете использовать _ref_.
+<big>Когда вы хотите, чтобы компонент "запомнил" какую-то информацию, но не хотите, чтобы эта информация [запускала новые рендеры](render-and-commit.md), вы можете использовать **ref**.</big>
 
 !!!tip "Вы узнаете"
 
@@ -9,31 +13,21 @@
     -   Чем отличаются ссылки от состояния
     -   Как безопасно использовать ссылки
 
-## Добавление ссылки в ваш компонент
+## Добавление ссылки в ваш компонент {#adding-a-ref-to-your-component}
 
 Вы можете добавить ссылку в свой компонент, импортировав хук `useRef` из React:
-
-<!-- 0001.part.md -->
 
 ```js
 import { useRef } from 'react';
 ```
 
-<!-- 0002.part.md -->
-
 Внутри вашего компонента вызовите хук `useRef` и в качестве единственного аргумента передайте начальное значение, на которое вы хотите сослаться. Например, вот ссылка на значение `0`:
-
-<!-- 0003.part.md -->
 
 ```js
 const ref = useRef(0);
 ```
 
-<!-- 0004.part.md -->
-
 `useRef` возвращает объект, подобный этому:
-
-<!-- 0005.part.md -->
 
 ```js
 {
@@ -43,13 +37,9 @@ const ref = useRef(0);
 
 ![Представление current из ref.](referencing-values-with-refs-0.png)
 
-<!-- 0006.part.md -->
-
 Вы можете получить доступ к текущему значению этой ссылки через свойство `ref.current`. Это значение намеренно мутабельно, то есть вы можете как читать, так и писать в него. Это как секретный карман вашего компонента, который React не отслеживает. (Именно это делает его "аварийным люком" из одностороннего потока данных React - подробнее об этом ниже\!)
 
 Здесь кнопка будет увеличивать `ref.current` при каждом нажатии:
-
-<!-- 0007.part.md -->
 
 === "App.js"
 
@@ -70,26 +60,20 @@ const ref = useRef(0);
 
 === "Результат"
 
-    ![Результат](referencing-values-with-refs-1.png)
-
-<!-- 0008.part.md -->
+    <iframe src="https://codesandbox.io/embed/vzfntc?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Ссылка указывает на число, но, как и [state](state-a-components-memory.md), вы можете указать на что угодно: строку, объект или даже функцию. В отличие от state, ref - это обычный объект JavaScript со свойством `current`, который можно читать и изменять.
 
 Обратите внимание, что **компонент не перерисовывается при каждом увеличении.** Как и state, refs сохраняется React между перерисовками. Однако, установка состояния перерисовывает компонент. Изменение ссылки не делает этого!
 
-## Пример: создание секундомера
+## Пример: создание секундомера {#example-building-a-stopwatch}
 
 Вы можете комбинировать ссылки и состояние в одном компоненте. Например, давайте сделаем секундомер, который пользователь может запустить или остановить нажатием кнопки. Чтобы отобразить, сколько времени прошло с момента нажатия пользователем кнопки "Start", вам нужно будет отслеживать, когда была нажата кнопка Start и каково текущее время. **Эта информация используется для рендеринга, поэтому вы будете хранить ее в состоянии:**.
-
-<!-- 0009.part.md -->
 
 ```js
 const [startTime, setStartTime] = useState(null);
 const [now, setNow] = useState(null);
 ```
-
-<!-- 0010.part.md -->
 
 Когда пользователь нажмет кнопку "Start", вы будете использовать [`setInterval`](https://developer.mozilla.org/docs/Web/API/setInterval), чтобы обновлять время каждые 10 миллисекунд:
 
@@ -129,11 +113,9 @@ const [now, setNow] = useState(null);
 
 === "Результат"
 
-    ![Результат](referencing-values-with-refs-2.png)
+    <iframe src="https://codesandbox.io/embed/jsy84p?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-<!-- 0012.part.md -->
-
-Когда нажата кнопка "Stop", необходимо отменить существующий интервал, чтобы он перестал обновлять переменную состояния `now`. Вы можете сделать это, вызвав [`clearInterval`](https://developer.mozilla.org/docs/Web/API/clearInterval), но вам нужно передать ему ID интервала, который ранее был возвращен вызовом `setInterval`, когда пользователь нажал кнопку Start. Вам нужно где-то сохранить ID интервала. **Поскольку ID интервала не используется для рендеринга, вы можете хранить его в ссылке:**.
+Когда нажата кнопка "Stop", необходимо отменить существующий интервал, чтобы он перестал обновлять переменную состояния `now`. Вы можете сделать это, вызвав [`clearInterval`](https://developer.mozilla.org/docs/Web/API/clearInterval), но вам нужно передать ему ID интервала, который ранее был возвращен вызовом `setInterval`, когда пользователь нажал кнопку Start. Вам нужно где-то сохранить ID интервала. **Поскольку ID интервала не используется для рендеринга, вы можете хранить его в ссылке:**
 
 === "App.js"
 
@@ -176,13 +158,11 @@ const [now, setNow] = useState(null);
 
 === "Результат"
 
-    ![Результат](referencing-values-with-refs-3.png)
-
-<!-- 0014.part.md -->
+    <iframe src="https://codesandbox.io/embed/fk7wvx?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Если часть информации используется для рендеринга, храните ее в состоянии. Если часть информации нужна только обработчикам событий и ее изменение не требует повторного рендеринга, использование ссылки может быть более эффективным.
 
-## Различия между refs и state
+## Различия между refs и state {#differences-between-refs-and-state}
 
 Возможно, вы думаете, что ссылки кажутся менее "строгими", чем `state` - например, вы можете мутировать их вместо того, чтобы всегда использовать функцию установки состояния. Но в большинстве случаев вы захотите использовать `state`. Рефы - это "аварийный люк", который вам не часто понадобится. Вот как сравниваются `state` и `refs`:
 
@@ -217,9 +197,7 @@ const [now, setNow] = useState(null);
 
 === "Результат"
 
-    ![Результат](referencing-values-with-refs-3.png)
-
-<!-- 0016.part.md -->
+    <iframe src="https://codesandbox.io/embed/wwk4tc?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Поскольку значение `count` отображается, имеет смысл использовать для него значение состояния. Когда значение счетчика устанавливается с помощью `setCount()`, React перерисовывает компонент, и экран обновляется, чтобы отразить новый счетчик.
 
@@ -248,9 +226,7 @@ const [now, setNow] = useState(null);
 
 === "Результат"
 
-    ![Результат](referencing-values-with-refs-4.png)
-
-<!-- 0018.part.md -->
+    <iframe src="https://codesandbox.io/embed/2sn3k9?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Вот почему чтение `ref.current` во время рендеринга приводит к ненадежному коду. Если вам это нужно, используйте вместо этого state.
 
@@ -272,7 +248,7 @@ const [now, setNow] = useState(null);
 
     React предоставляет встроенную версию `useRef`, потому что это достаточно часто встречается на практике. Но вы можете думать о ней как об обычной переменной состояния без сеттера. Если вы знакомы с объектно-ориентированным программированием, refs может напомнить вам поля экземпляра, но вместо `this.something` вы напишите `somethingRef.current`.
 
-## Когда использовать refs
+## Когда использовать refs {#when-to-use-refs}
 
 Как правило, вы используете refs, когда вашему компоненту нужно "выйти за пределы" React и взаимодействовать с внешними API - часто с API браузера, которые не влияют на внешний вид компонента. Вот несколько таких редких ситуаций:
 
@@ -282,7 +258,7 @@ const [now, setNow] = useState(null);
 
 Если вашему компоненту нужно хранить какое-то значение, но оно не влияет на логику рендеринга, выбирайте refs.
 
-## Лучшие практики для refs
+## Лучшие практики для refs {#best-practices-for-refs}
 
 Следование этим принципам сделает ваши компоненты более предсказуемыми:
 
@@ -291,20 +267,16 @@ const [now, setNow] = useState(null);
 
 Ограничения React state не распространяются на рефлексы. Например, состояние действует как [снимок для каждого рендера](state-as-a-snapshot.md) и [не обновляется синхронно](queueing-a-series-of-state-updates.md) Но когда вы изменяете текущее значение ссылки, оно немедленно меняется:
 
-<!-- 0021.part.md -->
-
 ```js
 ref.current = 5;
 console.log(ref.current); // 5
 ```
 
-<!-- 0022.part.md -->
-
 Это происходит потому, что **ссылка сама по себе является обычным объектом JavaScript,** и поэтому ведет себя как обычный объект.
 
 Вам также не нужно беспокоиться о [избегании мутации](updating-objects-in-state.md), когда вы работаете с ref. До тех пор, пока объект, который вы мутируете, не используется для рендеринга, React не волнует, что вы делаете с рефлексом или его содержимым.
 
-## Ссылки и DOM
+## Ссылки и DOM {#refs-and-the-dom}
 
 Вы можете указать ссылку на любое значение. Однако наиболее часто ссылка используется для доступа к элементу DOM. Например, это удобно, если вы хотите программно сфокусировать вход. Когда вы передаете ссылку в атрибут `ref` в JSX, например `<div ref={myRef}>`, React помещает соответствующий элемент DOM в `myRef.current`. Подробнее об этом вы можете прочитать в [Manipulating the DOM with Refs.](manipulating-the-dom-with-refs.md).
 
@@ -317,11 +289,11 @@ console.log(ref.current); // 5
     -   В отличие от состояния, установка `текущего` значения ссылки не вызывает повторного рендеринга.
     -   Не читайте и не записывайте `ref.current` во время рендеринга. Это сделает ваш компонент трудно предсказуемым.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Исправление неработающего входа в чат
+### 1. Исправление неработающего входа в чат {#fix-a-broken-chat-input}
 
-Введите сообщение и нажмите "Отправить". Вы заметите, что перед появлением сообщения "Отправлено!" произойдет трехсекундная задержка. Во время этой задержки вы увидите кнопку "Отменить". Нажмите на нее. Эта кнопка "Отменить" должна остановить появление сообщения "Отправлено!". Она делает это, вызывая [`clearTimeout`](https://developer.mozilla.org/docs/Web/API/clearTimeout) для идентификатора таймаута, сохраненного во время `handleSend`. Однако даже после нажатия кнопки "Undo" сообщение "Sent\!" все равно появляется. Найдите причину неработоспособности и устраните ее.
+Введите сообщение и нажмите "Отправить". Вы заметите, что перед появлением сообщения "Отправлено!" произойдет трехсекундная задержка. Во время этой задержки вы увидите кнопку "Отменить". Нажмите на нее. Эта кнопка "Отменить" должна остановить появление сообщения "Отправлено!". Она делает это, вызывая [`clearTimeout`](https://developer.mozilla.org/docs/Web/API/clearTimeout) для идентификатора таймаута, сохраненного во время `handleSend`. Однако даже после нажатия кнопки "Undo" сообщение "Sent!" все равно появляется. Найдите причину неработоспособности и устраните ее.
 
 === "App.js"
 
@@ -369,7 +341,7 @@ console.log(ref.current); // 5
 
 === "Результат"
 
-    ![Результат](referencing-values-with-refs-5.png)
+    <iframe src="https://codesandbox.io/embed/x4mdcl?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -425,13 +397,11 @@ console.log(ref.current); // 5
 
     === "Результат"
 
-    	![Результат](referencing-values-with-refs-6.png)
+    	<iframe src="https://codesandbox.io/embed/9sp2f9?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 2. Исправьте компонент, который не смог перерисоваться
+### 2. Исправьте компонент, который не смог перерисоваться {#fix-a-component-failing-to-re-render}
 
 Эта кнопка должна переключаться между отображением "Вкл" и "Выкл". Однако она всегда показывает "Выключено". Что не так с этим кодом? Исправьте это.
-
-<!-- 0027.part.md -->
 
 === "App.js"
 
@@ -455,9 +425,7 @@ console.log(ref.current); // 5
 
 === "Результат"
 
-    ![Результат](referencing-values-with-refs-7.png)
-
-<!-- 0028.part.md -->
+    <iframe src="https://codesandbox.io/embed/qgpkmc?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -485,9 +453,9 @@ console.log(ref.current); // 5
 
     === "Результат"
 
-    	![Результат](referencing-values-with-refs-7.png)
+    	<iframe src="https://codesandbox.io/embed/sd8nzf?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 3. Исправление debounce
+### 3. Исправление debounce {#fix-debouncing}
 
 В этом примере все обработчики нажатия на кнопку ["debounced"](https://redd.one/blog/debounce-vs-throttle). Чтобы увидеть, что это значит, нажмите на одну из кнопок. Обратите внимание, что через секунду появится сообщение. Если вы нажмете кнопку в ожидании сообщения, таймер сбросится. Таким образом, если вы будете нажимать одну и ту же кнопку много раз, сообщение появится только через секунду после того, как вы перестанете нажимать. Дебаунсинг позволяет отложить выполнение какого-либо действия до тех пор, пока пользователь не "перестанет делать что-то".
 
@@ -540,7 +508,7 @@ console.log(ref.current); // 5
 
 === "Решение"
 
-    ![Решение](referencing-values-with-refs-8.png)
+    <iframe src="https://codesandbox.io/embed/8zdcgn?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -596,9 +564,9 @@ console.log(ref.current); // 5
 
     === "Решение"
 
-    	![Решение](referencing-values-with-refs-8.png)
+    	<iframe src="https://codesandbox.io/embed/pwg2dx?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 4. Прочитать последнее состояние
+### 4. Прочитать последнее состояние {#read-the-latest-state}
 
 В этом примере после нажатия кнопки "Отправить" происходит небольшая задержка перед отображением сообщения. Введите "hello", нажмите "Отправить", а затем быстро отредактируйте ввод снова. Несмотря на ваши правки, оповещение все равно покажет "hello" (это было значение state [на момент](state-as-a-snapshot.md) нажатия кнопки).
 
@@ -632,9 +600,7 @@ console.log(ref.current); // 5
 
 === "Результат"
 
-    ![Результат](referencing-values-with-refs-9.png)
-
-<!-- 0040.part.md -->
+    <iframe src="https://codesandbox.io/embed/hxlfx9?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -671,8 +637,6 @@ console.log(ref.current); // 5
 
     === "Результат"
 
-    	![Результат](referencing-values-with-refs-9.png)
+    	<iframe src="https://codesandbox.io/embed/cjk6lf?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-## Ссылки
-
--   [https://react.dev/learn/referencing-values-with-refs](https://react.dev/learn/referencing-values-with-refs)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/referencing-values-with-refs](https://react.dev/learn/referencing-values-with-refs)</small>
