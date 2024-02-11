@@ -1,58 +1,46 @@
+---
+description: Иногда вам может понадобиться доступ к элементам DOM, управляемым React - например, для фокусировки узла, прокрутки к нему или измерения его размера и положения
+---
+
 # Манипулирование DOM с помощью Refs
 
-React автоматически обновляет [DOM](https://developer.mozilla.org/docs/Web/API/Document_Object_Model/Introduction) в соответствии с вашим выводом на экран, поэтому вашим компонентам не часто требуется манипулировать им. Однако иногда вам может понадобиться доступ к элементам DOM, управляемым React - например, для фокусировки узла, прокрутки к нему или измерения его размера и положения. Встроенного способа сделать это в React нет, поэтому вам понадобится _ref_ на узел DOM.
+<big>React автоматически обновляет [DOM](https://developer.mozilla.org/docs/Web/API/Document_Object_Model/Introduction) в соответствии с вашим выводом на экран, поэтому вашим компонентам не часто требуется манипулировать им. Однако иногда вам может понадобиться доступ к элементам DOM, управляемым React - например, для фокусировки узла, прокрутки к нему или измерения его размера и положения. Встроенного способа сделать это в React нет, поэтому вам понадобится **ref на узел DOM**.</big>
 
 !!!tip "Вы узнаете"
 
     -   Как получить доступ к узлу DOM, управляемому React, с помощью атрибута `ref`
-    -   Как JSX-атрибут `ref` связан с хуком `useRef`.
+    -   Как JSX-атрибут `ref` связан с хуком `useRef`
     -   Как получить доступ к DOM-узлу другого компонента
     -   В каких случаях безопасно изменять DOM под управлением React
 
-## Получение ссылки на узел
+## Получение ссылки на узел {#getting-a-ref-to-the-node}
 
 Чтобы получить доступ к узлу DOM, управляемому React, сначала импортируйте хук `useRef`:
-
-<!-- 0001.part.md -->
 
 ```js
 import { useRef } from 'react';
 ```
 
-<!-- 0002.part.md -->
-
 Затем используйте его для объявления ссылки внутри вашего компонента:
-
-<!-- 0003.part.md -->
 
 ```js
 const myRef = useRef(null);
 ```
 
-<!-- 0004.part.md -->
-
 Наконец, передайте его узлу DOM в качестве атрибута `ref`:
-
-<!-- 0005.part.md -->
 
 ```js
 <div ref={myRef}>
 ```
 
-<!-- 0006.part.md -->
-
 Хук `useRef` возвращает объект с единственным свойством `current`. Изначально `myRef.current` будет `null`. Когда React создаст DOM-узел для этого `<div>`, React поместит ссылку на этот узел в `myRef.current`. Затем вы сможете обращаться к этому узлу DOM из ваших [обработчиков событий](responding-to-events.md) и использовать встроенные [API браузера](https://developer.mozilla.org/docs/Web/API/Element), определенные на нем.
-
-<!-- 0007.part.md -->
 
 ```js
 // You can use any browser APIs, for example:
 myRef.current.scrollIntoView();
 ```
 
-<!-- 0008.part.md -->
-
-### Пример: Фокусировка текстового ввода
+### Пример: Фокусировка текстового ввода {#example-focusing-a-text-input}
 
 В этом примере нажатие на кнопку фокусирует ввод:
 
@@ -79,22 +67,20 @@ myRef.current.scrollIntoView();
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](manipulating-the-dom-with-refs-1.png)
-
-<!-- 0010.part.md -->
+    <iframe src="https://codesandbox.io/embed/7w8mjd?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Чтобы реализовать это:
 
 1.  Объявите `inputRef` с помощью хука `useRef`.
-2.  Передайте его как `<input ref={inputRef}>`. Это говорит React **ввести DOM-узел этого `<input>` в `inputRef.current`.**.
+2.  Передайте его как `<input ref={inputRef}>`. Это говорит React **ввести DOM-узел этого `<input>` в `inputRef.current`**.
 3.  В функции `handleClick` прочитайте входной DOM-узел из `inputRef.current` и вызовите [`focus()`](https://developer.mozilla.org/docs/Web/API/HTMLElement/focus) на нем с помощью `inputRef.current.focus()`.
 4.  Передайте обработчик события `handleClick` в `<button>` с помощью `onClick`.
 
-Хотя манипуляции с DOM являются наиболее распространенным случаем использования ссылок, хук `useRef` можно использовать для хранения других вещей вне React, например, идентификаторов таймеров. Аналогично состоянию, ссылки остаются между рендерами. Ссылки похожи на переменные состояния, которые не вызывают повторных рендеров, когда вы их устанавливаете. Читайте о реферерах в [Referencing Values with Refs](referencing-values-with-refs.md).
+Хотя манипуляции с DOM являются наиболее распространенным случаем использования ссылок, хук `useRef` можно использовать для хранения других вещей вне React, например, идентификаторов таймеров. Аналогично состоянию, ссылки остаются между рендерами. Ссылки похожи на переменные состояния, которые не вызывают повторных рендеров, когда вы их устанавливаете. Читайте о реферерах в [Ссылка на значения с помощью Refs](referencing-values-with-refs.md).
 
-### Пример: Прокрутка к элементу
+### Пример: Прокрутка к элементу {#example-scrolling-to-an-element}
 
 В компоненте может быть более одного элемента. В этом примере имеется карусель из трех изображений. Каждая кнопка центрирует изображение, вызывая метод браузера [`scrollIntoView()`](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView) на соответствующем узле DOM:
 
@@ -175,9 +161,9 @@ myRef.current.scrollIntoView();
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](manipulating-the-dom-with-refs-2.png)
+    <iframe src="https://codesandbox.io/embed/2q5lwj?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Как управлять списком ссылок с помощью обратного вызова"
 
@@ -276,9 +262,9 @@ myRef.current.scrollIntoView();
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](manipulating-the-dom-with-refs-3.png)
+    	<iframe src="https://codesandbox.io/embed/y83hzt?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     В этом примере `itemsRef` не содержит ни одного узла DOM. Вместо этого он содержит [Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map) от ID элемента к узлу DOM. ([Ссылки могут содержать любые значения!](referencing-values-with-refs.md)) Обратный вызов `ref` для каждого элемента списка заботится об обновлении карты:
 
@@ -300,7 +286,7 @@ myRef.current.scrollIntoView();
 
     Это позволит вам впоследствии считывать отдельные узлы DOM из карты.
 
-## Доступ к узлам DOM другого компонента
+## Доступ к узлам DOM другого компонента {#accessing-another-components-dom-nodes}
 
 Когда вы помещаете ссылку на встроенный компонент, который выводит элемент браузера, такой как `<input />`, React установит свойство `current` этой ссылки на соответствующий узел DOM (такой как фактический `<input />` в браузере).
 
@@ -333,33 +319,27 @@ myRef.current.scrollIntoView();
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](manipulating-the-dom-with-refs-4.png)
-
-<!-- 0024.part.md -->
+    <iframe src="https://codesandbox.io/embed/mz32r6?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Чтобы помочь вам заметить проблему, React также выводит ошибку в консоль:
 
-```console
-Warning: Function components cannot be given refs.
-Attempts to access this ref will fail.
-Did you mean to use React.forwardRef()?
-```
+!!!danger "Console"
+
+    <pre style="white-space: normal">Warning: Function components cannot be given refs.<br />
+    Attempts to access this ref will fail.<br />
+    Did you mean to use React.forwardRef()?</pre>
 
 Это происходит потому, что по умолчанию React не позволяет компоненту обращаться к узлам DOM других компонентов. Даже своим собственным детям! Это намеренно. Ссылки - это аварийный люк, который следует использовать очень редко. Ручное манипулирование DOM-узлами _другого_ компонента делает ваш код еще более хрупким.
 
 Вместо этого, компоненты, которые _хотят_ раскрыть свои узлы DOM, должны **оптировать** такое поведение. Компонент может указать, что он "переадресует" свою ссылку одному из своих дочерних компонентов. Вот как `MyInput` может использовать API `forwardRef`:
-
-<!-- 0025.part.md -->
 
 ```js
 const MyInput = forwardRef((props, ref) => {
     return <input {...props} ref={ref} />;
 });
 ```
-
-<!-- 0026.part.md -->
 
 Вот как это работает:
 
@@ -396,11 +376,9 @@ const MyInput = forwardRef((props, ref) => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](manipulating-the-dom-with-refs-5.png)
-
-<!-- 0028.part.md -->
+    <iframe src="https://codesandbox.io/embed/5q7gnm?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 В системах проектирования обычным шаблоном для низкоуровневых компонентов, таких как кнопки, входы и т.д., является передача ссылок на их узлы DOM. С другой стороны, высокоуровневые компоненты, такие как формы, списки или разделы страницы, обычно не раскрывают свои узлы DOM, чтобы избежать случайных зависимостей от структуры DOM.
 
@@ -446,18 +424,18 @@ const MyInput = forwardRef((props, ref) => {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](manipulating-the-dom-with-refs-5.png)
+    	<iframe src="https://codesandbox.io/embed/88zt5f?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Здесь `realInputRef` внутри `MyInput` содержит фактический входной DOM-узел. Однако `useImperativeHandle` инструктирует React предоставлять ваш собственный специальный объект в качестве значения ссылки на родительский компонент. Таким образом, `inputRef.current` внутри компонента `Form` будет иметь только метод `focus`. В этом случае ref "handle" - это не узел DOM, а пользовательский объект, который вы создаете внутри вызова `useImperativeHandle`.
 
-## Когда React присоединяет рефы
+## Когда React присоединяет рефы {#when-react-attaches-the-refs}
 
 В React каждое обновление делится на [две фазы](render-and-commit.md):
 
--   Во время **render,** React вызывает ваши компоненты, чтобы выяснить, что должно быть на экране.
--   Во время **commit,** React применяет изменения в DOM.
+-   Во время **render**, React вызывает ваши компоненты, чтобы выяснить, что должно быть на экране.
+-   Во время **commit**, React применяет изменения в DOM.
 
 В общем, вы [не хотите](referencing-values-with-refs.md) обращаться к рефкам во время рендеринга. Это относится и к ссылкам, содержащим узлы DOM. Во время первого рендеринга узлы DOM еще не были созданы, поэтому `ref.current` будет `null`. А во время рендеринга обновлений, узлы DOM еще не были обновлены. Поэтому читать их еще рано.
 
@@ -465,7 +443,7 @@ React устанавливает `ref.current` во время фиксации.
 
 **Обычно вы обращаетесь к рефкам из обработчиков событий.** Если вы хотите что-то сделать с рефкой, но нет конкретного события, в котором это можно сделать, вам может понадобиться эффект. Мы обсудим эффекты на следующих страницах.
 
-!!!note "Промывка обновлений состояния синхронно с помощью flushSync"
+!!!note "Промывка обновлений состояния синхронно с помощью `flushSync`"
 
     Рассмотрим код, подобный этому, который добавляет новый todo и прокручивает экран вниз до последнего дочернего элемента списка. Обратите внимание, что по какой-то причине он всегда прокручивается к тому todo, который был _прямо перед_ последним добавленным:
 
@@ -515,9 +493,9 @@ React устанавливает `ref.current` во время фиксации.
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](manipulating-the-dom-with-refs-6.png)
+    	<iframe src="https://codesandbox.io/embed/4nshw9?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Проблема заключается в этих двух линиях:
 
@@ -588,19 +566,17 @@ React устанавливает `ref.current` во время фиксации.
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](manipulating-the-dom-with-refs-6.png)
+    	<iframe src="https://codesandbox.io/embed/3kppjy?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-<!-- 0038.part.md -->
-
-## Лучшие практики работы с DOM с помощью ссылок
+## Лучшие практики работы с DOM с помощью ссылок {#best-practices-for-dom-manipulation-with-refs}
 
 Ссылки - это аварийный люк. Вы должны использовать их только тогда, когда вам нужно "выйти за пределы React". Обычные примеры этого - управление фокусом, позицией прокрутки или вызов API браузера, которые React не раскрывает.
 
 Если вы придерживаетесь неразрушающих действий, таких как фокусировка и прокрутка, вы не должны столкнуться с какими-либо проблемами. Однако, если вы попытаетесь **изменить** DOM вручную, вы рискуете вступить в конфликт с изменениями, которые вносит React.
 
-Чтобы проиллюстрировать эту проблему, данный пример включает в себя приветственное сообщение и две кнопки. Первая кнопка переключает свое присутствие, используя [conditional rendering](conditional-rendering.md) и [state](state-a-components-memory.md), как вы обычно делаете в React. Вторая кнопка использует [`remove()` DOM API](https://developer.mozilla.org/docs/Web/API/Element/remove), чтобы принудительно удалить ее из DOM вне контроля React.
+Чтобы проиллюстрировать эту проблему, данный пример включает в себя приветственное сообщение и две кнопки. Первая кнопка переключает свое присутствие, используя [условный рендеринг](conditional-rendering.md) и [состояние](state-a-components-memory.md), как вы обычно делаете в React. Вторая кнопка использует [`remove()` DOM API](https://developer.mozilla.org/docs/Web/API/Element/remove), чтобы принудительно удалить ее из DOM вне контроля React.
 
 Попробуйте нажать "Toggle with setState" несколько раз. Сообщение должно исчезнуть и появиться снова. Затем нажмите "Удалить из DOM". Это приведет к принудительному удалению. Наконец, нажмите "Toggle with setState":
 
@@ -635,9 +611,9 @@ React устанавливает `ref.current` во время фиксации.
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](manipulating-the-dom-with-refs-7.png)
+    <iframe src="https://codesandbox.io/embed/5xffwv?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 После того, как вы вручную удалили элемент DOM, попытка использовать `setState`, чтобы снова показать его, приведет к сбою. Это происходит потому, что вы изменили DOM, и React не знает, как продолжать управлять им правильно.
 
@@ -654,9 +630,9 @@ React устанавливает `ref.current` во время фиксации.
     -   Избегайте изменения узлов DOM, управляемых React.
     -   Если вы изменяете узлы DOM, управляемые React, изменяйте те части, которые React не имеет причин обновлять.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Воспроизведение и пауза видео
+### 1. Воспроизведение и пауза видео {#play-and-pause-the-video}
 
 В этом примере кнопка переключает переменную состояния для перехода между воспроизведением и паузой. Однако для того, чтобы действительно воспроизвести или поставить видео на паузу, переключения состояния недостаточно. Вам также необходимо вызвать [`play()`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/play) и [`pause()`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/pause) на элементе DOM для `<video>`. Добавьте к нему ссылку и заставьте кнопку работать.
 
@@ -689,9 +665,9 @@ React устанавливает `ref.current` во время фиксации.
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](manipulating-the-dom-with-refs-8.png)
+    <iframe src="https://codesandbox.io/embed/rl65tx?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Для решения дополнительной задачи синхронизируйте кнопку "Play" с тем, воспроизводится ли видео, даже если пользователь щелкает правой кнопкой мыши на видео и воспроизводит его с помощью встроенных элементов управления мультимедиа браузера. Для этого вам может понадобиться прослушать `onPlay` и `onPause` на видео.
 
@@ -740,13 +716,13 @@ React устанавливает `ref.current` во время фиксации.
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](manipulating-the-dom-with-refs-9.png)
+    	<iframe src="https://codesandbox.io/embed/78qsyg?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Для работы со встроенными элементами управления браузера вы можете добавить обработчики `onPlay` и `onPause` к элементу `<video>` и вызвать из них `setIsPlaying`. Таким образом, если пользователь воспроизводит видео с помощью элементов управления браузера, состояние будет соответствующим образом изменено.
 
-### 2. Фокусировка поля поиска
+### 2. Фокусировка поля поиска {#focus-the-search-field}
 
 Сделайте так, чтобы нажатие на кнопку "Поиск" наводило фокус на поле.
 
@@ -765,9 +741,9 @@ React устанавливает `ref.current` во время фиксации.
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](manipulating-the-dom-with-refs-10.png)
+    <iframe src="https://codesandbox.io/embed/yd249j?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???success "Показать решение"
 
@@ -800,15 +776,13 @@ React устанавливает `ref.current` во время фиксации.
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](manipulating-the-dom-with-refs-10.png)
+    	<iframe src="https://codesandbox.io/embed/g9mpvp?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 3. Прокрутка карусели изображений
+### 3. Прокрутка карусели изображений {#scrolling-an-image-carousel}
 
 Эта карусель изображений имеет кнопку "Next", которая переключает активное изображение. Заставьте галерею прокручиваться горизонтально до активного изображения по щелчку. Для этого нужно вызвать [`scrollIntoView()`](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView) на DOM-узле активного изображения:
-
-<!-- 0059.part.md -->
 
 ```js
 node.scrollIntoView({
@@ -871,15 +845,13 @@ node.scrollIntoView({
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](manipulating-the-dom-with-refs-11.png)
+    <iframe src="https://codesandbox.io/embed/jkmsd2?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
     Для этого упражнения не обязательно иметь ссылку на каждое изображение. Достаточно иметь ссылку на текущее активное изображение или на сам список. Используйте `flushSync` для обеспечения обновления DOM _до_ прокрутки.
-
-<!-- 0064.part.md -->
 
 ???success "Показать решение"
 
@@ -966,11 +938,11 @@ node.scrollIntoView({
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](manipulating-the-dom-with-refs-11.png)
+    	<iframe src="https://codesandbox.io/embed/6dlvvz?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### 4. Фокусировка поля поиска с помощью отдельных компонентов
+### 4. Фокусировка поля поиска с помощью отдельных компонентов {#focus-the-search-field-with-separate-components}
 
 Сделайте так, чтобы нажатие на кнопку "Поиск" наводило фокус на поле. Обратите внимание, что каждый компонент определен в отдельном файле и не должен быть перемещен из него. Как соединить их вместе?
 
@@ -1008,9 +980,9 @@ node.scrollIntoView({
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](manipulating-the-dom-with-refs-12.png)
+    <iframe src="https://codesandbox.io/embed/gs22cy?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -1067,10 +1039,8 @@ node.scrollIntoView({
     	});
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](manipulating-the-dom-with-refs-12.png)
+    	<iframe src="https://codesandbox.io/embed/xdzcqn?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-## Ссылки
-
--   [https://react.dev/learn/manipulating-the-dom-with-refs](https://react.dev/learn/manipulating-the-dom-with-refs)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/manipulating-the-dom-with-refs](https://react.dev/learn/manipulating-the-dom-with-refs)</small>
