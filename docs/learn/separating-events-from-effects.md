@@ -1,6 +1,10 @@
+---
+description: В отличие от обработчиков событий, эффекты повторно синхронизируются, если какое-либо значение, которое они считывают, например пропс или переменная состояния, отличается от того, что было во время последнего рендеринга
+---
+
 # Отделение событий от эффектов
 
-Обработчики событий запускаются повторно только при повторном выполнении того же взаимодействия. В отличие от обработчиков событий, эффекты повторно синхронизируются, если какое-либо значение, которое они считывают, например пропс или переменная состояния, отличается от того, что было во время последнего рендеринга. Иногда требуется сочетание обоих типов поведения: Эффект, который повторно запускается в ответ на некоторые значения, но не на другие. На этой странице вы узнаете, как это сделать.
+<big>Обработчики событий запускаются повторно только при повторном выполнении того же взаимодействия. В отличие от обработчиков событий, эффекты повторно синхронизируются, если какое-либо значение, которое они считывают, например пропс или переменная состояния, отличается от того, что было во время последнего рендеринга. Иногда требуется сочетание обоих типов поведения: Эффект, который повторно запускается в ответ на некоторые значения, но не на другие. На этой странице вы узнаете, как это сделать.</big>
 
 !!!tip "Вы узнаете"
 
@@ -8,9 +12,9 @@
     -   Почему эффекты являются реактивными, а обработчики событий - нет
     -   Что делать, если вы хотите, чтобы часть кода вашего Эффекта не была реактивной
     -   Что такое события эффектов и как извлекать их из эффектов
-    -   Как считывать последние пропсы и состояние из Эффектов с помощью Событий Эффектов
+    -   Как считывать последние пропсы и состояние из Эффектов с помощью событий эффектов
 
-## Выбор между обработчиками событий и Эффектами
+## Выбор между обработчиками событий и Эффектами {#choosing-between-event-handlers-and-effects}
 
 Во-первых, давайте вспомним разницу между обработчиками событий и Эффектами.
 
@@ -21,13 +25,11 @@
 
 Допустим, вы уже реализовали код для них, но не уверены, куда его поместить. Следует ли вам использовать обработчики событий или эффекты? Каждый раз, когда вам нужно ответить на этот вопрос, подумайте [_почему_ код должен выполняться](synchronizing-with-effects.md)
 
-### Обработчики событий запускаются в ответ на конкретные взаимодействия
+### Обработчики событий запускаются в ответ на конкретные взаимодействия {#event-handlers-run-in-response-to-specific-interactions}
 
 С точки зрения пользователя, отправка сообщения должна произойти _потому что_ была нажата конкретная кнопка "Отправить". Пользователь будет очень расстроен, если вы отправите его сообщение в любое другое время или по любой другой причине. Вот почему отправка сообщения должна быть обработчиком событий. Обработчики событий позволяют вам обрабатывать определенные взаимодействия:
 
-<!-- 0001.part.md -->
-
-```js
+```js hl_lines="4-6"
 function ChatRoom({ roomId }) {
     const [message, setMessage] = useState('');
     // ...
@@ -47,19 +49,15 @@ function ChatRoom({ roomId }) {
 }
 ```
 
-<!-- 0002.part.md -->
-
 С обработчиком событий вы можете быть уверены, что `sendMessage(message)` будет _только_ если пользователь нажмет на кнопку.
 
-### Эффекты запускаются всякий раз, когда необходима синхронизация
+### Эффекты запускаются всякий раз, когда необходима синхронизация {#effects-run-whenever-synchronization-is-needed}
 
 Вспомните, что вам также нужно, чтобы компонент был подключен к чату. Где находится этот код?
 
 Причиной для запуска этого кода не является какое-то конкретное взаимодействие. Неважно, почему или как пользователь перешел на экран чата. Теперь, когда они смотрят на него и могут взаимодействовать с ним, компонент должен оставаться подключенным к выбранному серверу чата. Даже если компонент чата был начальным экраном вашего приложения, и пользователь не выполнял никаких действий, вам _все равно_ потребуется подключение. Вот почему это Эффект:
 
-<!-- 0003.part.md -->
-
-```js
+```js hl_lines="3-12"
 function ChatRoom({ roomId }) {
     // ...
     useEffect(() => {
@@ -75,8 +73,6 @@ function ChatRoom({ roomId }) {
     // ...
 }
 ```
-
-<!-- 0004.part.md -->
 
 С помощью этого кода вы можете быть уверены, что всегда будет активное соединение с выбранным сервером чата, _независимо_ от конкретных действий, выполняемых пользователем. Открыл ли пользователь ваше приложение, выбрал другую комнату или перешел на другой экран и обратно, ваш эффект гарантирует, что компонент будет _оставаться синхронизированным_ с текущей выбранной комнатой и будет [переподключаться, когда это необходимо](lifecycle-of-reactive-effects.md).
 
@@ -175,19 +171,17 @@ function ChatRoom({ roomId }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](separating-events-from-effects-1.png)
+    <iframe src="https://codesandbox.io/embed/rtzvf2?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-## Реактивные значения и реактивная логика
+## Реактивные значения и реактивная логика {#reactive-values-and-reactive-logic}
 
 Интуитивно можно сказать, что обработчики событий всегда запускаются "вручную", например, при нажатии на кнопку. Эффекты, с другой стороны, являются "автоматическими": они запускаются и перезапускаются так часто, как это необходимо для сохранения синхронизации.
 
 Есть более точный способ подумать об этом.
 
 пропсы, состояния и переменные, объявленные в теле компонента, называются реактивными значениями. В этом примере `serverUrl` не является реактивным значением, но `roomId` и `message` являются таковыми. Они участвуют в потоке данных рендеринга:
-
-<!-- 0011.part.md -->
 
 ```js
 const serverUrl = 'https://localhost:1234';
@@ -199,8 +193,6 @@ function ChatRoom({ roomId }) {
 }
 ```
 
-<!-- 0012.part.md -->
-
 Реактивные значения, такие как эти, могут измениться в результате повторного рендеринга. Например, пользователь может изменить `сообщение` или выбрать другой `номер комнаты` в выпадающем списке. Обработчики событий и эффекты по-разному реагируют на изменения:
 
 -   **Логика внутри обработчиков событий _не реактивна._** Она не будет запущена снова, пока пользователь не выполнит то же самое действие (например, щелчок) снова. Обработчики событий могут считывать реактивные значения, не "реагируя" на их изменения.
@@ -208,11 +200,9 @@ function ChatRoom({ roomId }) {
 
 Давайте вернемся к предыдущему примеру, чтобы проиллюстрировать эту разницу.
 
-### Логика внутри обработчиков событий не является реактивной
+### Логика внутри обработчиков событий не является реактивной {#logic-inside-event-handlers-is-not-reactive}
 
 Взгляните на эту строку кода. Должна ли эта логика быть реактивной или нет?
-
-<!-- 0013.part.md -->
 
 ```js
 // ...
@@ -220,27 +210,19 @@ sendMessage(message);
 // ...
 ```
 
-<!-- 0014.part.md -->
-
 С точки зрения пользователя, **изменение `message` не означает, что он хочет отправить сообщение.** Это означает только то, что пользователь набирает текст. Другими словами, логика, отправляющая сообщение, не должна быть реактивной. Она не должна запускаться снова только потому, что реактивное значение изменилось. Вот почему она должна находиться в обработчике событий:
 
-<!-- 0015.part.md -->
-
-```js
+```js hl_lines="2"
 function handleSendClick() {
     sendMessage(message);
 }
 ```
 
-<!-- 0016.part.md -->
-
 Обработчики событий не являются реактивными, поэтому `sendMessage(message)` будет выполняться только тогда, когда пользователь нажмет кнопку Send.
 
-### Логика внутри Effects является реактивной
+### Логика внутри Effects является реактивной {#logic-inside-effects-is-reactive}
 
 Теперь давайте вернемся к этим строкам:
-
-<!-- 0017.part.md -->
 
 ```js
 // ...
@@ -249,13 +231,9 @@ connection.connect();
 // ...
 ```
 
-<!-- 0018.part.md -->
-
 С точки зрения пользователя, **изменение `roomId` _означает_, что он хочет подключиться к другой комнате.** Другими словами, логика подключения к комнате должна быть реактивной. Вы _хотите_, чтобы эти строки кода "шли в ногу" с реактивным значением, и запускались снова, если это значение изменилось. Вот почему это должно быть в Эффекте:
 
-<!-- 0019.part.md -->
-
-```js
+```js hl_lines="2-3"
 useEffect(() => {
     const connection = createConnection(serverUrl, roomId);
     connection.connect();
@@ -265,19 +243,15 @@ useEffect(() => {
 }, [roomId]);
 ```
 
-<!-- 0020.part.md -->
-
 Эффекты являются реактивными, поэтому `createConnection(serverUrl, roomId)` и `connection.connect()` будут выполняться для каждого отдельного значения `roomId`. Ваш эффект сохраняет соединение чата синхронизированным с текущей выбранной комнатой.
 
-## Извлечение нереактивной логики из эффектов
+## Извлечение нереактивной логики из эффектов {#extracting-non-reactive-logic-out-of-effects}
 
 Ситуация усложняется, когда вы хотите смешать реактивную логику с нереактивной.
 
 Например, представьте, что вы хотите показать уведомление, когда пользователь подключается к чату. Вы считываете текущую тему (темную или светлую) из пропса, чтобы показать уведомление нужного цвета:
 
-<!-- 0021.part.md -->
-
-```js
+```js hl_lines="1 7-9"
 function ChatRoom({ roomId, theme }) {
     useEffect(() => {
         const connection = createConnection(
@@ -293,13 +267,9 @@ function ChatRoom({ roomId, theme }) {
 }
 ```
 
-<!-- 0022.part.md -->
-
 Однако `theme` является реактивным значением (оно может меняться в результате перерисовки), и [каждое реактивное значение, считываемое Эффектом, должно быть объявлено его зависимостью](lifecycle-of-reactive-effects.md) Теперь вы должны указать `theme` как зависимость вашего Эффекта:
 
-<!-- 0023.part.md -->
-
-```js
+```js hl_lines="8 14"
 function ChatRoom({ roomId, theme }) {
     useEffect(() => {
         const connection = createConnection(
@@ -317,8 +287,6 @@ function ChatRoom({ roomId, theme }) {
     // ...
 }
 ```
-
-<!-- 0024.part.md -->
 
 Поиграйте с этим примером и посмотрите, сможете ли вы найти проблему в этом пользовательском опыте:
 
@@ -441,15 +409,13 @@ function ChatRoom({ roomId, theme }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](separating-events-from-effects-2.png)
+    <iframe src="https://codesandbox.io/embed/5dn4kh?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="broken-snowflake-5dn4kh" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 При изменении `roomId` чат переподключается, как и следовало ожидать. Но поскольку `theme` также является зависимостью, чат _также_ переподключается каждый раз, когда вы переключаетесь между темной и светлой темой. Это не здорово!
 
 Другими словами, вы _не_ хотите, чтобы эта строка была реактивной, даже если она находится внутри Effect (который является реактивным):
-
-<!-- 0035.part.md -->
 
 ```js
 // ...
@@ -457,11 +423,9 @@ showNotification('Connected!', theme);
 // ...
 ```
 
-<!-- 0036.part.md -->
-
 Вам нужен способ отделить эту нереактивную логику от реактивного Эффекта вокруг нее.
 
-### Объявление события эффекта
+### Объявление события эффекта {#declaring-an-effect-event}
 
 !!!warning "В разработке"
 
@@ -469,9 +433,7 @@ showNotification('Connected!', theme);
 
 Используйте специальный хук под названием [`useEffectEvent`](../reference/experimental_useEffectEvent.md), чтобы извлечь эту нереактивную логику из вашего Эффекта:
 
-<!-- 0037.part.md -->
-
-```js
+```js hl_lines="1 4-6"
 import { useEffect, useEffectEvent } from 'react';
 
 function ChatRoom({ roomId, theme }) {
@@ -482,15 +444,11 @@ function ChatRoom({ roomId, theme }) {
 }
 ```
 
-<!-- 0038.part.md -->
-
 Здесь `onConnected` называется _событием эффекта._ Это часть логики вашего эффекта, но она ведет себя гораздо больше как обработчик событий. Логика внутри него не является реактивной, и он всегда "видит" последние значения ваших пропсов и состояния.
 
 Теперь вы можете вызывать событие Эффекта `onConnected` изнутри вашего Эффекта:
 
-<!-- 0039.part.md -->
-
-```js
+```js hl_lines="2-4 12 16"
 function ChatRoom({ roomId, theme }) {
     const onConnected = useEffectEvent(() => {
         showNotification('Connected!', theme);
@@ -510,8 +468,6 @@ function ChatRoom({ roomId, theme }) {
     // ...
 }
 ```
-
-<!-- 0040.part.md -->
 
 Это решает проблему. Обратите внимание, что вам пришлось _удалить_ `onConnected` из списка зависимостей вашего Эффекта. **События эффектов не являются реактивными и должны быть исключены из зависимостей.**.
 
@@ -620,13 +576,13 @@ function ChatRoom({ roomId, theme }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](separating-events-from-effects-2.png)
+    <iframe src="https://codesandbox.io/embed/7szywk?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="late-cherry-7szywk" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 События эффектов можно считать очень похожими на обработчики событий. Основное различие заключается в том, что обработчики событий запускаются в ответ на действия пользователя, в то время как События эффектов запускаются вами из Эффектов. События эффектов позволяют вам "разорвать цепь" между реактивностью эффектов и кодом, который не должен быть реактивным.
 
-### Чтение последних пропсов и состояния с помощью событий эффектов
+### Чтение последних пропсов и состояния с помощью событий эффектов {#reading-latest-props-and-state-with-effect-events}
 
 !!!warning "В разработке"
 
@@ -635,8 +591,6 @@ function ChatRoom({ roomId, theme }) {
 События Effect Events позволяют исправить многие паттерны, где может возникнуть соблазн подавить линтер зависимостей.
 
 Например, у вас есть эффект для регистрации посещений страницы:
-
-<!-- 0051.part.md -->
 
 ```js
 function Page() {
@@ -647,13 +601,9 @@ function Page() {
 }
 ```
 
-<!-- 0052.part.md -->
-
 Позже вы добавляете несколько маршрутов на свой сайт. Теперь ваш компонент `Page` получает пропс `url` с текущим путем. Вы хотите передать `url` как часть вашего вызова `logVisit`, но линтер зависимостей жалуется:
 
-<!-- 0053.part.md -->
-
-```js
+```js hl_lines="1 3"
 function Page({ url }) {
     useEffect(() => {
         logVisit(url);
@@ -662,13 +612,9 @@ function Page({ url }) {
 }
 ```
 
-<!-- 0054.part.md -->
-
 Подумайте, что вы хотите сделать с помощью кода. Вы _хотите_ регистрировать отдельные посещения для разных URL, поскольку каждый URL представляет собой отдельную страницу. Другими словами, этот вызов `logVisit` _должен_ быть реактивным по отношению к `url`. Вот почему в данном случае имеет смысл следовать указателю зависимостей и добавить `url` в качестве зависимости:
 
-<!-- 0055.part.md -->
-
-```js
+```js hl_lines="4"
 function Page({ url }) {
     useEffect(() => {
         logVisit(url);
@@ -677,13 +623,9 @@ function Page({ url }) {
 }
 ```
 
-<!-- 0056.part.md -->
-
 Теперь предположим, что вы хотите включать количество товаров в корзине вместе с каждым посещением страницы:
 
-<!-- 0057.part.md -->
-
-```js
+```js hl_lines="2-3 6"
 function Page({ url }) {
     const { items } = useContext(ShoppingCartContext);
     const numberOfItems = items.length;
@@ -695,15 +637,11 @@ function Page({ url }) {
 }
 ```
 
-<!-- 0058.part.md -->
-
 Вы использовали `numberOfItems` внутри Effect, поэтому линтер просит вас добавить его в качестве зависимости. Однако, вы _не_ хотите, чтобы вызов `logVisit` был реактивным по отношению к `numberOfItems`. Если пользователь положил что-то в корзину, и `numberOfItems` изменилось, это _не означает_, что пользователь снова посетил страницу. Другими словами, _посещение страницы_ - это, в некотором смысле, "событие". Оно происходит в определенный момент времени.
 
 Разделите код на две части:
 
-<!-- 0059.part.md -->
-
-```js
+```js hl_lines="5-7 10"
 function Page({ url }) {
     const { items } = useContext(ShoppingCartContext);
     const numberOfItems = items.length;
@@ -719,8 +657,6 @@ function Page({ url }) {
 }
 ```
 
-<!-- 0060.part.md -->
-
 Здесь `onVisit` - это событие эффекта. Код внутри него не является реактивным. Вот почему вы можете использовать `numberOfItems` (или любое другое реактивное значение!), не беспокоясь о том, что оно заставит окружающий код повторно выполняться при изменениях.
 
 С другой стороны, сам Эффект остается реактивным. Код внутри Эффекта использует пропс `url`, поэтому Эффект будет запускаться заново после каждого повторного рендеринга с другим `url`. Это, в свою очередь, вызовет событие эффекта `onVisit`.
@@ -731,7 +667,7 @@ function Page({ url }) {
 
     Вам может быть интересно, можно ли вызвать функцию `onVisit()` без аргументов и прочитать `url` внутри нее:
 
-    ```js
+    ```js hl_lines="2 6"
     const onVisit = useEffectEvent(() => {
     	logVisit(url, numberOfItems);
     });
@@ -743,7 +679,7 @@ function Page({ url }) {
 
     Это сработает, но лучше передавать `url` в событие Effect Event явно. **Передавая `url` в качестве аргумента в событие Effect Event, вы говорите, что посещение страницы с другим `url` представляет собой отдельное "событие" с точки зрения пользователя.** `visitedUrl` является _частью_ произошедшего "события":
 
-    ```js
+    ```js hl_lines="1-2 6"
     const onVisit = useEffectEvent((visitedUrl) => {
     	logVisit(visitedUrl, numberOfItems);
     });
@@ -757,7 +693,7 @@ function Page({ url }) {
 
     Это становится особенно важным, если внутри Эффекта есть какая-то асинхронная логика:
 
-    ```js
+    ```js hl_lines="6 8"
     const onVisit = useEffectEvent((visitedUrl) => {
     	logVisit(visitedUrl, numberOfItems);
     });
@@ -775,7 +711,7 @@ function Page({ url }) {
 
     В существующих кодовых базах иногда можно встретить подавление правила lint следующим образом:
 
-    ```js
+    ```js hl_lines="7-9"
     function Page({ url }) {
     	const { items } = useContext(ShoppingCartContext);
     	const numberOfItems = items.length;
@@ -857,9 +793,9 @@ function Page({ url }) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](separating-events-from-effects-3.png)
+    	<iframe src="https://codesandbox.io/embed/mttx99?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Проблема с этим кодом заключается в подавлении линтера зависимостей. Если вы уберете подавление, то увидите, что этот Effect должен зависеть от функции `handleMove`. Это имеет смысл: `handleMove` объявлена внутри тела компонента, что делает ее реактивным значением. Каждое реактивное значение должно быть указано как зависимость, иначе оно может устареть со временем!
 
@@ -929,15 +865,15 @@ function Page({ url }) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](separating-events-from-effects-3.png)
+    	<iframe src="https://codesandbox.io/embed/3xd8d3?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="condescending-worker-3xd8d3" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Это не означает, что `useEffectEvent` - это _всегда_ правильное решение. Вы должны применять его только к тем строкам кода, которые вы не хотите, чтобы были реактивными. В приведенной выше песочнице вы не хотели, чтобы код Эффекта был реактивным в отношении `canMove`. Вот почему имело смысл извлечь событие эффекта.
 
     Читайте [Удаление зависимостей эффектов](removing-effect-dependencies.md) о других правильных альтернативах подавления линтера.
 
-### Ограничения событий эффектов
+### Ограничения событий эффектов {#limitations-of-effect-events}
 
 !!!warning "В разработке"
 
@@ -945,14 +881,12 @@ function Page({ url }) {
 
 События эффектов очень ограничены в том, как вы можете их использовать:
 
--   **Вызывать их только изнутри Эффектов.**.
--   **Никогда не передавайте их другим компонентам или хукам.**.
+-   **Вызывать их только изнутри Эффектов.**
+-   **Никогда не передавайте их другим компонентам или хукам.**
 
 Например, не объявляйте и не передавайте событие эффекта следующим образом:
 
-<!-- 0079.part.md -->
-
-```js
+```js hl_lines="4-6 8"
 function Timer() {
     const [count, setCount] = useState(0);
 
@@ -977,13 +911,9 @@ function useTimer(callback, delay) {
 }
 ```
 
-<!-- 0080.part.md -->
-
 Вместо этого всегда объявляйте события эффектов непосредственно рядом с эффектами, которые их используют:
 
-<!-- 0081.part.md -->
-
-```js
+```js hl_lines="10-12 16 21"
 function Timer() {
     const [count, setCount] = useState(0);
     useTimer(() => {
@@ -1008,8 +938,6 @@ function useTimer(callback, delay) {
 }
 ```
 
-<!-- 0082.part.md -->
-
 События эффектов - это нереактивные "куски" кода вашего эффекта. Они должны находиться рядом с использующим их Эффектом.
 
 !!!note "Итого"
@@ -1022,9 +950,9 @@ function useTimer(callback, delay) {
     -   Вызывайте события эффектов только из самих эффектов.
     -   Не передавайте события эффектов другим компонентам или хукам.
 
-## Задачи
+## Задачи {#challenges}
 
-### 1. Исправление переменной, которая не обновляется
+### 1. Исправление переменной, которая не обновляется {#fix-a-variable-that-doesnt-update}
 
 Этот компонент `Timer` хранит переменную состояния `count`, которая увеличивается каждую секунду. Значение, на которое она увеличивается, хранится в переменной состояния `increment`. Вы можете управлять переменной `increment` с помощью кнопок плюс и минус.
 
@@ -1082,9 +1010,9 @@ function useTimer(callback, delay) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](separating-events-from-effects-4.png)
+    <iframe src="https://codesandbox.io/embed/8y52w4?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -1147,13 +1075,13 @@ function useTimer(callback, delay) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](separating-events-from-effects-4.png)
+    	<iframe src="https://codesandbox.io/embed/cc3ckc?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Теперь, когда `increment` изменится, React пересинхронизирует ваш Effect, что перезапустит интервал.
 
-### 2. Исправьте зависший счетчик
+### 2. Исправьте зависший счетчик {#fix-a-freezing-counter}
 
 Этот компонент `Timer` хранит переменную состояния `count`, которая увеличивается каждую секунду. Значение, на которое она увеличивается, хранится в переменной состояния `increment`, которой вы можете управлять с помощью кнопок плюс и минус. Например, попробуйте нажать кнопку плюс девять раз и заметите, что теперь `count` увеличивается каждую секунду на десять, а не на один.
 
@@ -1211,9 +1139,9 @@ function useTimer(callback, delay) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](separating-events-from-effects-5.png)
+    <iframe src="https://codesandbox.io/embed/xtvpn9?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="objective-ramanujan-xtvpn9" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -1281,15 +1209,15 @@ function useTimer(callback, delay) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](separating-events-from-effects-5.png)
+    	<iframe src="https://codesandbox.io/embed/3zl5mk?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="sharp-colden-3zl5mk" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Поскольку `onTick` является событием Эффекта, код внутри него не является реактивным. Изменение `increment` не вызывает никаких Эффектов.
 
-### 3. Исправление нерегулируемой задержки
+### 3. Исправление нерегулируемой задержки {#fix-a-non-adjustable-delay}
 
-В этом примере вы можете настроить интервальную задержку. Она хранится в переменной состояния `delay`, которая обновляется двумя кнопками. Однако, даже если вы будете нажимать кнопку "плюс 100 мс", пока `delay` не станет равной 1000 миллисекунд (то есть секунде), вы заметите, что таймер все равно увеличивается очень быстро (каждые 100 мс). Как будто ваши изменения `задержки` игнорируются. Найдите и исправьте ошибку.
+В этом примере вы можете настроить интервальную задержку. Она хранится в переменной состояния `delay`, которая обновляется двумя кнопками. Однако, даже если вы будете нажимать кнопку "плюс 100 мс", пока `delay` не станет равной 1000 миллисекунд (то есть секунде), вы заметите, что таймер все равно увеличивается очень быстро (каждые 100 мс). Как будто ваши изменения `delay` игнорируются. Найдите и исправьте ошибку.
 
 === "App.js"
 
@@ -1371,9 +1299,9 @@ function useTimer(callback, delay) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](separating-events-from-effects-6.png)
+    <iframe src="https://codesandbox.io/embed/chx4tj?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="crazy-booth-chx4tj" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -1459,17 +1387,17 @@ function useTimer(callback, delay) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](separating-events-from-effects-6.png)
+    	<iframe src="https://codesandbox.io/embed/p4swy2?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="jovial-poitras-p4swy2" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     В целом, вы должны с подозрением относиться к функциям типа `onMount`, которые сосредоточены на _времени_, а не на _цели_ части кода. Поначалу это может показаться "более описательным", но это затуманивает ваш замысел. Как правило, события эффектов должны соответствовать чему-то, что происходит с точки зрения _пользователя_. Например, `onMessage`, `onTick`, `onVisit` или `onConnected` - хорошие названия событий эффектов. Код внутри них, скорее всего, не должен быть реактивным. С другой стороны, `onMount`, `onUpdate`, `onUnmount` или `onAfterRender` настолько общие, что в них легко случайно поместить код, который _должен_ быть реактивным. Вот почему вы должны называть свои события Effect Events в соответствии с тем, _что, по мнению пользователя, произошло,_ а не с тем, когда был запущен какой-то код.
 
-### 4. Исправление отложенного уведомления
+### 4. Исправление отложенного уведомления {#fix-a-delayed-notification}
 
 Когда вы присоединяетесь к чату, этот компонент показывает уведомление. Однако он не показывает уведомление немедленно. Вместо этого уведомление искусственно задерживается на две секунды, чтобы у пользователя была возможность осмотреться в пользовательском интерфейсе.
 
-Это почти работает, но есть ошибка. Попробуйте быстро изменить выпадающий список с "общие" на "путешествия", а затем на "музыка". Если вы сделаете это достаточно быстро, вы увидите два уведомления (как и ожидалось\!), но в обоих будет написано "Добро пожаловать в музыку".
+Это почти работает, но есть ошибка. Попробуйте быстро изменить выпадающий список с "общие" на "путешествия", а затем на "музыка". Если вы сделаете это достаточно быстро, вы увидите два уведомления (как и ожидалось!), но в обоих будет написано "Добро пожаловать в музыку".
 
 Исправьте это так, чтобы при быстром переключении с "общего" на "путешествия" и затем на "музыку" вы видели два уведомления, первое из которых было бы "Добро пожаловать в путешествие", а второе - "Добро пожаловать в музыку". (Для дополнительной сложности, если вы _уже_ сделали так, чтобы уведомления показывали правильные комнаты, измените код так, чтобы отображалось только последнее уведомление).
 
@@ -1578,9 +1506,9 @@ function useTimer(callback, delay) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
-    ![Результат](separating-events-from-effects-7.png)
+    <iframe src="https://codesandbox.io/embed/9mgdl8?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="blissful-monad-9mgdl8" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 ???tip "Показать подсказку"
 
@@ -1704,9 +1632,9 @@ function useTimer(callback, delay) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](separating-events-from-effects-8.png)
+    	<iframe src="https://codesandbox.io/embed/2ydfk9?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="elastic-vaughan-2ydfk9" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Эффект, у которого `roomId` был установлен на `"travel"` (поэтому он подключился к комнате `"travel"`), покажет уведомление для `"travel"`. Эффект, у которого `roomId` установлен в `"music"` (поэтому он подключился к комнате `"music"`), покажет уведомление для `"music"`. Другими словами, `connectedRoomId` приходит от вашего Эффекта (который является реактивным), в то время как `theme` всегда использует последнее значение.
 
@@ -1828,12 +1756,10 @@ function useTimer(callback, delay) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
-    	![Результат](separating-events-from-effects-8.png)
+    	<iframe src="https://codesandbox.io/embed/sw6wx7?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="quizzical-sun-sw6wx7" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
     Это гарантирует, что уже запланированные (но еще не отображенные) уведомления будут отменены, когда вы смените комнату.
 
-## Ссылки
-
--   [https://react.dev/learn/separating-events-from-effects](https://react.dev/learn/separating-events-from-effects)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/learn/separating-events-from-effects](https://react.dev/learn/separating-events-from-effects)</small>
