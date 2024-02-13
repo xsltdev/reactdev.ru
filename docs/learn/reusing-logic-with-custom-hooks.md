@@ -58,7 +58,7 @@ description: Возможно, вы не найдете таких хуков в
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/hfwvv4?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -111,7 +111,7 @@ description: Возможно, вы не найдете таких хуков в
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/9l2yz4?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -123,7 +123,7 @@ description: Возможно, вы не найдете таких хуков в
 
 Представьте на секунду, что, подобно [`useState`](../reference/useState.md) и [`useEffect`](../reference/useEffect.md), существует встроенный хук `useOnlineStatus`. Тогда оба этих компонента можно было бы упростить и убрать дублирование между ними:
 
-```js
+```js hl_lines="2 11"
 function StatusBar() {
     const isOnline = useOnlineStatus();
     return (
@@ -153,7 +153,7 @@ function SaveButton() {
 
 Хотя такого встроенного Hook не существует, вы можете написать его самостоятельно. Объявите функцию `useOnlineStatus` и перенесите в нее весь дублирующийся код из компонентов, которые вы написали ранее:
 
-```js
+```js hl_lines="2-22"
 function useOnlineStatus() {
     const [isOnline, setIsOnline] = useState(true);
     useEffect(() => {
@@ -254,7 +254,7 @@ function useOnlineStatus() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/kjf3xp?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -321,7 +321,7 @@ function useOnlineStatus() {
 
     Технически, React этого не делает. В принципе, вы можете сделать хук, который не вызывает другие хуки. Это часто запутывает и ограничивает, поэтому лучше избегать такого шаблона. Однако в редких случаях это может быть полезно. Например, возможно, ваша функция сейчас не использует никаких хуков, но в будущем вы планируете добавить в нее несколько вызовов хуков. Тогда имеет смысл назвать ее с префиксом `use`:
 
-    ```js
+    ```js hl_lines="3-4"
     // ✅ Good: A Hook that will likely use some other Hooks later
     function useAuth() {
     	// TODO: Replace with this line when authentication is implemented:
@@ -336,7 +336,7 @@ function useOnlineStatus() {
 
 В предыдущем примере, когда вы включали и выключали сеть, оба компонента обновлялись вместе. Однако неправильно думать, что одна переменная состояния `isOnline` разделяется между ними. Посмотрите на этот код:
 
-```js
+```js hl_lines="2 7"
 function StatusBar() {
     const isOnline = useOnlineStatus();
     // ...
@@ -350,7 +350,7 @@ function SaveButton() {
 
 Он работает так же, как и до извлечения дубликата:
 
-```js
+```js hl_lines="2-5 10-13"
 function StatusBar() {
     const [isOnline, setIsOnline] = useState(true);
     useEffect(() => {
@@ -415,7 +415,7 @@ function SaveButton() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/svvmrs?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -478,7 +478,7 @@ function SaveButton() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/l8n9sq?view=Editor+%2B+Preview&module=%2Fsrc%2FuseFormInput.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -666,7 +666,7 @@ function Form() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/yg49k7?view=Editor+%2B+Preview&module=%2Fsrc%2FChatRoom.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="charming-faraday-yg49k7" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -674,7 +674,7 @@ function Form() {
 
 Теперь переместите код эффекта в пользовательский хук:
 
-```js
+```js hl_lines="2-13"
 export function useChatRoom({ serverUrl, roomId }) {
     useEffect(() => {
         const options = {
@@ -693,7 +693,7 @@ export function useChatRoom({ serverUrl, roomId }) {
 
 Это позволит вашему компоненту `ChatRoom` вызывать ваш пользовательский Hook, не беспокоясь о том, как он работает внутри:
 
-```js
+```js hl_lines="6-9"
 export default function ChatRoom({ roomId }) {
     const [serverUrl, setServerUrl] = useState(
         'https://localhost:1234'
@@ -899,13 +899,13 @@ export default function ChatRoom({ roomId }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/kj9jvv?view=Editor+%2B+Preview&module=%2Fsrc%2FChatRoom.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="happy-lamport-kj9jvv" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что вы берете возвращаемое значение одного Hook:
 
-```js
+```js hl_lines="2-4"
 export default function ChatRoom({ roomId }) {
     const [serverUrl, setServerUrl] = useState(
         'https://localhost:1234'
@@ -921,7 +921,7 @@ export default function ChatRoom({ roomId }) {
 
 и передать его в качестве входного сигнала в другой Hook:
 
-```js
+```js hl_lines="8"
 export default function ChatRoom({ roomId }) {
     const [serverUrl, setServerUrl] = useState(
         'https://localhost:1234'
@@ -945,7 +945,7 @@ export default function ChatRoom({ roomId }) {
 
 Когда вы начнете использовать `useChatRoom` в большем количестве компонентов, вы, возможно, захотите позволить компонентам настраивать его поведение. Например, в настоящее время логика того, что делать, когда приходит сообщение, жестко закодирована внутри Hook:
 
-```js
+```js hl_lines="9-11"
 export function useChatRoom({ serverUrl, roomId }) {
     useEffect(() => {
         const options = {
@@ -964,7 +964,7 @@ export function useChatRoom({ serverUrl, roomId }) {
 
 Допустим, вы хотите перенести эту логику обратно в ваш компонент:
 
-```js
+```js hl_lines="7-9"
 export default function ChatRoom({ roomId }) {
   const [serverUrl, setServerUrl] = useState('https://localhost:1234');
 
@@ -980,7 +980,7 @@ export default function ChatRoom({ roomId }) {
 
 Чтобы это работало, измените свой пользовательский хук так, чтобы он принимал `onReceiveMessage` в качестве одной из именованных опций:
 
-```js
+```js hl_lines="1-5 14 18"
 export function useChatRoom({
     serverUrl,
     roomId,
@@ -997,7 +997,8 @@ export function useChatRoom({
             onReceiveMessage(msg);
         });
         return () => connection.disconnect();
-    }, [roomId, serverUrl, onReceiveMessage]); // ✅ All dependencies declared
+        // ✅ All dependencies declared
+    }, [roomId, serverUrl, onReceiveMessage]);
 }
 ```
 
@@ -1005,7 +1006,7 @@ export function useChatRoom({
 
 Добавление зависимости от `onReceiveMessage` не является идеальным, потому что это заставит чат переподключаться каждый раз, когда компонент перерендерится. [Заверните этот обработчик события в событие эффекта, чтобы избавить его от зависимостей:](removing-effect-dependencies.md)
 
-```js
+```js hl_lines="1 4-9 19 22"
 import { useEffect, useEffectEvent } from 'react';
 // ...
 
@@ -1217,7 +1218,7 @@ export function useChatRoom({
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/htyxqc?view=Editor+%2B+Preview&module=%2Fsrc%2FChatRoom.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="billowing-dream-htyxqc" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -1231,7 +1232,7 @@ export function useChatRoom({
 
 Например, рассмотрим компонент `ShippingForm`, который отображает два выпадающих списка: один показывает список городов, а другой - список областей в выбранном городе. Вы можете начать с кода, который выглядит следующим образом:
 
-```js
+```js hl_lines="3-16 20-35"
 function ShippingForm({ country }) {
     const [cities, setCities] = useState(null);
     // This Effect fetches cities for a country
@@ -1274,7 +1275,7 @@ function ShippingForm({ country }) {
 
 Хотя этот код довольно повторяющийся, [правильно держать эти Эффекты отдельно друг от друга](removing-effect-dependencies.md). Они синхронизируют две разные вещи, поэтому не стоит объединять их в один Эффект. Вместо этого вы можете упростить компонент `ShippingForm` выше, извлекая общую логику между ними в свой собственный хук `useData`:
 
-```js
+```js hl_lines="2-18"
 function useData(url) {
     const [data, setData] = useState(null);
     useEffect(() => {
@@ -1298,7 +1299,7 @@ function useData(url) {
 
 Теперь вы можете заменить оба Effects в компоненте `ShippingForm` вызовами `useData`:
 
-```js
+```js hl_lines="2-4 6-8"
 function ShippingForm({ country }) {
     const cities = useData(
         `/api/cities?country=${country}`
@@ -1337,7 +1338,7 @@ function ShippingForm({ country }) {
 
     Например, этот хук `useMount` пытается обеспечить выполнение некоторого кода только "при монтировании":
 
-    ```js
+    ```js hl_lines="6-7 21-22"
     function ChatRoom({ roomId }) {
     	const [serverUrl, setServerUrl] = useState(
     		'https://localhost:1234'
@@ -1493,7 +1494,7 @@ function ShippingForm({ country }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/kjf3xp?view=Editor+%2B+Preview&module=%2Fsrc%2FuseOnlineStatus.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -1565,13 +1566,13 @@ function ShippingForm({ country }) {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/562vcx?view=Editor+%2B+Preview&module=%2Fsrc%2FuseOnlineStatus.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что **вам не нужно было менять ни один из компонентов**, чтобы осуществить этот переход:
 
-```js
+```js hl_lines="2 7"
 function StatusBar() {
     const isOnline = useOnlineStatus();
     // ...
@@ -1595,7 +1596,7 @@ function SaveButton() {
 
     Мы все еще прорабатываем детали, но ожидаем, что в будущем вы будете писать выборку данных следующим образом:
 
-    ```js
+    ```js hl_lines="1 4 6"
     import { use } from 'react'; // Not available yet!
 
     function ShippingForm({ country }) {
@@ -1680,7 +1681,7 @@ function SaveButton() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/2rwk5f?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -1765,7 +1766,7 @@ function SaveButton() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/d3dzsq?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -1844,7 +1845,7 @@ function SaveButton() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/h4yd7p?view=Editor+%2B+Preview&module=%2Fsrc%2FuseFadeIn.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="still-butterfly-h4yd7p" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -1943,7 +1944,7 @@ function SaveButton() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/cqdq59?view=Editor+%2B+Preview&module=%2Fsrc%2FuseFadeIn.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2058,7 +2059,7 @@ export default function Counter() {
     // Write your custom Hook in this file!
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/tyjh4j?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2094,7 +2095,7 @@ export default function Counter() {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
     	<iframe src="https://codesandbox.io/embed/2l49gk?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2152,7 +2153,7 @@ export default function Counter() {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/v6dm8g?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2208,7 +2209,7 @@ export default function Counter() {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
     	<iframe src="https://codesandbox.io/embed/rxm8yx?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2263,7 +2264,7 @@ export function useCounter(delay) {
     // Write your Hook here!
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/vx576f?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2310,7 +2311,7 @@ export function useCounter(delay) {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
     	<iframe src="https://codesandbox.io/embed/cch2yk?view=Editor+%2B+Preview&module=%2Fsrc%2FuseInterval.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2324,7 +2325,7 @@ export function useCounter(delay) {
 
 По какой-то причине обратный вызов, обновляющий фон страницы, никогда не выполняется. Добавьте несколько журналов внутри `useInterval`:
 
-```js
+```js hl_lines="2-5 8-11"
 useEffect(() => {
     console.log(
         '✅ Setting up an interval with delay ',
@@ -2396,7 +2397,7 @@ useEffect(() => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/yc3d6g?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="stoic-galois-yc3d6g" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2462,7 +2463,7 @@ useEffect(() => {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
     	<iframe src="https://codesandbox.io/embed/mm2xkl?view=Editor+%2B+Preview&module=%2Fsrc%2FuseInterval.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="eager-pascal-mm2xkl" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2548,7 +2549,7 @@ useEffect(() => {
     }
     ```
 
-=== "Результат"
+=== "CodeSandbox"
 
     <iframe src="https://codesandbox.io/embed/g9j7sm?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
@@ -2642,7 +2643,7 @@ useEffect(() => {
     	}
     	```
 
-    === "Результат"
+    === "CodeSandbox"
 
     	<iframe src="https://codesandbox.io/embed/g6nx83?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
