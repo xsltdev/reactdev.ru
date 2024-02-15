@@ -1,4 +1,5 @@
 title: Гайды
 nav:
     - index.md
-    - esm-modernization-lessons.md
+    - tale-of-a-refactor
+    - esm-modernization-lessons
