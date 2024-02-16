@@ -20,7 +20,7 @@ nav:
             - startTransition.md
         - Директивы:
             - use-client.md
-            #- use-server.md
+            - use-server.md
     - react-dom:
         #- Хуки:
             #- useFormState.md
