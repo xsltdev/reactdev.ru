@@ -1,5 +1,6 @@
 ---
 description: use client необходим только в том случае, если вы используете React Server Components или создаете совместимую с ними библиотеку
+status: experimental
 ---
 
 # `'use client'`

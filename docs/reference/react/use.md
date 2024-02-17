@@ -1,22 +1,19 @@
+---
+status: experimental
+description: use - это хук React, который позволяет вам прочитать значение ресурса, например промиса или контекста
+---
+
 # use
 
-<Canary>
+!!!example "Canary"
 
-The `use` Hook is currently only available in React's canary and experimental channels. Learn more about [React's release channels here](/community/versioning-policy#all-release-channels).
+    В настоящее время хук `use` доступен только в канале React canary и экспериментальном канале.
 
-</Canary>
-
-<Intro>
-
-`use` is a React Hook that lets you read the value of a resource like a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) or [context](/learn/passing-data-deeply-with-context).
+`use` - это хук React, который позволяет вам прочитать значение ресурса, например [промиса](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) или [контекста](../../learn/passing-data-deeply-with-context.md).
 
 ```js
 const value = use(resource);
 ```
-
-</Intro>
-
-<InlineToc />
 
 ---
 
@@ -75,7 +72,7 @@ function Button() {
 
 To pass context to a `Button`, wrap it or one of its parent components into the corresponding context provider.
 
-```js [[1, 3, "ThemeContext"], [2, 3, "\"dark\""], [1, 5, "ThemeContext"]]
+```js [[1, 3, "ThemeContext"], [2, 3, ""dark""], [1, 5, "ThemeContext"]]
 function MyPage() {
     return (
         <ThemeContext.Provider value="dark">

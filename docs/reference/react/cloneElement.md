@@ -1,5 +1,6 @@
 ---
 description: Описание функции cloneElement из устаревшего API React
+status: deprecated
 ---
 
 # cloneElement

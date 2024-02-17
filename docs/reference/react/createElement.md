@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # createElement
 
 Функция `createElement` позволяет создать элемент React. Он служит альтернативой написанию [JSX.](../learn/writing-markup-with-jsx.md)

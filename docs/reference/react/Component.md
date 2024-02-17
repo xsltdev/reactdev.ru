@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # Component
 
 !!!warning ""

@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # isValidElement
 
 `isValidElement` проверяет, является ли значение элементом React.

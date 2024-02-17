@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # PureComponent
 
 !!!warning ""

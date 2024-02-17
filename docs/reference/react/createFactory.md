@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # createFactory
 
 !!!danger "Устарело"
