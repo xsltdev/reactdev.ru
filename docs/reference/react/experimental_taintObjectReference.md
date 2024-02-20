@@ -34,7 +34,7 @@ To prevent passing a key, hash or token, see [`taintUniqueValue`](/reference/rea
 
 ---
 
-## Reference {/_reference_/}
+## Описание {#reference}
 
 ### `taintObjectReference(message, object)` {/_taintobjectreference_/}
 
@@ -57,11 +57,11 @@ experimental_taintObjectReference(
 
 -   `object`: The object to be tainted. Functions and class instances can be passed to `taintObjectReference` as `object`. Functions and classes are already blocked from being passed to Client Components but the React's default error message will be replaced by what you defined in `message`. When a specific instance of a Typed Array is passed to `taintObjectReference` as `object`, any other copies of the Typed Array will not be tainted.
 
-#### Returns {/_returns_/}
+#### Возвращает {#returns}
 
 `experimental_taintObjectReference` returns `undefined`.
 
-#### Caveats {/_caveats_/}
+#### Замечания {#caveats}
 
 -   Recreating or cloning a tainted object creates a new untainted object which may contain sensitive data. For example, if you have a tainted `user` object, `const userInfo = {name: user.name, ssn: user.ssn}` or `{...user}` will create new objects which are not tainted. `taintObjectReference` only protects against simple mistakes when the object is passed through to a Client Component unchanged.
 
@@ -73,7 +73,7 @@ experimental_taintObjectReference(
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Prevent user data from unintentionally reaching the client {/_prevent-user-data-from-unintentionally-reaching-the-client_/}
 

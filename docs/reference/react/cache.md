@@ -22,7 +22,7 @@ const cachedFn = cache(fn);
 
 ---
 
-## Reference {/_reference_/}
+## Описание {#reference}
 
 ### `cache(fn)` {/_cache_/}
 
@@ -48,7 +48,7 @@ When `getMetrics` is first called with `data`, `getMetrics` will call `calculate
 
 -   `fn`: The function you want to cache results for. `fn` can take any arguments and return any value.
 
-#### Returns {/_returns_/}
+#### Возвращает {#returns}
 
 `cache` returns a cached version of `fn` with the same type signature. It does not call `fn` in the process.
 
@@ -60,7 +60,7 @@ The optimization of caching return values based on inputs is known as [_memoizat
 
 </Note>
 
-#### Caveats {/_caveats_/}
+#### Замечания {#caveats}
 
 [//]: # 'TODO: add links to Server/Client Component reference once https://github.com/reactjs/react.dev/pull/6177 is merged'
 
@@ -71,7 +71,7 @@ The optimization of caching return values based on inputs is known as [_memoizat
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Cache an expensive computation {/_cache-expensive-computation_/}
 

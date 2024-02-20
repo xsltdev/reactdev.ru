@@ -18,7 +18,7 @@ status: experimental
 
 ---
 
-## Reference {/_reference_/}
+## Описание {#reference}
 
 ### `'use server'` {/_use-server_/}
 
@@ -35,7 +35,7 @@ When calling a Server Action on the client, it will make a network request to th
 
 Instead of individually marking functions with `'use server'`, you can add the directive to the top of a file to mark all exports within that file as Server Actions that can be used anywhere, including imported in client code.
 
-#### Caveats {/_caveats_/}
+#### Замечания {#caveats}
 
 -   `'use server'` must be at the very beginning of their function or module; above any other code including imports (comments above directives are OK). They must be written with single or double quotes, not backticks.
 -   `'use server'` can only be used in server-side files. The resulting Server Actions can be passed to Client Components through props. See supported [types for serialization](#serializable-parameters-and-return-values).
@@ -95,7 +95,7 @@ Notably, these are not supported:
 
 Supported serializable return values are the same as [serializable props](/reference/react/use-client#passing-props-from-server-to-client-components) for a boundary Client Component.
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Server Actions in forms {/_server-actions-in-forms_/}
 

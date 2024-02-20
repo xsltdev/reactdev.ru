@@ -26,7 +26,7 @@ const [optimisticState, addOptimistic] = useOptimistic(
 
 ---
 
-## Reference {/_reference_/}
+## Описание {#reference}
 
 ### `useOptimistic(state, updateFn)` {/_use_/}
 
@@ -56,14 +56,14 @@ function AppContainer() {
 -   `state`: the value to be returned initially and whenever no action is pending.
 -   `updateFn(currentState, optimisticValue)`: a function that takes the current state and the optimistic value passed to `addOptimistic` and returns the resulting optimistic state. It must be a pure function. `updateFn` takes in two parameters. The `currentState` and the `optimisticValue`. The return value will be the merged value of the `currentState` and `optimisticValue`.
 
-#### Returns {/_returns_/}
+#### Возвращает {#returns}
 
 -   `optimisticState`: The resulting optimistic state. It is equal to `state` unless an action is pending, in which case it is equal to the value returned by `updateFn`.
 -   `addOptimistic`: `addOptimistic` is the dispatching function to call when you have an optimistic update. It takes one argument, `optimisticValue`, of any type and will call the `updateFn` with `state` and `optimisticValue`.
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Optimistically updating forms {/_optimistically-updating-with-forms_/}
 
