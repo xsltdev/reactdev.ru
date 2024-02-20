@@ -9,7 +9,7 @@ description: use - это хук React, который позволяет вам
 
     В настоящее время хук `use` доступен только в канале React canary и экспериментальном канале.
 
-`use` - это хук React, который позволяет вам прочитать значение ресурса, например [промиса](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) или [контекста](../../learn/passing-data-deeply-with-context.md).
+<big>`use` - это хук React, который позволяет вам прочитать значение ресурса, например [промиса](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) или [контекста](../../learn/passing-data-deeply-with-context.md).</big>
 
 ```js
 const value = use(resource);
