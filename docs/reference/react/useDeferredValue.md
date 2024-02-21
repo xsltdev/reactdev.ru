@@ -1,14 +1,18 @@
+---
+description: useDeferredValue - это хук React, который позволяет отложить обновление части пользовательского интерфейса
+---
+
 # useDeferredValue
 
-**`useDeferredValue`** - это хук React, который позволяет отложить обновление части пользовательского интерфейса.
+<big>**`useDeferredValue`** - это хук React, который позволяет отложить обновление части пользовательского интерфейса.</big>
 
 ```js
 const deferredValue = useDeferredValue(value);
 ```
 
-## Описание
+## Описание {#reference}
 
-### `useDeferredValue(value)`
+### `useDeferredValue(value)` {#usedeferredvalue}
 
 Вызовите `useDeferredValue` на верхнем уровне вашего компонента, чтобы получить отложенную версию этого значения.
 
@@ -22,15 +26,15 @@ function SearchPage() {
 }
 ```
 
-#### Параметры
+#### Параметры {#parameters}
 
 -   `value`: Значение, которое вы хотите отложить. Оно может иметь любой тип.
 
-#### Возвращает
+#### Возвращает {#returns}
 
 Во время первоначального рендеринга возвращаемое отложенное значение будет таким же, как и предоставленное вами значение. Во время обновления React сначала попытается выполнить повторный рендеринг со старым значением (поэтому вернет старое значение), а затем попытается выполнить повторный рендеринг в фоновом режиме с новым значением (поэтому вернет обновленное значение).
 
-#### Предупреждения
+#### Предупреждения {#caveats}
 
 -   Значения, которые вы передаете в `useDeferredValue`, должны быть либо примитивными значениями (такими как строки и числа), либо объектами, созданными вне рендеринга. Если вы создадите новый объект во время рендеринга и сразу передадите его в `useDeferredValue`, он будет отличаться при каждом рендеринге, что приведет к ненужным повторным рендерам фона.
 -   Когда `useDeferredValue` получает другое значение (по сравнению с [`Object.is`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is)), в дополнение к текущему рендеру (когда он все еще использует предыдущее значение), он планирует повторный рендер в фоновом режиме с новым значением. Фоновый рендеринг можно прервать: если произойдет очередное обновление `value`, React перезапустит фоновый рендеринг с нуля. Например, если пользователь набирает текст в поле ввода быстрее, чем график, получающий отложенное значение, успевает отрисоваться, график отрисуется только после того, как пользователь перестанет набирать текст.
@@ -39,13 +43,13 @@ function SearchPage() {
 -   Не существует фиксированной задержки, вызванной самим `useDeferredValue`. Как только React завершит первоначальный рендеринг, React немедленно начнет работу над фоновым рендерингом с новым отложенным значением. Любые обновления, вызванные событиями (например, вводом текста), будут прерывать фоновый рендеринг и получат приоритет над ним.
 -   Фоновый рендеринг, вызванный `useDeferredValue`, не запускает эффекты до тех пор, пока они не будут зафиксированы на экране. Если фоновый рендеринг приостановлен, его Эффекты будут запущены после загрузки данных и обновления пользовательского интерфейса.
 
-## Использование
+## Использование {#usage}
 
-### Показ устаревшего содержимого во время загрузки свежего
+### Показ устаревшего содержимого во время загрузки свежего {#showing-stale-content-while-fresh-content-is-loading}
 
 Вызовите `useDeferredValue` на верхнем уровне вашего компонента, чтобы отложить обновление некоторой части вашего пользовательского интерфейса.
 
-```js
+```js hl_lines="5"
 import { useState, useDeferredValue } from 'react';
 
 function SearchPage() {
@@ -61,45 +65,51 @@ function SearchPage() {
 
 **Давайте рассмотрим пример, чтобы увидеть, когда это полезно.**
 
-!!!note ""
+!!!note "Пример"
 
     Этот пример предполагает, что вы используете один из источников данных с поддержкой Suspense:
 
     -   Получение данных с помощью фреймворков с поддержкой Suspense, таких как [Relay](https://relay.dev/docs/guided-tour/rendering/loading-states/) и [Next.js](https://nextjs.org/docs/getting-started/react-essentials).
     -   Ленивая загрузка кода компонента с помощью [`lazy`](lazy.md)
 
-    [Узнайте больше о Suspense и его ограничениях](Suspense.md)
+    Узнайте больше о [Suspense и его ограничениях :octicons-arrow-right-24:](Suspense.md)
 
 В этом примере компонент `SearchResults` [приостанавливается](Suspense.md#displaying-a-fallback-while-content-is-loading) на время получения результатов поиска. Попробуйте набрать `"a"`, дождаться результатов, а затем изменить его на `"ab"`. Результаты для `"a"` будут заменены загружаемым возвратом.
 
-```js
-import { Suspense, useState } from 'react';
-import SearchResults from './SearchResults.js';
+=== "App.js"
 
-export default function App() {
-    const [query, setQuery] = useState('');
-    return (
-        <>
-            <label>
-                Search albums:
-                <input
-                    value={query}
-                    onChange={(e) =>
-                        setQuery(e.target.value)
-                    }
-                />
-            </label>
-            <Suspense fallback={<h2>Loading...</h2>}>
-                <SearchResults query={query} />
-            </Suspense>
-        </>
-    );
-}
-```
+    ```js
+    import { Suspense, useState } from 'react';
+    import SearchResults from './SearchResults.js';
+
+    export default function App() {
+    	const [query, setQuery] = useState('');
+    	return (
+    		<>
+    			<label>
+    				Search albums:
+    				<input
+    					value={query}
+    					onChange={(e) =>
+    						setQuery(e.target.value)
+    					}
+    				/>
+    			</label>
+    			<Suspense fallback={<h2>Loading...</h2>}>
+    				<SearchResults query={query} />
+    			</Suspense>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/mm976s?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="wild-framework-mm976s" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Распространенным альтернативным шаблоном пользовательского интерфейса является _отложенное_ обновление списка результатов и отображение предыдущих результатов до тех пор, пока не будут готовы новые результаты. Вызовите `useDeferredValue`, чтобы передать отложенную версию запроса вниз:
 
-```js
+```js hl_lines="3 16"
 export default function App() {
     const [query, setQuery] = useState('');
     const deferredQuery = useDeferredValue(query);
@@ -126,53 +136,59 @@ export default function App() {
 
 Введите `"a"` в примере ниже, дождитесь загрузки результатов, а затем измените ввод на `"ab"`. Обратите внимание, что вместо отката к приостановке теперь отображается список несвежих результатов, пока не загрузятся новые:
 
-```js
-import {
-    Suspense,
-    useState,
-    useDeferredValue,
-} from 'react';
-import SearchResults from './SearchResults.js';
+=== "App.js"
 
-export default function App() {
-    const [query, setQuery] = useState('');
-    const deferredQuery = useDeferredValue(query);
-    return (
-        <>
-            <label>
-                Search albums:
-                <input
-                    value={query}
-                    onChange={(e) =>
-                        setQuery(e.target.value)
-                    }
-                />
-            </label>
-            <Suspense fallback={<h2>Loading...</h2>}>
-                <SearchResults query={deferredQuery} />
-            </Suspense>
-        </>
-    );
-}
-```
+    ```js
+    import {
+    	Suspense,
+    	useState,
+    	useDeferredValue,
+    } from 'react';
+    import SearchResults from './SearchResults.js';
+
+    export default function App() {
+    	const [query, setQuery] = useState('');
+    	const deferredQuery = useDeferredValue(query);
+    	return (
+    		<>
+    			<label>
+    				Search albums:
+    				<input
+    					value={query}
+    					onChange={(e) =>
+    						setQuery(e.target.value)
+    					}
+    				/>
+    			</label>
+    			<Suspense fallback={<h2>Loading...</h2>}>
+    				<SearchResults query={deferredQuery} />
+    			</Suspense>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/lsmcyq?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="rough-dream-lsmcyq" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Как работает откладывание значения под капотом?"
 
     Можно представить, что это происходит в два этапа:
 
-    1.  **Сначала React выполняет рендеринг с новым `query` (`"ab"`), но со старым `deferredQuery`(все еще`"a"`)** Значение `deferredQuery`, которое вы передаете в список результатов, является _отложенным:_ оно "отстает" от значения `query`.
+    1.  **Сначала React выполняет рендеринг с новым `query` (`"ab"`), но со старым `deferredQuery`(все еще `"a"`)** Значение `deferredQuery`, которое вы передаете в список результатов, является _отложенным:_ оно "отстает" от значения `query`.
 
-    2.  **В фоновом режиме React пытается выполнить повторный рендеринг с обновленными значениями `query` и `deferredQuery` до `"ab"`** Если этот повторный рендеринг завершится, React покажет его на экране. Однако, если он приостановится (результаты для `"ab"` еще не загружены), React оставит эту попытку рендеринга и повторит ее снова после загрузки данных. Пользователь будет видеть отложенное значение до тех пор, пока данные не будут готовы.
+    2.  **В фоновом режиме React пытается выполнить повторный рендеринг с обновленными значениями `query` и `deferredQuery` до `"ab"`**. Если этот повторный рендеринг завершится, React покажет его на экране. Однако, если он приостановится (результаты для `"ab"` еще не загружены), React оставит эту попытку рендеринга и повторит ее снова после загрузки данных. Пользователь будет видеть отложенное значение до тех пор, пока данные не будут готовы.
 
     Отложенный "фоновый" рендеринг можно прервать. Например, если вы снова введете данные в поле ввода, React покинет его и перезапустит с новым значением. React всегда будет использовать последнее предоставленное значение.
 
     Обратите внимание, что при каждом нажатии клавиши все равно происходит запрос к сети. Здесь откладывается отображение результатов (пока они не будут готовы), а не сами сетевые запросы. Даже если пользователь продолжает набирать текст, ответы на каждое нажатие клавиши кэшируются, поэтому нажатие Backspace происходит мгновенно и не требует повторной выборки.
 
-### Указывает на то, что содержимое устарело
+### Указывает на то, что содержимое устарело {#indicating-that-the-content-is-stale}
 
 В приведенном выше примере нет указания на то, что список результатов последнего запроса все еще загружается. Это может сбить пользователя с толку, если новые результаты загружаются долго. Чтобы сделать более очевидным для пользователя, что список результатов не соответствует последнему запросу, можно добавить визуальную индикацию, когда отображается несвежий список результатов:
 
-```js
+```js hl_lines="3"
 <div
     style={{
         opacity: query !== deferredQuery ? 0.5 : 1,
@@ -184,47 +200,53 @@ export default function App() {
 
 При таком изменении, как только вы начинаете вводить текст, список неактуальных результатов слегка затемняется, пока не загрузится новый список результатов. Вы также можете добавить CSS-переход для задержки затемнения, чтобы оно было постепенным, как в примере ниже:
 
-```js
-import {
-    Suspense,
-    useState,
-    useDeferredValue,
-} from 'react';
-import SearchResults from './SearchResults.js';
+=== "App.js"
 
-export default function App() {
-    const [query, setQuery] = useState('');
-    const deferredQuery = useDeferredValue(query);
-    const isStale = query !== deferredQuery;
-    return (
-        <>
-            <label>
-                Search albums:
-                <input
-                    value={query}
-                    onChange={(e) =>
-                        setQuery(e.target.value)
-                    }
-                />
-            </label>
-            <Suspense fallback={<h2>Loading...</h2>}>
-                <div
-                    style={{
-                        opacity: isStale ? 0.5 : 1,
-                        transition: isStale
-                            ? 'opacity 0.2s 0.2s linear'
-                            : 'opacity 0s 0s linear',
-                    }}
-                >
-                    <SearchResults query={deferredQuery} />
-                </div>
-            </Suspense>
-        </>
-    );
-}
-```
+    ```js
+    import {
+    	Suspense,
+    	useState,
+    	useDeferredValue,
+    } from 'react';
+    import SearchResults from './SearchResults.js';
 
-### Откладывание повторного рендеринга для части пользовательского интерфейса
+    export default function App() {
+    	const [query, setQuery] = useState('');
+    	const deferredQuery = useDeferredValue(query);
+    	const isStale = query !== deferredQuery;
+    	return (
+    		<>
+    			<label>
+    				Search albums:
+    				<input
+    					value={query}
+    					onChange={(e) =>
+    						setQuery(e.target.value)
+    					}
+    				/>
+    			</label>
+    			<Suspense fallback={<h2>Loading...</h2>}>
+    				<div
+    					style={{
+    						opacity: isStale ? 0.5 : 1,
+    						transition: isStale
+    							? 'opacity 0.2s 0.2s linear'
+    							: 'opacity 0s 0s linear',
+    					}}
+    				>
+    					<SearchResults query={deferredQuery} />
+    				</div>
+    			</Suspense>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/kdzn9g?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="bold-einstein-kdzn9g" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Откладывание повторного рендеринга для части пользовательского интерфейса {#deferring-re-rendering-for-a-part-of-the-ui}
 
 Вы также можете применить `useDeferredValue` в качестве оптимизации производительности. Это полезно, когда часть вашего пользовательского интерфейса медленно перерисовывается, нет простого способа оптимизировать ее, и вы хотите предотвратить блокировку остальной части пользовательского интерфейса.
 
@@ -247,7 +269,7 @@ function App() {
 
 Во-первых, оптимизируйте `SlowList` для пропуска повторного рендеринга, когда его пропсы одинаковы. Для этого [оберните это в `memo`:](memo.md#skipping-re-rendering-when-props-are-unchanged)
 
-```js
+```js hl_lines="1 3"
 const SlowList = memo(function SlowList({ text }) {
     // ...
 });
@@ -257,7 +279,7 @@ const SlowList = memo(function SlowList({ text }) {
 
 Конкретно, основная проблема производительности заключается в том, что всякий раз, когда вы вводите данные на вход, `SlowList` получает новые пропсы, и повторное отображение всего дерева приводит к тому, что ввод становится неаккуратным. В этом случае `useDeferredValue` позволяет вам установить приоритет обновления ввода (которое должно быть быстрым) над обновлением списка результатов (которое может быть более медленным):
 
-```js
+```js hl_lines="3 10"
 function App() {
     const [text, setText] = useState('');
     const deferredText = useDeferredValue(text);
@@ -275,9 +297,9 @@ function App() {
 
 Это не делает повторное отображение `SlowList` быстрее. Однако это сообщает React, что повторное отображение списка может быть деприоритизировано, чтобы не блокировать нажатия клавиш. Список будет "отставать" от ввода, а затем "догонять". Как и раньше, React будет пытаться обновить список как можно быстрее, но не будет блокировать ввод пользователем.
 
-### Разница между useDeferredValue и неоптимизированным повторным рендерингом
+### Разница между useDeferredValue и неоптимизированным повторным рендерингом {#examples}
 
-#### 1. Отложенное повторное отображение списка
+#### 1. Отложенное повторное отображение списка {#deferred-re-rendering-of-the-list}
 
 В этом примере каждый элемент компонента `SlowList` **искусственно замедляется**, чтобы вы могли увидеть, как `useDeferredValue` позволяет вам сохранить отзывчивость ввода. Наберите текст на клавиатуре и обратите внимание, что текст набирается быстро, в то время как список "отстает" от него.
 
@@ -332,7 +354,11 @@ function App() {
     export default SlowList;
     ```
 
-#### 2. Неоптимизированный повторный рендеринг списка
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/7nyzhn?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+#### 2. Неоптимизированный повторный рендеринг списка {#unoptimized-re-rendering-of-the-list}
 
 В этом примере каждый элемент в компоненте `SlowList` **искусственно замедлен**, но нет `useDeferredValue`.
 
@@ -388,7 +414,11 @@ function App() {
     export default SlowList;
     ```
 
-!!!info ""
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/lc57th?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+!!!info "Замечание"
 
     Эта оптимизация требует, чтобы `SlowList` был обернут в [`memo`](memo.md). Это происходит потому, что всякий раз, когда `text` изменяется, React должен иметь возможность быстро перерисовать родительский компонент. Во время этой перерисовки `deferredText` все еще имеет свое предыдущее значение, поэтому `SlowList` может пропустить перерисовку (его пропсы не изменились). Без [`memo`](memo.md), ему все равно пришлось бы перерисовываться, что сводит на нет смысл оптимизации.
 
@@ -407,6 +437,4 @@ function App() {
 
     Если работа, которую вы оптимизируете, не происходит во время рендеринга, дебаунсинг и дросселирование все равно полезны. Например, они могут позволить вам выполнять меньше сетевых запросов. Вы также можете использовать эти методы вместе.
 
-## Ссылки
-
--   [https://react.dev/reference/react/useDeferredValue](https://react.dev/reference/react/useDeferredValue)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/useDeferredValue](https://react.dev/reference/react/useDeferredValue)</small>
