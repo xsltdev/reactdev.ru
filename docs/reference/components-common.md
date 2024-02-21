@@ -467,7 +467,7 @@ React также будет вызывать ваш обратный вызов 
 
     -   [`data`](https://developer.mozilla.org/docs/Web/API/InputEvent/data)
 
-### `KeyboardEvent` функция обработчика {/_keyboardevent-handler_/}
+### `KeyboardEvent` функция обработчика
 
 Тип обработчика событий для событий клавиатуры.
 
