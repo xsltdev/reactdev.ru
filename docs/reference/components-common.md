@@ -118,7 +118,7 @@
 -   [`onScroll`](https://developer.mozilla.org/docs/Web/API/Element/scroll_event): Функция обработчика `event`. Срабатывает, когда элемент был прокручен. Это событие не вызывает пузырьков.
 -   `onScrollCapture`: Версия `onScroll`, срабатывающая в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
 -   [`onSelect`](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/select_event): Функция обработчика `event`. Срабатывает после изменения выбора внутри редактируемого элемента, например, ввода. React расширяет событие `onSelect`, чтобы оно работало и для элементов `contentEditable={true}`. Кроме того, React расширяет его для срабатывания при пустом выделении и при редактировании (которое может повлиять на выделение).
--   `onSelectCapture`: Версия `onSelect`, которая срабатывает в [фазе захвата] (../learn/responding-to-events.md#capture-phase-events)
+-   `onSelectCapture`: Версия `onSelect`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
 -   [`onTouchCancel`](https://developer.mozilla.org/docs/Web/API/Element/touchcancel_event): Функция обработчика `TouchEvent`. Срабатывает, когда браузер отменяет сенсорное взаимодействие.
 -   `onTouchCancelCapture`: Версия `onTouchCancel`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
 -   [`onTouchEnd`](https://developer.mozilla.org/docs/Web/API/Element/touchend_event): Функция обработчика `TouchEvent`. Срабатывает при удалении одной или нескольких точек касания.
