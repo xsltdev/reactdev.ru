@@ -1,14 +1,18 @@
+---
+description: useImperativeHandle - это хук React, который позволяет вам настроить хэндл-обработчик, отображаемый как ссылка
+---
+
 # useImperativeHandle
 
-**`useImperativeHandle`** - это хук React, который позволяет вам настроить ручку, отображаемую как [ссылка](../learn/manipulating-the-dom-with-refs.md).
+<big>**`useImperativeHandle`** - это хук React, который позволяет вам настроить хэндл-обработчик, отображаемый как [ссылка](../../learn/manipulating-the-dom-with-refs.md).</big>
 
 ```js
 useImperativeHandle(ref, createHandle, dependencies?)
 ```
 
-## Описание
+## Описание {#reference}
 
-### `useImperativeHandle(ref, createHandle, dependencies?)`
+### `useImperativeHandle(ref, createHandle, dependencies?)` {#useimperativehandle}
 
 Вызовите `useImperativeHandle` на верхнем уровне вашего компонента, чтобы настроить экспортируемый им ref handle:
 
@@ -29,23 +33,23 @@ const MyInput = forwardRef(function MyInput(props, ref) {
 });
 ```
 
-#### Параметры
+#### Параметры {#parameters}
 
 -   `ref`: `ref`, полученный в качестве второго аргумента от функции рендеринга [`forwardRef`](forwardRef.md#render-function).
 -   `createHandle`: Функция, которая не принимает аргументов и возвращает хэндл ссылки, которую вы хотите раскрыть. Этот ref handle может иметь любой тип. Обычно вы возвращаете объект с методами, которые вы хотите раскрыть.
 -   **опционально** `dependencies`: Список всех реактивных значений, на которые ссылается код `createHandle`. Реактивные значения включают пропсы, состояние, а также все переменные и функции, объявленные непосредственно в теле вашего компонента. Если ваш линтер [настроен на React](../learn/editor-setup.md#linting), он проверит, что каждое реактивное значение правильно указано в качестве зависимости. Список зависимостей должен иметь постоянное количество элементов и быть написан inline по типу `[dep1, dep2, dep3]`. React будет сравнивать каждую зависимость с предыдущим значением, используя сравнение [`Object.is`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is). Если в результате повторного рендеринга изменилась какая-то зависимость, или если вы опустили этот аргумент, ваша функция `createHandle` будет повторно выполнена, и вновь созданный хэндл будет назначен ссылке.
 
-#### Возвращает
+#### Возвращает {#returns}
 
-Функция `useImperativeHandle` возвращает `undefined`.
+Хук `useImperativeHandle` возвращает `undefined`.
 
-## Использование
+## Использование {#usage}
 
-### Exposing a custom ref handle to the parent component
+### Выставление пользовательской функции ref для родительского компонента {#exposing-a-custom-ref-handle-to-the-parent-component}
 
-По умолчанию компоненты не открывают свои DOM-узлы родительским компонентам. Например, если вы хотите, чтобы родительский компонент `MyInput` имел [доступ](../learn/manipulating-the-dom-with-refs.md) к DOM-узлу `<input>`, вы должны выбрать [`forwardRef`:](forwardRef.md)
+По умолчанию компоненты не открывают свои DOM-узлы родительским компонентам. Например, если вы хотите, чтобы родительский компонент `MyInput` имел [доступ](../../learn/manipulating-the-dom-with-refs.md) к DOM-узлу `<input>`, вы должны выбрать [`forwardRef`:](forwardRef.md)
 
-```js
+```js hl_lines="4"
 import { forwardRef } from 'react';
 
 const MyInput = forwardRef(function MyInput(props, ref) {
@@ -55,7 +59,7 @@ const MyInput = forwardRef(function MyInput(props, ref) {
 
 С помощью приведенного выше кода [ссылка на `MyInput` получит DOM-узел `<input>`](forwardRef.md#exposing-a-dom-node-to-the-parent-component) Однако вместо этого вы можете выставить пользовательское значение. Чтобы настроить пользовательский дескриптор, вызовите `useImperativeHandle` на верхнем уровне вашего компонента:
 
-```js
+```js hl_lines="4-12"
 import { forwardRef, useImperativeHandle } from 'react';
 
 const MyInput = forwardRef(function MyInput(props, ref) {
@@ -77,7 +81,7 @@ const MyInput = forwardRef(function MyInput(props, ref) {
 
 Например, предположим, что вы не хотите раскрывать весь DOM-узел `input`, но хотите раскрыть два его метода: `focus` и `scrollIntoView`. Для этого сохраните реальный DOM браузера в отдельном реферере. Затем используйте `useImperativeHandle`, чтобы раскрыть дескриптор только с теми методами, которые вы хотите, чтобы вызывал родительский компонент:
 
-```js
+```js hl_lines="13-20"
 import {
     forwardRef,
     useRef,
@@ -167,7 +171,11 @@ const MyInput = forwardRef(function MyInput(props, ref) {
     export default MyInput;
     ```
 
-### Выставление собственных императивных методов
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/5ktlh7?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Выставление собственных императивных методов {#exposing-your-own-imperative-methods}
 
 Методы, которые вы раскрываете через императивный дескриптор, не обязательно должны точно соответствовать методам DOM. Например, этот компонент `Post` раскрывает метод `scrollAndFocusAddComment` через императивный хэндл. Это позволяет родительской `Page` прокручивать список комментариев _и_ фокусировать поле ввода, когда вы нажимаете на кнопку:
 
@@ -299,12 +307,14 @@ const MyInput = forwardRef(function MyInput(props, ref) {
     export default AddComment;
     ```
 
-!!!note ""
+=== "CodeSandbox"
 
-    **Не злоупотребляйте ссылками.** Ссылки следует использовать только для _императивного_ поведения, которое вы не можете выразить как пропс: например, прокрутка к узлу, фокусировка узла, запуск анимации, выделение текста и так далее.
+    <iframe src="https://codesandbox.io/embed/8snktj?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-    **Если вы можете выразить что-то как пропс, вы не должны использовать ссылку.** Например, вместо того, чтобы раскрывать императивный дескриптор типа `{ open, close }` из компонента `Modal`, лучше взять `isOpen` как пропс, например `<Modal isOpen={isOpen} />`. [Effects](../learn/synchronizing-with-effects.md) может помочь вам раскрыть императивное поведение через пропсы.
+!!!note "Не злоупотребляйте рефами"
 
-## Ссылки
+    Рефы следует использовать только для _императивного_ поведения, которое вы не можете выразить как пропс: например, прокрутка к узлу, фокусировка узла, запуск анимации, выделение текста и так далее.
 
--   [https://react.dev/reference/react/useImperativeHandle](https://react.dev/reference/react/useImperativeHandle)
+    **Если вы можете выразить что-то как пропс, вы не должны использовать реф.** Например, вместо того, чтобы раскрывать императивный дескриптор типа `{ open, close }` из компонента `Modal`, лучше взять `isOpen` как пропс, например `<Modal isOpen={isOpen} />`. [Effects](../../learn/synchronizing-with-effects.md) может помочь вам раскрыть императивное поведение через пропсы.
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/useImperativeHandle](https://react.dev/reference/react/useImperativeHandle)</small>
