@@ -232,7 +232,7 @@ class AutoselectingInput extends Component {
     }
     ```
 
-[Подробнее о манипулировании DOM с помощью ссылок](../learn/manipulating-the-dom-with-refs.md)
+[Подробнее о манипулировании DOM с помощью ссылок](../../learn/manipulating-the-dom-with-refs.md)
 
 ### Чтение узла DOM дочернего компонента из переадресованной ссылки
 

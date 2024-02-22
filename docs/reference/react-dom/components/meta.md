@@ -6,7 +6,7 @@ status: experimental
 
 <Canary>
 
-React's extensions to `<meta>` are currently only available in React's canary and experimental channels. In stable releases of React `<meta>` works only as a [built-in browser HTML component](https://react.dev/reference/react-dom/components#all-html-components). Learn more about [React's release channels here](/community/versioning-policy#all-release-channels).
+React's extensions to `<meta>` are currently only available in React's canary and experimental channels. In stable releases of React `<meta>` works only as a [built-in browser HTML component](https://react.dev/reference/react-dom/components#all-html-components). Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
 
 </Canary>
 

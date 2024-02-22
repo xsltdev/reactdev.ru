@@ -40,97 +40,97 @@
 -   [`itemProp`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/itemprop): Строка. Указывает, какое свойство представляет элемент для краулеров структурированных данных.
 -   [`lang`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/lang): Строка. Указывает язык элемента.
 -   [`onAnimationEnd`](https://developer.mozilla.org/docs/Web/API/Element/animationend_event): Функция обработчика `AnimationEvent`. Срабатывает при завершении CSS-анимации.
--   `onAnimationEndCapture`: Версия `onAnimationEnd`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
+-   `onAnimationEndCapture`: Версия `onAnimationEnd`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onAnimationIteration`](https://developer.mozilla.org/docs/Web/API/Element/animationiteration_event): Функция обработчика `AnimationEvent`. Срабатывает, когда итерация CSS-анимации заканчивается и начинается другая.
--   `onAnimationIterationCapture`: Версия `onAnimationIteration`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onAnimationIterationCapture`: Версия `onAnimationIteration`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onAnimationStart`](https://developer.mozilla.org/docs/Web/API/Element/animationstart_event): Функция обработчика `AnimationEvent`. Срабатывает при запуске CSS-анимации.
--   `onAnimationStartCapture`: `onAnimationStart`, но срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
+-   `onAnimationStartCapture`: `onAnimationStart`, но срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onAuxClick`](https://developer.mozilla.org/docs/Web/API/Element/auxclick_event): Функция обработчика `MouseEvent`. Срабатывает, когда была нажата не основная кнопка указателя.
--   `onAuxClickCapture`: Версия `onAuxClick`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onAuxClickCapture`: Версия `onAuxClick`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   `onBeforeInput`: Функция обработчика `InputEvent`. Срабатывает перед изменением значения редактируемого элемента. React пока _не_ использует собственное событие [`beforeinput`](https://developer.mozilla.org/docs/Web/API/HTMLElement/beforeinput_event), и вместо этого пытается заполнить его с помощью других событий.
--   `onBeforeInputCapture`: Версия `onBeforeInput`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onBeforeInputCapture`: Версия `onBeforeInput`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   `onBlur`: Функция обработчика `FocusEvent`. Срабатывает, когда элемент теряет фокус. В отличие от встроенного события браузера [`blur`](https://developer.mozilla.org/docs/Web/API/Element/blur_event), в React событие `onBlur` пузырится.
--   `onBlurCapture`: Версия `onBlur`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onBlurCapture`: Версия `onBlur`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onClick`](https://developer.mozilla.org/docs/Web/API/Element/click_event): Функция обработчика `MouseEvent`. Срабатывает при нажатии основной кнопки на указывающем устройстве.
--   `onClickCapture`: Версия `onClick`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
+-   `onClickCapture`: Версия `onClick`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onCompositionStart`](https://developer.mozilla.org/docs/Web/API/Element/compositionstart_event): Функция обработчика `CompositionEvent`. Срабатывает, когда [редактор методов ввода](https://developer.mozilla.org/docs/Glossary/Input_method_editor) начинает новую сессию композиции.
--   `onCompositionStartCapture`: Версия функции `onCompositionStart`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onCompositionStartCapture`: Версия функции `onCompositionStart`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onCompositionEnd`](https://developer.mozilla.org/docs/Web/API/Element/compositionend_event): Функция обработчика `CompositionEvent`. Срабатывает, когда [редактор методов ввода](https://developer.mozilla.org/docs/Glossary/Input_method_editor) завершает или отменяет сеанс композиции.
--   `onCompositionEndCapture`: Версия функции `onCompositionEnd`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onCompositionEndCapture`: Версия функции `onCompositionEnd`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onCompositionUpdate`](https://developer.mozilla.org/docs/Web/API/Element/compositionupdate_event): Функция обработчика `CompositionEvent`. Срабатывает, когда [редактор метода ввода](https://developer.mozilla.org/docs/Glossary/Input_method_editor) получает новый символ.
--   `onCompositionUpdateCapture`: Версия функции `onCompositionUpdate`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onCompositionUpdateCapture`: Версия функции `onCompositionUpdate`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onContextMenu`](https://developer.mozilla.org/docs/Web/API/Element/contextmenu_event): Функция обработчика `MouseEvent`. Срабатывает, когда пользователь пытается открыть контекстное меню.
--   `onContextMenuCapture`: Версия `onContextMenu`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onContextMenuCapture`: Версия `onContextMenu`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onCopy`](https://developer.mozilla.org/docs/Web/API/Element/copy_event): Функция обработчика `ClipboardEvent`. Срабатывает, когда пользователь пытается скопировать что-либо в буфер обмена.
--   `onCopyCapture`: Версия `onCopy`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onCopyCapture`: Версия `onCopy`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onCut`](https://developer.mozilla.org/docs/Web/API/Element/cut_event): Функция обработчика `ClipboardEvent`. Срабатывает, когда пользователь пытается вырезать что-то в буфере обмена.
--   `onCutCapture`: Версия `onCut`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onCutCapture`: Версия `onCut`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   `onDoubleClick`: Функция обработчика `MouseEvent`. Срабатывает, когда пользователь дважды щелкает мышью. Соответствует событию браузера [`dblclick`.](https://developer.mozilla.org/docs/Web/API/Element/dblclick_event)
--   `onDoubleClickCapture`: Версия `onDoubleClick`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onDoubleClickCapture`: Версия `onDoubleClick`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onDrag`](https://developer.mozilla.org/docs/Web/API/HTMLElement/drag_event): Функция обработчика `DragEvent`. Срабатывает, когда пользователь что-то перетаскивает.
--   `onDragCapture`: Версия функции `onDrag`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onDragCapture`: Версия функции `onDrag`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onDragEnd`](https://developer.mozilla.org/docs/Web/API/HTMLElement/dragend_event): Функция обработчика `DragEvent`. Срабатывает, когда пользователь прекращает перетаскивать что-то.
--   `onDragEndCapture`: Версия функции `onDragEnd`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onDragEndCapture`: Версия функции `onDragEnd`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onDragEnter`](https://developer.mozilla.org/docs/Web/API/HTMLElement/dragenter_event): Функция обработчика `DragEvent`. Срабатывает, когда перетаскиваемое содержимое попадает в допустимую цель падения.
--   `onDragEnterCapture`: Версия функции `onDragEnter`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onDragEnterCapture`: Версия функции `onDragEnter`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onDragOver`](https://developer.mozilla.org/docs/Web/API/HTMLElement/dragover_event): Функция обработчика `DragEvent`. Срабатывает на действительной цели падения, когда перетаскиваемое содержимое перетаскивается на нее. Вы должны вызвать `e.preventDefault()` здесь, чтобы разрешить перетаскивание.
--   `onDragOverCapture`: Версия `onDragOver`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onDragOverCapture`: Версия `onDragOver`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onDragStart`](https://developer.mozilla.org/docs/Web/API/HTMLElement/dragstart_event): Функция обработчика `DragEvent`. Срабатывает, когда пользователь начинает перетаскивать элемент.
--   `onDragStartCapture`: Версия `onDragStart`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onDragStartCapture`: Версия `onDragStart`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onDrop`](https://developer.mozilla.org/docs/Web/API/HTMLElement/drop_event): Функция обработчика `DragEvent`. Срабатывает, когда что-то падает на допустимую цель падения.
--   `onDropCapture`: Версия `onDrop`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onDropCapture`: Версия `onDrop`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   `onFocus`: Функция обработчика `FocusEvent`. Срабатывает, когда элемент потерял фокус. В отличие от встроенного события браузера [`focus`](https://developer.mozilla.org/docs/Web/API/Element/focus_event), в React событие `onFocus` пузырится.
--   `onFocusCapture`: Версия `onFocus`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
+-   `onFocusCapture`: Версия `onFocus`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onGotPointerCapture`](https://developer.mozilla.org/docs/Web/API/Element/gotpointercapture_event): Функция обработчика `PointerEvent`. Срабатывает, когда элемент программно захватывает указатель.
--   `onGotPointerCaptureCapture`: Версия `onGotPointerCapture`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onGotPointerCaptureCapture`: Версия `onGotPointerCapture`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onKeyDown`](https://developer.mozilla.org/docs/Web/API/Element/keydown_event): Функция обработчика `KeyboardEvent`. Срабатывает при нажатии клавиши.
--   `onKeyDownCapture`: Версия функции `onKeyDown`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onKeyDownCapture`: Версия функции `onKeyDown`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onKeyPress`](https://developer.mozilla.org/docs/Web/API/Element/keypress_event): Функция обработчика `KeyboardEvent`. Исправлено. Вместо нее используйте `onKeyDown` или `onBeforeInput`.
--   `onKeyPressCapture`: Версия `onKeyPress`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onKeyPressCapture`: Версия `onKeyPress`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onKeyUp`](https://developer.mozilla.org/docs/Web/API/Element/keyup_event): Функция обработчика `KeyboardEvent`. Срабатывает при отпускании клавиши.
--   `onKeyUpCapture`: Версия функции `onKeyUp`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onKeyUpCapture`: Версия функции `onKeyUp`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onLostPointerCapture`](https://developer.mozilla.org/docs/Web/API/Element/lostpointercapture_event): Функция обработчика `PointerEvent`. Срабатывает, когда элемент перестает захватывать указатель.
--   `onLostPointerCaptureCapture`: Версия `onLostPointerCapture`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onLostPointerCaptureCapture`: Версия `onLostPointerCapture`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onMouseDown`](https://developer.mozilla.org/docs/Web/API/Element/mousedown_event): Функция обработчика `MouseEvent`. Срабатывает при нажатии указателя вниз.
--   `onMouseDownCapture`: Версия `onMouseDown`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onMouseDownCapture`: Версия `onMouseDown`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onMouseEnter`](https://developer.mozilla.org/docs/Web/API/Element/mouseenter_event): Функция обработчика `MouseEvent`. Срабатывает, когда указатель перемещается внутри элемента. Не имеет фазы захвата. Вместо этого `onMouseLeave` и `onMouseEnter` распространяются от покидаемого элемента к вводимому.
 -   [`onMouseLeave`](https://developer.mozilla.org/docs/Web/API/Element/mouseleave_event): Функция обработчика `MouseEvent`. Срабатывает, когда указатель перемещается за пределы элемента. Не имеет фазы захвата. Вместо этого `onMouseLeave` и `onMouseEnter` распространяются от покидаемого элемента к вводимому.
 -   [`onMouseMove`](https://developer.mozilla.org/docs/Web/API/Element/mousemove_event): Функция обработчика `MouseEvent`. Срабатывает при изменении координат указателя.
--   `onMouseMoveCapture`: Версия функции `onMouseMove`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onMouseMoveCapture`: Версия функции `onMouseMove`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onMouseOut`](https://developer.mozilla.org/docs/Web/API/Element/mouseout_event): Функция обработчика `MouseEvent`. Срабатывает, когда указатель перемещается за пределы элемента, или если он перемещается в дочерний элемент.
--   `onMouseOutCapture`: Версия функции `onMouseOut`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onMouseOutCapture`: Версия функции `onMouseOut`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onMouseUp`](https://developer.mozilla.org/docs/Web/API/Element/mouseup_event): Функция обработчика `MouseEvent`. Срабатывает при освобождении указателя.
--   `onMouseUpCapture`: Версия функции `onMouseUp`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onMouseUpCapture`: Версия функции `onMouseUp`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onPointerCancel`](https://developer.mozilla.org/docs/Web/API/Element/pointercancel_event): Функция обработчика `PointerEvent`. Срабатывает, когда браузер отменяет взаимодействие с указателем.
--   `onPointerCancelCapture`: Версия `onPointerCancel`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onPointerCancelCapture`: Версия `onPointerCancel`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onPointerDown`](https://developer.mozilla.org/docs/Web/API/Element/pointerdown_event): Функция обработчика `PointerEvent`. Срабатывает, когда указатель становится активным.
--   `onPointerDownCapture`: Версия `onPointerDown`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onPointerDownCapture`: Версия `onPointerDown`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onPointerEnter`](https://developer.mozilla.org/docs/Web/API/Element/pointerenter_event): Функция обработчика `PointerEvent`. Срабатывает, когда указатель перемещается внутри элемента. Не имеет фазы захвата. Вместо этого `onPointerLeave` и `onPointerEnter` распространяются от покидаемого элемента к вводимому.
 -   [`onPointerLeave`](https://developer.mozilla.org/docs/Web/API/Element/pointerleave_event): Функция обработчика `PointerEvent`. Срабатывает, когда указатель перемещается за пределы элемента. Не имеет фазы захвата. Вместо этого `onPointerLeave` и `onPointerEnter` распространяются от покидаемого элемента к вводимому.
 -   [`onPointerMove`](https://developer.mozilla.org/docs/Web/API/Element/pointermove_event): Функция обработчика `PointerEvent`. Срабатывает при изменении координат указателя.
--   `onPointerMoveCapture`: Версия `onPointerMove`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
+-   `onPointerMoveCapture`: Версия `onPointerMove`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onPointerOut`](https://developer.mozilla.org/docs/Web/API/Element/pointerout_event): Функция обработчика `PointerEvent`. Срабатывает при перемещении указателя за пределы элемента, при отмене взаимодействия с указателем и [по некоторым другим причинам](https://developer.mozilla.org/docs/Web/API/Element/pointerout_event).
--   `onPointerOutCapture`: Версия `onPointerOut`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onPointerOutCapture`: Версия `onPointerOut`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onPointerUp`](https://developer.mozilla.org/docs/Web/API/Element/pointerup_event): Функция обработчика `PointerEvent`. Срабатывает, когда указатель больше не активен.
--   `onPointerUpCapture`: Версия `onPointerUp`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onPointerUpCapture`: Версия `onPointerUp`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onPaste`](https://developer.mozilla.org/docs/Web/API/Element/paste_event): Функция обработчика `ClipboardEvent`. Срабатывает, когда пользователь пытается вставить что-то из буфера обмена.
--   `onPasteCapture`: Версия `onPaste`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onPasteCapture`: Версия `onPaste`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onScroll`](https://developer.mozilla.org/docs/Web/API/Element/scroll_event): Функция обработчика `event`. Срабатывает, когда элемент был прокручен. Это событие не вызывает пузырьков.
--   `onScrollCapture`: Версия `onScroll`, срабатывающая в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onScrollCapture`: Версия `onScroll`, срабатывающая в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onSelect`](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/select_event): Функция обработчика `event`. Срабатывает после изменения выбора внутри редактируемого элемента, например, ввода. React расширяет событие `onSelect`, чтобы оно работало и для элементов `contentEditable={true}`. Кроме того, React расширяет его для срабатывания при пустом выделении и при редактировании (которое может повлиять на выделение).
--   `onSelectCapture`: Версия `onSelect`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
+-   `onSelectCapture`: Версия `onSelect`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onTouchCancel`](https://developer.mozilla.org/docs/Web/API/Element/touchcancel_event): Функция обработчика `TouchEvent`. Срабатывает, когда браузер отменяет сенсорное взаимодействие.
--   `onTouchCancelCapture`: Версия `onTouchCancel`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onTouchCancelCapture`: Версия `onTouchCancel`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onTouchEnd`](https://developer.mozilla.org/docs/Web/API/Element/touchend_event): Функция обработчика `TouchEvent`. Срабатывает при удалении одной или нескольких точек касания.
--   `onTouchEndCapture`: Версия `onTouchEnd`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onTouchEndCapture`: Версия `onTouchEnd`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onTouchMove`](https://developer.mozilla.org/docs/Web/API/Element/touchmove_event): Функция обработчика `TouchEvent`. Вызывает перемещение одной или нескольких точек касания.
--   `onTouchMoveCapture`: Версия `onTouchMove`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onTouchMoveCapture`: Версия `onTouchMove`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onTouchStart`](https://developer.mozilla.org/docs/Web/API/Element/touchstart_event): Функция обработчика `TouchEvent`. Срабатывает при размещении одной или нескольких точек касания.
--   `onTouchStartCapture`: Версия `onTouchStart`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onTouchStartCapture`: Версия `onTouchStart`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onTransitionEnd`](https://developer.mozilla.org/docs/Web/API/Element/transitionend_event): Функция обработчика `TransitionEvent`. Срабатывает при завершении CSS-перехода.
--   `onTransitionEndCapture`: Версия функции `onTransitionEnd`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onTransitionEndCapture`: Версия функции `onTransitionEnd`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onWheel`](https://developer.mozilla.org/docs/Web/API/Element/wheel_event): Функция обработчика `WheelEvent`. Срабатывает, когда пользователь поворачивает кнопку колеса.
--   `onWheelCapture`: Версия `onWheel`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
+-   `onWheelCapture`: Версия `onWheel`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`роль`](https://developer.mozilla.org/docs/Web/Accessibility/ARIA/Roles): Строка. Определяет роль элемента в явном виде для вспомогательных технологий.
 -   [`slot`](https://developer.mozilla.org/docs/Web/Accessibility/ARIA/Roles): Строка. Указывает имя слота при использовании теневого DOM. В React эквивалентная схема обычно достигается путем передачи JSX в качестве props, например `<Layout left={<Sidebar />} right={<Content />} />`.
 -   [`spellCheck`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/spellcheck): Булево значение или null. При явном значении `true` или `false` включает или выключает проверку орфографии.
@@ -143,81 +143,81 @@
 Эти события срабатывают только для элементов [`<form>`](https://developer.mozilla.org/docs/Web/HTML/Element/form):
 
 -   [`onReset`](https://developer.mozilla.org/docs/Web/API/HTMLFormElement/reset_event): Функция обработчика `event`. Срабатывает при сбросе формы.
--   `onResetCapture`: Версия функции `onReset`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onResetCapture`: Версия функции `onReset`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onSubmit`](https://developer.mozilla.org/docs/Web/API/HTMLFormElement/submit_event): Функция обработчика `event`. Срабатывает при отправке формы.
--   `onSubmitCapture`: Версия `onSubmit`, которая срабатывает на [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onSubmitCapture`: Версия `onSubmit`, которая срабатывает на [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 
 Эти события срабатывают только для элементов [`<dialog>`](https://developer.mozilla.org/docs/Web/HTML/Element/dialog). В отличие от событий браузера, в React они вызывают пузырьки:
 
 -   [`onCancel`](https://developer.mozilla.org/docs/Web/API/HTMLDialogElement/cancel_event): Функция обработчика `event`. Срабатывает, когда пользователь пытается закрыть диалог.
--   `onCancelCapture`: Версия `onCancel`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onCancelCapture`: Версия `onCancel`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onClose`](https://developer.mozilla.org/docs/Web/API/HTMLDialogElement/close_event): Функция обработчика `event`. Срабатывает, когда диалог был закрыт.
--   `onCloseCapture`: Версия `onClose`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onCloseCapture`: Версия `onClose`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 
 Эти события срабатывают только для элементов [`<details>`](https://developer.mozilla.org/docs/Web/HTML/Element/details). В отличие от браузерных событий, в React они вызывают пузырьки:
 
 -   [`onToggle`](https://developer.mozilla.org/docs/Web/API/HTMLDetailsElement/toggle_event): Функция обработчика `event`. Срабатывает, когда пользователь переключает детали.
--   `onToggleCapture`: Версия `onToggle`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onToggleCapture`: Версия `onToggle`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 
 Эти события происходят для элементов [`<img>`](https://hcdev.ru/html/img/), [`<iframe>`](https://hcdev.ru/html/iframe/), [`<object>`](https://hcdev.ru/html/object/), [`<embed>`](https://hcdev.ru/html/embed/), [`<link>`](https://hcdev.ru/html/link/) и [SVG `<image>`](https://developer.mozilla.org/docs/Web/SVG/Tutorial/SVG_Image_Tag). В отличие от событий браузера, в React они "всплывают":
 
 -   `onLoad`: Функция обработчика `event`. Срабатывает, когда ресурс загрузился.
--   `onLoadCapture`: Версия `onLoad`, которая срабатывает на [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onLoadCapture`: Версия `onLoad`, которая срабатывает на [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onError`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/error_event): Функция обработчика `event`. Срабатывает, когда ресурс не может быть загружен.
--   `onErrorCapture`: Версия `onError`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onErrorCapture`: Версия `onError`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 
 Эти события происходят для таких ресурсов, как [`<audio>`](https://hcdev.ru/html/audio/) и [`<video>`](https://hcdev.ru/html/video/). В отличие от браузерных событий, в React они "всплывают":
 
 -   [`onAbort`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/abort_event): Функция обработчика `event`. Срабатывает, когда ресурс не загрузился полностью, но не из-за ошибки.
--   `onAbortCapture`: Версия `onAbort`, срабатывающая на [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onAbortCapture`: Версия `onAbort`, срабатывающая на [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onCanPlay`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/canplay_event): Функция обработчика `event`. Срабатывает, когда данных достаточно для начала воспроизведения, но недостаточно для воспроизведения до конца без буферизации.
--   `onCanPlayCapture`: Версия `onCanPlay`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onCanPlayCapture`: Версия `onCanPlay`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onCanPlayThrough`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/canplaythrough_event): Функция обработчика `event`. Срабатывает, когда данных достаточно, чтобы можно было начать воспроизведение без буферизации до конца.
--   `onCanPlayThroughCapture`: Версия `onCanPlayThrough`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onCanPlayThroughCapture`: Версия `onCanPlayThrough`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onDurationChange`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/durationchange_event): Функция обработчика `event`. Срабатывает при обновлении длительности носителя.
--   `onDurationChangeCapture`: Версия `onDurationChange`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onDurationChangeCapture`: Версия `onDurationChange`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onEmptied`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/emptied_event): Функция обработчика `event`. Срабатывает, когда носитель становится пустым.
--   `onEmptiedCapture`: Версия `onEmptied`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onEmptiedCapture`: Версия `onEmptied`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onEncrypted`](https://w3c.github.io/encrypted-media/#dom-evt-encrypted): Функция обработчика `event`. Срабатывает, когда браузер сталкивается с зашифрованным медиа.
--   `onEncryptedCapture`: Версия `onEncrypted`, которая срабатывает на [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onEncryptedCapture`: Версия `onEncrypted`, которая срабатывает на [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onEnded`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/ended_event): Функция обработчика `event`. Срабатывает, когда воспроизведение останавливается, потому что больше нечего воспроизводить.
--   `onEndedCapture`: Версия `onEnded`, которая срабатывает на [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onEndedCapture`: Версия `onEnded`, которая срабатывает на [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onError`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/error_event): Функция обработчика `event`. Срабатывает, когда ресурс не может быть загружен.
--   `onErrorCapture`: Версия `onError`, которая срабатывает на [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onErrorCapture`: Версия `onError`, которая срабатывает на [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onLoadedData`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/loadeddata_event): Функция обработчика `event`. Срабатывает при загрузке текущего кадра воспроизведения.
--   `onLoadedDataCapture`: Версия `onLoadedData`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onLoadedDataCapture`: Версия `onLoadedData`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onLoadedMetadata`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/loadedmetadata_event): Функция обработчика `event`. Срабатывает при загрузке метаданных.
--   `onLoadedMetadataCapture`: Версия `onLoadedMetadata`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onLoadedMetadataCapture`: Версия `onLoadedMetadata`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   Срабатывает при загрузке метаданных.
--   `onLoadedMetadataCapture`: Версия `onLoadedMetadata`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onLoadedMetadataCapture`: Версия `onLoadedMetadata`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onLoadStart`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/loadstart_event): Функция обработчика `event`. Срабатывает, когда браузер начал загрузку ресурса.
--   `onLoadStartCapture`: Версия `onLoadStart`, которая срабатывает на [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onLoadStartCapture`: Версия `onLoadStart`, которая срабатывает на [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onPause`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/pause_event): Функция обработчика `event`. Срабатывает, когда медиа было приостановлено.
--   `onPauseCapture`: Версия `onPause`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onPauseCapture`: Версия `onPause`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onPlay`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/play_event): Функция обработчика `event`. Срабатывает, когда медиа больше не приостановлено.
--   `onPlayCapture`: Версия `onPlay`, срабатывающая в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onPlayCapture`: Версия `onPlay`, срабатывающая в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onPlaying`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/playing_event): Функция обработчика `event`. Срабатывает, когда медиа начинает или возобновляет воспроизведение.
--   `onPlayingCapture`: Версия функции `onPlaying`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onPlayingCapture`: Версия функции `onPlaying`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onProgress`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/progress_event): Функция обработчика `event`. Периодически срабатывает во время загрузки ресурса.
--   `onProgressCapture`: Версия функции `onProgress`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onProgressCapture`: Версия функции `onProgress`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onRateChange`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/ratechange_event): Функция обработчика `event`. Срабатывает при изменении скорости воспроизведения.
--   `onRateChangeCapture`: Версия `onRateChange`, срабатывающая в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onRateChangeCapture`: Версия `onRateChange`, срабатывающая в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   `onResize`: Функция обработчика `event`. Срабатывает при изменении размера видео.
--   `onResizeCapture`: Версия `onResize`, срабатывающая на [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onResizeCapture`: Версия `onResize`, срабатывающая на [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onSeeked`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/seeked_event): Функция обработчика `event`. Срабатывает при завершении операции поиска.
--   `onSeekedCapture`: Версия функции `onSeeked`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onSeekedCapture`: Версия функции `onSeeked`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onSeeking`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/seeking_event): Функция обработчика `event`. Срабатывает, когда начинается операция поиска.
--   `onSeekingCapture`: Версия функции `onSeeking`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onSeekingCapture`: Версия функции `onSeeking`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onStalled`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/stalled_event): Функция обработчика `event`. Срабатывает, когда браузер ожидает данные, но они не загружаются.
--   `onStalledCapture`: Версия функции `onStalled`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onStalledCapture`: Версия функции `onStalled`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onSuspend`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/suspend_event): Функция обработчика `event`. Срабатывает, когда загрузка ресурса была приостановлена.
--   `onSuspendCapture`: Версия `onSuspend`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onSuspendCapture`: Версия `onSuspend`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onTimeUpdate`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/timeupdate_event): Функция обработчика `event`. Срабатывает при обновлении текущего времени воспроизведения.
--   `onTimeUpdateCapture`: Версия `onTimeUpdate`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onTimeUpdateCapture`: Версия `onTimeUpdate`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onVolumeChange`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/volumechange_event): Функция обработчика `event`. Срабатывает при изменении громкости.
--   `onVolumeChangeCapture`: Версия функции `onVolumeChange`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onVolumeChangeCapture`: Версия функции `onVolumeChange`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onWaiting`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/waiting_event): Функция обработчика `event`. Срабатывает, когда воспроизведение остановилось из-за временного отсутствия данных.
--   `onWaitingCapture`: Версия функции `onWaiting`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onWaitingCapture`: Версия функции `onWaiting`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 
 **Предостережения**
 
@@ -232,7 +232,7 @@
 <div ref={(node) => console.log(node)} />
 ```
 
-[Смотрите пример использования обратного вызова `ref`.](../learn/manipulating-the-dom-with-refs.md#how-to-manage-a-list-of-refs-using-a-ref-callback)
+[Смотрите пример использования обратного вызова `ref`.](../../../learn/manipulating-the-dom-with-refs.md#how-to-manage-a-list-of-refs-using-a-ref-callback)
 
 Когда DOM-узел `div` будет добавлен на экран, React вызовет ваш обратный вызов `ref` с DOM-узлом `node` в качестве аргумента. Когда этот DOM-узел `div` будет удален, React вызовет ваш обратный вызов `ref` с аргументом `null`.
 
@@ -733,7 +733,7 @@ React не предписывает, как добавлять файлы CSS. �
 />
 ```
 
-В приведенном выше примере `style={{}}` - это не специальный синтаксис, а обычный объект `{}` внутри `style={ }` [фигурные скобки JSX.](../learn/javascript-in-jsx-with-curly-braces.md) Мы рекомендуем использовать атрибут `style` только тогда, когда ваши стили зависят от переменных JavaScript.
+В приведенном выше примере `style={{}}` - это не специальный синтаксис, а обычный объект `{}` внутри `style={ }` [фигурные скобки JSX.](../../../learn/javascript-in-jsx-with-curly-braces.md) Мы рекомендуем использовать атрибут `style` только тогда, когда ваши стили зависят от переменных JavaScript.
 
 === "App.js"
 
@@ -861,7 +861,7 @@ export default function Form() {
 }
 ```
 
-Читайте больше о [манипулировании DOM с помощью ссылок](../learn/manipulating-the-dom-with-refs.md) и [посмотрите больше примеров](useRef.md#examples-dom).
+Читайте больше о [манипулировании DOM с помощью ссылок](../../../learn/manipulating-the-dom-with-refs.md) и [посмотрите больше примеров](useRef.md#examples-dom).
 
 Для более сложных случаев использования атрибут `ref` также принимает функцию обратного вызова.
 

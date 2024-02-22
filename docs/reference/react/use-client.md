@@ -7,7 +7,7 @@ status: experimental
 
 <big>
 
-`'use client'` необходим только в том случае, если вы [используете React Server Components](../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) или создаете совместимую с ними библиотеку.
+`'use client'` необходим только в том случае, если вы [используете React Server Components](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) или создаете совместимую с ними библиотеку.
 
 </big>
 
@@ -37,7 +37,7 @@ export default function RichTextEditor({
 }
 ```
 
-Когда файл, помеченный директивой `'use client'`, импортируется из серверного компонента, [совместимые бандлеры](../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) будут рассматривать импорт модуля как границу между кодом, выполняемым на сервере, и кодом, выполняемым на клиенте.
+Когда файл, помеченный директивой `'use client'`, импортируется из серверного компонента, [совместимые бандлеры](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) будут рассматривать импорт модуля как границу между кодом, выполняемым на сервере, и кодом, выполняемым на клиенте.
 
 Будучи зависимостями `RichTextEditor`, `formatDate` и `Button` также будут оцениваться на клиенте, независимо от того, содержат ли их модули директиву `'use client'`. Обратите внимание, что один модуль может оцениваться на сервере при импорте из серверного кода и на клиенте при импорте из клиентского кода.
 
@@ -52,9 +52,9 @@ export default function RichTextEditor({
 
 ### How `'use client'` marks client code {#how-use-client-marks-client-code}
 
-In a React app, components are often split into separate files, or [modules](../learn/importing-and-exporting-components.md#exporting-and-importing-a-component).
+In a React app, components are often split into separate files, or [modules](../../learn/importing-and-exporting-components.md#exporting-and-importing-a-component).
 
-For apps that use React Server Components, the app is server-rendered by default. `'use client'` introduces a server-client boundary in the [module dependency tree](../learn/understanding-your-ui-as-a-tree.md#the-module-dependency-tree), effectively creating a subtree of Client modules.
+For apps that use React Server Components, the app is server-rendered by default. `'use client'` introduces a server-client boundary in the [module dependency tree](../../learn/understanding-your-ui-as-a-tree.md#the-module-dependency-tree), effectively creating a subtree of Client modules.
 
 To better illustrate this, consider the following React Server Components app.
 
@@ -149,7 +149,7 @@ In the module dependency tree of this example app, the `'use client'` directive 
 `'use client'` segments the module dependency tree of the React Server Components app, marking `InspirationGenerator.js` and all of its dependencies as client-rendered.
 </Diagram>
 
-During render, the framework will server-render the root component and continue through the [render tree](/learn/understanding-your-ui-as-a-tree#the-render-tree), opting-out of evaluating any code imported from client-marked code.
+During render, the framework will server-render the root component and continue through the [render tree](../../learn/understanding-your-ui-as-a-tree#the-render-tree), opting-out of evaluating any code imported from client-marked code.
 
 The server-rendered portion of the render tree is then sent to the client. The client, with its client code downloaded, then completes rendering the rest of the tree.
 
@@ -222,7 +222,7 @@ Recall that `'use client'` defines the boundary between server and client code o
 
 In the module dependency tree, we see that `App.js` imports and calls `Copyright` from the `Copyright.js` module. As `Copyright.js` does not contain a `'use client'` directive, the component usage is rendered on the server. `App` is rendered on the server as it is the root component.
 
-Client Components can render Server Components because you can pass JSX as props. In this case, `InspirationGenerator` receives `Copyright` as [children](/learn/passing-props-to-a-component#passing-jsx-as-children). However, the `InspirationGenerator` module never directly imports the `Copyright` module nor calls the component, all of that is done by `App`. In fact, the `Copyright` component is fully executed before `InspirationGenerator` starts rendering.
+Client Components can render Server Components because you can pass JSX as props. In this case, `InspirationGenerator` receives `Copyright` as [children](../../learn/passing-props-to-a-component#passing-jsx-as-children). However, the `InspirationGenerator` module never directly imports the `Copyright` module nor calls the component, all of that is done by `App`. In fact, the `Copyright` component is fully executed before `InspirationGenerator` starts rendering.
 
 The takeaway is that a parent-child render relationship between components does not guarantee the same render environment.
 

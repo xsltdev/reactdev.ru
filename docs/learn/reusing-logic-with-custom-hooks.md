@@ -121,7 +121,7 @@ description: Возможно, вы не найдете таких хуков в
 
 ### Извлечение собственного пользовательского хука из компонента {#extracting-your-own-custom-hook-from-a-component}
 
-Представьте на секунду, что, подобно [`useState`](../reference/useState.md) и [`useEffect`](../reference/useEffect.md), существует встроенный хук `useOnlineStatus`. Тогда оба этих компонента можно было бы упростить и убрать дублирование между ними:
+Представьте на секунду, что, подобно [`useState`](../reference/react/useState.md) и [`useEffect`](../reference/react/useEffect.md), существует встроенный хук `useOnlineStatus`. Тогда оба этих компонента можно было бы упростить и убрать дублирование между ними:
 
 ```js hl_lines="2 11"
 function StatusBar() {
@@ -271,7 +271,7 @@ function useOnlineStatus() {
 Вы должны следовать этим соглашениям об именовании:
 
 1.  **Имена компонентов React должны начинаться с заглавной буквы,** например, `StatusBar` и `SaveButton`. Компоненты React также должны возвращать что-то, что React умеет отображать, например, кусок JSX.
-2.  **Имена хуков должны начинаться с `use`, за которым следует заглавная буква,** например [`useState`](../reference/useState.md) (встроенный) или `useOnlineStatus` (пользовательский, как ранее на этой странице). Хуки могут возвращать произвольные значения.
+2.  **Имена хуков должны начинаться с `use`, за которым следует заглавная буква,** например [`useState`](../reference/react/useState.md) (встроенный) или `useOnlineStatus` (пользовательский, как ранее на этой странице). Хуки могут возвращать произвольные значения.
 
 Это соглашение гарантирует, что вы всегда сможете посмотреть на компонент и узнать, где может "прятаться" его состояние, Эффекты и другие возможности React. Например, если вы видите вызов функции `getColor()` внутри вашего компонента, вы можете быть уверены, что она не может содержать внутри себя состояние React, потому что ее имя не начинается с `use`. Однако вызов такой функции, как `useOnlineStatus()`, скорее всего, будет содержать вызовы других Hooks внутри!
 
@@ -1498,9 +1498,9 @@ function ShippingForm({ country }) {
 
     <iframe src="https://codesandbox.io/embed/kjf3xp?view=Editor+%2B+Preview&module=%2Fsrc%2FuseOnlineStatus.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-В приведенном выше примере `useOnlineStatus` реализован с помощью пары [`useState`](../reference/useState.md) и [`useEffect`.](../reference/useEffect.md) Однако это не лучшее из возможных решений. Оно не учитывает ряд побочных ситуаций. Например, предполагается, что когда компонент монтируется, `isOnline` уже `true`, но это может быть неверно, если сеть уже отключилась. Вы можете использовать API браузера [`navigator.onLine`](https://developer.mozilla.org/docs/Web/API/Navigator/onLine) для проверки этого, но его использование напрямую не будет работать на сервере для генерации начального HTML. Короче говоря, этот код можно улучшить.
+В приведенном выше примере `useOnlineStatus` реализован с помощью пары [`useState`](../reference/react/useState.md) и [`useEffect`.](../reference/react/useEffect.md) Однако это не лучшее из возможных решений. Оно не учитывает ряд побочных ситуаций. Например, предполагается, что когда компонент монтируется, `isOnline` уже `true`, но это может быть неверно, если сеть уже отключилась. Вы можете использовать API браузера [`navigator.onLine`](https://developer.mozilla.org/docs/Web/API/Navigator/onLine) для проверки этого, но его использование напрямую не будет работать на сервере для генерации начального HTML. Короче говоря, этот код можно улучшить.
 
-К счастью, React 18 включает специальный API под названием [`useSyncExternalStore`](../reference/useSyncExternalStore.md), который решает все эти проблемы за вас. Вот как выглядит ваш хук `useOnlineStatus`, переписанный для использования преимуществ этого нового API:
+К счастью, React 18 включает специальный API под названием [`useSyncExternalStore`](../reference/react/useSyncExternalStore.md), который решает все эти проблемы за вас. Вот как выглядит ваш хук `useOnlineStatus`, переписанный для использования преимуществ этого нового API:
 
 === "App.js"
 

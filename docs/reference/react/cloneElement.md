@@ -58,7 +58,7 @@ console.log(clonedElement); // <Row title="Cabbage">Goodbye</Row>
 #### Предостережения {#caveats}
 
 -   Клонирование элемента **не изменяет исходный элемент.**
--   Вы должны **передавать дочерние элементы в качестве нескольких аргументов `cloneElement`, только если они все статически известны,** например, `cloneElement(element, null, child1, child2, child3)`. Если ваши дочерние элементы динамические, передайте весь массив в качестве третьего аргумента: `cloneElement(element, null, listItems)`. Это гарантирует, что React [предупредит вас об отсутствии `ключей`](../learn/rendering-lists.md#keeping-list-items-in-order-with-key) для любых динамических списков. Для статических списков это не нужно, потому что они никогда не меняют порядок.
+-   Вы должны **передавать дочерние элементы в качестве нескольких аргументов `cloneElement`, только если они все статически известны,** например, `cloneElement(element, null, child1, child2, child3)`. Если ваши дочерние элементы динамические, передайте весь массив в качестве третьего аргумента: `cloneElement(element, null, listItems)`. Это гарантирует, что React [предупредит вас об отсутствии `ключей`](../../learn/rendering-lists.md#keeping-list-items-in-order-with-key) для любых динамических списков. Для статических списков это не нужно, потому что они никогда не меняют порядок.
 -   `cloneElement` затрудняет отслеживание потока данных, поэтому **вместо этого попробуйте [альтернативы](#alternatives).**
 
 ## Использование {#usage}
@@ -81,7 +81,7 @@ const clonedElement = cloneElement(
 
 **Давайте рассмотрим пример, чтобы увидеть, когда это полезно.**.
 
-Представьте себе компонент `List`, который отображает своих [`детей`](../learn/passing-props-to-a-component.md#passing-jsx-as-children) как список выбираемых строк с кнопкой "Next", которая изменяет выбранную строку. Компонент `List` должен отображать выбранный `Row` по-разному, поэтому он клонирует каждый дочерний `<Row>`, который он получил, и добавляет дополнительный параметр `isHighlighted: true` или `isHighlighted: false`:
+Представьте себе компонент `List`, который отображает своих [`детей`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children) как список выбираемых строк с кнопкой "Next", которая изменяет выбранную строку. Компонент `List` должен отображать выбранный `Row` по-разному, поэтому он клонирует каждый дочерний `<Row>`, который он получил, и добавляет дополнительный параметр `isHighlighted: true` или `isHighlighted: false`:
 
 ```js
 export default function List({ children }) {
@@ -336,7 +336,7 @@ export default function List({ items, renderItem }) {
 
 ### Передача данных через контекст {#passing-data-through-context}
 
-Другой альтернативой `cloneElement` является [передача данных через контекст](../learn/passing-data-deeply-with-context.md).
+Другой альтернативой `cloneElement` является [передача данных через контекст](../../learn/passing-data-deeply-with-context.md).
 
 Например, вы можете вызвать [`createContext`](createContext.md), чтобы определить `HighlightContext`:
 
