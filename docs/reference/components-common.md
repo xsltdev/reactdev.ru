@@ -19,7 +19,7 @@
 -   `ref`: Объект ссылки из [`useRef`](useRef.md) или [`createRef`](createRef.md), или функция обратного вызова `ref`, или строка для [legacy refs](https://reactjs.org/docs/refs-and-the-dom.html#legacy-api-string-refs). Ваш ref будет заполнен элементом DOM для этого узла.
 -   `suppressContentEditableWarning`: Булево значение. Если `true`, подавляет предупреждение, которое React показывает для элементов, имеющих одновременно `children` и `contentEditable={true}` (которые обычно не работают вместе). Используйте это, если вы создаете библиотеку ввода текста, которая управляет содержимым `contentEditable` вручную.
 -   `suppressHydrationWarning`: Булево значение. Если вы используете [серверный рендеринг,](server.md), обычно появляется предупреждение, когда сервер и клиент рендерят разное содержимое. В некоторых редких случаях (например, временные метки) очень трудно или невозможно гарантировать точное совпадение. Если вы установите `uppressHydrationWarning` в `true`, React не будет предупреждать вас о несоответствии атрибутов и содержимого этого элемента. Эта функция работает только на одном уровне и предназначена для использования в качестве аварийного люка. Не злоупотребляйте им. [Читайте о подавлении ошибок гидратации](client-hydrateRoot.md#suppressing-unavoidable-hydration-mismatch-errors).
--   `style`: Объект со стилями CSS, например `{ fontWeight: 'bold', margin: 20 }`. Аналогично свойству DOM [`style`](https://developer.mozilla.org/docs/Web/API/HTMLElement/style), имена свойств CSS должны быть написаны в `camelCase`, например `fontWeight` вместо `font-weight`. В качестве значений можно передавать строки или числа. Если вы передаете число, например `width: 100`, React автоматически добавит `px` ("пиксели") к значению, если только это не [свойство без единиц измерения](https://github.com/facebook/react/blob/81d4ee9ca5c405dce62f64e61506b8e155f38d8d/packages/react-dom-bindings/src/shared/CSSProperty.js#L8-L57). Мы рекомендуем использовать `style` только для динамических стилей, где вы не используете kn.
+-   `style`: Объект со стилями CSS, например `{ fontWeight: 'bold', margin: 20 }`. Аналогично свойству DOM [`style`](https://developer.mozilla.org/docs/Web/API/HTMLElement/style), имена свойств CSS должны быть написаны в `camelCase`, например `fontWeight` вместо `font-weight`. В качестве значений можно передавать строки или числа. Если вы передаете число, например `width: 100`, React автоматически добавит `px` ("пиксели") к значению, если только это не [свойство без единиц измерения](https://github.com/facebook/react/blob/81d4ee9ca5c405dce62f64e61506b8e155f38d8d/packages/react-dom-bindings/src/shared/CSSProperty.js#L8-L57). Мы рекомендуем использовать `style` только для динамических стилей, значения которых заранее не известны. В других случаях применение простых CSS-классов с `className` более эффективно.
 
 Эти стандартные пропсы DOM также поддерживаются для всех встроенных компонентов:
 
@@ -118,7 +118,7 @@
 -   [`onScroll`](https://developer.mozilla.org/docs/Web/API/Element/scroll_event): Функция обработчика `event`. Срабатывает, когда элемент был прокручен. Это событие не вызывает пузырьков.
 -   `onScrollCapture`: Версия `onScroll`, срабатывающая в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
 -   [`onSelect`](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/select_event): Функция обработчика `event`. Срабатывает после изменения выбора внутри редактируемого элемента, например, ввода. React расширяет событие `onSelect`, чтобы оно работало и для элементов `contentEditable={true}`. Кроме того, React расширяет его для срабатывания при пустом выделении и при редактировании (которое может повлиять на выделение).
--   `onSelectCapture`: Версия `onSelect`, которая срабатывает в [фазе захвата] (../learn/responding-to-events.md#capture-phase-events)
+-   `onSelectCapture`: Версия `onSelect`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events)
 -   [`onTouchCancel`](https://developer.mozilla.org/docs/Web/API/Element/touchcancel_event): Функция обработчика `TouchEvent`. Срабатывает, когда браузер отменяет сенсорное взаимодействие.
 -   `onTouchCancelCapture`: Версия `onTouchCancel`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
 -   [`onTouchEnd`](https://developer.mozilla.org/docs/Web/API/Element/touchend_event): Функция обработчика `TouchEvent`. Срабатывает при удалении одной или нескольких точек касания.
@@ -467,7 +467,7 @@ React также будет вызывать ваш обратный вызов 
 
     -   [`data`](https://developer.mozilla.org/docs/Web/API/InputEvent/data)
 
-### `KeyboardEvent` функция обработчика {/_keyboardevent-handler_/}
+### `KeyboardEvent` функция обработчика
 
 Тип обработчика событий для событий клавиатуры.
 
