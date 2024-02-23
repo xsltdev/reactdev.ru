@@ -105,7 +105,7 @@ export default Greeting;
 
 === "Результат"
 
-    ![Результат](memo-1.png)
+    <iframe src="https://codesandbox.io/embed/tvntmx?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note ""
 
@@ -215,7 +215,7 @@ export default Greeting;
 
 === "Результат"
 
-    ![Результат](memo-2.png)
+    <iframe src="https://codesandbox.io/embed/hl22qf?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Если вы установите переменную состояния в ее текущее значение, React пропустит повторный рендеринг вашего компонента даже без `memo`. Вы можете увидеть, что функция компонента будет вызвана лишний раз, но результат будет отброшен.
 
@@ -264,7 +264,7 @@ export default Greeting;
 
 === "Результат"
 
-    ![Результат](memo-3.png)
+    <iframe src="https://codesandbox.io/embed/vvm2v6?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Чтобы заставить ваш компонент перерисовываться только при изменении _части_ некоторого контекста, разделите ваш компонент на две части. Считывайте то, что вам нужно из контекста во внешнем компоненте, и передавайте это дочернему компоненту в виде пропса.
 

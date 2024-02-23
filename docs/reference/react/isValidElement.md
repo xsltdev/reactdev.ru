@@ -39,7 +39,7 @@ console.log(isValidElement({ age: 42 })); // false
 
 **Ограничения**
 
--   **В качестве элементов React рассматриваются только [JSX-теги](../../learn/writing-markup-with-jsx.md) и объекты, возвращаемые [`createElement`](createElement.md).** Например, даже если число типа `42` является допустимым React _узлом_ (и может быть возвращено из компонента), оно не является допустимым элементом React. Массивы и порталы, созданные с помощью [`createPortal`](createPortal.md), также _не_ считаются элементами React.
+-   **В качестве элементов React рассматриваются только [JSX-теги](../../learn/writing-markup-with-jsx.md) и объекты, возвращаемые [`createElement`](createElement.md).** Например, даже если число типа `42` является допустимым React _узлом_ (и может быть возвращено из компонента), оно не является допустимым элементом React. Массивы и порталы, созданные с помощью [`createPortal`](../react-dom/createPortal.md), также _не_ считаются элементами React.
 
 ## Использование
 
@@ -97,7 +97,7 @@ console.log(isValidElement(MyComponent)); // false
     Узел React может быть:
 
     -   Элемент React, созданный как `div` или `createElement('div')`.
-    -   Портал, созданный с помощью [`createPortal`](createPortal.md)
+    -   Портал, созданный с помощью [`createPortal`](../react-dom/createPortal.md)
     -   строка
     -   число
     -   `true`, `false`, `null` или `undefined` (которые не отображаются)

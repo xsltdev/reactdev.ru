@@ -4,7 +4,7 @@ status: experimental
 
 <Canary>
 
-`'use server'` is needed only if you're [using React Server Components](../../learn/start-a-new-react-project#bleeding-edge-react-frameworks) or building a library compatible with them.
+`'use server'` is needed only if you're [using React Server Components](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) or building a library compatible with them.
 
 </Canary>
 
@@ -39,10 +39,10 @@ Instead of individually marking functions with `'use server'`, you can add the d
 
 -   `'use server'` must be at the very beginning of their function or module; above any other code including imports (comments above directives are OK). They must be written with single or double quotes, not backticks.
 -   `'use server'` can only be used in server-side files. The resulting Server Actions can be passed to Client Components through props. See supported [types for serialization](#serializable-parameters-and-return-values).
--   To import a Server Action from [client code](/reference/react/use-client), the directive must be used on a module level.
+-   To import a Server Action from [client code](./use-client.md), the directive must be used on a module level.
 -   Because the underlying network calls are always asynchronous, `'use server'` can only be used on async functions.
 -   Always treat arguments to Server Actions as untrusted input and authorize any mutations. See [security considerations](#security).
--   Server Actions should be called in a [transition](/reference/react/useTransition). Server Actions passed to [`<form action>`](/reference/react-dom/components/form#props) or [`formAction`](/reference/react-dom/components/input#props) will automatically be called in a transition.
+-   Server Actions should be called in a [transition](./useTransition.md). Server Actions passed to [`<form action>`](../react-dom/components/form.md#props) or [`formAction`](../react-dom/components/input.md#props) will automatically be called in a transition.
 -   Server Actions are designed for mutations that update server-side state; they are not recommended for data fetching. Accordingly, frameworks implementing Server Actions typically process one action at a time and do not have a way to cache the return value.
 
 ### Security considerations {/_security_/}
@@ -55,7 +55,7 @@ In any Server Action, make sure to validate that the logged-in user is allowed t
 
 To prevent sending sensitive data from a Server Action, there are experimental taint APIs to prevent unique values and objects from being passed to client code.
 
-See [experimental_taintUniqueValue](/reference/react/experimental_taintUniqueValue) and [experimental_taintObjectReference](/reference/react/experimental_taintObjectReference).
+See [experimental_taintUniqueValue](./experimental_taintUniqueValue.md) and [experimental_taintObjectReference](./experimental_taintObjectReference.md).
 
 </Wip>
 
@@ -93,13 +93,13 @@ Notably, these are not supported:
 -   Objects that are instances of any class (other than the built-ins mentioned) or objects with [a null prototype](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object#null-prototype_objects)
 -   Symbols not registered globally, ex. `Symbol('my new symbol')`
 
-Supported serializable return values are the same as [serializable props](/reference/react/use-client#passing-props-from-server-to-client-components) for a boundary Client Component.
+Supported serializable return values are the same as [serializable props](./use-client.md#passing-props-from-server-to-client-components) for a boundary Client Component.
 
 ## Использование {#usage}
 
 ### Server Actions in forms {/_server-actions-in-forms_/}
 
-The most common use case of Server Actions will be calling server functions that mutate data. On the browser, the [HTML form element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form) is the traditional approach for a user to submit a mutation. With React Server Components, React introduces first-class support for Server Actions in [forms](/reference/react-dom/components/form).
+The most common use case of Server Actions will be calling server functions that mutate data. On the browser, the [HTML form element](https://developer.mozilla.org/docs/Web/HTML/Element/form) is the traditional approach for a user to submit a mutation. With React Server Components, React introduces first-class support for Server Actions in [forms](../react-dom/components/form.md).
 
 Here is a form that allows a user to request a username.
 
@@ -128,7 +128,7 @@ By passing a Server Action to the form `action`, React can [progressively enhanc
 
 In the username request form, there might be the chance that a username is not available. `requestUsername` should tell us if it fails or not.
 
-To update the UI based on the result of a Server Action while supporting progressive enhancement, use [`useFormState`](/reference/react-dom/hooks/useFormState).
+To update the UI based on the result of a Server Action while supporting progressive enhancement, use [`useFormState`](../react-dom/hooks/useFormState.md).
 
 ```js
 // requestUsername.js
@@ -172,13 +172,13 @@ function UsernameForm() {
 }
 ```
 
-Note that like most Hooks, `useFormState` can only be called in <CodeStep step={1}>[client code](/reference/react/use-client)</CodeStep>.
+Note that like most Hooks, `useFormState` can only be called in <CodeStep step={1}>[client code](./use-client.md)</CodeStep>.
 
 ### Calling a Server Action outside of `<form>` {/_calling-a-server-action-outside-of-form_/}
 
 Server Actions are exposed server endpoints and can be called anywhere in client code.
 
-When using a Server Action outside of a [form](/reference/react-dom/components/form), call the Server Action in a [transition](/reference/react/useTransition), which allows you to display a loading indicator, show [optimistic state updates](/reference/react/useOptimistic), and handle unexpected errors. Forms will automatically wrap Server Actions in transitions.
+When using a Server Action outside of a [form](../react-dom/components/form.md), call the Server Action in a [transition](./useTransition.md), which allows you to display a loading indicator, show [optimistic state updates](./useOptimistic.md), and handle unexpected errors. Forms will automatically wrap Server Actions in transitions.
 
 ```js {9-12}
 import incrementLike from './actions';

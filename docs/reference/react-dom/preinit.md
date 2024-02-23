@@ -10,7 +10,7 @@ The `preinit` function is currently only available in React's Canary and experim
 
 <Note>
 
-[React-based frameworks](../../learn/start-a-new-react-project) frequently handle resource loading for you, so you might not have to call this API yourself. Consult your framework's documentation for details.
+[React-based frameworks](../../learn/start-a-new-react-project.md) frequently handle resource loading for you, so you might not have to call this API yourself. Consult your framework's documentation for details.
 
 </Note>
 
@@ -91,7 +91,7 @@ function AppRoot() {
 }
 ```
 
-If you want the browser to download the script but not to execute it right away, use [`preload`](/reference/react-dom/preload) instead. If you want to load an ESM module, use [`preinitModule`](/reference/react-dom/preinitModule).
+If you want the browser to download the script but not to execute it right away, use [`preload`](./preload.md) instead. If you want to load an ESM module, use [`preinitModule`](./preinitModule.md).
 
 <Solution />
 
@@ -108,7 +108,7 @@ function AppRoot() {
 
 The `precedence` option, which is required, lets you control the order of stylesheets within the document. Stylesheets with higher precedence can overrule those with lower precedence.
 
-If you want to download the stylesheet but not to insert it into the document right away, use [`preload`](/reference/react-dom/preload) instead.
+If you want to download the stylesheet but not to insert it into the document right away, use [`preload`](./preload.md) instead.
 
 <Solution />
 

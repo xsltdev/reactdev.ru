@@ -10,7 +10,7 @@ The `preloadModule` function is currently only available in React's Canary and e
 
 <Note>
 
-[React-based frameworks](../../learn/start-a-new-react-project) frequently handle resource loading for you, so you might not have to call this API yourself. Consult your framework's documentation for details.
+[React-based frameworks](../../learn/start-a-new-react-project.md) frequently handle resource loading for you, so you might not have to call this API yourself. Consult your framework's documentation for details.
 
 </Note>
 
@@ -87,7 +87,7 @@ function AppRoot() {
 }
 ```
 
-If you want the browser to start executing the module immediately (rather than just downloading it), use [`preinitModule`](/reference/react-dom/preinitModule) instead. If you want to load a script that isn't an ESM module, use [`preload`](/reference/react-dom/preload).
+If you want the browser to start executing the module immediately (rather than just downloading it), use [`preinitModule`](./preinitModule.md) instead. If you want to load a script that isn't an ESM module, use [`preload`](./preload.md).
 
 ### Preloading in an event handler {/_preloading-in-an-event-handler_/}
 

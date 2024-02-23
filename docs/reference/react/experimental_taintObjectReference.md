@@ -29,7 +29,7 @@ This API is only available inside React Server Components.
 experimental_taintObjectReference(message, object);
 ```
 
-To prevent passing a key, hash or token, see [`taintUniqueValue`](/reference/react/experimental_taintUniqueValue).
+To prevent passing a key, hash or token, see [`taintUniqueValue`](./experimental_taintUniqueValue.md).
 
 </Intro>
 

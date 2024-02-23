@@ -4,7 +4,7 @@
 
     Этот API будет удален в одной из будущих основных версий React.
 
-`findDOMNode` находит узел DOM браузера для экземпляра React [class component](Component.md).
+`findDOMNode` находит узел DOM браузера для экземпляра React [class component](../react/Component.md).
 
 ```js
 const domNode = findDOMNode(componentInstance);
@@ -14,7 +14,7 @@ const domNode = findDOMNode(componentInstance);
 
 ### `findDOMNode(componentInstance)`
 
-Вызывает `findDOMNode` для поиска узла DOM браузера для данного экземпляра React [class component](Component.md).
+Вызывает `findDOMNode` для поиска узла DOM браузера для данного экземпляра React [class component](../react/Component.md).
 
 ```js
 import { findDOMNode } from 'react-dom';
@@ -24,7 +24,7 @@ const domNode = findDOMNode(componentInstance);
 
 #### Параметры
 
--   `componentInstance`: Экземпляр подкласса [`Component`](Component.md). Например, `this` внутри компонента класса.
+-   `componentInstance`: Экземпляр подкласса [`Component`](../react/Component.md). Например, `this` внутри компонента класса.
 
 #### Возвращает
 
@@ -32,7 +32,7 @@ const domNode = findDOMNode(componentInstance);
 
 #### Ограничения
 
--   Компонент может возвращать массив или [фрагмент](Fragment.md) с несколькими дочерними элементами. В этом случае `findDOMNode` вернет узел DOM, соответствующий первому непустому дочернему компоненту.
+-   Компонент может возвращать массив или [фрагмент](../react/Fragment.md) с несколькими дочерними элементами. В этом случае `findDOMNode` вернет узел DOM, соответствующий первому непустому дочернему компоненту.
 -   `findDOMNode` работает только для смонтированных компонентов (то есть компонентов, которые были помещены в DOM). Если вы попытаетесь вызвать эту функцию на компоненте, который еще не смонтирован (например, вызвать `findDOMNode()` в `render()` на компоненте, который еще не создан), будет выброшено исключение.
 -   `findDOMNode` возвращает результат только на момент вызова. Если дочерний компонент позже отобразит другой узел, у вас не будет возможности получить уведомление об этом изменении.
 -   `findDOMNode` принимает экземпляр компонента класса, поэтому его нельзя использовать с компонентами функций.
@@ -41,7 +41,7 @@ const domNode = findDOMNode(componentInstance);
 
 ### Нахождение корневого DOM-узла компонента класса
 
-Вызовите `findDOMNode` с экземпляром [class component](Component.md) (обычно `this`), чтобы найти DOM-узел, который он отобразил.
+Вызовите `findDOMNode` с экземпляром [class component](../react/Component.md) (обычно `this`), чтобы найти DOM-узел, который он отобразил.
 
 ```js
 class AutoselectingInput extends Component {
@@ -143,7 +143,7 @@ class AutoselectingInput extends Component {
     export default AutoselectingInput;
     ```
 
-Это нарушит код, поскольку теперь `findDOMNode(this)` находит DOM-узел `<div>`, но код ожидает DOM-узел `<input>`. Чтобы избежать подобных проблем, используйте [`createRef`](createRef.md) для управления конкретным узлом DOM.
+Это нарушит код, поскольку теперь `findDOMNode(this)` находит DOM-узел `<div>`, но код ожидает DOM-узел `<input>`. Чтобы избежать подобных проблем, используйте [`createRef`](../react/createRef.md) для управления конкретным узлом DOM.
 
 В этом примере `findDOMNode` больше не используется. Вместо этого `inputRef = createRef(null)` определяется как поле экземпляра класса. Для чтения DOM-узла из него можно использовать `this.inputRef.current`. Чтобы присоединить его к JSX, вы рендерите `<input ref={this.inputRef} />`. Это соединяет код, использующий узел DOM, с его JSX:
 
@@ -193,7 +193,7 @@ class AutoselectingInput extends Component {
     export default AutoselectingInput;
     ```
 
-В современном React без компонентов классов эквивалентный код будет вызывать [`useRef`](useRef.md) вместо этого:
+В современном React без компонентов классов эквивалентный код будет вызывать [`useRef`](../react/useRef.md) вместо этого:
 
 === "App.js"
 
@@ -292,7 +292,7 @@ class AutoselectingInput extends Component {
 
 **1.** `AutoSelectingInput` должен объявить ref, как в предыдущем примере, и передать его в `<MyInput>`.
 
-**2.** `MyInput` должен быть объявлен с [`forwardRef`](forwardRef.md), чтобы принять эту ссылку и передать ее узлу `<input>`.
+**2.** `MyInput` должен быть объявлен с [`forwardRef`](../react/forwardRef.md), чтобы принять эту ссылку и передать ее узлу `<input>`.
 
 Эта версия делает это, поэтому больше не требуется `findDOMNode`:
 

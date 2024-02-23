@@ -4,7 +4,7 @@
 
     Этот API будет удален в одной из будущих основных версий React.
 
-    В React 18 функция `unmountComponentAtNode` была заменена на [`root.unmount()`](client-createRoot.md#root-unmount).
+    В React 18 функция `unmountComponentAtNode` была заменена на [`root.unmount()`](./client/createRoot.md#root-unmount).
 
 `unmountComponentAtNode` удаляет смонтированный компонент React из DOM.
 

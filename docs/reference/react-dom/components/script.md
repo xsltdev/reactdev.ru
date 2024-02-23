@@ -37,7 +37,7 @@ To add inline or external scripts to your document, render the [built-in browser
 
 #### Props {/_props_/}
 
-`<script>` supports all [common element props.](/reference/react-dom/components/common#props)
+`<script>` supports all [common element props.](./common.md#props)
 
 It should have _either_ `children` or a `src` prop.
 
@@ -114,7 +114,7 @@ export default function Page() {
 </SandpackWithHTMLOutput>
 
 <Note>
-When you want to use a script, it can be beneficial to call the [preinit](/reference/react-dom/preinit) function. Calling this function may allow the browser to start fetching the script earlier than if you just render a `<script>` component, for example by sending an [HTTP Early Hints response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103).
+When you want to use a script, it can be beneficial to call the [preinit](../preinit.md) function. Calling this function may allow the browser to start fetching the script earlier than if you just render a `<script>` component, for example by sending an [HTTP Early Hints response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103).
 </Note>
 
 ### Rendering an inline script {/_rendering-an-inline-script_/}

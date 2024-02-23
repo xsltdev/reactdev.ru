@@ -42,7 +42,7 @@ To create interactive controls for submitting information, render the [built-in 
 
 #### Props {/_props_/}
 
-`<form>` supports all [common element props.](/reference/react-dom/components/common#props)
+`<form>` supports all [common element props.](./common.md#props)
 
 [`action`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action): a URL or function. When a URL is passed to `action` the form will behave like the HTML form component. When a function is passed to `action` the function will handle the form submission. The function passed to `action` may be async and will be called with a single argument containing the [form data](https://developer.mozilla.org/en-US/docs/Web/API/FormData) of the submitted form. The `action` prop can be overridden by a `formAction` attribute on a `<button>`, `<input type="submit">`, or `<input type="image">` component.
 
@@ -91,7 +91,7 @@ export default function Search() {
 
 ### Handle form submission with a Server Action {/_handle-form-submission-with-a-server-action_/}
 
-Render a `<form>` with an input and submit button. Pass a Server Action (a function marked with [`'use server'`](/reference/react/use-server)) to the `action` prop of form to run the function when the form is submitted.
+Render a `<form>` with an input and submit button. Pass a Server Action (a function marked with [`'use server'`](../../react/use-server.md)) to the `action` prop of form to run the function when the form is submitted.
 
 Passing a Server Action to `<form action>` allow users to submit forms without JavaScript enabled or before the code has loaded. This is beneficial to users who have a slow connection, device, or have JavaScript disabled and is similar to the way forms work when a URL is passed to the `action` prop.
 
@@ -141,7 +141,7 @@ function AddToCart({ productId }) {
 }
 ```
 
-When `<form>` is rendered by a [Server Component](/reference/react/use-client), and a [Server Action](/reference/react/use-server) is passed to the `<form>`'s `action` prop, the form is [progressively enhanced](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement).
+When `<form>` is rendered by a [Server Component](../../react/use-client.md), and a [Server Action](../../react/use-server.md) is passed to the `<form>`'s `action` prop, the form is [progressively enhanced](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement).
 
 ### Display a pending state during form submission {/_display-a-pending-state-during-form-submission_/}
 
@@ -197,7 +197,7 @@ export async function submitForm(query) {
 
 </Sandpack>
 
-To learn more about the `useFormStatus` Hook see the [reference documentation](/reference/react-dom/hooks/useFormStatus).
+To learn more about the `useFormStatus` Hook see the [reference documentation](../hooks/useFormStatus.md).
 
 ### Optimistically updating form data {/_optimistically-updating-form-data_/}
 
@@ -292,7 +292,7 @@ export async function deliverMessage(message) {
 </Sandpack>
 
 [//]: # 'Uncomment the next line, and delete this line after the `useOptimistic` reference documentatino page is published'
-[//]: # 'To learn more about the `useOptimistic` Hook see the [reference documentation](/reference/react/hooks/useOptimistic).'
+[//]: # 'To learn more about the `useOptimistic` Hook see the [reference documentation](../../react/hooks/useOptimistic.md).'
 
 ### Handling form submission errors {/_handling-form-submission-errors_/}
 
@@ -344,11 +344,11 @@ export default function Search() {
 
 Displaying a form submission error message before the JavaScript bundle loads for progressive enhancement requires that:
 
-1. `<form>` be rendered by a [Server Component](/reference/react/use-client)
-1. the function passed to the `<form>`'s `action` prop be a [Server Action](/reference/react/use-server)
-1. the `useFormState` Hook be used to display the error message
+1.  `<form>` be rendered by a [Server Component](../../react/use-client.md)
+2.  the function passed to the `<form>`'s `action` prop be a [Server Action](../../react/use-server.md)
+3.  the `useFormState` Hook be used to display the error message
 
-`useFormState` takes two parameters: a [Server Action](/reference/react/use-server) and an initial state. `useFormState` returns two values, a state variable and an action. The action returned by `useFormState` should be passed to the `action` prop of the form. The state variable returned by `useFormState` can be used to displayed an error message. The value returned by the [Server Action](/reference/react/use-server) passed to `useFormState` will be used to update the state variable.
+`useFormState` takes two parameters: a [Server Action](../../react/use-server.md) and an initial state. `useFormState` returns two values, a state variable and an action. The action returned by `useFormState` should be passed to the `action` prop of the form. The state variable returned by `useFormState` can be used to displayed an error message. The value returned by the [Server Action](../../react/use-server.md) passed to `useFormState` will be used to update the state variable.
 
 <Sandpack>
 
@@ -420,7 +420,7 @@ export async function signUpNewUser(newEmail) {
 
 </Sandpack>
 
-Learn more about updating state from a form action with the [`useFormState`](/reference/react-dom/hooks/useFormState) docs
+Learn more about updating state from a form action with the [`useFormState`](../hooks/useFormState.md) docs
 
 ### Handling multiple submission types {/_handling-multiple-submission-types_/}
 

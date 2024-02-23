@@ -10,7 +10,7 @@ The `preload` function is currently only available in React's Canary and experim
 
 <Note>
 
-[React-based frameworks](../../learn/start-a-new-react-project) frequently handle resource loading for you, so you might not have to call this API yourself. Consult your framework's documentation for details.
+[React-based frameworks](../../learn/start-a-new-react-project.md) frequently handle resource loading for you, so you might not have to call this API yourself. Consult your framework's documentation for details.
 
 </Note>
 
@@ -96,7 +96,7 @@ function AppRoot() {
 }
 ```
 
-If you want the browser to start executing the script immediately (rather than just downloading it), use [`preinit`](/reference/react-dom/preinit) instead. If you want to load an ESM module, use [`preloadModule`](/reference/react-dom/preloadModule).
+If you want the browser to start executing the script immediately (rather than just downloading it), use [`preinit`](./preinit.md) instead. If you want to load an ESM module, use [`preloadModule`](./preloadModule.md).
 
 <Solution />
 
@@ -111,7 +111,7 @@ function AppRoot() {
 }
 ```
 
-If you want the stylesheet to be inserted into the document immediately (which means the browser will start parsing it immediately rather than just downloading it), use [`preinit`](/reference/react-dom/preinit) instead.
+If you want the stylesheet to be inserted into the document immediately (which means the browser will start parsing it immediately rather than just downloading it), use [`preinit`](./preinit.md) instead.
 
 <Solution />
 

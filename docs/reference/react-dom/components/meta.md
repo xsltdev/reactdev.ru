@@ -44,7 +44,7 @@ To add document metadata, render the [built-in browser `<meta>` component](https
 
 #### Props {/_props_/}
 
-`<meta>` supports all [common element props.](/reference/react-dom/components/common#props)
+`<meta>` supports all [common element props.](./common.md#props)
 
 It should have _exactly one_ of the following props: `name`, `httpEquiv`, `charset`, `itemProp`. The `<meta>` component does something different depending on which of these props is specified.
 

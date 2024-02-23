@@ -28,7 +28,7 @@ const [state, formAction] = useFormState(fn, initialState);
 
 {/_ TODO T164397693: link to actions documentation once it exists _/}
 
-Call `useFormState` at the top level of your component to create component state that is updated [when a form action is invoked](/reference/react-dom/components/form). You pass `useFormState` an existing form action function as well as an initial state, and it returns a new action that you use in your form, along with the latest form state. The latest form state is also passed to the function that you provided.
+Call `useFormState` at the top level of your component to create component state that is updated [when a form action is invoked](../components/form.md). You pass `useFormState` an existing form action function as well as an initial state, and it returns a new action that you use in your form, along with the latest form state. The latest form state is also passed to the function that you provided.
 
 ```js
 import { useFormState } from 'react-dom';

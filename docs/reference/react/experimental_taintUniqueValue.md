@@ -17,7 +17,7 @@ You can try it by upgrading React packages to the most recent experimental versi
 
 Experimental versions of React may contain bugs. Don't use them in production.
 
-This API is only available inside [React Server Components](/reference/react/use-client).
+This API is only available inside [React Server Components](./use-client.md).
 
 </Wip>
 
@@ -29,7 +29,7 @@ This API is only available inside [React Server Components](/reference/react/use
 taintUniqueValue(errMessage, lifetime, value);
 ```
 
-To prevent passing an object containing sensitive data, see [`taintObjectReference`](/reference/react/experimental_taintObjectReference).
+To prevent passing an object containing sensitive data, see [`taintObjectReference`](./experimental_taintObjectReference.md).
 
 </Intro>
 
