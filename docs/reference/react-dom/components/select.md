@@ -46,11 +46,11 @@
 -   [`multiple`](https://hcdev.ru/html/select/#multiple): Булево значение. Если `true`, браузер разрешает множественный выбор.
 -   [`name`](https://hcdev.ru/html/select/#name): Строка. Задает имя для этого поля выбора, которое передается вместе с формой.
 -   `onChange`: Функция обработчика [`event`](components-common.md#event-handler). Требуется для управляемых полей выбора. Срабатывает немедленно, когда пользователь выбирает другой вариант. Ведет себя как событие браузера [`input`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event).
--   `onChangeCapture`: Версия `onChange`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onChangeCapture`: Версия `onChange`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onInput`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event): Функция обработчика [`event`](components-common.md#event-handler). Срабатывает немедленно, когда значение изменяется пользователем. По историческим причинам в React идиоматично использовать `onChange`, которая работает аналогично.
--   `onInputCapture`: Версия `onInput`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onInputCapture`: Версия `onInput`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onInvalid`](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/invalid_event): Функция обработчика [`event`](components-common.md#event-handler). Срабатывает, если ввод не прошел валидацию при отправке формы. В отличие от встроенного события `invalid`, событие React `onInvalid` вызывает всплытие.
--   `onInvalidCapture`: Версия `onInvalid`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onInvalidCapture`: Версия `onInvalid`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`required`](https://hcdev.ru/html/select/#required): Булево значение. Если `true`, значение должно быть предоставлено для отправки формы.
 -   [`size`](https://hcdev.ru/html/select/#size): Число. Для селектов `multiple={true}` определяет желаемое количество изначально видимых элементов.
 

@@ -8,7 +8,7 @@ status: deprecated
 
     `createRef` в основном используется для [компонентов класса](Component.md). Функциональные компоненты обычно полагаются на [`useRef`](useRef.md).
 
-`createRef` создает объект [ref](../learn/referencing-values-with-refs.md), который может содержать произвольное значение.
+`createRef` создает объект [ref](../../learn/referencing-values-with-refs.md), который может содержать произвольное значение.
 
 <!-- 0001.part.md -->
 
@@ -25,7 +25,7 @@ class MyInput extends Component {
 
 ### `createRef()`
 
-Вызовите `createRef` для объявления [ссылки](../learn/referencing-values-with-refs.md) внутри [компонента класса.](Component.md)
+Вызовите `createRef` для объявления [ссылки](../../learn/referencing-values-with-refs.md) внутри [компонента класса.](Component.md)
 
 <!-- 0003.part.md -->
 

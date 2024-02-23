@@ -8,7 +8,7 @@ status: deprecated
 
     Использование `Children` является необычным и может привести к хрупкому коду.
 
-`Children` позволяет вам манипулировать и преобразовывать JSX, который вы получили в качестве [`children` prop.](../learn/passing-props-to-a-component.md#passing-jsx-as-children).
+`Children` позволяет вам манипулировать и преобразовывать JSX, который вы получили в качестве [`children` prop.](../../learn/passing-props-to-a-component.md#passing-jsx-as-children).
 
 ```js
 const mappedChildren = Children.map(children, (child) => (
@@ -37,7 +37,7 @@ function RowList({ children }) {
 
 **Параметры**
 
--   `children`: Значение пропса [`children`](../learn/passing-props-to-a-component.md#passing-jsx-as-children), полученного вашим компонентом.
+-   `children`: Значение пропса [`children`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children), полученного вашим компонентом.
 
 **Возвращает**
 
@@ -65,7 +65,7 @@ function SeparatorList({ children }) {
 
 **Параметры**
 
--   `children`: Значение свойства [`children`](../learn/passing-props-to-a-component.md#passing-jsx-as-children), полученного вашим компонентом.
+-   `children`: Значение свойства [`children`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children), полученного вашим компонентом.
 -   `fn`: Функция, которую вы хотите запускать для каждого ребенка, аналогично обратному вызову [метода массива `forEach`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach). Она будет вызвана с дочерним элементом в качестве первого аргумента и его индексом в качестве второго аргумента. Индекс начинается с `0` и увеличивается при каждом вызове.
 -   **опционально** `thisArg`: Значение [`this`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/this), с которым должна быть вызвана функция `fn`. Если опущено, то `undefined`.
 
@@ -97,7 +97,7 @@ function RowList({ children }) {
 
 **Параметры**
 
--   `children`: Значение свойства [`children`](../learn/passing-props-to-a-component.md#passing-jsx-as-children), полученного вашим компонентом.
+-   `children`: Значение свойства [`children`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children), полученного вашим компонентом.
 -   `fn`: Функция отображения, аналогичная обратному вызову [array `map` method](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/map). Она будет вызвана с дочерним элементом в качестве первого аргумента и его индексом в качестве второго аргумента. Индекс начинается с `0` и увеличивается при каждом вызове. Вы должны вернуть узел React из этой функции. Это может быть пустой узел (`null`, `undefined` или булево значение), строка, число, элемент React или массив других узлов React.
 -   **опционально** `thisArg`: Значение [`this`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/this), с которым должна быть вызвана функция `fn`. Если оно опущено, то `undefined`.
 
@@ -125,7 +125,7 @@ function Box({ children }) {
 
 **Параметры**
 
--   `children`: Значение свойства [`children`](../learn/passing-props-to-a-component.md#passing-jsx-as-children), полученного вашим компонентом.
+-   `children`: Значение свойства [`children`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children), полученного вашим компонентом.
 
 **Возвращает**
 
@@ -153,7 +153,7 @@ export default function ReversedList({ children }) {
 
 **Параметры**
 
--   `children`: Значение параметра [`children`](/learn/passing-props-to-a-component#passing-jsx-as-children), полученное вашим компонентом.
+-   `children`: Значение параметра [`children`](../../learn/passing-props-to-a-component#passing-jsx-as-children), полученное вашим компонентом.
 
 **Возвращает**
 
@@ -167,7 +167,7 @@ export default function ReversedList({ children }) {
 
 ### Преобразование детей
 
-Для преобразования дочерних JSX, которые ваш компонент [получает как пропс `children`,](../learn/passing-props-to-a-component.md#passing-jsx-as-children) вызовите `Children.map`:
+Для преобразования дочерних JSX, которые ваш компонент [получает как пропс `children`,](../../learn/passing-props-to-a-component.md#passing-jsx-as-children) вызовите `Children.map`:
 
 ```js
 import { Children } from 'react';
@@ -209,7 +209,7 @@ function RowList({ children }) {
 </div>
 ```
 
-`Children.map` похож на [на преобразование массивов с помощью `map()`](../learn/rendering-lists.md) Разница в том, что структура данных `children` считается _очевидной._ Это означает, что даже если иногда это массив, вы не должны предполагать, что это массив или любой другой конкретный тип данных. Вот почему вы должны использовать `Children.map`, если вам нужно преобразовать его.
+`Children.map` похож на [на преобразование массивов с помощью `map()`](../../learn/rendering-lists.md) Разница в том, что структура данных `children` считается _очевидной._ Это означает, что даже если иногда это массив, вы не должны предполагать, что это массив или любой другой конкретный тип данных. Вот почему вы должны использовать `Children.map`, если вам нужно преобразовать его.
 
 === "App.js"
 
@@ -249,7 +249,7 @@ function RowList({ children }) {
 
     На практике структура данных `children` часто представляется в виде внутреннего массива. Однако если есть только один ребенок, то React не будет создавать дополнительный массив, так как это приведет к ненужным затратам памяти. Пока вы используете методы `Children` вместо прямого интроспекции пропса `children`, ваш код не сломается, даже если React изменит способ реализации структуры данных.
 
-    Даже когда `children` является массивом, `Children.map` имеет полезное специальное поведение. Например, `Children.map` объединяет [keys](../learn/rendering-lists.md#keeping-list-items-in-order-with-key) на возвращаемых элементах с ключами на `children`, которые вы ему передали. Это гарантирует, что оригинальные дочерние элементы JSX не "потеряют" ключи, даже если они будут обернуты, как в примере выше.
+    Даже когда `children` является массивом, `Children.map` имеет полезное специальное поведение. Например, `Children.map` объединяет [keys](../../learn/rendering-lists.md#keeping-list-items-in-order-with-key) на возвращаемых элементах с ключами на `children`, которые вы ему передали. Это гарантирует, что оригинальные дочерние элементы JSX не "потеряют" ключи, даже если они будут обернуты, как в примере выше.
 
 !!!warning ""
 
@@ -431,7 +431,7 @@ function RowList({ children }) {
     import { Children } from 'react';
     ```
 
-    Не путайте это с [использованием свойства `children`](../learn/passing-props-to-a-component.md#passing-jsx-as-children) (строчная буква `c`), что хорошо и поощряется.
+    Не путайте это с [использованием свойства `children`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children) (строчная буква `c`), что хорошо и поощряется.
 
 ### Раскрытие нескольких компонентов
 

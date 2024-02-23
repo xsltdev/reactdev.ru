@@ -42,13 +42,13 @@
 -   [`minLength`](https://hcdev.ru/html/textarea/#minlength): Число. Определяет минимальную длину текста.
 -   [`name`](https://hcdev.ru/html/textarea/#name): Строка. Задает имя для этого ввода, который передается вместе с формой.
 -   `onChange`: Функция обработчика [`event`](components-common.md#event-handler). Требуется для управляемых текстовых областей. Срабатывает немедленно, когда значение ввода изменяется пользователем (например, срабатывает при каждом нажатии клавиши). Поведение аналогично браузерному событию [`input`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event).
--   `onChangeCapture`: Версия `onChange`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onChangeCapture`: Версия `onChange`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onInput`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event): Функция обработчика [`event`](components-common.md#event-handler). функция. Срабатывает немедленно, когда значение изменяется пользователем. По историческим причинам в React идиоматично использовать `onChange`, которая работает аналогично.
--   `onInputCapture`: Версия `onInput`, которая срабатывает в [фазе захвата](../learn/responding-to-events.md#capture-phase-events).
+-   `onInputCapture`: Версия `onInput`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
 -   [`onInvalid`](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/invalid_event): Функция обработчика [`event`](components-common.md#event-handler). Срабатывает, если ввод не прошел валидацию при отправке формы. В отличие от встроенного события `invalid`, событие React `onInvalid` всплывает.
--   `onInvalidCapture`: Версия `onInvalid`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onInvalidCapture`: Версия `onInvalid`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`onSelect`](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/select_event): Функция обработчика [`Event` handler](components-common.md#event-handler). Срабатывает после изменения выделения внутри `<textarea>`. В React событие `onSelect` расширяется, чтобы также срабатывать при пустом выделении и при редактировании (которое может повлиять на выделение).
--   `onSelectCapture`: Версия `onSelect`, которая срабатывает в [фазе захвата.](../learn/responding-to-events.md#capture-phase-events)
+-   `onSelectCapture`: Версия `onSelect`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`placeholder`](https://hcdev.ru/html/textarea/#placeholder): Строка. Отображается затемненным цветом, когда значение текстовой области пусто.
 -   [`readOnly`](https://hcdev.ru/html/textarea/#readonly): Булево значение. Если значение `true`, текстовая область не редактируется пользователем.
 -   [`required`](https://hcdev.ru/html/textarea/#required): Булево значение. Если `true`, то для отправки формы необходимо указать значение.
@@ -340,7 +340,7 @@ function handleChange(e) {
 }
 ```
 
-Если это не устраняет проблему, возможно, текстовая область удаляется и добавляется из DOM при каждом нажатии клавиши. Это может произойти, если вы случайно [сбрасываете состояние](../learn/preserving-and-resetting-state.md) при каждом повторном рендере. Например, это может произойти, если текстовая область или один из ее родителей всегда получает другой атрибут `key`, или если вы вложили определения компонентов (что не разрешено в React и заставляет "внутренний" компонент перемонтироваться при каждом рендере).
+Если это не устраняет проблему, возможно, текстовая область удаляется и добавляется из DOM при каждом нажатии клавиши. Это может произойти, если вы случайно [сбрасываете состояние](../../../learn/preserving-and-resetting-state.md) при каждом повторном рендере. Например, это может произойти, если текстовая область или один из ее родителей всегда получает другой атрибут `key`, или если вы вложили определения компонентов (что не разрешено в React и заставляет "внутренний" компонент перемонтироваться при каждом рендере).
 
 ### Я получаю ошибку: "Компонент изменяет неконтролируемый вход на контролируемый"
 

@@ -39,7 +39,7 @@ console.log(isValidElement({ age: 42 })); // false
 
 **Ограничения**
 
--   **В качестве элементов React рассматриваются только [JSX-теги](../learn/writing-markup-with-jsx.md) и объекты, возвращаемые [`createElement`](createElement.md).** Например, даже если число типа `42` является допустимым React _узлом_ (и может быть возвращено из компонента), оно не является допустимым элементом React. Массивы и порталы, созданные с помощью [`createPortal`](createPortal.md), также _не_ считаются элементами React.
+-   **В качестве элементов React рассматриваются только [JSX-теги](../../learn/writing-markup-with-jsx.md) и объекты, возвращаемые [`createElement`](createElement.md).** Например, даже если число типа `42` является допустимым React _узлом_ (и может быть возвращено из компонента), оно не является допустимым элементом React. Массивы и порталы, созданные с помощью [`createPortal`](createPortal.md), также _не_ считаются элементами React.
 
 ## Использование
 
@@ -49,7 +49,7 @@ console.log(isValidElement({ age: 42 })); // false
 
 React-элементы - это:
 
--   Значения, создаваемые при написании [JSX-тега] (../learn/writing-markup-with-jsx.md)
+-   Значения, создаваемые при написании [JSX-тега] (../../learn/writing-markup-with-jsx.md)
 -   Значения, создаваемые вызовом [`createElement`](createElement.md)
 
 Для элементов React функция `isValidElement` возвращает значение `true`:

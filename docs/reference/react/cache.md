@@ -3,9 +3,9 @@ status: experimental
 ---
 
 <Canary>
-* `cache` is only for use with [React Server Components](/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components). See [frameworks](/learn/start-a-new-react-project#bleeding-edge-react-frameworks) that support React Server Components.
+* `cache` is only for use with [React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components). See [frameworks](../../learn/start-a-new-react-project#bleeding-edge-react-frameworks) that support React Server Components.
 
--   `cache` is only available in React’s [Canary](/community/versioning-policy#canary-channel) and [experimental](/community/versioning-policy#experimental-channel) channels. Please ensure you understand the limitations before using `cache` in production. Learn more about [React's release channels here](/community/versioning-policy#all-release-channels).
+-   `cache` is only available in React’s [Canary](https://react.dev/community/versioning-policy#canary-channel) and [experimental](https://react.dev/community/versioning-policy#experimental-channel) channels. Please ensure you understand the limitations before using `cache` in production. Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
     </Canary>
 
 <Intro>
@@ -67,7 +67,7 @@ The optimization of caching return values based on inputs is known as [_memoizat
 -   React will invalidate the cache for all memoized functions for each server request.
 -   Each call to `cache` creates a new function. This means that calling `cache` with the same function multiple times will return different memoized functions that do not share the same cache.
 -   `cachedFn` will also cache errors. If `fn` throws an error for certain arguments, it will be cached, and the same error is re-thrown when `cachedFn` is called with those same arguments.
--   `cache` is for use in [Server Components](/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components) only.
+-   `cache` is for use in [Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components) only.
 
 ---
 
@@ -310,7 +310,7 @@ async function DemoProfile() {
 
 React only provides cache access to the memoized function in a component. When calling <CodeStep step={1}>`getUser`</CodeStep> outside of a component, it will still evaluate the function but not read or update the cache.
 
-This is because cache access is provided through a [context](/learn/passing-data-deeply-with-context) which is only accessible from a component.
+This is because cache access is provided through a [context](../../learn/passing-data-deeply-with-context) which is only accessible from a component.
 
 </Pitfall>
 

@@ -1,6 +1,6 @@
 # createContext
 
-`createContext` позволяет вам создать [контекст](../learn/passing-data-deeply-with-context.md), который компоненты могут предоставить или прочитать.
+`createContext` позволяет вам создать [контекст](../../learn/passing-data-deeply-with-context.md), который компоненты могут предоставить или прочитать.
 
 <!-- 0001.part.md -->
 
@@ -102,7 +102,7 @@ function Button() {
 
 ### Создание контекста
 
-Контекст позволяет компонентам [передавать информацию вглубь](../learn/passing-data-deeply-with-context.md) без явной передачи пропсов.
+Контекст позволяет компонентам [передавать информацию вглубь](../../learn/passing-data-deeply-with-context.md) без явной передачи пропсов.
 
 Вызовите `createContext` вне любых компонентов для создания одного или нескольких контекстов.
 
@@ -218,7 +218,7 @@ function App() {
 
 <!-- 0022.part.md -->
 
-Это работает аналогично [импорту и экспорту компонентов](../learn/importing-and-exporting-components.md).
+Это работает аналогично [импорту и экспорту компонентов](../../learn/importing-and-exporting-components.md).
 
 ## Устранение неполадок
 
