@@ -1,8 +1,10 @@
+---
+description: useTransition - это хук React, который позволяет обновлять состояние без блокировки пользовательского интерфейса
+---
+
 # useTransition
 
-**`useTransition`** - это хук React, который позволяет обновлять состояние без блокировки пользовательского интерфейса.
-
-<!-- 0001.part.md -->
+<big>**`useTransition`** - это хук React, который позволяет обновлять состояние без блокировки пользовательского интерфейса.</big>
 
 ```js
 const [isPending, startTransition] = useTransition();
@@ -13,8 +15,6 @@ const [isPending, startTransition] = useTransition();
 ### `useTransition()`
 
 Вызовите `useTransition` на верхнем уровне вашего компонента, чтобы пометить некоторые обновления состояния как переходы.
-
-<!-- 0003.part.md -->
 
 ```js
 import { useTransition } from 'react';
