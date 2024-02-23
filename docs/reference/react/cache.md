@@ -5,7 +5,7 @@ status: experimental
 # cache
 
 <Canary>
-* `cache` is only for use with [React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components). See [frameworks](../../learn/start-a-new-react-project#bleeding-edge-react-frameworks) that support React Server Components.
+* `cache` is only for use with [React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components). See [frameworks](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) that support React Server Components.
 
 -   `cache` is only available in React’s [Canary](https://react.dev/community/versioning-policy#canary-channel) and [experimental](https://react.dev/community/versioning-policy#experimental-channel) channels. Please ensure you understand the limitations before using `cache` in production. Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
     </Canary>
@@ -261,7 +261,7 @@ When rendering `Profile`, we call <CodeStep step={2}>`getUser`</CodeStep> again.
 
 #### Caching asynchronous work {/_caching-asynchronous-work_/}
 
-When evaluating an [asynchronous function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), you will receive a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) for that work. The promise holds the state of that work (_pending_, _fulfilled_, _failed_) and its eventual settled result.
+When evaluating an [asynchronous function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/async_function), you will receive a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) for that work. The promise holds the state of that work (_pending_, _fulfilled_, _failed_) and its eventual settled result.
 
 In this example, the asynchronous function <CodeStep step={1}>`fetchData`</CodeStep> returns a promise that is awaiting the `fetch`.
 
@@ -282,7 +282,7 @@ async function MyComponent() {
 
 In calling <CodeStep step={2}>`getData`</CodeStep> the first time, the promise returned from <CodeStep step={1}>`fetchData`</CodeStep> is cached. Subsequent look-ups will then return the same promise.
 
-Notice that the first <CodeStep step={2}>`getData`</CodeStep> call does not `await` whereas the <CodeStep step={3}>second</CodeStep> does. [`await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await) is a JavaScript operator that will wait and return the settled result of the promise. The first <CodeStep step={2}>`getData`</CodeStep> call simply initiates the `fetch` to cache the promise for the second <CodeStep step={3}>`getData`</CodeStep> to look-up.
+Notice that the first <CodeStep step={2}>`getData`</CodeStep> call does not `await` whereas the <CodeStep step={3}>second</CodeStep> does. [`await`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/await) is a JavaScript operator that will wait and return the settled result of the promise. The first <CodeStep step={2}>`getData`</CodeStep> call simply initiates the `fetch` to cache the promise for the second <CodeStep step={3}>`getData`</CodeStep> to look-up.
 
 If by the <CodeStep step={3}>second call</CodeStep> the promise is still _pending_, then `await` will pause for the result. The optimization is that while we wait on the `fetch`, React can continue with computational work, thus reducing the wait time for the <CodeStep step={3}>second call</CodeStep>.
 
@@ -312,36 +312,39 @@ async function DemoProfile() {
 
 React only provides cache access to the memoized function in a component. When calling <CodeStep step={1}>`getUser`</CodeStep> outside of a component, it will still evaluate the function but not read or update the cache.
 
-This is because cache access is provided through a [context](../../learn/passing-data-deeply-with-context) which is only accessible from a component.
+This is because cache access is provided through a [context](../../learn/passing-data-deeply-with-context.md) which is only accessible from a component.
 
 </Pitfall>
 
 <DeepDive>
 
-#### When should I use `cache`, [`memo`](/reference/react/memo), or [`useMemo`](/reference/react/useMemo)? {/_cache-memo-usememo_/}
+#### When should I use `cache`, [`memo`](./memo.md), or [`useMemo`](./useMemo.md)? {/_cache-memo-usememo_/}
 
 All mentioned APIs offer memoization but the difference is what they're intended to memoize, who can access the cache, and when their cache is invalidated.
 
 #### `useMemo` {/_deep-dive-use-memo_/}
 
-In general, you should use [`useMemo`](/reference/react/useMemo) for caching a expensive computation in a Client Component across renders. As an example, to memoize a transformation of data within a component.
+In general, you should use [`useMemo`](./useMemo.md) for caching a expensive computation in a Client Component across renders. As an example, to memoize a transformation of data within a component.
 
-```jsx {4}
+```jsx
 'use client';
 
-function WeatherReport({record}) {
-  const avgTemp = useMemo(() => calculateAvg(record)), record);
-  // ...
+function WeatherReport({ record }) {
+    const avgTemp = useMemo(
+        () => calculateAvg(record),
+        record
+    );
+    // ...
 }
 
 function App() {
-  const record = getRecord();
-  return (
-    <>
-      <WeatherReport record={record} />
-      <WeatherReport record={record} />
-    </>
-  );
+    const record = getRecord();
+    return (
+        <>
+            <WeatherReport record={record} />
+            <WeatherReport record={record} />
+        </>
+    );
 }
 ```
 
@@ -353,7 +356,7 @@ However, `useMemo` does ensure that if `App` re-renders and the `record` object 
 
 In general, you should use `cache` in Server Components to memoize work that can be shared across components.
 
-```js [[1, 12, "<WeatherReport city={city} />"], [3, 13, "<WeatherReport city={city} />"], [2, 1, "cache(fetchReport)"]]
+```js
 const cachedFetchReport = cache(fetchReport);
 
 function WeatherReport({ city }) {
@@ -378,7 +381,7 @@ At this time, `cache` should only be used in Server Components and the cache wil
 
 #### `memo` {/_deep-dive-memo_/}
 
-You should use [`memo`](reference/react/memo) to prevent a component re-rendering if its props are unchanged.
+You should use [`memo`](./memo.md) to prevent a component re-rendering if its props are unchanged.
 
 ```js
 'use client';
@@ -420,7 +423,7 @@ See prior mentioned pitfalls
 
 If none of the above apply, it may be a problem with how React checks if something exists in cache.
 
-If your arguments are not [primitives](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) (ex. objects, functions, arrays), ensure you're passing the same object reference.
+If your arguments are not [primitives](https://developer.mozilla.org/docs/Glossary/Primitive) (ex. objects, functions, arrays), ensure you're passing the same object reference.
 
 When calling a memoized function, React will look up the input arguments to see if a result is already cached. React will use shallow equality of the arguments to determine if there is a cache hit.
 
@@ -449,9 +452,9 @@ function App() {
 
 In this case the two `MapMarker`s look like they're doing the same work and calling `calculateNorm` with the same value of `{x: 10, y: 10, z:10}`. Even though the objects contain the same values, they are not the same object reference as each component creates its own `props` object.
 
-React will call [`Object.is`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is) on the input to verify if there is a cache hit.
+React will call [`Object.is`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is) on the input to verify if there is a cache hit.
 
-```js {3,9}
+```js
 import { cache } from 'react';
 
 const calculateNorm = cache((x, y, z) => {
@@ -478,7 +481,7 @@ One way to address this could be to pass the vector dimensions to `calculateNorm
 
 Another solution may be to pass the vector object itself as a prop to the component. We'll need to pass the same object to both component instances.
 
-```js {3,9,14}
+```js
 import { cache } from 'react';
 
 const calculateNorm = cache((vector) => {
