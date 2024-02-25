@@ -29,16 +29,16 @@ async function handler(request) {
 }
 ```
 
-На клиенте вызовите [`hydrateRoot`](client-hydrateRoot.md), чтобы сделать сгенерированный сервером HTML интерактивным.
+На клиенте вызовите [`hydrateRoot`](../client/hydrateRoot.md), чтобы сделать сгенерированный сервером HTML интерактивным.
 
 #### Параметры
 
 -   `reactNode`: Узел React, который вы хотите отобразить в HTML. Например, JSX-элемент типа `<App />`. Ожидается, что он будет представлять весь документ, поэтому компонент `App` должен вывести тег `<html>`.
 -   **опционально** `options`: Объект с опциями потоковой передачи.
     -   **optional** `bootstrapScriptContent`: Если указано, то эта строка будет помещена в инлайн тег `<script>`.
-    -   **optional** `bootstrapScripts`: Массив URL строк для тегов `<script>`, которые будут отображаться на странице. Используйте его для включения `<script>`, вызывающего [`hydrateRoot`](client-hydrateRoot.md) Опустите его, если вы вообще не хотите запускать React на клиенте.
+    -   **optional** `bootstrapScripts`: Массив URL строк для тегов `<script>`, которые будут отображаться на странице. Используйте его для включения `<script>`, вызывающего [`hydrateRoot`](../client/hydrateRoot.md) Опустите его, если вы вообще не хотите запускать React на клиенте.
     -   **опционально** `bootstrapModules`: Аналогично `bootstrapScripts`, но вместо него выдается [`<script type="module">`](https://developer.mozilla.org/docs/Web/JavaScript/Guide/Modules).
-    -   **optional** `identifierPrefix`: Строковый префикс, который React использует для идентификаторов, генерируемых [`useId`](useId.md) Полезно для предотвращения конфликтов при использовании нескольких корней на одной странице. Должен быть тем же префиксом, что передан в [`hydrateRoot`](client-hydrateRoot.md#parameters)
+    -   **optional** `identifierPrefix`: Строковый префикс, который React использует для идентификаторов, генерируемых [`useId`](../../react/useId.md) Полезно для предотвращения конфликтов при использовании нескольких корней на одной странице. Должен быть тем же префиксом, что передан в [`hydrateRoot`](../client/hydrateRoot.md#parameters)
     -   **опционально** `namespaceURI`: Строка с корневым [namespace URI](https://developer.mozilla.org/docs/Web/API/Document/createElementNS#important_namespace_uris) для потока. По умолчанию используется обычный HTML. Передайте `'http://www.w3.org/2000/svg'` для SVG или `'http://www.w3.org/1998/Math/MathML'` для MathML.
     -   **опционально** `nonce`: Строка [`nonce`](http://developer.mozilla.org/docs/Web/HTML/Element/script#nonce) для разрешения скриптов для [`script-src` Content-Security-Policy](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
     -   **опционально** `onError`: Обратный вызов, который срабатывает всякий раз, когда происходит ошибка сервера, будь то восстанавливаемая или нет По умолчанию, он вызывает только `console.error`. Если вы переопределите его для регистрации сообщений о сбоях, убедитесь, что вы все еще вызываете `console.error`. Вы также можете использовать его для настройки кода состояния перед выдачей оболочки.
@@ -113,7 +113,7 @@ React внедрит [doctype](https://developer.mozilla.org/docs/Glossary/Docty
 <script src="/main.js" async=""></script>
 ```
 
-На клиенте ваш скрипт bootstrap должен [гидратировать весь `документ` с помощью вызова `hydrateRoot`:](client-hydrateRoot.md#hydrating-an-entire-document)
+На клиенте ваш скрипт bootstrap должен [гидратировать весь `документ` с помощью вызова `hydrateRoot`:](../client/hydrateRoot.md#hydrating-an-entire-document)
 
 ```js
 import { hydrateRoot } from 'react-dom/client';
@@ -225,7 +225,7 @@ function ProfilePage() {
 }
 ```
 
-Представьте, что загрузка данных для `<Posts />` занимает некоторое время. В идеале вы хотели бы показать пользователю остальную часть содержимого страницы профиля, не дожидаясь сообщений. Для этого [оберните `Posts` в границу `<Suspense>`:](Suspense.md#displaying-a-fallback-while-content-is-loading)
+Представьте, что загрузка данных для `<Posts />` занимает некоторое время. В идеале вы хотели бы показать пользователю остальную часть содержимого страницы профиля, не дожидаясь сообщений. Для этого [оберните `Posts` в границу `<Suspense>`:](../../react/Suspense.md#displaying-a-fallback-while-content-is-loading)
 
 ```js
 function ProfilePage() {
@@ -246,7 +246,7 @@ function ProfilePage() {
 
 Это указывает React начать передачу HTML до того, как `Posts` загрузит свои данные. Сначала React отправит HTML для резервной загрузки (`PostsGlimmer`), а затем, когда `Posts` закончит загрузку своих данных, React отправит оставшийся HTML вместе со встроенным тегом `<script>`, который заменит резервную загрузку этим HTML. С точки зрения пользователя, на странице сначала появится `PostsGlimmer`, а затем его заменит `Posts`.
 
-Вы можете далее [вложить границы `<Suspense>`](Suspense.md#revealing-nested-content-as-it-loads) для создания более детальной последовательности загрузки:
+Вы можете далее [вложить границы `<Suspense>`](../../react/Suspense.md#revealing-nested-content-as-it-loads) для создания более детальной последовательности загрузки:
 
 ```js
 function ProfilePage() {
@@ -278,7 +278,7 @@ function ProfilePage() {
     **Только источники данных с поддержкой Suspense активируют компонент Suspense.** К ним относятся:
 
     -   Получение данных с помощью фреймворков с поддержкой Suspense, таких как [Relay](https://relay.dev/docs/guided-tour/rendering/loading-states/) и [Next.js](https://nextjs.org/docs/getting-started/react-essentials).
-    -   Ленивая загрузка кода компонента с помощью [`lazy`](lazy.md).
+    -   Ленивая загрузка кода компонента с помощью [`lazy`](../../react/lazy.md).
 
     Suspense **не** обнаруживает, когда данные извлекаются внутри Effect или обработчика события.
 
@@ -422,15 +422,15 @@ function ProfilePage() {
 }
 ```
 
-Если ошибка произойдет в компоненте `Posts` или где-то внутри него, React [попытается восстановиться после нее:](Suspense.md#providing-a-fallback-for-server-errors-and-server-only-content)
+Если ошибка произойдет в компоненте `Posts` или где-то внутри него, React [попытается восстановиться после нее:](../../react/Suspense.md#providing-a-fallback-for-server-errors-and-server-only-content)
 
 1.  Выдаст в HTML фаллбэк загрузки для ближайшей границы `<Suspense>` (`PostsGlimmer`).
 2.  Он "откажется" от попыток рендеринга содержимого `Posts` на сервере.
 3.  Когда код JavaScript загрузится на клиенте, React _повторит_ рендеринг `Posts` на клиенте.
 
-Если повторная попытка рендеринга `Posts` на клиенте _также_ не удалась, React выбросит ошибку на клиент. Как и для всех ошибок, возникающих во время рендеринга, [ближайшая родительская граница ошибки](Component.md#static-getderivedstatefromerror) определяет, как представить ошибку пользователю. На практике это означает, что пользователь будет видеть индикатор загрузки до тех пор, пока не будет уверен, что ошибка не может быть устранена.
+Если повторная попытка рендеринга `Posts` на клиенте _также_ не удалась, React выбросит ошибку на клиент. Как и для всех ошибок, возникающих во время рендеринга, [ближайшая родительская граница ошибки](../../react/Component.md#static-getderivedstatefromerror) определяет, как представить ошибку пользователю. На практике это означает, что пользователь будет видеть индикатор загрузки до тех пор, пока не будет уверен, что ошибка не может быть устранена.
 
-Если повторная попытка рендеринга `Posts` на клиенте будет успешной, индикатор загрузки с сервера будет заменен на вывод клиентского рендеринга. Пользователь не будет знать, что произошла ошибка сервера. Однако обратный вызов сервера `onError` и обратный вызов клиента [`onRecoverableError`](client-hydrateRoot.md#hydrateroot) сработают, чтобы вы могли получить уведомление об ошибке.
+Если повторная попытка рендеринга `Posts` на клиенте будет успешной, индикатор загрузки с сервера будет заменен на вывод клиентского рендеринга. Пользователь не будет знать, что произошла ошибка сервера. Однако обратный вызов сервера `onError` и обратный вызов клиента [`onRecoverableError`](../client/hydrateRoot.md#hydrateroot) сработают, чтобы вы могли получить уведомление об ошибке.
 
 ### Установка кода состояния
 

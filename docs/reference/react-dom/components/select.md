@@ -24,7 +24,7 @@
 
 #### Пропсы
 
-`<select>` поддерживает все [общие пропсы элементов](components-common.md#props)
+`<select>` поддерживает все [общие пропсы элементов](./common.md#props)
 
 Вы можете сделать поле выбора управляемым, передав ему пропс `value`:
 
@@ -45,11 +45,11 @@
 -   [`form`](https://hcdev.ru/html/select/#form): Строка. Указывает `id` формы `<form>`, к которой принадлежит это поле выбора. Если опущено, то это ближайшая родительская форма.
 -   [`multiple`](https://hcdev.ru/html/select/#multiple): Булево значение. Если `true`, браузер разрешает множественный выбор.
 -   [`name`](https://hcdev.ru/html/select/#name): Строка. Задает имя для этого поля выбора, которое передается вместе с формой.
--   `onChange`: Функция обработчика [`event`](components-common.md#event-handler). Требуется для управляемых полей выбора. Срабатывает немедленно, когда пользователь выбирает другой вариант. Ведет себя как событие браузера [`input`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event).
+-   `onChange`: Функция обработчика [`event`](./common.md#event-handler). Требуется для управляемых полей выбора. Срабатывает немедленно, когда пользователь выбирает другой вариант. Ведет себя как событие браузера [`input`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event).
 -   `onChangeCapture`: Версия `onChange`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
--   [`onInput`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event): Функция обработчика [`event`](components-common.md#event-handler). Срабатывает немедленно, когда значение изменяется пользователем. По историческим причинам в React идиоматично использовать `onChange`, которая работает аналогично.
+-   [`onInput`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event): Функция обработчика [`event`](./common.md#event-handler). Срабатывает немедленно, когда значение изменяется пользователем. По историческим причинам в React идиоматично использовать `onChange`, которая работает аналогично.
 -   `onInputCapture`: Версия `onInput`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
--   [`onInvalid`](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/invalid_event): Функция обработчика [`event`](components-common.md#event-handler). Срабатывает, если ввод не прошел валидацию при отправке формы. В отличие от встроенного события `invalid`, событие React `onInvalid` вызывает всплытие.
+-   [`onInvalid`](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/invalid_event): Функция обработчика [`event`](./common.md#event-handler). Срабатывает, если ввод не прошел валидацию при отправке формы. В отличие от встроенного события `invalid`, событие React `onInvalid` вызывает всплытие.
 -   `onInvalidCapture`: Версия `onInvalid`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`required`](https://hcdev.ru/html/select/#required): Булево значение. Если `true`, значение должно быть предоставлено для отправки формы.
 -   [`size`](https://hcdev.ru/html/select/#size): Число. Для селектов `multiple={true}` определяет желаемое количество изначально видимых элементов.
@@ -87,7 +87,7 @@ export default function FruitPicker() {
 
 Обычно каждый `select` помещается в тег [`<label>`](https://hcdev.ru/html/label/). Это сообщает браузеру, что данная метка связана с этим полем выбора. Когда пользователь нажимает на метку, браузер автоматически фокусирует поле выбора. Этот тег также необходим для обеспечения доступности: программа чтения с экрана будет сообщать о надписи метки, когда пользователь наведет фокус на поле выбора.
 
-Если вы не можете вложить `select` в `<label>`, свяжите их, передав одинаковый ID в `<select id>` и [`<label htmlFor>`.](https://developer.mozilla.org/docs/Web/API/HTMLLabelElement/htmlFor) Чтобы избежать конфликтов между несколькими экземплярами одного компонента, создайте такой ID с помощью [`useId`.](useId.md)
+Если вы не можете вложить `select` в `<label>`, свяжите их, передав одинаковый ID в `<select id>` и [`<label htmlFor>`.](https://developer.mozilla.org/docs/Web/API/HTMLLabelElement/htmlFor) Чтобы избежать конфликтов между несколькими экземплярами одного компонента, создайте такой ID с помощью [`useId`.](../../react/useId.md)
 
 ```js
 import { useId } from 'react';
@@ -249,7 +249,7 @@ export default function EditPost() {
 
 Окно выбора типа `<select />` является _неуправляемым._ Даже если вы передаете первоначально выбранное значение, например `<select defaultValue="orange" />`, ваш JSX определяет только начальное значение, а не значение в данный момент.
 
-**Чтобы отобразить _управляемое_ поле выбора, передайте ему свойство `value`.** React заставит поле выбора всегда иметь переданное вами `value`. Обычно вы управляете полем выбора, объявляя [переменную состояния:](useState.md)
+**Чтобы отобразить _управляемое_ поле выбора, передайте ему свойство `value`.** React заставит поле выбора всегда иметь переданное вами `value`. Обычно вы управляете полем выбора, объявляя [переменную состояния:](../../react/useState.md)
 
 ```js
 function FruitPicker() {

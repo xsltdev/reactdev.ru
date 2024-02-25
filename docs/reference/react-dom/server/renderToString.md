@@ -22,7 +22,7 @@ import { renderToString } from 'react-dom/server';
 const html = renderToString(<App />);
 ```
 
-На клиенте вызовите [`hydrateRoot`](client-hydrateRoot.md), чтобы сделать сгенерированный сервером HTML интерактивным.
+На клиенте вызовите [`hydrateRoot`](../client/hydrateRoot.md), чтобы сделать сгенерированный сервером HTML интерактивным.
 
 #### Параметры
 
@@ -53,7 +53,7 @@ app.use('/', (request, response) => {
 });
 ```
 
-Это создаст первоначальный неинтерактивный HTML-вывод ваших компонентов React. На клиенте вам нужно будет вызвать [`hydrateRoot`](client-hydrateRoot.md), чтобы _гидратировать_ этот сгенерированный сервером HTML и сделать его интерактивным.
+Это создаст первоначальный неинтерактивный HTML-вывод ваших компонентов React. На клиенте вам нужно будет вызвать [`hydrateRoot`](../client/hydrateRoot.md), чтобы _гидратировать_ этот сгенерированный сервером HTML и сделать его интерактивным.
 
 !!!warning ""
 
@@ -84,7 +84,7 @@ const html = renderToString(<MyIcon />);
 console.log(html); // For example, "<svg>...</svg>"
 ```
 
-Импорт `react-dom/server` **на клиенте** неоправданно увеличивает размер вашего пакета и его следует избегать. Если вам нужно вывести какой-то компонент в HTML в браузере, используйте [`createRoot`](client-createRoot.md) и читайте HTML из DOM:
+Импорт `react-dom/server` **на клиенте** неоправданно увеличивает размер вашего пакета и его следует избегать. Если вам нужно вывести какой-то компонент в HTML в браузере, используйте [`createRoot`](../client/createRoot.md) и читайте HTML из DOM:
 
 ```js
 import { createRoot } from 'react-dom/client';
@@ -98,7 +98,7 @@ flushSync(() => {
 console.log(div.innerHTML); // For example, "<svg>...</svg>"
 ```
 
-Вызов [`flushSync`](flushSync.md) необходим для того, чтобы DOM был обновлен до чтения его свойства [`innerHTML`](https://developer.mozilla.org/docs/Web/API/Element/innerHTML).
+Вызов [`flushSync`](../flushSync.md) необходим для того, чтобы DOM был обновлен до чтения его свойства [`innerHTML`](https://developer.mozilla.org/docs/Web/API/Element/innerHTML).
 
 ## Устранение неполадок
 
@@ -106,6 +106,6 @@ console.log(div.innerHTML); // For example, "<svg>...</svg>"
 
 `renderToString` не полностью поддерживает Suspense.
 
-Если какой-то компонент приостанавливается (например, потому что он определен с помощью [`lazy`](lazy.md) или получает данные), `renderToString` не будет ждать, пока его содержимое разрешится. Вместо этого `renderToString` найдет ближайшую границу [`<Suspense>`](Suspense.md) над ним и отобразит его `fallback` prop в HTML. Содержимое не появится до тех пор, пока не загрузится клиентский код.
+Если какой-то компонент приостанавливается (например, потому что он определен с помощью [`lazy`](../../react/lazy.md) или получает данные), `renderToString` не будет ждать, пока его содержимое разрешится. Вместо этого `renderToString` найдет ближайшую границу [`<Suspense>`](../../react/Suspense.md) над ним и отобразит его `fallback` prop в HTML. Содержимое не появится до тех пор, пока не загрузится клиентский код.
 
 Чтобы решить эту проблему, используйте одно из рекомендуемых потоковых решений. Они могут передавать содержимое частями по мере его разрешения на сервере, чтобы пользователь видел, как страница постепенно заполняется до загрузки клиентского кода.

@@ -4,7 +4,7 @@
 
     Этот API будет удален в одной из будущих основных версий React.
 
-    В React 18 `render` был заменен на [`createRoot`.](client-createRoot.md) Использование `render` в React 18 предупредит, что ваше приложение будет вести себя так, как будто оно работает на React 17.
+    В React 18 `render` был заменен на [`createRoot`](./client/createRoot.md). Использование `render` в React 18 предупредит, что ваше приложение будет вести себя так, как будто оно работает на React 17.
 
 `render` рендерит часть [JSX](../../learn/writing-markup-with-jsx.md) ("узел React") в DOM-узел браузера.
 

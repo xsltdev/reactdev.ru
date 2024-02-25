@@ -1,8 +1,10 @@
+---
+description: Режим StrictMode позволяет находить распространенные ошибки в компонентах на ранних стадиях разработки
+---
+
 # StrictMode
 
-Режим `<StrictMode>` позволяет находить распространенные ошибки в компонентах на ранних стадиях разработки.
-
-<!-- 0001.part.md -->
+<big>Режим `<StrictMode>` позволяет находить распространенные ошибки в компонентах на ранних стадиях разработки.</big>
 
 ```js
 <StrictMode>
@@ -10,13 +12,11 @@
 </StrictMode>
 ```
 
-## Описание
+## Описание {#reference}
 
-### `<StrictMode>`
+### `<StrictMode>` {#strictmode}
 
 Используйте `StrictMode` для включения дополнительных поведений разработки и предупреждений для внутреннего дерева компонентов:
-
-<!-- 0003.part.md -->
 
 ```js
 import { StrictMode } from 'react';
@@ -36,25 +36,23 @@ root.render(
 -   Ваши компоненты будут перезапускать эффекты дополнительно, чтобы найти ошибки, вызванные отсутствием очистки эффектов.
 -   Ваши компоненты будут проверяться на использование устаревших API.
 
-#### Пропсы
+#### Пропсы {#props}
 
 `StrictMode` не принимает никаких пропсов.
 
-#### Предупреждения
+#### Предупреждения {#caveats}
 
 -   Не существует способа отказаться от строгого режима внутри дерева, обернутого в `<StrictMode>`. Это дает уверенность в том, что все компоненты внутри `<StrictMode>` проверены. Если две команды, работающие над продуктом, расходятся во мнении, считают ли они проверки ценными, им нужно либо прийти к консенсусу, либо переместить `<StrictMode>` вниз в дереве.
 
-## Использование
+## Использование {#usage}
 
-### Включение строгого режима для всего приложения
+### Включение строгого режима для всего приложения {#enabling-strict-mode-for-entire-app}
 
 Строгий режим включает дополнительные проверки, предназначенные только для разработчиков, для всего дерева компонентов внутри компонента `<StrictMode>`. Эти проверки помогут вам найти распространенные ошибки в ваших компонентах на ранних стадиях разработки.
 
 Чтобы включить режим Strict Mode для всего приложения, оберните корневой компонент компонентом `<StrictMode>` при его рендеринге:
 
-<!-- 0005.part.md -->
-
-```js
+```js hl_lines="6 8"
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
@@ -66,13 +64,11 @@ root.render(
 );
 ```
 
-<!-- 0006.part.md -->
-
 Мы рекомендуем обернуть все ваше приложение в режим Strict Mode, особенно для вновь созданных приложений. Если вы используете фреймворк, который вызывает для вас `createRoot`, ознакомьтесь с его документацией, чтобы узнать, как включить строгий режим.
 
 Хотя проверки в строгом режиме **работают только в разработке,** они помогают найти ошибки, которые уже существуют в вашем коде, но могут быть трудно воспроизводимы в производстве. Строгий режим позволяет исправлять ошибки до того, как пользователи сообщат о них.
 
-!!!note ""
+!!!note "Проверки строгого режима"
 
     Строгий режим включает следующие проверки в процессе разработки:
 
@@ -82,13 +78,11 @@ root.render(
 
     **Все эти проверки предназначены только для разработки и не влияют на производственную сборку.**
 
-### Включение строгого режима для части приложения
+### Включение строгого режима для части приложения {#enabling-strict-mode-for-a-part-of-the-app}
 
 Вы также можете включить строгий режим для любой части вашего приложения:
 
-<!-- 0007.part.md -->
-
-```js
+```js hl_lines="7 12"
 import { StrictMode } from 'react';
 
 function App() {
@@ -107,11 +101,9 @@ function App() {
 }
 ```
 
-<!-- 0008.part.md -->
-
 В этом примере проверки строгого режима не будут выполняться для компонентов `Header` и `Footer`. Однако они будут выполняться для `Sidebar` и `Content`, а также для всех компонентов внутри них, независимо от их глубины.
 
-### Исправление ошибок, найденных при двойном рендеринге в разработке
+### Исправление ошибок, найденных при двойном рендеринге в разработке {#fixing-bugs-found-by-double-rendering-in-development}
 
 [React предполагает, что каждый написанный вами компонент является чистой функцией](../../learn/keeping-components-pure.md) Это означает, что написанные вами компоненты React должны всегда возвращать один и тот же JSX при одинаковых входных данных (props, state и context).
 
@@ -182,6 +174,10 @@ function App() {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/9pkqsl?view=Editor+%2B+Preview&module=%2Fsrc%2FStoryTray.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 В приведенном выше коде есть ошибка. Однако ее легко не заметить, поскольку первоначальный вывод выглядит правильным.
 
 Эта ошибка станет более заметной, если компонент `StoryTray` будет рендериться несколько раз. Например, давайте заставим `StoryTray` повторно отображаться с другим цветом фона при каждом наведении на него курсора:
@@ -250,20 +246,20 @@ function App() {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/jf3f8w?view=Editor+%2B+Preview&module=%2Fsrc%2FStoryTray.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Обратите внимание, что каждый раз, когда вы наводите курсор на компонент `StoryTray`, "Create Story" снова добавляется в список. Замысел кода заключался в том, чтобы добавить его один раз в конце. Но `StoryTray` напрямую изменяет массив `stories` из пропса. Каждый раз, когда `StoryTray` рендерит, он снова добавляет "Create Story" в конец того же массива. Другими словами, `StoryTray` не является чистой функцией - ее многократный запуск приводит к различным результатам.
 
 Чтобы решить эту проблему, вы можете сделать копию массива и изменить эту копию вместо оригинальной:
 
-<!-- 0025.part.md -->
-
-```js
+```js hl_lines="2"
 export default function StoryTray({ stories }) {
   const items = stories.slice(); // Clone the array
   // ✅ Good: Pushing into a new array
   items.push({ id: 'create', label: 'Create Story' });
 ```
-
-<!-- 0026.part.md -->
 
 Это [сделает функцию `StoryTray` чистой](../../learn/keeping-components-pure.md). При каждом вызове она будет модифицировать только новую копию массива и не будет влиять на внешние объекты или переменные. Это решает проблему, но вам придется заставлять компонент перерисовываться чаще, прежде чем станет очевидно, что в его поведении что-то не так.
 
@@ -328,6 +324,10 @@ export default function StoryTray({ stories }) {
     	);
     }
     ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/nz6y4z?view=Editor+%2B+Preview&module=%2Fsrc%2FStoryTray.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 **Строгий режим _всегда_ вызывает вашу функцию рендеринга дважды, чтобы вы могли сразу увидеть ошибку** ("Create Story" появляется дважды). Это позволяет заметить такие ошибки на ранней стадии процесса. Когда вы исправляете свой компонент для рендеринга в строгом режиме, вы _также_ исправляете многие возможные будущие ошибки производства, такие как функциональность hover, о которой говорилось ранее:
 
@@ -400,11 +400,15 @@ export default function StoryTray({ stories }) {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/n2rn5f?view=Editor+%2B+Preview&module=%2Fsrc%2FStoryTray.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Без режима Strict Mode ошибку легко было не заметить, пока вы не добавляли больше рендеров. В режиме Strict Mode та же ошибка появлялась сразу же. Режим Strict Mode помогает найти ошибки до того, как вы передадите их команде и пользователям.
 
 [Подробнее о поддержании чистоты компонентов](../../learn/keeping-components-pure.md).
 
-!!!note ""
+!!!note "React DevTools"
 
     Если у вас установлен [React DevTools](../../learn/react-developer-tools.md), все вызовы `console.log` во время второго вызова рендеринга будут выглядеть слегка затемненными. React DevTools также предлагает настройку (по умолчанию выключена) для их полного подавления.
 
@@ -489,6 +493,10 @@ export default function StoryTray({ stories }) {
     	};
     }
     ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/w3y5mk?view=Editor+%2B+Preview&module=%2Fsrc%2Findex.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 В этом коде есть проблема, но она может быть не сразу понятна.
 
@@ -591,19 +599,19 @@ export default function StoryTray({ stories }) {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/ldksx8?view=Editor+%2B+Preview&module=%2Fsrc%2Findex.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Вы заметите, что количество открытых соединений постоянно растет. В реальном приложении это вызвало бы проблемы с производительностью и сетью. Проблема в том, что [вашему Эффекту не хватает функции очистки:](../../learn/synchronizing-with-effects.md)
 
-<!-- 0059.part.md -->
-
-```js
+```js hl_lines="4"
 useEffect(() => {
     const connection = createConnection(serverUrl, roomId);
     connection.connect();
     return () => connection.disconnect();
 }, [roomId]);
 ```
-
-<!-- 0060.part.md -->
 
 Теперь, когда ваш Effect "убирает" за собой и уничтожает устаревшие связи, утечка решена. Однако обратите внимание, что проблема не стала заметной, пока вы не добавили больше возможностей (поле выбора).
 
@@ -683,6 +691,10 @@ useEffect(() => {
     	};
     }
     ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/kq6pws?view=Editor+%2B+Preview&module=%2Fsrc%2Findex.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 **В строгом режиме вы сразу увидите, что есть проблема** (количество активных соединений подскочит до 2). Строгий режим запускает дополнительный цикл настройки+очистки для каждого Эффекта. Этот Эффект не имеет логики очистки, поэтому он создает дополнительное соединение, но не уничтожает его. Это намек на то, что вам не хватает функции очистки.
 
@@ -791,23 +803,25 @@ useEffect(() => {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/4mdv9v?view=Editor+%2B+Preview&module=%2Fsrc%2Findex.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Обратите внимание, что количество активных соединений в консоли больше не растет.
 
 Без режима Strict Mode можно было легко пропустить, что ваш Эффект нуждается в очистке. Выполняя _setup → cleanup → setup_ вместо _setup_ для вашего Эффекта в разработке, Строгий режим сделал недостающую логику очистки более заметной.
 
-[Подробнее о реализации очистки эффектов](../../learn/synchronizing-with-effects.md)
+Подробнее о реализации [очистки эффектов](../../learn/synchronizing-with-effects.md)
 
-### Исправление предупреждений об износе, включенных в строгом режиме
+### Исправление предупреждений об устаревании, включенных в строгом режиме
 
 React предупреждает, если какой-то компонент в любом месте дерева `<StrictMode>` использует один из этих устаревших API:
 
--   `findDOMNode`. [См. альтернативы.](https://reactjs.org/docs/strict-mode.html#warning-about-deprecated-finddomnode-usage).
--   Методы жизненного цикла класса `UNSAFE_`, такие как `UNSAFE_componentWillMount`. [См. альтернативы.](https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#migrating-from-legacy-lifecycles).
--   Наследный контекст (`childContextTypes`, `contextTypes`, и `getChildContext`). [См. альтернативы](createContext.md).
--   Legacy string refs (`this.refs`). [См. альтернативы.](https://reactjs.org/docs/strict-mode.html#warning-about-legacy-string-ref-api-usage).
+-   `findDOMNode` - [См. альтернативы](https://legacy.reactjs.org/docs/strict-mode.html#warning-about-deprecated-finddomnode-usage).
+-   Методы жизненного цикла класса `UNSAFE_`, такие как `UNSAFE_componentWillMount` - [См. альтернативы](https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#migrating-from-legacy-lifecycles).
+-   Наследный контекст (`childContextTypes`, `contextTypes`, и `getChildContext`) - [См. альтернативы](createContext.md).
+-   Legacy string refs (`this.refs`) - [См. альтернативы](https://legacy.reactjs.org/docs/strict-mode.html#warning-about-legacy-string-ref-api-usage).
 
 Эти API в основном используются в старых [компонентах классов](Component.md), поэтому они редко появляются в современных приложениях.
 
-## Ссылки
-
--   [https://react.dev/reference/react/StrictMode](https://react.dev/reference/react/StrictMode)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/StrictMode](https://react.dev/reference/react/StrictMode)</small>

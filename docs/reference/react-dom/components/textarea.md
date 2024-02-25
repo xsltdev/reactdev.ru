@@ -18,7 +18,7 @@
 
 #### Свойства
 
-`<textarea>` поддерживает все [общие пропсы элементов](components-common.md#props)
+`<textarea>` поддерживает все [общие пропсы элементов](./common.md#props)
 
 Вы можете сделать текстовую область управляемой, передав ей пропс `value`:
 
@@ -41,13 +41,13 @@
 -   [`maxLength`](https://hcdev.ru/html/textarea/#maxlength): Число. Определяет максимальную длину текста.
 -   [`minLength`](https://hcdev.ru/html/textarea/#minlength): Число. Определяет минимальную длину текста.
 -   [`name`](https://hcdev.ru/html/textarea/#name): Строка. Задает имя для этого ввода, который передается вместе с формой.
--   `onChange`: Функция обработчика [`event`](components-common.md#event-handler). Требуется для управляемых текстовых областей. Срабатывает немедленно, когда значение ввода изменяется пользователем (например, срабатывает при каждом нажатии клавиши). Поведение аналогично браузерному событию [`input`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event).
+-   `onChange`: Функция обработчика [`event`](./common.md#event-handler). Требуется для управляемых текстовых областей. Срабатывает немедленно, когда значение ввода изменяется пользователем (например, срабатывает при каждом нажатии клавиши). Поведение аналогично браузерному событию [`input`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event).
 -   `onChangeCapture`: Версия `onChange`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
--   [`onInput`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event): Функция обработчика [`event`](components-common.md#event-handler). функция. Срабатывает немедленно, когда значение изменяется пользователем. По историческим причинам в React идиоматично использовать `onChange`, которая работает аналогично.
+-   [`onInput`](https://developer.mozilla.org/docs/Web/API/HTMLElement/input_event): Функция обработчика [`event`](./common.md#event-handler). функция. Срабатывает немедленно, когда значение изменяется пользователем. По историческим причинам в React идиоматично использовать `onChange`, которая работает аналогично.
 -   `onInputCapture`: Версия `onInput`, которая срабатывает в [фазе захвата](../../../learn/responding-to-events.md#capture-phase-events).
--   [`onInvalid`](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/invalid_event): Функция обработчика [`event`](components-common.md#event-handler). Срабатывает, если ввод не прошел валидацию при отправке формы. В отличие от встроенного события `invalid`, событие React `onInvalid` всплывает.
+-   [`onInvalid`](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/invalid_event): Функция обработчика [`event`](./common.md#event-handler). Срабатывает, если ввод не прошел валидацию при отправке формы. В отличие от встроенного события `invalid`, событие React `onInvalid` всплывает.
 -   `onInvalidCapture`: Версия `onInvalid`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
--   [`onSelect`](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/select_event): Функция обработчика [`Event` handler](components-common.md#event-handler). Срабатывает после изменения выделения внутри `<textarea>`. В React событие `onSelect` расширяется, чтобы также срабатывать при пустом выделении и при редактировании (которое может повлиять на выделение).
+-   [`onSelect`](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/select_event): Функция обработчика [`Event` handler](./common.md#event-handler). Срабатывает после изменения выделения внутри `<textarea>`. В React событие `onSelect` расширяется, чтобы также срабатывать при пустом выделении и при редактировании (которое может повлиять на выделение).
 -   `onSelectCapture`: Версия `onSelect`, которая срабатывает в [фазе захвата.](../../../learn/responding-to-events.md#capture-phase-events)
 -   [`placeholder`](https://hcdev.ru/html/textarea/#placeholder): Строка. Отображается затемненным цветом, когда значение текстовой области пусто.
 -   [`readOnly`](https://hcdev.ru/html/textarea/#readonly): Булево значение. Если значение `true`, текстовая область не редактируется пользователем.
@@ -88,7 +88,7 @@ export default function NewPost() {
 
 Обычно вы помещаете каждую `<textarea>` внутри тега [`<label>`](https://hcdev.ru/html/label/). Это сообщает браузеру, что данная метка связана с этой текстовой областью. Когда пользователь нажимает на метку, браузер фокусирует текстовую область. Это также необходимо для обеспечения доступности: программа чтения с экрана будет объявлять надпись на ярлыке, когда пользователь наводит фокус на текстовую область.
 
-Если вы не можете вложить `<textarea>` в `<label>`, свяжите их, передав одинаковый ID в `<textarea id>` и [`<label htmlFor>`.](https://developer.mozilla.org/docs/Web/API/HTMLLabelElement/htmlFor) Чтобы избежать конфликтов между экземплярами одного компонента, создайте такой ID с помощью [`useId`.](useId.md)
+Если вы не можете вложить `<textarea>` в `<label>`, свяжите их, передав одинаковый ID в `<textarea id>` и [`<label htmlFor>`.](https://developer.mozilla.org/docs/Web/API/HTMLLabelElement/htmlFor) Чтобы избежать конфликтов между экземплярами одного компонента, создайте такой ID с помощью [`useId`.](../../react/useId.md)
 
 ```js
 import { useId } from 'react';
@@ -200,7 +200,7 @@ export default function EditPost() {
 
 Текстовая область типа `<textarea />` является _неуправляемой._ Даже если вы передадите начальное значение, например `<textarea defaultValue="Initial text" />`, ваш JSX определяет только начальное значение, а не значение прямо сейчас.
 
-**Чтобы отобразить _управляемую_ текстовую область, передайте ей свойство `value`.** React заставит текстовую область всегда иметь переданное вами `value`. Обычно вы управляете текстовой областью, объявляя [переменную состояния:](useState.md)
+**Чтобы отобразить _управляемую_ текстовую область, передайте ей свойство `value`.** React заставит текстовую область всегда иметь переданное вами `value`. Обычно вы управляете текстовой областью, объявляя [переменную состояния:](../../react/useState.md)
 
 ```js
 function NewPost() {

@@ -4,13 +4,13 @@ status: experimental
 
 <Canary>
 
-React's extensions to `<form>` are currently only available in React's canary and experimental channels. In stable releases of React, `<form>` works only as a [built-in browser HTML component](https://react.dev/reference/react-dom/components#all-html-components). Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
+React's extensions to `<form>` are currently only available in React's canary and experimental channels. In stable releases of React, `<form>` works only as a [built-in browser HTML component](./index.md#all-html-components). Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
 
 </Canary>
 
 <Intro>
 
-The [built-in browser `<form>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form) lets you create interactive controls for submitting information.
+The [built-in browser `<form>` component](https://hcdev.ru/html/form/) lets you create interactive controls for submitting information.
 
 ```js
 <form action={search}>
@@ -29,7 +29,7 @@ The [built-in browser `<form>` component](https://developer.mozilla.org/en-US/do
 
 ### `<form>` {/_form_/}
 
-To create interactive controls for submitting information, render the [built-in browser `<form>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form).
+To create interactive controls for submitting information, render the [built-in browser `<form>` component](https://hcdev.ru/html/form/).
 
 ```js
 <form action={search}>
@@ -56,7 +56,7 @@ To create interactive controls for submitting information, render the [built-in 
 
 ### Handle form submission on the client {/_handle-form-submission-on-the-client_/}
 
-Pass a function to the `action` prop of form to run the function when the form is submitted. [`formData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) will be passed to the function as an argument so you can access the data submitted by the form. This differs from the conventional [HTML action](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action), which only accepts URLs.
+Pass a function to the `action` prop of form to run the function when the form is submitted. [`formData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) will be passed to the function as an argument so you can access the data submitted by the form. This differs from the conventional [HTML action](https://hcdev.ru/html/form/#action), which only accepts URLs.
 
 <Sandpack>
 
