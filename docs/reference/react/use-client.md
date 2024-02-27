@@ -5,13 +5,11 @@ status: experimental
 
 # `'use client'`
 
-<big>
+!!!example "Canary"
 
-`'use client'` необходим только в том случае, если вы [используете React Server Components](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) или создаете совместимую с ними библиотеку.
+    `'use client'` необходим только в том случае, если вы [используете React Server Components](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) или создаете совместимую с ними библиотеку.
 
-</big>
-
-`'use client` позволяет отметить, какой код выполняется на клиенте.
+<big>`'use client'` позволяет отметить, какой код выполняется на клиенте.</big>
 
 ## Справочник {#reference}
 
@@ -19,7 +17,7 @@ status: experimental
 
 Добавьте `'use client'` в верхней части файла, чтобы отметить модуль и его транзитивные зависимости как клиентский код.
 
-```js
+```js hl_lines="1"
 'use client';
 
 import { useState } from 'react';
@@ -41,7 +39,7 @@ export default function RichTextEditor({
 
 Будучи зависимостями `RichTextEditor`, `formatDate` и `Button` также будут оцениваться на клиенте, независимо от того, содержат ли их модули директиву `'use client'`. Обратите внимание, что один модуль может оцениваться на сервере при импорте из серверного кода и на клиенте при импорте из клиентского кода.
 
-#### Предостережения {#caveats}
+**Предостережения**
 
 -   `'use client'` должно находиться в самом начале файла, выше любого импорта или другого кода (комментарии допускаются). Они должны быть написаны с одинарными или двойными кавычками, но не с обратными знаками.
 -   Если модуль `'use client'` импортируется из другого клиентского модуля, директива не имеет силы.
@@ -50,269 +48,260 @@ export default function RichTextEditor({
 -   Код, помеченный для использования клиентом, не ограничивается компонентами. Весь код, входящий в поддерево модулей Client, отправляется клиенту и выполняется им.
 -   Когда модуль, работающий с сервером, импортирует значения из модуля `'use client'`, эти значения должны быть либо компонентами React, либо поддерживаемыми сериализуемыми значениями prop для передачи в клиентский компонент. При любом другом варианте использования будет возникать исключение.
 
-### How `'use client'` marks client code {#how-use-client-marks-client-code}
-
-In a React app, components are often split into separate files, or [modules](../../learn/importing-and-exporting-components.md#exporting-and-importing-a-component).
-
-For apps that use React Server Components, the app is server-rendered by default. `'use client'` introduces a server-client boundary in the [module dependency tree](../../learn/understanding-your-ui-as-a-tree.md#the-module-dependency-tree), effectively creating a subtree of Client modules.
-
-To better illustrate this, consider the following React Server Components app.
-
-<Sandpack>
-
-```js App.js
-import FancyText from './FancyText';
-import InspirationGenerator from './InspirationGenerator';
-import Copyright from './Copyright';
-
-export default function App() {
-    return (
-        <>
-            <FancyText title text="Get Inspired App" />
-            <InspirationGenerator>
-                <Copyright year={2004} />
-            </InspirationGenerator>
-        </>
-    );
-}
-```
-
-```js FancyText.js
-export default function FancyText({ title, text }) {
-    return title ? (
-        <h1 className="fancy title">{text}</h1>
-    ) : (
-        <h3 className="fancy cursive">{text}</h3>
-    );
-}
-```
-
-```js InspirationGenerator.js
-'use client';
-
-import { useState } from 'react';
-import inspirations from './inspirations';
-import FancyText from './FancyText';
-
-export default function InspirationGenerator({ children }) {
-    const [index, setIndex] = useState(0);
-    const quote = inspirations[index];
-    const next = () =>
-        setIndex((index + 1) % inspirations.length);
-
-    return (
-        <>
-            <p>Your inspirational quote is:</p>
-            <FancyText text={quote} />
-            <button onClick={next}>Inspire me again</button>
-            {children}
-        </>
-    );
-}
-```
+### Как `'use client'` помечает клиентский код {#how-use-client-marks-client-code}
 
-```js Copyright.js
-export default function Copyright({ year }) {
-    return <p className="small">©️ {year}</p>;
-}
-```
+В приложениях React компоненты часто разделяются на отдельные файлы, или [модули](../../learn/importing-and-exporting-components.md#exporting-and-importing-a-component).
 
-```js inspirations.js
-export default [
-    'Don’t let yesterday take up too much of today.” — Will Rogers',
-    'Ambition is putting a ladder against the sky.',
-    "A joy that's shared is a joy made double.",
-];
-```
+Для приложений, использующих компоненты React Server Components, приложение по умолчанию рендерится на сервере. `'use client'` вводит границу сервер-клиент в [дерево зависимостей модулей](../../learn/understanding-your-ui-as-a-tree.md#the-module-dependency-tree), фактически создавая поддерево модулей Client.
 
-```css
-.fancy {
-    font-family: 'Georgia';
-}
-.title {
-    color: #007aa3;
-    text-decoration: underline;
-}
-.cursive {
-    font-style: italic;
-}
-.small {
-    font-size: 10px;
-}
-```
+Чтобы лучше проиллюстрировать это, рассмотрим следующее приложение React Server Components.
 
-</Sandpack>
+=== "App.js"
 
-In the module dependency tree of this example app, the `'use client'` directive in `InspirationGenerator.js` marks that module and all of its transitive dependencies as Client modules. The subtree starting at `InspirationGenerator.js` is now marked as Client modules.
+    ```js
+    import FancyText from './FancyText';
+    import InspirationGenerator from './InspirationGenerator';
+    import Copyright from './Copyright';
 
-<Diagram name="use_client_module_dependency" height={250} width={545} alt="A tree graph with the top node representing the module 'App.js'. 'App.js' has three children: 'Copyright.js', 'FancyText.js', and 'InspirationGenerator.js'. 'InspirationGenerator.js' has two children: 'FancyText.js' and 'inspirations.js'. The nodes under and including 'InspirationGenerator.js' have a yellow background color to signify that this sub-graph is client-rendered due to the 'use client' directive in 'InspirationGenerator.js'.">
-`'use client'` segments the module dependency tree of the React Server Components app, marking `InspirationGenerator.js` and all of its dependencies as client-rendered.
-</Diagram>
+    export default function App() {
+    	return (
+    		<>
+    			<FancyText title text="Get Inspired App" />
+    			<InspirationGenerator>
+    				<Copyright year={2004} />
+    			</InspirationGenerator>
+    		</>
+    	);
+    }
+    ```
 
-During render, the framework will server-render the root component and continue through the [render tree](../../learn/understanding-your-ui-as-a-tree.md#the-render-tree), opting-out of evaluating any code imported from client-marked code.
+=== "FancyText.js"
 
-The server-rendered portion of the render tree is then sent to the client. The client, with its client code downloaded, then completes rendering the rest of the tree.
+    ```js
+    export default function FancyText({ title, text }) {
+    	return title ? (
+    		<h1 className="fancy title">{text}</h1>
+    	) : (
+    		<h3 className="fancy cursive">{text}</h3>
+    	);
+    }
+    ```
 
-<Diagram name="use_client_render_tree" height={250} width={500} alt="A tree graph where each node represents a component and its children as child components. The top-level node is labelled 'App' and it has two child components 'InspirationGenerator' and 'FancyText'. 'InspirationGenerator' has two child components, 'FancyText' and 'Copyright'. Both 'InspirationGenerator' and its child component 'FancyText' are marked to be client-rendered.">
-The render tree for the React Server Components app. `InspirationGenerator` and its child component `FancyText` are components exported from client-marked code and considered Client Components.
-</Diagram>
+=== "InspirationGenerator.js"
 
-We introduce the following definitions:
+    ```js
+    'use client';
 
--   **Client Components** are components in a render tree that are rendered on the client.
--   **Server Components** are components in a render tree that are rendered on the server.
+    import { useState } from 'react';
+    import inspirations from './inspirations';
+    import FancyText from './FancyText';
 
-Working through the example app, `App`, `FancyText` and `Copyright` are all server-rendered and considered Server Components. As `InspirationGenerator.js` and its transitive dependencies are marked as client code, the component `InspirationGenerator` and its child component `FancyText` are Client Components.
+    export default function InspirationGenerator({ children }) {
+    	const [index, setIndex] = useState(0);
+    	const quote = inspirations[index];
+    	const next = () =>
+    		setIndex((index + 1) % inspirations.length);
 
-<DeepDive>
-#### How is `FancyText` both a Server and a Client Component? {/*how-is-fancytext-both-a-server-and-a-client-component*/}
+    	return (
+    		<>
+    			<p>Your inspirational quote is:</p>
+    			<FancyText text={quote} />
+    			<button onClick={next}>Inspire me again</button>
+    			{children}
+    		</>
+    	);
+    }
+    ```
 
-By the above definitions, the component `FancyText` is both a Server and Client Component, how can that be?
+=== "Copyright.js"
 
-First, let's clarify that the term "component" is not very precise. Here are just two ways "component" can be understood:
+    ```js
+    export default function Copyright({ year }) {
+    	return <p className="small">©️ {year}</p>;
+    }
+    ```
 
-1. A "component" can refer to a **component definition**. In most cases this will be a function.
+=== "inspirations.js"
 
-```js
-// This is a definition of a component
-function MyComponent() {
-    return <p>My Component</p>;
-}
-```
+    ```js
+    export default [
+    	'Don’t let yesterday take up too much of today.” — Will Rogers',
+    	'Ambition is putting a ladder against the sky.',
+    	"A joy that's shared is a joy made double.",
+    ];
+    ```
 
-2. A "component" can also refer to a **component usage** of its definition.
+=== "CodeSandbox"
 
-```js
-import MyComponent from './MyComponent';
+    <iframe src="https://codesandbox.io/embed/85dryt?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-function App() {
-    // This is a usage of a component
-    return <MyComponent />;
-}
-```
+В дереве зависимостей модулей этого примера приложения директива `'use client'` в `InspirationGenerator.js` помечает этот модуль и все его транзитивные зависимости как модули Client. Поддерево, начинающееся с `InspirationGenerator.js`, теперь помечено как Client modules.
 
-Often, the imprecision is not important when explaining concepts, but in this case it is.
+![Древовидный граф, верхний узел которого представляет модуль 'App.js'. У 'App.js' есть три дочерних модуля: 'Copyright.js', 'FancyText.js' и 'InspirationGenerator.js'. У 'InspirationGenerator.js' есть два дочерних узла: 'FancyText.js' и 'inspirations.js'. Узлы под и включая 'InspirationGenerator.js' имеют желтый цвет фона, чтобы обозначить, что этот подграф является клиентским из-за директивы 'use client' в 'InspirationGenerator.js'.](use_client_module_dependency.webp)
 
-When we talk about Server or Client Components, we are referring to component usages.
+<small>_`'use client'` сегментирует дерево зависимостей модулей приложения React Server Components, помечая `InspirationGenerator.js` и все его зависимости как client-rendered._</small>
 
--   If the component is defined in a module with a `'use client'` directive, or the component is imported and called in a Client Component, then the component usage is a Client Component.
--   Otherwise, the component usage is a Server Component.
+Во время рендеринга фреймворк отрендерит корневой компонент и продолжит движение по [дереву рендеринга](../../learn/understanding-your-ui-as-a-tree.md#the-render-tree), отказываясь от оценки любого кода, импортированного из кода, отмеченного клиентом.
 
-<Diagram name="use_client_render_tree" height={150} width={450} alt="A tree graph where each node represents a component and its children as child components. The top-level node is labelled 'App' and it has two child components 'InspirationGenerator' and 'FancyText'. 'InspirationGenerator' has two child components, 'FancyText' and 'Copyright'. Both 'InspirationGenerator' and its child component 'FancyText' are marked to be client-rendered.">A render tree illustrates component usages.</Diagram>
+Затем часть дерева рендеринга, отрендеренная сервером, отправляется клиенту. Клиент, загрузив свой клиентский код, завершает рендеринг оставшейся части дерева.
 
-Back to the question of `FancyText`, we see that the component definition does _not_ have a `'use client'` directive and it has two usages.
+![Древовидный граф, в котором каждый узел представляет компонент, а его дочерние компоненты - дочерние компоненты. Узел верхнего уровня обозначен как 'App', и у него есть два дочерних компонента 'InspirationGenerator' и 'FancyText'. У 'InspirationGenerator' есть два дочерних компонента, 'FancyText' и 'Copyright'. И 'InspirationGenerator', и его дочерний компонент 'FancyText' помечены как клиентские.](use_client_render_tree.webp)
 
-The usage of `FancyText` as a child of `App`, marks that usage as a Server Component. When `FancyText` is imported and called under `InspirationGenerator`, that usage of `FancyText` is a Client Component as `InspirationGenerator` contains a `'use client'` directive.
+<small>_Дерево рендеринга для приложения React Server Components. `InspirationGenerator` и его дочерний компонент `FancyText` являются компонентами, экспортированными из клиентского кода и считаются клиентскими компонентами._</small>
 
-This means that the component definition for `FancyText` will both be evaluated on the server and also downloaded by the client to render its Client Component usage.
+Мы вводим следующие определения:
 
-</DeepDive>
+-   **Клиентские компоненты** - это компоненты в дереве рендеринга, которые отображаются на клиенте.
+-   **Серверные компоненты** - это компоненты в дереве рендеринга, которые отображаются на сервере.
 
-<DeepDive>
+Работая с примером приложения, `App`, `FancyText` и `Copyright` рендерятся на сервере и считаются серверными компонентами. Поскольку `InspirationGenerator.js` и его транзитивные зависимости помечены как клиентский код, компонент `InspirationGenerator` и его дочерний компонент `FancyText` являются клиентскими компонентами.
 
-#### Why is `Copyright` a Server Component? {#why-is-copyright-a-server-component}
+#### Как `FancyText` является одновременно серверным и клиентским компонентом? {#how-is-fancytext-both-a-server-and-a-client-component}
 
-Because `Copyright` is rendered as a child of the Client Component `InspirationGenerator`, you might be surprised that it is a Server Component.
+Согласно приведенным выше определениям, компонент `FancyText` является одновременно серверным и клиентским компонентом, как такое может быть?
 
-Recall that `'use client'` defines the boundary between server and client code on the _module dependency tree_, not the render tree.
+Во-первых, давайте уточним, что термин "компонент" не очень точен. Вот только два варианта понимания "компонента":
 
-<Diagram name="use_client_module_dependency" height={200} width={500} alt="A tree graph with the top node representing the module 'App.js'. 'App.js' has three children: 'Copyright.js', 'FancyText.js', and 'InspirationGenerator.js'. 'InspirationGenerator.js' has two children: 'FancyText.js' and 'inspirations.js'. The nodes under and including 'InspirationGenerator.js' have a yellow background color to signify that this sub-graph is client-rendered due to the 'use client' directive in 'InspirationGenerator.js'.">
-`'use client'` defines the boundary between server and client code on the module dependency tree.
-</Diagram>
+1.  "Компонент" может относиться к **определению компонента**. В большинстве случаев это будет функция.
 
-In the module dependency tree, we see that `App.js` imports and calls `Copyright` from the `Copyright.js` module. As `Copyright.js` does not contain a `'use client'` directive, the component usage is rendered on the server. `App` is rendered on the server as it is the root component.
+    ```js
+    // This is a definition of a component
+    function MyComponent() {
+        return <p>My Component</p>;
+    }
+    ```
 
-Client Components can render Server Components because you can pass JSX as props. In this case, `InspirationGenerator` receives `Copyright` as [children](../../learn/passing-props-to-a-component.md#passing-jsx-as-children). However, the `InspirationGenerator` module never directly imports the `Copyright` module nor calls the component, all of that is done by `App`. In fact, the `Copyright` component is fully executed before `InspirationGenerator` starts rendering.
+2.  "Компонент" также может относиться к **компонентному использованию** его определения.
 
-The takeaway is that a parent-child render relationship between components does not guarantee the same render environment.
+    ```js
+    import MyComponent from './MyComponent';
 
-</DeepDive>
+    function App() {
+        // This is a usage of a component
+        return <MyComponent />;
+    }
+    ```
 
-### When to use `'use client'` {#when-to-use-use-client}
+Часто неточность не имеет значения при объяснении концепций, но в данном случае она имеет значение.
 
-With `'use client'`, you can determine when components are Client Components. As Server Components are default, here is a brief overview of the advantages and limitations to Server Components to determine when you need to mark something as client rendered.
+Когда мы говорим о серверных или клиентских компонентах, мы имеем в виду использование компонентов.
 
-For simplicity, we talk about Server Components, but the same principles apply to all code in your app that is server run.
+-   Если компонент определен в модуле с директивой `'use client'`, или компонент импортируется и вызывается в клиентском компоненте, то использование компонента - это клиентский компонент.
+-   В противном случае используется серверный компонент.
 
-#### Advantages of Server Components {#advantages}
+![Древовидный граф, в котором каждый узел представляет компонент, а его дочерние компоненты - дочерние компоненты. Узел верхнего уровня обозначен как 'App', и у него есть два дочерних компонента 'InspirationGenerator' и 'FancyText'. У 'InspirationGenerator' есть два дочерних компонента, 'FancyText' и 'Copyright'. И 'InspirationGenerator', и его дочерний компонент 'FancyText' помечены как клиентские.](use_client_render_tree.webp)
 
--   Server Components can reduce the amount of code sent and run by the client. Only Client modules are bundled and evaluated by the client.
--   Server Components benefit from running on the server. They can access the local filesystem and may experience low latency for data fetches and network requests.
+<small>_Дерево рендеринга иллюстрирует использование компонентов._</small>
 
-#### Limitations of Server Components {#limitations}
+Возвращаясь к вопросу о `FancyText`, мы видим, что в определении компонента _нет_ директивы `'use client'` и у него есть два варианта использования.
 
--   Server Components cannot support interaction as event handlers must be registered and triggered by a client.
-    -   For example, event handlers like `onClick` can only be defined in Client Components.
--   Server Components cannot use most Hooks.
-    -   When Server Components are rendered, their output is essentially a list of components for the client to render. Server Components do not persist in memory after render and cannot have their own state.
+Использование `FancyText` в качестве дочернего компонента `App`, маркирует это использование как серверный компонент. Когда `FancyText` импортируется и вызывается в `InspirationGenerator`, это использование `FancyText` является клиентским компонентом, поскольку `InspirationGenerator` содержит директиву `'use client'`.
 
-### Serializable types returned by Server Components {#serializable-types}
+Это означает, что определение компонента для `FancyText` будет оцениваться на сервере, а также загружаться клиентом для отображения его использования в качестве клиентского компонента.
 
-As in any React app, parent components pass data to child components. As they are rendered in different environments, passing data from a Server Component to a Client Component requires extra consideration.
+#### Почему `Copyright` является серверным компонентом? {#why-is-copyright-a-server-component}
 
-Prop values passed from a Server Component to Client Component must be serializable.
+Поскольку `Copyright` отображается как дочерний компонент клиентского компонента `InspirationGenerator`, вы можете быть удивлены, что он является серверным компонентом.
 
-Serializable props include:
+Вспомните, что `'use client'` определяет границу между серверным и клиентским кодом на дереве зависимостей _модуля_, а не на дереве рендеринга.
 
--   Primitives
-    -   [string](https://developer.mozilla.org/en-US/docs/Glossary/String)
-    -   [number](https://developer.mozilla.org/en-US/docs/Glossary/Number)
-    -   [bigint](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt)
-    -   [boolean](https://developer.mozilla.org/en-US/docs/Glossary/Boolean)
-    -   [undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined)
-    -   [null](https://developer.mozilla.org/en-US/docs/Glossary/Null)
-    -   [symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol), only symbols registered in the global Symbol registry via [`Symbol.for`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/for)
--   Iterables containing serializable values
-    -   [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
-    -   [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
-    -   [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
-    -   [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
-    -   [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) and [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)
--   [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
--   Plain [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object): those created with [object initializers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer), with serializable properties
--   Functions that are [Server Actions](./use-server.md)
--   Client or Server Component elements (JSX)
--   [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+![Древовидный граф, верхний узел которого представляет модуль 'App.js'. У 'App.js' есть три дочерних модуля: 'Copyright.js', 'FancyText.js' и 'InspirationGenerator.js'. У 'InspirationGenerator.js' есть два дочерних узла: 'FancyText.js' и 'inspirations.js'. Узлы под и включая 'InspirationGenerator.js' имеют желтый цвет фона, чтобы обозначить, что этот подграф является клиентским из-за директивы 'use client' в 'InspirationGenerator.js'.](use_client_render_tree.webp)
 
-Notably, these are not supported:
+<small>_`'use client'` определяет границу между серверным и клиентским кодом в дереве зависимостей модуля._</small>
 
--   [Functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function) that are not exported from client-marked modules or marked with [`'use server'`](./use-server.md)
--   [Classes](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Classes_in_JavaScript)
--   Objects that are instances of any class (other than the built-ins mentioned) or objects with [a null prototype](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object#null-prototype_objects)
--   Symbols not registered globally, ex. `Symbol('my new symbol')`
+В дереве зависимостей модулей мы видим, что `App.js` импортирует и вызывает `Copyright` из модуля `Copyright.js`. Поскольку `Copyright.js` не содержит директивы `'use client'`, использование компонента отображается на сервере. Компонент `App` отображается на сервере, так как он является корневым компонентом.
 
-## Usage {#usage}
+Клиентские компоненты могут рендерить серверные компоненты, потому что вы можете передавать JSX в качестве реквизита. В данном случае `InspirationGenerator` получает `Copyright` в качестве [`children`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children). Однако модуль `InspirationGenerator` никогда напрямую не импортирует модуль `Copyright` и не вызывает компонент, все это делает `App`. Фактически, компонент `Copyright` полностью выполняется до того, как `InspirationGenerator` начинает рендеринг.
 
-### Building with interactivity and state {#building-with-interactivity-and-state}
+Отсюда следует вывод, что отношения рендеринга между компонентами типа "родитель-ребенок" не гарантируют одинакового окружения рендеринга.
 
-<Sandpack>
+### Когда использовать `'use client'` {#when-to-use-use-client}
 
-```js App.js
-'use client';
+С помощью `'use client'` вы можете определить, когда компоненты являются клиентскими компонентами. Поскольку серверные компоненты используются по умолчанию, здесь приводится краткий обзор преимуществ и ограничений серверных компонентов, чтобы определить, когда вам нужно пометить что-то как клиентское.
 
-import { useState } from 'react';
+Для простоты мы говорим о серверных компонентах, но те же принципы применимы ко всему коду в вашем приложении, который выполняется на сервере.
 
-export default function Counter({ initialValue = 0 }) {
-    const [countValue, setCountValue] = useState(
-        initialValue
-    );
-    const increment = () => setCountValue(countValue + 1);
-    const decrement = () => setCountValue(countValue - 1);
-    return (
-        <>
-            <h2>Count Value: {countValue}</h2>
-            <button onClick={increment}>+1</button>
-            <button onClick={decrement}>-1</button>
-        </>
-    );
-}
-```
+#### Преимущества серверных компонентов {#advantages}
 
-</Sandpack>
+-   Серверные компоненты позволяют сократить объем кода, отправляемого и выполняемого клиентом. Только клиентские модули собираются и оцениваются клиентом.
+-   Серверные компоненты выигрывают от работы на сервере. Они получают доступ к локальной файловой системе и могут работать с низкой задержкой при получении данных и сетевых запросах.
 
-As `Counter` requires both the `useState` hook and event handlers to increment or decrement the value, this component must be a Client Component and will require a `'use client'` directive at the top.
+#### Ограничения серверных компонентов {#limitations}
 
-In contrast, a component that renders UI without interaction will not need to be a Client Component.
+-   Серверные компоненты не могут поддерживать взаимодействие, поскольку обработчики событий должны быть зарегистрированы и вызваны клиентом.
+    -   Например, обработчики событий типа `onClick` могут быть определены только в клиентских компонентах.
+-   Серверные компоненты не могут использовать большинство хуков.
+    -   Когда серверные компоненты отрисовываются, их вывод - это, по сути, список компонентов для отрисовки клиентом. Серверные компоненты не сохраняются в памяти после рендеринга и не могут иметь собственного состояния.
+
+### Сериализуемые типы, возвращаемые серверными компонентами {#serializable-types}
+
+Как и в любом приложении React, родительские компоненты передают данные дочерним компонентам. Поскольку они отображаются в разных средах, передача данных от серверного компонента к клиентскому компоненту требует особого внимания.
+
+Значения реквизитов, передаваемые от серверного компонента к клиентскому компоненту, должны быть сериализуемыми.
+
+К сериализуемым реквизитам относятся:
+
+-   Примитивы
+    -   [строка](https://developer.mozilla.org/docs/Glossary/String)
+    -   [число](https://developer.mozilla.org/docs/Glossary/Number)
+    -   [bigint](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/BigInt)
+    -   [boolean](https://developer.mozilla.org/docs/Glossary/Boolean)
+    -   [undefined](https://developer.mozilla.org/docs/Glossary/Undefined)
+    -   [null](https://developer.mozilla.org/docs/Glossary/Null)
+    -   [symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol), только символы, зарегистрированные в глобальном реестре Symbol через [`Symbol.for`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol/for)
+-   Iterables, содержащие сериализуемые значения
+    -   [String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+    -   [Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)
+    -   [Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)
+    -   [Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)
+    -   [TypedArray](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) и [ArrayBuffer](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)
+-   [Date](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date)
+-   Обычные [объекты](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object): созданные с помощью [инициализаторов объектов](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Object_initializer), с сериализуемыми свойствами
+-   Функции, являющиеся [Действиями сервера](./use-server.md)
+-   Элементы клиентского или серверного компонента (JSX)
+-   [Promises](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+
+Примечательно, что не поддерживаются:
+
+-   [Функции](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Function), которые не экспортируются из модулей с клиентской разметкой или не помечены [`'use server'`](./use-server.md)
+-   [Классы](https://developer.mozilla.org/docs/Learn/JavaScript/Objects/Classes_in_JavaScript)
+-   Объекты, являющиеся экземплярами любого класса (кроме упомянутых встроенных) или объекты с [нулевым прототипом](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object#null-prototype_objects)
+-   Символы, не зарегистрированные глобально, например, `Symbol('mySymbol')`.
+
+## Использование {#usage}
+
+### Построение с интерактивностью и состоянием {#building-with-interactivity-and-state}
+
+=== "App.js"
+
+    ```js
+    'use client';
+
+    import { useState } from 'react';
+
+    export default function Counter({ initialValue = 0 }) {
+    	const [countValue, setCountValue] = useState(
+    		initialValue
+    	);
+    	const increment = () => setCountValue(countValue + 1);
+    	const decrement = () => setCountValue(countValue - 1);
+    	return (
+    		<>
+    			<h2>Count Value: {countValue}</h2>
+    			<button onClick={increment}>+1</button>
+    			<button onClick={decrement}>-1</button>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/w65qsc?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+Поскольку `Counter` требует как хук `useState`, так и обработчики событий для увеличения или уменьшения значения, этот компонент должен быть клиентским компонентом и потребует директивы `'use client'` в верхней части.
+
+В отличие от этого, компоненту, который отображает пользовательский интерфейс без взаимодействия, не нужно быть клиентским компонентом.
 
 ```js
 import { readFile } from 'node:fs/promises';
@@ -326,9 +315,9 @@ export default async function CounterContainer() {
 }
 ```
 
-For example, `Counter`'s parent component, `CounterContainer`, does not require `'use client'` as it is not interactive and does not use state. In addition, `CounterContainer` must be a Server Component as it reads from the local file system on the server, which is possible only in a Server Component.
+Например, родительский компонент `Counter`, `CounterContainer`, не требует `'use client'`, поскольку он не является интерактивным и не использует состояние. Кроме того, `CounterContainer` должен быть серверным компонентом, поскольку он читает из локальной файловой системы на сервере, что возможно только в серверном компоненте.
 
-There are also components that don't use any server or client-only features and can be agnostic to where they render. In our earlier example, `FancyText` is one such component.
+Существуют также компоненты, которые не используют никаких функций, предназначенных только для сервера или клиента, и могут быть независимы от того, где они отображаются. В нашем предыдущем примере одним из таких компонентов является `FancyText`.
 
 ```js
 export default function FancyText({ title, text }) {
@@ -340,15 +329,15 @@ export default function FancyText({ title, text }) {
 }
 ```
 
-In this case, we don't add the `'use client'` directive, resulting in `FancyText`'s _output_ (rather than its source code) to be sent to the browser when referenced from a Server Component. As demonstrated in the earlier Inspirations app example, `FancyText` is used as both a Server or Client Component, depending on where it is imported and used.
+В этом случае мы не добавляем директиву `'use client'`, в результате чего при обращении к серверному компоненту в браузер отправляется вывод `FancyText` (а не его исходный код). Как было показано в предыдущем примере приложения Inspirations, `FancyText` используется как серверный или клиентский компонент, в зависимости от того, где он импортируется и используется.
 
-But if `FancyText`'s HTML output was large relative to its source code (including dependencies), it might be more efficient to force it to always be a Client Component. Components that return a long SVG path string are one case where it may be more efficient to force a component to be a Client Component.
+Но если HTML-вывод `FancyText` велик по отношению к его исходному коду (включая зависимости), было бы эффективнее заставить его всегда быть клиентским компонентом. Компоненты, возвращающие длинную строку пути к SVG, - это один из случаев, когда может быть эффективнее заставить компонент быть клиентским компонентом.
 
-### Using client APIs {#using-client-apis}
+### Использование клиентских API {#using-client-apis}
 
-Your React app may use client-specific APIs, such as the browser's APIs for web storage, audio and video manipulation, and device hardware, among [others](https://developer.mozilla.org/en-US/docs/Web/API).
+Ваше приложение React может использовать специфические клиентские API, такие как API браузера для веб-хранилища, работы с аудио и видео, аппаратного обеспечения устройства, среди [других](https://developer.mozilla.org/docs/Web/API).
 
-In this example, the component uses [DOM APIs](https://developer.mozilla.org/en-US/docs/Glossary/DOM) to manipulate a [`canvas`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas) element. Since those APIs are only available in the browser, it must be marked as a Client Component.
+В этом примере компонент использует [DOM APIs](https://developer.mozilla.org/docs/Glossary/DOM) для манипулирования элементом [`canvas`](https://developer.mozilla.org/docs/Web/HTML/Element/canvas). Поскольку эти API доступны только в браузере, он должен быть помечен как клиентский компонент.
 
 ```js
 'use client';
@@ -369,17 +358,19 @@ export default function Circle() {
 }
 ```
 
-### Using third-party libraries {#using-third-party-libraries}
+### Использование сторонних библиотек {#using-third-party-libraries}
 
-Often in a React app, you'll leverage third-party libraries to handle common UI patterns or logic.
+Часто в приложениях на React вы используете сторонние библиотеки для работы с общими шаблонами пользовательского интерфейса или логикой.
 
-These libraries may rely on component Hooks or client APIs. Third-party components that use any of the following React APIs must run on the client:
+Эти библиотеки могут опираться на хуки компонентов или клиентские API. Сторонние компоненты, использующие любой из следующих API React, должны запускаться на клиенте:
 
 -   [createContext](createContext.md)
--   [`react`](hooks.md) and `react-dom` Hooks, excluding [`use`](use.md) and [`useId`](useId.md)
+-   [`react`](hooks.md) и `react-dom` Hooks, за исключением [`use`](use.md) и [`useId`](useId.md)
 -   [forwardRef](forwardRef.md)
 -   [memo](memo.md)
 -   [startTransition](startTransition.md)
--   If they use client APIs, ex. DOM insertion or native platform views
+-   Если они используют клиентские API, например, вставку DOM или нативные представления платформы
 
-If these libraries have been updated to be compatible with React Server Components, then they will already include `'use client'` markers of their own, allowing you to use them directly from your Server Components. If a library hasn't been updated, or if a component needs props like event handlers that can only be specified on the client, you may need to add your own Client Component file in between the third-party Client Component and your Server Component where you'd like to use it.
+Если эти библиотеки были обновлены для совместимости с React Server Components, то они уже будут содержать собственные маркеры `'use client'`, что позволит вам использовать их непосредственно из ваших серверных компонентов. Если библиотека не была обновлена, или компоненту нужны такие параметры, как обработчики событий, которые могут быть указаны только на клиенте, вам может потребоваться добавить собственный файл клиентского компонента между сторонним клиентским компонентом и вашим серверным компонентом, где вы хотите его использовать.
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/use-client](https://react.dev/reference/react/use-client)</small>

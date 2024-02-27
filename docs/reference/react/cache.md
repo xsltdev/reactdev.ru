@@ -1,36 +1,29 @@
 ---
 status: experimental
+description: cache позволяет кэшировать результат выборки данных или вычислений
 ---
 
 # cache
 
-<Canary>
-* `cache` is only for use with [React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components). See [frameworks](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) that support React Server Components.
+!!!example "Canary"
 
--   `cache` is only available in React’s [Canary](https://react.dev/community/versioning-policy#canary-channel) and [experimental](https://react.dev/community/versioning-policy#experimental-channel) channels. Please ensure you understand the limitations before using `cache` in production. Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
-    </Canary>
+    -   `cache` предназначен только для использования с [React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components). Смотрите [фреймворки](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks), которые поддерживают React Server Components.
 
-<Intro>
+    -   `cache` доступен только в каналах React [Canary](https://react.dev/community/versioning-policy#canary-channel) и [experimental](https://react.dev/community/versioning-policy#experimental-channel). Пожалуйста, убедитесь, что вы понимаете ограничения, прежде чем использовать `cache` в производстве. Узнайте больше о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
-`cache` lets you cache the result of a data fetch or computation.
+<big>`cache` позволяет кэшировать результат выборки данных или вычислений.</big>
 
 ```js
 const cachedFn = cache(fn);
 ```
 
-</Intro>
-
-<InlineToc />
-
----
-
 ## Описание {#reference}
 
-### `cache(fn)` {/_cache_/}
+### `cache(fn)` {#cache}
 
-Call `cache` outside of any components to create a version of the function with caching.
+Вызовите `cache` вне каких-либо компонентов, чтобы создать версию функции с кэшированием.
 
-```js {4,7}
+```js hl_lines="4 7"
 import { cache } from 'react';
 import calculateMetrics from 'lib/metrics';
 
@@ -42,44 +35,36 @@ function Chart({ data }) {
 }
 ```
 
-When `getMetrics` is first called with `data`, `getMetrics` will call `calculateMetrics(data)` and store the result in cache. If `getMetrics` is called again with the same `data`, it will return the cached result instead of calling `calculateMetrics(data)` again.
+При первом вызове `getMetrics` с `data`, `getMetrics` вызовет `calculateMetrics(data)` и сохранит результат в кэше. Если `getMetrics` будет вызвана снова с теми же `data`, она вернет кэшированный результат вместо повторного вызова `calculateMetrics(data)`.
 
-[See more examples below.](#usage)
+#### Параметры {#parameters}
 
-#### Parameters {/_parameters_/}
-
--   `fn`: The function you want to cache results for. `fn` can take any arguments and return any value.
+-   `fn`: Функция, для которой вы хотите кэшировать результаты. Функция `fn` может принимать любые аргументы и возвращать любое значение.
 
 #### Возвращает {#returns}
 
-`cache` returns a cached version of `fn` with the same type signature. It does not call `fn` in the process.
+`cache` возвращает кэшированную версию `fn` с той же сигнатурой типа. При этом вызов `fn` не производится.
 
-When calling `cachedFn` with given arguments, it first checks if a cached result exists in the cache. If a cached result exists, it returns the result. If not, it calls `fn` with the arguments, stores the result in the cache, and returns the result. The only time `fn` is called is when there is a cache miss.
+При вызове `cachedFn` с заданными аргументами сначала проверяется, существует ли кэшированный результат в кэше. Если кэшированный результат существует, он возвращает его. Если нет, он вызывает `fn` с аргументами, сохраняет результат в кэше и возвращает его. Единственный раз, когда вызывается `fn`, это когда происходит пропуск кэша.
 
-<Note>
+!!!note "Мемоизация"
 
-The optimization of caching return values based on inputs is known as [_memoization_](https://en.wikipedia.org/wiki/Memoization). We refer to the function returned from `cache` as a memoized function.
-
-</Note>
+    Оптимизация кэширования возвращаемых значений на основе входных данных известна как [_мемоизация_](https://ru.wikipedia.org/wiki/Мемоизация). Мы называем функцию, возвращаемую из `cache`, мемоизированной функцией.
 
 #### Замечания {#caveats}
 
-[//]: # 'TODO: add links to Server/Client Component reference once https://github.com/reactjs/react.dev/pull/6177 is merged'
-
--   React will invalidate the cache for all memoized functions for each server request.
--   Each call to `cache` creates a new function. This means that calling `cache` with the same function multiple times will return different memoized functions that do not share the same cache.
--   `cachedFn` will also cache errors. If `fn` throws an error for certain arguments, it will be cached, and the same error is re-thrown when `cachedFn` is called with those same arguments.
--   `cache` is for use in [Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components) only.
-
----
+-   React аннулирует кэш для всех мемоизированных функций при каждом запросе сервера.
+-   Каждый вызов `cache` создает новую функцию. Это означает, что вызов `cache` с одной и той же функцией несколько раз будет возвращать разные мемоизированные функции, которые не используют один и тот же кэш.
+-   `cachedFn` также будет кэшировать ошибки. Если `fn` выбрасывает ошибку для определенных аргументов, она будет кэширована, и та же ошибка будет повторно выброшена, когда `cachedFn` будет вызвана с теми же аргументами.
+-   `cache` предназначен только для использования в [Серверных компонентах](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components).
 
 ## Использование {#usage}
 
-### Cache an expensive computation {/_cache-expensive-computation_/}
+### Кэширование дорогих вычислений {#cache-expensive-computation}
 
-Use `cache` to skip duplicate work.
+Используйте `cache` для пропуска дублирующей работы.
 
-```js [[1, 7, "getUserMetrics(user)"],[2, 13, "getUserMetrics(user)"]]
+```js hl_lines="7 13"
 import { cache } from 'react';
 import calculateUserMetrics from 'lib/user';
 
@@ -99,37 +84,39 @@ function TeamReport({ users }) {
 }
 ```
 
-If the same `user` object is rendered in both `Profile` and `TeamReport`, the two components can share work and only call `calculateUserMetrics` once for that `user`.
+Если один и тот же объект `user` отображается и в `Profile`, и в `TeamReport`, оба компонента могут разделить работу и вызвать `calculateUserMetrics` только один раз для этого `user`.
 
-Assume `Profile` is rendered first. It will call <CodeStep step={1}>`getUserMetrics`</CodeStep>, and check if there is a cached result. Since it is the first time `getUserMetrics` is called with that `user`, there will be a cache miss. `getUserMetrics` will then call `calculateUserMetrics` with that `user` and write the result to cache.
+Предположим, что первым рендерится `Profile`. Он вызовет `getUserMetrics` и проверит, есть ли кэшированный результат. Поскольку `getUserMetrics` вызывается впервые для этого 'user', произойдет пропуск кэша. Затем `getUserMetrics` вызовет `calculateUserMetrics` с этим `пользователем` и запишет результат в кэш.
 
-When `TeamReport` renders its list of `users` and reaches the same `user` object, it will call <CodeStep step={2}>`getUserMetrics`</CodeStep> and read the result from cache.
+Когда `TeamReport` отобразит свой список 'users' и достигнет того же самого объекта `user`, он вызовет `getUserMetrics` и прочитает результат из кэша.
 
-<Pitfall>
+#### Вызов разных мемоизированных функций будет считывать данные из разных кэшей {#pitfall-different-memoized-functions}
 
-##### Calling different memoized functions will read from different caches. {/_pitfall-different-memoized-functions_/}
+Чтобы получить доступ к одному и тому же кэшу, компоненты должны вызывать одну и ту же мемоизированную функцию.
 
-To access the same cache, components must call the same memoized function.
-
-```js [[1, 7, "getWeekReport"], [1, 7, "cache(calculateWeekReport)"], [1, 8, "getWeekReport"]]
+```js hl_lines="8-9"
 // Temperature.js
 import { cache } from 'react';
 import { calculateWeekReport } from './report';
 
 export function Temperature({ cityData }) {
-    // 🚩 Wrong: Calling `cache` in component creates new `getWeekReport` for each render
+    // 🚩 Wrong: Calling `cache` in component creates
+    // new `getWeekReport` for each render
     const getWeekReport = cache(calculateWeekReport);
     const report = getWeekReport(cityData);
     // ...
 }
 ```
 
-```js [[2, 6, "getWeekReport"], [2, 6, "cache(calculateWeekReport)"], [2, 9, "getWeekReport"]]
+---
+
+```js hl_lines="7 10"
 // Precipitation.js
 import { cache } from 'react';
 import { calculateWeekReport } from './report';
 
-// 🚩 Wrong: `getWeekReport` is only accessible for `Precipitation` component.
+// 🚩 Wrong: `getWeekReport` is only accessible
+// for `Precipitation` component.
 const getWeekReport = cache(calculateWeekReport);
 
 export function Precipitation({ cityData }) {
@@ -138,13 +125,13 @@ export function Precipitation({ cityData }) {
 }
 ```
 
-In the above example, <CodeStep step={2}>`Precipitation`</CodeStep> and <CodeStep step={1}>`Temperature`</CodeStep> each call `cache` to create a new memoized function with their own cache look-up. If both components render for the same `cityData`, they will do duplicate work to call `calculateWeekReport`.
+В приведенном выше примере `Precipitation` и `Temperature` каждый вызывает `cache` для создания новой мемоизированной функции с собственным поиском в кэше. Если оба компонента выполняют рендеринг для одного и того же `cityData`, они будут выполнять дублирующую работу по вызову `calculateWeekReport`.
 
-In addition, `Temperature` creates a <CodeStep step={1}>new memoized function</CodeStep> each time the component is rendered which doesn't allow for any cache sharing.
+Кроме того, `Temperature` создает новую мемоизированную функцию каждый раз, когда компонент рендерится, что не позволяет разделить кэш.
 
-To maximize cache hits and reduce work, the two components should call the same memoized function to access the same cache. Instead, define the memoized function in a dedicated module that can be [`import`-ed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) across components.
+Чтобы максимизировать количество обращений к кэшу и сократить объем работы, оба компонента должны вызывать одну и ту же мемоизированную функцию для доступа к одному и тому же кэшу. Вместо этого определите мемоизированную функцию в специальном модуле, который можно [`import`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/import) для всех компонентов.
 
-```js [[3, 5, "export default cache(calculateWeekReport)"]]
+```js hl_lines="5"
 // getWeekReport.js
 import { cache } from 'react';
 import { calculateWeekReport } from './report';
@@ -152,7 +139,9 @@ import { calculateWeekReport } from './report';
 export default cache(calculateWeekReport);
 ```
 
-```js [[3, 2, "getWeekReport", 0], [3, 5, "getWeekReport"]]
+---
+
+```js hl_lines="2 5"
 // Temperature.js
 import getWeekReport from './getWeekReport';
 
@@ -162,7 +151,9 @@ export default function Temperature({ cityData }) {
 }
 ```
 
-```js [[3, 2, "getWeekReport", 0], [3, 5, "getWeekReport"]]
+---
+
+```js hl_lines="2 5"
 // Precipitation.js
 import getWeekReport from './getWeekReport';
 
@@ -172,14 +163,13 @@ export default function Precipitation({ cityData }) {
 }
 ```
 
-Here, both components call the <CodeStep step={3}>same memoized function</CodeStep> exported from `./getWeekReport.js` to read and write to the same cache.
-</Pitfall>
+Здесь оба компонента вызывают одну и ту же мемоизированную функцию, экспортированную из `./getWeekReport.js`, для чтения и записи в один и тот же кэш.
 
-### Share a snapshot of data {/_take-and-share-snapshot-of-data_/}
+### Совместное использование снимка данных {#take-and-share-snapshot-of-data}
 
-To share a snapshot of data between components, call `cache` with a data-fetching function like `fetch`. When multiple components make the same data fetch, only one request is made and the data returned is cached and shared across components. All components refer to the same snapshot of data across the server render.
+Чтобы поделиться снимком данных между компонентами, вызовите `cache` с функцией получения данных, например `fetch`. Когда несколько компонентов выполняют одну и ту же выборку данных, выполняется только один запрос, а возвращаемые данные кэшируются и разделяются между компонентами. Все компоненты обращаются к одному и тому же снимку данных во время рендеринга сервера.
 
-```js [[1, 4, "city"], [1, 5, "fetchTemperature(city)"], [2, 4, "getTemperature"], [2, 9, "getTemperature"], [1, 9, "city"], [2, 14, "getTemperature"], [1, 14, "city"]]
+```js
 import { cache } from 'react';
 import { fetchTemperature } from './api.js';
 
@@ -198,74 +188,65 @@ async function MinimalWeatherCard({ city }) {
 }
 ```
 
-If `AnimatedWeatherCard` and `MinimalWeatherCard` both render for the same <CodeStep step={1}>city</CodeStep>, they will receive the same snapshot of data from the <CodeStep step={2}>memoized function</CodeStep>.
+Если `AnimatedWeatherCard` и `MinimalWeatherCard` рендерятся для одного и того же города, то они получат один и тот же снимок данных из мемоизированной функции.
 
-If `AnimatedWeatherCard` and `MinimalWeatherCard` supply different <CodeStep step={1}>city</CodeStep> arguments to <CodeStep step={2}>`getTemperature`</CodeStep>, then `fetchTemperature` will be called twice and each call site will receive different data.
+Если `AnimatedWeatherCard` и `MinimalWeatherCard` передают разные аргументы города в `getTemperature`, то `fetchTemperature` будет вызван дважды, и каждый сайт вызова получит разные данные.
 
-The <CodeStep step={1}>city</CodeStep> acts as a cache key.
+Город действует как ключ кэша.
 
-<Note>
+!!!note "Асинхронный рендеринг"
 
-[//]: # 'TODO: add links to Server Components when merged.'
+    Асинхронный рендеринг поддерживается только для серверных компонентов.
 
-<CodeStep step={3}>Asynchronous rendering</CodeStep> is only supported for Server Components.
+    ```js
+    async function AnimatedWeatherCard({ city }) {
+    	const temperature = await getTemperature(city);
+    	// ...
+    }
+    ```
 
-```js [[3, 1, "async"], [3, 2, "await"]]
-async function AnimatedWeatherCard({ city }) {
-    const temperature = await getTemperature(city);
-    // ...
-}
-```
+### Предварительная загрузка данных {#preload-data}
 
-[//]: # 'TODO: add link and mention to use documentation when merged'
-[//]: # 'To render components that use asynchronous data in Client Components, see `use` documentation.'
+Кэширование длительной выборки данных позволяет запустить асинхронную работу до рендеринга компонента.
 
-</Note>
-
-### Preload data {/_preload-data_/}
-
-By caching a long-running data fetch, you can kick off asynchronous work prior to rendering the component.
-
-```jsx [[2, 6, "await getUser(id)"], [1, 17, "getUser(id)"]]
+```js
 const getUser = cache(async (id) => {
-  return await db.user.query(id);
+    return await db.user.query(id);
+});
+
+async function Profile({ id }) {
+    const user = await getUser(id);
+    return (
+        <section>
+            <img src={user.profilePic} />
+            <h2>{user.name}</h2>
+        </section>
+    );
 }
 
-async function Profile({id}) {
-  const user = await getUser(id);
-  return (
-    <section>
-      <img src={user.profilePic} />
-      <h2>{user.name}</h2>
-    </section>
-  );
-}
-
-function Page({id}) {
-  // ✅ Good: start fetching the user data
-  getUser(id);
-  // ... some computational work
-  return (
-    <>
-      <Profile id={id} />
-    </>
-  );
+function Page({ id }) {
+    // ✅ Good: start fetching the user data
+    getUser(id);
+    // ... some computational work
+    return (
+        <>
+            <Profile id={id} />
+        </>
+    );
 }
 ```
 
-When rendering `Page`, the component calls <CodeStep step={1}>`getUser`</CodeStep> but note that it doesn't use the returned data. This early <CodeStep step={1}>`getUser`</CodeStep> call kicks off the asynchronous database query that occurs while `Page` is doing other computational work and rendering children.
+При рендеринге `Page` компонент вызывает `getUser`, но обратите внимание, что он не использует возвращенные данные. Этот ранний вызов `getUser` запускает асинхронный запрос к базе данных, который происходит, пока `Page` выполняет другую вычислительную работу и рендерит дочерние страницы.
 
-When rendering `Profile`, we call <CodeStep step={2}>`getUser`</CodeStep> again. If the initial <CodeStep step={1}>`getUser`</CodeStep> call has already returned and cached the user data, when `Profile` <CodeStep step={2}>asks and waits for this data</CodeStep>, it can simply read from the cache without requiring another remote procedure call. If the <CodeStep step={1}> initial data request</CodeStep> hasn't been completed, preloading data in this pattern reduces delay in data-fetching.
+При рендеринге `Profile` мы снова вызываем `getUser`. Если первоначальный вызов `getUser` уже вернул и кэшировал данные о пользователе, то когда `Profile` запрашивает и ждет эти данные, он может просто прочитать их из кэша, не требуя повторного вызова удаленной процедуры. Если первоначальный запрос данных не был завершен, предварительная загрузка данных в этом шаблоне уменьшает задержку в получении данных.
 
-<DeepDive>
+#### Кэширование асинхронной работы {#caching-asynchronous-work}
 
-#### Caching asynchronous work {/_caching-asynchronous-work_/}
+При выполнении [асинхронной функции](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/async_function) вы получите [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) для этой работы. Promise содержит состояние этой работы (_в ожидании_, _выполнена_, _не выполнена_) и ее конечный результат.
 
-When evaluating an [asynchronous function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/async_function), you will receive a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) for that work. The promise holds the state of that work (_pending_, _fulfilled_, _failed_) and its eventual settled result.
+В этом примере асинхронная функция `fetchData` возвращает обещание, которое ожидает `fetch`.
 
-In this example, the asynchronous function <CodeStep step={1}>`fetchData`</CodeStep> returns a promise that is awaiting the `fetch`.
-
-```js [[1, 1, "fetchData()"], [2, 8, "getData()"], [3, 10, "getData()"]]
+```js
 async function fetchData() {
     return await fetch(`https://...`);
 }
@@ -280,27 +261,25 @@ async function MyComponent() {
 }
 ```
 
-In calling <CodeStep step={2}>`getData`</CodeStep> the first time, the promise returned from <CodeStep step={1}>`fetchData`</CodeStep> is cached. Subsequent look-ups will then return the same promise.
+При первом вызове `getData` обещание, возвращенное из `fetchData`, кэшируется. Последующие вызовы будут возвращать то же обещание.
 
-Notice that the first <CodeStep step={2}>`getData`</CodeStep> call does not `await` whereas the <CodeStep step={3}>second</CodeStep> does. [`await`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/await) is a JavaScript operator that will wait and return the settled result of the promise. The first <CodeStep step={2}>`getData`</CodeStep> call simply initiates the `fetch` to cache the promise for the second <CodeStep step={3}>`getData`</CodeStep> to look-up.
+Обратите внимание, что в первом вызове `getData` не используется `await`, тогда как во втором - используется. [`await`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/await) - это оператор JavaScript, который будет ждать и вернет готовый результат обещания. Первый вызов `getData` просто инициирует `fetch` для кэширования обещания, чтобы второй `getData` мог его просмотреть.
 
-If by the <CodeStep step={3}>second call</CodeStep> the promise is still _pending_, then `await` will pause for the result. The optimization is that while we wait on the `fetch`, React can continue with computational work, thus reducing the wait time for the <CodeStep step={3}>second call</CodeStep>.
+Если ко второму вызову обещание все еще _ожидает_, то `await` сделает паузу для получения результата. Оптимизация заключается в том, что пока мы ждем `fetch`, React может продолжать вычислительную работу, тем самым сокращая время ожидания второго вызова.
 
-If the promise is already settled, either to an error or the _fulfilled_ result, `await` will return that value immediately. In both outcomes, there is a performance benefit.
-</DeepDive>
+Если обещание уже выполнено, либо ошибка, либо _выполненный_ результат, `await` вернет это значение немедленно. В обоих случаях выигрыш в производительности налицо.
 
-<Pitfall>
+#### Вызов мемоизированной функции вне компонента не будет использовать кэш {#pitfall-memoized-call-outside-component}
 
-##### Calling a memoized function outside of a component will not use the cache. {/_pitfall-memoized-call-outside-component_/}
-
-```jsx [[1, 3, "getUser"]]
+```js
 import { cache } from 'react';
 
 const getUser = cache(async (userId) => {
     return await db.user.query(userId);
 });
 
-// 🚩 Wrong: Calling memoized function outside of component will not memoize.
+// 🚩 Wrong: Calling memoized function outside
+// of component will not memoize.
 getUser('demo-id');
 
 async function DemoProfile() {
@@ -310,23 +289,19 @@ async function DemoProfile() {
 }
 ```
 
-React only provides cache access to the memoized function in a component. When calling <CodeStep step={1}>`getUser`</CodeStep> outside of a component, it will still evaluate the function but not read or update the cache.
+React предоставляет доступ к кэшу только для мемоизированной функции в компоненте. При вызове `getUser` вне компонента, он по-прежнему будет оценивать функцию, но не будет считывать или обновлять кэш.
 
-This is because cache access is provided through a [context](../../learn/passing-data-deeply-with-context.md) which is only accessible from a component.
+Это происходит потому, что доступ к кэшу осуществляется через [контекст](../../learn/passing-data-deeply-with-context.md), который доступен только из компонента.
 
-</Pitfall>
+### Когда следует использовать `cache`, [`memo`](./memo.md) или [`useMemo`](./useMemo.md)? {#cache-memo-usememo}
 
-<DeepDive>
+Все упомянутые API предлагают мемоизацию, но разница заключается в том, что они предназначены для мемоизации, кто может получить доступ к кэшу и когда их кэш будет аннулирован.
 
-#### When should I use `cache`, [`memo`](./memo.md), or [`useMemo`](./useMemo.md)? {/_cache-memo-usememo_/}
+#### `useMemo` {#deep-dive-use-memo}
 
-All mentioned APIs offer memoization but the difference is what they're intended to memoize, who can access the cache, and when their cache is invalidated.
+В общем случае для кэширования дорогостоящих вычислений в клиентском компоненте при разных рендерах следует использовать [`useMemo`](./useMemo.md). Например, для мемоизации преобразования данных внутри компонента.
 
-#### `useMemo` {/_deep-dive-use-memo_/}
-
-In general, you should use [`useMemo`](./useMemo.md) for caching a expensive computation in a Client Component across renders. As an example, to memoize a transformation of data within a component.
-
-```jsx
+```js hl_lines="4"
 'use client';
 
 function WeatherReport({ record }) {
@@ -348,13 +323,13 @@ function App() {
 }
 ```
 
-In this example, `App` renders two `WeatherReport`s with the same record. Even though both components do the same work, they cannot share work. `useMemo`'s cache is only local to the component.
+В этом примере `App` отображает два `WeatherReport` с одной и той же записью. Несмотря на то, что оба компонента выполняют одну и ту же работу, они не могут делиться ею. Кэш `useMemo` является локальным только для компонента.
 
-However, `useMemo` does ensure that if `App` re-renders and the `record` object doesn't change, each component instance would skip work and use the memoized value of `avgTemp`. `useMemo` will only cache the last computation of `avgTemp` with the given dependencies.
+Однако `useMemo` гарантирует, что если `App` перерендерится и объект `record` не изменится, каждый экземпляр компонента пропустит работу и использует мемоизированное значение `avgTemp`. `useMemo` будет кэшировать только последнее вычисление `avgTemp` с заданными зависимостями.
 
-#### `cache` {/_deep-dive-cache_/}
+#### `cache` {#deep-dive-cache}
 
-In general, you should use `cache` in Server Components to memoize work that can be shared across components.
+В общем случае следует использовать `cache` в серверных компонентах для запоминания работы, которая может быть разделена между компонентами.
 
 ```js
 const cachedFetchReport = cache(fetchReport);
@@ -375,13 +350,13 @@ function App() {
 }
 ```
 
-Re-writing the previous example to use `cache`, in this case the <CodeStep step={3}>second instance of `WeatherReport`</CodeStep> will be able to skip duplicate work and read from the same cache as the <CodeStep step={1}>first `WeatherReport`</CodeStep>. Another difference from the previous example is that `cache` is also recommended for <CodeStep step={2}>memoizing data fetches</CodeStep>, unlike `useMemo` which should only be used for computations.
+Если переписать предыдущий пример и использовать `cache`, то в этом случае второй экземпляр `WeatherReport` сможет пропустить дублирование работы и читать из того же кэша, что и первый `WeatherReport`. Еще одним отличием от предыдущего примера является то, что `cache` также рекомендуется для мемоизации поиска данных, в отличие от `useMemo`, который должен использоваться только для вычислений.
 
-At this time, `cache` should only be used in Server Components and the cache will be invalidated across server requests.
+В настоящее время `cache` следует использовать только в серверных компонентах, и при запросах к серверу кэш будет аннулирован.
 
-#### `memo` {/_deep-dive-memo_/}
+#### `memo` {#deep-dive-memo}
 
-You should use [`memo`](./memo.md) to prevent a component re-rendering if its props are unchanged.
+Вы должны использовать [`memo`](./memo.md) для предотвращения повторного рендеринга компонента, если его реквизиты не изменились.
 
 ```js
 'use client';
@@ -404,28 +379,24 @@ function App() {
 }
 ```
 
-In this example, both `MemoWeatherReport` components will call `calculateAvg` when first rendered. However, if `App` re-renders, with no changes to `record`, none of the props have changed and `MemoWeatherReport` will not re-render.
+В этом примере оба компонента `MemoWeatherReport` вызовут `calculateAvg` при первом рендеринге. Однако если `App` перерендерится без изменений в `record`, ни один из реквизитов не изменится, и `MemoWeatherReport` не перерендерится.
 
-Compared to `useMemo`, `memo` memoizes the component render based on props vs. specific computations. Similar to `useMemo`, the memoized component only caches the last render with the last prop values. Once the props change, the cache invalidates and the component re-renders.
+По сравнению с `useMemo`, `memo` мемоизирует рендеринг компонента на основе реквизитов, а не конкретных вычислений. Как и в случае с `useMemo`, компонент с мемоизацией кэширует только последний рендер с последними значениями реквизитов. Как только реквизит меняется, кэш аннулируется и компонент рендерится заново.
 
-</DeepDive>
+## Устранение неполадок {#troubleshooting}
 
----
+### Моя мемоизированная функция все еще выполняется, даже если я вызывал ее с теми же аргументами {#memoized-function-still-runs}
 
-## Troubleshooting {/_troubleshooting_/}
+См. ранее упомянутые подводные камни
 
-### My memoized function still runs even though I've called it with the same arguments {/_memoized-function-still-runs_/}
+-   [Вызов разных мемоизированных функций будет считываться из разных кэшей](#pitfall-different-memoized-functions)
+-   [Вызов мемоизированной функции вне компонента не будет использовать кэш](#pitfall-memoized-call-outside-component).
 
-See prior mentioned pitfalls
+Если ничего из вышеперечисленного не работает, возможно, проблема в том, как React проверяет, существует ли что-то в кэше.
 
--   [Calling different memoized functions will read from different caches.](#pitfall-different-memoized-functions)
--   [Calling a memoized function outside of a component will not use the cache.](#pitfall-memoized-call-outside-component)
+Если ваши аргументы не являются [примитивами](https://developer.mozilla.org/docs/Glossary/Primitive) (например, объекты, функции, массивы), убедитесь, что вы передаете одну и ту же ссылку на объект.
 
-If none of the above apply, it may be a problem with how React checks if something exists in cache.
-
-If your arguments are not [primitives](https://developer.mozilla.org/docs/Glossary/Primitive) (ex. objects, functions, arrays), ensure you're passing the same object reference.
-
-When calling a memoized function, React will look up the input arguments to see if a result is already cached. React will use shallow equality of the arguments to determine if there is a cache hit.
+При вызове мемоизированной функции React просмотрит входные аргументы на предмет того, не кэширован ли уже результат. React будет использовать неглубокое равенство аргументов, чтобы определить, есть ли попадание в кэш.
 
 ```js
 import { cache } from 'react';
@@ -450,11 +421,11 @@ function App() {
 }
 ```
 
-In this case the two `MapMarker`s look like they're doing the same work and calling `calculateNorm` with the same value of `{x: 10, y: 10, z:10}`. Even though the objects contain the same values, they are not the same object reference as each component creates its own `props` object.
+В данном случае два `MapMarker` выглядят так, как будто они выполняют одну и ту же работу и вызывают `calculateNorm` с одним и тем же значением `{x: 10, y: 10, z:10}`. Несмотря на то, что объекты содержат одинаковые значения, они не являются одной и той же объектной ссылкой, поскольку каждый компонент создает свой собственный объект `props`.
 
-React will call [`Object.is`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is) on the input to verify if there is a cache hit.
+React вызовет [`Object.is`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is) на входе, чтобы проверить, есть ли попадание в кэш.
 
-```js
+```js hl_lines="3 9"
 import { cache } from 'react';
 
 const calculateNorm = cache((x, y, z) => {
@@ -477,11 +448,11 @@ function App() {
 }
 ```
 
-One way to address this could be to pass the vector dimensions to `calculateNorm`. This works because the dimensions themselves are primitives.
+Одним из способов решения этой проблемы может быть передача размеров вектора в `calculateNorm`. Это работает, потому что сами размеры являются примитивами.
 
-Another solution may be to pass the vector object itself as a prop to the component. We'll need to pass the same object to both component instances.
+Другим решением может быть передача компоненту самого объекта вектора в качестве параметра. Нам нужно будет передать один и тот же объект обоим экземплярам компонента.
 
-```js
+```js hl_lines="3 9"
 import { cache } from 'react';
 
 const calculateNorm = cache((vector) => {
@@ -504,3 +475,5 @@ function App() {
     );
 }
 ```
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/cache](https://react.dev/reference/react/cache)</small>

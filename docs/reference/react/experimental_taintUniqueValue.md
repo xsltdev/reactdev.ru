@@ -5,43 +5,33 @@ title: taintUniqueValue
 
 # experimental_taintUniqueValue
 
-<Wip>
+!!!warning "В разработке"
 
-**This API is experimental and is not available in a stable version of React yet.**
+    **Этот API является экспериментальным и пока не доступен в стабильной версии React.**
 
-You can try it by upgrading React packages to the most recent experimental version:
+    Вы можете попробовать его, обновив пакеты React до последней экспериментальной версии:
 
--   `react@experimental`
--   `react-dom@experimental`
--   `eslint-plugin-react-hooks@experimental`
+    -   `react@experimental`
+    -   `react-dom@experimental`
+    -   `eslint-plugin-react-hooks@experimental`.
 
-Experimental versions of React may contain bugs. Don't use them in production.
+    Экспериментальные версии React могут содержать ошибки. Не используйте их в продакшене.
 
-This API is only available inside [React Server Components](./use-client.md).
+    Этот API доступен только внутри [React Server Components](./use-client.md).
 
-</Wip>
-
-<Intro>
-
-`taintUniqueValue` lets you prevent unique values from being passed to Client Components like passwords, keys, or tokens.
+<big>`taintUniqueValue` позволяет предотвратить передачу уникальных значений клиентским компонентам, таких как пароли, ключи или токены.</big>
 
 ```js
 taintUniqueValue(errMessage, lifetime, value);
 ```
 
-To prevent passing an object containing sensitive data, see [`taintObjectReference`](./experimental_taintObjectReference.md).
-
-</Intro>
-
-<InlineToc />
-
----
+Чтобы предотвратить передачу объекта, содержащего конфиденциальные данные, смотрите [`taintObjectReference`](./experimental_taintObjectReference.md).
 
 ## Описание {#reference}
 
-### `taintUniqueValue(message, lifetime, value)` {/_taintuniquevalue_/}
+### `taintUniqueValue(message, lifetime, value)` {#taintuniquevalue}
 
-Call `taintUniqueValue` with a password, token, key or hash to register it with React as something that should not be allowed to be passed to the Client as is:
+Вызовите `taintUniqueValue` с паролем, токеном, ключом или хэшем, чтобы зарегистрировать его в React как нечто, что не должно быть передано клиенту как есть:
 
 ```js
 import { experimental_taintUniqueValue } from 'react';
@@ -53,34 +43,30 @@ experimental_taintUniqueValue(
 );
 ```
 
-[See more examples below.](#usage)
+**Параметры**
 
-#### Parameters {/_parameters_/}
+-   `message`: Сообщение, которое вы хотите отобразить, если `value` будет передано клиентскому компоненту. Это сообщение будет отображаться как часть ошибки, которая будет выброшена, если `value` будет передано клиентскому компоненту.
 
--   `message`: The message you want to display if `value` is passed to a Client Component. This message will be displayed as a part of the Error that will be thrown if `value` is passed to a Client Component.
+-   `lifetime`: Любой объект, указывающий, как долго `value` должно быть запятнано. Пока этот объект существует, `value` будет заблокирован от передачи любому клиентскому компоненту. Например, передача `globalThis` блокирует значение на время жизни приложения. `lifetime` обычно представляет собой объект, свойства которого содержат `value`.
 
--   `lifetime`: Any object that indicates how long `value` should be tainted. `value` will be blocked from being sent to any Client Component while this object still exists. For example, passing `globalThis` blocks the value for the lifetime of an app. `lifetime` is typically an object whose properties contains `value`.
+-   `value`: Строка, bigint или TypedArray. `value` должно быть уникальной последовательностью символов или байтов с высокой энтропией, например, криптографическим токеном, закрытым ключом, хэшем или длинным паролем. Значение `value` будет заблокировано от отправки любому клиентскому компоненту.
 
--   `value`: A string, bigint or TypedArray. `value` must be a unique sequence of characters or bytes with high entropy such as a cryptographic token, private key, hash, or a long password. `value` will be blocked from being sent to any Client Component.
+**Возвращает**
 
-#### Возвращает {#returns}
+`experimental_taintUniqueValue` возвращает `undefined`.
 
-`experimental_taintUniqueValue` returns `undefined`.
+**Замечания**
 
-#### Замечания {#caveats}
-
--   Deriving new values from tainted values can compromise tainting protection. New values created by uppercasing tainted values, concatenating tainted string values into a larger string, converting tainted values to base64, substringing tainted values, and other similar transformations are not tainted unless you explicitly call `taintUniqueValue` on these newly created values.
--   Do not use `taintUniqueValue` to protect low-entropy values such as PIN codes or phone numbers. If any value in a request is controlled by an attacker, they could infer which value is tainted by enumerating all possible values of the secret.
-
----
+-   Получение новых значений из запятнанных значений может нарушить защиту от запятнанности. Новые значения, созданные путем перевода запятнанных значений в верхний регистр, конкатенации запятнанных строковых значений в большую строку, преобразования запятнанных значений в base64, подстроки запятнанных значений и других подобных преобразований, не будут запятнаны, если вы явно не вызовете `taintUniqueValue` для этих вновь созданных значений.
+-   Не используйте `taintUniqueValue` для защиты значений с низкой энтропией, таких как PIN-коды или номера телефонов. Если любое значение в запросе контролируется злоумышленником, он может определить, какое значение испорчено, перечислив все возможные значения секрета.
 
 ## Использование {#usage}
 
-### Prevent a token from being passed to Client Components {/_prevent-a-token-from-being-passed-to-client-components_/}
+### Предотвращение передачи токена клиентским компонентам {#prevent-a-token-from-being-passed-to-client-components}
 
-To ensure that sensitive information such as passwords, session tokens, or other unique values do not inadvertently get passed to Client Components, the `taintUniqueValue` function provides a layer of protection. When a value is tainted, any attempt to pass it to a Client Component will result in an error.
+Чтобы гарантировать, что конфиденциальная информация, такая как пароли, токены сессий или другие уникальные значения, не будут случайно переданы клиентским компонентам, функция `taintUniqueValue` обеспечивает уровень защиты. Если значение запятнано, любая попытка передать его клиентскому компоненту приведет к ошибке.
 
-The `lifetime` argument defines the duration for which the value remains tainted. For values that should remain tainted indefinitely, objects like [`globalThis`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) or `process` can serve as the `lifetime` argument. These objects have a lifespan that spans the entire duration of your app's execution.
+Аргумент `lifetime` определяет срок, в течение которого значение остается запятнанным. Для значений, которые должны оставаться запятнанными неограниченно долго, в качестве аргумента `lifetime` могут выступать объекты типа [`globalThis`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) или `process`. Эти объекты имеют срок жизни, который охватывает все время выполнения вашего приложения.
 
 ```js
 import { experimental_taintUniqueValue } from 'react';
@@ -92,7 +78,7 @@ experimental_taintUniqueValue(
 );
 ```
 
-If the tainted value's lifespan is tied to a object, the `lifetime` should be the object that encapsulates the value. This ensures the tainted value remains protected for the lifetime of the encapsulating object.
+Если время жизни запятнанного значения привязано к объекту, то `lifetime` должен быть объектом, который инкапсулирует значение. Это гарантирует, что запятнанное значение останется защищенным в течение всего срока жизни инкапсулирующего объекта.
 
 ```js
 import { experimental_taintUniqueValue } from 'react';
@@ -108,39 +94,38 @@ export async function getUser(id) {
 }
 ```
 
-In this example, the `user` object serves as the `lifetime` argument. If this object gets stored in a global cache or is accessible by another request, the session token remains tainted.
+В этом примере в качестве аргумента `lifetime` выступает объект `user`. Если этот объект попадет в глобальный кэш или будет доступен по другому запросу, маркер сессии останется испорченным.
 
 <Pitfall>
 
-**Do not rely solely on tainting for security.** Tainting a value doesn't block every possible derived value. For example, creating a new value by upper casing a tainted string will not taint the new value.
+!!!warning "Не полагайтесь только на запятнанность для обеспечения безопасности"
 
-```js
-import { experimental_taintUniqueValue } from 'react';
+    Запятнанность значения не блокирует все возможные производные значения. Например, создание нового значения путем выделения верхним регистром запятнанной строки не приведет к запятнанию нового значения.
 
-const password = 'correct horse battery staple';
+    ```js
+    import { experimental_taintUniqueValue } from 'react';
 
-experimental_taintUniqueValue(
-    'Do not pass the password to the client.',
-    globalThis,
-    password
-);
+    const password = 'correct horse battery staple';
 
-const uppercasePassword = password.toUpperCase(); // `uppercasePassword` is not tainted
-```
+    experimental_taintUniqueValue(
+    	'Do not pass the password to the client.',
+    	globalThis,
+    	password
+    );
 
-In this example, the constant `password` is tainted. Then `password` is used to create a new value `uppercasePassword` by calling the `toUpperCase` method on `password`. The newly created `uppercasePassword` is not tainted.
+    // `uppercasePassword` is not tainted
+    const uppercasePassword = password.toUpperCase();
+    ```
 
-Other similar ways of deriving new values from tainted values like concatenating it into a larger string, converting it to base64, or returning a substring create untained values.
+    В этом примере запятнана константа `password`. Затем `password` используется для создания нового значения `uppercasePassword` путем вызова метода `toUpperCase` для `password`. Вновь созданное значение `uppercasePassword` не запятнано.
 
-Tainting only protects against simple mistakes like explicitly passing secret values to the client. Mistakes in calling the `taintUniqueValue` like using a global store outside of React, without the corresponding lifetime object, can cause the tainted value to become untainted. Tainting is a layer of protection; a secure app will have multiple layers of protection, well designed APIs, and isolation patterns.
+    Другие подобные способы получения новых значений из запятнанных значений, такие как конкатенация в большую строку, преобразование в base64 или возврат подстроки, создают незапятнанные значения.
 
-</Pitfall>
+    Tainting защищает только от простых ошибок, таких как явная передача секретных значений клиенту. Ошибки при вызове `taintUniqueValue`, например, использование глобального хранилища вне React, без соответствующего объекта `lifetime`, могут привести к тому, что запятнанное значение станет незапятнанным. Запятнанное значение - это уровень защиты; безопасное приложение будет иметь несколько уровней защиты, хорошо разработанные API и шаблоны изоляции.
 
-<DeepDive>
+#### Использование `server-only` и `taintUniqueValue` для предотвращения утечки секретов {#using-server-only-and-taintuniquevalue-to-prevent-leaking-secrets}
 
-#### Using `server-only` and `taintUniqueValue` to prevent leaking secrets {/_using-server-only-and-taintuniquevalue-to-prevent-leaking-secrets_/}
-
-If you're running a Server Components environment that has access to private keys or passwords such as database passwords, you have to be careful not to pass that to a Client Component.
+Если вы используете среду серверных компонентов, которая имеет доступ к закрытым ключам или паролям, таким как пароли баз данных, вы должны быть осторожны, чтобы не передать их клиентскому компоненту.
 
 ```js
 export async function Dashboard(props) {
@@ -148,6 +133,8 @@ export async function Dashboard(props) {
     return <Overview password={process.env.API_PASSWORD} />;
 }
 ```
+
+---
 
 ```js
 "use client";
@@ -163,11 +150,9 @@ export async function Overview({ password }) {
 }
 ```
 
-This example would leak the secret API token to the client. If this API token can be used to access data this particular user shouldn't have access to, it could lead to a data breach.
+В этом примере секретный API-токен будет передан клиенту. Если этот API-токен может быть использован для доступа к данным, к которым этот конкретный пользователь не должен иметь доступа, это может привести к утечке данных.
 
-[comment]: <> (TODO: Link to `server-only` docs once they are written)
-
-Ideally, secrets like this are abstracted into a single helper file that can only be imported by trusted data utilities on the server. The helper can even be tagged with [`server-only`](https://www.npmjs.com/package/server-only) to ensure that this file isn't imported on the client.
+В идеале подобные секреты абстрагируются в один файл-помощник, который может быть импортирован только доверенными утилитами данных на сервере. Этот помощник можно даже пометить [`server-only`](https://www.npmjs.com/package/server-only), чтобы гарантировать, что этот файл не будет импортирован на клиенте.
 
 ```js
 import 'server-only';
@@ -180,8 +165,7 @@ export function fetchAPI(url) {
 }
 ```
 
-Sometimes mistakes happen during refactoring and not all of your colleagues might know about this.
-To protect against this mistakes happening down the line we can "taint" the actual password:
+Иногда во время рефакторинга случаются ошибки, и не все ваши коллеги могут знать об этом. Чтобы защитить себя от таких ошибок, мы можем "испортить" настоящий пароль:
 
 ```js
 import "server-only";
@@ -195,8 +179,6 @@ experimental_taintUniqueValue(
 );
 ```
 
-Now whenever anyone tries to pass this password to a Client Component, or send the password to a Client Component with a Server Action, an error will be thrown with message you defined when you called `taintUniqueValue`.
+Теперь при попытке передать этот пароль клиентскому компоненту или отправить пароль клиентскому компоненту с помощью серверного действия будет возникать ошибка с сообщением, которое вы определили при вызове `taintUniqueValue`.
 
-</DeepDive>
-
----
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/experimental_taintUniqueValue](https://react.dev/reference/react/experimental_taintUniqueValue)</small>

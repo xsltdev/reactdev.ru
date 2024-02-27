@@ -1,134 +1,127 @@
 ---
 status: experimental
+description: use server отмечает функции стороны сервера, которые могут быть вызваны из кода стороны клиента
 ---
 
-<Canary>
+# `'use server'`
 
-`'use server'` is needed only if you're [using React Server Components](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) or building a library compatible with them.
+!!!example "Canary"
 
-</Canary>
+    `'use server'` необходимо только в том случае, если вы [используете React Server Components](../../learn/start-a-new-react-project.md#bleeding-edge-react-frameworks) или собираете совместимую с ними библиотеку.
 
-<Intro>
-
-`'use server'` marks server-side functions that can be called from client-side code.
-
-</Intro>
-
-<InlineToc />
-
----
+<big>`'use server'` отмечает функции стороны сервера, которые могут быть вызваны из кода стороны клиента.</big>
 
 ## Описание {#reference}
 
-### `'use server'` {/_use-server_/}
+### `'use server'` {#use-server}
 
-Add `'use server'` at the top of an async function body to mark the function as callable by the client. We call these functions _Server Actions_.
+Добавьте `'use server'` в верхней части тела async-функции, чтобы пометить функцию как вызываемую клиентом. Мы называем эти функции _серверными действиями_.
 
-```js {2}
+```js hl_lines="2"
 async function addToCart(data) {
     'use server';
     // ...
 }
 ```
 
-When calling a Server Action on the client, it will make a network request to the server that includes a serialized copy of any arguments passed. If the Server Action returns a value, that value will be serialized and returned to the client.
+При вызове действия сервера на клиенте выполняется сетевой запрос к серверу, включающий сериализованную копию всех переданных аргументов. Если действие сервера возвращает значение, оно будет сериализовано и возвращено клиенту.
 
-Instead of individually marking functions with `'use server'`, you can add the directive to the top of a file to mark all exports within that file as Server Actions that can be used anywhere, including imported in client code.
+Вместо того чтобы отдельно отмечать функции с `использовать сервер`, вы можете добавить директиву в верхнюю часть файла, чтобы отметить все экспортируемые функции в этом файле как Server Actions, которые могут быть использованы где угодно, включая импортированные в клиентский код.
 
 #### Замечания {#caveats}
 
--   `'use server'` must be at the very beginning of their function or module; above any other code including imports (comments above directives are OK). They must be written with single or double quotes, not backticks.
--   `'use server'` can only be used in server-side files. The resulting Server Actions can be passed to Client Components through props. See supported [types for serialization](#serializable-parameters-and-return-values).
--   To import a Server Action from [client code](./use-client.md), the directive must be used on a module level.
--   Because the underlying network calls are always asynchronous, `'use server'` can only be used on async functions.
--   Always treat arguments to Server Actions as untrusted input and authorize any mutations. See [security considerations](#security).
--   Server Actions should be called in a [transition](./useTransition.md). Server Actions passed to [`<form action>`](../react-dom/components/form.md#props) or [`formAction`](../react-dom/components/input.md#props) will automatically be called in a transition.
--   Server Actions are designed for mutations that update server-side state; they are not recommended for data fetching. Accordingly, frameworks implementing Server Actions typically process one action at a time and do not have a way to cache the return value.
+-   Директивы `'use server'` должны находиться в самом начале своей функции или модуля; выше любого другого кода, включая импорт (комментарии над директивами - это нормально). Они должны быть написаны с одинарными или двойными кавычками, а не с обратными знаками.
+-   Директива `'use server'` может быть использована только в файлах серверной части. Результирующие действия сервера могут быть переданы клиентским компонентам через реквизиты. Смотрите поддерживаемые [типы для сериализации](#serializable-parameters-and-return-values).
+-   Чтобы импортировать действие сервера из [кода клиента](./use-client.md), необходимо использовать директиву на уровне модуля.
+-   Поскольку базовые сетевые вызовы всегда асинхронны, `'use server'` можно использовать только в асинхронных функциях.
+-   Всегда рассматривайте аргументы к действиям сервера как недоверенный ввод и авторизуйте любые мутации. Смотрите [соображения безопасности](#security).
+-   Действия сервера должны вызываться в [transition](./useTransition.md). Действия сервера, переданные в [`<form action>`](../react-dom/components/form.md#props) или [`formAction`](../react-dom/components/input.md#props), будут автоматически вызваны в переходе.
+-   Server Actions предназначены для мутаций, которые обновляют состояние на стороне сервера; их не рекомендуется использовать для получения данных. Соответственно, фреймворки, реализующие Server Actions, обычно обрабатывают одно действие за раз и не имеют возможности кэшировать возвращаемое значение.
 
-### Security considerations {/_security_/}
+### Соображения безопасности {#security}
 
-Arguments to Server Actions are fully client-controlled. For security, always treat them as untrusted input, and make sure to validate and escape arguments as appropriate.
+Аргументы действий сервера полностью контролируются клиентом. В целях безопасности всегда рассматривайте их как недоверенный ввод и обязательно проверяйте и экранируйте аргументы.
 
-In any Server Action, make sure to validate that the logged-in user is allowed to perform that action.
+В любом действии сервера обязательно проверяйте, что вошедшему в систему пользователю разрешено выполнять это действие.
 
-<Wip>
+!!!warning "В разработке"
 
-To prevent sending sensitive data from a Server Action, there are experimental taint APIs to prevent unique values and objects from being passed to client code.
+    Чтобы предотвратить отправку конфиденциальных данных из серверного действия, существуют экспериментальные API для предотвращения передачи уникальных значений и объектов в клиентский код.
 
-See [experimental_taintUniqueValue](./experimental_taintUniqueValue.md) and [experimental_taintObjectReference](./experimental_taintObjectReference.md).
+    См. [`experimental_taintUniqueValue`](./experimental_taintUniqueValue.md) и [`experimental_taintObjectReference`](./experimental_taintObjectReference.md).
 
-</Wip>
+### Сериализуемые аргументы и возвращаемые значения {#serializable-parameters-and-return-values}
 
-### Serializable arguments and return values {/_serializable-parameters-and-return-values_/}
+Поскольку клиентский код вызывает действие сервера по сети, любые передаваемые аргументы должны быть сериализуемыми.
 
-As client code calls the Server Action over the network, any arguments passed will need to be serializable.
+Здесь перечислены поддерживаемые типы аргументов серверного действия:
 
-Here are supported types for Server Action arguments:
+-   Примитивы
+    -   [строка](https://developer.mozilla.org/docs/Glossary/String)
+    -   [число](https://developer.mozilla.org/docs/Glossary/Number)
+    -   [bigint](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/BigInt)
+    -   [boolean](https://developer.mozilla.org/docs/Glossary/Boolean)
+    -   [undefined](https://developer.mozilla.org/docs/Glossary/Undefined)
+    -   [null](https://developer.mozilla.org/docs/Glossary/Null)
+    -   [symbol](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol), только символы, зарегистрированные в глобальном реестре Symbol через [`Symbol.for`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol/for)
+-   Iterables, содержащие сериализуемые значения
+    -   [String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+    -   [Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)
+    -   [Map](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)
+    -   [Set](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)
+    -   [TypedArray](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) и [ArrayBuffer](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)
+-   [Date](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date)
+-   [FormData](https://developer.mozilla.org/docs/Web/API/FormData) экземпляры
+-   Обычные [объекты](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object): созданные с помощью [инициализаторов объектов](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Object_initializer), с сериализуемыми свойствами
+-   Функции, являющиеся действиями сервера
+-   [Promises](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 
--   Primitives
-    -   [string](https://developer.mozilla.org/en-US/docs/Glossary/String)
-    -   [number](https://developer.mozilla.org/en-US/docs/Glossary/Number)
-    -   [bigint](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt)
-    -   [boolean](https://developer.mozilla.org/en-US/docs/Glossary/Boolean)
-    -   [undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined)
-    -   [null](https://developer.mozilla.org/en-US/docs/Glossary/Null)
-    -   [symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol), only symbols registered in the global Symbol registry via [`Symbol.for`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/for)
--   Iterables containing serializable values
-    -   [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
-    -   [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)
-    -   [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
-    -   [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
-    -   [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) and [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)
--   [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
--   [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) instances
--   Plain [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object): those created with [object initializers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer), with serializable properties
--   Functions that are Server Actions
--   [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+Примечательно, что не поддерживаются:
 
-Notably, these are not supported:
+-   React-элементы или [JSX](https://react.dev/learn/writing-markup-with-jsx)
+-   Функции, включая функции компонентов или любые другие функции, которые не являются действиями сервера
+-   [Classes](https://developer.mozilla.org/docs/Learn/JavaScript/Objects/Classes_in_JavaScript)
+-   Объекты, являющиеся экземплярами любого класса (кроме упомянутых встроенных) или объекты с [нулевым прототипом](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object#null-prototype_objects)
+-   Символы, не зарегистрированные глобально, например, `Symbol('mySymbol')`.
 
--   React elements, or [JSX](https://react.dev/learn/writing-markup-with-jsx)
--   Functions, including component functions or any other function that is not a Server Action
--   [Classes](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Classes_in_JavaScript)
--   Objects that are instances of any class (other than the built-ins mentioned) or objects with [a null prototype](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object#null-prototype_objects)
--   Symbols not registered globally, ex. `Symbol('my new symbol')`
-
-Supported serializable return values are the same as [serializable props](./use-client.md#passing-props-from-server-to-client-components) for a boundary Client Component.
+Поддерживаемые сериализуемые возвращаемые значения такие же, как [сериализуемые реквизиты](./use-client.md#passing-props-from-server-to-client-components) для граничного клиентского компонента.
 
 ## Использование {#usage}
 
-### Server Actions in forms {/_server-actions-in-forms_/}
+### Действия сервера в формах {#server-actions-in-forms}
 
-The most common use case of Server Actions will be calling server functions that mutate data. On the browser, the [HTML form element](https://developer.mozilla.org/docs/Web/HTML/Element/form) is the traditional approach for a user to submit a mutation. With React Server Components, React introduces first-class support for Server Actions in [forms](../react-dom/components/form.md).
+Наиболее распространенным вариантом использования Server Actions будет вызов серверных функций, которые изменяют данные. В браузере традиционным способом отправки мутации является [элемент HTML-формы](https://developer.mozilla.org/docs/Web/HTML/Element/form). В React Server Components React представляет первоклассную поддержку Server Actions в [forms](../react-dom/components/form.md).
 
-Here is a form that allows a user to request a username.
+Здесь представлена форма, позволяющая пользователю запросить имя пользователя.
 
-```js [[1, 3, "formData"]]
+```js
 // App.js
 
 async function requestUsername(formData) {
-  'use server';
-  const username = formData.get('username');
-  // ...
+    'use server';
+    const username = formData.get('username');
+    // ...
 }
 
-export default App() {
-  <form action={requestUsername}>
-    <input type="text" name="username" />
-    <button type="submit">Request</button>
-  </form>
+export default function App() {
+    return (
+        <form action={requestUsername}>
+            <input type="text" name="username" />
+            <button type="submit">Request</button>
+        </form>
+    );
 }
 ```
 
-In this example `requestUsername` is a Server Action passed to a `<form>`. When a user submits this form, there is a network request to the server function `requestUsername`. When calling a Server Action in a form, React will supply the form's <CodeStep step={1}>[FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)</CodeStep> as the first argument to the Server Action.
+В этом примере `requestUsername` - это действие сервера, переданное в `<form>`. Когда пользователь отправляет эту форму, происходит сетевой запрос к серверной функции `requestUsername`. При вызове серверного действия в форме React передает [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData) в качестве первого аргумента серверному действию.
 
-By passing a Server Action to the form `action`, React can [progressively enhance](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) the form. This means that forms can be submitted before the JavaScript bundle is loaded.
+Передавая серверное действие форме `action`, React может [постепенно улучшать](https://developer.mozilla.org/docs/Glossary/Progressive_Enhancement) форму. Это означает, что формы могут быть отправлены до загрузки пакета JavaScript.
 
-#### Handling return values in forms {/_handling-return-values_/}
+#### Обработка возвращаемых значений в формах {#handling-return-values}
 
-In the username request form, there might be the chance that a username is not available. `requestUsername` should tell us if it fails or not.
+В форме запроса имени пользователя может возникнуть ситуация, когда имя пользователя недоступно. Функция `requestUsername` должна сообщать нам о том, не удалось выполнить запрос или нет.
 
-To update the UI based on the result of a Server Action while supporting progressive enhancement, use [`useFormState`](../react-dom/hooks/useFormState.md).
+Чтобы обновить пользовательский интерфейс на основе результата действия сервера, поддерживая прогрессивное улучшение, используйте [`useFormState`](../react-dom/hooks/useFormState.md).
 
 ```js
 // requestUsername.js
@@ -144,7 +137,9 @@ export default async function requestUsername(formData) {
 }
 ```
 
-```js {4,8}, [[2, 2, "'use client'"]]
+---
+
+```js hl_lines="4 8-11"
 // UsernameForm.js
 'use client';
 
@@ -172,15 +167,15 @@ function UsernameForm() {
 }
 ```
 
-Note that like most Hooks, `useFormState` can only be called in <CodeStep step={1}>[client code](./use-client.md)</CodeStep>.
+Обратите внимание, что, как и большинство хуков, `useFormState` может быть вызван только в [клиентском коде](./use-client.md).
 
-### Calling a Server Action outside of `<form>` {/_calling-a-server-action-outside-of-form_/}
+### Вызов серверного действия вне `<form>` {#calling-a-server-action-outside-of-form}
 
-Server Actions are exposed server endpoints and can be called anywhere in client code.
+Действия сервера являются открытыми конечными точками сервера и могут быть вызваны в любом месте клиентского кода.
 
-When using a Server Action outside of a [form](../react-dom/components/form.md), call the Server Action in a [transition](./useTransition.md), which allows you to display a loading indicator, show [optimistic state updates](./useOptimistic.md), and handle unexpected errors. Forms will automatically wrap Server Actions in transitions.
+При использовании действия сервера вне [формы](../react-dom/components/form.md) вызывайте его в [переходе](./useTransition.md), что позволит вам отображать индикатор загрузки, показывать [оптимистичные обновления состояния](./useOptimistic.md) и обрабатывать неожиданные ошибки. Формы автоматически оборачивают действия сервера в переходы.
 
-```js {9-12}
+```js hl_lines="9-12"
 import incrementLike from './actions';
 import { useState, useTransition } from 'react';
 
@@ -206,15 +201,19 @@ function LikeButton() {
 }
 ```
 
+---
+
 ```js
 // actions.js
 'use server';
 
 let likeCount = 0;
-export default async incrementLike() {
-  likeCount++;
-  return likeCount;
+export default async function incrementLike() {
+    likeCount++;
+    return likeCount;
 }
 ```
 
-To read a Server Action return value, you'll need to `await` the promise returned.
+Чтобы прочитать возвращаемое значение действия сервера, вам нужно `await` возвращаемого обещания.
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/use-server](https://react.dev/reference/react/use-server)</small>

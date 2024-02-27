@@ -1,14 +1,18 @@
+---
+description: lazy позволяет отложить загрузку кода компонента до его первого отображения
+---
+
 # lazy
 
-`lazy` позволяет отложить загрузку кода компонента до его первого отображения.
+<big>`lazy` позволяет отложить загрузку кода компонента до его первого отображения.</big>
 
 ```js
 const SomeComponent = lazy(load);
 ```
 
-## Описание
+## Описание {#reference}
 
-### `lazy(load)`
+### `lazy(load)` {#lazy}
 
 Вызывайте `lazy` вне ваших компонентов, чтобы объявить лениво загруженный компонент React:
 
@@ -20,27 +24,27 @@ const MarkdownPreview = lazy(() =>
 );
 ```
 
-#### Параметры
+**Параметры**
 
 -   `load`: Функция, возвращающая [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) или другой _thenable_ (Promise-подобный объект с методом `then`). React не будет вызывать `load` до первой попытки рендеринга возвращаемого компонента. После того как React впервые вызовет `load`, он будет ждать разрешения Promise, а затем отобразит разрешенное значение как компонент React. И возвращаемое Promise, и разрешенное значение Promise будут кэшироваться, поэтому React не будет вызывать `load` более одного раза. Если Promise отклоняется, React будет `throw` причину отклонения для обработки ближайшей границы ошибок.
 
-#### Возвращает
+**Возвращает**
 
 `lazy` возвращает компонент React, который вы можете отобразить в своем дереве. Пока код ленивого компонента загружается, попытка его рендеринга будет _приостановлена._ Используйте [`<Suspense>`](Suspense.md) для отображения индикатора загрузки во время загрузки.
 
-### `load` функция
+### `load` функция {#load}
 
-#### Параметры
+**Параметры**
 
 `load` не получает никаких параметров.
 
-#### Возвращает
+**Возвращает**
 
 Вы должны вернуть [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) или какой-либо другой _thenable_ (объект типа Promise с методом `then`). В конечном итоге он должен разрешиться в допустимый тип компонента React, такой как функция, [`memo`](memo.md) или компонент [`forwardRef`](forwardRef.md).
 
-## Использование
+## Использование {#usage}
 
-### Ленивая загрузка компонентов с помощью Suspense
+### Ленивая загрузка компонентов с помощью Suspense {#suspense-for-code-splitting}
 
 Обычно вы импортируете компоненты с помощью объявления static [`import`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/import):
 
@@ -62,7 +66,7 @@ const MarkdownPreview = lazy(() =>
 
 Теперь, когда код вашего компонента загружается по требованию, вам также необходимо указать, что должно отображаться во время его загрузки. Вы можете сделать это, обернув ленивый компонент или любого из его родителей в границу [`<Suspense>`](Suspense.md):
 
-```js
+```js hl_lines="1 4"
 <Suspense fallback={<Loading />}>
     <h2>Preview</h2>
     <MarkdownPreview />
@@ -154,17 +158,21 @@ const MarkdownPreview = lazy(() =>
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/nvsn7g?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="laughing-borg-nvsn7g" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Эта демонстрация загружается с искусственной задержкой. В следующий раз, когда вы снимите и установите флажок, `Preview` будет кэширован, поэтому состояния загрузки не будет. Чтобы снова увидеть состояние загрузки, нажмите "Сброс" в песочнице.
 
-[Подробнее об управлении состояниями загрузки с помощью Suspense](Suspense.md).
+Подробнее об [управлении состояниями загрузки с помощью Suspense](Suspense.md).
 
-## Устранение неполадок
+## Устранение неполадок {#troubleshooting}
 
-### Состояние моего компонента `lazy` неожиданно сбрасывается
+### Состояние моего компонента `lazy` неожиданно сбрасывается {#my-lazy-components-state-gets-reset-unexpectedly}
 
 Не объявляйте компоненты `lazy` _внутри_ других компонентов:
 
-```js
+```js hl_lines="4-7"
 import { lazy } from 'react';
 
 function Editor() {
@@ -178,7 +186,7 @@ function Editor() {
 
 Вместо этого всегда объявляйте их на верхнем уровне вашего модуля:
 
-```js
+```js hl_lines="3-6"
 import { lazy } from 'react';
 
 // ✅ Good: Declare lazy components outside of your components
@@ -191,6 +199,4 @@ function Editor() {
 }
 ```
 
-## Ссылки
-
--   [https://react.dev/reference/react/lazy](https://react.dev/reference/react/lazy)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/lazy](https://react.dev/reference/react/lazy)</small>

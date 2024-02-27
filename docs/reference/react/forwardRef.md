@@ -1,14 +1,18 @@
+---
+description: forwardRef позволяет вашему компоненту передать узел DOM родительскому компоненту с помощью ref
+---
+
 # forwardRef
 
-**`forwardRef`** позволяет вашему компоненту передать узел DOM родительскому компоненту с помощью [ref](../../learn/manipulating-the-dom-with-refs.md).
+<big>**`forwardRef`** позволяет вашему компоненту передать узел DOM родительскому компоненту с помощью [ref](../../learn/manipulating-the-dom-with-refs.md).</big>
 
 ```js
 const SomeComponent = forwardRef(render);
 ```
 
-## Описание
+## Описание {#reference}
 
-### `forwardRef(render)`
+### `forwardRef(render)` {#forwardref}
 
 Вызовите `forwardRef()`, чтобы позволить вашему компоненту получить ссылку и переслать ее дочернему компоненту:
 
@@ -32,7 +36,7 @@ const MyInput = forwardRef(function MyInput(props, ref) {
 
 -   В строгом режиме React будет **вызывать вашу функцию рендеринга дважды**, чтобы помочь вам найти случайные примеси. Это поведение только для разработчиков и не влияет на производство. Если ваша функция рендеринга чиста (как и должно быть), это не должно повлиять на логику вашего компонента. Результат одного из вызовов будет проигнорирован.
 
-### `render` функция
+### `render` функция {#render-function}
 
 `forwardRef` принимает функцию рендеринга в качестве аргумента. React вызывает эту функцию с `props` и `ref`:
 
@@ -56,13 +60,13 @@ const MyInput = forwardRef(function MyInput(props, ref) {
 
 `forwardRef` возвращает React-компонент, который вы можете отобразить в JSX. В отличие от компонентов React, определенных как простые функции, компонент, возвращаемый `forwardRef`, может принимать пропс `ref`.
 
-## Использование
+## Использование {#usage}
 
-### Раскрытие узла DOM для родительского компонента
+### Раскрытие узла DOM для родительского компонента {#exposing-a-dom-node-to-the-parent-component}
 
 По умолчанию DOM-узлы каждого компонента являются приватными. Однако иногда полезно раскрыть узел DOM для родительского компонента - например, чтобы разрешить его фокусировку. Чтобы сделать это, оберните определение вашего компонента в `forwardRef()`:
 
-```js
+```js hl_lines="3 11"
 import { forwardRef } from 'react';
 
 const MyInput = forwardRef(function MyInput(props, ref) {
@@ -76,9 +80,9 @@ const MyInput = forwardRef(function MyInput(props, ref) {
 });
 ```
 
-Вы получите `ref` в качестве второго аргумента после props. Передайте его узлу DOM, который вы хотите раскрыть:
+Вы получите `ref` в качестве второго аргумента после `props`. Передайте его узлу DOM, который вы хотите раскрыть:
 
-```js
+```js hl_lines="8"
 import { forwardRef } from 'react';
 
 const MyInput = forwardRef(function MyInput(props, ref) {
@@ -117,9 +121,9 @@ function Form() {
 
 Помните, что раскрытие ссылки на узел DOM внутри вашего компонента усложняет последующее изменение внутреннего устройства компонента. Обычно вы будете раскрывать узлы DOM из многократно используемых низкоуровневых компонентов, таких как кнопки или текстовые входы, но вы не будете делать этого для компонентов прикладного уровня, таких как аватар или комментарий.
 
-### Примеры пересылки реферера
+### Примеры пересылки реферера {#examples}
 
-#### 1. Фокусировка текстового ввода
+**1. Фокусировка текстового ввода**
 
 При нажатии на кнопку происходит фокусировка ввода. Компонент `Form` определяет ссылку и передает ее компоненту `MyInput`. Компонент `MyInput` передает эту ссылку браузеру `input`. Это позволяет компоненту `Form` сфокусировать `ввод`.
 
@@ -165,7 +169,11 @@ function Form() {
     export default MyInput;
     ```
 
-#### 2. Воспроизведение и приостановка видео
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/l2rwjf?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+**2. Воспроизведение и приостановка видео**
 
 Нажатие на кнопку вызывает [`play()`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/play) и [`pause()`](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/pause) на DOM-узле `<video>`. Компонент `App` определяет ссылку и передает ее компоненту `MyVideoPlayer`. Компонент `MyVideoPlayer` пересылает ссылку на узел `<video>` браузера. Это позволяет компоненту `App` воспроизводить и приостанавливать `<video>`.
 
@@ -216,11 +224,15 @@ function Form() {
     export default VideoPlayer;
     ```
 
-### Пересылка ссылки через несколько компонентов
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/zjtr5d?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Пересылка ссылки через несколько компонентов {#forwarding-a-ref-through-multiple-components}
 
 Вместо пересылки `ref` на узел DOM, вы можете переслать его на свой собственный компонент, например `MyInput`:
 
-```js
+```js hl_lines="1 8"
 const FormField = forwardRef(function FormField(
     props,
     ref
@@ -237,7 +249,7 @@ const FormField = forwardRef(function FormField(
 
 Если компонент `MyInput` передает ссылку на свой `<input>`, ссылка на `FormField` даст вам этот `<input>`:
 
-```js
+```js hl_lines="2 5 10-14"
 function Form() {
     const ref = useRef(null);
 
@@ -335,11 +347,15 @@ function Form() {
     export default MyInput;
     ```
 
-### Выставление императивного дескриптора вместо узла DOM
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/cmz28n?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Выставление императивного дескриптора вместо узла DOM {#exposing-an-imperative-handle-instead-of-a-dom-node}
 
 Вместо того чтобы раскрывать весь узел DOM, вы можете раскрыть пользовательский объект, называемый _императивным дескриптором_, с более ограниченным набором методов. Для этого вам нужно определить отдельный ref для хранения DOM-узла:
 
-```js
+```js hl_lines="2 6"
 const MyInput = forwardRef(function MyInput(props, ref) {
     const inputRef = useRef(null);
 
@@ -351,7 +367,7 @@ const MyInput = forwardRef(function MyInput(props, ref) {
 
 Передайте полученный `ref` в [`useImperativeHandle`](useImperativeHandle.md) и укажите значение, которое вы хотите передать `ref`:
 
-```js
+```js hl_lines="10-23"
 import {
     forwardRef,
     useRef,
@@ -441,23 +457,27 @@ const MyInput = forwardRef(function MyInput(props, ref) {
     export default MyInput;
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/5ktlh7?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 [Подробнее об использовании императивных дескрипторов](useImperativeHandle.md)
 
-!!!info ""
+!!!info "Не злоупотребляйте ссылками"
 
-    **Не злоупотребляйте ссылками.** Ссылки следует использовать только для _императивного_ поведения, которое вы не можете выразить как пропс: например, прокрутка к узлу, фокусировка узла, запуск анимации, выделение текста и так далее.
+    Ссылки следует использовать только для _императивного_ поведения, которое вы не можете выразить как пропс: например, прокрутка к узлу, фокусировка узла, запуск анимации, выделение текста и так далее.
 
     **Если вы можете выразить что-то как пропс, вы не должны использовать ссылку.** Например, вместо того, чтобы раскрывать императивный дескриптор типа `{ open, close }` из компонента `Modal`, лучше взять `isOpen` как пропс, например `<Modal isOpen={isOpen} />`. [Effects](../../learn/synchronizing-with-effects.md) может помочь вам раскрыть императивное поведение через пропсы.
 
-## Устранение неполадок
+## Устранение неполадок {#troubleshooting}
 
-### Мой компонент обернут в `forwardRef`, но `реф` на него всегда `null`
+### Мой компонент обернут в `forwardRef`, но `ref` на него всегда `null` {#my-component-is-wrapped-in-forwardref-but-the-ref-to-it-is-always-null}
 
 Обычно это означает, что вы забыли использовать полученный `ref`.
 
 Например, этот компонент ничего не делает со своим `ref`:
 
-```js
+```js hl_lines="1"
 const MyInput = forwardRef(function MyInput(
     { label },
     ref
@@ -473,7 +493,7 @@ const MyInput = forwardRef(function MyInput(
 
 Чтобы исправить это, передайте `ref` вниз к узлу DOM или другому компоненту, который может принимать ссылку:
 
-```js
+```js hl_lines="1 8"
 const MyInput = forwardRef(function MyInput(
     { label },
     ref
@@ -489,7 +509,7 @@ const MyInput = forwardRef(function MyInput(
 
 Ссылка `ref` на `MyInput` может также быть `null`, если некоторая логика является условной:
 
-```js
+```js hl_lines="1 8"
 const MyInput = forwardRef(function MyInput(
     { label, showInput },
     ref
@@ -505,7 +525,7 @@ const MyInput = forwardRef(function MyInput(
 
 Если `showInput` будет `false`, то ссылка не будет перенаправлена ни на какой узел, и ссылка на `MyInput` останется пустой. Это особенно легко пропустить, если условие скрыто внутри другого компонента, как `Panel` в этом примере:
 
-```js
+```js hl_lines="8 10"
 const MyInput = forwardRef(function MyInput(
     { label, showInput },
     ref
@@ -521,6 +541,4 @@ const MyInput = forwardRef(function MyInput(
 });
 ```
 
-## Ссылки
-
--   [https://react.dev/reference/react/forwardRef](https://react.dev/reference/react/forwardRef)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/forwardRef](https://react.dev/reference/react/forwardRef)</small>

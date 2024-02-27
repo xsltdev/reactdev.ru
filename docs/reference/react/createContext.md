@@ -1,22 +1,20 @@
+---
+description: createContext позволяет вам создать контекст, который компоненты могут предоставить или прочитать
+---
+
 # createContext
 
-`createContext` позволяет вам создать [контекст](../../learn/passing-data-deeply-with-context.md), который компоненты могут предоставить или прочитать.
-
-<!-- 0001.part.md -->
+<big>`createContext` позволяет вам создать [контекст](../../learn/passing-data-deeply-with-context.md), который компоненты могут предоставить или прочитать.</big>
 
 ```js
 const SomeContext = createContext(defaultValue);
 ```
 
-<!-- 0002.part.md -->
+## Описание {#reference}
 
-## Описание
-
-### `createContext(defaultValue)`
+### `createContext(defaultValue)` {#createcontext}
 
 Вызовите `createContext` вне каких-либо компонентов для создания контекста.
-
-<!-- 0003.part.md -->
 
 ```js
 import { createContext } from 'react';
@@ -24,11 +22,11 @@ import { createContext } from 'react';
 const ThemeContext = createContext('light');
 ```
 
-#### Параметры
+#### Параметры {#parameters}
 
 -   `defaultValue`: Значение, которое вы хотите, чтобы контекст имел, если в дереве над компонентом, читающим контекст, нет подходящего поставщика контекста. Если у вас нет никакого значимого значения по умолчанию, укажите `null`. Значение по умолчанию используется в качестве запасного варианта "на крайний случай". Оно статично и никогда не изменяется с течением времени.
 
-#### Возвращает
+#### Возвращает {#returns}
 
 `createContext` возвращает объект контекста.
 
@@ -37,11 +35,9 @@ const ThemeContext = createContext('light');
 -   `SomeContext.Provider` позволяет вам предоставлять значение контекста компонентам.
 -   `SomeContext.Consumer` является альтернативным и редко используемым способом чтения значения контекста.
 
-### `SomeContext.Provider`
+### `SomeContext.Provider` {#provider}
 
 Оберните ваши компоненты в провайдер контекста, чтобы указать значение этого контекста для всех компонентов внутри:
-
-<!-- 0005.part.md -->
 
 ```js
 function App() {
@@ -55,17 +51,13 @@ function App() {
 }
 ```
 
-<!-- 0006.part.md -->
+#### Параметры {#provider-props}
 
-#### пропсы
+-   `value`: Значение, которое вы хотите передать всем компонентам, читающим данный контекст внутри данного провайдера, независимо от его глубины. Значение контекста может быть любого типа. Компонент, вызывающий [`useContext(SomeContext)`](useContext.md) внутри провайдера, получает `value` самого внутреннего соответствующего провайдера контекста над ним.
 
--   `value`: Значение, которое вы хотите передать всем компонентам, читающим данный контекст внутри данного провайдера, независимо от его глубины. Значение контекста может быть любого типа. Компонент, вызывающий [`useContext(SomeContext)`](useContext.md) внутри провайдера, получает `значение` самого внутреннего соответствующего провайдера контекста над ним.
-
-### `SomeContext.Consumer`
+### `SomeContext.Consumer` {#consumer}
 
 До появления `useContext` существовал более старый способ чтения контекста:
-
-<!-- 0007.part.md -->
 
 ```js
 function Button() {
@@ -78,11 +70,7 @@ function Button() {
 }
 ```
 
-<!-- 0008.part.md -->
-
-Хотя этот старый способ все еще работает, но **новый написанный код должен читать контекст с помощью [`useContext()`](useContext.md) вместо этого:**.
-
-<!-- 0009.part.md -->
+Хотя этот старый способ все еще работает, но **новый написанный код должен читать контекст с помощью [`useContext()`](useContext.md) вместо этого:**
 
 ```js
 function Button() {
@@ -92,21 +80,17 @@ function Button() {
 }
 ```
 
-<!-- 0010.part.md -->
-
-#### пропсы
+#### Параметры {#consumer-props}
 
 -   `children`: Функция. React будет вызывать переданную вами функцию с текущим значением контекста, определяемым по тому же алгоритму, что и [`useContext()`](useContext.md), и отображать результат, возвращаемый этой функцией. React также будет повторно запускать эту функцию и обновлять пользовательский интерфейс при каждом изменении контекста из родительских компонентов.
 
-## Использование
+## Использование {#usage}
 
-### Создание контекста
+### Создание контекста {#creating-context}
 
 Контекст позволяет компонентам [передавать информацию вглубь](../../learn/passing-data-deeply-with-context.md) без явной передачи пропсов.
 
 Вызовите `createContext` вне любых компонентов для создания одного или нескольких контекстов.
-
-<!-- 0011.part.md -->
 
 ```js
 import { createContext } from 'react';
@@ -115,11 +99,7 @@ const ThemeContext = createContext('light');
 const AuthContext = createContext(null);
 ```
 
-<!-- 0012.part.md -->
-
 `createContext` возвращает объект контекста. Компоненты могут читать контекст, передавая его в [`useContext()`](useContext.md):
-
-<!-- 0013.part.md -->
 
 ```js
 function Button() {
@@ -133,15 +113,11 @@ function Profile() {
 }
 ```
 
-<!-- 0014.part.md -->
-
 По умолчанию, значения, которые они получают, будут значениями по умолчанию, которые вы указали при создании контекстов. Однако, само по себе это не полезно, потому что значения по умолчанию никогда не меняются.
 
 Контекст полезен, потому что вы можете **предоставить другие, динамические значения из ваших компонентов:**.
 
-<!-- 0015.part.md -->
-
-```js
+```js hl_lines="10-11 13-14"
 function App() {
     const [theme, setTheme] = useState('dark');
     const [currentUser, setCurrentUser] = useState({
@@ -160,19 +136,15 @@ function App() {
 }
 ```
 
-<!-- 0016.part.md -->
-
 Теперь компонент `Page` и все компоненты внутри него, независимо от глубины, будут "видеть" переданные значения контекста. Если переданные значения контекста изменяются, React будет перерисовывать компоненты, читающие контекст.
 
-[Подробнее о чтении и предоставлении контекста и примеры](useContext.md)
+Подробнее о [чтении и предоставлении контекста и примеры](useContext.md)
 
-### Импорт и экспорт контекста из файла
+### Импорт и экспорт контекста из файла {#importing-and-exporting-context-from-a-file}
 
 Часто компонентам в разных файлах требуется доступ к одному и тому же контексту. Поэтому обычно контексты объявляются в отдельном файле. Затем вы можете использовать оператор [`export`](https://developer.mozilla.org/docs/web/javascript/reference/statements/export), чтобы сделать контекст доступным для других файлов:
 
-<!-- 0017.part.md -->
-
-```js
+```js hl_lines="4-5"
 // Contexts.js
 import { createContext } from 'react';
 
@@ -180,13 +152,9 @@ export const ThemeContext = createContext('light');
 export const AuthContext = createContext(null);
 ```
 
-<!-- 0018.part.md -->
-
 Компоненты, объявленные в других файлах, могут использовать оператор [`импорт`](https://developer.mozilla.org/docs/web/javascript/reference/statements/import) для чтения или предоставления этого контекста:
 
-<!-- 0019.part.md -->
-
-```js
+```js hl_lines="2"
 // Button.js
 import { ThemeContext } from './Contexts.js';
 
@@ -196,11 +164,9 @@ function Button() {
 }
 ```
 
-<!-- 0020.part.md -->
+---
 
-<!-- 0021.part.md -->
-
-```js
+```js hl_lines="2"
 // App.js
 import { ThemeContext, AuthContext } from './Contexts.js';
 
@@ -216,30 +182,20 @@ function App() {
 }
 ```
 
-<!-- 0022.part.md -->
-
 Это работает аналогично [импорту и экспорту компонентов](../../learn/importing-and-exporting-components.md).
 
-## Устранение неполадок
+## Устранение неполадок {#troubleshooting}
 
-### Я не могу найти способ изменить значение контекста
+### Я не могу найти способ изменить значение контекста {#i-cant-find-a-way-to-change-the-context-value}
 
 Код, подобный этому, определяет значение контекста _по умолчанию_:
-
-<!-- 0023.part.md -->
 
 ```js
 const ThemeContext = createContext('light');
 ```
 
-<!-- 0024.part.md -->
-
 Это значение никогда не меняется. React использует это значение только в качестве запасного варианта, если не может найти подходящего провайдера выше.
 
 Чтобы контекст менялся со временем, [добавьте состояние и оберните компоненты в провайдера контекста](useContext.md).
 
-<!-- 0025.part.md -->
-
-## Ссылки
-
--   [https://react.dev/reference/react/createContext](https://react.dev/reference/react/createContext)
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/createContext](https://react.dev/reference/react/createContext)</small>

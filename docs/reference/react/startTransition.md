@@ -1,18 +1,22 @@
+---
+description: startTransition позволяет обновлять состояние без блокировки пользовательского интерфейса
+---
+
 # startTransition
 
-**`startTransition`** позволяет обновлять состояние без блокировки пользовательского интерфейса.
+<big>**`startTransition`** позволяет обновлять состояние без блокировки пользовательского интерфейса.</big>
 
 ```js
 startTransition(scope);
 ```
 
-## Описание
+## Описание {#reference}
 
-### `startTransition(scope)`
+### `startTransition(scope)` {#starttransitionscope}
 
 Функция `startTransition` позволяет пометить обновление состояния как переход.
 
-```js
+```js hl_lines="7 9"
 import { startTransition } from 'react';
 
 function TabContainer() {
@@ -27,15 +31,15 @@ function TabContainer() {
 }
 ```
 
-#### Параметры
+**Параметры**
 
 -   `scope`: Функция, которая обновляет некоторое состояние, вызывая одну или несколько функций [`set`](useState.md#setstate). React немедленно вызывает `scope` без параметров и помечает все обновления состояния, запланированные синхронно во время вызова функции `scope`, как переходы. Они будут [неблокирующими](useTransition.md#marking-a-state-update-as-a-non-blocking-transition) и [не будут отображать нежелательные индикаторы загрузки](useTransition.md#preventing-unwanted-loading-indicators).
 
-#### Возвращает
+**Возвращает**
 
 `startTransition` ничего не возвращает.
 
-#### Предостережения
+**Предостережения**
 
 -   `startTransition` не предоставляет возможности отслеживать, находится ли переход в стадии ожидания. Для отображения индикатора ожидания, пока переход продолжается, вам нужен [`useTransition`](useTransition.md).
 -   Вы можете обернуть обновление в переход, только если у вас есть доступ к функции `set` этого состояния. Если вы хотите запустить переход в ответ на какой-то пропс или пользовательское возвращаемое значение Hook, попробуйте вместо этого использовать [`useDeferredValue`](useDeferredValue.md).
@@ -44,13 +48,13 @@ function TabContainer() {
 -   Обновления переходов не могут быть использованы для управления текстовыми вводами.
 -   Если есть несколько текущих переходов, React в настоящее время собирает их вместе. Это ограничение, которое, вероятно, будет устранено в будущем выпуске.
 
-## Использование
+## Использование {#usage}
 
-### Пометка обновления состояния как неблокирующего перехода
+### Пометка обновления состояния как неблокирующего перехода {#marking-a-state-update-as-a-non-blocking-transition}
 
 Вы можете пометить обновление состояния как _переход_, обернув его в вызов `startTransition`:
 
-```js
+```js hl_lines="7 9"
 import { startTransition } from 'react';
 
 function TabContainer() {
@@ -69,8 +73,10 @@ function TabContainer() {
 
 С помощью перехода пользовательский интерфейс остается отзывчивым в середине повторного рендеринга. Например, если пользователь щелкнул вкладку, но затем передумал и щелкнул другую вкладку, он может сделать это, не дожидаясь окончания первого повторного рендеринга.
 
-!!!note ""
+!!!note "Различия `startTransition` и `useTransition`"
 
     `startTransition` очень похож на [`useTransition`](useTransition.md), за исключением того, что он не предоставляет флаг `isPending` для отслеживания того, продолжается ли переход. Вы можете вызвать `startTransition`, когда `useTransition` недоступен. Например, `startTransition` работает вне компонентов, например, из библиотеки данных.
 
-    [Узнайте о переходах и посмотрите примеры на странице `useTransition`](useTransition.md).
+    Узнайте о [переходах и посмотрите примеры на странице `useTransition`](useTransition.md).
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/startTransition](https://react.dev/reference/react/startTransition)</small>
