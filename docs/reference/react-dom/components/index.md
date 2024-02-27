@@ -14,7 +14,7 @@ React supports all of the browser built-in [HTML](https://developer.mozilla.org/
 
 All of the built-in browser components support some props and events.
 
--   [Common components (e.g. `<div>`)](../components/common.md)
+-   [Common components (e.g. `<div>`)](./common.md)
 
 This includes React-specific props like `ref` and `dangerouslySetInnerHTML`.
 
@@ -24,11 +24,11 @@ This includes React-specific props like `ref` and `dangerouslySetInnerHTML`.
 
 These built-in browser components accept user input:
 
--   [`<input>`](../components/input.md)
--   [`<select>`](../components/select.md)
--   [`<textarea>`](../components/textarea.md)
+-   [`<input>`](./input.md)
+-   [`<select>`](./select.md)
+-   [`<textarea>`](./textarea.md)
 
-They are special in React because passing the `value` prop to them makes them _[controlled.](../components/input.md#controlling-an-input-with-a-state-variable)_
+They are special in React because passing the `value` prop to them makes them _[controlled.](./input.md#controlling-an-input-with-a-state-variable)_
 
 ---
 
@@ -36,11 +36,11 @@ They are special in React because passing the `value` prop to them makes them _[
 
 These bulit-in browser components let you load external resources or annotate the document with metadata:
 
--   [`<link>`](../components/link.md)
--   [`<meta>`](../components/meta.md)
--   [`<script>`](../components/script.md)
--   [`<style>`](../components/style.md)
--   [`<title>`](../components/title.md)
+-   [`<link>`](./link.md)
+-   [`<meta>`](./meta.md)
+-   [`<script>`](./script.md)
+-   [`<style>`](./style.md)
+-   [`<title>`](./title.md)
 
 They are special in React because React can render them into the document head, suspend while resources are loading, and enact other behaviors that are described on the reference page for each specific component.
 
@@ -92,7 +92,7 @@ React supports all built-in browser HTML components. This includes:
 -   [`<i>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/i)
 -   [`<iframe>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe)
 -   [`<img>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)
--   [`<input>`](../components/input.md)
+-   [`<input>`](./input.md)
 -   [`<ins>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ins)
 -   [`<kbd>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/kbd)
 -   [`<label>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label)
@@ -110,12 +110,12 @@ React supports all built-in browser HTML components. This includes:
 -   [`<object>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/object)
 -   [`<ol>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ol)
 -   [`<optgroup>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/optgroup)
--   [`<option>`](../components/option.md)
+-   [`<option>`](./option.md)
 -   [`<output>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output)
 -   [`<p>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/p)
 -   [`<picture>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture)
 -   [`<pre>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/pre)
--   [`<progress>`](../components/progress.md)
+-   [`<progress>`](./progress.md)
 -   [`<q>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q)
 -   [`<rp>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/rp)
 -   [`<rt>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/rt)
@@ -124,7 +124,7 @@ React supports all built-in browser HTML components. This includes:
 -   [`<samp>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/samp)
 -   [`<script>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
 -   [`<section>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/section)
--   [`<select>`](../components/select.md)
+-   [`<select>`](./select.md)
 -   [`<slot>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot)
 -   [`<small>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/small)
 -   [`<source>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source)
@@ -138,7 +138,7 @@ React supports all built-in browser HTML components. This includes:
 -   [`<tbody>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/tbody)
 -   [`<td>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/td)
 -   [`<template>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template)
--   [`<textarea>`](../components/textarea.md)
+-   [`<textarea>`](./textarea.md)
 -   [`<tfoot>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/tfoot)
 -   [`<th>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th)
 -   [`<thead>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/thead)

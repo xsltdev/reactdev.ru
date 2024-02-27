@@ -22,7 +22,7 @@ The [built-in browser `<title>` component](https://developer.mozilla.org/en-US/d
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `<title>` {/_title_/}
 
@@ -57,7 +57,7 @@ Only render a single `<title>` at a time. If more than one component renders a `
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Set the document title {/_set-the-document-title_/}
 

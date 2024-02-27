@@ -22,7 +22,7 @@ preconnect('https://example.com');
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `preconnect(href)` {/_preconnect_/}
 
@@ -41,15 +41,15 @@ function AppRoot() {
 
 The `preconnect` function provides the browser with a hint that it should open a connection to the given server. If the browser chooses to do so, this can speed up the loading of resources from that server.
 
-#### Parameters {/_parameters_/}
+**Параметры**
 
 -   `href`: a string. The URL of the server you want to connect to.
 
-#### Returns {/_returns_/}
+**Возвращаемое значение**
 
 `preconnect` returns nothing.
 
-#### Caveats {/_caveats_/}
+**Ограничения**
 
 -   Multiple calls to `preconnect` with the same server have the same effect as a single call.
 -   In the browser, you can call `preconnect` in any situation: while rendering a component, in an effect, in an event handler, and so on.
@@ -59,7 +59,7 @@ The `preconnect` function provides the browser with a hint that it should open a
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Preconnecting when rendering {/_preconnecting-when-rendering_/}
 

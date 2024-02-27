@@ -22,7 +22,7 @@ prefetchDNS('https://example.com');
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `prefetchDNS(href)` {/_prefetchdns_/}
 
@@ -41,15 +41,15 @@ function AppRoot() {
 
 The prefetchDNS function provides the browser with a hint that it should look up the IP address of a given server. If the browser chooses to do so, this can speed up the loading of resources from that server.
 
-#### Parameters {/_parameters_/}
+**Параметры**
 
 -   `href`: a string. The URL of the server you want to connect to.
 
-#### Returns {/_returns_/}
+**Возвращаемое значение**
 
 `prefetchDNS` returns nothing.
 
-#### Caveats {/_caveats_/}
+**Ограничения**
 
 -   Multiple calls to `prefetchDNS` with the same server have the same effect as a single call.
 -   In the browser, you can call `prefetchDNS` in any situation: while rendering a component, in an effect, in an event handler, and so on.

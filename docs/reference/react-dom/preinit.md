@@ -28,7 +28,7 @@ preinit('https://example.com/script.js', { as: 'style' });
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `preinit(href, options)` {/_preinit_/}
 
@@ -49,7 +49,7 @@ function AppRoot() {
 
 The `preinit` function provides the browser with a hint that it should start downloading and executing the given resource, which can save time. Scripts that you `preinit` are executed when they finish downloading. Stylesheets that you preinit are inserted into the document, which causes them to go into effect right away.
 
-#### Parameters {/_parameters_/}
+**Параметры**
 
 -   `href`: a string. The URL of the resource you want to download and execute.
 -   `options`: an object. It contains the following properties:
@@ -60,11 +60,11 @@ The `preinit` function provides the browser with a hint that it should start dow
     -   `nonce`: a string. A cryptographic [nonce to allow the resource](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) when using a strict Content Security Policy.
     -   `fetchPriority`: a string. Suggests a relative priority for fetching the resource. The possible values are `auto` (the default), `high`, and `low`.
 
-#### Returns {/_returns_/}
+**Возвращаемое значение**
 
 `preinit` returns nothing.
 
-#### Caveats {/_caveats_/}
+**Ограничения**
 
 -   Multiple calls to `preinit` with the same `href` have the same effect as a single call.
 -   In the browser, you can call `preinit` in any situation: while rendering a component, in an effect, in an event handler, and so on.
@@ -72,7 +72,7 @@ The `preinit` function provides the browser with a hint that it should start dow
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Preiniting when rendering {/_preiniting-when-rendering_/}
 

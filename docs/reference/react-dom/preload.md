@@ -28,7 +28,7 @@ preload('https://example.com/font.woff2', { as: 'font' });
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `preload(href, options)` {/_preload_/}
 
@@ -49,7 +49,7 @@ function AppRoot() {
 
 The `preload` function provides the browser with a hint that it should start downloading the given resource, which can save time.
 
-#### Parameters {/_parameters_/}
+**Параметры**
 
 -   `href`: a string. The URL of the resource you want to download.
 -   `options`: an object. It contains the following properties:
@@ -63,11 +63,11 @@ The `preload` function provides the browser with a hint that it should start dow
     -   `imageSrcSet`: a string. For use only with `as: "image"`. Specifies the [source set of the image](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
     -   `imageSizes`: a string. For use only with `as: "image"`. Specifies the [sizes of the image](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
 
-#### Returns {/_returns_/}
+**Возвращаемое значение**
 
 `preload` returns nothing.
 
-#### Caveats {/_caveats_/}
+**Ограничения**
 
 -   Multiple equivalent calls to `preload` have the same effect as a single call. Calls to `preload` are considered equivalent according to the following rules:
     -   Two calls are equivalent if they have the same `href`, except:
@@ -77,7 +77,7 @@ The `preload` function provides the browser with a hint that it should start dow
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Preloading when rendering {/_preloading-when-rendering_/}
 

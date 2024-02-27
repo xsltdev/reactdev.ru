@@ -22,7 +22,7 @@ The [built-in browser `<script>` component](https://developer.mozilla.org/en-US/
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `<script>` {/_script_/}
 
@@ -80,7 +80,7 @@ This special treatment comes with two caveats:
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Rendering an external script {/_rendering-an-external-script_/}
 

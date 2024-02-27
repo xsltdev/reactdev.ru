@@ -30,7 +30,7 @@ preinitModule('https://example.com/module.js', {
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `preinitModule(href, options)` {/_preinitmodule_/}
 
@@ -51,7 +51,7 @@ function AppRoot() {
 
 The `preinitModule` function provides the browser with a hint that it should start downloading and executing the given module, which can save time. Modules that you `preinit` are executed when they finish downloading.
 
-#### Parameters {/_parameters_/}
+**Параметры**
 
 -   `href`: a string. The URL of the module you want to download and exeucute.
 -   `options`: an object. It contains the following properties:
@@ -60,11 +60,11 @@ The `preinitModule` function provides the browser with a hint that it should sta
     -   `integrity`: a string. A cryptographic hash of the module, to [verify its authenticity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
     -   `nonce`: a string. A cryptographic [nonce to allow the module](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) when using a strict Content Security Policy.
 
-#### Returns {/_returns_/}
+**Возвращаемое значение**
 
 `preinitModule` returns nothing.
 
-#### Caveats {/_caveats_/}
+**Ограничения**
 
 -   Multiple calls to `preinitModule` with the same `href` have the same effect as a single call.
 -   In the browser, you can call `preinitModule` in any situation: while rendering a component, in an effect, in an event handler, and so on.
@@ -72,7 +72,7 @@ The `preinitModule` function provides the browser with a hint that it should sta
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Preloading when rendering {/_preloading-when-rendering_/}
 

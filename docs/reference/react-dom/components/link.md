@@ -22,7 +22,7 @@ The [built-in browser `<link>` component](https://developer.mozilla.org/en-US/do
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `<link>` {/_link_/}
 
@@ -105,7 +105,7 @@ This special treatment comes with two caveats:
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Linking to related resources {/_linking-to-related-resources_/}
 

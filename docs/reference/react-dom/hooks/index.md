@@ -1,27 +1,21 @@
 ---
-title: 'Built-in React DOM Hooks'
+description: На этой странице перечислены все хуки из пакета react-dom
 ---
 
-<Intro>
+# Встроенные хуки React DOM
 
-The `react-dom` package contains Hooks that are only supported for web applications (which run in the browser DOM environment). These Hooks are not supported in non-browser environments like iOS, Android, or Windows applications. If you are looking for Hooks that are supported in web browsers _and other environments_ see [the React Hooks page](../../react/hooks.md). This page lists all the Hooks in the `react-dom` package.
+<big>Пакет `react-dom` содержит хуки, которые поддерживаются только для веб-приложений (которые работают в среде DOM браузера). Эти хуки не поддерживаются в небраузерных средах, таких как приложения для iOS, Android или Windows. Если вы ищете хуки, которые поддерживаются в веб-браузерах _и других средах_, смотрите [страницу React Хуки](../../react/hooks.md). На этой странице перечислены все хуки из пакета `react-dom`.</big>
 
-</Intro>
+## Хуки формы {#form-hooks}
 
----
+!!!example "Canary"
 
-## Form Hooks {/_form-hooks_/}
+    В настоящее время хуки форм доступны только в канале React canary и экспериментальном канале. Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
-<Canary>
+Формы позволяют создавать интерактивные элементы управления для отправки информации. Для управления формами в ваших компонентах используйте один из этих хуков:
 
-Form Hooks are currently only available in React's canary and experimental channels. Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
-
-</Canary>
-
-_Forms_ let you create interactive controls for submitting information. To manage forms in your components, use one of these Hooks:
-
--   [`useFormStatus`](./useFormStatus.md) allows you to make updates to the UI based on the status of the a form.
--   [`useFormState`](./useFormState.md) allows you to manage state inside a form.
+-   [`useFormStatus`](./useFormStatus.md) позволяет вносить обновления в пользовательский интерфейс на основе статуса формы.
+-   [`useFormState`](./useFormState.md) позволяет управлять состоянием внутри формы.
 
 ```js
 function Form({ action }) {
@@ -51,3 +45,5 @@ function Button() {
     );
 }
 ```
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/hooks](https://react.dev/reference/react-dom/hooks)</small>

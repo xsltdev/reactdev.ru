@@ -2,33 +2,23 @@
 status: experimental
 ---
 
-<Canary>
+# useFormState
 
-The `useFormState` Hook is currently only available in React's canary and experimental channels. Learn more about [release channels here](https://react.dev/community/versioning-policy#all-release-channels). In addition, you need to use a framework that supports [React Server Components](../../react/use-client.md) to get the full benefit of `useFormState`.
+!!!example "Canary"
 
-</Canary>
+    Хук `useFormState` в настоящее время доступен только в канале React canary и experimental. Подробнее о [каналах выпуска здесь](https://react.dev/community/versioning-policy#all-release-channels). Кроме того, для получения всех преимуществ `useFormState` вам необходимо использовать фреймворк, поддерживающий [React Server Components](../../react/use-client.md).
 
-<Intro>
-
-`useFormState` is a Hook that allows you to update state based on the result of a form action.
+<big>`useFormState` - это хук, который позволяет вам обновлять состояние на основе результата действия формы.</big>
 
 ```js
 const [state, formAction] = useFormState(fn, initialState);
 ```
 
-</Intro>
+## Описание {#reference}
 
-<InlineToc />
+### `useFormState(action, initialState)` {#useformstate}
 
----
-
-## Reference {/_reference_/}
-
-### `useFormState(action, initialState)` {/_useformstate_/}
-
-{/_ TODO T164397693: link to actions documentation once it exists _/}
-
-Call `useFormState` at the top level of your component to create component state that is updated [when a form action is invoked](../components/form.md). You pass `useFormState` an existing form action function as well as an initial state, and it returns a new action that you use in your form, along with the latest form state. The latest form state is also passed to the function that you provided.
+Вызовите `useFormState` на верхнем уровне вашего компонента, чтобы создать состояние компонента, которое обновляется [при вызове действия формы](../components/form.md). Вы передаете `useFormState` существующую функцию действия формы, а также начальное состояние, и она возвращает новое действие, которое вы используете в своей форме, вместе с последним состоянием формы. Последнее состояние формы также передается в указанную вами функцию.
 
 ```js
 import { useFormState } from 'react-dom';
@@ -50,40 +40,34 @@ function StatefulForm({}) {
 }
 ```
 
-The form state is the value returned by the action when the form was last submitted. If the form has not yet been submitted, it is the initial state that you pass.
+Состояние формы - это значение, возвращенное действием, когда форма была отправлена в последний раз. Если форма еще не была отправлена, это начальное состояние, которое вы передаете.
 
-If used with a Server Action, `useFormState` allows the server's response from submitting the form to be shown even before hydration has completed.
+При использовании с серверным действием `useFormState` позволяет показывать ответ сервера от отправки формы даже до завершения гидратации.
 
-[See more examples below.](#usage)
+**Параметры**
 
-#### Parameters {/_parameters_/}
+-   `fn`: Функция, которая будет вызываться при отправке формы или нажатии кнопки. Когда функция вызывается, она получает предыдущее состояние формы (сначала `initialState`, которое вы передаете, а затем предыдущее возвращаемое значение) в качестве начального аргумента, а затем аргументы, которые обычно получает действие формы.
+-   `initialState`: Значение, которое вы хотите получить в качестве начального состояния. Это может быть любое сериализуемое значение. Этот аргумент игнорируется после первого вызова действия.
 
--   `fn`: The function to be called when the form is submitted or button pressed. When the function is called, it will receive the previous state of the form (initially the `initialState` that you pass, subsequently its previous return value) as its initial argument, followed by the arguments that a form action normally receives.
--   `initialState`: The value you want the state to be initially. It can be any serializable value. This argument is ignored after the action is first invoked.
+**Возвращаемое значение**
 
-{/_ TODO T164397693: link to serializable values docs once it exists _/}
+`useFormState` возвращает массив, содержащий ровно два значения:
 
-#### Returns {/_returns_/}
+1.  Текущее состояние. Во время первого рендера оно будет соответствовать переданному вами значению `initialState`. После вызова действия оно будет соответствовать значению, возвращенному действием.
+2.  Новое действие, которое вы можете передать в качестве свойства `action` компоненту `form` или свойства `formAction` любому компоненту `button` внутри формы.
 
-`useFormState` returns an array with exactly two values:
+**Ограничения**
 
-1. The current state. During the first render, it will match the `initialState` you have passed. After the action is invoked, it will match the value returned by the action.
-2. A new action that you can pass as the `action` prop to your `form` component or `formAction` prop to any `button` component within the form.
+-   При использовании с фреймворком, поддерживающим серверные компоненты React, `useFormState` позволяет сделать формы интерактивными до выполнения JavaScript на клиенте. При использовании без серверных компонентов это эквивалентно локальному состоянию компонента.
+-   Функция, передаваемая `useFormState`, получает в качестве первого аргумента дополнительный аргумент - предыдущее или начальное состояние. Это делает ее сигнатуру иной, чем если бы она использовалась непосредственно как действие формы без использования `useFormState`.
 
-#### Caveats {/_caveats_/}
+## Использование {#usage}
 
--   When used with a framework that supports React Server Components, `useFormState` lets you make forms interactive before JavaScript has executed on the client. When used without Server Components, it is equivalent to component local state.
--   The function passed to `useFormState` receives an extra argument, the previous or initial state, as its first argument. This makes its signature different than if it were used directly as a form action without using `useFormState`.
+### Использование информации, возвращаемой действием формы {#using-information-returned-by-a-form-action}
 
----
+Вызовите `useFormState` на верхнем уровне вашего компонента, чтобы получить доступ к возвращаемому значению действия из последнего раза, когда форма была отправлена.
 
-## Usage {/_usage_/}
-
-### Using information returned by a form action {/_using-information-returned-by-a-form-action_/}
-
-Call `useFormState` at the top level of your component to access the return value of an action from the last time a form was submitted.
-
-```js [[1, 5, "state"], [2, 5, "formAction"], [3, 5, "action"], [4, 5, "null"], [2, 8, "formAction"]]
+```js
 import { useFormState } from 'react-dom';
 import { action } from './actions.js';
 
@@ -94,225 +78,181 @@ function MyComponent() {
 }
 ```
 
-`useFormState` returns an array with exactly two items:
+`useFormState` возвращает массив, содержащий ровно два элемента:
 
-1. The <CodeStep step={1}>current state</CodeStep> of the form, which is initially set to the <CodeStep step={4}>initial state</CodeStep> you provided, and after the form is submitted is set to the return value of the <CodeStep step={3}>action</CodeStep> you provided.
-2. A <CodeStep step={2}>new action</CodeStep> that you pass to `<form>` as its `action` prop.
+1.  Текущее состояние формы, которое первоначально устанавливается в указанное вами начальное состояние, а после отправки формы устанавливается в возвращаемое значение указанного вами действия.
+2.  Новое действие, которое вы передаете в `<form>` в качестве его свойства `action`.
 
-When the form is submitted, the <CodeStep step={3}>action</CodeStep> function that you provided will be called. Its return value will become the new <CodeStep step={1}>current state</CodeStep> of the form.
+Когда форма будет отправлена, будет вызвана указанная вами функция действия. Ее возвращаемое значение станет новым текущим состоянием формы.
 
-The <CodeStep step={3}>action</CodeStep> that you provide will also receive a new first argument, namely the <CodeStep step={1}>current state</CodeStep> of the form. The first time the form is submitted, this will be the <CodeStep step={4}>initial state</CodeStep> you provided, while with subsequent submissions, it will be the return value from the last time the action was called. The rest of the arguments are the same as if `useFormState` had not been used
+Предоставленное вами действие также получит новый первый аргумент, а именно текущее состояние формы. При первой отправке формы это будет начальное состояние, которое вы указали, а при последующих отправках - возвращаемое значение, полученное при последнем вызове действия. Остальные аргументы такие же, как если бы `useFormState` не использовался
 
-```js [[3, 1, "action"], [1, 1, "currentState"]]
+```js
 function action(currentState, formData) {
     // ...
     return 'next state';
 }
 ```
 
-<Recipes titleText="Display information after submitting a form" titleId="display-information-after-submitting-a-form">
+### Отображение информации после отправки формы {#display-information-after-submitting-a-form}
 
-#### Display form errors {/_display-form-errors_/}
+**1. Отображение ошибок формы**
 
-To display messages such as an error message or toast that's returned by a Server Action, wrap the action in a call to `useFormState`.
+Чтобы отобразить сообщения, такие как сообщение об ошибке или тост, возвращаемый серверным действием, оберните действие вызовом `useFormState`.
 
-<Sandpack>
+=== "App.js"
 
-```js App.js
-import { useState } from 'react';
-import { useFormState } from 'react-dom';
-import { addToCart } from './actions.js';
+    ```js
+    import { useState } from 'react';
+    import { useFormState } from 'react-dom';
+    import { addToCart } from './actions.js';
 
-function AddToCartForm({ itemID, itemTitle }) {
-    const [message, formAction] = useFormState(
-        addToCart,
-        null
-    );
-    return (
-        <form action={formAction}>
-            <h2>{itemTitle}</h2>
-            <input
-                type="hidden"
-                name="itemID"
-                value={itemID}
-            />
-            <button type="submit">Add to Cart</button>
-            {message}
-        </form>
-    );
-}
-
-export default function App() {
-    return (
-        <>
-            <AddToCartForm
-                itemID="1"
-                itemTitle="JavaScript: The Definitive Guide"
-            />
-            <AddToCartForm
-                itemID="2"
-                itemTitle="JavaScript: The Good Parts"
-            />
-        </>
-    );
-}
-```
-
-```js actions.js
-'use server';
-
-export async function addToCart(prevState, queryData) {
-    const itemID = queryData.get('itemID');
-    if (itemID === '1') {
-        return 'Added to cart';
-    } else {
-        return "Couldn't add to cart: the item is sold out.";
+    function AddToCartForm({ itemID, itemTitle }) {
+    	const [message, formAction] = useFormState(
+    		addToCart,
+    		null
+    	);
+    	return (
+    		<form action={formAction}>
+    			<h2>{itemTitle}</h2>
+    			<input
+    				type="hidden"
+    				name="itemID"
+    				value={itemID}
+    			/>
+    			<button type="submit">Add to Cart</button>
+    			{message}
+    		</form>
+    	);
     }
-}
-```
 
-```css styles.css hidden
-form {
-    border: solid 1px black;
-    margin-bottom: 24px;
-    padding: 12px;
-}
-
-form button {
-    margin-right: 12px;
-}
-```
-
-```json package.json hidden
-{
-    "dependencies": {
-        "react": "canary",
-        "react-dom": "canary",
-        "react-scripts": "^5.0.0"
-    },
-    "main": "/index.js",
-    "devDependencies": {}
-}
-```
-
-</Sandpack>
-
-<Solution />
-
-#### Display structured information after submitting a form {/_display-structured-information-after-submitting-a-form_/}
-
-The return value from a Server Action can be any serializable value. For example, it could be an object that includes a boolean indicating whether the action was successful, an error message, or updated information.
-
-<Sandpack>
-
-```js App.js
-import { useState } from 'react';
-import { useFormState } from 'react-dom';
-import { addToCart } from './actions.js';
-
-function AddToCartForm({ itemID, itemTitle }) {
-    const [formState, formAction] = useFormState(
-        addToCart,
-        {}
-    );
-    return (
-        <form action={formAction}>
-            <h2>{itemTitle}</h2>
-            <input
-                type="hidden"
-                name="itemID"
-                value={itemID}
-            />
-            <button type="submit">Add to Cart</button>
-            {formState?.success && (
-                <div className="toast">
-                    Added to cart! Your cart now has{' '}
-                    {formState.cartSize} items.
-                </div>
-            )}
-            {formState?.success === false && (
-                <div className="error">
-                    Failed to add to cart:{' '}
-                    {formState.message}
-                </div>
-            )}
-        </form>
-    );
-}
-
-export default function App() {
-    return (
-        <>
-            <AddToCartForm
-                itemID="1"
-                itemTitle="JavaScript: The Definitive Guide"
-            />
-            <AddToCartForm
-                itemID="2"
-                itemTitle="JavaScript: The Good Parts"
-            />
-        </>
-    );
-}
-```
-
-```js actions.js
-'use server';
-
-export async function addToCart(prevState, queryData) {
-    const itemID = queryData.get('itemID');
-    if (itemID === '1') {
-        return {
-            success: true,
-            cartSize: 12,
-        };
-    } else {
-        return {
-            success: false,
-            message: 'The item is sold out.',
-        };
+    export default function App() {
+    	return (
+    		<>
+    			<AddToCartForm
+    				itemID="1"
+    				itemTitle="JavaScript: The Definitive Guide"
+    			/>
+    			<AddToCartForm
+    				itemID="2"
+    				itemTitle="JavaScript: The Good Parts"
+    			/>
+    		</>
+    	);
     }
-}
-```
+    ```
 
-```css styles.css hidden
-form {
-    border: solid 1px black;
-    margin-bottom: 24px;
-    padding: 12px;
-}
+=== "actions.js"
 
-form button {
-    margin-right: 12px;
-}
-```
+    ```js
+    'use server';
 
-```json package.json hidden
-{
-    "dependencies": {
-        "react": "canary",
-        "react-dom": "canary",
-        "react-scripts": "^5.0.0"
-    },
-    "main": "/index.js",
-    "devDependencies": {}
-}
-```
+    export async function addToCart(prevState, queryData) {
+    	const itemID = queryData.get('itemID');
+    	if (itemID === '1') {
+    		return 'Added to cart';
+    	} else {
+    		return "Couldn't add to cart: the item is sold out.";
+    	}
+    }
+    ```
 
-</Sandpack>
+=== "CodeSandbox"
 
-<Solution />
+    <iframe src="https://codesandbox.io/embed/yv2vzy?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="damp-tree-yv2vzy" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-</Recipes>
+**2. Отображение структурированной информации после отправки формы**
 
-## Troubleshooting {/_troubleshooting_/}
+Возвращаемое значение действия сервера может быть любым сериализуемым значением. Например, это может быть объект, содержащий логическое значение, указывающее на успешность выполнения действия, сообщение об ошибке или обновленную информацию.
 
-### My action can no longer read the submitted form data {/_my-action-can-no-longer-read-the-submitted-form-data_/}
+=== "App.js"
 
-When you wrap an action with `useFormState`, it gets an extra argument _as its first argument_. The submitted form data is therefore its _second_ argument instead of its first as it would usually be. The new first argument that gets added is the current state of the form.
+    ```js
+    import { useState } from 'react';
+    import { useFormState } from 'react-dom';
+    import { addToCart } from './actions.js';
+
+    function AddToCartForm({ itemID, itemTitle }) {
+    	const [formState, formAction] = useFormState(
+    		addToCart,
+    		{}
+    	);
+    	return (
+    		<form action={formAction}>
+    			<h2>{itemTitle}</h2>
+    			<input
+    				type="hidden"
+    				name="itemID"
+    				value={itemID}
+    			/>
+    			<button type="submit">Add to Cart</button>
+    			{formState?.success && (
+    				<div className="toast">
+    					Added to cart! Your cart now has{' '}
+    					{formState.cartSize} items.
+    				</div>
+    			)}
+    			{formState?.success === false && (
+    				<div className="error">
+    					Failed to add to cart:{' '}
+    					{formState.message}
+    				</div>
+    			)}
+    		</form>
+    	);
+    }
+
+    export default function App() {
+    	return (
+    		<>
+    			<AddToCartForm
+    				itemID="1"
+    				itemTitle="JavaScript: The Definitive Guide"
+    			/>
+    			<AddToCartForm
+    				itemID="2"
+    				itemTitle="JavaScript: The Good Parts"
+    			/>
+    		</>
+    	);
+    }
+    ```
+
+=== "actions.js"
+
+    ```js
+    'use server';
+
+    export async function addToCart(prevState, queryData) {
+    	const itemID = queryData.get('itemID');
+    	if (itemID === '1') {
+    		return {
+    			success: true,
+    			cartSize: 12,
+    		};
+    	} else {
+    		return {
+    			success: false,
+    			message: 'The item is sold out.',
+    		};
+    	}
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/kmkspd?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="jolly-minsky-kmkspd" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+## Решение проблем {#troubleshooting}
+
+### Мое действие больше не может читать данные отправленной формы {#my-action-can-no-longer-read-the-submitted-form-data}
+
+Когда вы оборачиваете действие с помощью `useFormState`, оно получает дополнительный аргумент _в качестве первого аргумента_. Таким образом, отправленные данные формы являются его _вторым_ аргументом, а не первым, как это было бы обычно. Новый первый аргумент, который добавляется, - это текущее состояние формы.
 
 ```js
 function action(currentState, formData) {
     // ...
 }
 ```
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/hooks/useFormState](https://react.dev/reference/react-dom/hooks/useFormState)</small>

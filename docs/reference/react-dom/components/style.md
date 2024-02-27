@@ -22,7 +22,7 @@ The [built-in browser `<style>` component](https://developer.mozilla.org/en-US/d
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `<style>` {/_style_/}
 
@@ -62,7 +62,7 @@ This special treatment comes with two caveats:
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Rendering an inline CSS stylesheet {/_rendering-an-inline-css-stylesheet_/}
 

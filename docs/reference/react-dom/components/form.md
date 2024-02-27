@@ -25,7 +25,7 @@ The [built-in browser `<form>` component](https://hcdev.ru/html/form/) lets you 
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `<form>` {/_form_/}
 
@@ -46,13 +46,13 @@ To create interactive controls for submitting information, render the [built-in 
 
 [`action`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action): a URL or function. When a URL is passed to `action` the form will behave like the HTML form component. When a function is passed to `action` the function will handle the form submission. The function passed to `action` may be async and will be called with a single argument containing the [form data](https://developer.mozilla.org/en-US/docs/Web/API/FormData) of the submitted form. The `action` prop can be overridden by a `formAction` attribute on a `<button>`, `<input type="submit">`, or `<input type="image">` component.
 
-#### Caveats {/_caveats_/}
+**Ограничения**
 
 -   When a function is passed to `action` or `formAction` the HTTP method will be POST regardless of value of the `method` prop.
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Handle form submission on the client {/_handle-form-submission-on-the-client_/}
 

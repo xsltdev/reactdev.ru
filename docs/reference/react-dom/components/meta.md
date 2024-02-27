@@ -27,7 +27,7 @@ The [built-in browser `<meta>` component](https://developer.mozilla.org/en-US/do
 
 ---
 
-## Reference {/_reference_/}
+## Описание {/_reference_/}
 
 ### `<meta>` {/_meta_/}
 
@@ -62,7 +62,7 @@ There is one exception to this: if `<meta>` has an [`itemProp`](https://develope
 
 ---
 
-## Usage {/_usage_/}
+## Использование {#usage}
 
 ### Annotating the document with metadata {/_annotating-the-document-with-metadata_/}
 
