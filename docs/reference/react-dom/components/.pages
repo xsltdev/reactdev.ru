@@ -1,4 +1,15 @@
 title: Component API
 nav:
     - index.md
-    - ...
+    - common.md
+    - form.md
+    - input.md
+    - option.md
+    - progress.md
+    - select.md
+    - textarea.md
+    - link.md
+    - meta.md
+    - script.md
+    - style.md
+    - title.md

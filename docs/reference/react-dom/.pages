@@ -8,6 +8,12 @@ nav:
         - flushSync.md
         - findDOMNode.md
         - hydrate.md
+        - preconnect.md
+        - prefetchDNS.md
+        - preinit.md
+        - preinitModule.md
+        - preload.md
+        - preloadModule.md
         - render.md
         - unmountComponentAtNode.md
     - client
