@@ -431,7 +431,7 @@ showNotification('Connected!', theme);
 
     Этот раздел описывает **экспериментальный API, который еще не был выпущен** в стабильной версии React.
 
-Используйте специальный хук под названием [`useEffectEvent`](../reference/experimental_useEffectEvent.md), чтобы извлечь эту нереактивную логику из вашего Эффекта:
+Используйте специальный хук под названием [`useEffectEvent`](../reference/react/experimental_useEffectEvent.md), чтобы извлечь эту нереактивную логику из вашего Эффекта:
 
 ```js hl_lines="1 4-6"
 import { useEffect, useEffectEvent } from 'react';
