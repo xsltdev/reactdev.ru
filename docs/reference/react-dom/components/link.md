@@ -1,246 +1,329 @@
 ---
 status: experimental
+description: Встроенный компонент браузера link позволяет использовать внешние ресурсы, такие как таблицы стилей, или аннотировать документ метаданными ссылок
 ---
 
-<Canary>
+# &lt;link&gt;
 
-React's extensions to `<link>` are currently only available in React's canary and experimental channels. In stable releases of React `<link>` works only as a [built-in browser HTML component](https://react.dev/reference/react-dom/components#all-html-components). Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
+!!!example "Canary"
 
-</Canary>
+    Расширения React для `<link>` в настоящее время доступны только в канале React canary и экспериментальном канале. В стабильных релизах React `<link>` работает только как [встроенный в браузер HTML-компонент](https://react.dev/reference/react-dom/components#all-html-components). Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
-<Intro>
-
-The [built-in browser `<link>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link) lets you use external resources such as stylesheets or annotate the document with link metadata.
+<big>Встроенный компонент браузера [`<link>`](https://hcdev.ru/html/link/) позволяет использовать внешние ресурсы, такие как таблицы стилей, или аннотировать документ метаданными ссылок.</big>
 
 ```js
 <link rel="icon" href="favicon.ico" />
 ```
 
-</Intro>
+## Описание {#reference}
 
-<InlineToc />
+### `<link>` {#link}
 
----
-
-## Описание {/_reference_/}
-
-### `<link>` {/_link_/}
-
-To link to external resources such as stylesheets, fonts, and icons, or to annotate the document with link metadata, render the [built-in browser `<link>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link). You can render `<link>` from any component and React will [in most cases](#special-rendering-behavior) place the corresponding DOM element in the document head.
+Чтобы сделать ссылки на внешние ресурсы, такие как таблицы стилей, шрифты и иконки, или аннотировать документ метаданными ссылок, используйте [встроенный в браузер компонент `<link>`](https://hcdev.ru/html/link/). Вы можете рендерить `<link>` из любого компонента, и React [в большинстве случаев](#special-rendering-behavior) поместит соответствующий элемент DOM в голову документа.
 
 ```js
 <link rel="icon" href="favicon.ico" />
 ```
 
-[See more examples below.](#usage)
+**Параметры**
 
-#### Props {/_props_/}
+`<link>` поддерживает все [общие пропсы элементов](../components/common.md#props)
 
-`<link>` supports all [common element props.](../components/common.md#props)
+-   `rel`: строка, обязательна. Указывает [отношение к ресурсу](https://developer.mozilla.org/docs/Web/HTML/Attributes/rel). React [обрабатывает ссылки с `rel="stylesheet"` иначе](#special-rendering-behavior), чем другие ссылки.
 
--   `rel`: a string, required. Specifies the [relationship to the resource](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel). React [treats links with `rel="stylesheet"` differently](#special-rendering-behavior) from other links.
+Эти реквизиты применяются, когда `rel="stylesheet"`:
 
-These props apply when `rel="stylesheet"`:
+-   `precedence`: строка. Указывает React, где ранжировать DOM-узел `<link>` относительно других в документе `<head>`, что определяет, какая таблица стилей может перекрыть другую. Его значение может быть (в порядке старшинства) `" reset"`, `"low"`, `"medium"`, `"high"`. Таблицы стилей с одинаковым старшинством идут вместе независимо от того, являются ли они тегами `<link>` или встроенными тегами `<style>` или загружаются с помощью функций [`preload`](../preload.md) или [`preinit`](../preinit.md).
+-   `media`: строка. Ограничивает электронную таблицу определенным [media query](https://developer.mozilla.org/docs/Web/CSS/CSS_media_queries/Using_media_queries).
+-   `title`: строка. Задает имя [альтернативной таблицы стилей](https://developer.mozilla.org/docs/Web/CSS/Alternative_style_sheets).
 
--   `precedence`: a string. Tells React where to rank the `<link>` DOM node relative to others in the document `<head>`, which determines which stylesheet can override the other. Its value can be (in order of precedence) `"reset"`, `"low"`, `"medium"`, `"high"`. Stylesheets with the same precedence go together whether they are `<link>` or inline `<style>` tags or loaded using the [`preload`](../preload.md) or [`preinit`](../preinit.md) functions.
--   `media`: a string. Restricts the spreadsheet to a certain [media query](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries).
--   `title`: a string. Specifies the name of an [alternative stylesheet](https://developer.mozilla.org/en-US/docs/Web/CSS/Alternative_style_sheets).
+Эти реквизиты применяются, когда `rel="stylesheet"`, но отключают [особое отношение React к таблицам стилей](#special-rendering-behavior):
 
-These props apply when `rel="stylesheet"` but disable React's [special treatment of stylesheets](#special-rendering-behavior):
+-   `disabled`: булево. Отключает таблицу.
+-   `onError`: функция. Вызывается, когда таблица стилей не загружается.
+-   `onLoad`: функция. Вызывается, когда таблица стилей завершает загрузку.
 
--   `disabled`: a boolean. Disables the spreadsheet.
--   `onError`: a function. Called when the stylesheet fails to load.
--   `onLoad`: a function. Called when the stylesheet finishes being loaded.
+Эти реквизиты применяются, когда `rel="preload"` или `rel="modulepreload"`:
 
-These props apply when `rel="preload"` or `rel="modulepreload"`:
+-   `as`: строка. Тип ресурса. Возможные значения: `audio`, `document`, `embed`, `fetch`, `font`, `image`, `object`, `script`, `style`, `track`, `video`, `worker`.
+-   `imageSrcSet`: строка. Применяется только в случае `as="image"`. Указывает [исходный набор изображения](https://developer.mozilla.org/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
+-   `imageSizes`: строка. Применяется только в случае `as="image"`. Указывает [размеры изображения](https://developer.mozilla.org/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
 
--   `as`: a string. The type of resource. Its possible values are `audio`, `document`, `embed`, `fetch`, `font`, `image`, `object`, `script`, `style`, `track`, `video`, `worker`.
--   `imageSrcSet`: a string. Applicable only when `as="image"`. Specifies the [source set of the image](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
--   `imageSizes`: a string. Applicable only when `as="image"`. Specifies the [sizes of the image](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
+Этот реквизит применяется при `rel="icon"` или `rel="apple-touch-icon"`:
 
-These props apply when `rel="icon"` or `rel="apple-touch-icon"`:
+-   `sizes`: строка. [размеры иконки](https://developer.mozilla.org/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
 
--   `sizes`: a string. The [sizes of the icon](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
+Эти параметры применяются во всех случаях:
 
-These props apply in all cases:
+-   `href`: строка. URL-адрес связанного ресурса.
+-   `crossOrigin`: строка. Используемая политика [CORS](https://developer.mozilla.org/docs/Web/HTML/Attributes/crossorigin). Возможные значения: `anonymous` и `use-credentials`. Требуется, если для параметра `as` установлено значение `"fetch"`.
+-   `referrerPolicy`: строка. Заголовок [Referrer header](https://hcdev.ru/html/link/#referrerpolicy), который следует отправлять при выборке. Возможные значения: `no-referrer-when-downgrade` (по умолчанию), `no-referrer`, `origin`, `origin-when-cross-origin`, и `unsafe-url`.
+-   `fetchPriority`: строка. Указывает относительный приоритет для получения ресурса. Возможные значения: `auto` (по умолчанию), `high` и `low`.
+-   `hrefLang`: строка. Язык связанного ресурса.
+-   `integrity`: строка. Криптографический хэш ресурса для [проверки его подлинности](https://developer.mozilla.org/docs/Web/Security/Subresource_Integrity).
+-   `type`: строка. MIME-тип связанного ресурса.
 
--   `href`: a string. The URL of the linked resource.
--   `crossOrigin`: a string. The [CORS policy](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin) to use. Its possible values are `anonymous` and `use-credentials`. It is required when `as` is set to `"fetch"`.
--   `referrerPolicy`: a string. The [Referrer header](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link#referrerpolicy) to send when fetching. Its possible values are `no-referrer-when-downgrade` (the default), `no-referrer`, `origin`, `origin-when-cross-origin`, and `unsafe-url`.
--   `fetchPriority`: a string. Suggests a relative priority for fetching the resource. The possible values are `auto` (the default), `high`, and `low`.
--   `hrefLang`: a string. The language of the linked resource.
--   `integrity`: a string. A cryptographic hash of the resource, to [verify its authenticity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
--   `type`: a string. The MIME type of the linked resource.
+Реквизиты, которые **не рекомендуется** использовать с React:
 
-Props that are **not recommended** for use with React:
+-   `blocking`: строка. Если установлено значение `"render"`, это указывает браузеру не рендерить страницу до тех пор, пока не будет загружена таблица стилей. React обеспечивает более тонкий контроль с помощью Suspense.
 
--   `blocking`: a string. If set to `"render"`, instructs the browser not to render the page until the stylesheet is loaded. React provides more fine-grained control using Suspense.
+#### Особое поведение рендеринга {#special-rendering-behavior}
 
-#### Special rendering behavior {/_special-rendering-behavior_/}
+React всегда будет помещать элемент DOM, соответствующий компоненту `<link>`, в `<head>` документа, независимо от того, в каком месте дерева React он отрисовывается. `<head>` - единственное допустимое место для `<link>` в DOM, но это удобно и позволяет сохранить композитность, если компонент, представляющий определенную страницу, может сам рендерить компоненты `<link>`.
 
-React will always place the DOM element corresponding to the `<link>` component within the document’s `<head>`, regardless of where in the React tree it is rendered. The `<head>` is the only valid place for `<link>` to exist within the DOM, yet it’s convenient and keeps things composable if a component representing a specific page can render `<link>` components itself.
+Из этого есть несколько исключений:
 
-There are a few exceptions to this:
+-   Если у `<link>` есть свойство `rel="stylesheet"`, то для получения такого особого поведения у него также должно быть свойство `precedence`. Это происходит потому, что порядок следования таблиц стилей в документе имеет значение, поэтому React должен знать, как упорядочить эту таблицу стилей относительно других, которые вы указываете с помощью свойства `precedence`. Если параметр `precedence` опущен, то никакого особого поведения не будет.
+-   Если у `<link>` есть реквизит [`itemProp`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/itemprop), то никакого особого поведения не будет, потому что в этом случае она не относится к документу, а представляет собой метаданные о конкретной части страницы.
+-   Если у `<link>` есть свойство `onLoad` или `onError`, то в этом случае вы управляете загрузкой связанного ресурса вручную внутри вашего компонента React.
 
--   If the `<link>` has a `rel="stylesheet"` prop, then it has to also have a `precedence` prop to get this special behavior. This is because the order of stylesheets within the document is significant, so React needs to know how to order this stylesheet relative to others, which you specify using the `precedence` prop. If the `precedence` prop is omitted, there is no special behavior.
--   If the `<link>` has an [`itemProp`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop) prop, there is no special behavior, because in this case it doesn’t apply to the document but instead represents metadata about a specific part of the page.
--   If the `<link>` has an `onLoad` or `onError` prop, because in that case you are managing the loading of the linked resource manually within your React component.
+#### Особое поведение для таблиц стилей {#special-behavior-for-stylesheets}
 
-#### Special behavior for stylesheets {/_special-behavior-for-stylesheets_/}
+Кроме того, если `<link>` является ссылкой на таблицу стилей (а именно, имеет `rel="stylesheet"` в своем реквизите), React обрабатывает ее особым образом следующим образом:
 
-In addition, if the `<link>` is to a stylesheet (namely, it has `rel="stylesheet"` in its props), React treats it specially in the following ways:
+-   Компонент, отображающий `<link>`, будет [приостановлен](../../react/Suspense.md) на время загрузки таблицы стилей.
+-   Если несколько компонентов отображают ссылки на одну и ту же таблицу стилей, React будет дедублировать их и помещать в DOM только одну ссылку. Две ссылки считаются одинаковыми, если у них одинаковый параметр `href`.
 
--   The component that renders `<link>` will [suspend](http://localhost:3000/reference/react/Suspense) while the stylesheet is loading.
--   If multiple components render links to the same stylesheet, React will de-duplicate them and only put a single link into the DOM. Two links are considered the same if they have the same `href` prop.
+Есть два исключения из этого особого поведения:
 
-There are two exception to this special behavior:
+-   Если у ссылки нет свойства `precedence`, то особого поведения не будет, потому что порядок следования таблиц стилей в документе имеет значение, поэтому React должен знать, как упорядочить эту таблицу стилей относительно других, что вы и указываете с помощью свойства `precedence`.
+-   Если вы предоставите любой из реквизитов `onLoad`, `onError` или `disabled`, то никакого особого поведения не будет, потому что эти реквизиты указывают на то, что вы управляете загрузкой таблицы стилей вручную внутри вашего компонента.
 
--   If the link doesn't have a `precedence` prop, there is no special behavior, because the order of stylesheets within the document is significant, so React needs to know how to order this stylesheet relative to others, which you specify using the `precedence` prop.
--   If you supply any of the `onLoad`, `onError`, or `disabled` props, there is no special behavior, because these props indicate that you are managing the loading of the stylesheet manually within your component.
+Это особое отношение сопровождается двумя оговорками:
 
-This special treatment comes with two caveats:
-
--   React will ignore changes to props after the link has been rendered. (React will issue a warning in development if this happens.)
--   React may leave the link in the DOM even after the component that rendered it has been unmounted.
-
----
+-   React будет игнорировать изменения реквизитов после того, как ссылка будет отрисована. (Если это произойдет, React выдаст предупреждение в процессе разработки).
+-   React может оставить ссылку в DOM даже после того, как компонент, который ее отобразил, будет размонтирован.
 
 ## Использование {#usage}
 
-### Linking to related resources {/_linking-to-related-resources_/}
+### Ссылки на связанные ресурсы {#linking-to-related-resources}
 
-You can annotate the document with links to related resources such as an icon, canonical URL, or pingback. React will place this metadata within the document `<head>` regardless of where in the React tree it is rendered.
+Вы можете аннотировать документ ссылками на связанные ресурсы, такие как иконка, канонический URL или pingback. React поместит эти метаданные в `<head>` документа, независимо от того, в каком месте дерева React он будет отображаться.
 
-<SandpackWithHTMLOutput>
+=== "App.js"
 
-```js src/App.js active
-import ShowRenderedHTML from './ShowRenderedHTML.js';
+    ```js
+    import ShowRenderedHTML from './ShowRenderedHTML.js';
 
-export default function BlogPage() {
-    return (
-        <ShowRenderedHTML>
-            <link rel="icon" href="favicon.ico" />
-            <link
-                rel="pingback"
-                href="http://www.example.com/xmlrpc.php"
-            />
-            <h1>My Blog</h1>
-            <p>...</p>
-        </ShowRenderedHTML>
-    );
-}
-```
+    export default function BlogPage() {
+    	return (
+    		<ShowRenderedHTML>
+    			<link rel="icon" href="favicon.ico" />
+    			<link
+    				rel="pingback"
+    				href="http://www.example.com/xmlrpc.php"
+    			/>
+    			<h1>My Blog</h1>
+    			<p>...</p>
+    		</ShowRenderedHTML>
+    	);
+    }
+    ```
 
-</SandpackWithHTMLOutput>
+=== "ShowRenderedHTML.js"
 
-### Linking to a stylesheet {/_linking-to-a-stylesheet_/}
+    ```js
+    import { renderToStaticMarkup } from 'react-dom/server';
+    import formatHTML from './formatHTML.js';
 
-If a component depends on a certain stylesheet in order to be displayed correctly, you can render a link to that stylesheet within the component. Your component will [suspend](http://localhost:3000/reference/react/Suspense) while the stylesheet is loading. You must supply the `precedence` prop, which tells React where to place this stylesheet relative to others — stylesheets with higher precedence can override those with lower precedence.
+    export default function ShowRenderedHTML({ children }) {
+    	const markup = renderToStaticMarkup(
+    		<html>
+    			<head />
+    			<body>{children}</body>
+    		</html>
+    	);
+    	return (
+    		<>
+    			<h1>Rendered HTML:</h1>
+    			<pre>{formatHTML(markup)}</pre>
+    		</>
+    	);
+    }
+    ```
 
-<Note>
-When you want to use a stylesheet, it can be beneficial to call the [preinit](../preinit.md) function. Calling this function may allow the browser to start fetching the stylesheet earlier than if you just render a `<link>` component, for example by sending an [HTTP Early Hints response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103).
-</Note>
+=== "CodeSandbox"
 
-<SandpackWithHTMLOutput>
+    <iframe src="https://codesandbox.io/embed/htpzgz?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="gracious-jerry-htpzgz" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-```js src/App.js active
-import ShowRenderedHTML from './ShowRenderedHTML.js';
+### Ссылка на таблицу стилей {#linking-to-a-stylesheet}
 
-export default function SiteMapPage() {
-    return (
-        <ShowRenderedHTML>
-            <link
-                rel="stylesheet"
-                href="sitemap.css"
-                precedence="medium"
-            />
-            <p>...</p>
-        </ShowRenderedHTML>
-    );
-}
-```
+Если компонент зависит от определенной таблицы стилей для корректного отображения, вы можете отобразить ссылку на эту таблицу стилей внутри компонента. Ваш компонент будет [приостановлен](../../react/Suspense.md) на время загрузки таблицы стилей. Вы должны указать параметр `precedence`, который указывает React, куда поместить эту таблицу стилей относительно других - таблицы стилей с более высоким приоритетом могут перекрывать таблицы с более низким приоритетом.
 
-</SandpackWithHTMLOutput>
+!!!note ""
 
-### Controlling stylesheet precedence {/_controlling-stylesheet-precedence_/}
+    Когда вы хотите использовать таблицу стилей, может быть полезно вызвать функцию [preinit](../preinit.md). Вызов этой функции может позволить браузеру начать поиск таблицы стилей раньше, чем если бы вы просто отобразили компонент `<link>`, например, отправив ответ [HTTP Early Hints response](https://developer.mozilla.org/docs/Web/HTTP/Status/103).
 
-Stylesheets can conflict with each other, and when they do, the browser goes with the one that comes later in the document. React lets you control the order of stylesheets with the `precedence` prop. In this example, two components render stylesheets, and the one with the higher precedence goes later in the document even though the component that renders it comes earlier.
+=== "App.js"
 
-{/_FIXME: this doesn't appear to actually work -- I guess precedence isn't implemented yet?_/}
+    ```js
+    import ShowRenderedHTML from './ShowRenderedHTML.js';
 
-<SandpackWithHTMLOutput>
+    export default function SiteMapPage() {
+    	return (
+    		<ShowRenderedHTML>
+    			<link
+    				rel="stylesheet"
+    				href="sitemap.css"
+    				precedence="medium"
+    			/>
+    			<p>...</p>
+    		</ShowRenderedHTML>
+    	);
+    }
+    ```
 
-```js src/App.js active
-import ShowRenderedHTML from './ShowRenderedHTML.js';
+=== "ShowRenderedHTML.js"
 
-export default function HomePage() {
-    return (
-        <ShowRenderedHTML>
-            <FirstComponent />
-            <SecondComponent />
-            ...
-        </ShowRenderedHTML>
-    );
-}
+    ```js
+    import { renderToStaticMarkup } from 'react-dom/server';
+    import formatHTML from './formatHTML.js';
 
-function FirstComponent() {
-    return (
-        <link
-            rel="stylesheet"
-            href="first.css"
-            precedence="high"
-        />
-    );
-}
+    export default function ShowRenderedHTML({ children }) {
+    	const markup = renderToStaticMarkup(
+    		<html>
+    			<head />
+    			<body>{children}</body>
+    		</html>
+    	);
+    	return (
+    		<>
+    			<h1>Rendered HTML:</h1>
+    			<pre>{formatHTML(markup)}</pre>
+    		</>
+    	);
+    }
+    ```
 
-function SecondComponent() {
-    return (
-        <link
-            rel="stylesheet"
-            href="second.css"
-            precedence="low"
-        />
-    );
-}
-```
+=== "CodeSandbox"
 
-</SandpackWithHTMLOutput>
+    <iframe src="https://codesandbox.io/embed/q3m693?view=Editor+%2B+Preview&module=%2Fsrc%2FShowRenderedHTML.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="suspicious-shirley-q3m693" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### Deduplicated stylesheet rendering {/_deduplicated-stylesheet-rendering_/}
+### Управление приоритетом таблиц стилей {#controlling-stylesheet-precedence}
 
-If you render the same stylesheet from multiple components, React will place only a single `<link>` in the document head.
+Таблицы стилей могут конфликтовать друг с другом, и когда это происходит, браузер выбирает ту, которая находится позже в документе. React позволяет управлять порядком следования таблиц стилей с помощью свойства `precedence`. В этом примере два компонента рендерят таблицы стилей, и та, что имеет больший приоритет, идет позже в документе, хотя компонент, который ее рендерит, идет раньше.
 
-<SandpackWithHTMLOutput>
+=== "App.js"
 
-```js src/App.js active
-import ShowRenderedHTML from './ShowRenderedHTML.js';
+    ```js
+    import ShowRenderedHTML from './ShowRenderedHTML.js';
 
-export default function HomePage() {
-    return (
-        <ShowRenderedHTML>
-            <Component />
-            <Component />
-            ...
-        </ShowRenderedHTML>
-    );
-}
+    export default function HomePage() {
+    	return (
+    		<ShowRenderedHTML>
+    			<FirstComponent />
+    			<SecondComponent />
+    			...
+    		</ShowRenderedHTML>
+    	);
+    }
 
-function Component() {
-    return (
-        <link
-            rel="stylesheet"
-            href="styles.css"
-            precedence="medium"
-        />
-    );
-}
-```
+    function FirstComponent() {
+    	return (
+    		<link
+    			rel="stylesheet"
+    			href="first.css"
+    			precedence="high"
+    		/>
+    	);
+    }
 
-</SandpackWithHTMLOutput>
+    function SecondComponent() {
+    	return (
+    		<link
+    			rel="stylesheet"
+    			href="second.css"
+    			precedence="low"
+    		/>
+    	);
+    }
+    ```
 
-### Annotating specific items within the document with links {/_annotating-specific-items-within-the-document-with-links_/}
+=== "ShowRenderedHTML.js"
 
-You can use the `<link>` component with the `itemProp` prop to annotate specific items within the document with links to related resources. In this case, React will _not_ place these annotations within the document `<head>` but will place them like any other React component.
+    ```js
+    import { renderToStaticMarkup } from 'react-dom/server';
+    import formatHTML from './formatHTML.js';
+
+    export default function ShowRenderedHTML({ children }) {
+    	const markup = renderToStaticMarkup(
+    		<html>
+    			<head />
+    			<body>{children}</body>
+    		</html>
+    	);
+    	return (
+    		<>
+    			<h1>Rendered HTML:</h1>
+    			<pre>{formatHTML(markup)}</pre>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/n27jzp?view=Editor+%2B+Preview&module=%2Fsrc%2FShowRenderedHTML.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="gifted-moore-n27jzp" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Дублированный рендеринг таблицы стилей {#deduplicated-stylesheet-rendering}
+
+Если вы рендерите одну и ту же таблицу стилей из нескольких компонентов, React поместит только одну `<link>` в шапку документа.
+
+=== "App.js"
+
+    ```js
+    import ShowRenderedHTML from './ShowRenderedHTML.js';
+
+    export default function HomePage() {
+    	return (
+    		<ShowRenderedHTML>
+    			<Component />
+    			<Component />
+    			...
+    		</ShowRenderedHTML>
+    	);
+    }
+
+    function Component() {
+    	return (
+    		<link
+    			rel="stylesheet"
+    			href="styles.css"
+    			precedence="medium"
+    		/>
+    	);
+    }
+    ```
+
+=== "ShowRenderedHTML.js"
+
+    ```js
+    import { renderToStaticMarkup } from 'react-dom/server';
+    import formatHTML from './formatHTML.js';
+
+    export default function ShowRenderedHTML({ children }) {
+    	const markup = renderToStaticMarkup(
+    		<html>
+    			<head />
+    			<body>{children}</body>
+    		</html>
+    	);
+    	return (
+    		<>
+    			<h1>Rendered HTML:</h1>
+    			<pre>{formatHTML(markup)}</pre>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/z6742w?view=Editor+%2B+Preview&module=%2Fsrc%2FShowRenderedHTML.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="affectionate-architecture-z6742w" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Аннотирование определенных элементов в документе ссылками {#annotating-specific-items-within-the-document-with-links}
+
+Вы можете использовать компонент `<link>` с параметром `itemProp` для аннотирования определенных элементов в документе ссылками на связанные ресурсы. В этом случае React не будет размещать эти аннотации внутри документа `<head>`, а разместит их как любой другой компонент React.
 
 ```js
 <section itemScope>
@@ -249,3 +332,5 @@ You can use the `<link>` component with the `itemProp` prop to annotate specific
     <p>...</p>
 </section>
 ```
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/components/link](https://react.dev/reference/react-dom/components/link)</small>

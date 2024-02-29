@@ -10,6 +10,6 @@ nav:
     - textarea.md
     - link.md
     - meta.md
-    - script.md
-    - style.md
-    - title.md
+    #- script.md
+    #- style.md
+    #- title.md

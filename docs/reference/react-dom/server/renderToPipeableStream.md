@@ -8,7 +8,7 @@ const { pipe, abort } = renderToPipeableStream(reactNode, options?)
 
 !!!note ""
 
-Этот API специфичен для Node.js. Среды с [Web Streams,](https://developer.mozilla.org/docs/Web/API/Streams_API), такие как Deno и современные edge runtimes, должны использовать [`renderToReadableStream`](renderToReadableStream.md) вместо этого.
+    Этот API специфичен для Node.js. Среды с [Web Streams,](https://developer.mozilla.org/docs/Web/API/Streams_API), такие как Deno и современные edge runtimes, должны использовать [`renderToReadableStream`](renderToReadableStream.md) вместо этого.
 
 ## Описание
 

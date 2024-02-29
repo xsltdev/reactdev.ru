@@ -1,16 +1,15 @@
 ---
 status: experimental
+description: Компонент встроенный в браузер form позволяет создавать интерактивные элементы управления для отправки информации
 ---
+
+# &lt;form&gt;
 
 !!!example "Canary"
 
-Расширения для `<form>` в React в настоящее время доступны только в канале React canary и экспериментальном канале. В стабильных релизах React `<form>` работает только как [встроенный в браузер HTML-компонент](./index.md#all-html-components). Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
+    Расширения для `<form>` в React в настоящее время доступны только в канале React canary и экспериментальном канале. В стабильных релизах React `<form>` работает только как [встроенный в браузер HTML-компонент](./index.md#all-html-components). Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
-</Canary>
-
-<Intro>
-
-The [built-in browser `<form>` component](https://hcdev.ru/html/form/) lets you create interactive controls for submitting information.
+<big>Компонент [встроенный в браузер `<form>`](https://hcdev.ru/html/form/) позволяет создавать интерактивные элементы управления для отправки информации.</big>
 
 ```js
 <form action={search}>
@@ -18,18 +17,12 @@ The [built-in browser `<form>` component](https://hcdev.ru/html/form/) lets you 
     <button type="submit">Search</button>
 </form>
 ```
-
-</Intro>
-
-<InlineToc />
-
----
 
 ## Описание {#reference}
 
 ### `<form>` {#form}
 
-To create interactive controls for submitting information, render the [built-in browser `<form>` component](https://hcdev.ru/html/form/).
+Чтобы создать интерактивные элементы управления для отправки информации, используйте [встроенный компонент браузера `<form>`](https://hcdev.ru/html/form/).
 
 ```js
 <form action={search}>
@@ -38,64 +31,52 @@ To create interactive controls for submitting information, render the [built-in 
 </form>
 ```
 
-[See more examples below.](#usage)
+#### Пропсы {#props}
 
-#### Props {#props}
+`<form>` поддерживает все [общие пропсы элементов](./common.md#props)
 
-`<form>` supports all [common element props.](./common.md#props)
-
-[`action`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action): a URL or function. When a URL is passed to `action` the form will behave like the HTML form component. When a function is passed to `action` the function will handle the form submission. The function passed to `action` may be async and will be called with a single argument containing the [form data](https://developer.mozilla.org/en-US/docs/Web/API/FormData) of the submitted form. The `action` prop can be overridden by a `formAction` attribute on a `<button>`, `<input type="submit">`, or `<input type="image">` component.
+[`action`](https://hcdev.ru/html/form#action): URL или функция. Когда в `action` передается URL, форма будет вести себя как компонент HTML-формы. Когда в `action` передается функция, она будет обрабатывать отправку формы. Функция, переданная в `action`, может быть асинхронной и будет вызвана с единственным аргументом, содержащим [данные формы](https://developer.mozilla.org/en-US/docs/Web/API/FormData) отправленной формы. Свойство `action` может быть переопределено атрибутом `formAction` компонента `<button>`, `<input type="submit">` или `<input type="image">`.
 
 **Ограничения**
 
--   When a function is passed to `action` or `formAction` the HTTP method will be POST regardless of value of the `method` prop.
+-   Когда функция передается в `action` или `formAction`, метод HTTP будет POST, независимо от значения параметра `method`.
 
 ## Использование {#usage}
 
-### Handle form submission on the client {#handle-form-submission-on-the-client}
+### Обработка отправки формы на клиенте {#handle-form-submission-on-the-client}
 
-Pass a function to the `action` prop of form to run the function when the form is submitted. [`formData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) will be passed to the function as an argument so you can access the data submitted by the form. This differs from the conventional [HTML action](https://hcdev.ru/html/form/#action), which only accepts URLs.
+Передайте функцию в свойство `action` формы для запуска функции при отправке формы. [`formData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) будет передан в функцию в качестве аргумента, чтобы вы могли получить доступ к данным, отправленным формой. Это отличается от обычного [HTML action](https://hcdev.ru/html/form/#action), который принимает только URL.
 
-<Sandpack>
+=== "App.js"
 
-```js src/App.js
-export default function Search() {
-    function search(formData) {
-        const query = formData.get('query');
-        alert(`You searched for '${query}'`);
+    ```js
+    export default function Search() {
+    	function search(formData) {
+    		const query = formData.get('query');
+    		alert(`You searched for '${query}'`);
+    	}
+    	return (
+    		<form action={search}>
+    			<input name="query" />
+    			<button type="submit">Search</button>
+    		</form>
+    	);
     }
-    return (
-        <form action={search}>
-            <input name="query" />
-            <button type="submit">Search</button>
-        </form>
-    );
-}
-```
+    ```
 
-```json package.json hidden
-{
-    "dependencies": {
-        "react": "18.3.0-canary-6db7f4209-20231021",
-        "react-dom": "18.3.0-canary-6db7f4209-20231021",
-        "react-scripts": "^5.0.0"
-    },
-    "main": "/index.js",
-    "devDependencies": {}
-}
-```
+=== "CodeSandbox"
 
-</Sandpack>
+    <iframe src="https://codesandbox.io/embed/6pyqcx?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="prod-fog-6pyqcx" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-### Handle form submission with a Server Action {#handle-form-submission-with-a-server-action}
+### Обработка отправки формы с помощью серверного действия {#handle-form-submission-with-a-server-action}
 
-Render a `<form>` with an input and submit button. Pass a Server Action (a function marked with [`'use server'`](../../react/use-server.md)) to the `action` prop of form to run the function when the form is submitted.
+Отображение `<form>` с вводом и кнопкой отправки. Передайте серверное действие (функцию, помеченную [`'use server'`](../../react/use-server.md)) в свойство `action` формы, чтобы запустить функцию при отправке формы.
 
-Passing a Server Action to `<form action>` allow users to submit forms without JavaScript enabled or before the code has loaded. This is beneficial to users who have a slow connection, device, or have JavaScript disabled and is similar to the way forms work when a URL is passed to the `action` prop.
+Передача серверного действия в `<form action>` позволяет пользователям отправлять формы без включенного JavaScript или до загрузки кода. Это полезно для пользователей, у которых медленное соединение, устройство или отключен JavaScript, и похоже на то, как работают формы, когда в свойство `action` передается URL.
 
-You can use hidden form fields to provide data to the `<form>`'s action. The Server Action will be called with the hidden form field data as an instance of [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData).
+Вы можете использовать скрытые поля формы для предоставления данных действию `<form>`. Серверное действие будет вызвано с данными скрытого поля формы в виде экземпляра [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData).
 
-```jsx
+```js
 import { updateCart } from './lib.js';
 
 function AddToCart({ productId }) {
@@ -117,9 +98,9 @@ function AddToCart({ productId }) {
 }
 ```
 
-In lieu of using hidden form fields to provide data to the `<form>`'s action, you can call the <CodeStep step={1}>`bind`</CodeStep> method to supply it with extra arguments. This will bind a new argument (<CodeStep step={2}>`productId`</CodeStep>) to the function in addition to the <CodeStep step={3}>`formData`</CodeStep> that is passed as an argument to the function.
+Вместо того чтобы использовать скрытые поля формы для передачи данных в действие `<form>`, вы можете вызвать метод `bind`, чтобы снабдить его дополнительными аргументами. Это приведет к привязке к функции нового аргумента (`productId`) в дополнение к `formData`, который передается в качестве аргумента функции.
 
-```jsx [[1, 8, "bind"], [2,8, "productId"], [2,4, "productId"], [3,4, "formData"]]
+```js
 import { updateCart } from './lib.js';
 
 function AddToCart({ productId }) {
@@ -139,337 +120,268 @@ function AddToCart({ productId }) {
 }
 ```
 
-When `<form>` is rendered by a [Server Component](../../react/use-client.md), and a [Server Action](../../react/use-server.md) is passed to the `<form>`'s `action` prop, the form is [progressively enhanced](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement).
+Когда `<form>` отображается [Серверным компонентом](../../react/use-client.md), а в параметр `action` формы `<form>` передается [Серверное действие](../../react/use-server.md), форма [прогрессивно улучшается](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement).
 
-### Display a pending state during form submission {/_display-a-pending-state-during-form-submission_/}
+### Отображение состояния ожидания во время отправки формы {#display-a-pending-state-during-form-submission}
 
-To display a pending state when a form is being submitted, you can call the `useFormStatus` Hook in a component rendered in a `<form>` and read the `pending` property returned.
+Чтобы отобразить состояние ожидания во время отправки формы, вы можете вызвать хук `useFormStatus` в компоненте, отображаемом в `<form>`, и прочитать возвращаемое свойство `pending`.
 
-Here, we use the `pending` property to indicate the form is submitting.
+Здесь мы используем свойство `pending`, чтобы указать, что форма отправляется.
 
-<Sandpack>
+=== "App.js"
 
-```js src/App.js
-import { useFormStatus } from 'react-dom';
-import { submitForm } from './actions.js';
+    ```js
+    import { useFormStatus } from 'react-dom';
+    import { submitForm } from './actions.js';
 
-function Submit() {
-    const { pending } = useFormStatus();
-    return (
-        <button type="submit" disabled={pending}>
-            {pending ? 'Submitting...' : 'Submit'}
-        </button>
-    );
-}
-
-function Form({ action }) {
-    return (
-        <form action={action}>
-            <Submit />
-        </form>
-    );
-}
-
-export default function App() {
-    return <Form action={submitForm} />;
-}
-```
-
-```js src/actions.js hidden
-export async function submitForm(query) {
-    await new Promise((res) => setTimeout(res, 1000));
-}
-```
-
-```json package.json hidden
-{
-    "dependencies": {
-        "react": "canary",
-        "react-dom": "canary",
-        "react-scripts": "^5.0.0"
-    },
-    "main": "/index.js",
-    "devDependencies": {}
-}
-```
-
-</Sandpack>
-
-To learn more about the `useFormStatus` Hook see the [reference documentation](../hooks/useFormStatus.md).
-
-### Optimistically updating form data {#optimistically-updating-form-data}
-
-The `useOptimistic` Hook provides a way to optimistically update the user interface before a background operation, like a network request, completes. In the context of forms, this technique helps to make apps feel more responsive. When a user submits a form, instead of waiting for the server's response to reflect the changes, the interface is immediately updated with the expected outcome.
-
-For example, when a user types a message into the form and hits the "Send" button, the `useOptimistic` Hook allows the message to immediately appear in the list with a "Sending..." label, even before the message is actually sent to a server. This "optimistic" approach gives the impression of speed and responsiveness. The form then attempts to truly send the message in the background. Once the server confirms the message has been received, the "Sending..." label is removed.
-
-<Sandpack>
-
-```js src/App.js
-import { useOptimistic, useState, useRef } from 'react';
-import { deliverMessage } from './actions.js';
-
-function Thread({ messages, sendMessage }) {
-    const formRef = useRef();
-    async function formAction(formData) {
-        addOptimisticMessage(formData.get('message'));
-        formRef.current.reset();
-        await sendMessage(formData);
-    }
-    const [
-        optimisticMessages,
-        addOptimisticMessage,
-    ] = useOptimistic(messages, (state, newMessage) => [
-        ...state,
-        {
-            text: newMessage,
-            sending: true,
-        },
-    ]);
-
-    return (
-        <>
-            {optimisticMessages.map((message, index) => (
-                <div key={index}>
-                    {message.text}
-                    {!!message.sending && (
-                        <small> (Sending...)</small>
-                    )}
-                </div>
-            ))}
-            <form action={formAction} ref={formRef}>
-                <input
-                    type="text"
-                    name="message"
-                    placeholder="Hello!"
-                />
-                <button type="submit">Send</button>
-            </form>
-        </>
-    );
-}
-
-export default function App() {
-    const [messages, setMessages] = useState([
-        { text: 'Hello there!', sending: false, key: 1 },
-    ]);
-    async function sendMessage(formData) {
-        const sentMessage = await deliverMessage(
-            formData.get('message')
-        );
-        setMessages([...messages, { text: sentMessage }]);
-    }
-    return (
-        <Thread
-            messages={messages}
-            sendMessage={sendMessage}
-        />
-    );
-}
-```
-
-```js src/actions.js
-export async function deliverMessage(message) {
-    await new Promise((res) => setTimeout(res, 1000));
-    return message;
-}
-```
-
-```json package.json hidden
-{
-    "dependencies": {
-        "react": "18.3.0-canary-6db7f4209-20231021",
-        "react-dom": "18.3.0-canary-6db7f4209-20231021",
-        "react-scripts": "^5.0.0"
-    },
-    "main": "/index.js",
-    "devDependencies": {}
-}
-```
-
-</Sandpack>
-
-[//]: # 'Uncomment the next line, and delete this line after the `useOptimistic` reference documentatino page is published'
-[//]: # 'To learn more about the `useOptimistic` Hook see the [reference documentation](../../react/hooks/useOptimistic.md).'
-
-### Handling form submission errors {#handling-form-submission-errors}
-
-In some cases the function called by a `<form>`'s `action` prop throws an error. You can handle these errors by wrapping `<form>` in an Error Boundary. If the function called by a `<form>`'s `action` prop throws an error, the fallback for the error boundary will be displayed.
-
-<Sandpack>
-
-```js src/App.js
-import { ErrorBoundary } from 'react-error-boundary';
-
-export default function Search() {
-    function search() {
-        throw new Error('search error');
-    }
-    return (
-        <ErrorBoundary
-            fallback={
-                <p>
-                    There was an error while submitting the
-                    form
-                </p>
-            }
-        >
-            <form action={search}>
-                <input name="query" />
-                <button type="submit">Search</button>
-            </form>
-        </ErrorBoundary>
-    );
-}
-```
-
-```json package.json hidden
-{
-    "dependencies": {
-        "react": "18.3.0-canary-6db7f4209-20231021",
-        "react-dom": "18.3.0-canary-6db7f4209-20231021",
-        "react-scripts": "^5.0.0",
-        "react-error-boundary": "4.0.3"
-    },
-    "main": "/index.js",
-    "devDependencies": {}
-}
-```
-
-</Sandpack>
-
-### Display a form submission error without JavaScript {#display-a-form-submission-error-without-javascript}
-
-Displaying a form submission error message before the JavaScript bundle loads for progressive enhancement requires that:
-
-1.  `<form>` be rendered by a [Server Component](../../react/use-client.md)
-2.  the function passed to the `<form>`'s `action` prop be a [Server Action](../../react/use-server.md)
-3.  the `useFormState` Hook be used to display the error message
-
-`useFormState` takes two parameters: a [Server Action](../../react/use-server.md) and an initial state. `useFormState` returns two values, a state variable and an action. The action returned by `useFormState` should be passed to the `action` prop of the form. The state variable returned by `useFormState` can be used to displayed an error message. The value returned by the [Server Action](../../react/use-server.md) passed to `useFormState` will be used to update the state variable.
-
-<Sandpack>
-
-```js src/App.js
-import { useFormState } from 'react-dom';
-import { signUpNewUser } from './api';
-
-export default function Page() {
-    async function signup(prevState, formData) {
-        'use server';
-        const email = formData.get('email');
-        try {
-            await signUpNewUser(email);
-            alert(`Added "${email}"`);
-        } catch (err) {
-            return err.toString();
-        }
-    }
-    const [message, formAction] = useFormState(
-        signup,
-        null
-    );
-    return (
-        <>
-            <h1>Signup for my newsletter</h1>
-            <p>
-                Signup with the same email twice to see an
-                error
-            </p>
-            <form action={formAction} id="signup-form">
-                <label htmlFor="email">Email: </label>
-                <input
-                    name="email"
-                    id="email"
-                    placeholder="react@example.com"
-                />
-                <button>Sign up</button>
-                {!!message && <p>{message}</p>}
-            </form>
-        </>
-    );
-}
-```
-
-```js src/api.js hidden
-let emails = [];
-
-export async function signUpNewUser(newEmail) {
-    if (emails.includes(newEmail)) {
-        throw new Error(
-            'This email address has already been added'
-        );
-    }
-    emails.push(newEmail);
-}
-```
-
-```json package.json hidden
-{
-    "dependencies": {
-        "react": "18.3.0-canary-6db7f4209-20231021",
-        "react-dom": "18.3.0-canary-6db7f4209-20231021",
-        "react-scripts": "^5.0.0"
-    },
-    "main": "/index.js",
-    "devDependencies": {}
-}
-```
-
-</Sandpack>
-
-Learn more about updating state from a form action with the [`useFormState`](../hooks/useFormState.md) docs
-
-### Handling multiple submission types {#handling-multiple-submission-types}
-
-Forms can be designed to handle multiple submission actions based on the button pressed by the user. Each button inside a form can be associated with a distinct action or behavior by setting the `formAction` prop.
-
-When a user taps a specific button, the form is submitted, and a corresponding action, defined by that button's attributes and action, is executed. For instance, a form might submit an article for review by default but have a separate button with `formAction` set to save the article as a draft.
-
-<Sandpack>
-
-```js src/App.js
-export default function Search() {
-    function publish(formData) {
-        const content = formData.get('content');
-        const button = formData.get('button');
-        alert(
-            `'${content}' was published with the '${button}' button`
-        );
+    function Submit() {
+    	const { pending } = useFormStatus();
+    	return (
+    		<button type="submit" disabled={pending}>
+    			{pending ? 'Submitting...' : 'Submit'}
+    		</button>
+    	);
     }
 
-    function save(formData) {
-        const content = formData.get('content');
-        alert(`Your draft of '${content}' has been saved!`);
+    function Form({ action }) {
+    	return (
+    		<form action={action}>
+    			<Submit />
+    		</form>
+    	);
     }
 
-    return (
-        <form action={publish}>
-            <textarea name="content" rows={4} cols={40} />
-            <br />
-            <button
-                type="submit"
-                name="button"
-                value="submit"
-            >
-                Publish
-            </button>
-            <button formAction={save}>Save draft</button>
-        </form>
-    );
-}
-```
+    export default function App() {
+    	return <Form action={submitForm} />;
+    }
+    ```
 
-```json package.json hidden
-{
-    "dependencies": {
-        "react": "18.3.0-canary-6db7f4209-20231021",
-        "react-dom": "18.3.0-canary-6db7f4209-20231021",
-        "react-scripts": "^5.0.0"
-    },
-    "main": "/index.js",
-    "devDependencies": {}
-}
-```
+=== "CodeSandbox"
 
-</Sandpack>
+    <iframe src="https://codesandbox.io/embed/2qyqy4?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="serene-satoshi-2qyqy4" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+Подробнее о хуке `useFormStatus` читайте в [справочной документации](../hooks/useFormStatus.md).
+
+### Оптимистическое обновление данных формы {#optimistically-updating-form-data}
+
+Хук `useOptimistic` предоставляет возможность оптимистично обновлять пользовательский интерфейс до завершения фоновой операции, например, сетевого запроса. В контексте форм эта техника помогает сделать приложения более отзывчивыми. Когда пользователь отправляет форму, вместо того чтобы ждать, пока ответ сервера отразит изменения, интерфейс сразу же обновляется с ожидаемым результатом.
+
+Например, когда пользователь вводит сообщение в форму и нажимает кнопку "Отправить", хук `useOptimistic` позволяет сообщению сразу же появиться в списке с надписью "Отправка...", еще до того, как оно будет отправлено на сервер. Такой "оптимистичный" подход создает впечатление скорости и оперативности. Затем форма пытается действительно отправить сообщение в фоновом режиме. Как только сервер подтверждает, что сообщение получено, метка "Отправка..." удаляется.
+
+=== "App.js"
+
+    ```js
+    import { useOptimistic, useState, useRef } from 'react';
+    import { deliverMessage } from './actions.js';
+
+    function Thread({ messages, sendMessage }) {
+    	const formRef = useRef();
+    	async function formAction(formData) {
+    		addOptimisticMessage(formData.get('message'));
+    		formRef.current.reset();
+    		await sendMessage(formData);
+    	}
+    	const [
+    		optimisticMessages,
+    		addOptimisticMessage,
+    	] = useOptimistic(messages, (state, newMessage) => [
+    		...state,
+    		{
+    			text: newMessage,
+    			sending: true,
+    		},
+    	]);
+
+    	return (
+    		<>
+    			{optimisticMessages.map((message, index) => (
+    				<div key={index}>
+    					{message.text}
+    					{!!message.sending && (
+    						<small> (Sending...)</small>
+    					)}
+    				</div>
+    			))}
+    			<form action={formAction} ref={formRef}>
+    				<input
+    					type="text"
+    					name="message"
+    					placeholder="Hello!"
+    				/>
+    				<button type="submit">Send</button>
+    			</form>
+    		</>
+    	);
+    }
+
+    export default function App() {
+    	const [messages, setMessages] = useState([
+    		{ text: 'Hello there!', sending: false, key: 1 },
+    	]);
+    	async function sendMessage(formData) {
+    		const sentMessage = await deliverMessage(
+    			formData.get('message')
+    		);
+    		setMessages([...messages, { text: sentMessage }]);
+    	}
+    	return (
+    		<Thread
+    			messages={messages}
+    			sendMessage={sendMessage}
+    		/>
+    	);
+    }
+    ```
+
+=== "actions.js"
+
+    ```js
+    export async function deliverMessage(message) {
+    	await new Promise((res) => setTimeout(res, 1000));
+    	return message;
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/g9tj8k?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="blue-wave-g9tj8k" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Обработка ошибок отправки формы {#handling-form-submission-errors}
+
+В некоторых случаях функция, вызываемая реквизитом `<form>` `action`, выбрасывает ошибку. Вы можете обработать эти ошибки, обернув `<form>` в границу ошибки. Если функция, вызываемая реквизитом `<form>` `action`, выдает ошибку, то будет отображена обратная связь для границы ошибки.
+
+=== "App.js"
+
+    ```js
+    import { ErrorBoundary } from 'react-error-boundary';
+
+    export default function Search() {
+    	function search() {
+    		throw new Error('search error');
+    	}
+    	return (
+    		<ErrorBoundary
+    			fallback={
+    				<p>
+    					There was an error while submitting the
+    					form
+    				</p>
+    			}
+    		>
+    			<form action={search}>
+    				<input name="query" />
+    				<button type="submit">Search</button>
+    			</form>
+    		</ErrorBoundary>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/xyv5wq?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="async-wave-xyv5wq" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Отображение ошибки отправки формы без JavaScript {#display-a-form-submission-error-without-javascript}
+
+Отображение сообщения об ошибке отправки формы до загрузки пакета JavaScript для прогрессивного улучшения требует, чтобы:
+
+1.  `<form>` должна быть отображена [серверным компонентом](../../react/use-client.md)
+2.  функция, передаваемая в свойство `action` `<form>`, должна быть [Server Action](../../react/use-server.md)
+3.  `useFormState` Hook будет использоваться для отображения сообщения об ошибке
+
+`useFormState` принимает два параметра: [Server Action](../../react/use-server.md) и начальное состояние. `useFormState` возвращает два значения: переменную состояния и экшен. Действие, возвращаемое `useFormState`, должно быть передано в свойство `action` формы. Переменная состояния, возвращаемая `useFormState`, может быть использована для отображения сообщения об ошибке. Значение, возвращаемое [Server Action](../../react/use-server.md), переданное в `useFormState`, будет использовано для обновления переменной состояния.
+
+=== "App.js"
+
+    ```js
+    import { useFormState } from 'react-dom';
+    import { signUpNewUser } from './api';
+
+    export default function Page() {
+    	async function signup(prevState, formData) {
+    		'use server';
+    		const email = formData.get('email');
+    		try {
+    			await signUpNewUser(email);
+    			alert(`Added "${email}"`);
+    		} catch (err) {
+    			return err.toString();
+    		}
+    	}
+    	const [message, formAction] = useFormState(
+    		signup,
+    		null
+    	);
+    	return (
+    		<>
+    			<h1>Signup for my newsletter</h1>
+    			<p>
+    				Signup with the same email twice to see an
+    				error
+    			</p>
+    			<form action={formAction} id="signup-form">
+    				<label htmlFor="email">Email: </label>
+    				<input
+    					name="email"
+    					id="email"
+    					placeholder="react@example.com"
+    				/>
+    				<button>Sign up</button>
+    				{!!message && <p>{message}</p>}
+    			</form>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/y4rgmr?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="vigorous-haibt-y4rgmr" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+Подробнее об обновлении состояния из действия формы можно узнать из документации [`useFormState`](../hooks/useFormState.md)
+
+### Обработка нескольких типов отправки {#handling-multiple-submission-types}
+
+Формы могут быть разработаны для обработки нескольких действий отправки, основанных на кнопке, нажатой пользователем. Каждая кнопка внутри формы может быть связана с определенным действием или поведением путем установки свойства `formAction`.
+
+Когда пользователь нажимает определенную кнопку, форма отправляется, и выполняется соответствующее действие, определенное атрибутами и действием этой кнопки. Например, форма может по умолчанию отправлять статью на проверку, но иметь отдельную кнопку с `formAction`, установленную для сохранения статьи в черновик.
+
+=== "App.js"
+
+    ```js
+    export default function Search() {
+    	function publish(formData) {
+    		const content = formData.get('content');
+    		const button = formData.get('button');
+    		alert(
+    			`'${content}' was published with the '${button}' button`
+    		);
+    	}
+
+    	function save(formData) {
+    		const content = formData.get('content');
+    		alert(`Your draft of '${content}' has been saved!`);
+    	}
+
+    	return (
+    		<form action={publish}>
+    			<textarea name="content" rows={4} cols={40} />
+    			<br />
+    			<button
+    				type="submit"
+    				name="button"
+    				value="submit"
+    			>
+    				Publish
+    			</button>
+    			<button formAction={save}>Save draft</button>
+    		</form>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/ql6qph?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="late-glade-ql6qph" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/components/form](https://react.dev/reference/react-dom/components/form)</small>

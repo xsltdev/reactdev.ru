@@ -8,7 +8,7 @@ const stream = await renderToReadableStream(reactNode, options?)
 
 !!!note ""
 
-Этот API зависит от [Web Streams](https://developer.mozilla.org/docs/Web/API/Streams_API). Для Node.js используйте [`renderToPipeableStream`](renderToPipeableStream.md) вместо этого.
+    Этот API зависит от [Web Streams](https://developer.mozilla.org/docs/Web/API/Streams_API). Для Node.js используйте [`renderToPipeableStream`](renderToPipeableStream.md) вместо этого.
 
 ## Описание
 

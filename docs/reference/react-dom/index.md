@@ -1,55 +1,45 @@
 ---
-title: React DOM APIs
+description: Пакет react-dom содержит методы, которые поддерживаются только для веб-приложений (которые работают в среде DOM браузера). Они не поддерживаются для React Native
 ---
 
-<Intro>
+# React DOM API
 
-The `react-dom` package contains methods that are only supported for the web applications (which run in the browser DOM environment). They are not supported for React Native.
+<big>Пакет `react-dom` содержит методы, которые поддерживаются только для веб-приложений (которые работают в среде DOM браузера). Они не поддерживаются для React Native.</big>
 
-</Intro>
+## API {#apis}
 
----
+Эти API могут быть импортированы из ваших компонентов. Они используются редко:
 
-## APIs {/_apis_/}
+-   [`createPortal`](./createPortal.md) позволяет рендерить дочерние компоненты в другой части дерева DOM.
+-   [`flushSync`](./flushSync.md) позволяет заставить React промыть обновление состояния и синхронно обновить DOM.
 
-These APIs can be imported from your components. They are rarely used:
+## Ресурсные API для предварительной загрузки {#resource-preloading-apis}
 
--   [`createPortal`](./createPortal.md) lets you render child components in a different part of the DOM tree.
--   [`flushSync`](./flushSync.md) lets you force React to flush a state update and update the DOM synchronously.
+Эти API можно использовать для ускорения работы приложений путем предварительной загрузки ресурсов, таких как скрипты, таблицы стилей и шрифты, как только вы узнаете, что они вам нужны, например, перед переходом на другую страницу, где эти ресурсы будут использоваться.
 
-## Resource Preloading APIs {/_resource-preloading-apis_/}
+Фреймворки [React](../../learn/start-a-new-react-project.md) часто выполняют загрузку ресурсов за вас, поэтому вы можете не вызывать эти API самостоятельно. За подробностями обращайтесь к документации вашего фреймворка.
 
-These APIs can be used to make apps faster by pre-loading resources such as scripts, stylesheets, and fonts as soon as you know you need them, for example before navigating to another page where the resources will be used.
+-   [`prefetchDNS`](./prefetchDNS.md) позволяет предварительно получить IP-адрес DNS-имени домена, к которому вы ожидаете подключиться.
+-   [`preconnect`](./preconnect.md) позволяет вам подключиться к серверу, с которого вы ожидаете запросить ресурсы, даже если вы еще не знаете, какие ресурсы вам понадобятся.
+-   [`preload`](./preload.md) позволяет получить таблицу стилей, шрифт, изображение или внешний скрипт, который вы предполагаете использовать.
+-   [`preloadModule`](./preloadModule.md) позволяет получить модуль ESM, который предполагается использовать.
+-   [`preinit`](./preinit.md) позволяет получить и оценить внешний скрипт или получить и вставить таблицу стилей.
+-   [`preinitModule`](./preinitModule.md) позволяет получить и оценить ESM-модуль.
 
-[React-based frameworks](../../learn/start-a-new-react-project.md) frequently handle resource loading for you, so you might not have to call these APIs yourself. Consult your framework's documentation for details.
+## Точки входа {#entry-points}
 
--   [`prefetchDNS`](./prefetchDNS.md) lets you prefetch the IP address of a DNS domain name that you expect to connect to.
--   [`preconnect`](./preconnect.md) lets you connect to a server you expect to request resources from, even if you don't know what resources you'll need yet.
--   [`preload`](./preload.md) lets you fetch a stylesheet, font, image, or external script that you expect to use.
--   [`preloadModule`](./preloadModule.md) lets you fetch an ESM module that you expect to use.
--   [`preinit`](./preinit.md) lets you fetch and evaluate an external script or fetch and insert a stylesheet.
--   [`preinitModule`](./preinitModule.md) lets you fetch and evaluate an ESM module.
+Пакет `react-dom` предоставляет две дополнительные точки входа:
 
----
+-   [`react-dom/client`](./client/index.md) содержит API для рендеринга компонентов React на клиенте (в браузере).
+-   [`react-dom/server`](./server/index.md) содержит API для рендеринга React-компонентов на сервере.
 
-## Entry points {/_entry-points_/}
+## Утратившие актуальность API {#deprecated-apis}
 
-The `react-dom` package provides two additional entry points:
+!!!danger ""
 
--   [`react-dom/client`](./client/index.md) contains APIs to render React components on the client (in the browser).
--   [`react-dom/server`](./server/index.md) contains APIs to render React components on the server.
+    Эти API будут удалены в будущей основной версии React.
 
----
-
-## Deprecated APIs {/_deprecated-apis_/}
-
-<Deprecated>
-
-These APIs will be removed in a future major version of React.
-
-</Deprecated>
-
--   [`findDOMNode`](./findDOMNode.md) finds the closest DOM node corresponding to a class component instance.
--   [`hydrate`](./hydrate.md) mounts a tree into the DOM created from server HTML. Deprecated in favor of [`hydrateRoot`](./client/hydrateRoot.md).
--   [`render`](./render.md) mounts a tree into the DOM. Deprecated in favor of [`createRoot`](./client/createRoot.md).
--   [`unmountComponentAtNode`](./unmountComponentAtNode.md) unmounts a tree from the DOM. Deprecated in favor of [`root.unmount()`](./client/createRoot.md#root-unmount).
+-   [`findDOMNode`](./findDOMNode.md) находит ближайший узел DOM, соответствующий экземпляру компонента класса.
+-   [`hydrate`](./hydrate.md) монтирует дерево в DOM, созданное из серверного HTML. Утратил силу в пользу [`hydrateRoot`](./client/hydrateRoot.md).
+-   [`render`](./render.md) монтирует дерево в DOM. Утратил силу в пользу [`createRoot`](./client/createRoot.md).
+-   [`unmountComponentAtNode`](./unmountComponentAtNode.md) размонтирует дерево из DOM. Утратил силу в пользу [`root.unmount()`](./client/createRoot.md#root-unmount).

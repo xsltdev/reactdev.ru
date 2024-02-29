@@ -2,17 +2,13 @@
 status: experimental
 ---
 
-# Meta
+# &lt;meta&gt;
 
-<Canary>
+!!!example "Canary"
 
-React's extensions to `<meta>` are currently only available in React's canary and experimental channels. In stable releases of React `<meta>` works only as a [built-in browser HTML component](https://react.dev/reference/react-dom/components#all-html-components). Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
+    Расширения React для `<meta>` в настоящее время доступны только в канале React canary и экспериментальном канале. В стабильных релизах React `<meta>` работает только как [встроенный HTML-компонент браузера](https://react.dev/reference/react-dom/components#all-html-components). Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
-</Canary>
-
-<Intro>
-
-The [built-in browser `<meta>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta) lets you add metadata to the document.
+<big>Встроенный компонент браузера [`<meta>`](https://hcdev.ru/html/meta/) позволяет добавлять метаданные к документу.</big>
 
 ```js
 <meta
@@ -21,17 +17,11 @@ The [built-in browser `<meta>` component](https://developer.mozilla.org/en-US/do
 />
 ```
 
-</Intro>
+## Описание {#reference}
 
-<InlineToc />
+### `<meta>` {#meta}
 
----
-
-## Описание {/_reference_/}
-
-### `<meta>` {/_meta_/}
-
-To add document metadata, render the [built-in browser `<meta>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta). You can render `<meta>` from any component and React will always place the corresponding DOM element in the document head.
+Чтобы добавить метаданные документа, отобразите [встроенный в браузер компонент `<meta>`](https://hcdev.ru/html/meta/). Вы можете рендерить `<meta>` из любого компонента, и React всегда будет помещать соответствующий элемент DOM в голову документа.
 
 ```js
 <meta
@@ -40,33 +30,29 @@ To add document metadata, render the [built-in browser `<meta>` component](https
 />
 ```
 
-[See more examples below.](#usage)
+**Параметры**
 
-#### Props {/_props_/}
+`<meta>` поддерживает все [общие реквизиты элементов](./common.md#props).
 
-`<meta>` supports all [common element props.](./common.md#props)
+Он должен иметь _точно один_ из следующих реквизитов: `name`, `httpEquiv`, `charset`, `itemProp`. Компонент `<meta>` выполняет разные действия в зависимости от того, какой из этих реквизитов указан.
 
-It should have _exactly one_ of the following props: `name`, `httpEquiv`, `charset`, `itemProp`. The `<meta>` component does something different depending on which of these props is specified.
+-   `name`: строка. Указывает [вид метаданных](https://hcdev.ru/html/meta/#name), которые будут прикреплены к документу.
+-   `charset`: строка. Указывает набор символов, используемый документом. Единственное допустимое значение - `"utf-8"`.
+-   `httpEquiv`: строка. Указывает директиву для обработки документа.
+-   `itemProp`: строка. Указывает метаданные о конкретном элементе в документе, а не о документе в целом.
+-   `content`: строка. Определяет метаданные, которые должны быть присоединены при использовании реквизитов `name` или `itemProp`, или поведение директивы при использовании реквизита `httpEquiv`.
 
--   `name`: a string. Specifies the [kind of metadata](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name) to be attached to the document.
--   `charset`: a string. Specifies the character set used by the document. The only valid value is `"utf-8"`.
--   `httpEquiv`: a string. Specifies a directive for processing the document.
--   `itemProp`: a string. Specifies metadata about a particular item within the document rather than the document as a whole.
--   `content`: a string. Specifies the metadata to be attached when used with the `name` or `itemProp` props or the behavior of the directive when used with the `httpEquiv` prop.
+#### Специальное поведение рендеринга {#special-rendering-behavior}
 
-#### Special rendering behavior {/_special-rendering-behavior_/}
+React всегда будет помещать элемент DOM, соответствующий компоненту `<meta>`, в `<head>` документа, независимо от того, в каком месте дерева React он отрисован. `<head>` - единственное допустимое место для `<meta>` в DOM, однако это удобно и позволяет сохранить композитность, если компонент, представляющий определенную страницу, может сам рендерить компоненты `<meta>`.
 
-React will always place the DOM element corresponding to the `<meta>` component within the document’s `<head>`, regardless of where in the React tree it is rendered. The `<head>` is the only valid place for `<meta>` to exist within the DOM, yet it’s convenient and keeps things composable if a component representing a specific page can render `<meta>` components itself.
-
-There is one exception to this: if `<meta>` has an [`itemProp`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop) prop, there is no special behavior, because in this case it doesn’t represent metadata about the document but rather metadata about a specific part of the page.
-
----
+Есть одно исключение: если у `<meta>` есть реквизит [`itemProp`](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/itemprop), то никакого особого поведения не будет, потому что в этом случае он представляет не метаданные о документе, а метаданные о конкретной части страницы.
 
 ## Использование {#usage}
 
-### Annotating the document with metadata {/_annotating-the-document-with-metadata_/}
+### Аннотирование документа метаданными {#annotating-the-document-with-metadata}
 
-You can annotate the document with metadata such as keywords, a summary, or the author’s name. React will place this metadata within the document `<head>` regardless of where in the React tree it is rendered.
+Вы можете аннотировать документ метаданными, такими как ключевые слова, краткое содержание или имя автора. React поместит эти метаданные в `<head>` документа, независимо от того, в каком месте дерева React он будет отображаться.
 
 ```html
 <meta name="author" content="John Smith" />
@@ -80,33 +66,57 @@ You can annotate the document with metadata such as keywords, a summary, or the 
 />
 ```
 
-You can render the `<meta>` component from any component. React will put a `<meta>` DOM node in the document `<head>`.
+Вы можете отобразить компонент `<meta>` из любого компонента. React поместит DOM-узел `<meta>` в документ `<head>`.
 
-<SandpackWithHTMLOutput>
+=== "App.js"
 
-```js src/App.js active
-import ShowRenderedHTML from './ShowRenderedHTML.js';
+    ```js
+    import ShowRenderedHTML from './ShowRenderedHTML.js';
 
-export default function SiteMapPage() {
-    return (
-        <ShowRenderedHTML>
-            <meta name="keywords" content="React" />
-            <meta
-                name="description"
-                content="A site map for the React website"
-            />
-            <h1>Site Map</h1>
-            <p>...</p>
-        </ShowRenderedHTML>
-    );
-}
-```
+    export default function SiteMapPage() {
+    	return (
+    		<ShowRenderedHTML>
+    			<meta name="keywords" content="React" />
+    			<meta
+    				name="description"
+    				content="A site map for the React website"
+    			/>
+    			<h1>Site Map</h1>
+    			<p>...</p>
+    		</ShowRenderedHTML>
+    	);
+    }
+    ```
 
-</SandpackWithHTMLOutput>
+=== "ShowRenderedHTML.js"
 
-### Annotating specific items within the document with metadata {/_annotating-specific-items-within-the-document-with-metadata_/}
+    ```js
+    import { renderToStaticMarkup } from 'react-dom/server';
+    import formatHTML from './formatHTML.js';
 
-You can use the `<meta>` component with the `itemProp` prop to annotate specific items within the document with metadata. In this case, React will _not_ place these annotations within the document `<head>` but will place them like any other React component.
+    export default function ShowRenderedHTML({ children }) {
+    	const markup = renderToStaticMarkup(
+    		<html>
+    			<head />
+    			<body>{children}</body>
+    		</html>
+    	);
+    	return (
+    		<>
+    			<h1>Rendered HTML:</h1>
+    			<pre>{formatHTML(markup)}</pre>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/6gdxf2?view=Editor+%2B+Preview&module=%2Fsrc%2FShowRenderedHTML.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="wandering-https-6gdxf2" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Аннотирование конкретных элементов в документе с помощью метаданных {#annotating-specific-items-within-the-document-with-metadata}
+
+Вы можете использовать компонент `<meta>` с параметром `itemProp` для аннотирования конкретных элементов в документе с метаданными. В этом случае React не будет размещать эти аннотации внутри документа `<head>`, а разместит их как любой другой компонент React.
 
 ```js
 <section itemScope>
@@ -118,3 +128,5 @@ You can use the `<meta>` component with the `itemProp` prop to annotate specific
     <p>...</p>
 </section>
 ```
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/components/meta](https://react.dev/reference/react-dom/components/meta)</small>

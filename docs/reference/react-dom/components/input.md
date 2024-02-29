@@ -1,14 +1,18 @@
+---
+description: Встроенный компонент браузера input позволяет отображать различные виды вводимых форм
+---
+
 # &lt;input&gt;
 
-Встроенный компонент браузера [`<input>`](https://hcdev.ru/html/input/) позволяет отображать различные виды вводимых форм.
+<big>Встроенный компонент браузера [`<input>`](https://hcdev.ru/html/input/) позволяет отображать различные виды вводимых форм.</big>
 
 ```js
 <input />
 ```
 
-## Описание
+## Описание {#reference}
 
-### `<input>`
+### `<input>` {#input}
 
 Чтобы отобразить ввод, отобразите компонент [встроенный в браузер `<input>`](https://hcdev.ru/html/input/).
 
@@ -16,7 +20,7 @@
 <input name="myInput" />
 ```
 
-#### Свойства
+**Свойства**
 
 `input` поддерживает все [общие пропсы элементов](./common.md#props).
 
@@ -53,7 +57,7 @@
 -   [`max`](https://hcdev.ru/html/input/#max): Число. Определяет максимальное значение числовых данных и данных времени.
 -   [`maxLength`](https://hcdev.ru/html/input/#maxlength): Число. Определяет максимальную длину текстовых и других вводов.
 
-#### Предостережения
+**Предостережения**
 
 -   Для флажков нужно `checked` (или `defaultChecked`), а не `value` (или `defaultValue`).
 -   Если текстовый ввод получает строковое значение `value`, он будет рассматриваться как управляемый.
@@ -62,9 +66,9 @@
 -   Вход не может переключаться между управляемым и неуправляемым в течение своего существования.
 -   Каждый управляемый вход нуждается в обработчике события `onChange`, который синхронно обновляет его базовое значение.
 
-## Использование
+## Использование {#usage}
 
-### Отображение входов различных типов
+### Отображение входов различных типов {#displaying-inputs-of-different-types}
 
 Чтобы отобразить ввод, создайте компонент `input`. По умолчанию это будет текстовый ввод. Вы можете передать `type="checkbox"` для флажка, `type="radio"` для радиокнопки, [или один из других типов ввода.](https://developer.mozilla.org/docs/Web/HTML/Element/input#input_types)
 
@@ -113,7 +117,7 @@ export default function MyForm() {
 }
 ```
 
-### Предоставление метки для ввода {/_providing-a-label-for-an-input_/}
+### Предоставление метки для ввода {#providing-a-label-for-an-input}
 
 Обычно вы помещаете каждый `input` в тег [`label`](https://hcdev.ru/html/label/). Это сообщает браузеру, что данная метка связана с этим входом. Когда пользователь нажимает на метку, браузер автоматически фокусируется на вводе. Это также необходимо для обеспечения доступности: программа чтения с экрана объявит надпись на ярлыке, когда пользователь сфокусируется на связанном вводе.
 
@@ -142,7 +146,7 @@ export default function Form() {
 }
 ```
 
-### Предоставление начального значения для входа
+### Предоставление начального значения для ввода {#providing-an-initial-value-for-an-input}
 
 Вы можете опционально указать начальное значение для любого входа. Для текстовых входов передавайте его как строку `defaultValue`. Для флажков и радиокнопок начальное значение должно задаваться булевым значением `defaultChecked`.
 
@@ -200,7 +204,7 @@ export default function MyForm() {
 }
 ```
 
-### Чтение значений ввода при отправке формы
+### Чтение значений ввода при отправке формы {#reading-the-input-values-when-submitting-a-form}
 
 Добавьте [`<form>`](https://hcdev.ru/html/form/) вокруг ваших входных данных с [`<button type="submit">`](https://hcdev.ru/html/button/) внутри. Это вызовет обработчик события `<form onSubmit>`. По умолчанию браузер отправит данные формы на текущий URL и обновит страницу. Вы можете отменить это поведение, вызвав `e.preventDefault()`. Считайте данные формы с помощью [`new FormData(e.target)`](https://developer.mozilla.org/docs/Web/API/FormData).
 
@@ -282,28 +286,31 @@ export default function MyForm() {
 }
 ```
 
-!!!note ""
+!!!note "Дайте `name` каждому `<input>`"
 
     Дайте `name` каждому `<input>`, например `<input name="firstName" defaultValue="Taylor" />`. Указанное вами `name` будет использоваться в качестве ключа в данных формы, например `{ firstName: "Taylor" }`.
 
-!!!warning ""
+!!!warning "Тип `<button>`"
 
-    По умолчанию _любая_ `<кнопка>` внутри `<формы>` отправит ее. Это может быть неожиданно! Если у вас есть собственный пользовательский компонент React `Button`, подумайте о возврате [`<button type="button">`](https://developer.mozilla.org/docs/Web/HTML/Element/input/button) вместо `<button>`. Затем, чтобы быть однозначным, используйте `<button type="submit">` для кнопок, которые _должны_ отправлять форму.
+    По умолчанию _любая_ `<button>` внутри `<form>` отправит ее. Это может быть неожиданно! Если у вас есть собственный пользовательский компонент React `Button`, подумайте о возврате [`<button type="button">`](https://developer.mozilla.org/docs/Web/HTML/Element/input/button) вместо `<button>`. Затем, чтобы быть однозначным, используйте `<button type="submit">` для кнопок, которые _должны_ отправлять форму.
 
-### Управление input с помощью переменной состояния
+### Управление input с помощью переменной состояния {#controlling-an-input-with-a-state-variable}
 
 Input типа `<input />` является _неуправляемым._ Даже если вы передаете начальное значение, например `<input defaultValue="Initial text" />`, ваш JSX определяет только начальное значение. Он не контролирует, каким должно быть значение в данный момент.
 
 **Чтобы отобразить _управляемый_ вход, передайте ему свойство `value` (или `checked` для чекбоксов и радио).** React заставит вход всегда иметь переданное вами `value`. Обычно для этого объявляется [переменная состояния](../../react/useState.md):
 
-```js
+```js hl_lines="3 7-10"
 function Form() {
-    const [firstName, setFirstName] = useState(''); // Declare a state variable...
+    // Declare a state variable...
+    const [firstName, setFirstName] = useState('');
     // ...
     return (
         <input
-            value={firstName} // ...force the input's value to match the state variable...
-            onChange={(e) => setFirstName(e.target.value)} // ... and update the state variable on any edits!
+            // ...force the input's value to match the state variable...
+            value={firstName}
+            // ... and update the state variable on any edits!
+            onChange={(e) => setFirstName(e.target.value)}
         />
     );
 }
@@ -311,7 +318,7 @@ function Form() {
 
 Контролируемый ввод имеет смысл, если вам все равно нужно состояние - например, для повторного отображения пользовательского интерфейса при каждом редактировании:
 
-```js
+```js hl_lines="2 14-16"
 function Form() {
     const [firstName, setFirstName] = useState('');
     return (
@@ -336,7 +343,7 @@ function Form() {
 
 Это также полезно, если вы хотите предложить несколько способов изменения состояния ввода (например, нажатием кнопки):
 
-```js
+```js hl_lines="3-4 10-11 14-16"
 function Form() {
     // ...
     const [age, setAge] = useState('');
@@ -363,59 +370,65 @@ function Form() {
 
 Значение `value`, которое вы передаете управляемым компонентам, не должно быть `undefined` или `null`. Если вам нужно, чтобы начальное значение было пустым (как в случае с полем `firstName` ниже), инициализируйте переменную состояния пустой строкой (`''`).
 
-```js
-import { useState } from 'react';
+=== "App.js"
 
-export default function Form() {
-    const [firstName, setFirstName] = useState('');
-    const [age, setAge] = useState('20');
-    const ageAsNumber = Number(age);
-    return (
-        <>
-            <label>
-                First name:
-                <input
-                    value={firstName}
-                    onChange={(e) =>
-                        setFirstName(e.target.value)
-                    }
-                />
-            </label>
-            <label>
-                Age:
-                <input
-                    value={age}
-                    onChange={(e) => setAge(e.target.value)}
-                    type="number"
-                />
-                <button
-                    onClick={() => setAge(ageAsNumber + 10)}
-                >
-                    Add 10 years
-                </button>
-            </label>
-            {firstName !== '' && (
-                <p>Your name is {firstName}.</p>
-            )}
-            {ageAsNumber > 0 && (
-                <p>Your age is {ageAsNumber}.</p>
-            )}
-        </>
-    );
-}
-```
+    ```js
+    import { useState } from 'react';
 
-!!!info ""
+    export default function Form() {
+    	const [firstName, setFirstName] = useState('');
+    	const [age, setAge] = useState('20');
+    	const ageAsNumber = Number(age);
+    	return (
+    		<>
+    			<label>
+    				First name:
+    				<input
+    					value={firstName}
+    					onChange={(e) =>
+    						setFirstName(e.target.value)
+    					}
+    				/>
+    			</label>
+    			<label>
+    				Age:
+    				<input
+    					value={age}
+    					onChange={(e) => setAge(e.target.value)}
+    					type="number"
+    				/>
+    				<button
+    					onClick={() => setAge(ageAsNumber + 10)}
+    				>
+    					Add 10 years
+    				</button>
+    			</label>
+    			{firstName !== '' && (
+    				<p>Your name is {firstName}.</p>
+    			)}
+    			{ageAsNumber > 0 && (
+    				<p>Your age is {ageAsNumber}.</p>
+    			)}
+    		</>
+    	);
+    }
+    ```
 
-    **Если вы передадите `value` без `onChange`, то ввод будет невозможен.** Когда вы управляете вводом, передавая ему некоторое `value`, вы _принуждаете_ его всегда иметь то значение, которое вы передали. Поэтому если вы передадите переменную состояния в качестве `value`, но забудете синхронно обновить эту переменную состояния в обработчике события `onChange`, React будет возвращать ввод после каждого нажатия клавиши к указанному вами `value`.
+=== "CodeSandbox"
 
-### Оптимизация повторного рендеринга при каждом нажатии клавиши
+    <iframe src="https://codesandbox.io/embed/k5h8fm?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+!!!info "Если вы передадите `value` без `onChange`, то ввод будет невозможен"
+
+    Когда вы управляете вводом, передавая ему некоторое `value`, вы _принуждаете_ его всегда иметь то значение, которое вы передали. Поэтому если вы передадите переменную состояния в качестве `value`, но забудете синхронно обновить эту переменную состояния в обработчике события `onChange`, React будет возвращать ввод после каждого нажатия клавиши к указанному вами `value`.
+
+### Оптимизация повторного рендеринга при каждом нажатии клавиши {#optimizing-re-rendering-on-every-keystroke}
 
 Когда вы используете управляемый ввод, вы устанавливаете состояние при каждом нажатии клавиши. Если компонент, содержащий ваше состояние, перерисовывает большое дерево, это может стать медленным. Есть несколько способов оптимизировать производительность повторного рендеринга.
 
 Например, предположим, вы начинаете с формы, которая при каждом нажатии клавиши перерисовывает все содержимое страницы:
 
-```js
+```js hl_lines="5-13"
 function App() {
     const [firstName, setFirstName] = useState('');
     return (
@@ -436,7 +449,7 @@ function App() {
 
 Поскольку `<PageContent />` не зависит от состояния ввода, вы можете перенести состояние ввода в свой собственный компонент:
 
-```js
+```js hl_lines="4 10-22"
 function App() {
     return (
         <>
@@ -465,9 +478,9 @@ function SignupForm() {
 
 Если нет возможности избежать повторного рендеринга (например, если `PageContent` зависит от значения поискового ввода), [`useDeferredValue`](../../react/useDeferredValue.md#deferring-re-rendering-for-a-part-of-the-ui) позволяет сохранить отзывчивость управляемого ввода даже в середине большого повторного рендеринга.
 
-## Устранение неполадок
+## Устранение неполадок {#troubleshooting}
 
-### Мой текстовый ввод не обновляется, когда я ввожу текст
+### Мой текстовый ввод не обновляется, когда я ввожу текст {#my-text-input-doesnt-update-when-i-type-into-it}
 
 Если вы отображаете ввод с `value`, но без `onChange`, вы увидите ошибку в консоли:
 
@@ -504,7 +517,7 @@ function SignupForm() {
 <input value={something} readOnly={true} />
 ```
 
-### Мой флажок не обновляется, когда я нажимаю на него
+### Мой флажок не обновляется, когда я нажимаю на него {#my-checkbox-doesnt-update-when-i-click-on-it}
 
 Если вы отобразите флажок с `checked`, но без `onChange`, вы увидите ошибку в консоли:
 
@@ -550,7 +563,7 @@ function SignupForm() {
 />
 ```
 
-### Мой каретка ввода перескакивает в начало при каждом нажатии клавиши
+### Мой каретка ввода перескакивает в начало при каждом нажатии клавиши {#my-input-caret-jumps-to-the-beginning-on-every-keystroke}
 
 Если вы управляете вводом, вы должны обновить его переменную состояния до значения ввода из DOM во время `onChange`.
 
@@ -585,7 +598,7 @@ function handleChange(e) {
 
 Если это не устраняет проблему, возможно, что ввод удаляется и добавляется из DOM при каждом нажатии клавиши. Это может произойти, если вы случайно [сбрасываете состояние](../../../learn/preserving-and-resetting-state.md) при каждом повторном рендере, например, если `input` или один из его родителей всегда получает другой атрибут `key`, или если вы вложены определения функций компонентов (что не поддерживается и приводит к тому, что "внутренний" компонент всегда считается другим деревом).
 
-### Я получаю ошибку: "Компонент изменяет неконтролируемый вход на контролируемый"
+### Я получаю ошибку: "Компонент изменяет неконтролируемый вход на контролируемый" {#im-getting-an-error-a-component-is-changing-an-uncontrolled-input-to-be-controlled}
 
 Если вы передаете компоненту `value`, оно должно оставаться строкой в течение всего времени его работы.
 
@@ -594,3 +607,5 @@ function handleChange(e) {
 Если ваше `value` приходит из API или переменной состояния, оно может быть инициализировано в `null` или `undefined`. В этом случае либо изначально установите его в пустую строку (`''`), либо передайте `value={someValue ?? ''}`, чтобы убедиться, что `value` является строкой.
 
 Аналогично, если вы передаете `checked` флажку, убедитесь, что это всегда булево значение.
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/components/input](https://react.dev/reference/react-dom/components/input)</small>
