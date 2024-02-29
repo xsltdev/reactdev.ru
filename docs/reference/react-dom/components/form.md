@@ -2,9 +2,9 @@
 status: experimental
 ---
 
-<Canary>
+!!!example "Canary"
 
-React's extensions to `<form>` are currently only available in React's canary and experimental channels. In stable releases of React, `<form>` works only as a [built-in browser HTML component](./index.md#all-html-components). Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
+Расширения для `<form>` в React в настоящее время доступны только в канале React canary и экспериментальном канале. В стабильных релизах React `<form>` работает только как [встроенный в браузер HTML-компонент](./index.md#all-html-components). Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
 </Canary>
 
