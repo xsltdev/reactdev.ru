@@ -25,9 +25,9 @@ The [built-in browser `<form>` component](https://hcdev.ru/html/form/) lets you 
 
 ---
 
-## Описание {/_reference_/}
+## Описание {#reference}
 
-### `<form>` {/_form_/}
+### `<form>` {#form}
 
 To create interactive controls for submitting information, render the [built-in browser `<form>` component](https://hcdev.ru/html/form/).
 
@@ -40,7 +40,7 @@ To create interactive controls for submitting information, render the [built-in 
 
 [See more examples below.](#usage)
 
-#### Props {/_props_/}
+#### Props {#props}
 
 `<form>` supports all [common element props.](./common.md#props)
 
@@ -50,11 +50,9 @@ To create interactive controls for submitting information, render the [built-in 
 
 -   When a function is passed to `action` or `formAction` the HTTP method will be POST regardless of value of the `method` prop.
 
----
-
 ## Использование {#usage}
 
-### Handle form submission on the client {/_handle-form-submission-on-the-client_/}
+### Handle form submission on the client {#handle-form-submission-on-the-client}
 
 Pass a function to the `action` prop of form to run the function when the form is submitted. [`formData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) will be passed to the function as an argument so you can access the data submitted by the form. This differs from the conventional [HTML action](https://hcdev.ru/html/form/#action), which only accepts URLs.
 
@@ -89,7 +87,7 @@ export default function Search() {
 
 </Sandpack>
 
-### Handle form submission with a Server Action {/_handle-form-submission-with-a-server-action_/}
+### Handle form submission with a Server Action {#handle-form-submission-with-a-server-action}
 
 Render a `<form>` with an input and submit button. Pass a Server Action (a function marked with [`'use server'`](../../react/use-server.md)) to the `action` prop of form to run the function when the form is submitted.
 
@@ -199,7 +197,7 @@ export async function submitForm(query) {
 
 To learn more about the `useFormStatus` Hook see the [reference documentation](../hooks/useFormStatus.md).
 
-### Optimistically updating form data {/_optimistically-updating-form-data_/}
+### Optimistically updating form data {#optimistically-updating-form-data}
 
 The `useOptimistic` Hook provides a way to optimistically update the user interface before a background operation, like a network request, completes. In the context of forms, this technique helps to make apps feel more responsive. When a user submits a form, instead of waiting for the server's response to reflect the changes, the interface is immediately updated with the expected outcome.
 
@@ -294,7 +292,7 @@ export async function deliverMessage(message) {
 [//]: # 'Uncomment the next line, and delete this line after the `useOptimistic` reference documentatino page is published'
 [//]: # 'To learn more about the `useOptimistic` Hook see the [reference documentation](../../react/hooks/useOptimistic.md).'
 
-### Handling form submission errors {/_handling-form-submission-errors_/}
+### Handling form submission errors {#handling-form-submission-errors}
 
 In some cases the function called by a `<form>`'s `action` prop throws an error. You can handle these errors by wrapping `<form>` in an Error Boundary. If the function called by a `<form>`'s `action` prop throws an error, the fallback for the error boundary will be displayed.
 
@@ -340,7 +338,7 @@ export default function Search() {
 
 </Sandpack>
 
-### Display a form submission error without JavaScript {/_display-a-form-submission-error-without-javascript_/}
+### Display a form submission error without JavaScript {#display-a-form-submission-error-without-javascript}
 
 Displaying a form submission error message before the JavaScript bundle loads for progressive enhancement requires that:
 
@@ -422,7 +420,7 @@ export async function signUpNewUser(newEmail) {
 
 Learn more about updating state from a form action with the [`useFormState`](../hooks/useFormState.md) docs
 
-### Handling multiple submission types {/_handling-multiple-submission-types_/}
+### Handling multiple submission types {#handling-multiple-submission-types}
 
 Forms can be designed to handle multiple submission actions based on the button pressed by the user. Each button inside a form can be associated with a distinct action or behavior by setting the `formAction` prop.
 

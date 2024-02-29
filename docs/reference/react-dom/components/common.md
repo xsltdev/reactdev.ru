@@ -1,10 +1,14 @@
+---
+description: Все встроенные компоненты браузера, такие как div, поддерживают некоторые общие пропсы и события
+---
+
 # Общие компоненты
 
 Все встроенные компоненты браузера, такие как [`<div>`](https://hcdev.ru/html/div/), поддерживают некоторые общие пропсы и события.
 
-## Описание
+## Описание {#reference}
 
-### Общий компонент
+### Общий компонент {#common}
 
 ```js
 <div className="wrapper">Some content</div>
@@ -224,7 +228,7 @@
 -   Вы не можете одновременно передавать `children` и `dangerouslySetInnerHTML`.
 -   Некоторые события (например, `onAbort` и `onLoad`) не отображаются в браузере, но отображаются в React.
 
-### `ref` функция обратного вызова
+### `ref` функция {#ref-callback}
 
 Вместо объекта ref (например, возвращаемого [`useRef`](../../react/useRef.md#manipulating-the-dom-with-a-ref)), вы можете передать функцию в атрибут `ref`.
 
@@ -246,7 +250,7 @@ React также будет вызывать ваш обратный вызов 
 
 Не возвращает ничего из обратного вызова `ref`.
 
-### Объект события React
+### Объект события React {#react-event-object}
 
 Ваши обработчики событий будут получать _объект события React._ Он также иногда известен как "синтетическое событие".
 
@@ -297,7 +301,7 @@ React также будет вызывать ваш обратный вызов 
 
 -   Значения `currentTarget`, `eventPhase`, `target` и `type` отражают значения, которые ожидает ваш код React. Под капотом React прикрепляет обработчики событий к корню, но это не отражается в объектах событий React. Например, `e.currentTarget` может не совпадать с базовым `e.nativeEvent.currentTarget`. Для полизаполненных событий `e.type` (тип события React) может отличаться от `e.nativeEvent.type` (базовый тип).
 
-### `AnimationEvent` функция обработчика
+### `AnimationEvent` {#animationevent-handler}
 
 Тип обработчика событий для событий [CSS animation](https://developer.mozilla.org/docs/Web/CSS/CSS_Animations/Using_CSS_animations).
 
@@ -321,7 +325,7 @@ React также будет вызывать ваш обратный вызов 
     -   [`elapsedTime`](https://developer.mozilla.org/docs/Web/API/AnimationEvent/elapsedTime)
     -   [`псевдоэлемент`](https://developer.mozilla.org/docs/Web/API/AnimationEvent)
 
-### `ClipboardEvent` функция обработчика
+### `ClipboardEvent` {#clipboadevent-handler}
 
 Тип обработчика событий для событий [Clipboard API](https://developer.mozilla.org/docs/Web/API/Clipboard_API).
 
@@ -339,7 +343,7 @@ React также будет вызывать ваш обратный вызов 
 
     -   [`clipboardData`](https://developer.mozilla.org/docs/Web/API/ClipboardEvent/clipboardData)
 
-### `CompositionEvent` функция обработчика
+### `CompositionEvent` {#compositionevent-handler}
 
 Тип обработчика событий для событий [редактора методов ввода (IME)](https://developer.mozilla.org/docs/Glossary/Input_method_editor).
 
@@ -363,7 +367,7 @@ React также будет вызывать ваш обратный вызов 
 
     -   [`data`](https://developer.mozilla.org/docs/Web/API/CompositionEvent/data)
 
-### `DragEvent` функция обработчика
+### `DragEvent` {#dragevent-handler}
 
 Тип обработчика событий для событий [HTML Drag and Drop API](https://developer.mozilla.org/docs/Web/API/HTML_Drag_and_Drop_API).
 
@@ -421,7 +425,7 @@ React также будет вызывать ваш обратный вызов 
     -   [`detail`](https://developer.mozilla.org/docs/Web/API/UIEvent/detail)
     -   [`view`](https://developer.mozilla.org/docs/Web/API/UIEvent/view)
 
-### `FocusEvent` функция обработчика
+### `FocusEvent` {#focusevent-handler}
 
 Тип обработчика событий для событий фокуса.
 
@@ -443,7 +447,7 @@ React также будет вызывать ваш обратный вызов 
     -   [`detail`](https://developer.mozilla.org/docs/Web/API/UIEvent/detail)
     -   [`view`](https://developer.mozilla.org/docs/Web/API/UIEvent/view)
 
-### `Event` функция обработчика
+### `Event` {#event-handler}
 
 Тип обработчика событий для общих событий.
 
@@ -451,7 +455,7 @@ React также будет вызывать ваш обратный вызов 
 
 -   `e`: объект события React без дополнительных свойств.
 
-### `InputEvent` функция-обработчик
+### `InputEvent` {#inputevent-handler}
 
 Тип обработчика события для события `onBeforeInput`.
 
@@ -467,7 +471,7 @@ React также будет вызывать ваш обратный вызов 
 
     -   [`data`](https://developer.mozilla.org/docs/Web/API/InputEvent/data)
 
-### `KeyboardEvent` функция обработчика
+### `KeyboardEvent` {#keyboardevent-handler}
 
 Тип обработчика событий для событий клавиатуры.
 
@@ -501,7 +505,7 @@ React также будет вызывать ваш обратный вызов 
     -   [`detail`](https://developer.mozilla.org/docs/Web/API/UIEvent/detail)
     -   [`view`](https://developer.mozilla.org/docs/Web/API/UIEvent/view)
 
-### `MouseEvent` функция-обработчик
+### `MouseEvent` {#mouseevent-handler}
 
 Тип обработчика событий для событий мыши.
 
@@ -542,7 +546,7 @@ React также будет вызывать ваш обратный вызов 
     -   [`detail`](https://developer.mozilla.org/docs/Web/API/UIEvent/detail)
     -   [`view`](https://developer.mozilla.org/docs/Web/API/UIEvent/view)
 
-### `PointerEvent` функция обработчика
+### `PointerEvent` {#pointerevent-handler}
 
 Тип обработчика событий для [событий указателя.](https://developer.mozilla.org/docs/Web/API/Pointer_events)
 
@@ -595,7 +599,7 @@ React также будет вызывать ваш обратный вызов 
     -   [`detail`](https://developer.mozilla.org/docs/Web/API/UIEvent/detail)
     -   [`view`](https://developer.mozilla.org/docs/Web/API/UIEvent/view)
 
-### `TouchEvent` функция обработчика
+### `TouchEvent` {#touchevent-handler}
 
 Тип обработчика событий для [событий касания.](https://developer.mozilla.org/docs/Web/API/Touch_events)
 
@@ -626,7 +630,7 @@ React также будет вызывать ваш обратный вызов 
     -   [`detail`](https://developer.mozilla.org/docs/Web/API/UIEvent/detail)
     -   [`view`](https://developer.mozilla.org/docs/Web/API/UIEvent/view)
 
-### `TransitionEvent` функция обработчика
+### `TransitionEvent` {#transitionevent-handler}
 
 Тип обработчика событий для событий перехода CSS.
 
@@ -644,7 +648,7 @@ React также будет вызывать ваш обратный вызов 
     -   [`propertyName`](https://developer.mozilla.org/docs/Web/API/TransitionEvent/propertyName)
     -   [`pseudoElement`](https://developer.mozilla.org/docs/Web/API/TransitionEvent/pseudoElement)
 
-### `UIEvent` функция обработчик
+### `UIEvent` {#uievent-handler}
 
 Тип обработчика событий для общих событий пользовательского интерфейса.
 
@@ -659,7 +663,7 @@ React также будет вызывать ваш обратный вызов 
     -   [`detail`](https://developer.mozilla.org/docs/Web/API/UIEvent/detail)
     -   [`view`](https://developer.mozilla.org/docs/Web/API/UIEvent/view)
 
-### `WheelEvent` функция обработчика
+### `WheelEvent` {#wheelevent-handler}
 
 Тип обработчика события для события `onWheel`.
 
@@ -700,9 +704,9 @@ React также будет вызывать ваш обратный вызов 
     -   [`detail`](https://developer.mozilla.org/docs/Web/API/UIEvent/detail)
     -   [`view`](https://developer.mozilla.org/docs/Web/API/UIEvent/view)
 
-## Использование
+## Использование {#usage}
 
-### Применение стилей CSS
+### Применение стилей CSS {#applying-css-styles}
 
 В React вы указываете CSS-класс с помощью [`className`](https://developer.mozilla.org/docs/Web/API/Element/className). Это работает как атрибут `class` в HTML:
 
@@ -769,13 +773,9 @@ React не предписывает, как добавлять файлы CSS. �
     }
     ```
 
-=== "styles.css"
+=== "CodeSandbox"
 
-    ```css
-    .avatar {
-    	border-radius: 50%;
-    }
-    ```
+    <iframe src="https://codesandbox.io/embed/xj4rl2?view=Editor+%2B+Preview&module=%2Fsrc%2FAvatar.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!note "Как применить несколько классов CSS условно?"
 
@@ -825,7 +825,7 @@ React не предписывает, как добавлять файлы CSS. �
 
 Чтобы получить DOM-узел браузера для тега, [объявите ссылку](../../react/useRef.md) и передайте ее в качестве атрибута `ref` этому тегу:
 
-```js
+```js hl_lines="7"
 import { useRef } from 'react';
 
 export default function Form() {
@@ -840,32 +840,38 @@ export default function Form() {
 
 React поместит узел DOM в `inputRef.current` после того, как он будет выведен на экран.
 
-```js
-import { useRef } from 'react';
+=== "App.js"
 
-export default function Form() {
-    const inputRef = useRef(null);
+    ```js
+    import { useRef } from 'react';
 
-    function handleClick() {
-        inputRef.current.focus();
+    export default function Form() {
+    	const inputRef = useRef(null);
+
+    	function handleClick() {
+    		inputRef.current.focus();
+    	}
+
+    	return (
+    		<>
+    			<input ref={inputRef} />
+    			<button onClick={handleClick}>
+    				Focus the input
+    			</button>
+    		</>
+    	);
     }
+    ```
 
-    return (
-        <>
-            <input ref={inputRef} />
-            <button onClick={handleClick}>
-                Focus the input
-            </button>
-        </>
-    );
-}
-```
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/7w8mjd?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Читайте больше о [манипулировании DOM с помощью ссылок](../../../learn/manipulating-the-dom-with-refs.md) и [посмотрите больше примеров](../../react/useRef.md#examples-dom).
 
 Для более сложных случаев использования атрибут `ref` также принимает функцию обратного вызова.
 
-### Опасная установка внутреннего HTML
+### Опасная установка внутреннего HTML {#dangerously-setting-the-inner-html}
 
 Вы можете передать необработанную строку HTML элементу следующим образом:
 
@@ -927,9 +933,13 @@ return <div dangerouslySetInnerHTML={markup} />;
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/tsw54l?view=Editor+%2B+Preview&module=%2Fsrc%2FMarkdownPreview.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="serene-marco-tsw54l" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Чтобы понять, почему рендеринг произвольного HTML опасен, замените приведенный выше код на следующий:
 
-```js
+```js hl_lines="1-4 7-8"
 const post = {
     // Imagine this content is stored in the database.
     content: `<img src="" onerror='alert("you were hacked")'>`,
@@ -942,251 +952,277 @@ export default function MarkdownPreview() {
 }
 ```
 
-Код, встроенный в HTML, будет запущен. Хакер может использовать эту брешь в безопасности для кражи информации пользователя или выполнения действий от его имени. **Используйте `dangerouslySetInnerHTML` только с доверенными и проверенными данными.**.
+Код, встроенный в HTML, будет запущен. Хакер может использовать эту брешь в безопасности для кражи информации пользователя или выполнения действий от его имени. **Используйте `dangerouslySetInnerHTML` только с доверенными и проверенными данными.**
 
-### Обработка событий мыши
+### Обработка событий мыши {#handling-mouse-events}
 
 Этот пример показывает некоторые общие события мыши и время их возникновения.
 
-```js
-export default function MouseExample() {
-    return (
-        <div
-            onMouseEnter={(e) =>
-                console.log('onMouseEnter (parent)')
-            }
-            onMouseLeave={(e) =>
-                console.log('onMouseLeave (parent)')
-            }
-        >
-            <button
-                onClick={(e) =>
-                    console.log('onClick (first button)')
-                }
-                onMouseDown={(e) =>
-                    console.log(
-                        'onMouseDown (first button)'
-                    )
-                }
-                onMouseEnter={(e) =>
-                    console.log(
-                        'onMouseEnter (first button)'
-                    )
-                }
-                onMouseLeave={(e) =>
-                    console.log(
-                        'onMouseLeave (first button)'
-                    )
-                }
-                onMouseOver={(e) =>
-                    console.log(
-                        'onMouseOver (first button)'
-                    )
-                }
-                onMouseUp={(e) =>
-                    console.log('onMouseUp (first button)')
-                }
-            >
-                First button
-            </button>
-            <button
-                onClick={(e) =>
-                    console.log('onClick (second button)')
-                }
-                onMouseDown={(e) =>
-                    console.log(
-                        'onMouseDown (second button)'
-                    )
-                }
-                onMouseEnter={(e) =>
-                    console.log(
-                        'onMouseEnter (second button)'
-                    )
-                }
-                onMouseLeave={(e) =>
-                    console.log(
-                        'onMouseLeave (second button)'
-                    )
-                }
-                onMouseOver={(e) =>
-                    console.log(
-                        'onMouseOver (second button)'
-                    )
-                }
-                onMouseUp={(e) =>
-                    console.log('onMouseUp (second button)')
-                }
-            >
-                Second button
-            </button>
-        </div>
-    );
-}
-```
+=== "App.js"
 
-### Обработка событий указателя
+    ```js
+    export default function MouseExample() {
+    	return (
+    		<div
+    			onMouseEnter={(e) =>
+    				console.log('onMouseEnter (parent)')
+    			}
+    			onMouseLeave={(e) =>
+    				console.log('onMouseLeave (parent)')
+    			}
+    		>
+    			<button
+    				onClick={(e) =>
+    					console.log('onClick (first button)')
+    				}
+    				onMouseDown={(e) =>
+    					console.log(
+    						'onMouseDown (first button)'
+    					)
+    				}
+    				onMouseEnter={(e) =>
+    					console.log(
+    						'onMouseEnter (first button)'
+    					)
+    				}
+    				onMouseLeave={(e) =>
+    					console.log(
+    						'onMouseLeave (first button)'
+    					)
+    				}
+    				onMouseOver={(e) =>
+    					console.log(
+    						'onMouseOver (first button)'
+    					)
+    				}
+    				onMouseUp={(e) =>
+    					console.log('onMouseUp (first button)')
+    				}
+    			>
+    				First button
+    			</button>
+    			<button
+    				onClick={(e) =>
+    					console.log('onClick (second button)')
+    				}
+    				onMouseDown={(e) =>
+    					console.log(
+    						'onMouseDown (second button)'
+    					)
+    				}
+    				onMouseEnter={(e) =>
+    					console.log(
+    						'onMouseEnter (second button)'
+    					)
+    				}
+    				onMouseLeave={(e) =>
+    					console.log(
+    						'onMouseLeave (second button)'
+    					)
+    				}
+    				onMouseOver={(e) =>
+    					console.log(
+    						'onMouseOver (second button)'
+    					)
+    				}
+    				onMouseUp={(e) =>
+    					console.log('onMouseUp (second button)')
+    				}
+    			>
+    				Second button
+    			</button>
+    		</div>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/zgp5kp?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Обработка событий указателя {#handling-pointer-events}
 
 Этот пример показывает некоторые общие события pointer-events и время их возникновения.
 
-```js
-export default function PointerExample() {
-    return (
-        <div
-            onPointerEnter={(e) =>
-                console.log('onPointerEnter (parent)')
-            }
-            onPointerLeave={(e) =>
-                console.log('onPointerLeave (parent)')
-            }
-            style={{ padding: 20, backgroundColor: '#ddd' }}
-        >
-            <div
-                onPointerDown={(e) =>
-                    console.log(
-                        'onPointerDown (first child)'
-                    )
-                }
-                onPointerEnter={(e) =>
-                    console.log(
-                        'onPointerEnter (first child)'
-                    )
-                }
-                onPointerLeave={(e) =>
-                    console.log(
-                        'onPointerLeave (first child)'
-                    )
-                }
-                onPointerMove={(e) =>
-                    console.log(
-                        'onPointerMove (first child)'
-                    )
-                }
-                onPointerUp={(e) =>
-                    console.log('onPointerUp (first child)')
-                }
-                style={{
-                    padding: 20,
-                    backgroundColor: 'lightyellow',
-                }}
-            >
-                First child
-            </div>
-            <div
-                onPointerDown={(e) =>
-                    console.log(
-                        'onPointerDown (second child)'
-                    )
-                }
-                onPointerEnter={(e) =>
-                    console.log(
-                        'onPointerEnter (second child)'
-                    )
-                }
-                onPointerLeave={(e) =>
-                    console.log(
-                        'onPointerLeave (second child)'
-                    )
-                }
-                onPointerMove={(e) =>
-                    console.log(
-                        'onPointerMove (second child)'
-                    )
-                }
-                onPointerUp={(e) =>
-                    console.log(
-                        'onPointerUp (second child)'
-                    )
-                }
-                style={{
-                    padding: 20,
-                    backgroundColor: 'lightblue',
-                }}
-            >
-                Second child
-            </div>
-        </div>
-    );
-}
-```
+=== "App.js"
 
-### Обработка событий фокуса
+    ```js
+    export default function PointerExample() {
+    	return (
+    		<div
+    			onPointerEnter={(e) =>
+    				console.log('onPointerEnter (parent)')
+    			}
+    			onPointerLeave={(e) =>
+    				console.log('onPointerLeave (parent)')
+    			}
+    			style={{ padding: 20, backgroundColor: '#ddd' }}
+    		>
+    			<div
+    				onPointerDown={(e) =>
+    					console.log(
+    						'onPointerDown (first child)'
+    					)
+    				}
+    				onPointerEnter={(e) =>
+    					console.log(
+    						'onPointerEnter (first child)'
+    					)
+    				}
+    				onPointerLeave={(e) =>
+    					console.log(
+    						'onPointerLeave (first child)'
+    					)
+    				}
+    				onPointerMove={(e) =>
+    					console.log(
+    						'onPointerMove (first child)'
+    					)
+    				}
+    				onPointerUp={(e) =>
+    					console.log('onPointerUp (first child)')
+    				}
+    				style={{
+    					padding: 20,
+    					backgroundColor: 'lightyellow',
+    				}}
+    			>
+    				First child
+    			</div>
+    			<div
+    				onPointerDown={(e) =>
+    					console.log(
+    						'onPointerDown (second child)'
+    					)
+    				}
+    				onPointerEnter={(e) =>
+    					console.log(
+    						'onPointerEnter (second child)'
+    					)
+    				}
+    				onPointerLeave={(e) =>
+    					console.log(
+    						'onPointerLeave (second child)'
+    					)
+    				}
+    				onPointerMove={(e) =>
+    					console.log(
+    						'onPointerMove (second child)'
+    					)
+    				}
+    				onPointerUp={(e) =>
+    					console.log(
+    						'onPointerUp (second child)'
+    					)
+    				}
+    				style={{
+    					padding: 20,
+    					backgroundColor: 'lightblue',
+    				}}
+    			>
+    				Second child
+    			</div>
+    		</div>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/nggl5k?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Обработка событий фокуса {#handling-focus-events}
 
 В React, focus events пузырьковый. Вы можете использовать `currentTarget` и `relatedTarget`, чтобы отличить, если события фокусировки или размытия возникли вне родительского элемента. Пример показывает, как обнаружить фокусировку дочернего элемента, фокусировку родительского элемента, а также как обнаружить вхождение или выход фокуса из всего поддерева.
 
-```js
-export default function FocusExample() {
-    return (
-        <div
-            tabIndex={1}
-            onFocus={(e) => {
-                if (e.currentTarget === e.target) {
-                    console.log('focused parent');
-                } else {
-                    console.log(
-                        'focused child',
-                        e.target.name
-                    );
-                }
-                if (
-                    !e.currentTarget.contains(
-                        e.relatedTarget
-                    )
-                ) {
-                    // Not triggered when swapping focus between children
-                    console.log('focus entered parent');
-                }
-            }}
-            onBlur={(e) => {
-                if (e.currentTarget === e.target) {
-                    console.log('unfocused parent');
-                } else {
-                    console.log(
-                        'unfocused child',
-                        e.target.name
-                    );
-                }
-                if (
-                    !e.currentTarget.contains(
-                        e.relatedTarget
-                    )
-                ) {
-                    // Not triggered when swapping focus between children
-                    console.log('focus left parent');
-                }
-            }}
-        >
-            <label>
-                First name:
-                <input name="firstName" />
-            </label>
-            <label>
-                Last name:
-                <input name="lastName" />
-            </label>
-        </div>
-    );
-}
-```
+=== "App.js"
 
-### Обработка событий клавиатуры
+    ```js
+    export default function FocusExample() {
+    	return (
+    		<div
+    			tabIndex={1}
+    			onFocus={(e) => {
+    				if (e.currentTarget === e.target) {
+    					console.log('focused parent');
+    				} else {
+    					console.log(
+    						'focused child',
+    						e.target.name
+    					);
+    				}
+    				if (
+    					!e.currentTarget.contains(
+    						e.relatedTarget
+    					)
+    				) {
+    					// Not triggered when swapping focus between children
+    					console.log('focus entered parent');
+    				}
+    			}}
+    			onBlur={(e) => {
+    				if (e.currentTarget === e.target) {
+    					console.log('unfocused parent');
+    				} else {
+    					console.log(
+    						'unfocused child',
+    						e.target.name
+    					);
+    				}
+    				if (
+    					!e.currentTarget.contains(
+    						e.relatedTarget
+    					)
+    				) {
+    					// Not triggered when swapping focus between children
+    					console.log('focus left parent');
+    				}
+    			}}
+    		>
+    			<label>
+    				First name:
+    				<input name="firstName" />
+    			</label>
+    			<label>
+    				Last name:
+    				<input name="lastName" />
+    			</label>
+    		</div>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/9wsn6g?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Обработка событий клавиатуры {#handling-keyboard-events}
 
 Этот пример показывает некоторые общие клавиатурные события и время их возникновения.
 
-```js
-export default function KeyboardExample() {
-    return (
-        <label>
-            First name:
-            <input
-                name="firstName"
-                onKeyDown={(e) =>
-                    console.log('onKeyDown:', e.key, e.code)
-                }
-                onKeyUp={(e) =>
-                    console.log('onKeyUp:', e.key, e.code)
-                }
-            />
-        </label>
-    );
-}
-```
+=== "App.js"
+
+    ```js
+    export default function KeyboardExample() {
+    	return (
+    		<label>
+    			First name:
+    			<input
+    				name="firstName"
+    				onKeyDown={(e) =>
+    					console.log('onKeyDown:', e.key, e.code)
+    				}
+    				onKeyUp={(e) =>
+    					console.log('onKeyUp:', e.key, e.code)
+    				}
+    			/>
+    		</label>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/m9mlp7?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/components/common](https://react.dev/reference/react-dom/components/common)</small>
