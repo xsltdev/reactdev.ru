@@ -2,111 +2,125 @@
 status: experimental
 ---
 
-<Canary>
+# &lt;style&gt;
 
-React's extensions to `<style>` are currently only available in React's canary and experimental channels. In stable releases of React `<style>` works only as a [built-in browser HTML component](https://react.dev/reference/react-dom/components#all-html-components). Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
+!!!example "Canary"
 
-</Canary>
+    Расширения React для `<style>` в настоящее время доступны только в канале React canary и экспериментальном канале. В стабильных релизах React `<style>` работает только как [встроенный в браузер HTML-компонент](https://react.dev/reference/react-dom/components#all-html-components). Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
-<Intro>
+<big>Встроенный компонент браузера [`<style>`](https://developer.mozilla.org/docs/Web/HTML/Element/style) позволяет добавлять в документ встроенные таблицы стилей CSS.</big>
 
-The [built-in browser `<style>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style) lets you add inline CSS stylesheets to your document.
-
-```js
+```css
 <style> p { color: red; } </style>
 ```
 
-</Intro>
+## Описание {#reference}
 
-<InlineToc />
+### `<style>` {#style}
 
----
+Чтобы добавить инлайн-стили в документ, отрендерите [встроенный в браузер компонент `<style>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style). Вы можете рендерить `<style>` из любого компонента, и React [в определенных случаях](#special-rendering-behavior) поместит соответствующий элемент DOM в голову документа и удалит дублирование идентичных стилей.
 
-## Описание {/_reference_/}
-
-### `<style>` {/_style_/}
-
-To add inline styles to your document, render the [built-in browser `<style>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style). You can render `<style>` from any component and React will [in certain cases](#special-rendering-behavior) place the corresponding DOM element in the document head and de-duplicate identical styles.
-
-```js
+```css
 <style> p { color: red; } </style>
 ```
 
-[See more examples below.](#usage)
+**Параметры**
 
-#### Props {/_props_/}
+`<style>` поддерживает все [общие пропсы элементов](./common.md#props).
 
-`<style>` supports all [common element props.](./common.md#props)
+-   `children`: строка, обязательна. Содержимое таблицы стилей.
+-   `precedence`: строка. Указывает React, где ранжировать DOM-узел `<style>` относительно других в документе `<head>`, который определяет, какая таблица стилей может перекрывать другую. Его значение может быть (в порядке старшинства) `" reset"`, `"low"`, `"medium"`, `"high"`. Таблицы стилей с одинаковым старшинством идут вместе независимо от того, являются ли они тегами `<link>` или встроенными тегами `<style>` или загружаются с помощью функций [`preload`](../preload.md) или [`preinit`](../preinit.md).
+-   `href`: строка. Позволяет React [де-дублировать стили](#special-rendering-behavior), которые имеют одинаковый `href`.
+-   `media`: строка. Ограничивает таблицу определенным [media query](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries).
+-   `nonce`: строка. Криптографический [nonce для разрешения ресурса](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) при использовании строгой политики безопасности содержимого.
+-   `title`: строка. Указывает имя [альтернативной таблицы стилей](https://developer.mozilla.org/en-US/docs/Web/CSS/Alternative_style_sheets).
 
--   `children`: a string, required. The contents of the stylesheet.
--   `precedence`: a string. Tells React where to rank the `<style>` DOM node relative to others in the document `<head>`, which determines which stylesheet can override the other. Its value can be (in order of precedence) `"reset"`, `"low"`, `"medium"`, `"high"`. Stylesheets with the same precedence go together whether they are `<link>` or inline `<style>` tags or loaded using the [`preload`](../preload.md) or [`preinit`](../preinit.md) functions.
--   `href`: a string. Allows React to [de-duplicate styles](#special-rendering-behavior) that have the same `href`.
--   `media`: a string. Restricts the spreadsheet to a certain [media query](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries).
--   `nonce`: a string. A cryptographic [nonce to allow the resource](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) when using a strict Content Security Policy.
--   `title`: a string. Specifies the name of an [alternative stylesheet](https://developer.mozilla.org/en-US/docs/Web/CSS/Alternative_style_sheets).
+Пропсы, которые **не рекомендуется** использовать с React:
 
-Props that are **not recommended** for use with React:
+-   `blocking`: строка. Если установлено значение `"render"`, указывает браузеру не рендерить страницу до тех пор, пока не будет загружена таблица стилей. React обеспечивает более тонкий контроль с помощью Suspense.
 
--   `blocking`: a string. If set to `"render"`, instructs the browser not to render the page until the stylesheet is loaded. React provides more fine-grained control using Suspense.
+#### Специальное поведение рендеринга {#special-rendering-behavior}
 
-#### Special rendering behavior {/_special-rendering-behavior_/}
+React может перемещать компоненты `<style>` в `<head>` документа, де-дублировать идентичные таблицы стилей и [приостанавливать](http://localhost:3000/reference/react/Suspense) загрузку таблицы стилей.
 
-React can move `<style>` components to the document's `<head>`, de-duplicate identical stylesheets, and [suspend](http://localhost:3000/reference/react/Suspense) while the stylesheet is loading.
+Чтобы принять это поведение, укажите параметры `href` и `precedence`. React будет де-дублировать стили, если у них одинаковый `href`. Проп `precedence` указывает React, где ранжировать DOM-узел `<style>` относительно других в документе `<head>`, что определяет, какая таблица стилей может переопределить другую.
 
-To opt into this behavior, provide the `href` and `precedence` props. React will de-duplicate styles if they have the same `href`. The precedence prop tells React where to rank the `<style>` DOM node relative to others in the document `<head>`, which determines which stylesheet can override the other.
+Этот особый режим имеет две оговорки:
 
-This special treatment comes with two caveats:
-
--   React will ignore changes to props after the style has been rendered. (React will issue a warning in development if this happens.)
--   React may leave the style in the DOM even after the component that rendered it has been unmounted.
-
----
+-   React будет игнорировать изменения пропсов после отрисовки стиля. (Если это произойдет, React выдаст предупреждение в процессе разработки).
+-   React может оставить стиль в DOM даже после того, как компонент, который его отрисовал, будет размонтирован.
 
 ## Использование {#usage}
 
-### Rendering an inline CSS stylesheet {/_rendering-an-inline-css-stylesheet_/}
+### Рендеринг встроенной таблицы стилей CSS {#rendering-an-inline-css-stylesheet}
 
-If a component depends on certain CSS styles in order to be displayed correctly, you can render an inline stylesheet within the component.
+Если компонент зависит от определенных стилей CSS для корректного отображения, вы можете отобразить встроенную таблицу стилей внутри компонента.
 
-If you supply an `href` and `precedence` prop, your component will suspend while the stylesheet is loading. (Even with inline stylesheets, there may be a loading time due to fonts and images that the stylesheet refers to.) The `href` prop should uniquely identify the stylesheet, because React will de-duplicate stylesheets that have the same `href`.
+Если вы укажете параметры `href` и `precedence`, ваш компонент приостановится на время загрузки таблицы стилей. (Даже при использовании встроенных таблиц стилей может потребоваться время загрузки из-за шрифтов и изображений, на которые ссылается таблица стилей). Параметр `href` должен уникально идентифицировать таблицу стилей, потому что React будет удалять дубликаты таблиц стилей с одинаковым `href`.
 
-<SandpackWithHTMLOutput>
+=== "App.js"
 
-```js src/App.js active
-import ShowRenderedHTML from './ShowRenderedHTML.js';
-import { useId } from 'react';
+    ```js
+    import ShowRenderedHTML from './ShowRenderedHTML.js';
+    import { useId } from 'react';
 
-function PieChart({ data, colors }) {
-    const id = useId();
-    const stylesheet = colors
-        .map(
-            (color, index) =>
-                `#${id} .color-${index}: \{ color: "${color}"; \}`
-        )
-        .join();
-    return (
-        <>
-            <style
-                href={'PieChart-' + JSON.stringify(colors)}
-                precedence="medium"
-            >
-                {stylesheet}
-            </style>
-            <svg id={id}>…</svg>
-        </>
-    );
-}
+    function PieChart({ data, colors }) {
+    	const id = useId();
+    	const stylesheet = colors
+    		.map(
+    			(color, index) =>
+    				`#${id} .color-${index}: \{ color: "${color}"; \}`
+    		)
+    		.join();
+    	return (
+    		<>
+    			<style
+    				href={'PieChart-' + JSON.stringify(colors)}
+    				precedence="medium"
+    			>
+    				{stylesheet}
+    			</style>
+    			<svg id={id}>…</svg>
+    		</>
+    	);
+    }
 
-export default function App() {
-    return (
-        <ShowRenderedHTML>
-            <PieChart
-                data="..."
-                colors={['red', 'green', 'blue']}
-            />
-        </ShowRenderedHTML>
-    );
-}
-```
+    export default function App() {
+    	return (
+    		<ShowRenderedHTML>
+    			<PieChart
+    				data="..."
+    				colors={['red', 'green', 'blue']}
+    			/>
+    		</ShowRenderedHTML>
+    	);
+    }
+    ```
 
-</SandpackWithHTMLOutput>
+=== "ShowRenderedHTML.js"
+
+    ```js
+    import { renderToStaticMarkup } from 'react-dom/server';
+    import formatHTML from './formatHTML.js';
+
+    export default function ShowRenderedHTML({ children }) {
+    	const markup = renderToStaticMarkup(
+    		<html>
+    			<head />
+    			<body>{children}</body>
+    		</html>
+    	);
+    	return (
+    		<>
+    			<h1>Rendered HTML:</h1>
+    			<pre>{formatHTML(markup)}</pre>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/y2773z?view=Editor+%2B+Preview&module=%2Fsrc%2FShowRenderedHTML.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="frosty-wright-y2773z" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/components/style](https://react.dev/reference/react-dom/components/style)</small>

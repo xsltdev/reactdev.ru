@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # renderToNodeStream
 
 !!!danger "Устарело"

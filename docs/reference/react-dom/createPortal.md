@@ -1,8 +1,10 @@
+---
+description: createPortal позволяет вам выводить некоторые дочерние элементы в другую часть DOM
+---
+
 # createPortal
 
-`createPortal` позволяет вам выводить некоторые дочерние элементы в другую часть DOM.
-
-<!-- 0001.part.md -->
+<big>`createPortal` позволяет вам выводить некоторые дочерние элементы в другую часть DOM.</big>
 
 ```js
 <div>
@@ -11,13 +13,11 @@
 </div>
 ```
 
-## Описание
+## Описание {#reference}
 
-### `createPortal(children, domNode, key?)`
+### `createPortal(children, domNode, key?)` {#createportal}
 
 Чтобы создать портал, вызовите `createPortal`, передав некоторый JSX и DOM-узел, в котором он должен быть отображен:
-
-<!-- 0003.part.md -->
 
 ```js
 import { createPortal } from 'react-dom';
@@ -33,11 +33,9 @@ import { createPortal } from 'react-dom';
 </div>;
 ```
 
-<!-- 0004.part.md -->
-
 Портал изменяет только физическое размещение узла DOM. Во всех остальных отношениях JSX, который вы отображаете в портал, действует как дочерний узел компонента React, который его отображает. Например, дочерний узел может получить доступ к контексту, предоставляемому родительским деревом, а события передаются от дочерних узлов к родительским в соответствии с деревом React.
 
-#### Параметры
+**Параметры**
 
 -   `children`: Все, что может быть отображено с помощью React, например, фрагмент JSX (т. е. `<div />` или `<SomeComponent />`), [Fragment](../react/Fragment.md) (<code><>...&lt;/&gt;</code>), строка или число, или массив из них.
 
@@ -45,23 +43,21 @@ import { createPortal } from 'react-dom';
 
 -   **опционально** `key`: Уникальная строка или число, которое будет использоваться в качестве [ключа](../../learn/rendering-lists.md) портала.
 
-#### Возвращает
+**Возвращает**
 
 `createPortal` возвращает узел React, который может быть включен в JSX или возвращен из компонента React. Если React встретит его в выводе рендера, он поместит предоставленные `children` внутрь предоставленного `domNode`.
 
-#### Предупреждения
+**Предупреждения**
 
 -   События от порталов распространяются в соответствии с деревом React, а не с деревом DOM. Например, если вы щелкните внутри портала, а портал обернут в `<div onClick>`, то сработает обработчик `onClick`. Если это вызывает проблемы, либо остановите распространение событий внутри портала, либо переместите сам портал вверх в дереве React.
 
-## Использование
+## Использование {#usage}
 
-### Рендеринг в другую часть DOM
+### Рендеринг в другую часть DOM {#rendering-to-a-different-part-of-the-dom}
 
 _Порталы_ позволяют вашим компонентам рендерить некоторые из своих дочерних компонентов в другое место в DOM. Это позволяет части вашего компонента "вырваться" из контейнеров, в которых он может находиться. Например, компонент может отображать модальный диалог или всплывающую подсказку, которая появляется над и вне остальной части страницы.
 
 Чтобы создать портал, отобразите результат `createPortal` с некоторым JSX и узлом DOM, где он должен быть размещен:
-
-<!-- 0005.part.md -->
 
 ```js
 import { createPortal } from 'react-dom';
@@ -82,38 +78,38 @@ function MyComponent() {
 }
 ```
 
-<!-- 0006.part.md -->
-
 React поместит DOM-узлы для переданного вами JSX внутрь предоставленного вами DOM-узла.
 
 Без портала второй `p` был бы помещен внутрь родительского `div`, но портал "телепортировал" его в [`document.body`:](https://developer.mozilla.org/docs/Web/API/Document/body)
 
-<!-- 0007.part.md -->
+=== "App.js"
 
-```js
-import { createPortal } from 'react-dom';
+    ```js
+    import { createPortal } from 'react-dom';
 
-export default function MyComponent() {
-    return (
-        <div style={{ border: '2px solid black' }}>
-            <p>This child is placed in the parent div.</p>
-            {createPortal(
-                <p>
-                    This child is placed in the document
-                    body.
-                </p>,
-                document.body
-            )}
-        </div>
-    );
-}
-```
+    export default function MyComponent() {
+    	return (
+    		<div style={{ border: '2px solid black' }}>
+    			<p>This child is placed in the parent div.</p>
+    			{createPortal(
+    				<p>
+    					This child is placed in the document
+    					body.
+    				</p>,
+    				document.body
+    			)}
+    		</div>
+    	);
+    }
+    ```
 
-<!-- 0008.part.md -->
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/8zm59x?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Обратите внимание, что второй абзац визуально появляется вне родительского `div` с границей. Если вы просмотрите структуру DOM с помощью инструментов разработчика, вы увидите, что второй `p` был помещен непосредственно в `body`:
 
-```html
+```html hl_lines="4-8 11"
 <body>
     <div id="root">
         ...
@@ -130,7 +126,7 @@ export default function MyComponent() {
 
 Портал изменяет только физическое размещение узла DOM. Во всех остальных отношениях JSX, который вы отображаете в портал, действует как дочерний узел компонента React, который его отображает. Например, дочерний узел может получить доступ к контексту, предоставляемому родительским деревом, а события по-прежнему передаются от дочерних узлов к родительским в соответствии с деревом React.
 
-### Рендеринг модального диалога с помощью портала
+### Рендеринг модального диалога с помощью портала {#rendering-a-modal-dialog-with-a-portal}
 
 Вы можете использовать портал для создания модального диалога, который парит над остальной частью страницы, даже если компонент, вызывающий диалог, находится внутри контейнера с `overflow: hidden` или другими стилями, которые мешают диалогу.
 
@@ -218,7 +214,9 @@ export default function MyComponent() {
     }
     ```
 
-<!-- 0018.part.md -->
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/6c6clm?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 !!!warning ""
 
@@ -226,7 +224,7 @@ export default function MyComponent() {
 
     При создании модалов следуйте [WAI-ARIA Modal Authoring Practices](https://www.w3.org/WAI/ARIA/apg/#dialog_modal). Если вы используете пакет сообщества, убедитесь, что он доступен и следует этим рекомендациям.
 
-### Рендеринг компонентов React в серверную разметку, не относящуюся к React
+### Рендеринг компонентов React в серверную разметку, не относящуюся к React {#rendering-react-components-into-non-react-server-markup}
 
 Порталы могут быть полезны, если ваш React root является лишь частью статической или серверной страницы, построенной не на React. Например, если ваша страница построена на серверном фреймворке, таком как Rails, вы можете создавать интерактивные области внутри статичных областей, таких как боковые панели. По сравнению с наличием [нескольких отдельных корней React](./client/createRoot.md), порталы позволяют рассматривать приложение как единое дерево React с общим состоянием, даже если его части отображаются в разных частях DOM.
 
@@ -295,23 +293,21 @@ export default function MyComponent() {
     }
     ```
 
-### Рендеринг компонентов React в не-React DOM-узлы
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/px6dfl?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Рендеринг компонентов React в не-React DOM-узлы {#rendering-react-components-into-non-react-dom-nodes}
 
 Вы также можете использовать портал для управления содержимым DOM-узла, который управляется вне React. Например, предположим, что вы интегрируетесь с виджетом карты, не принадлежащим React, и хотите отобразить содержимое React во всплывающем окне. Чтобы сделать это, объявите переменную состояния `popupContainer` для хранения DOM-узла, в который будет производиться рендеринг:
-
-<!-- 0025.part.md -->
 
 ```js
 const [popupContainer, setPopupContainer] = useState(null);
 ```
 
-<!-- 0026.part.md -->
-
 Когда вы создаете сторонний виджет, сохраните узел DOM, возвращаемый виджетом, чтобы вы могли выполнить в нем рендеринг:
 
-<!-- 0027.part.md -->
-
-```js
+```js hl_lines="5-6"
 useEffect(() => {
     if (mapRef.current === null) {
         const map = createMapWidget(containerRef.current);
@@ -322,13 +318,9 @@ useEffect(() => {
 }, []);
 ```
 
-<!-- 0028.part.md -->
-
 Это позволит вам использовать `createPortal` для рендеринга React-контента в `popupContainer`, как только он станет доступен:
 
-<!-- 0029.part.md -->
-
-```js
+```js hl_lines="6-10"
 return (
     <div
         style={{ width: 250, height: 250 }}
@@ -342,8 +334,6 @@ return (
     </div>
 );
 ```
-
-<!-- 0030.part.md -->
 
 Вот полный пример, с которым вы можете поиграть:
 
@@ -419,6 +409,8 @@ return (
     }
     ```
 
-## Ссылки
+=== "CodeSandbox"
 
--   [https://react.dev/reference/react-dom/createPortal](https://react.dev/reference/react-dom/createPortal)
+    <iframe src="https://codesandbox.io/embed/rj555k?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="condescending-worker-rj555k" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/createPortal](https://react.dev/reference/react-dom/createPortal)</small>

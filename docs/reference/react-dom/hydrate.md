@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # hydrate
 
 !!!danger "Устарело"

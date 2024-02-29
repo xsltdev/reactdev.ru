@@ -1,144 +1,183 @@
 ---
 status: experimental
+description: Встроенный компонент браузера script позволяет добавить скрипт в документ
 ---
 
-<Canary>
+# &lt;script&gt;
 
-React's extensions to `<script>` are currently only available in React's canary and experimental channels. In stable releases of React `<script>` works only as a [built-in browser HTML component](https://react.dev/reference/react-dom/components#all-html-components). Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
+!!!example "Canary"
 
-</Canary>
+    Расширения для `<script>` в React в настоящее время доступны только в канале React canary и экспериментальном канале. В стабильных релизах React `<script>` работает только как [встроенный в браузер HTML-компонент](https://react.dev/reference/react-dom/components#all-html-components). Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
-<Intro>
-
-The [built-in browser `<script>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script) lets you add a script to your document.
+<big>Встроенный компонент браузера [`<script>`](https://hcdev.ru/html/script) позволяет добавить скрипт в документ.</big>
 
 ```js
 <script> alert("hi!") </script>
 ```
 
-</Intro>
+## Описание {#reference}
 
-<InlineToc />
+### `<script>` {#script}
 
----
-
-## Описание {/_reference_/}
-
-### `<script>` {/_script_/}
-
-To add inline or external scripts to your document, render the [built-in browser `<script>` component](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script). You can render `<script>` from any component and React will [in certain cases](#special-rendering-behavior) place the corresponding DOM element in the document head and de-duplicate identical scripts.
+Чтобы добавить в документ встроенные или внешние скрипты, отобразите [встроенный в браузер компонент `<script>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script). Вы можете рендерить `<script>` из любого компонента, и React [в определенных случаях](#special-rendering-behavior) поместит соответствующий элемент DOM в голову документа и удалит дублирование идентичных скриптов.
 
 ```js
 <script> alert("hi!") </script>
 <script src="script.js" />
 ```
 
-[See more examples below.](#usage)
+**Параметры**
 
-#### Props {/_props_/}
+`<script>` поддерживает все [общие свойства элементов](./common.md#props).
 
-`<script>` supports all [common element props.](./common.md#props)
+У него должны быть _либо_ `children`, либо проп `src`.
 
-It should have _either_ `children` or a `src` prop.
+-   `children`: строка. Исходный код встроенного скрипта.
+-   `src`: строка. URL-адрес внешнего скрипта.
 
--   `children`: a string. The source code of an inline script.
--   `src`: a string. The URL of an external script.
+Другие поддерживаемые пропсы:
 
-Other supported props:
+-   `async`: булево. Позволяет браузеру отложить выполнение скрипта до тех пор, пока не будет обработана остальная часть документа - предпочтительное поведение для повышения производительности.
+-   `crossOrigin`: строка. Политика [CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin), которую следует использовать. Возможные значения: `anonymous` и `use-credentials`.
+-   `fetchPriority`: строка. Позволяет браузеру ранжировать скрипты по приоритету при одновременной выборке нескольких скриптов. Может быть `"high"`, `"low"` или `"auto"` (по умолчанию).
+-   `integrity`: строка. Криптографический хэш скрипта для [проверки его подлинности](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
+-   `noModule`: булево. Отключает скрипт в браузерах, поддерживающих ES-модули, и позволяет использовать запасной скрипт в браузерах, которые этого не делают.
+-   `nonce`: строка. Криптографический [nonce для разрешения ресурса](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) при использовании строгой политики безопасности содержимого.
+-   `referrer`: строка. Указывает [какой заголовок Referer отправить](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#referrerpolicy) при выборке скрипта и любых ресурсов, которые скрипт в свою очередь берет.
+-   `type`: строка. Указывает, является ли скрипт [классическим скриптом, ES-модулем или import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type).
 
--   `async`: a boolean. Allows the browser to defer execution of the script until the rest of the document has been processed — the preferred behavior for performance.
--   `crossOrigin`: a string. The [CORS policy](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin) to use. Its possible values are `anonymous` and `use-credentials`.
--   `fetchPriority`: a string. Lets the browser rank scripts in priority when fetching multiple scripts at the same time. Can be `"high"`, `"low"`, or `"auto"` (the default).
--   `integrity`: a string. A cryptographic hash of the script, to [verify its authenticity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
--   `noModule`: a boolean. Disables the script in browsers that support ES modules — allowing for a fallback script for browsers that do not.
--   `nonce`: a string. A cryptographic [nonce to allow the resource](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) when using a strict Content Security Policy.
--   `referrer`: a string. Says [what Referer header to send](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#referrerpolicy) when fetching the script and any resources that the script fetches in turn.
--   `type`: a string. Says whether the script is a [classic script, ES module, or import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type).
+Реквизиты, отключающие [особое отношение React к скриптам](#special-rendering-behavior):
 
-Props that disable React's [special treatment of scripts](#special-rendering-behavior):
+-   `onError`: функция. Вызывается, когда скрипт не загружается.
+-   `onLoad`: функция. Вызывается, когда скрипт завершает загрузку.
 
--   `onError`: a function. Called when the script fails to load.
--   `onLoad`: a function. Called when the script finishes being loaded.
+Пропсы, которые **не рекомендуется** использовать с React:
 
-Props that are **not recommended** for use with React:
+-   `blocking`: строка. Если установлено значение `"render"`, это указывает браузеру не рендерить страницу до тех пор, пока не будет загружен лист скриптов. React обеспечивает более тонкий контроль с помощью Suspense.
+-   `defer`: строка. Запрещает браузеру выполнять скрипт до окончания загрузки документа. Не совместим с потоковыми компонентами, рендеримыми сервером. Вместо этого используйте параметр `async`.
 
--   `blocking`: a string. If set to `"render"`, instructs the browser not to render the page until the scriptsheet is loaded. React provides more fine-grained control using Suspense.
--   `defer`: a string. Prevents the browser from executing the script until the document is done loading. Not compatible with streaming server-rendered components. Use the `async` prop instead.
+#### Специальное поведение рендеринга {#special-rendering-behavior}
 
-#### Special rendering behavior {/_special-rendering-behavior_/}
+React может перемещать компоненты `<script>` в `<head>` документа, де-дублировать идентичные скрипты и [приостанавливать](http://localhost:3000/reference/react/Suspense) загрузку скрипта.
 
-React can move `<script>` components to the document's `<head>`, de-duplicate identical scripts, and [suspend](http://localhost:3000/reference/react/Suspense) while the script is loading.
+Для того, чтобы принять это поведение, укажите свойства `src` и `async={true}`. React будет дедублировать скрипты, если у них одинаковый `src`. Свойство `async` должно быть истинным, чтобы скрипты можно было безопасно перемещать.
 
-To opt into this behavior, provide the `src` and `async={true}` props. React will de-duplicate scripts if they have the same `src`. The `async` prop must be true to allow scripts to be safely moved.
+Если вы передадите любой из параметров `onLoad` или `onError`, то никакого особого поведения не будет, поскольку эти параметры указывают на то, что вы управляете загрузкой скрипта вручную внутри вашего компонента.
 
-If you supply any of the `onLoad` or `onError` props, there is no special behavior, because these props indicate that you are managing the loading of the script manually within your component.
+Это особое обращение сопровождается двумя оговорками:
 
-This special treatment comes with two caveats:
-
--   React will ignore changes to props after the script has been rendered. (React will issue a warning in development if this happens.)
--   React may leave the script in the DOM even after the component that rendered it has been unmounted. (This has no effect as scripts just execute once when they are inserted into the DOM.)
-
----
+-   React будет игнорировать изменения пропсов после рендеринга скрипта. (React выдаст предупреждение в процессе разработки, если это произойдет).
+-   React может оставить скрипт в DOM даже после того, как компонент, который его отрисовал, будет размонтирован. (Это не имеет никакого эффекта, так как скрипты выполняются только один раз, когда их вставляют в DOM).
 
 ## Использование {#usage}
 
-### Rendering an external script {/_rendering-an-external-script_/}
+### Рендеринг внешнего скрипта {#rendering-an-external-script}
 
-If a component depends on certain scripts in order to be displayed correctly, you can render a `<script>` within the component.
+Если компонент зависит от определенных скриптов для корректного отображения, вы можете отобразить `<script>` внутри компонента.
 
-If you supply an `src` and `async` prop, your component will suspend while the script is loading. React will de-duplicate scripts that have the same `src`, inserting only one of them into the DOM even if multiple components render it.
+Если вы укажете свойства `src` и `async`, ваш компонент приостановится на время загрузки скрипта. React будет де-дублировать скрипты с одинаковым `src`, вставляя в DOM только один из них, даже если его рендерят несколько компонентов.
 
-<SandpackWithHTMLOutput>
+=== "App.js"
 
-```js src/App.js active
-import ShowRenderedHTML from './ShowRenderedHTML.js';
+    ```js
+    import ShowRenderedHTML from './ShowRenderedHTML.js';
 
-function Map({ lat, long }) {
-    return (
-        <>
-            <script async src="map-api.js" />
-            <div id="map" data-lat={lat} data-long={long} />
-        </>
-    );
-}
+    function Map({ lat, long }) {
+    	return (
+    		<>
+    			<script async src="map-api.js" />
+    			<div id="map" data-lat={lat} data-long={long} />
+    		</>
+    	);
+    }
 
-export default function Page() {
-    return (
-        <ShowRenderedHTML>
-            <Map />
-        </ShowRenderedHTML>
-    );
-}
-```
+    export default function Page() {
+    	return (
+    		<ShowRenderedHTML>
+    			<Map />
+    		</ShowRenderedHTML>
+    	);
+    }
+    ```
 
-</SandpackWithHTMLOutput>
+=== "ShowRenderedHTML.js"
 
-<Note>
-When you want to use a script, it can be beneficial to call the [preinit](../preinit.md) function. Calling this function may allow the browser to start fetching the script earlier than if you just render a `<script>` component, for example by sending an [HTTP Early Hints response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103).
-</Note>
+    ```js
+    import { renderToStaticMarkup } from 'react-dom/server';
+    import formatHTML from './formatHTML.js';
 
-### Rendering an inline script {/_rendering-an-inline-script_/}
+    export default function ShowRenderedHTML({ children }) {
+    	const markup = renderToStaticMarkup(
+    		<html>
+    			<head />
+    			<body>{children}</body>
+    		</html>
+    	);
+    	return (
+    		<>
+    			<h1>Rendered HTML:</h1>
+    			<pre>{formatHTML(markup)}</pre>
+    		</>
+    	);
+    }
+    ```
 
-To include an inline script, render the `<script>` component with the script source code as its children. Inline scripts are not de-duplicated or moved to the document `<head>`, and since they don't load any external resources, they will not cause your component to suspend.
+=== "CodeSandbox"
 
-<SandpackWithHTMLOutput>
+    <iframe src="https://codesandbox.io/embed/xc2xj8?view=Editor+%2B+Preview&module=%2Fsrc%2FShowRenderedHTML.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="interesting-mendel-xc2xj8" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-```js src/App.js active
-import ShowRenderedHTML from './ShowRenderedHTML.js';
+!!!note ""
 
-function Tracking() {
-    return <script>ga('send', 'pageview');</script>;
-}
+    Когда вы хотите использовать скрипт, может быть полезно вызвать функцию [preinit](../preinit.md). Вызов этой функции может позволить браузеру начать выборку скрипта раньше, чем если бы вы просто отобразили компонент `<script>`, например, отправив ответ [HTTP Early Hints response](https://developer.mozilla.org/docs/Web/HTTP/Status/103).
 
-export default function Page() {
-    return (
-        <ShowRenderedHTML>
-            <h1>My Website</h1>
-            <Tracking />
-            <p>Welcome</p>
-        </ShowRenderedHTML>
-    );
-}
-```
+### Рендеринг встроенного скрипта {#rendering-an-inline-script}
 
-</SandpackWithHTMLOutput>
+Чтобы включить встроенный скрипт, отобразите компонент `<script>` с исходным кодом скрипта в качестве его дочерних элементов. Встроенные скрипты не дублируются и не перемещаются в документ `<head>`, а поскольку они не загружают никаких внешних ресурсов, они не приведут к приостановке работы вашего компонента.
+
+=== "App.js"
+
+    ```js
+    import ShowRenderedHTML from './ShowRenderedHTML.js';
+
+    function Tracking() {
+    	return <script>ga('send', 'pageview');</script>;
+    }
+
+    export default function Page() {
+    	return (
+    		<ShowRenderedHTML>
+    			<h1>My Website</h1>
+    			<Tracking />
+    			<p>Welcome</p>
+    		</ShowRenderedHTML>
+    	);
+    }
+    ```
+
+=== "ShowRenderedHTML.js"
+
+    ```js
+    import { renderToStaticMarkup } from 'react-dom/server';
+    import formatHTML from './formatHTML.js';
+
+    export default function ShowRenderedHTML({ children }) {
+    	const markup = renderToStaticMarkup(
+    		<html>
+    			<head />
+    			<body>{children}</body>
+    		</html>
+    	);
+    	return (
+    		<>
+    			<h1>Rendered HTML:</h1>
+    			<pre>{formatHTML(markup)}</pre>
+    		</>
+    	);
+    }
+    ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/q6mk6v?view=Editor+%2B+Preview&module=%2Fsrc%2FShowRenderedHTML.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="eloquent-microservice-q6mk6v" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/components/script](https://react.dev/reference/react-dom/components/script)</small>

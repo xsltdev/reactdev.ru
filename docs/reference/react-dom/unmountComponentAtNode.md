@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # unmountComponentAtNode
 
 !!!danger "Устарело"

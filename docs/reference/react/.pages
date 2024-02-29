@@ -22,3 +22,12 @@ nav:
     - Директивы:
         - use-client.md
         - use-server.md
+    - Устаревшие API:
+        - Children.md
+        - cloneElement.md
+        - Component.md
+        - createElement.md
+        - createFactory.md
+        - createRef.md
+        - isValidElement.md
+        - PureComponent.md

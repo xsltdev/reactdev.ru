@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # render
 
 !!!danger "Устарело"

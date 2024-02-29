@@ -1,3 +1,7 @@
+---
+status: deprecated
+---
+
 # findDOMNode
 
 !!!danger "Устарело"
