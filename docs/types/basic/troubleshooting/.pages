@@ -1,0 +1,9 @@
+title: Руководство по устранению неполадок
+nav:
+    - types.md
+    - operators.md
+    - utilities.md
+    - non-ts-files.md
+    - ts-config.md
+    - official-typings-bugs.md
+    - learn-ts.md

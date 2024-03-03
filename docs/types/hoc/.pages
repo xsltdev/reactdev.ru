@@ -1,0 +1,6 @@
+title: HOC
+nav:
+    - index.md
+    - full-example.md
+    - react-hoc-docs.md
+    - excluding-props.md

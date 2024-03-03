@@ -1,0 +1,8 @@
+title: Продвинутая шпаргалка
+nav:
+    - index.md
+    - utility-types.md
+    - patterns_by_usecase.md
+    - patterns_by_version.md
+    - misc-concerns.md
+    - types-react-api.md
