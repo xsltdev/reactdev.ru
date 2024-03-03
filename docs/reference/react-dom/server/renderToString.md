@@ -1,18 +1,22 @@
+---
+description: renderToString преобразует дерево React в строку HTML
+---
+
 # renderToString
 
 !!!warning ""
 
     `renderToString` не поддерживает потоковую передачу или ожидание данных.
 
-`renderToString` преобразует дерево React в строку HTML.
+<big>`renderToString` преобразует дерево React в строку HTML.</big>
 
 ```js
 const html = renderToString(reactNode);
 ```
 
-## Описание
+## Описание {#reference}
 
-### `renderToString(reactNode)`
+### `renderToString(reactNode)` {#rendertostaticnodestream}
 
 На сервере вызовите `renderToString` для рендеринга вашего приложения в HTML.
 
@@ -24,22 +28,22 @@ const html = renderToString(<App />);
 
 На клиенте вызовите [`hydrateRoot`](../client/hydrateRoot.md), чтобы сделать сгенерированный сервером HTML интерактивным.
 
-#### Параметры
+**Параметры**
 
 -   `reactNode`: Узел React, который вы хотите преобразовать в HTML. Например, JSX-узел типа `<App />`.
 
-#### Возвращает
+**Возвращает**
 
 HTML-строку.
 
-#### Предостережения
+**Предостережения**
 
 -   `renderToString` имеет ограниченную поддержку приостановки. Если компонент приостанавливается, `renderToString` немедленно отправляет его обратную версию как HTML.
 -   `renderToString` работает в браузере, но использовать его в клиентском коде не рекомендуется.
 
-## Использование
+## Использование {#usage}
 
-### Рендеринг дерева React как HTML в строку
+### Рендеринг дерева React как HTML в строку {#rendering-a-react-tree-as-static-html-to-a-nodejs-readable-stream}
 
 Вызовите `renderToString` для рендеринга вашего приложения в HTML-строку, которую вы можете отправить с ответом сервера:
 
@@ -109,3 +113,5 @@ console.log(div.innerHTML); // For example, "<svg>...</svg>"
 Если какой-то компонент приостанавливается (например, потому что он определен с помощью [`lazy`](../../react/lazy.md) или получает данные), `renderToString` не будет ждать, пока его содержимое разрешится. Вместо этого `renderToString` найдет ближайшую границу [`<Suspense>`](../../react/Suspense.md) над ним и отобразит его `fallback` prop в HTML. Содержимое не появится до тех пор, пока не загрузится клиентский код.
 
 Чтобы решить эту проблему, используйте одно из рекомендуемых потоковых решений. Они могут передавать содержимое частями по мере его разрешения на сервере, чтобы пользователь видел, как страница постепенно заполняется до загрузки клиентского кода.
+
+<small>:material-information-outline: Источник &mdash; <https://react.dev/reference/react-dom/server/renderToStaticNodeStream></small>

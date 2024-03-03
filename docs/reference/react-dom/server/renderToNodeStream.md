@@ -1,5 +1,6 @@
 ---
 status: deprecated
+description: renderToNodeStream рендерит дерево React в Node.js Readable Stream
 ---
 
 # renderToNodeStream
@@ -8,15 +9,15 @@ status: deprecated
 
     Этот API будет удален в одной из будущих основных версий React. Вместо него используйте [`renderToPipeableStream`](renderToPipeableStream.md).
 
-`renderToNodeStream` рендерит дерево React в [Node.js Readable Stream.](https://nodejsdev.ru/api/stream/#readable-streams).
+<big>`renderToNodeStream` рендерит дерево React в [Node.js Readable Stream](https://nodejsdev.ru/api/stream/#readable-streams).</big>
 
 ```js
 const stream = renderToNodeStream(reactNode);
 ```
 
-## Описание
+## Описание {#reference}
 
-### `renderToNodeStream(reactNode)`
+### `renderToNodeStream(reactNode)` {#rendertonodestream}
 
 На сервере вызовите `renderToNodeStream`, чтобы получить [Node.js Readable Stream](https://nodejsdev.ru/api/stream/#readable-streams), который вы можете передать в ответ.
 
@@ -29,27 +30,27 @@ stream.pipe(response);
 
 На клиенте вызовите [`hydrateRoot`](../client/hydrateRoot.md), чтобы сделать сгенерированный сервером HTML интерактивным.
 
-#### Параметры
+**Параметры**
 
 -   `reactNode`: Узел React, который вы хотите отобразить в HTML. Например, JSX-элемент типа `<App />`.
 
-#### Возвращает
+**Возвращает**
 
 [Node.js Readable Stream](https://nodejsdev.ru/api/stream/#readable-streams), который выводит строку HTML.
 
-#### Ограничения
+**Ограничения**
 
 -   Этот метод будет ждать завершения всех [Suspense boundaries](../../react/Suspense.md), прежде чем вернуть любой вывод.
 -   Начиная с React 18, этот метод буферизирует весь свой вывод, поэтому он не обеспечивает никаких преимуществ потоковой передачи. Поэтому рекомендуется вместо него перейти на [`renderToPipeableStream`](renderToPipeableStream.md).
 -   Возвращаемый поток - это поток байтов, закодированный в utf-8. Если вам нужен поток в другой кодировке, обратите внимание на проект типа [iconv-lite](https://www.npmjs.com/package/iconv-lite), который предоставляет потоки преобразования для перекодировки текста.
 
-## Использование
+## Использование {#usage}
 
-### Рендеринг дерева React в формате HTML в читаемый поток Node.js
+### Рендеринг дерева React в формате HTML в читаемый поток Node.js {#rendering-a-react-tree-as-html-to-a-nodejs-readable-stream}
 
 Вызовите `renderToNodeStream` для получения [Node.js Readable Stream](https://nodejsdev.ru/api/stream/#readable-streams), который вы можете направить в ответ вашего сервера:
 
-```js
+```js hl_lines="5-6"
 import { renderToNodeStream } from 'react-dom/server';
 
 // The route handler syntax depends on your backend framework
@@ -60,3 +61,5 @@ app.use('/', (request, response) => {
 ```
 
 Этот поток будет создавать первоначальный неинтерактивный HTML-вывод ваших компонентов React. На клиенте вам нужно будет вызвать [`hydrateRoot`](../client/hydrateRoot.md), чтобы _гидратировать_ этот сгенерированный сервером HTML и сделать его интерактивным.
+
+<small>:material-information-outline: Источник &mdash; <https://react.dev/reference/react-dom/server/renderToNodeStream></small>
