@@ -1,38 +1,29 @@
 ---
 status: experimental
+description: preinit позволяет быстро получить и оценить таблицу стилей или внешний скрипт
 ---
 
-<Canary>
+# preinit
 
-The `preinit` function is currently only available in React's Canary and experimental channels. Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
+!!!example "Canary"
 
-</Canary>
+    Функция `preinit` в настоящее время доступна только в каналах React Canary и experimental. Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
-<Note>
+!!!note ""
 
-[React-based frameworks](../../learn/start-a-new-react-project.md) frequently handle resource loading for you, so you might not have to call this API yourself. Consult your framework's documentation for details.
+    [Фреймворки на основе React](../../learn/start-a-new-react-project.md) часто обрабатывают загрузку ресурсов за вас, поэтому вы можете не вызывать этот API самостоятельно. За подробностями обращайтесь к документации вашего фреймворка.
 
-</Note>
-
-<Intro>
-
-`preinit` lets you eagerly fetch and evaluate a stylesheet or external script.
+<big>`preinit` позволяет быстро получить и оценить таблицу стилей или внешний скрипт.</big>
 
 ```js
 preinit('https://example.com/script.js', { as: 'style' });
 ```
 
-</Intro>
+## Описание {#reference}
 
-<InlineToc />
+### `preinit(href, options)` {#preinit}
 
----
-
-## Описание {/_reference_/}
-
-### `preinit(href, options)` {/_preinit_/}
-
-To preinit a script or stylesheet, call the `preinit` function from `react-dom`.
+Чтобы предварительно инициировать скрипт или таблицу стилей, вызовите функцию `preinit` из `react-dom`.
 
 ```js
 import { preinit } from 'react-dom';
@@ -45,78 +36,73 @@ function AppRoot() {
 }
 ```
 
-[See more examples below.](#usage)
-
-The `preinit` function provides the browser with a hint that it should start downloading and executing the given resource, which can save time. Scripts that you `preinit` are executed when they finish downloading. Stylesheets that you preinit are inserted into the document, which causes them to go into effect right away.
+Функция `preinit` дает браузеру подсказку, что он должен начать загрузку и выполнение данного ресурса, что позволяет сэкономить время. Скрипты, которые вы `preinit`, выполняются, когда они завершают загрузку. Таблицы стилей, которые вы предварительно инициируете, вставляются в документ, что заставляет их сразу же вступать в силу.
 
 **Параметры**
 
--   `href`: a string. The URL of the resource you want to download and execute.
--   `options`: an object. It contains the following properties:
-    -   `as`: a required string. The type of resource. Its possible values are `script` and `style`.
-    -   `precedence`: a string. Required with stylesheets. Says where to insert the stylesheet relative to others. Stylesheets with higher precedence can override those with lower precedence. The possible values are `reset`, `low`, `medium`, `high`.
-    -   `crossOrigin`: a string. The [CORS policy](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin) to use. Its possible values are `anonymous` and `use-credentials`. It is required when `as` is set to `"fetch"`.
-    -   `integrity`: a string. A cryptographic hash of the resource, to [verify its authenticity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
-    -   `nonce`: a string. A cryptographic [nonce to allow the resource](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) when using a strict Content Security Policy.
-    -   `fetchPriority`: a string. Suggests a relative priority for fetching the resource. The possible values are `auto` (the default), `high`, and `low`.
+-   `href`: строка. URL-адрес ресурса, который вы хотите загрузить и выполнить.
+-   `options`: объект. Он содержит следующие свойства:
+    -   `as`: обязательная строка. Тип ресурса. Возможные значения: `script` и `style`.
+    -   `precedence`: строка. Требуется для таблиц стилей. Указывает, куда вставлять таблицу стилей относительно других. Таблицы стилей с более высоким старшинством могут перекрывать таблицы с более низким старшинством. Возможные значения: `reset`, `low`, `medium`, `high`.
+    -   `crossOrigin`: строка. Политика [CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin), которую следует использовать. Возможные значения: `anonymous` и `use-credentials`. Требуется, если для `as` установлено значение `"fetch"`.
+    -   `integrity`: строка. Криптографический хэш ресурса для [проверки его подлинности](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
+    -   `nonce`: строка. Криптографический [nonce для разрешения ресурса](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) при использовании строгой политики безопасности содержимого.
+    -   `fetchPriority`: строка. Предлагает относительный приоритет для получения ресурса. Возможные значения: `auto` (по умолчанию), `high` и `low`.
 
 **Возвращаемое значение**
 
-`preinit` returns nothing.
+`preinit` ничего не возвращает.
 
 **Ограничения**
 
--   Multiple calls to `preinit` with the same `href` have the same effect as a single call.
--   In the browser, you can call `preinit` in any situation: while rendering a component, in an effect, in an event handler, and so on.
--   In server-side rendering or when rendering Server Components, `preinit` only has an effect if you call it while rendering a component or in an async context originating from rendering a component. Any other calls will be ignored.
-
----
+-   Несколько вызовов `preinit` с одним и тем же `href` имеют тот же эффект, что и один вызов.
+-   В браузере вы можете вызвать `preinit` в любой ситуации: при рендеринге компонента, в эффекте, в обработчике событий и так далее.
+-   При рендеринге на стороне сервера или при рендеринге серверных компонентов `preinit` имеет эффект, только если вы вызываете его во время рендеринга компонента или в асинхронном контексте, возникающем при рендеринге компонента. Любые другие вызовы будут проигнорированы.
 
 ## Использование {#usage}
 
-### Preiniting when rendering {/_preiniting-when-rendering_/}
+### Преинициация при рендеринге {#preiniting-when-rendering}
 
-Call `preinit` when rendering a component if you know that it or its children will use a specific resource, and you're OK with the resource being evaluated and thereby taking effect immediately upon being downloaded.
+Вызовите `preinit` при рендеринге компонента, если вы знаете, что он или его дочерние компоненты будут использовать определенный ресурс, и вы не против того, чтобы этот ресурс был оценен и, таким образом, вступил в силу сразу после загрузки.
 
-<Recipes titleText="Examples of preiniting">
+### Примеры предварительного инициирования {#examples}
 
-#### Preiniting an external script {/_preiniting-an-external-script_/}
-
-```js
-import { preinit } from 'react-dom';
-
-function AppRoot() {
-  preinit("https://example.com/script.js", {as: "script"});
-  return ...;
-}
-```
-
-If you want the browser to download the script but not to execute it right away, use [`preload`](./preload.md) instead. If you want to load an ESM module, use [`preinitModule`](./preinitModule.md).
-
-<Solution />
-
-#### Preiniting a stylesheet {/_preiniting-a-stylesheet_/}
+**1. Предварительное инициирование внешнего скрипта**
 
 ```js
 import { preinit } from 'react-dom';
 
 function AppRoot() {
-  preinit("https://example.com/style.css", {as: "style", precedence: "medium"});
-  return ...;
+    preinit('https://example.com/script.js', {
+        as: 'script',
+    });
+    return /* ... */;
 }
 ```
 
-The `precedence` option, which is required, lets you control the order of stylesheets within the document. Stylesheets with higher precedence can overrule those with lower precedence.
+Если вы хотите, чтобы браузер загрузил скрипт, но не выполнял его сразу, используйте [`preload`](./preload.md). Если вы хотите загрузить модуль ESM, используйте [`preinitModule`](./preinitModule.md).
 
-If you want to download the stylesheet but not to insert it into the document right away, use [`preload`](./preload.md) instead.
+**2. Предварительное инициирование таблицы стилей**
 
-<Solution />
+```js
+import { preinit } from 'react-dom';
 
-</Recipes>
+function AppRoot() {
+    preinit('https://example.com/style.css', {
+        as: 'style',
+        precedence: 'medium',
+    });
+    return /* ... */;
+}
+```
 
-### Preiniting in an event handler {/_preiniting-in-an-event-handler_/}
+Опция `precedence`, которая является обязательной, позволяет вам контролировать порядок следования таблиц стилей в документе. Таблицы стилей с более высоким приоритетом могут отменять те, что имеют более низкий приоритет.
 
-Call `preinit` in an event handler before transitioning to a page or state where external resources will be needed. This gets the process started earlier than if you call it during the rendering of the new page or state.
+Если вы хотите загрузить таблицу стилей, но не вставлять ее сразу в документ, используйте вместо этого [`preload`](./preload.md).
+
+### Преинициация в обработчике события {#preiniting-in-an-event-handler}
+
+Вызовите `preinit` в обработчике события перед переходом на страницу или в состояние, где потребуются внешние ресурсы. Это позволит запустить процесс раньше, чем если бы вы вызвали его во время рендеринга новой страницы или состояния.
 
 ```js
 import { preinit } from 'react-dom';
@@ -131,3 +117,5 @@ function CallToAction() {
     return <button onClick={onClick}>Start Wizard</button>;
 }
 ```
+
+<small>:material-information-outline: Источник &mdash; <https://react.dev/reference/react-dom/preinit></small>

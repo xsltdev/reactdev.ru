@@ -1,5 +1,6 @@
 ---
 status: deprecated
+description: findDOMNode находит узел DOM браузера для экземпляра классового компонента React
 ---
 
 # findDOMNode
@@ -8,17 +9,17 @@ status: deprecated
 
     Этот API будет удален в одной из будущих основных версий React.
 
-`findDOMNode` находит узел DOM браузера для экземпляра React [class component](../react/Component.md).
+<big>`findDOMNode` находит узел DOM браузера для экземпляра [классового компонента React](../react/Component.md).</big>
 
 ```js
 const domNode = findDOMNode(componentInstance);
 ```
 
-## Описание
+## Описание {#reference}
 
-### `findDOMNode(componentInstance)`
+### `findDOMNode(componentInstance)` {#finddomnode}
 
-Вызывает `findDOMNode` для поиска узла DOM браузера для данного экземпляра React [class component](../react/Component.md).
+Вызывает `findDOMNode` для поиска узла DOM браузера для данного экземпляра [классового компонента React](../react/Component.md).
 
 ```js
 import { findDOMNode } from 'react-dom';
@@ -26,28 +27,28 @@ import { findDOMNode } from 'react-dom';
 const domNode = findDOMNode(componentInstance);
 ```
 
-#### Параметры
+**Параметры**
 
 -   `componentInstance`: Экземпляр подкласса [`Component`](../react/Component.md). Например, `this` внутри компонента класса.
 
-#### Возвращает
+**Возвращает**
 
 `findDOMNode` возвращает первый ближайший DOM-узел браузера в пределах заданного `componentInstance`. Если компонент отображается на `null`, или отображается `false`, `findDOMNode` возвращает `null`. Если компонент отображается в строку, `findDOMNode` возвращает текстовый узел DOM, содержащий это значение.
 
-#### Ограничения
+**Ограничения**
 
 -   Компонент может возвращать массив или [фрагмент](../react/Fragment.md) с несколькими дочерними элементами. В этом случае `findDOMNode` вернет узел DOM, соответствующий первому непустому дочернему компоненту.
 -   `findDOMNode` работает только для смонтированных компонентов (то есть компонентов, которые были помещены в DOM). Если вы попытаетесь вызвать эту функцию на компоненте, который еще не смонтирован (например, вызвать `findDOMNode()` в `render()` на компоненте, который еще не создан), будет выброшено исключение.
 -   `findDOMNode` возвращает результат только на момент вызова. Если дочерний компонент позже отобразит другой узел, у вас не будет возможности получить уведомление об этом изменении.
 -   `findDOMNode` принимает экземпляр компонента класса, поэтому его нельзя использовать с компонентами функций.
 
-## Использование
+## Использование {#usage}
 
-### Нахождение корневого DOM-узла компонента класса
+### Нахождение корневого DOM-узла компонента класса {#finding-the-root-dom-node-of-a-class-component}
 
-Вызовите `findDOMNode` с экземпляром [class component](../react/Component.md) (обычно `this`), чтобы найти DOM-узел, который он отобразил.
+Вызовите `findDOMNode` с экземпляром [классового компонента](../react/Component.md) (обычно `this`), чтобы найти DOM-узел, который он отобразил.
 
-```js
+```js hl_lines="3"
 class AutoselectingInput extends Component {
     componentDidMount() {
         const input = findDOMNode(this);
@@ -102,9 +103,13 @@ class AutoselectingInput extends Component {
     export default AutoselectingInput;
     ```
 
-## Альтернативы
+=== "CodeSandbox"
 
-### Чтение собственного DOM-узла компонента из ссылки
+    <iframe src="https://codesandbox.io/embed/h428j9?view=Editor+%2B+Preview&module=%2Fsrc%2FAutoselectingInput.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+## Альтернативы {#alternatives}
+
+### Чтение собственного DOM-узла компонента из ссылки {#reading-components-own-dom-node-from-a-ref}
 
 Код, использующий `findDOMNode`, хрупок, поскольку связь между узлом JSX и кодом, манипулирующим соответствующим узлом DOM, не является явной. Например, попробуйте обернуть этот `input` в `div`:
 
@@ -146,6 +151,10 @@ class AutoselectingInput extends Component {
 
     export default AutoselectingInput;
     ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/6s9v5v?view=Editor+%2B+Preview&module=%2Fsrc%2FAutoselectingInput.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Это нарушит код, поскольку теперь `findDOMNode(this)` находит DOM-узел `<div>`, но код ожидает DOM-узел `<input>`. Чтобы избежать подобных проблем, используйте [`createRef`](../react/createRef.md) для управления конкретным узлом DOM.
 
@@ -197,6 +206,10 @@ class AutoselectingInput extends Component {
     export default AutoselectingInput;
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/rv3ytp?view=Editor+%2B+Preview&module=%2Fsrc%2FAutoselectingInput.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 В современном React без компонентов классов эквивалентный код будет вызывать [`useRef`](../react/useRef.md) вместо этого:
 
 === "App.js"
@@ -236,9 +249,13 @@ class AutoselectingInput extends Component {
     }
     ```
 
-[Подробнее о манипулировании DOM с помощью ссылок](../../learn/manipulating-the-dom-with-refs.md)
+=== "CodeSandbox"
 
-### Чтение узла DOM дочернего компонента из переадресованной ссылки
+    <iframe src="https://codesandbox.io/embed/y7g92y?view=Editor+%2B+Preview&module=%2Fsrc%2FAutoselectingInput.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+Подробнее о [манипулировании DOM с помощью ссылок](../../learn/manipulating-the-dom-with-refs.md)
+
+### Чтение узла DOM дочернего компонента из переадресованной ссылки {#reading-a-child-components-dom-node-from-a-forwarded-ref}
 
 В этом примере `findDOMNode(this)` находит узел DOM, принадлежащий другому компоненту. Компонент `AutoselectingInput` отображает `MyInput`, который является вашим собственным компонентом, отображающим браузерный `<input>`.
 
@@ -290,11 +307,15 @@ class AutoselectingInput extends Component {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/9qy2tx?view=Editor+%2B+Preview&module=%2Fsrc%2FAutoselectingInput.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Обратите внимание, что вызов `findDOMNode(this)` внутри `AutoselectingInput` все еще дает вам DOM `input` - несмотря на то, что JSX для этого `input` скрыт внутри компонента `MyInput`. Это кажется удобным для приведенного выше примера, но это приводит к хрупкому коду. Представьте, что вы захотите отредактировать `MyInput` позже и добавить обертку `div` вокруг него. Это нарушит код `AutoselectingInput` (который ожидает найти `<input>`).
 
 Чтобы заменить `findDOMNode` в этом примере, необходимо согласовать два компонента:
 
-**1.** `AutoSelectingInput` должен объявить ref, как в предыдущем примере, и передать его в `<MyInput>`.
+**1.** `AutoSelectingInput` должен объявить `ref`, как в предыдущем примере, и передать его в `<MyInput>`.
 
 **2.** `MyInput` должен быть объявлен с [`forwardRef`](../react/forwardRef.md), чтобы принять эту ссылку и передать ее узлу `<input>`.
 
@@ -354,6 +375,10 @@ class AutoselectingInput extends Component {
     export default MyInput;
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/tkgpq6?view=Editor+%2B+Preview&module=%2Fsrc%2FAutoselectingInput.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Вот как выглядел бы этот код с компонентами функций вместо классов:
 
 === "App.js"
@@ -406,7 +431,11 @@ class AutoselectingInput extends Component {
     export default MyInput;
     ```
 
-### Добавление элемента-обертки `<div>`
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/cqyvys?view=Editor+%2B+Preview&module=%2Fsrc%2FAutoselectingInput.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+### Добавление элемента-обертки `<div>` {#adding-a-wrapper-div-element}
 
 Иногда компоненту необходимо знать положение и размер своих дочерних элементов. Это делает заманчивым найти дочерние элементы с помощью `findDOMNode(this)`, а затем использовать методы DOM, такие как [`getBoundingClientRect`](https://developer.mozilla.org/docs/Web/API/Element/getBoundingClientRect) для измерений.
 
@@ -417,3 +446,5 @@ class AutoselectingInput extends Component {
 ```
 
 Это также относится к фокусировке и прокрутке к произвольным дочерним элементам.
+
+<small>:material-information-outline: Источник &mdash; <https://react.dev/reference/react-dom/findDOMNode></small>

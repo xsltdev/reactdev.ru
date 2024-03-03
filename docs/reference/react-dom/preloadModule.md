@@ -2,21 +2,17 @@
 status: experimental
 ---
 
-<Canary>
+# preloadModule
 
-The `preloadModule` function is currently only available in React's Canary and experimental channels. Learn more about [React's release channels here](https://react.dev/community/versioning-policy#all-release-channels).
+!!!example "Canary"
 
-</Canary>
+    Функция `preloadModule` в настоящее время доступна только в каналах React Canary и experimental. Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
-<Note>
+!!!note ""
 
-[React-based frameworks](../../learn/start-a-new-react-project.md) frequently handle resource loading for you, so you might not have to call this API yourself. Consult your framework's documentation for details.
+    [Фреймворки на основе React](../../learn/start-a-new-react-project.md) часто обрабатывают загрузку ресурсов за вас, поэтому вы можете не вызывать этот API самостоятельно. За подробностями обращайтесь к документации вашего фреймворка.
 
-</Note>
-
-<Intro>
-
-`preloadModule` lets you eagerly fetch an ESM module that you expect to use.
+<big>`preloadModule` позволяет вам с нетерпением получить модуль ESM, который вы ожидаете использовать.</big>
 
 ```js
 preloadModule('https://example.com/module.js', {
@@ -24,17 +20,11 @@ preloadModule('https://example.com/module.js', {
 });
 ```
 
-</Intro>
+## Описание {#reference}
 
-<InlineToc />
+### `preloadModule(href, options)` {#preloadmodule}
 
----
-
-## Описание {/_reference_/}
-
-### `preloadModule(href, options)` {/_preloadmodule_/}
-
-To preload an ESM module, call the `preloadModule` function from `react-dom`.
+Чтобы предварительно загрузить модуль ESM, вызовите функцию `preloadModule` из `react-dom`.
 
 ```js
 import { preloadModule } from 'react-dom';
@@ -47,36 +37,32 @@ function AppRoot() {
 }
 ```
 
-[See more examples below.](#usage)
-
-The `preloadModule` function provides the browser with a hint that it should start downloading the given module, which can save time.
+Функция `preloadModule` дает браузеру подсказку, что ему следует начать загрузку данного модуля, что позволяет сэкономить время.
 
 **Параметры**
 
--   `href`: a string. The URL of the module you want to download.
--   `options`: an object. It contains the following properties:
-    -   `as`: a required string. It must be `'script'`.
-    -   `crossOrigin`: a string. The [CORS policy](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin) to use. Its possible values are `anonymous` and `use-credentials`.
-    -   `integrity`: a string. A cryptographic hash of the module, to [verify its authenticity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
-    -   `nonce`: a string. A cryptographic [nonce to allow the module](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) when using a strict Content Security Policy.
+-   `href`: строка. URL-адрес модуля, который вы хотите загрузить.
+-   `options`: объект. Он содержит следующие свойства:
+    -   `as`: обязательная строка. Она должна быть `'script'`.
+    -   `crossOrigin`: строка. Политика [CORS](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin), которую следует использовать. Возможные значения: `anonymous` и `use-credentials`.
+    -   `integrity`: строка. Криптографический хэш модуля для [проверки его подлинности](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
+    -   `nonce`: строка. Криптографический [nonce для разрешения модуля](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) при использовании строгой политики безопасности содержимого.
 
 **Возвращаемое значение**
 
-`preloadModule` returns nothing.
+`preloadModule` ничего не возвращает.
 
 **Ограничения**
 
--   Multiple calls to `preloadModule` with the same `href` have the same effect as a single call.
--   In the browser, you can call `preloadModule` in any situation: while rendering a component, in an effect, in an event handler, and so on.
--   In server-side rendering or when rendering Server Components, `preloadModule` only has an effect if you call it while rendering a component or in an async context originating from rendering a component. Any other calls will be ignored.
-
----
+-   Несколько вызовов `preloadModule` с одним и тем же `href` имеют тот же эффект, что и один вызов.
+-   В браузере вы можете вызвать `preloadModule` в любой ситуации: при рендеринге компонента, в эффекте, в обработчике события и так далее.
+-   При рендеринге на стороне сервера или при рендеринге серверных компонентов `preloadModule` имеет эффект только в том случае, если вы вызываете его во время рендеринга компонента или в асинхронном контексте, возникающем при рендеринге компонента. Любые другие вызовы будут проигнорированы.
 
 ## Использование {#usage}
 
-### Preloading when rendering {/_preloading-when-rendering_/}
+### Предварительная загрузка при рендеринге {#preloading-when-rendering}
 
-Call `preloadModule` when rendering a component if you know that it or its children will use a specific module.
+Вызовите `preloadModule` при рендеринге компонента, если вы знаете, что он или его дочерние компоненты будут использовать определенный модуль.
 
 ```js
 import { preloadModule } from 'react-dom';
@@ -87,11 +73,11 @@ function AppRoot() {
 }
 ```
 
-If you want the browser to start executing the module immediately (rather than just downloading it), use [`preinitModule`](./preinitModule.md) instead. If you want to load a script that isn't an ESM module, use [`preload`](./preload.md).
+Если вы хотите, чтобы браузер начал выполнять модуль немедленно (а не просто загрузил его), используйте [`preinitModule`](./preinitModule.md). Если вы хотите загрузить скрипт, который не является модулем ESM, используйте [`preload`](./preload.md).
 
-### Preloading in an event handler {/_preloading-in-an-event-handler_/}
+### Предварительная загрузка в обработчике события {#preloading-in-an-event-handler}
 
-Call `preloadModule` in an event handler before transitioning to a page or state where the module will be needed. This gets the process started earlier than if you call it during the rendering of the new page or state.
+Вызовите `preloadModule` в обработчике события перед переходом на страницу или в состояние, где потребуется модуль. Это позволит запустить процесс раньше, чем если бы вы вызвали его во время рендеринга новой страницы или состояния.
 
 ```js
 import { preloadModule } from 'react-dom';
@@ -106,3 +92,5 @@ function CallToAction() {
     return <button onClick={onClick}>Start Wizard</button>;
 }
 ```
+
+<small>:material-information-outline: Источник &mdash; <https://react.dev/reference/react-dom/preloadModule></small>
