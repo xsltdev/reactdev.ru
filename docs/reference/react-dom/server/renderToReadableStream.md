@@ -1,6 +1,10 @@
+---
+description: renderToReadableStream рендерит дерево React в Readable Web Stream
+---
+
 # renderToReadableStream
 
-`renderToReadableStream` рендерит дерево React в [Readable Web Stream.](https://developer.mozilla.org/docs/Web/API/ReadableStream)
+<big>`renderToReadableStream` рендерит дерево React в [Readable Web Stream](https://developer.mozilla.org/docs/Web/API/ReadableStream).</big>
 
 ```js
 const stream = await renderToReadableStream(reactNode, options?)
@@ -10,9 +14,9 @@ const stream = await renderToReadableStream(reactNode, options?)
 
     Этот API зависит от [Web Streams](https://developer.mozilla.org/docs/Web/API/Streams_API). Для Node.js используйте [`renderToPipeableStream`](renderToPipeableStream.md) вместо этого.
 
-## Описание
+## Описание {#reference}
 
-### `renderToReadableStream(reactNode, options?)`
+### `renderToReadableStream(reactNode, options?)` {#rendertoreadablestream}
 
 Вызовите `renderToReadableStream` для рендеринга вашего дерева React в формате HTML в [читаемый веб-поток](https://developer.mozilla.org/docs/Web/API/ReadableStream).
 
@@ -31,21 +35,21 @@ async function handler(request) {
 
 На клиенте вызовите [`hydrateRoot`](../client/hydrateRoot.md), чтобы сделать сгенерированный сервером HTML интерактивным.
 
-#### Параметры
+**Параметры**
 
 -   `reactNode`: Узел React, который вы хотите отобразить в HTML. Например, JSX-элемент типа `<App />`. Ожидается, что он будет представлять весь документ, поэтому компонент `App` должен вывести тег `<html>`.
 -   **опционально** `options`: Объект с опциями потоковой передачи.
-    -   **optional** `bootstrapScriptContent`: Если указано, то эта строка будет помещена в инлайн тег `<script>`.
-    -   **optional** `bootstrapScripts`: Массив URL строк для тегов `<script>`, которые будут отображаться на странице. Используйте его для включения `<script>`, вызывающего [`hydrateRoot`](../client/hydrateRoot.md) Опустите его, если вы вообще не хотите запускать React на клиенте.
+    -   **опционально** `bootstrapScriptContent`: Если указано, то эта строка будет помещена в инлайн тег `<script>`.
+    -   **опционально** `bootstrapScripts`: Массив URL строк для тегов `<script>`, которые будут отображаться на странице. Используйте его для включения `<script>`, вызывающего [`hydrateRoot`](../client/hydrateRoot.md) Опустите его, если вы вообще не хотите запускать React на клиенте.
     -   **опционально** `bootstrapModules`: Аналогично `bootstrapScripts`, но вместо него выдается [`<script type="module">`](https://developer.mozilla.org/docs/Web/JavaScript/Guide/Modules).
-    -   **optional** `identifierPrefix`: Строковый префикс, который React использует для идентификаторов, генерируемых [`useId`](../../react/useId.md) Полезно для предотвращения конфликтов при использовании нескольких корней на одной странице. Должен быть тем же префиксом, что передан в [`hydrateRoot`](../client/hydrateRoot.md#parameters)
+    -   **опционально** `identifierPrefix`: Строковый префикс, который React использует для идентификаторов, генерируемых [`useId`](../../react/useId.md) Полезно для предотвращения конфликтов при использовании нескольких корней на одной странице. Должен быть тем же префиксом, что передан в [`hydrateRoot`](../client/hydrateRoot.md#parameters)
     -   **опционально** `namespaceURI`: Строка с корневым [namespace URI](https://developer.mozilla.org/docs/Web/API/Document/createElementNS#important_namespace_uris) для потока. По умолчанию используется обычный HTML. Передайте `'http://www.w3.org/2000/svg'` для SVG или `'http://www.w3.org/1998/Math/MathML'` для MathML.
     -   **опционально** `nonce`: Строка [`nonce`](http://developer.mozilla.org/docs/Web/HTML/Element/script#nonce) для разрешения скриптов для [`script-src` Content-Security-Policy](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
     -   **опционально** `onError`: Обратный вызов, который срабатывает всякий раз, когда происходит ошибка сервера, будь то восстанавливаемая или нет По умолчанию, он вызывает только `console.error`. Если вы переопределите его для регистрации сообщений о сбоях, убедитесь, что вы все еще вызываете `console.error`. Вы также можете использовать его для настройки кода состояния перед выдачей оболочки.
     -   **опционально** `progressiveChunkSize`: Количество байт в чанке. [Подробнее об эвристике по умолчанию.](https://github.com/facebook/react/blob/14c2be8dac2d5482fda8a0906a31d239df8551fc/packages/react-server/src/ReactFizzServer.js#L210-L225)
-    -   **optional** `signal`: Сигнал [прерывания](https://developer.mozilla.org/docs/Web/API/AbortSignal), который позволяет вам прервать серверный рендеринг и отрисовать все остальное на клиенте.
+    -   **опционально** `signal`: Сигнал [прерывания](https://developer.mozilla.org/docs/Web/API/AbortSignal), который позволяет вам прервать серверный рендеринг и отрисовать все остальное на клиенте.
 
-#### Возвращает
+**Возвращает**
 
 `renderToReadableStream` возвращает промис:
 
@@ -56,9 +60,9 @@ async function handler(request) {
 
 -   `allReady`: Обещание, которое разрешается, когда весь рендеринг завершен, включая оболочку и весь дополнительный контент. Вы можете `дождаться stream.allReady` перед возвращением ответа для краулеров и статической генерации. Если вы сделаете это, вы не получите никакой прогрессивной загрузки. Поток будет содержать конечный HTML.
 
-## Использование
+## Использование {#usage}
 
-### Рендеринг дерева React в формате HTML в читаемый веб-поток
+### Рендеринг дерева React в формате HTML в читаемый веб-поток {#rendering-a-react-tree-as-html-to-a-readable-web-stream}
 
 Вызовите `renderToReadableStream` для рендеринга вашего дерева React в формате HTML в [Readable Web Stream:](https://developer.mozilla.org/docs/Web/API/ReadableStream)
 
@@ -206,7 +210,7 @@ hydrateRoot(document, <App />);
 
     И клиент, и сервер рендерят `App` с одним и тем же пропсом `assetMap`, поэтому ошибок гидратации нет.
 
-### Потоковая передача контента по мере его загрузки
+### Потоковая передача контента по мере его загрузки {#streaming-more-content-as-it-loads}
 
 Потоковая передача позволяет пользователю начать видеть содержимое еще до того, как все данные загрузятся на сервер. Например, рассмотрим страницу профиля, на которой отображается обложка, боковая панель с друзьями и фотографиями, а также список сообщений:
 
@@ -286,7 +290,7 @@ function ProfilePage() {
 
     Получение данных с поддержкой Suspense без использования фреймворка с поддержкой мнений пока не поддерживается. Требования к реализации источника данных с поддержкой Suspense нестабильны и не документированы. Официальный API для интеграции источников данных с Suspense будет выпущен в одной из будущих версий React.
 
-### Указание того, что входит в оболочку
+### Указание того, что входит в оболочку {#specifying-what-goes-into-the-shell}
 
 Часть вашего приложения вне границ `<Suspense>` называется _оболочкой:_
 
@@ -335,7 +339,7 @@ async function handler(request) {
 
 К моменту возврата `stream`, компоненты во вложенных границах `<Suspense>` могут все еще загружать данные.
 
-### Протоколирование аварий на сервере
+### Протоколирование аварий на сервере {#logging-crashes-on-the-server}
 
 По умолчанию все ошибки на сервере записываются в консоль. Вы можете переопределить это поведение для записи отчетов о сбоях:
 
@@ -356,7 +360,7 @@ async function handler(request) {
 
 Если вы предоставляете пользовательскую реализацию `onError`, не забудьте также вести журнал ошибок в консоль, как описано выше.
 
-### Восстановление после ошибок внутри оболочки
+### Восстановление после ошибок внутри оболочки {#recovering-from-errors-inside-the-shell}
 
 В этом примере оболочка содержит `ProfileLayout`, `ProfileCover` и `PostsGlimmer`:
 
@@ -405,7 +409,7 @@ async function handler(request) {
 
 Если при генерации оболочки произошла ошибка, сработает и `onError`, и ваш блок `catch`. Используйте `onError` для сообщения об ошибке и используйте блок `catch` для отправки резервного HTML-документа. Ваш резервный HTML не обязательно должен быть страницей ошибки. Вместо этого вы можете включить альтернативную оболочку, которая отображает ваше приложение только на клиенте.
 
-### Восстановление после ошибок вне оболочки
+### Восстановление после ошибок вне оболочки {#recovering-from-errors-outside-the-shell}
 
 В этом примере компонент `<Posts />` обернут в `<Suspense>`, поэтому он _не_ является частью оболочки:
 
@@ -432,7 +436,7 @@ function ProfilePage() {
 
 Если повторная попытка рендеринга `Posts` на клиенте будет успешной, индикатор загрузки с сервера будет заменен на вывод клиентского рендеринга. Пользователь не будет знать, что произошла ошибка сервера. Однако обратный вызов сервера `onError` и обратный вызов клиента [`onRecoverableError`](../client/hydrateRoot.md#hydrateroot) сработают, чтобы вы могли получить уведомление об ошибке.
 
-### Установка кода состояния
+### Установка кода состояния {#setting-the-status-code}
 
 При потоковой передаче возникает компромисс. Вы хотите начать потоковую передачу страницы как можно раньше, чтобы пользователь мог быстрее увидеть содержимое. Однако после начала потоковой передачи вы больше не сможете установить код состояния ответа.
 
@@ -504,7 +508,7 @@ async function handler(request) {
 
 Это позволит отловить только те ошибки вне оболочки, которые возникли при генерации начального содержимого оболочки, так что этот способ не является исчерпывающим. Если знать, произошла ли ошибка для какого-то содержимого, очень важно, вы можете перенести ее в оболочку.
 
-### Обработка различных ошибок различными способами
+### Обработка различных ошибок различными способами {#handling-different-errors-in-different-ways}
 
 Вы можете [создавать собственные подклассы `Error`](https://javascript.info/custom-errors) и использовать оператор [`instanceof`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/instanceof) для проверки того, какая ошибка была выброшена. Например, вы можете определить пользовательскую `NotFoundError` и выбросить ее из вашего компонента. Затем вы можете сохранить ошибку в `onError` и сделать что-то другое перед возвратом ответа в зависимости от типа ошибки:
 
@@ -556,7 +560,7 @@ async function handler(request) {
 
 Имейте в виду, что после эмиссии оболочки и начала потоковой передачи вы не сможете изменить код состояния.
 
-### Ожидание загрузки всего содержимого для краулеров и статической генерации
+### Ожидание загрузки всего содержимого для краулеров и статической генерации {#waiting-for-all-content-to-load-for-crawlers-and-static-generation}
 
 Потоковая передача обеспечивает лучший пользовательский опыт, поскольку пользователь может видеть содержимое по мере его появления.
 
@@ -566,36 +570,42 @@ async function handler(request) {
 
 ```js
 async function handler(request) {
-  try {
-    let didError = false;
-    const stream = await renderToReadableStream(<App />, {
-      bootstrapScripts: ['/main.js'],
-      onError(error) {
-        didError = true;
-        console.error(error);
-        logServerCrashReport(error);
-      }
-    });
-    let isCrawler = // ... depends on your bot detection strategy ...
-    if (isCrawler) {
-      await stream.allReady;
+    try {
+        let didError = false;
+        const stream = await renderToReadableStream(
+            <App />,
+            {
+                bootstrapScripts: ['/main.js'],
+                onError(error) {
+                    didError = true;
+                    console.error(error);
+                    logServerCrashReport(error);
+                },
+            }
+        );
+        let isCrawler = true; // ... depends on your bot detection strategy ...
+        if (isCrawler) {
+            await stream.allReady;
+        }
+        return new Response(stream, {
+            status: didError ? 500 : 200,
+            headers: { 'content-type': 'text/html' },
+        });
+    } catch (error) {
+        return new Response(
+            '<h1>Something went wrong</h1>',
+            {
+                status: 500,
+                headers: { 'content-type': 'text/html' },
+            }
+        );
     }
-    return new Response(stream, {
-      status: didError ? 500 : 200,
-      headers: { 'content-type': 'text/html' },
-    });
-  } catch (error) {
-    return new Response('<h1>Something went wrong</h1>', {
-      status: 500,
-      headers: { 'content-type': 'text/html' },
-    });
-  }
 }
 ```
 
 Обычный посетитель получит поток постепенно загружаемого содержимого. Краулер получит окончательный HTML-вывод после загрузки всех данных. Однако это также означает, что краулеру придется ждать _все_ данные, некоторые из которых могут загружаться медленно или с ошибками. В зависимости от вашего приложения, вы можете выбрать вариант отправки оболочки краулерам.
 
-### Прерывание рендеринга сервера
+### Прерывание рендеринга сервера {#aborting-server-rendering}
 
 Вы можете заставить серверный рендеринг "сдаться" после таймаута:
 
@@ -625,3 +635,5 @@ async function handler(request) {
 ```
 
 React пропустит оставшиеся фаллаверы загрузки как HTML, а остальные попытается отобразить на клиенте.
+
+<small>:material-information-outline: Источник &mdash; <https://react.dev/reference/react-dom/server/renderToReadableStream></small>

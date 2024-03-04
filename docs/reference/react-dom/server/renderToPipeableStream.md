@@ -1,6 +1,10 @@
+---
+description: renderToPipeableStream рендерит дерево React в поток Node.js Stream
+---
+
 # renderToPipeableStream
 
-`renderToPipeableStream` рендерит дерево React в поток [Node.js Stream](https://nodejsdev.ru/api/stream/).
+<big>`renderToPipeableStream` рендерит дерево React в поток [Node.js Stream](https://nodejsdev.ru/api/stream/).</big>
 
 ```js
 const { pipe, abort } = renderToPipeableStream(reactNode, options?)
@@ -10,9 +14,9 @@ const { pipe, abort } = renderToPipeableStream(reactNode, options?)
 
     Этот API специфичен для Node.js. Среды с [Web Streams,](https://developer.mozilla.org/docs/Web/API/Streams_API), такие как Deno и современные edge runtimes, должны использовать [`renderToReadableStream`](renderToReadableStream.md) вместо этого.
 
-## Описание
+## Описание {#reference}
 
-### `renderToPipeableStream(reactNode, options?)`
+### `renderToPipeableStream(reactNode, options?)` {#rendertopipeablestream}
 
 Вызовите `renderToPipeableStream` для рендеринга вашего дерева React как HTML в [Node.js поток](https://nodejsdev.ru/api/stream/#streamwritable).
 
@@ -30,30 +34,30 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 На клиенте вызовите [`hydrateRoot`](../client/hydrateRoot.md), чтобы сделать сгенерированный сервером HTML интерактивным.
 
-#### Параметры
+**Параметры**
 
 -   `reactNode`: Узел React, который вы хотите отобразить в HTML. Например, JSX-элемент типа `<App />`. Ожидается, что он будет представлять весь документ, поэтому компонент `App` должен вывести тег `<html>`.
 -   **опционально** `options`: Объект с опциями потоковой передачи.
-    -   **optional** `bootstrapScriptContent`: Если указано, эта строка будет помещена в инлайн тег `<script>`.
-    -   **optional** `bootstrapScripts`: Массив URL строк для тегов `<script>`, которые будут отображаться на странице. Используйте его для включения `<script>`, вызывающего [`hydrateRoot`](../client/hydrateRoot.md) Опустите его, если вы вообще не хотите запускать React на клиенте.
+    -   **опционально** `bootstrapScriptContent`: Если указано, эта строка будет помещена в инлайн тег `<script>`.
+    -   **опционально** `bootstrapScripts`: Массив URL строк для тегов `<script>`, которые будут отображаться на странице. Используйте его для включения `<script>`, вызывающего [`hydrateRoot`](../client/hydrateRoot.md) Опустите его, если вы вообще не хотите запускать React на клиенте.
     -   **опционально** `bootstrapModules`: Аналогично `bootstrapScripts`, но вместо них выдается [`<script type="module">`](https://developer.mozilla.org/docs/Web/JavaScript/Guide/Modules).
-    -   **optional** `identifierPrefix`: Строковый префикс, который React использует для идентификаторов, генерируемых [`useId`](../../react/useId.md) Полезно для предотвращения конфликтов при использовании нескольких корней на одной странице. Должен быть тем же префиксом, что передан в [`hydrateRoot`](../client/hydrateRoot.md#parameters)
+    -   **опционально** `identifierPrefix`: Строковый префикс, который React использует для идентификаторов, генерируемых [`useId`](../../react/useId.md) Полезно для предотвращения конфликтов при использовании нескольких корней на одной странице. Должен быть тем же префиксом, что передан в [`hydrateRoot`](../client/hydrateRoot.md#parameters)
     -   **опционально** `namespaceURI`: Строка с корневым [namespace URI](https://developer.mozilla.org/docs/Web/API/Document/createElementNS#important_namespace_uris) для потока. По умолчанию используется обычный HTML. Передайте `'http://www.w3.org/2000/svg'` для SVG или `'http://www.w3.org/1998/Math/MathML'` для MathML.
     -   **опционально** `nonce`: Строка [`nonce`](http://developer.mozilla.org/docs/Web/HTML/Element/script#nonce) для разрешения скриптов для [`script-src` Content-Security-Policy](https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
     -   **опционально** `onAllReady`: Обратный вызов, который срабатывает, когда весь рендеринг завершен, включая оболочку и весь дополнительный контент. Вы можете использовать это вместо `onShellReady` для краулеров и статической генерации. Если вы начнете потоковую передачу здесь, вы не получите никакой прогрессивной загрузки. Поток будет содержать конечный HTML.
     -   **опционально** `onError`: Обратный вызов, который срабатывает всякий раз, когда происходит ошибка сервера, независимо от того, восстанавливаемая или нет По умолчанию он вызывает только `console.error`. Если вы переопределите его для регистрации отчетов о сбоях, убедитесь, что вы все еще вызываете `console.error`. Вы также можете использовать его для настройки кода состояния перед выдачей оболочки.
     -   **опционально** `onShellReady`: Обратный вызов, который срабатывает сразу после отрисовки начальной оболочки. Вы можете установить код состояния и вызвать `pipe` здесь, чтобы начать потоковую передачу. React будет передавать дополнительный контент после оболочки вместе с
 
-#### Возвращает
+**Возвращает**
 
 `renderToPipeableStream` возвращает объект с двумя методами:
 
 -   `pipe` выводит HTML в предоставленный [Writable Node.js Stream](https://nodejsdev.ru/api/stream/#streamwritable). Вызовите `pipe` в `onShellReady`, если вы хотите включить потоковую передачу, или в `onAllReady` для краулеров и генерации статики.
 -   `abort` позволяет вам прервать серверный рендеринг и отрисовать остальное на клиенте.
 
-## Использование
+## Использование {#usage}
 
-### Рендеринг дерева React как HTML в поток Node.js
+### Рендеринг дерева React как HTML в поток Node.js {#rendering-a-react-tree-as-html-to-a-nodejs-stream}
 
 Вызовите `renderToPipeableStream` для рендеринга вашего дерева React в формате HTML в [Node.js Stream](https://nodejsdev.ru/api/stream/#streamwritable):
 
@@ -127,7 +131,7 @@ hydrateRoot(document, <App />);
 
     Однако, если вы не знаете URL-адреса активов до окончания сборки, у вас нет возможности поместить их в исходный код. Например, жесткое кодирование `"/styles.css"` в JSX, как это было ранее, не сработает. Чтобы они не попадали в исходный код, ваш корневой компонент может считывать реальные имена файлов из карты, передаваемой в качестве пропса:
 
-    ```js
+    ```js hl_lines="1 6-9"
     export default function App({ assetMap }) {
     	return (
     		<html>
@@ -147,7 +151,7 @@ hydrateRoot(document, <App />);
 
     На сервере выполните рендеринг `<App assetMap={assetMap} />` и передайте вашему `assetMap` URLs активов:
 
-    ```js
+    ```js hl_lines="1-5 8-11"
     // You'd need to get this JSON from your build tooling, e.g. read it from the build output.
     const assetMap = {
     	'styles.css': '/styles.123456.css',
@@ -173,7 +177,7 @@ hydrateRoot(document, <App />);
 
     Поскольку ваш сервер теперь рендерит `<App assetMap={assetMap} />`, вам нужно отобразить его с `assetMap` на клиенте, чтобы избежать ошибок гидратации. Вы можете сериализовать и передать `assetMap` клиенту следующим образом:
 
-    ```js
+    ```js hl_lines="11-14"
     // You'd need to get this JSON from your build tooling.
     const assetMap = {
     	'styles.css': '/styles.123456.css',
@@ -203,7 +207,7 @@ hydrateRoot(document, <App />);
 
     В примере выше опция `bootstrapScriptContent` добавляет дополнительный встроенный тег `<script>`, который устанавливает глобальную переменную `window.assetMap` на клиенте. Это позволяет клиентскому коду читать ту же самую `assetMap`:
 
-    ```js
+    ```js hl_lines="4"
     import { hydrateRoot } from 'react-dom/client';
     import App from './App.js';
 
@@ -212,7 +216,7 @@ hydrateRoot(document, <App />);
 
     И клиент, и сервер рендерят `App` с одним и тем же пропсом `assetMap`, поэтому ошибок гидратации нет.
 
-### Потоковая передача контента по мере его загрузки
+### Потоковая передача контента по мере его загрузки {#streaming-more-content-as-it-loads}
 
 Потоковая передача позволяет пользователю начать видеть содержимое еще до того, как все данные загрузятся на сервер. Например, рассмотрим страницу профиля, на которой отображается обложка, боковая панель с друзьями и фотографиями, а также список сообщений:
 
@@ -233,7 +237,7 @@ function ProfilePage() {
 
 Представьте, что загрузка данных для `<Posts />` занимает некоторое время. В идеале вы хотели бы показать пользователю остальную часть содержимого страницы профиля, не дожидаясь сообщений. Для этого [оберните `Posts` в границу `<Suspense>`:](../../react/Suspense.md#displaying-a-fallback-while-content-is-loading)
 
-```js
+```js hl_lines="9 11"
 function ProfilePage() {
     return (
         <ProfileLayout>
@@ -254,7 +258,7 @@ function ProfilePage() {
 
 Вы можете далее [вложить границы `<Suspense>`](../../react/Suspense.md#revealing-nested-content-as-it-loads) для создания более детальной последовательности загрузки:
 
-```js
+```js hl_lines="5 13"
 function ProfilePage() {
     return (
         <ProfileLayout>
@@ -277,11 +281,11 @@ function ProfilePage() {
 
 Потоковая передача данных не требует ожидания загрузки самого React в браузере или интерактивности вашего приложения. HTML-содержимое с сервера будет постепенно раскрываться до загрузки любого из тегов `<script>`.
 
-[Подробнее о том, как работает потоковый HTML.](https://github.com/reactwg/react-18/discussions/37)
+Подробнее о том, как [работает потоковый HTML](https://github.com/reactwg/react-18/discussions/37).
 
-!!!note ""
+!!!note "Только источники данных с поддержкой Suspense активируют компонент Suspense"
 
-    **Только источники данных с поддержкой Suspense активируют компонент Suspense.** К ним относятся:
+    К ним относятся:
 
     -   Получение данных с помощью фреймворков с поддержкой Suspense, таких как [Relay](https://relay.dev/docs/guided-tour/rendering/loading-states/) и [Next.js](https://nextjs.org/docs/getting-started/react-essentials).
     -   Ленивая загрузка кода компонента с помощью [`lazy`](../../react/lazy.md).
@@ -292,11 +296,11 @@ function ProfilePage() {
 
     Получение данных с поддержкой Suspense без использования фреймворка с поддержкой мнений пока не поддерживается. Требования к реализации источника данных с поддержкой Suspense нестабильны и не документированы. Официальный API для интеграции источников данных с Suspense будет выпущен в одной из будущих версий React.
 
-### Указание того, что входит в оболочку
+### Указание того, что входит в оболочку {#specifying-what-goes-into-the-shell}
 
 Часть вашего приложения за пределами границ `<Suspense>` называется _оболочкой:_
 
-```js
+```js hl_lines="3-5 13-14"
 function ProfilePage() {
     return (
         <ProfileLayout>
@@ -328,7 +332,7 @@ function ProfilePage() {
 
 Обратный вызов `onShellReady` срабатывает, когда вся оболочка была отрисована. Обычно вы начинаете потоковую передачу именно тогда:
 
-```js
+```js hl_lines="3-6"
 const { pipe } = renderToPipeableStream(<App />, {
     bootstrapScripts: ['/main.js'],
     onShellReady() {
@@ -340,11 +344,11 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 К моменту срабатывания `onShellReady` компоненты во вложенных границах `<Suspense>` могут все еще загружать данные.
 
-### Протоколирование аварий на сервере
+### Протоколирование аварий на сервере {#logging-crashes-on-the-server}
 
 По умолчанию все ошибки на сервере записываются в консоль. Вы можете переопределить это поведение для записи отчетов о сбоях:
 
-```js
+```js hl_lines="7-10"
 const { pipe } = renderToPipeableStream(<App />, {
     bootstrapScripts: ['/main.js'],
     onShellReady() {
@@ -360,11 +364,11 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 Если вы предоставляете пользовательскую реализацию `onError`, не забудьте также вести журнал ошибок в консоль, как описано выше.
 
-### Восстановление после ошибок внутри оболочки
+### Восстановление после ошибок внутри оболочки {#recovering-from-errors-inside-the-shell}
 
 В этом примере оболочка содержит `ProfileLayout`, `ProfileCover` и `PostsGlimmer`:
 
-```js
+```js hl_lines="3-5 7-8"
 function ProfilePage() {
     return (
         <ProfileLayout>
@@ -379,7 +383,7 @@ function ProfilePage() {
 
 Если при рендеринге этих компонентов произойдет ошибка, у React не будет никакого осмысленного HTML для отправки клиенту. Переопределите `onShellError`, чтобы в крайнем случае отправлять резервный HTML, не полагающийся на серверный рендеринг:
 
-```js
+```js hl_lines="7-11"
 const { pipe } = renderToPipeableStream(<App />, {
     bootstrapScripts: ['/main.js'],
     onShellReady() {
@@ -400,11 +404,11 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 Если при генерации оболочки произошла ошибка, то сработает и `onError`, и `onShellError`. Используйте `onError` для сообщения об ошибке и используйте `onShellError` для отправки резервного HTML-документа. Ваш резервный HTML не обязательно должен быть страницей ошибки. Вместо этого вы можете включить альтернативную оболочку, которая отображает ваше приложение только на клиенте.
 
-### Восстановление после ошибок вне оболочки
+### Восстановление после ошибок вне оболочки {#recovering-from-errors-outside-the-shell}
 
 В этом примере компонент `<Posts />` обернут в `<Suspense>`, поэтому он _не_ является частью оболочки:
 
-```js
+```js hl_lines="6"
 function ProfilePage() {
     return (
         <ProfileLayout>
@@ -427,13 +431,13 @@ function ProfilePage() {
 
 Если повторная попытка рендеринга `Posts` на клиенте будет успешной, индикатор загрузки с сервера будет заменен на вывод клиентского рендеринга. Пользователь не будет знать, что произошла ошибка сервера. Однако обратный вызов сервера `onError` и обратный вызов клиента [`onRecoverableError`](../client/hydrateRoot.md#hydrateroot) сработают, чтобы вы могли получить уведомление об ошибке.
 
-### Установка кода состояния
+### Установка кода состояния {#setting-the-status-code}
 
 При потоковой передаче возникает компромисс. Вы хотите начать потоковую передачу страницы как можно раньше, чтобы пользователь мог быстрее увидеть содержимое. Однако после начала потоковой передачи вы больше не сможете установить код состояния ответа.
 
 Разделив приложение на оболочку (выше всех границ `<Suspense>`) и остальное содержимое, вы уже решили часть этой проблемы. Если оболочка ошибется, вы получите обратный вызов `onShellError`, который позволит вам установить код состояния ошибки. В противном случае вы знаете, что приложение может восстановиться на клиенте, поэтому вы можете послать "OK".
 
-```js
+```js hl_lines="4"
 const { pipe } = renderToPipeableStream(<App />, {
     bootstrapScripts: ['/main.js'],
     onShellReady() {
@@ -457,7 +461,7 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 Однако, если вы хотите, вы можете использовать факт ошибки для установки кода состояния:
 
-```js
+```js hl_lines="1 6 16"
 let didError = false;
 
 const { pipe } = renderToPipeableStream(<App />, {
@@ -482,11 +486,11 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 Это позволит отловить только те ошибки вне оболочки, которые возникли при генерации начального содержимого оболочки, так что этот способ не является исчерпывающим. Если знать, произошла ли ошибка для какого-то содержимого, очень важно, вы можете перенести ее в оболочку.
 
-### Обработка различных ошибок различными способами
+### Обработка различных ошибок различными способами {#handling-different-errors-in-different-ways}
 
 Вы можете [создавать собственные подклассы `Error`](https://javascript.info/custom-errors) и использовать оператор [`instanceof`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/instanceof) для проверки того, какая ошибка была выброшена. Например, вы можете определить пользовательский `NotFoundError` и бросать его из вашего компонента. Тогда ваши обратные вызовы `onError`, `onShellReady` и `onShellError` могут выполнять различные действия в зависимости от типа ошибки:
 
-```js
+```js hl_lines="2 4-14 19 24 30"
 let didError = false;
 let caughtError = null;
 
@@ -525,7 +529,7 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 Имейте в виду, что после эмиссии оболочки и начала потоковой передачи вы не сможете изменить код состояния.
 
-### Ожидание загрузки всего содержимого для краулеров и статической генерации
+### Ожидание загрузки всего содержимого для краулеров и статической генерации {#waiting-for-all-content-to-load-for-crawlers-and-static-generation}
 
 Потоковая передача обеспечивает лучший пользовательский опыт, поскольку пользователь может видеть содержимое по мере его появления.
 
@@ -533,7 +537,7 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 Вы можете дождаться загрузки всего содержимого, используя обратный вызов `onAllReady`:
 
-```js
+```js hl_lines="2 7 11 18-24"
 let didError = false;
 let isCrawler = // ... depends on your bot detection strategy ...
 
@@ -568,11 +572,11 @@ const { pipe } = renderToPipeableStream(<App />, {
 
 Обычный посетитель получит поток постепенно загружаемого содержимого. Краулер получит окончательный HTML-вывод после загрузки всех данных. Однако это также означает, что краулеру придется ждать _все_ данные, некоторые из которых могут загружаться медленно или с ошибками. В зависимости от вашего приложения, вы можете выбрать вариант отправки оболочки краулерам.
 
-### Прерывание рендеринга сервера
+### Прерывание серверного рендеринга {#aborting-server-rendering}
 
 Вы можете заставить серверный рендеринг "сдаться" после таймаута:
 
-```js
+```js hl_lines="1 5-7"
 const { pipe, abort } = renderToPipeableStream(<App />, {
     // ...
 });
@@ -582,4 +586,6 @@ setTimeout(() => {
 }, 10000);
 ```
 
-React пропустит оставшиеся фаллаверы загрузки как HTML, а остальные попытается отобразить на клиенте.
+React пропустит оставшиеся фоллбеки загрузки как HTML, а остальные попытается отобразить на клиенте.
+
+<small>:material-information-outline: Источник &mdash; <https://react.dev/reference/react-dom/server/renderToPipeableStream></small>
