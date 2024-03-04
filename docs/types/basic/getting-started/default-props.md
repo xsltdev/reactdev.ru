@@ -1,212 +1,217 @@
 ---
-id: default_props
-title: Typing defaultProps
+description: defaultProps со временем будет устаревшим, общее мнение - использовать значения объектов по умолчанию
 ---
 
-## You May Not Need `defaultProps`
+# Типизация defaultProps
 
-As per [this tweet](https://twitter.com/dan_abramov/status/1133878326358171650), defaultProps will eventually be deprecated. You can check the discussions here:
+## Возможно, вам не нужен `defaultProps`
 
-- [Original tweet](https://twitter.com/hswolff/status/1133759319571345408)
-- More info can also be found in [this article](https://medium.com/@matanbobi/react-defaultprops-is-dying-whos-the-contender-443c19d9e7f1)
+Согласно [этому твиту](https://twitter.com/dan_abramov/status/1133878326358171650), `defaultProps` со временем будет устаревшим. Вы можете ознакомиться с обсуждениями здесь:
 
-The consensus is to use object default values.
+-   [Оригинальный твит](https://twitter.com/hswolff/status/1133759319571345408)
+-   Дополнительную информацию можно найти в [этой статье](https://medium.com/@matanbobi/react-defaultprops-is-dying-whos-the-contender-443c19d9e7f1)
 
-Function Components:
+Общее мнение - использовать значения объектов по умолчанию.
 
-```tsx
+Компоненты функций:
+
+```ts
 type GreetProps = { age?: number };
 
 const Greet = ({ age = 21 }: GreetProps) => // etc
 ```
 
-Class Components:
+Классовые компоненты:
 
-```tsx
+```ts
 type GreetProps = {
-  age?: number;
+    age?: number;
 };
 
 class Greet extends React.Component<GreetProps> {
-  render() {
-    const { age = 21 } = this.props;
-    /*...*/
-  }
+    render() {
+        const { age = 21 } = this.props;
+        /*...*/
+    }
 }
 
 let el = <Greet age={3} />;
 ```
 
-## Typing `defaultProps`
+## Типизация `defaultProps`
 
-Type inference improved greatly for `defaultProps` in [TypeScript 3.0+](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html), although [some edge cases are still problematic](https://github.com/typescript-cheatsheets/react/issues/61).
+Вывод типов для `defaultProps` значительно улучшился в [TypeScript 3.0+](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html), хотя [некоторые крайние случаи все еще проблематичны](https://github.com/typescript-cheatsheets/react/issues/61).
 
-**Function Components**
+**Функциональные компоненты**
 
-```tsx
-// using typeof as a shortcut; note that it hoists!
-// you can also declare the type of DefaultProps if you choose
-// e.g. https://github.com/typescript-cheatsheets/react/issues/415#issuecomment-841223219
+```ts
+// используя typeof как сокращение; обратите внимание,
+// что это поднимает! Вы также можете объявить тип DefaultProps,
+// если вы выберете, например
+// https://github.com/typescript-cheatsheets/react/issues/415#issuecomment-841223219
 type GreetProps = { age: number } & typeof defaultProps;
 
 const defaultProps = {
-  age: 21,
+    age: 21,
 };
 
 const Greet = (props: GreetProps) => {
-  // etc
+    // etc
 };
 Greet.defaultProps = defaultProps;
 ```
 
-_[See this in TS Playground](https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAKjgQwM5wEoFNkGN4BmUEIcARFDvmQNwBQdMAnmFnAOKVYwAKxY6ALxwA3igDmWAFxwAdgFcQAIyxQ4AXzgAyOM1YQCcACZYCyeQBte-VPVwRZqeCbOXrEAXGEi6cCdLgAJgBGABo6dXo6e0d4TixuLzgACjAbGXjuPg9UAEovAD5RXzhKGHkoWTgAHiNgADcCkTScgDpkSTgAeiQFZVVELvVqrrrGiPpMmFaXcytsz2FZtwXbOiA)_
+_[Посмотреть в TS Playground](https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAKjgQwM5wEoFNkGN4BmUEIcARFDvmQNwBQdMAnmFnAOKVYwAKxY6ALxwA3igDmWAFxwAdgFcQAIyxQ4AXzgAyOM1YQCcACZYCyeQBte-VPVwRZqeCbOXrEAXGEi6cCdLgAJgBGABo6dXo6e0d4TixuLzgACjAbGXjuPg9UAEovAD5RXzhKGHkoWTgAHiNgADcCkTScgDpkSTgAeiQFZVVELvVqrrrGiPpMmFaXcytsz2FZtwXbOiA)_
 
-For **Class components**, there are [a couple ways to do it](https://github.com/typescript-cheatsheets/react/pull/103#issuecomment-481061483) (including using the `Pick` utility type) but the recommendation is to "reverse" the props definition:
+Для **Классовых компонентов** существует [несколько способов сделать это](https://github.com/typescript-cheatsheets/react/pull/103#issuecomment-481061483) (включая использование типа утилиты `Pick`), но рекомендация заключается в "обратном" определении реквизита:
 
-```tsx
+```ts
 type GreetProps = typeof Greet.defaultProps & {
-  age: number;
+    age: number;
 };
 
 class Greet extends React.Component<GreetProps> {
-  static defaultProps = {
-    age: 21,
-  };
-  /*...*/
+    static defaultProps = {
+        age: 21,
+    };
+    /*...*/
 }
 
-// Type-checks! No type assertions needed!
+// Проверка типов! Утверждения типов не нужны!
 let el = <Greet age={3} />;
 ```
 
-<details>
-<summary><b><code>React.JSX.LibraryManagedAttributes</code> nuance for library authors</b></summary>
+!!!info "Нюанс `React.JSX.LibraryManagedAttributes` для авторов библиотек"
 
-The above implementations work fine for App creators, but sometimes you want to be able to export `GreetProps` so that others can consume it. The problem here is that the way `GreetProps` is defined, `age` is a required prop when it isn't because of `defaultProps`.
+    Вышеописанные реализации отлично подходят для создателей приложений, но иногда вы хотите иметь возможность экспортировать `GreetProps`, чтобы другие могли его использовать. Проблема здесь в том, что при определении `GreetProps`, `age` является обязательным свойством, когда оно не является таковым из-за `defaultProps`.
 
-The insight to have here is that [`GreetProps` is the _internal_ contract for your component, not the _external_, consumer facing contract](https://github.com/typescript-cheatsheets/react/issues/66#issuecomment-453878710). You could create a separate type specifically for export, or you could make use of the `React.JSX.LibraryManagedAttributes` utility:
+    Здесь нужно понимать, что [`GreetProps` - это _внутренний_ контракт вашего компонента, а не _внешний_, обращенный к потребителю контракт](https://github.com/typescript-cheatsheets/react/issues/66#issuecomment-453878710). Вы можете создать отдельный тип специально для экспорта или воспользоваться утилитой `React.JSX.LibraryManagedAttributes`:
 
-```tsx
-// internal contract, should not be exported out
-type GreetProps = {
-  age: number;
-};
+    ```ts
+    // внутренний контракт, не должен быть экспортирован за пределы
+    type GreetProps = {
+    	age: number;
+    };
 
-class Greet extends Component<GreetProps> {
-  static defaultProps = { age: 21 };
-}
+    class Greet extends Component<GreetProps> {
+    	static defaultProps = { age: 21 };
+    }
 
-// external contract
-export type ApparentGreetProps = React.JSX.LibraryManagedAttributes<
-  typeof Greet,
-  GreetProps
->;
-```
+    // внешний контракт
+    export type ApparentGreetProps = React.JSX.LibraryManagedAttributes<
+    	typeof Greet,
+    	GreetProps
+    >;
+    ```
 
-This will work properly, although hovering over`ApparentGreetProps`may be a little intimidating. You can reduce this boilerplate with the`ComponentProps` utility detailed below.
+    Это будет работать правильно, хотя наведение курсора на `ApparentGreetProps` может быть немного пугающим. Вы можете сократить этот шаблон с помощью утилиты `ComponentProps`, о которой мы расскажем ниже.
 
-</details>
+## Использование пропсов компонента с defaultProps
 
-## Consuming Props of a Component with defaultProps
+Может показаться, что компонент с `defaultProps` имеет некоторые необходимые свойства, которые на самом деле таковыми не являются.
 
-A component with `defaultProps` may seem to have some required props that actually aren't.
+### Постановка проблемы
 
-### Problem Statement
+Вот что вы хотите сделать:
 
-Here's what you want to do:
-
-```tsx
+```ts
 interface IProps {
-  name: string;
+    name: string;
 }
 const defaultProps = {
-  age: 25,
+    age: 25,
 };
-const GreetComponent = ({ name, age }: IProps & typeof defaultProps) => (
-  <div>{`Hello, my name is ${name}, ${age}`}</div>
+const GreetComponent = ({
+    name,
+    age,
+}: IProps & typeof defaultProps) => (
+    <div>{`Hello, my name is ${name}, ${age}`}</div>
 );
 GreetComponent.defaultProps = defaultProps;
 
-const TestComponent = (props: React.ComponentProps<typeof GreetComponent>) => {
-  return <h1 />;
+const TestComponent = (
+    props: React.ComponentProps<typeof GreetComponent>
+) => {
+    return <h1 />;
 };
 
-// Property 'age' is missing in type '{ name: string; }' but required in type '{ age: number; }'
+// Свойство 'age' отсутствует в типе '{ name: string; }',
+// но обязательно в типе '{ age: number; }'.
 const el = <TestComponent name="foo" />;
 ```
 
-### Solution
+### Решение
 
-Define a utility that applies `React.JSX.LibraryManagedAttributes`:
+Определите утилиту, которая применяет `React.JSX.LibraryManagedAttributes`:
 
-```tsx
+```ts
 type ComponentProps<T> = T extends
-  | React.ComponentType<infer P>
-  | React.Component<infer P>
-  ? React.JSX.LibraryManagedAttributes<T, P>
-  : never;
+    | React.ComponentType<infer P>
+    | React.Component<infer P>
+    ? React.JSX.LibraryManagedAttributes<T, P>
+    : never;
 
-const TestComponent = (props: ComponentProps<typeof GreetComponent>) => {
-  return <h1 />;
+const TestComponent = (
+    props: ComponentProps<typeof GreetComponent>
+) => {
+    return <h1 />;
 };
 
-// No error
+// Нет ошибок
 const el = <TestComponent name="foo" />;
 ```
 
-[_See this in TS Playground_](https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAKjgQwM5wEoFNkGN4BmUEIcARFDvmQNwBQdMAnmFnAMImQB2W3MABWJhUAHgAqAPjgBeOOLhYAHjD4ATdNjwwAdJ3ARe-cSyyjg3AlihwB0gD6Yqu-Tz4xzl67cl04cAH44ACkAZQANHQAZYAAjKGQoJgBZZG5kAHMsNQBBGBgoOIBXVTFxABofPzgALjheADdrejoLVSgCPDYASSEIETgAb2r0kCw61AKLDPoAXzpcQ0m4NSxOooAbQWF0OWH-TPG4ACYAVnK6WfpF7mWAcUosGFdDd1k4AApB+uQxysO4LM6r0dnAAGRwZisCAEFZrZCbbb9VAASlk0g+1VEamADUkgwABgAJLAbDYQSogJg-MZwYDoAAkg1GWFmlSZh1mBNmogA9Di8XQUfQHlgni8jLpVustn0BnJpQjZTsWrzeXANsh2gwbstxFhJhK3nIPmAdnUjfw5WIoVgYXBReKuK9+JI0TJpPs4JQYEUoNw4KIABYARjgvN8VwYargADkIIooMQoAslvBSe8JAbns7JTSsDIyAQIBAyOHJDQgA)
+[_Посмотреть в TS Playground_](https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAKjgQwM5wEoFNkGN4BmUEIcARFDvmQNwBQdMAnmFnAMImQB2W3MABWJhUAHgAqAPjgBeOOLhYAHjD4ATdNjwwAdJ3ARe-cSyyjg3AlihwB0gD6Yqu-Tz4xzl67cl04cAH44ACkAZQANHQAZYAAjKGQoJgBZZG5kAHMsNQBBGBgoOIBXVTFxABofPzgALjheADdrejoLVSgCPDYASSEIETgAb2r0kCw61AKLDPoAXzpcQ0m4NSxOooAbQWF0OWH-TPG4ACYAVnK6WfpF7mWAcUosGFdDd1k4AApB+uQxysO4LM6r0dnAAGRwZisCAEFZrZCbbb9VAASlk0g+1VEamADUkgwABgAJLAbDYQSogJg-MZwYDoAAkg1GWFmlSZh1mBNmogA9Di8XQUfQHlgni8jLpVustn0BnJpQjZTsWrzeXANsh2gwbstxFhJhK3nIPmAdnUjfw5WIoVgYXBReKuK9+JI0TJpPs4JQYEUoNw4KIABYARjgvN8VwYargADkIIooMQoAslvBSe8JAbns7JTSsDIyAQIBAyOHJDQgA)
 
-## Misc Discussions and Knowledge
+## Обсуждения и знания
 
-<details>
-<summary><b>Why does <code>React.FC</code> break <code>defaultProps</code>?</b></summary>
+!!!note "Почему `React.FC` ломает `defaultProps`?"
 
-You can check the discussions here:
+    Вы можете посмотреть обсуждения здесь:
 
-- https://medium.com/@martin_hotell/10-typescript-pro-tips-patterns-with-or-without-react-5799488d6680
-- https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30695
-- https://github.com/typescript-cheatsheets/react/issues/87
+    -   <https://medium.com/@martin_hotell/10-typescript-pro-tips-patterns-with-or-without-react-5799488d6680>
+    -   <https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30695>
+    -   <https://github.com/typescript-cheatsheets/react/issues/87>
 
-This is just the current state and may be fixed in future.
+    Это только текущее состояние и может быть исправлено в будущем.
 
-</details>
+???note "TypeScript 2.9 и более ранние версии"
 
-<details>
-<summary><b>TypeScript 2.9 and earlier</b></summary>
+    Для TypeScript 2.9 и более ранних версий есть несколько способов сделать это, но это лучший совет, который мы видели:
 
-For TypeScript 2.9 and earlier, there's more than one way to do it, but this is the best advice we've yet seen:
+    ```ts
+    type Props = Required<typeof MyComponent.defaultProps> & {
+    	/* additional props here */
+    };
 
-```ts
-type Props = Required<typeof MyComponent.defaultProps> & {
-  /* additional props here */
-};
+    export class MyComponent extends React.Component<Props> {
+    	static defaultProps = {
+    		foo: 'foo',
+    	};
+    }
+    ```
 
-export class MyComponent extends React.Component<Props> {
-  static defaultProps = {
-    foo: "foo",
-  };
-}
-```
+    Наша прежняя рекомендация использовала функцию `Partial type` в TypeScript, которая означает, что текущий интерфейс будет выполнять частичную версию обернутого интерфейса. Таким образом, мы можем расширять defaultProps без каких-либо изменений в типах!
 
-Our former recommendation used the `Partial type` feature in TypeScript, which means that the current interface will fulfill a partial version on the wrapped interface. In that way we can extend defaultProps without any changes in the types!
+    ```ts
+    interface IMyComponentProps {
+    	firstProp?: string;
+    	secondProp: IPerson[];
+    }
 
-```ts
-interface IMyComponentProps {
-  firstProp?: string;
-  secondProp: IPerson[];
-}
+    export class MyComponent extends React.Component<
+    	IMyComponentProps
+    > {
+    	public static defaultProps: Partial<
+    		IMyComponentProps
+    	> = {
+    		firstProp: 'default',
+    	};
+    }
+    ```
 
-export class MyComponent extends React.Component<IMyComponentProps> {
-  public static defaultProps: Partial<IMyComponentProps> = {
-    firstProp: "default",
-  };
-}
-```
+    Проблема с этим подходом заключается в том, что он вызывает сложные проблемы с выводом типов при работе с `React.JSX.LibraryManagedAttributes`. По сути, это заставляет компилятор думать, что при создании JSX-выражения с этим компонентом все его реквизиты являются необязательными.
 
-The problem with this approach is it causes complex issues with the type inference working with `React.JSX.LibraryManagedAttributes`. Basically it causes the compiler to think that when creating a JSX expression with that component, that all of its props are optional.
+    [См. комментарии @ferdaber здесь](https://github.com/typescript-cheatsheets/react/issues/57) и [здесь](https://github.com/typescript-cheatsheets/react/issues/61).
 
-[See commentary by @ferdaber here](https://github.com/typescript-cheatsheets/react/issues/57) and [here](https://github.com/typescript-cheatsheets/react/issues/61).
-
-</details>
-
-[Something to add? File an issue](https://github.com/typescript-cheatsheets/react/issues/new).
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/default_props></small>

@@ -160,6 +160,10 @@ h3 {
 	border: 1px solid #78787840;
 }
 
+.md-typeset .admonition .highlight {
+	box-shadow: none;
+}
+
 .md-typeset .highlighttable {
 	margin-top: 0;
 	margin-bottom: 0;

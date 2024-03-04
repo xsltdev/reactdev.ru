@@ -209,22 +209,25 @@ function DelayedEffect(props: { timerMs: number }) {
 
 ```ts
 function Foo() {
-    // - If possible, prefer as specific as possible. For example, HTMLDivElement
-    //   is better than HTMLElement and way better than Element.
-    // - Technical-wise, this returns RefObject<HTMLDivElement>
+    // - Если возможно, предпочитайте как можно больше конкретики.
+    //   Например, HTMLDivElement лучше, чем HTMLElement, и намного
+    //   лучше, чем Element.
+    // - С технической точки зрения, это возвращает
+    //   RefObject<HTMLDivElement>
     const divRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Note that ref.current may be null. This is expected, because you may
-        // conditionally render the ref-ed element, or you may forget to assign it
+        // Обратите внимание, что ref.current может быть равен null.
+        // Это ожидаемо, потому что вы можете условно отрисовать
+        // элемент ref-ed или забыть присвоить его
         if (!divRef.current)
             throw Error('divRef is not assigned');
 
-        // Now divRef.current is sure to be HTMLDivElement
+        // Теперь divRef.current обязательно будет HTMLDivElement
         doSomethingWith(divRef.current);
     });
 
-    // Give the ref to an element so React can manage it for you
+    // Передайте ссылку на элемент, чтобы React мог управлять им за вас
     return <div ref={divRef}>etc</div>;
 }
 ```
@@ -233,7 +236,7 @@ function Foo() {
 
 ```ts
 const divRef = useRef<HTMLDivElement>(null!);
-// Later... No need to check if it is null
+// Позже... Нет необходимости проверять, является ли он нулевым
 doSomethingWith(divRef.current);
 ```
 
@@ -251,17 +254,18 @@ doSomethingWith(divRef.current);
 
 ```ts
 function Foo() {
-    // Technical-wise, this returns MutableRefObject<number | null>
+    // С технической точки зрения, это возвращает
+    // MutableRefObject<number | null>.
     const intervalRef = useRef<number | null>(null);
 
-    // You manage the ref yourself (that's why
-    // it's called MutableRefObject!)
+    // Вы сами управляете ссылкой (поэтому она и
+    // называется MutableRefObject!).
     useEffect(() => {
         intervalRef.current = setInterval(/* ... */);
         return () => clearInterval(intervalRef.current);
     }, []);
 
-    // The ref is not passed to any element's "ref" prop
+    // Ссылка не передается ни в один реквизит "ref" элемента.
     return (
         <button onClick={/* clearInterval the ref */}>
             Cancel timer
