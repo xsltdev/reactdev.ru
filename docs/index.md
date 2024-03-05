@@ -22,7 +22,7 @@ hide:
 
     [:octicons-arrow-right-24: API React](./reference/index.md) <small>v18</small>
 
-    [:octicons-arrow-right-24: React 16](./archive/react16/tutorial.md)
+    <small>[:octicons-arrow-right-24: React 16](./archive/react16/tutorial.md)</small>
 
 -   :material-language-typescript:{ .lg .middle } **Типизация**
 
