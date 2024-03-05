@@ -3,51 +3,62 @@ id: error_boundaries
 title: Error Boundaries
 ---
 
-### Option 1: Using react-error-boundary
+# Границы ошибок
 
-[React-error-boundary](https://github.com/bvaughn/react-error-boundary) - is a lightweight package ready to use for this scenario with TS support built-in.
-This approach also lets you avoid class components that are not that popular anymore.
+## Вариант 1: Использование react-error-boundary
 
-### Option 2: Writing your custom error boundary component
+[React-error-boundary](https://github.com/bvaughn/react-error-boundary) - это легкий пакет, готовый к использованию для данного сценария со встроенной поддержкой TS.
 
-If you don't want to add a new npm package for this, you can also write your own `ErrorBoundary` component.
+Этот подход также позволяет избежать использования компонентов класса, которые уже не так популярны.
 
-```jsx
-import React, { Component, ErrorInfo, ReactNode } from "react";
+## Вариант 2: Написание собственного компонента границы ошибки
+
+Если вы не хотите добавлять новый пакет npm для этого, вы также можете написать свой собственный компонент `ErrorBoundary`.
+
+```ts
+import React, {
+    Component,
+    ErrorInfo,
+    ReactNode,
+} from 'react';
 
 interface Props {
-  children?: ReactNode;
+    children?: ReactNode;
 }
 
 interface State {
-  hasError: boolean;
+    hasError: boolean;
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false
-  };
+    public state: State = {
+        hasError: false,
+    };
 
-  public static getDerivedStateFromError(_: Error): State {
-    // Update state so the next render will show the fallback UI.
-    return { hasError: true };
-  }
-
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
-  }
-
-  public render() {
-    if (this.state.hasError) {
-      return <h1>Sorry.. there was an error</h1>;
+    public static getDerivedStateFromError(
+        _: Error
+    ): State {
+        // Update state so the next render will show the fallback UI.
+        return { hasError: true };
     }
 
-    return this.props.children;
-  }
+    public componentDidCatch(
+        error: Error,
+        errorInfo: ErrorInfo
+    ) {
+        console.error('Uncaught error:', error, errorInfo);
+    }
+
+    public render() {
+        if (this.state.hasError) {
+            return <h1>Sorry.. there was an error</h1>;
+        }
+
+        return this.props.children;
+    }
 }
 
 export default ErrorBoundary;
-
 ```
 
-[Something to add? File an issue](https://github.com/typescript-cheatsheets/react/issues/new).
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/error_boundaries></small>

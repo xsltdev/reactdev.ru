@@ -1,150 +1,169 @@
 ---
-id: context
-title: Context
+description: базовый пример создания контекста, содержащего активную тему
 ---
 
-## Basic example
+# Контекст
 
-Here's a basic example of creating a context containing the active theme.
+## Базовый пример
 
-```tsx
-import { createContext } from "react";
+Вот базовый пример создания контекста, содержащего активную тему.
 
-type ThemeContextType = "light" | "dark";
+```ts
+import { createContext } from 'react';
 
-const ThemeContext = createContext<ThemeContextType>("light");
-```
+type ThemeContextType = 'light' | 'dark';
 
-Wrap the components that need the context with a context provider:
-
-```tsx
-import { useState } from "react";
-
-const App = () => {
-  const [theme, setTheme] = useState<ThemeContextType>("light");
-
-  return (
-    <ThemeContext.Provider value={theme}>
-      <MyComponent />
-    </ThemeContext.Provider>
-  );
-};
-```
-
-Call `useContext` to read and subscribe to the context.
-
-```tsx
-import { useContext } from "react";
-
-const MyComponent = () => {
-  const theme = useContext(ThemeContext);
-
-  return <p>The current theme is {theme}.</p>;
-};
-```
-
-## Without default context value
-
-If you don't have any meaningful default value, specify `null`:
-
-```tsx
-import { createContext } from "react";
-
-interface CurrentUserContextType {
-  username: string;
-}
-
-const CurrentUserContext = createContext<CurrentUserContextType | null>(null);
-```
-
-```tsx
-const App = () => {
-  const [currentUser, setCurrentUser] = useState<CurrentUserContextType>({
-    username: "filiptammergard",
-  });
-
-  return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <MyComponent />
-    </CurrentUserContext.Provider>
-  );
-};
-```
-
-Now that the type of the context can be `null`, you'll notice that you'll get a `'currentUser' is possibly 'null'` TypeScript error if you try to access the `username` property. You can use optional chaining to access `username`:
-
-```tsx
-import { useContext } from "react";
-
-const MyComponent = () => {
-  const currentUser = useContext(CurrentUserContext);
-
-  return <p>Name: {currentUser?.username}.</p>;
-};
-```
-
-However, it would be preferable to not have to check for `null`, since we know that the context won't be `null`. One way to do that is to provide a custom hook to use the context, where an error is thrown if the context is not provided:
-
-```tsx
-import { createContext } from "react";
-
-interface CurrentUserContextType {
-  username: string;
-}
-
-const CurrentUserContext = createContext<CurrentUserContextType | null>(null);
-
-const useCurrentUser = () => {
-  const currentUserContext = useContext(CurrentUserContext);
-
-  if (!currentUserContext) {
-    throw new Error(
-      "useCurrentUser has to be used within <CurrentUserContext.Provider>"
-    );
-  }
-
-  return currentUserContext;
-};
-```
-
-Using a runtime type check in this will has the benefit of printing a clear error message in the console when a provider is not wrapping the components properly. Now it's possible to access `currentUser.username` without checking for `null`:
-
-```tsx
-import { useContext } from "react";
-
-const MyComponent = () => {
-  const currentUser = useCurrentUser();
-
-  return <p>Username: {currentUser.username}.</p>;
-};
-```
-
-### Type assertion as an alternative
-
-Another way to avoid having to check for `null` is to use type assertion to tell TypeScript you know the context is not `null`:
-
-```tsx
-import { useContext } from "react";
-
-const MyComponent = () => {
-  const currentUser = useContext(CurrentUserContext);
-
-  return <p>Name: {currentUser!.username}.</p>;
-};
-```
-
-Another option is to use an empty object as default value and cast it to the expected context type:
-
-```tsx
-const CurrentUserContext = createContext<CurrentUserContextType>(
-  {} as CurrentUserContextType
+const ThemeContext = createContext<ThemeContextType>(
+    'light'
 );
 ```
 
-You can also use non-null assertion to get the same result:
+Оберните компоненты, которым нужен контекст, поставщиком контекста:
 
-```tsx
-const CurrentUserContext = createContext<CurrentUserContextType>(null!);
+```ts
+import { useState } from 'react';
+
+const App = () => {
+    const [theme, setTheme] = useState<ThemeContextType>(
+        'light'
+    );
+
+    return (
+        <ThemeContext.Provider value={theme}>
+            <MyComponent />
+        </ThemeContext.Provider>
+    );
+};
 ```
 
-When you don't know what to choose, prefer runtime checking and throwing over type asserting.
+Вызовите `useContext`, чтобы прочитать и подписаться на контекст.
+
+```ts
+import { useContext } from 'react';
+
+const MyComponent = () => {
+    const theme = useContext(ThemeContext);
+
+    return <p>The current theme is {theme}.</p>;
+};
+```
+
+## Без значения контекста по умолчанию
+
+Если у вас нет значения по умолчанию, укажите `null`:
+
+```ts
+import { createContext } from 'react';
+
+interface CurrentUserContextType {
+    username: string;
+}
+
+const CurrentUserContext = createContext<CurrentUserContextType | null>(
+    null
+);
+```
+
+---
+
+```ts
+const App = () => {
+    const [currentUser, setCurrentUser] = useState<
+        CurrentUserContextType
+    >({
+        username: 'filiptammergard',
+    });
+
+    return (
+        <CurrentUserContext.Provider value={currentUser}>
+            <MyComponent />
+        </CurrentUserContext.Provider>
+    );
+};
+```
+
+Теперь, когда тип контекста может быть `null`, вы заметите, что при попытке получить доступ к свойству `username` вы получите ошибку TypeScript `'currentUser' is possibly 'null'`. Для доступа к `username` можно использовать опциональную цепочку:
+
+```ts
+import { useContext } from 'react';
+
+const MyComponent = () => {
+    const currentUser = useContext(CurrentUserContext);
+
+    return <p>Name: {currentUser?.username}.</p>;
+};
+```
+
+Однако было бы предпочтительнее не проверять наличие `null`, поскольку мы знаем, что контекст не будет `null`. Один из способов сделать это - предоставить пользовательский хук для использования контекста, в котором будет вылетать ошибка, если контекст не предоставлен:
+
+```ts
+import { createContext } from 'react';
+
+interface CurrentUserContextType {
+    username: string;
+}
+
+const CurrentUserContext = createContext<CurrentUserContextType | null>(
+    null
+);
+
+const useCurrentUser = () => {
+    const currentUserContext = useContext(
+        CurrentUserContext
+    );
+
+    if (!currentUserContext) {
+        throw new Error(
+            'useCurrentUser has to be used within <CurrentUserContext.Provider>'
+        );
+    }
+
+    return currentUserContext;
+};
+```
+
+Использование проверки типов во время выполнения дает возможность вывести в консоль четкое сообщение об ошибке, когда провайдер не оборачивает компоненты должным образом. Теперь можно получить доступ к `currentUser.username` без проверки на `null`:
+
+```ts
+import { useContext } from 'react';
+
+const MyComponent = () => {
+    const currentUser = useCurrentUser();
+
+    return <p>Username: {currentUser.username}.</p>;
+};
+```
+
+### Утверждение типа как альтернатива
+
+Еще один способ избежать проверки на `null` - использовать утверждение типа, чтобы сообщить TypeScript, что контекст не является `null`:
+
+```ts
+import { useContext } from 'react';
+
+const MyComponent = () => {
+    const currentUser = useContext(CurrentUserContext);
+
+    return <p>Name: {currentUser!.username}.</p>;
+};
+```
+
+Другой вариант - использовать пустой объект в качестве значения по умолчанию и привести его к ожидаемому типу контекста:
+
+```ts
+const CurrentUserContext = createContext<
+    CurrentUserContextType
+>({} as CurrentUserContextType);
+```
+
+Вы также можете использовать утверждение non-null, чтобы получить тот же результат:
+
+```tsx
+const CurrentUserContext = createContext<
+    CurrentUserContextType
+>(null!);
+```
+
+Если вы не знаете, что выбрать, отдайте предпочтение проверке и отбрасыванию во время выполнения, а не утверждению типов.
+
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/context></small>

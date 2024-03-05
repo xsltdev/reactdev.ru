@@ -10,4 +10,3 @@ nav:
     - forward-create-ref.md
     - portals.md
     - error-boundaries.md
-    - concurrent.md

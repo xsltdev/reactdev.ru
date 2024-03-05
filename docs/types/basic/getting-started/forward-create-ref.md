@@ -1,138 +1,165 @@
 ---
-id: forward_and_create_ref
-title: forwardRef/createRef
+description: forwardRef и createRef
 ---
 
-Check the [Hooks section](https://github.com/typescript-cheatsheets/react/blob/main/README.md#hooks) for `useRef`.
+# `forwardRef` и `createRef`
 
 `createRef`:
 
-```tsx
-import { createRef, PureComponent } from "react";
+```ts
+import { createRef, PureComponent } from 'react';
 
 class CssThemeProvider extends PureComponent<Props> {
-  private rootRef = createRef<HTMLDivElement>(); // like this
-  render() {
-    return <div ref={this.rootRef}>{this.props.children}</div>;
-  }
+    private rootRef = createRef<HTMLDivElement>(); // like this
+    render() {
+        return (
+            <div ref={this.rootRef}>
+                {this.props.children}
+            </div>
+        );
+    }
 }
 ```
 
 `forwardRef`:
 
-```tsx
-import { forwardRef, ReactNode } from "react";
+```ts
+import { forwardRef, ReactNode } from 'react';
 
 interface Props {
-  children?: ReactNode;
-  type: "submit" | "button";
+    children?: ReactNode;
+    type: 'submit' | 'button';
 }
 export type Ref = HTMLButtonElement;
 
-export const FancyButton = forwardRef<Ref, Props>((props, ref) => (
-  <button ref={ref} className="MyClassName" type={props.type}>
-    {props.children}
-  </button>
-));
-```
-
-<details>
-<summary><b>Side note: the <code>ref</code> you get from <code>forwardRef</code> is mutable so you can assign to it if needed.</b></summary>
-
-This was done [on purpose](https://github.com/DefinitelyTyped/DefinitelyTyped/pull/43265/). You can make it immutable if you have to - assign `React.Ref` if you want to ensure nobody reassigns it:
-
-```tsx
-import { forwardRef, ReactNode, Ref } from "react";
-
-interface Props {
-  children?: ReactNode;
-  type: "submit" | "button";
-}
-
-export const FancyButton = forwardRef(
-  (
-    props: Props,
-    ref: Ref<HTMLButtonElement> // <-- here!
-  ) => (
-    <button ref={ref} className="MyClassName" type={props.type}>
-      {props.children}
-    </button>
-  )
+export const FancyButton = forwardRef<Ref, Props>(
+    (props, ref) => (
+        <button
+            ref={ref}
+            className="MyClassName"
+            type={props.type}
+        >
+            {props.children}
+        </button>
+    )
 );
 ```
 
-</details>
+!!!info "Примечание: `ref`, который вы получаете из `forwardRef`, мутабелен, так что вы можете присваивать его при необходимости."
 
-If you are grabbing the props of a component that forwards refs, use [`ComponentPropsWithRef`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/a05cc538a42243c632f054e42eab483ebf1560ab/types/react/index.d.ts#L770).
+    Это было сделано [специально](https://github.com/DefinitelyTyped/DefinitelyTyped/pull/43265/). Вы можете сделать его неизменяемым, если нужно - назначьте `React.Ref`, если хотите, чтобы никто не переназначил его:
+
+    ```ts
+    import { forwardRef, ReactNode, Ref } from 'react';
+
+    interface Props {
+    	children?: ReactNode;
+    	type: 'submit' | 'button';
+    }
+
+    export const FancyButton = forwardRef((
+    	props: Props,
+    	ref: Ref<HTMLButtonElement> // <-- here!
+    ) => (
+    	<button
+    		ref={ref}
+    		className="MyClassName"
+    		type={props.type}
+    	>
+    		{props.children}
+    	</button>
+    ));
+    ```
+
+Если вы захватываете реквизиты компонента, который пересылает рефссылки, используйте [`ComponentPropsWithRef`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/a05cc538a42243c632f054e42eab483ebf1560ab/types/react/index.d.ts#L770).
 
 ## Generic forwardRefs
 
-Read more context in https://fettblog.eu/typescript-react-generic-forward-refs/:
+Подробнее о контексте читайте в <https://fettblog.eu/typescript-react-generic-forward-refs/>:
 
-### Option 1 - Wrapper component
+### Вариант 1 - компонент-обертка
 
 ```ts
 type ClickableListProps<T> = {
-  items: T[];
-  onSelect: (item: T) => void;
-  mRef?: React.Ref<HTMLUListElement> | null;
+    items: T[];
+    onSelect: (item: T) => void;
+    mRef?: React.Ref<HTMLUListElement> | null;
 };
 
-export function ClickableList<T>(props: ClickableListProps<T>) {
-  return (
-    <ul ref={props.mRef}>
-      {props.items.map((item, i) => (
-        <li key={i}>
-          <button onClick={(el) => props.onSelect(item)}>Select</button>
-          {item}
-        </li>
-      ))}
-    </ul>
-  );
+export function ClickableList<T>(
+    props: ClickableListProps<T>
+) {
+    return (
+        <ul ref={props.mRef}>
+            {props.items.map((item, i) => (
+                <li key={i}>
+                    <button
+                        onClick={(el) =>
+                            props.onSelect(item)
+                        }
+                    >
+                        Select
+                    </button>
+                    {item}
+                </li>
+            ))}
+        </ul>
+    );
 }
 ```
 
-### Option 2 - Redeclare forwardRef
+### Вариант 2 - Переопределение forwardRef
 
 ```ts
 // Redeclare forwardRef
-declare module "react" {
-  function forwardRef<T, P = {}>(
-    render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
-  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+declare module 'react' {
+    function forwardRef<T, P = {}>(
+        render: (
+            props: P,
+            ref: React.Ref<T>
+        ) => React.ReactElement | null
+    ): (
+        props: P & React.RefAttributes<T>
+    ) => React.ReactElement | null;
 }
 
 // Just write your components like you're used to!
-import { forwardRef, ForwardedRef } from "react";
+import { forwardRef, ForwardedRef } from 'react';
 
 interface ClickableListProps<T> {
-  items: T[];
-  onSelect: (item: T) => void;
+    items: T[];
+    onSelect: (item: T) => void;
 }
 
 function ClickableListInner<T>(
-  props: ClickableListProps<T>,
-  ref: ForwardedRef<HTMLUListElement>
+    props: ClickableListProps<T>,
+    ref: ForwardedRef<HTMLUListElement>
 ) {
-  return (
-    <ul ref={ref}>
-      {props.items.map((item, i) => (
-        <li key={i}>
-          <button onClick={(el) => props.onSelect(item)}>Select</button>
-          {item}
-        </li>
-      ))}
-    </ul>
-  );
+    return (
+        <ul ref={ref}>
+            {props.items.map((item, i) => (
+                <li key={i}>
+                    <button
+                        onClick={(el) =>
+                            props.onSelect(item)
+                        }
+                    >
+                        Select
+                    </button>
+                    {item}
+                </li>
+            ))}
+        </ul>
+    );
 }
 
 export const ClickableList = forwardRef(ClickableListInner);
 ```
 
-## More Info
+## Дополнительная информация
 
-- https://medium.com/@martin_hotell/react-refs-with-typescript-a32d56c4d315
+-   <https://medium.com/@martin_hotell/react-refs-with-typescript-a32d56c4d315>
 
-You may also wish to do [Conditional Rendering with `forwardRef`](https://github.com/typescript-cheatsheets/react/issues/167).
+Возможно, вы также захотите сделать [Условный рендеринг с `forwardRef`](https://github.com/typescript-cheatsheets/react/issues/167).
 
-[Something to add? File an issue](https://github.com/typescript-cheatsheets/react/issues/new).
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/forward_and_create_ref></small>
