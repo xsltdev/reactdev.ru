@@ -1,32 +1,34 @@
 ---
-id: non_ts_files
-title: "Troubleshooting Handbook: Globals, Images and other non-TS files"
-sidebar_label: Globals, Images and other non-TS files
+description: Глобалы, изображения и другие файлы, не относящиеся к TS
 ---
 
-Use [declaration merging](https://www.typescriptlang.org/docs/handbook/declaration-merging.html).
+# Глобалы, изображения и другие файлы, не относящиеся к TS
 
-If, say, you are using a third party JS script that attaches on to the `window` global, you can extend `Window`:
+Используйте [объединение деклараций](https://www.typescriptlang.org/docs/handbook/declaration-merging.html).
+
+Если, скажем, вы используете сторонний JS-скрипт, который подключается к глобалу `window`, вы можете расширить `Window`:
 
 ```ts
 declare global {
-  interface Window {
-    MyVendorThing: MyVendorType;
-  }
+    interface Window {
+        MyVendorThing: MyVendorType;
+    }
 }
 ```
 
-Likewise if you wish to "import" an image or other non TS/TSX file:
+Аналогично, если вы хотите "импортировать" изображение или другой файл, не относящийся к TS/TSX:
 
 ```ts
 // declaration.d.ts
 // anywhere in your project, NOT the same name as any of your .ts/tsx files
-declare module "*.png";
+declare module '*.png';
 
 // importing in a tsx file
-import * as logo from "./logo.png";
+import * as logo from './logo.png';
 ```
 
-Note that `tsc` cannot bundle these files for you, you will have to use Webpack or Parcel.
+Обратите внимание, что `tsc` не может упаковать эти файлы за вас, вам придется использовать Webpack или Parcel.
 
-Related issue: https://github.com/Microsoft/TypeScript-React-Starter/issues/12 and [StackOverflow](https://stackoverflow.com/a/49715468/4216035)
+[Связанный вопрос](https://github.com/Microsoft/TypeScript-React-Starter/issues/12) и [StackOverflow](https://stackoverflow.com/a/49715468/4216035)
+
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/basic/troubleshooting/non_ts_files></small>

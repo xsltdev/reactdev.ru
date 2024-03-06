@@ -1,57 +1,60 @@
 ---
-id: intro
-sidebar_label: Intro
-title: HOC Cheatsheet
+description: Этот HOC Cheatsheet собирает все доступные знания для написания компонентов высшего порядка с помощью React и TypeScript
 ---
 
-**This HOC Cheatsheet** compiles all available knowledge for writing Higher Order Components with React and TypeScript.
+# Шпаргалка по HOC
 
-- We will map closely to [the official docs on HOCs](https://reactjs.org/docs/higher-order-components.html) initially
-- While hooks exist, many libraries and codebases still have a need to type HOCs.
-- Render props may be considered in future
-- The goal is to write HOCs that offer type safety while not getting in the way.
+**Этот HOC Cheatsheet** собирает все доступные знания для написания компонентов высшего порядка с помощью React и TypeScript.
 
-Here is a base HOC example you can copy right away:
+-   Изначально мы будем ориентироваться на [официальную документацию по HOC](https://reactjs.org/docs/higher-order-components.html).
+-   Несмотря на существование хуков, многие библиотеки и кодовые базы по-прежнему нуждаются в HOC.
+-   Реквизиты рендера могут быть рассмотрены в будущем
+-   Цель состоит в том, чтобы писать HOC, которые обеспечивают безопасность типов и при этом не мешают.
 
-```jsx
+Вот базовый пример HOC, который вы можете скопировать прямо сейчас:
 
+```ts
 type PropsAreEqual<P> = (
-  prevProps: Readonly<P>,
-  nextProps: Readonly<P>
+    prevProps: Readonly<P>,
+    nextProps: Readonly<P>
 ) => boolean;
 
 const withSampleHoC = <P extends {}>(
-  component: {
-    (props: P): Exclude<React.ReactNode, undefined>;
-    displayName?: string;
-  },
-  propsAreEqual?: PropsAreEqual<P> | false,
+    component: {
+        (props: P): Exclude<React.ReactNode, undefined>;
+        displayName?: string;
+    },
+    propsAreEqual?: PropsAreEqual<P> | false,
 
-  componentName = component.displayName ?? component.name
+    componentName = component.displayName ?? component.name
 ): {
-  (props: P): React.JSX.Element;
-  displayName: string;
+    (props: P): React.JSX.Element;
+    displayName: string;
 } => {
+    function WithSampleHoc(props: P) {
+        //Do something special to justify the HoC.
+        return component(props) as React.JSX.Element;
+    }
 
-  function WithSampleHoc(props: P) {
-    //Do something special to justify the HoC.
-    return component(props) as React.JSX.Element;
-  }
+    WithSampleHoc.displayName = `withSampleHoC(${componentName})`;
 
-  WithSampleHoc.displayName = `withSampleHoC(${componentName})`;
+    let wrappedComponent =
+        propsAreEqual === false
+            ? WithSampleHoc
+            : React.memo(WithSampleHoc, propsAreEqual);
 
-  let wrappedComponent = propsAreEqual === false ? WithSampleHoc : React.memo(WithSampleHoc, propsAreEqual);
+    //copyStaticProperties(component, wrappedComponent);
 
-  //copyStaticProperties(component, wrappedComponent);
-
-  return wrappedComponent as typeof WithSampleHoc
+    return wrappedComponent as typeof WithSampleHoc;
 };
 ```
 
-This code meets these criteria:
+Этот код соответствует следующим критериям:
 
-1. Allows a component to return valid elements (`strings | array | boolean | null | number`) and not just `React.JSX.Element | null`.
-2. Wraps it in a memo unless you opt out.
-3. Removes the nested component, so React Dev tools will just show one component.
-4. Indicates with `displayName` in React Dev Tool with an annotation that this is a component wrapped in two HoCs
-5. Optional: Copies over static properties that might have been defined on the original component.
+1.  Позволяет компоненту возвращать допустимые элементы (`string | array | boolean | null | number`), а не только `React.JSX.Element | null`.
+2.  Обертывает его в мемо, если вы не откажетесь от этого.
+3.  Удаляет вложенный компонент, поэтому инструменты React Dev будут показывать только один компонент.
+4.  Указывает с помощью `displayName` в React Dev Tool с аннотацией, что это компонент, обернутый в два HoCs.
+5.  Необязательно: Копирует статические свойства, которые могли быть определены в исходном компоненте.
+
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/hoc/></small>

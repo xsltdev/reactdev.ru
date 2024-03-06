@@ -1,21 +1,23 @@
 ---
-id: learn_ts
-title: "Time to Really Learn TypeScript"
-sidebar_label: Time to Really Learn TypeScript
+description: Время по-настоящему изучить TypeScript
 ---
 
-Believe it or not, we have only barely introduced TypeScript here in this cheatsheet. If you are still facing TypeScript troubleshooting issues, it is likely that your understanding of TS is still too superficial.
+# Время по-настоящему изучить TypeScript
 
-There is a whole world of generic type logic that you will eventually get into, however it becomes far less dealing with React than just getting good at TypeScript so it is out of scope here. But at least you can get productive in React now :)
+Хотите верьте, хотите нет, но в этой шпаргалке мы лишь едва познакомили вас с TypeScript. Если вы все еще сталкиваетесь с проблемами TypeScript, скорее всего, ваше понимание TS еще слишком поверхностно.
 
-It is worth mentioning some resources to help you get started:
+Существует целый мир общей логики типов, в который вы со временем погрузитесь, однако это становится гораздо менее важным при работе с React, чем просто хорошее владение TypeScript, поэтому здесь это не рассматривается. Но, по крайней мере, теперь вы можете продуктивно работать в React.
 
-- Step through the 40+ examples under [the playground's](http://www.typescriptlang.org/play/index.html) Examples section, written by @Orta
-- Anders Hejlsberg's overview of TS: https://www.youtube.com/watch?v=ET4kT88JRXs
-- Marius Schultz: https://blog.mariusschulz.com/series/typescript-evolution with an [Egghead.io course](https://egghead.io/courses/advanced-static-types-in-typescript)
-- Basarat's Deep Dive: https://basarat.gitbook.io/typescript/
-- Axel Rauschmeyer's [Tackling TypeScript](https://exploringjs.com/tackling-ts/)
-- Rares Matei: [Egghead.io course](https://egghead.io/courses/practical-advanced-typescript)'s advanced TypeScript course on Egghead.io is great for newer typescript features and practical type logic applications (e.g. recursively making all properties of a type `readonly`)
-- Learn about [Generics, Conditional types and Mapped types](https://www.youtube.com/watch?v=PJjeHzvi_VQ&feature=youtu.be)
-- Shu Uesugi: [TypeScript for Beginner Programmers](https://ts.chibicode.com/)
-- Here is another [TypeScript Error Guide](https://github.com/threehams/typescript-error-guide/) that you can check for your errors.
+Стоит упомянуть о некоторых ресурсах, которые помогут вам начать:
+
+-   Пройдитесь по 40+ примерам в разделе [playground's](http://www.typescriptlang.org/play/index.html) Examples, написанным @Orta
+-   [Обзор Андерса Хейлсберга по TS](https://www.youtube.com/watch?v=ET4kT88JRXs)
+-   [Мариус Шульц](https://blog.mariusschulz.com/series/typescript-evolution) с курсом [Egghead.io](https://egghead.io/courses/advanced-static-types-in-typescript)
+-   [Глубокое погружение Басарата](https://basarat.gitbook.io/typescript/)
+-   Аксель Раушмайер: [Tackling TypeScript](https://exploringjs.com/tackling-ts/)
+-   Продвинутый курс по TypeScript от Рареса Матея на Egghead.io: [Egghead.io course](https://egghead.io/courses/practical-advanced-typescript) отлично подходит для изучения новых возможностей TypeScript и практического применения логики типов (например, рекурсивное превращение всех свойств типа в `readonly`).
+-   Узнайте о [Generics, Conditional types и Mapped types](https://www.youtube.com/watch?v=PJjeHzvi_VQ&feature=youtu.be)
+-   Shu Uesugi: [TypeScript для начинающих программистов](https://ts.chibicode.com/)
+-   Вот еще один [TypeScript Error Guide](https://github.com/threehams/typescript-error-guide/), который вы можете проверить на наличие ошибок.
+
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/basic/troubleshooting/learn_ts></small>

@@ -1,30 +1,32 @@
 ---
-id: utilities
-title: "Troubleshooting Handbook: Utilities"
-sidebar_label: Utilities
+description: Утилиты
 ---
 
-These are all built in, [see source in es5.d.ts](https://github.com/microsoft/TypeScript/blob/33a34e5b96bfe086266f4765ab9789a2a02507f9/src/lib/es5.d.ts#L1523-L1637):
+# Утилиты
 
-- `Awaited`: emulate the behavior of `await`
-- `Capitalize`: convert first character of string literal type to uppercase
-- `ConstructorParameters`: a tuple of class constructor's parameter types
-- `Exclude`: exclude a type from another type
-- `Extract`: select a subtype that is assignable to another type
-- `InstanceType`: the instance type you get from a `new`ing a class constructor
-- `Lowercase`: convert string literal type to lowercase
-- `NonNullable`: exclude `null` and `undefined` from a type
-- `Omit`: construct a type with the properties of another type.
-- `OmitThisParameter`: remove the 'this' parameter from a function type.
-- `Parameters`: a tuple of a function's parameter types
-- `Partial`: Make all properties in an object optional
-- `Readonly`: Make all properties in an object readonly
-- `ReadonlyArray`: Make an immutable array of the given type
-- `Pick`: A subtype of an object type with a subset of its keys
-- `Record`: A map from a key type to a value type
-- `Required`: Make all properties in an object required
-- `ReturnType`: A function's return type
-- `ThisParameterType`: extract the type of the 'this' parameter of a function type
-- `ThisType`: marker for contextual 'this' type
-- `Uncapitalize`: convert first character of string literal type to lowercase
-- `Uppercase`: convert string literal type to uppercase
+Все они встроены, [см. исходный текст в es5.d.ts](https://github.com/microsoft/TypeScript/blob/33a34e5b96bfe086266f4765ab9789a2a02507f9/src/lib/es5.d.ts#L1523-L1637):
+
+-   `Awaited`: эмулирует поведение `await`.
+-   `Capitalize`: преобразование первого символа строкового литерала в верхний регистр
+-   `ConstructorParameters`: кортеж типов параметров конструктора класса
+-   `Exclude`: исключить тип из другого типа
+-   `Extract`: выбрать подтип, который можно присвоить другому типу
+-   `InstanceType`: тип экземпляра, который вы получаете при `new` конструктора класса
+-   `Lowercase`: преобразование строчного литерального типа в строчный
+-   `NonNullable`: исключить `null` и `undefined` из типа
+-   `Omit`: конструирует тип со свойствами другого типа.
+-   `OmitThisParameter`: удалить параметр 'this' из типа функции.
+-   `Parameters`: кортеж типов параметров функции.
+-   `Partial`: сделать все свойства объекта необязательными
+-   `Readonly`: Сделать все свойства объекта доступными только для чтения
+-   `ReadonlyArray`: Создать неизменяемый массив заданного типа
+-   `Pick`: Подтип типа объекта с подмножеством его ключей
+-   `Record`: Карта от типа ключа к типу значения
+-   `Required`: Сделать все свойства объекта обязательными
+-   `ReturnType`: Тип возврата функции
+-   `ThisParameterType`: извлечение типа 'this' параметра типа функции
+-   `ThisType`: маркер для контекстного типа 'this'
+-   `Uncapitalize`: преобразование первого символа строчного литерального типа в нижний регистр
+-   `Uppercase`: преобразование строкового литерального типа в верхний регистр
+
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/basic/troubleshooting/utilities></small>

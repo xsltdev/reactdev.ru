@@ -1,99 +1,122 @@
 ---
 id: full_example
 sidebar_label: Full HOC Example
-title: "Full HOC Example"
+title: 'Full HOC Example'
 ---
 
-> This is an HOC example for you to copy and paste. If certain pieces don't make sense for you, head to [the React HOC Docs intro](https://react-typescript-cheatsheet.netlify.app/docs/hoc/react_hoc_docs/) to get a detailed walkthrough via a complete translation of the React docs in TypeScript.
+# Пример с полным HOC
 
-Sometimes you want a simple way to inject props from somewhere else (either a global store or a provider) and don't want to continually pass down the props for it. Context is great for it, but then the values from the context can only be used in your `render` function. A HoC will provide these values as props.
+> Это пример HOC, который вы можете скопировать и вставить. Если некоторые фрагменты не имеют для вас смысла, перейдите по ссылке [React HOC Docs intro](https://react-typescript-cheatsheet.netlify.app/docs/hoc/react_hoc_docs/), чтобы получить подробное описание через полный перевод документации по React на TypeScript.
 
-**The injected props**
+Иногда вам нужен простой способ инжектировать реквизиты из другого места (либо глобального хранилища, либо провайдера), и вы не хотите постоянно передавать реквизиты для этого. Контекст отлично подходит для этого, но тогда значения из контекста могут быть использованы только в вашей функции `render`. HoC будет предоставлять эти значения в качестве реквизитов.
+
+**Инжектируемые реквизиты**
 
 ```ts
 interface WithThemeProps {
-  primaryColor: string;
+    primaryColor: string;
 }
 ```
 
-**Usage in the component**
+**Использование в компоненте**.
 
-The goal is to have the props available on the interface for the component, but subtracted out for the consumers of the component when wrapped in the HoC.
+Цель состоит в том, чтобы реквизиты были доступны в интерфейсе компонента, но вычитались для потребителей компонента при обертывании в HoC.
 
 ```ts
 interface Props extends WithThemeProps {
-  children?: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 class MyButton extends React.Component<Props> {
-  public render() {
-    // Render an the element using the theme and other props.
-  }
+    public render() {
+        // Render an the element using the theme and other props.
+    }
 
-  private someInternalMethod() {
-    // The theme values are also available as props here.
-  }
+    private someInternalMethod() {
+        // The theme values are also available as props here.
+    }
 }
 
 export default withTheme(MyButton);
 ```
 
-**Consuming the Component**
+**Потребление компонента**
 
-Now when consuming the component you can omit the `primaryColor` prop or override the one provided through context.
+Теперь при потреблении компонента вы можете опустить параметр `primaryColor` или переопределить тот, который предоставляется через контекст.
 
-```tsx
+```ts
 <MyButton>Hello button</MyButton> // Valid
 <MyButton primaryColor="#333">Hello Button</MyButton> // Also valid
 ```
 
-**Declaring the HoC**
+**Объявление HoC**
 
-The actual HoC.
+Фактический HoC.
 
-```tsx
-export function withTheme<T extends WithThemeProps = WithThemeProps>(
-  WrappedComponent: React.ComponentType<T>
-) {
-  // Try to create a nice displayName for React Dev Tools.
-  const displayName =
-    WrappedComponent.displayName || WrappedComponent.name || "Component";
+```ts
+export function withTheme<
+    T extends WithThemeProps = WithThemeProps
+>(WrappedComponent: React.ComponentType<T>) {
+    // Try to create a nice displayName for React Dev Tools.
+    const displayName =
+        WrappedComponent.displayName ||
+        WrappedComponent.name ||
+        'Component';
 
-  // Creating the inner component. The calculated Props type here is the where the magic happens.
-  const ComponentWithTheme = (props: Omit<T, keyof WithThemeProps>) => {
-    // Fetch the props you want to inject. This could be done with context instead.
-    const themeProps = useTheme();
+    // Creating the inner component. The calculated Props type here is the where the magic happens.
+    const ComponentWithTheme = (
+        props: Omit<T, keyof WithThemeProps>
+    ) => {
+        // Fetch the props you want to inject. This could be done with context instead.
+        const themeProps = useTheme();
 
-    // props comes afterwards so the can override the default ones.
-    return <WrappedComponent {...themeProps} {...(props as T)} />;
-  };
+        // props comes afterwards so the can override the default ones.
+        return (
+            <WrappedComponent
+                {...themeProps}
+                {...(props as T)}
+            />
+        );
+    };
 
-  ComponentWithTheme.displayName = `withTheme(${displayName})`;
+    ComponentWithTheme.displayName = `withTheme(${displayName})`;
 
-  return ComponentWithTheme;
+    return ComponentWithTheme;
 }
 ```
 
-Note that the `{...(props as T)}` assertion is needed because of a current bug in TS 3.2 https://github.com/Microsoft/TypeScript/issues/28938#issuecomment-450636046
+Обратите внимание, что утверждение `{...(props as T)}` необходимо из-за текущей ошибки в TS 3.2 <https://github.com/Microsoft/TypeScript/issues/28938#issuecomment-450636046>.
 
-Here is a more advanced example of a dynamic higher order component that bases some of its parameters on the props of the component being passed in:
+Вот более продвинутый пример динамического компонента высшего порядка, который основывает некоторые свои параметры на реквизитах передаваемого компонента:
 
-```tsx
+```ts
 // inject static values to a component so that they're always provided
-export function inject<TProps, TInjectedKeys extends keyof TProps>(
-  Component: React.JSXElementConstructor<TProps>,
-  injector: Pick<TProps, TInjectedKeys>
+export function inject<
+    TProps,
+    TInjectedKeys extends keyof TProps
+>(
+    Component: React.JSXElementConstructor<TProps>,
+    injector: Pick<TProps, TInjectedKeys>
 ) {
-  return function Injected(props: Omit<TProps, TInjectedKeys>) {
-    return <Component {...(props as TProps)} {...injector} />;
-  };
+    return function Injected(
+        props: Omit<TProps, TInjectedKeys>
+    ) {
+        return (
+            <Component
+                {...(props as TProps)}
+                {...injector}
+            />
+        );
+    };
 }
 ```
 
-### Using `forwardRef`
+## Использование `forwardRef`
 
-For "true" reusability you should also consider exposing a ref for your HOC. You can use `React.forwardRef<Ref, Props>` as documented in [the basic cheatsheet](https://github.com/typescript-cheatsheets/react/blob/main/README.md#forwardrefcreateref), but we are interested in more real world examples. [Here is a nice example in practice](https://gist.github.com/OliverJAsh/d2f462b03b3e6c24f5588ca7915d010e) from @OliverJAsh (note - it still has some rough edges, we need help to test this out/document this).
+Для "настоящего" многократного использования вам также следует подумать об открытии реферера для вашего HOC. Вы можете использовать `React.forwardRef<Ref, Props>`, как описано в [базовой шпаргалке](https://github.com/typescript-cheatsheets/react/blob/main/README.md#forwardrefcreateref), но нас интересуют более реальные примеры. [Вот хороший пример на практике](https://gist.github.com/OliverJAsh/d2f462b03b3e6c24f5588ca7915d010e) от @OliverJAsh (обратите внимание - он все еще имеет некоторые неровности, нам нужна помощь, чтобы проверить это/документировать это).
 
-### Supporting `defaultProps` of Wrapped Component
+## Поддержка `defaultProps` обернутого компонента
 
-If this is something you need, please see [the stale discussion we had](https://github.com/typescript-cheatsheets/react/issues/86) and comment with your requirements. We will pick this up again if needed.
+Если вам это нужно, пожалуйста, посмотрите [устаревшее обсуждение](https://github.com/typescript-cheatsheets/react/issues/86) и напишите в комментариях свои требования. При необходимости мы поднимем эту тему снова.
+
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/hoc/full_example></small>

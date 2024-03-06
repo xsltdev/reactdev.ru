@@ -1,51 +1,53 @@
 ---
-id: tsconfig
-title: "Troubleshooting Handbook: tsconfig.json"
-sidebar_label: tsconfig.json
+description: В новой документации по TS также есть аннотации по каждому флагу, что каждый из них делает
 ---
 
-You can find [all the Compiler options in the TypeScript docs](https://www.typescriptlang.org/docs/handbook/compiler-options.html). [The new TS docs also has per-flag annotations of what each does](https://www.typescriptlang.org/tsconfig#allowSyntheticDefaultImports). This is the setup I roll with for APPS (not libraries - for libraries you may wish to see the settings we use in `tsdx`):
+# `tsconfig.json`
+
+Вы можете найти [все опции компилятора в документации по TypeScript](https://www.typescriptlang.org/docs/handbook/compiler-options.html). [В новой документации по TS также есть аннотации по каждому флагу, что каждый из них делает](https://www.typescriptlang.org/tsconfig#allowSyntheticDefaultImports). Я использую эту настройку для APPS (не для библиотек - для библиотек вы можете посмотреть настройки, которые мы используем в `tsdx`):
 
 ```json
 {
-  "compilerOptions": {
-    "incremental": true,
-    "outDir": "build/lib",
-    "target": "es5",
-    "module": "esnext",
-    "lib": ["DOM", "ESNext"],
-    "sourceMap": true,
-    "importHelpers": true,
-    "declaration": true,
-    "rootDir": "src",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowJs": false,
-    "jsx": "react",
-    "moduleResolution": "node",
-    "baseUrl": "src",
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "build", "scripts"]
+    "compilerOptions": {
+        "incremental": true,
+        "outDir": "build/lib",
+        "target": "es5",
+        "module": "esnext",
+        "lib": ["DOM", "ESNext"],
+        "sourceMap": true,
+        "importHelpers": true,
+        "declaration": true,
+        "rootDir": "src",
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowJs": false,
+        "jsx": "react",
+        "moduleResolution": "node",
+        "baseUrl": "src",
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "build", "scripts"]
 }
 ```
 
-You can find more [recommended TS config here](https://github.com/tsconfig/bases).
+Вы можете найти больше [рекомендуемых конфигов TS здесь](https://github.com/tsconfig/bases).
 
-Please open an issue and discuss if there are better recommended choices for React.
+Пожалуйста, откройте вопрос и обсудите, есть ли лучшие рекомендуемые варианты для React.
 
-Selected flags and why we like them:
+Выбранные флаги и почему они нам нравятся:
 
-- `esModuleInterop`: disables namespace imports (`import * as foo from "foo"`) and enables CJS/AMD/UMD style imports (`import fs from "fs"`)
-- `strict`: `strictPropertyInitialization` forces you to initialize class properties or explicitly declare that they can be undefined. You can opt out of this with a definite assignment assertion.
-- `"typeRoots": ["./typings", "./node_modules/@types"]`: By default, TypeScript looks in `node_modules/@types` and parent folders for third party type declarations. You may wish to override this default resolution so you can put all your global type declarations in a special `typings` folder.
+-   `esModuleInterop`: отключает импорт пространств имен (`import * as foo from "foo"`) и включает импорт в стиле CJS/AMD/UMD (`import fs from "fs"`)
+-   `strict`: `strictPropertyInitialization` заставляет вас инициализировать свойства класса или явно объявлять, что они могут быть неопределены. Вы можете отказаться от этого с помощью определенного утверждения присваивания.
+-   `"typeRoots": ["./typings", "./node_modules/@types"]`: По умолчанию TypeScript ищет сторонние объявления типов в папках `node_modules/@types`и родительских папках. Вы можете переопределить это разрешение по умолчанию, чтобы поместить все свои глобальные объявления типов в специальную папку`typings`.
 
-Compilation time grows linearly with size of codebase. For large projects, you will want to use [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html). See our [ADVANCED](https://react-typescript-cheatsheet.netlify.app/docs/advanced) cheatsheet for commentary.
+Время компиляции растет линейно с размером кодовой базы. Для больших проектов лучше использовать [Project References](https://www.typescriptlang.org/docs/handbook/project-references.html). Комментарии см. в нашей шпаргалке [ADVANCED](https://react-typescript-cheatsheet.netlify.app/docs/advanced).
+
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/basic/troubleshooting/tsconfig></small>

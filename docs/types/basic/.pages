@@ -3,7 +3,4 @@ nav:
     - setup.md
     - getting-started
     - troubleshooting
-    - recommended
-    - editor-integration.md
     - linting.md
-    - examples.md
