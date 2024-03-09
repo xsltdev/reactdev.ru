@@ -1,7 +1,5 @@
 ---
-id: react_hoc_docs
-sidebar_label: React HOC docs in TypeScript
-title: 'Section 1: React HOC docs in TypeScript'
+description: В этом первом разделе мы ссылаемся на документацию React по HOCs и предлагаем прямые параллели с TypeScript
 ---
 
 # Документация React HOC на TypeScript
@@ -180,7 +178,7 @@ export const BlogPostWithSubscription = withSubscription(
 );
 ```
 
-## Документация Пример: [Не мутируйте исходный компонент. Используйте композицию](https://reactjs.org/docs/higher-order-components.html#dont-mutate-the-original-component-use-composition).
+## Пример из документации: [Не мутируйте исходный компонент. Используйте композицию](https://reactjs.org/docs/higher-order-components.html#dont-mutate-the-original-component-use-composition).
 
 Это довольно просто - убедитесь, что передаваемый реквизит имеет значение `T` [из-за ошибки в TS 3.2](https://github.com/Microsoft/TypeScript/issues/28938#issuecomment-450636046).
 
@@ -207,11 +205,11 @@ function logProps<T>(
 }
 ```
 
-## Docs Пример: [Pass Unrelated Props Through to the Wrapped Component](https://reactjs.org/docs/higher-order-components.html#convention-pass-unrelated-props-through-to-the-wrapped-component)
+## Пример из документации: [Передача несвязанных реквизитов в обернутый компонент](https://reactjs.org/docs/higher-order-components.html#convention-pass-unrelated-props-through-to-the-wrapped-component)
 
 Здесь не нужны советы по TypeScript.
 
-## Docs Пример: [Maximizing Composability](https://reactjs.org/docs/higher-order-components.html#convention-maximizing-composability)
+## Пример из документации: [Максимальная совместимость](https://reactjs.org/docs/higher-order-components.html#convention-maximizing-composability)
 
 HOC могут принимать форму функций, возвращающих компоненты более высокого порядка, которые возвращают компоненты.
 
@@ -322,7 +320,7 @@ function connect(
 
 [Посмотреть в TypeScript Playground](https://www.typescriptlang.org/play/?jsx=2#code/JYWwDg9gTgLgBAJQKYEMDG8BmUIjgcilQ3wFgAoCtCAOwGd5qQQkaY64BeOAbQF0A3BSq0GcAMK4WbADLAx3ABQBKLgD44iinDgAeACbAAbnAD0aisuHlq9RlNYwAykgA2SDNC6aA+gC44FBoATwAaOAgAdxoABRwwOgCg4NVODUUAb204YH0AqNj4ugA6XIoAX2UhG1F7ZkcAQQxgUW8VdU0s8h0UfX1JerYAxQYoANHgGgBzVI0maXZisABXOgALTLgYJAAPGHGYKHDcgPnHEvdpmDW4Soqq61sxSRoaD23+hzZvWzeMLW6cDObBc7k8R2ywJgTRgLXolkUAwWcgYD0o5FMpi2ayQdCQgSI2PxYCKWwgcAARvjJgArd5IfSU4JEuAACQA8uIKJNtlBMOh8QB1YDXJzLCl0NBQYBgWG0OIQBK6AAqGi6On0KBgKACyuq5QomGWNGatCBtD+MEUIBQYCc2u2yogCoSAQAYsbTTRwjawAAReRgLVoNZOl2JOAek1ymiqdVwIgwZZQGhwI3RuEq8IxOC7bY0fQcYWi8WS6WyuHhlVqcLiNQAnQ6QVQW1gBkDSBvIaIYgwYod2iOZXBNvV7Jx7I6GAj-Hh7wAKScAA1inIKS2oMEALJBFBTBkNGCHYAU5bbOi6cThdkgEW6GLhABEmu1j7UamqjbMWPERC1kymFlJjeKBzXAQc2GKOBlRxIEUFcNBllcLUGTgOdpzbOAcUJeQWUibD8WufEbSmYA0Cw1tWBKScEyQJMUyBZC6A4AcuxgYtQxxFhcz2VhCx7dA+1Yxx7yKNUaJ0FYKVcMjaILJAoHaeMvx0TFIzokMWRJRUOGCCBljgSIgngWl3igmDcOoJDGSpOB9EHQyRRuWxtj2HI7FQfRigkxsnngX0230e0ULnbhfWCx1nSKRRrnkYoGBQ8JYpKbSEjRFTfNqOAAoZAM6CDGAQ1C7LbTygqQzDaLkvih0kCStY4tSuh0oy79sUa0kmFxQJMF5IyoH4uhySIuDUwgIwFOlfRCNg6b+SQ+BB2owEMsTZNUwbVqdF0ZtKM+cC2J8jKMmKU7qqag0Vq2uATtOnKgtq8NLuuxtbuKe6yuDNYnqOxtzF+lqv2extyk-W59SAA)
 
-## Docs Пример: [Оберните отображаемое имя для облегчения отладки](https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging)
+## Пример из документации: [Оберните отображаемое имя для облегчения отладки](https://reactjs.org/docs/higher-order-components.html#convention-wrap-the-display-name-for-easy-debugging)
 
 Это тоже довольно просто.
 
@@ -354,8 +352,4 @@ function getDisplayName<T>(
 }
 ```
 
-## Неписанный: [раздел Caveats](https://reactjs.org/docs/higher-order-components.html#caveats)
-
--   Не используйте HOC внутри метода рендеринга
--   Статические методы должны быть скопированы
--   Ссылки не передаются
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/hoc/react_hoc_docs></small>

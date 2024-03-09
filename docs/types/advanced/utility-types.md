@@ -1,15 +1,15 @@
 ---
-id: utility_types
-title: "Utility Types"
-sidebar_label: Utility Types
+description: Мы будем исходить из знания типов утилит, описанных в родственном проекте typescript-cheatsheets/utilities
 ---
 
-We will assume knowledge of utility types covered in the sister project [`typescript-cheatsheets/utilities`](https://github.com/typescript-cheatsheets/utilities). Look up libraries included there as well for your typing needs.
+# Утилиты типов
 
-If you intend to maintain a large TS codebase/a nontrivial React+TS library, **we strongly recommend exploring these utilities** so that you don't reinvent the wheel and/or lose sanity trying to do so. Studying their code can also teach you a lot of advanced TS that is not covered here.
+Мы будем исходить из знания типов утилит, описанных в родственном проекте [`typescript-cheatsheets/utilities`](https://github.com/typescript-cheatsheets/utilities). Поищите библиотеки, включенные в него, для ваших потребностей в типизации.
 
-I also recommend have a good working knowledge of how to construct the inbuilt utility types from scratch. See [Dr. Rauschmayer's guide](https://2ality.com/2020/06/computing-with-types.html) for a concise introduction.
+Если вы собираетесь поддерживать большую кодовую базу TS/нетривиальную библиотеку React+TS, **мы настоятельно рекомендуем изучить эти утилиты**, чтобы не изобретать колесо и/или не терять рассудок при попытке сделать это. Изучение их кода также может научить вас многим продвинутым TS, которые здесь не рассматриваются.
 
-A level of comfort with **generic types** is therefore required. Here are some helpful resources:
+Я также рекомендую иметь хорошие рабочие знания о том, как создавать встроенные типы утилит с нуля. Краткое введение см. в [Руководстве доктора Раушмайера](https://2ality.com/2020/06/computing-with-types.html).
 
-- https://ts.chibicode.com/generics/
+Таким образом, необходим уровень комфорта с **генеративными типами**. Вот несколько полезных ресурсов:
+
+-   <https://ts.chibicode.com/generics/>

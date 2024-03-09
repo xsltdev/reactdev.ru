@@ -1,21 +1,23 @@
 ---
-id: intro
-sidebar_label: Intro
-title: Advanced Cheatsheet
+description: Эта расширенная шпаргалка помогает показать и объяснить расширенное использование общих типов для тех, кто пишет утилиты/функции/редакторные реквизиты/компоненты более высокого порядка и библиотеки TS+React
 ---
 
-**This Advanced Cheatsheet** helps show and explain advanced usage of generic types for people writing reusable type utilities/functions/render prop/higher order components and TS+React **libraries**.
+# Продвинутая шпаргалка
 
-- It also has miscellaneous tips and tricks for pro users.
-- Advice for contributing to DefinitelyTyped
-- The goal is to take _full advantage_ of TypeScript.
+**Эта расширенная шпаргалка** помогает показать и объяснить расширенное использование общих типов для тех, кто пишет утилиты/функции/редакторные реквизиты/компоненты более высокого порядка и **библиотеки TS+React**.
 
-**Creating React + TypeScript Libraries**
+-   В нем также есть различные советы и рекомендации для профессиональных пользователей.
+-   Советы по внесению вклада в DefinitelyTyped
+-   Цель - использовать _полные преимущества_ TypeScript.
 
-The best tool for creating React + TS libraries right now is [`tsdx`](https://github.com/palmerhq/tsdx). Run `npx tsdx create` and select the "react" option. You can view [the React User Guide](https://github.com/palmerhq/tsdx/issues/5) for a few tips on React+TS library best practices and optimizations for production.
+**Создание библиотек React + TypeScript**.
 
-Another option is [Rollpkg](https://github.com/rafgraph/rollpkg), which uses Rollup and the TypeScript compiler (not Babel) to create packages. It includes default configs for TypeScript, Prettier, ESLint, and Jest (setup for use with React), as well as Bundlephobia package stats for each build.
+Лучшим инструментом для создания библиотек React + TS на данный момент является [`tsdx`](https://github.com/palmerhq/tsdx). Запустите `npx tsdx create` и выберите опцию "react". Вы можете просмотреть [React User Guide](https://github.com/palmerhq/tsdx/issues/5), чтобы получить несколько советов по лучшим практикам создания библиотек React+TS и их оптимизации для производства.
 
-- Be sure to also check [`basarat`'s guide](https://basarat.gitbooks.io/typescript/content/docs/quick/library.html) for library tsconfig settings.
-- Alec Larson: [The best Rollup config for TypeScript libraries](https://gist.github.com/aleclarson/9900ed2a9a3119d865286b218e14d226)
-- From the Angular world, check out https://github.com/bitjson/typescript-starter
+Другой вариант - [Rollpkg](https://github.com/rafgraph/rollpkg), который использует Rollup и компилятор TypeScript (не Babel) для создания пакетов. Он включает конфигурации по умолчанию для TypeScript, Prettier, ESLint и Jest (настройка для использования с React), а также статистику пакетов Bundlephobia для каждой сборки.
+
+-   Не забудьте также проверить [руководство `basarat`](https://basarat.gitbooks.io/typescript/content/docs/quick/library.html) для настроек tsconfig библиотеки.
+-   Алек Ларсон: [Лучший конфиг Rollup для библиотек TypeScript](https://gist.github.com/aleclarson/9900ed2a9a3119d865286b218e14d226)
+-   Из мира Angular [посмотрите](https://github.com/bitjson/typescript-starter).
+
+<small>:material-information-outline: Источник &mdash; <https://react-typescript-cheatsheet.netlify.app/docs/advanced/></small>
