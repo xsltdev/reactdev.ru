@@ -32,6 +32,8 @@ hide:
 
     [:octicons-arrow-right-24: React и Typescript](types/index.md)
 
+    [:octicons-arrow-right-24: Типизация Redux](./types/redux.md)
+
 -   :simple-nextdotjs:{ .lg .middle } **Старт**
 
     ***
