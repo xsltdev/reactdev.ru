@@ -1,14 +1,15 @@
 ---
 status: deprecated
+description: Children позволяет вам манипулировать и преобразовывать JSX, который вы получили в качестве свойства children
 ---
 
 # Children
 
-!!!warning ""
+!!!warning "Внимание"
 
-    Использование `Children` является необычным и может привести к хрупкому коду.
+    Использование `Children` является необычным и может привести к небезопасному коду.
 
-`Children` позволяет вам манипулировать и преобразовывать JSX, который вы получили в качестве [`children` prop.](../../learn/passing-props-to-a-component.md#passing-jsx-as-children).
+`Children` позволяет вам манипулировать и преобразовывать JSX, который вы получили в качестве свойства [`children`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children).
 
 ```js
 const mappedChildren = Children.map(children, (child) => (
@@ -154,7 +155,7 @@ export default function ReversedList({ children }) {
 
 **Параметры**
 
--   `children`: Значение параметра [`children`](../../learn/passing-props-to-a-component#passing-jsx-as-children), полученное вашим компонентом.
+-   `children`: Значение параметра [`children`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children), полученное вашим компонентом.
 
 **Возвращает**
 
