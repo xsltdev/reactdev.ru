@@ -16,9 +16,9 @@ const mappedChildren = Children.map(children, (child) => (
 ));
 ```
 
-## Описание
+## Описание {#reference}
 
-### `Children.count(children)`
+### `Children.count(children)` {#children-count}
 
 Вызовите `Children.count(children)` для подсчета количества детей в структуре данных `children`.
 
@@ -47,7 +47,7 @@ function RowList({ children }) {
 
 -   Пустые узлы (`null`, `undefined` и булевы), строки, числа и [React elements](createElement.md) считаются отдельными узлами. Массивы не считаются отдельными узлами, но их дочерние элементы считаются. **Обход не идет глубже, чем React-элементы:** они не отображаются, и их дочерние элементы не обходятся. [Фрагменты](Fragment.md) не обходятся.
 
-### `Children.forEach(children, fn, thisArg?)`
+### `Children.forEach(children, fn, thisArg?)` {#children-foreach}
 
 Вызовите `Children.forEach(children, fn, thisArg?)`, чтобы выполнить некоторый код для каждого ребенка в структуре данных `children`.
 
@@ -55,12 +55,13 @@ function RowList({ children }) {
 import { Children } from 'react';
 
 function SeparatorList({ children }) {
-  const result = [];
-  Children.forEach(children, (child, index) => {
-    result.push(child);
-    result.push(<hr key={index} />);
-  });
-  // ...
+    const result = [];
+    Children.forEach(children, (child, index) => {
+        result.push(child);
+        result.push(<hr key={index} />);
+    });
+    // ...
+}
 ```
 
 **Параметры**
@@ -77,7 +78,7 @@ function SeparatorList({ children }) {
 
 -   Пустые узлы (`null`, `undefined` и булевы), строки, числа и [React elements](createElement.md) считаются отдельными узлами. Массивы не считаются отдельными узлами, но их дочерние элементы считаются. **Обход не идет глубже, чем React-элементы:** они не отображаются, и их дочерние элементы не обходятся. [Фрагменты](Fragment.md) не обходятся.
 
-### `Children.map(children, fn, thisArg?)`
+### `Children.map(children, fn, thisArg?)` {#children-map}
 
 Вызовите `Children.map(children, fn, thisArg?)` для отображения или преобразования каждого ребенка в структуре данных `children`.
 
@@ -112,7 +113,7 @@ function RowList({ children }) {
 -   Пустые узлы (`null`, `undefined` и булевы), строки, числа и [React elements](createElement.md) считаются отдельными узлами. Массивы не считаются отдельными узлами, но их дочерние элементы считаются. **Обход не идет глубже, чем React-элементы:** они не отображаются, и их дочерние элементы не обходятся. [Фрагменты](Fragment.md) не обходятся.
 -   Если вы возвращаете элемент или массив элементов с ключами из `fn`, **ключи возвращаемых элементов будут автоматически объединены с ключом соответствующего исходного элемента из `children`.** Когда вы возвращаете несколько элементов из `fn` в массиве, их ключи должны быть уникальными только локально друг для друга.
 
-### `Children.only(children)`
+### `Children.only(children)` {#children-only}
 
 Вызовите `Children.only(children)` для утверждения, что `children` представляют собой один элемент React.
 
@@ -137,11 +138,11 @@ function Box({ children }) {
 
 -   Этот метод всегда **отбрасывается, если вы передаете массив (например, возвращаемое значение `Children.map`) в качестве `children`.** Другими словами, он проверяет, что `children` - это один элемент React, а не массив с одним элементом.
 
-### `Children.toArray(children)`
+### `Children.toArray(children)` {#children-toarray}
 
 Вызовите `Children.toArray(children)` для создания массива из структуры данных `children`.
 
-```js ReversedList.js active
+```js
 import { Children } from 'react';
 
 export default function ReversedList({ children }) {
@@ -163,13 +164,13 @@ export default function ReversedList({ children }) {
 
 -   Пустые узлы (`null`, `undefined` и булевы) будут опущены в возвращаемом массиве. **Ключи возвращаемых элементов будут вычислены из ключей исходных элементов и их уровня вложенности и позиции.** Это гарантирует, что уплощение массива не приведет к изменениям в поведении.
 
-## Использование
+## Использование {#usage}
 
-### Преобразование детей
+### Преобразование детей {#transforming-children}
 
 Для преобразования дочерних JSX, которые ваш компонент [получает как пропс `children`,](../../learn/passing-props-to-a-component.md#passing-jsx-as-children) вызовите `Children.map`:
 
-```js
+```js hl_lines="6 8"
 import { Children } from 'react';
 
 function RowList({ children }) {
@@ -243,7 +244,11 @@ function RowList({ children }) {
     }
     ```
 
-!!!note "Почему пропс children не всегда является массивом?"
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/n5ctdz?view=Editor+%2B+Preview&module=%2Fsrc%2FRowList.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
+!!!note "Почему пропс `children` не всегда является массивом?"
 
     В React пропс `children` считается _прозрачной_ структурой данных. Это означает, что вы не должны полагаться на то, как он структурирован. Для преобразования, фильтрации или подсчета детей следует использовать методы `Children`.
 
@@ -300,9 +305,13 @@ function RowList({ children }) {
     	}
     	```
 
+    === "CodeSandbox"
+
+    	<iframe src="https://codesandbox.io/embed/s7wcdv?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
     **Невозможно получить рендерный вывод внутреннего компонента** типа `<MoreRows />` при манипулировании `children`. Вот почему обычно лучше использовать одно из альтернативных решений.
 
-### Выполнение некоторого кода для каждого ребенка
+### Выполнение кода для каждого ребенка {#running-some-code-for-each-child}
 
 Вызовите `Children.forEach` для перебора каждого ребенка в структуре данных `children`. Он не возвращает никакого значения и похож на метод [array `forEach`.](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach) Вы можете использовать его для выполнения пользовательской логики, например, для создания собственного массива.
 
@@ -338,11 +347,15 @@ function RowList({ children }) {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/n4qsff?view=Editor+%2B+Preview&module=%2Fsrc%2FSeparatorList.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 !!!warning ""
 
     Как упоминалось ранее, не существует способа получить рендерный вывод внутреннего компонента при манипулировании `children`. Вот почему обычно лучше использовать одно из альтернативных решений.
 
-### Подсчет детей
+### Подсчет детей {#counting-children}
 
 Вызовите `Children.count(children)` для подсчета количества детей.
 
@@ -381,11 +394,15 @@ function RowList({ children }) {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/2tlqss?view=Editor+%2B+Preview&module=%2Fsrc%2FRowList.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 !!!warning ""
 
     Как упоминалось ранее, не существует способа получить рендерный вывод внутреннего компонента при манипулировании `children`. Вот почему обычно лучше использовать одно из альтернативных решений.
 
-### Преобразование детей в массив
+### Преобразование детей в массив {#converting-children-to-an-array}
 
 Вызовите команду `Children.toArray(children)`, чтобы превратить структуру данных `children` в обычный массив JavaScript. Это позволит вам манипулировать массивом с помощью встроенных методов массивов, таких как [`filter`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/filter), [`sort`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) или [`reverse`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse).
 
@@ -417,11 +434,15 @@ function RowList({ children }) {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/m794qv?view=Editor+%2B+Preview&module=%2Fsrc%2FReversedList.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 !!!warning ""
 
     Как упоминалось ранее, не существует способа получить рендерный вывод внутреннего компонента при манипулировании `children`. Вот почему обычно лучше использовать одно из альтернативных решений.
 
-## Альтернативы
+## Альтернативы {#alternatives}
 
 !!!note ""
 
@@ -433,7 +454,7 @@ function RowList({ children }) {
 
     Не путайте это с [использованием свойства `children`](../../learn/passing-props-to-a-component.md#passing-jsx-as-children) (строчная буква `c`), что хорошо и поощряется.
 
-### Раскрытие нескольких компонентов
+### Раскрытие нескольких компонентов {#exposing-multiple-components}
 
 Манипулирование дочерними компонентами с помощью методов `Children` часто приводит к хрупкому коду. Когда вы передаете дочерние элементы компоненту в JSX, вы обычно не ожидаете, что компонент будет манипулировать или преобразовывать отдельные дочерние элементы.
 
@@ -472,6 +493,10 @@ function RowList({ children }) {
     	return <div className="Row">{children}</div>;
     }
     ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/2sfsd4?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 В отличие от использования `Children.map`, этот подход не оборачивает каждого ребенка автоматически. **Однако, этот подход имеет значительное преимущество по сравнению с предыдущим примером с `Children.map`, потому что он работает, даже если вы продолжаете извлекать больше компонентов.** Например, он все еще работает, если вы извлекаете свой собственный компонент `MoreRows`:
 
@@ -517,9 +542,13 @@ function RowList({ children }) {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/x3p5md?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Это не будет работать с `Children.map`, потому что он будет "видеть" `<MoreRows />` как одного ребенка (и одну строку).
 
-### Принятие массива объектов в качестве пропса
+### Принятие массива объектов в качестве пропса {#accepting-an-array-of-objects-as-a-prop}
 
 Вы также можете явно передать массив в качестве пропса. Например, этот `RowList` принимает в качестве пропса массив `rows`:
 
@@ -567,6 +596,10 @@ function RowList({ children }) {
     	);
     }
     ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/36z7hj?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Поскольку `rows` является обычным массивом JavaScript, компонент `RowList` может использовать для него встроенные методы массивов, такие как [`map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/map).
 
@@ -636,9 +669,13 @@ function RowList({ children }) {
     }
     ```
 
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/8nmgxh?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 В отличие от передачи дочерних элементов как JSX, этот подход позволяет вам связать некоторые дополнительные данные, такие как `header`, с каждым элементом. Поскольку вы работаете с `tabs` напрямую, и это массив, вам не нужны методы `Children`.
 
-### Вызов render prop для настройки рендеринга
+### Вызов render prop для настройки рендеринга {#calling-a-render-prop-to-customize-rendering}
 
 Вместо того чтобы создавать JSX для каждого отдельного элемента, вы также можете передать функцию, которая возвращает JSX, и вызывать эту функцию, когда это необходимо. В этом примере компонент `App` передает функцию `renderContent` компоненту `TabSwitcher`. Компонент `TabSwitcher` вызывает `renderContent` только для выбранной вкладки:
 
@@ -694,6 +731,10 @@ function RowList({ children }) {
     	);
     }
     ```
+
+=== "CodeSandbox"
+
+    <iframe src="https://codesandbox.io/embed/qvd3nz?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
 Пропс типа `renderContent` называется _render prop_, потому что это пропс, определяющий, как отобразить часть пользовательского интерфейса. Однако в нем нет ничего особенного: это обычный пропс, который, как оказалось, является функцией.
 
@@ -754,11 +795,15 @@ function RowList({ children }) {
     }
     ```
 
+=== "CodeSandBox"
+
+    <iframe src="https://codesandbox.io/embed/x28frp?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+
 Это еще один пример того, как родительские и дочерние компоненты могут сотрудничать, не манипулируя детьми.
 
-## Устранение неполадок
+## Устранение неполадок {#troubleshooting}
 
-### Я передаю пользовательский компонент, но методы `Children` не показывают его результат рендеринга
+### Я передаю пользовательский компонент, но методы `Children` не показывают его результат рендеринга {#i-pass-a-custom-component-but-the-children-methods-dont-show-its-render-result}
 
 Предположим, вы передаете два дочерних компонента в `RowList` следующим образом:
 
@@ -772,3 +817,5 @@ function RowList({ children }) {
 Если вы выполните `Children.count(children)` внутри `RowList`, вы получите `2`. Даже если `MoreRows` отобразит 10 различных элементов или вернет `null`, `Children.count(children)` все равно будет `2`. С точки зрения `RowList`, он "видит" только JSX, который он получил. Он не "видит" внутренности компонента `MoreRows`.
 
 Это ограничение затрудняет извлечение компонента. Вот почему альтернативы предпочтительнее использования `Children`.
+
+<small>:material-information-outline: Источник &mdash; <https://react.dev/reference/react/Children></small>
