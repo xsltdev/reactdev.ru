@@ -20,7 +20,6 @@ class App extends React.Component {
 }
 
 function Toolbar(props) {
-    // highlight-range{1-5,8}
     // Компонент Toolbar должен передать проп "theme" ниже,
     // фактически не используя его. Учитывая, что у вас в приложении
     // могут быть десятки компонентов, использующих UI-тему,
@@ -43,7 +42,6 @@ class ThemedButton extends React.Component {
 Контекст позволяет избежать передачи пропсов в промежуточные компоненты:
 
 ```js
-// highlight-range{1-5}
 // Контекст позволяет передавать значение глубоко
 // в дерево компонентов без явной передачи пропсов
 // на каждом уровне. Создадим контекст для текущей
@@ -52,7 +50,6 @@ const ThemeContext = React.createContext('light');
 
 class App extends React.Component {
     render() {
-        // highlight-range{1-4,6}
         // Компонент Provider используется для передачи текущей
         // UI-темы вниз по дереву. Любой компонент может использовать
         // этот контекст и не важно, как глубоко он находится.
@@ -65,7 +62,6 @@ class App extends React.Component {
     }
 }
 
-// highlight-range{1,2}
 // Компонент, который находится в середине,
 // больше не должен явно передавать тему вниз.
 function Toolbar() {
@@ -77,7 +73,6 @@ function Toolbar() {
 }
 
 class ThemedButton extends React.Component {
-    // highlight-range{1-4,7}
     // Определяем contextType, чтобы получить значение контекста.
     // React найдёт (выше по дереву) ближайший Provider-компонент,
     // предоставляющий этот контекст, и использует его значение.
@@ -182,7 +177,7 @@ const MyContext = React.createContext(defaultValue);
 
 Каждый объект Контекста используется вместе с `Provider` компонентом, который позволяет дочерним компонентам, использующим этот контекст, подписаться на его изменения.
 
-Принимает проп `value`, который будут передан во все компоненты, использующие этот контекст и являющиеся потомками этого Provider компонента. Один Provider может быть связан с несколькими компонентами, потребляющими контекст. Так же Provider компоненты могут быть вложены друг в друга, переопределяя значение контекста глубже в дереве.
+Принимает проп `value`, который будет передан во все компоненты, использующие этот контекст и являющиеся потомками этого Provider компонента. Один Provider может быть связан с несколькими компонентами, потребляющими контекст. Так же Provider компоненты могут быть вложены друг в друга, переопределяя значение контекста глубже в дереве.
 
 Все потребители, которые являются потомками Provider, будут повторно рендериться, как только проп `value` у Provider изменится. Потребитель перерендерится при изменении контекста, даже если его родитель, не использующий данный контекст, блокирует повторные рендеры с помощью `shouldComponentUpdate`.
 
@@ -270,7 +265,6 @@ export const themes = {
     },
 };
 
-// highlight-range{1-3}
 export const ThemeContext = React.createContext(
     themes.dark // значение по умолчанию
 );
@@ -282,7 +276,6 @@ export const ThemeContext = React.createContext(
 import { ThemeContext } from './theme-context';
 
 class ThemedButton extends React.Component {
-    // highlight-range{3,12}
     render() {
         let props = this.props;
         let theme = this.context;
@@ -334,12 +327,10 @@ class App extends React.Component {
     }
 
     render() {
-        //highlight-range{1-4}
         // ThemedButton внутри ThemeProvider использует
         // значение светлой UI-темы из состояния, в то время как
         // ThemedButton, который находится вне ThemeProvider,
         // использует тёмную UI-тему из значения по умолчанию
-        //highlight-range{3-5,7}
         return (
             <Page>
                 <ThemeContext.Provider
@@ -370,7 +361,6 @@ ReactDOM.render(<App />, document.root);
 // Убедитесь, что форма значения по умолчанию,
 // передаваемого в createContext, совпадает с формой объекта,
 // которую ожидают потребители контекста.
-// highlight-range{2-3}
 export const ThemeContext = React.createContext({
     theme: themes.dark,
     toggleTheme: () => {},
@@ -383,7 +373,6 @@ export const ThemeContext = React.createContext({
 import { ThemeContext } from './theme-context';
 
 function ThemeTogglerButton() {
-    // highlight-range{1-2,5}
     // ThemeTogglerButton получает из контекста
     // не только значение UI-темы, но и функцию toggleTheme.
     return (
@@ -424,7 +413,6 @@ class App extends React.Component {
             }));
         };
 
-        // highlight-range{1-2,5}
         // Состояние хранит функцию для обновления контекста,
         // которая будет также передана в Provider-компонент.
         this.state = {
@@ -434,7 +422,6 @@ class App extends React.Component {
     }
 
     render() {
-        // highlight-range{1,3}
         // Всё состояние передаётся в качестве значения контекста
         return (
             <ThemeContext.Provider value={this.state}>
@@ -473,7 +460,6 @@ class App extends React.Component {
         const { signedInUser, theme } = this.props;
 
         // Компонент App, который предоставляет начальные значения контекстов
-        // highlight-range{2-3,5-6}
         return (
             <ThemeContext.Provider value={theme}>
                 <UserContext.Provider value={signedInUser}>
@@ -495,7 +481,6 @@ function Layout() {
 
 // Компонент, который может использовать несколько контекстов
 function Content() {
-    // highlight-range{2-10}
     return (
         <ThemeContext.Consumer>
             {(theme) => (
@@ -522,7 +507,6 @@ function Content() {
 ```js
 class App extends React.Component {
     render() {
-        // highlight-range{2}
         return (
             <MyContext.Provider
                 value={{ something: 'something' }}
@@ -540,14 +524,12 @@ class App extends React.Component {
 class App extends React.Component {
     constructor(props) {
         super(props);
-        // highlight-range{2}
         this.state = {
             value: { something: 'something' },
         };
     }
 
     render() {
-        // highlight-range{2}
         return (
             <Provider value={this.state.value}>
                 <Toolbar />
