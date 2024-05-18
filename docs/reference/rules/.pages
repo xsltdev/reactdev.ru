@@ -1,0 +1,6 @@
+title: Правила React
+nav:
+    - index.md
+    - components-and-hooks-must-be-pure.md
+    - react-calls-components-and-hooks.md
+    - rules-of-hooks.md
