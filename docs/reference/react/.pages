@@ -19,9 +19,6 @@ nav:
         - startTransition.md
         - experimental_taintObjectReference.md
         - experimental_taintUniqueValue.md
-    - Директивы:
-        - use-client.md
-        - use-server.md
     - Устаревшие API:
         - Children.md
         - cloneElement.md

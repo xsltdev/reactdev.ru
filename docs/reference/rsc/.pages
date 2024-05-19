@@ -1,0 +1,7 @@
+title: Компоненты React Server
+nav:
+    - server-components.md
+    - server-actions.md
+    - directives.md
+    - use-client.md
+    - use-server.md
