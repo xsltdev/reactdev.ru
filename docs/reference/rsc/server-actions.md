@@ -203,7 +203,7 @@ function UpdateName() {
 
 При использовании `useActionState` с серверными Actions, React также будет автоматически воспроизводить отправленные формы до завершения гидратации. Это означает, что пользователи могут взаимодействовать с вашим приложением даже до того, как оно будет гидратировано.
 
-Подробнее см. документацию для [`useActionState`](../react-dom/hooks/useFormState.md).
+Подробнее см. документацию для [`useActionState`](../react/useActionState.md).
 
 ## Прогрессивное улучшение с `useActionState` {#progressive-enhancement-with-useactionstate}
 
@@ -227,6 +227,6 @@ function UpdateName() {
 
 При указании `permalink` для `useActionState`, React перенаправит на указанный URL, если форма будет отправлена до загрузки сборки JavaScript.
 
-Подробнее см. документацию для [`useActionState`](../react-dom/hooks/useFormState.md).
+Подробнее см. документацию для [`useActionState`](../react/useActionState.md).
 
 <small>:material-information-outline: Источник &mdash; <https://react.dev/reference/rsc/server-actions></small>

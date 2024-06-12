@@ -70,7 +70,7 @@ description: Компонент встроенный в браузер form по
 
 ### Обработка отправки формы с помощью серверного действия {#handle-form-submission-with-a-server-action}
 
-Отображение `<form>` с вводом и кнопкой отправки. Передайте серверное действие (функцию, помеченную [`'use server'`](../../react/use-server.md)) в свойство `action` формы, чтобы запустить функцию при отправке формы.
+Отображение `<form>` с вводом и кнопкой отправки. Передайте серверное действие (функцию, помеченную [`'use server'`](../../rsc/use-server.md)) в свойство `action` формы, чтобы запустить функцию при отправке формы.
 
 Передача серверного действия в `<form action>` позволяет пользователям отправлять формы без включенного JavaScript или до загрузки кода. Это полезно для пользователей, у которых медленное соединение, устройство или отключен JavaScript, и похоже на то, как работают формы, когда в свойство `action` передается URL.
 
@@ -120,7 +120,7 @@ function AddToCart({ productId }) {
 }
 ```
 
-Когда `<form>` отображается [Серверным компонентом](../../react/use-client.md), а в параметр `action` формы `<form>` передается [Серверное действие](../../react/use-server.md), форма [прогрессивно улучшается](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement).
+Когда `<form>` отображается [Серверным компонентом](../../rsc/use-client.md), а в параметр `action` формы `<form>` передается [Серверное действие](../../rsc/use-server.md), форма [прогрессивно улучшается](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement).
 
 ### Отображение состояния ожидания во время отправки формы {#display-a-pending-state-during-form-submission}
 
@@ -285,16 +285,16 @@ function AddToCart({ productId }) {
 
 Отображение сообщения об ошибке отправки формы до загрузки пакета JavaScript для прогрессивного улучшения требует, чтобы:
 
-1.  `<form>` должна быть отображена [серверным компонентом](../../react/use-client.md)
-2.  функция, передаваемая в свойство `action` `<form>`, должна быть [Server Action](../../react/use-server.md)
-3.  `useFormState` Hook будет использоваться для отображения сообщения об ошибке
+1.  `<form>` должна быть отображена [серверным компонентом](../../rsc/use-client.md)
+2.  функция, передаваемая в свойство `action` `<form>`, должна быть [Server Action](../../rsc/use-server.md)
+3.  `useActionState` Hook будет использоваться для отображения сообщения об ошибке
 
-`useFormState` принимает два параметра: [Server Action](../../react/use-server.md) и начальное состояние. `useFormState` возвращает два значения: переменную состояния и экшен. Действие, возвращаемое `useFormState`, должно быть передано в свойство `action` формы. Переменная состояния, возвращаемая `useFormState`, может быть использована для отображения сообщения об ошибке. Значение, возвращаемое [Server Action](../../react/use-server.md), переданное в `useFormState`, будет использовано для обновления переменной состояния.
+`useActionState` принимает два параметра: [Server Action](../../rsc/use-server.md) и начальное состояние. `useActionState` возвращает два значения: переменную состояния и экшен. Действие, возвращаемое `useActionState`, должно быть передано в свойство `action` формы. Переменная состояния, возвращаемая `useActionState`, может быть использована для отображения сообщения об ошибке. Значение, возвращаемое [Server Action](../../rsc/use-server.md), переданное в `useActionState`, будет использовано для обновления переменной состояния.
 
 === "App.js"
 
     ```js
-    import { useFormState } from 'react-dom';
+    import { useActionState } from 'react';
     import { signUpNewUser } from './api';
 
     export default function Page() {
@@ -308,7 +308,7 @@ function AddToCart({ productId }) {
     			return err.toString();
     		}
     	}
-    	const [message, formAction] = useFormState(
+    	const [message, formAction] = useActionState(
     		signup,
     		null
     	);
@@ -338,7 +338,7 @@ function AddToCart({ productId }) {
 
     <iframe src="https://codesandbox.io/embed/y4rgmr?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="vigorous-haibt-y4rgmr" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
-Подробнее об обновлении состояния из действия формы можно узнать из документации [`useFormState`](../hooks/useFormState.md)
+Подробнее об обновлении состояния из действия формы можно узнать из документации [`useActionState`](../../react/useActionState.md)
 
 ### Обработка нескольких типов отправки {#handling-multiple-submission-types}
 

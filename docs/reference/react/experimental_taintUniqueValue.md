@@ -17,7 +17,7 @@ title: taintUniqueValue
 
     Экспериментальные версии React могут содержать ошибки. Не используйте их в продакшене.
 
-    Этот API доступен только внутри [React Server Components](./use-client.md).
+    Этот API доступен только внутри [React Server Components](../rsc/use-client.md).
 
 <big>`taintUniqueValue` позволяет предотвратить передачу уникальных значений клиентским компонентам, таких как пароли, ключи или токены.</big>
 
