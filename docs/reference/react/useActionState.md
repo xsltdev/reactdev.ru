@@ -2,33 +2,43 @@
 status: experimental
 ---
 
-# useFormState
+# useActionState
 
 !!!example "Canary"
 
-    Хук `useFormState` в настоящее время доступен только в канале React canary и experimental. Подробнее о [каналах выпуска здесь](https://react.dev/community/versioning-policy#all-release-channels). Кроме того, для получения всех преимуществ `useFormState` вам необходимо использовать фреймворк, поддерживающий [React Server Components](../../react/use-client.md).
+    Хук `useActionState` в настоящее время доступен только в канале React canary и experimental. Подробнее о [каналах выпуска здесь](https://react.dev/community/versioning-policy#all-release-channels). Кроме того, для получения всех преимуществ `useActionState` вам необходимо использовать фреймворк, поддерживающий [React Server Components](../rsc/use-client.md).
 
-<big>`useFormState` - это хук, который позволяет вам обновлять состояние на основе результата действия формы.</big>
+!!!note ""
+
+    В более ранних версиях React Canary этот API был частью React DOM и назывался useFormState.
+
+<big>`useActionState` - это хук, который позволяет вам обновлять состояние на основе результата действия формы.</big>
 
 ```js
-const [state, formAction] = useFormState(fn, initialState);
+const [state, formAction] = useActionState(
+    fn,
+    initialState
+);
 ```
 
 ## Описание {#reference}
 
-### `useFormState(action, initialState)` {#useformstate}
+### `useActionState(action, initialState)` {#useactionstate}
 
-Вызовите `useFormState` на верхнем уровне вашего компонента, чтобы создать состояние компонента, которое обновляется [при вызове действия формы](../components/form.md). Вы передаете `useFormState` существующую функцию действия формы, а также начальное состояние, и она возвращает новое действие, которое вы используете в своей форме, вместе с последним состоянием формы. Последнее состояние формы также передается в указанную вами функцию.
+Вызовите `useActionState` на верхнем уровне вашего компонента, чтобы создать состояние компонента, которое обновляется [при вызове действия формы](../react-dom/components/form.md). Вы передаете `useActionState` существующую функцию действия формы, а также начальное состояние, и она возвращает новое действие, которое вы используете в своей форме, вместе с последним состоянием формы. Последнее состояние формы также передается в указанную вами функцию.
 
-```js
-import { useFormState } from 'react-dom';
+```jsx
+import { useActionState } from 'react';
 
 async function increment(previousState, formData) {
     return previousState + 1;
 }
 
 function StatefulForm({}) {
-    const [state, formAction] = useFormState(increment, 0);
+    const [state, formAction] = useActionState(
+        increment,
+        0
+    );
     return (
         <form>
             {state}
@@ -42,7 +52,7 @@ function StatefulForm({}) {
 
 Состояние формы - это значение, возвращенное действием, когда форма была отправлена в последний раз. Если форма еще не была отправлена, это начальное состояние, которое вы передаете.
 
-При использовании с серверным действием `useFormState` позволяет показывать ответ сервера от отправки формы даже до завершения гидратации.
+При использовании с серверным действием `useActionState` позволяет показывать ответ сервера от отправки формы даже до завершения гидратации.
 
 **Параметры**
 
@@ -51,41 +61,44 @@ function StatefulForm({}) {
 
 **Возвращаемое значение**
 
-`useFormState` возвращает массив, содержащий ровно два значения:
+`useActionState` возвращает массив, содержащий ровно два значения:
 
 1.  Текущее состояние. Во время первого рендера оно будет соответствовать переданному вами значению `initialState`. После вызова действия оно будет соответствовать значению, возвращенному действием.
 2.  Новое действие, которое вы можете передать в качестве свойства `action` компоненту `form` или свойства `formAction` любому компоненту `button` внутри формы.
 
 **Ограничения**
 
--   При использовании с фреймворком, поддерживающим серверные компоненты React, `useFormState` позволяет сделать формы интерактивными до выполнения JavaScript на клиенте. При использовании без серверных компонентов это эквивалентно локальному состоянию компонента.
--   Функция, передаваемая `useFormState`, получает в качестве первого аргумента дополнительный аргумент - предыдущее или начальное состояние. Это делает ее сигнатуру иной, чем если бы она использовалась непосредственно как действие формы без использования `useFormState`.
+-   При использовании с фреймворком, поддерживающим серверные компоненты React, `useActionState` позволяет сделать формы интерактивными до выполнения JavaScript на клиенте. При использовании без серверных компонентов это эквивалентно локальному состоянию компонента.
+-   Функция, передаваемая `useActionState`, получает в качестве первого аргумента дополнительный аргумент - предыдущее или начальное состояние. Это делает ее сигнатуру иной, чем если бы она использовалась непосредственно как действие формы без использования `useActionState`.
 
 ## Использование {#usage}
 
 ### Использование информации, возвращаемой действием формы {#using-information-returned-by-a-form-action}
 
-Вызовите `useFormState` на верхнем уровне вашего компонента, чтобы получить доступ к возвращаемому значению действия из последнего раза, когда форма была отправлена.
+Вызовите `useActionState` на верхнем уровне вашего компонента, чтобы получить доступ к возвращаемому значению действия из последнего раза, когда форма была отправлена.
 
-```js
-import { useFormState } from 'react-dom';
+```jsx
+import { useActionState } from 'react';
 import { action } from './actions.js';
 
 function MyComponent() {
-    const [state, formAction] = useFormState(action, null);
+    const [state, formAction] = useActionState(
+        action,
+        null
+    );
     // ...
     return <form action={formAction}>{/* ... */}</form>;
 }
 ```
 
-`useFormState` возвращает массив, содержащий ровно два элемента:
+`useActionState` возвращает массив, содержащий ровно два элемента:
 
 1.  Текущее состояние формы, которое первоначально устанавливается в указанное вами начальное состояние, а после отправки формы устанавливается в возвращаемое значение указанного вами действия.
 2.  Новое действие, которое вы передаете в `<form>` в качестве его свойства `action`.
 
 Когда форма будет отправлена, будет вызвана указанная вами функция действия. Ее возвращаемое значение станет новым текущим состоянием формы.
 
-Предоставленное вами действие также получит новый первый аргумент, а именно текущее состояние формы. При первой отправке формы это будет начальное состояние, которое вы указали, а при последующих отправках - возвращаемое значение, полученное при последнем вызове действия. Остальные аргументы такие же, как если бы `useFormState` не использовался
+Предоставленное вами действие также получит новый первый аргумент, а именно текущее состояние формы. При первой отправке формы это будет начальное состояние, которое вы указали, а при последующих отправках - возвращаемое значение, полученное при последнем вызове действия. Остальные аргументы такие же, как если бы `useActionState` не использовался
 
 ```js
 function action(currentState, formData) {
@@ -98,17 +111,17 @@ function action(currentState, formData) {
 
 **1. Отображение ошибок формы**
 
-Чтобы отобразить сообщения, такие как сообщение об ошибке или тост, возвращаемый серверным действием, оберните действие вызовом `useFormState`.
+Чтобы отобразить сообщения, такие как сообщение об ошибке или тост, возвращаемый серверным действием, оберните действие вызовом `useActionState`.
 
 === "App.js"
 
-    ```js
+    ```jsx
     import { useState } from 'react';
-    import { useFormState } from 'react-dom';
+    import { useActionState } from 'react';
     import { addToCart } from './actions.js';
 
     function AddToCartForm({ itemID, itemTitle }) {
-    	const [message, formAction] = useFormState(
+    	const [message, formAction] = useActionState(
     		addToCart,
     		null
     	);
@@ -167,13 +180,13 @@ function action(currentState, formData) {
 
 === "App.js"
 
-    ```js
+    ```jsx
     import { useState } from 'react';
-    import { useFormState } from 'react-dom';
+    import { useActionState } from 'react';
     import { addToCart } from './actions.js';
 
     function AddToCartForm({ itemID, itemTitle }) {
-    	const [formState, formAction] = useFormState(
+    	const [formState, formAction] = useActionState(
     		addToCart,
     		{}
     	);
@@ -247,7 +260,7 @@ function action(currentState, formData) {
 
 ### Мое действие больше не может читать данные отправленной формы {#my-action-can-no-longer-read-the-submitted-form-data}
 
-Когда вы оборачиваете действие с помощью `useFormState`, оно получает дополнительный аргумент _в качестве первого аргумента_. Таким образом, отправленные данные формы являются его _вторым_ аргументом, а не первым, как это было бы обычно. Новый первый аргумент, который добавляется, - это текущее состояние формы.
+Когда вы оборачиваете действие с помощью `useActionState`, оно получает дополнительный аргумент _в качестве первого аргумента_. Таким образом, отправленные данные формы являются его _вторым_ аргументом, а не первым, как это было бы обычно. Новый первый аргумент, который добавляется, - это текущее состояние формы.
 
 ```js
 function action(currentState, formData) {
@@ -255,4 +268,4 @@ function action(currentState, formData) {
 }
 ```
 
-<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react-dom/hooks/useFormState](https://react.dev/reference/react-dom/hooks/useFormState)</small>
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/useActionState](https://react.dev/reference/react/useActionState)</small>

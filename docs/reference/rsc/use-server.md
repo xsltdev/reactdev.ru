@@ -35,7 +35,7 @@ async function addToCart(data) {
 -   Чтобы импортировать действие сервера из [кода клиента](./use-client.md), необходимо использовать директиву на уровне модуля.
 -   Поскольку базовые сетевые вызовы всегда асинхронны, `'use server'` можно использовать только в асинхронных функциях.
 -   Всегда рассматривайте аргументы к действиям сервера как недоверенный ввод и авторизуйте любые мутации. Смотрите [соображения безопасности](#security).
--   Действия сервера должны вызываться в [transition](./useTransition.md). Действия сервера, переданные в [`<form action>`](../react-dom/components/form.md#props) или [`formAction`](../react-dom/components/input.md#props), будут автоматически вызваны в переходе.
+-   Действия сервера должны вызываться в [transition](../react/useTransition.md). Действия сервера, переданные в [`<form action>`](../react-dom/components/form.md#props) или [`formAction`](../react-dom/components/input.md#props), будут автоматически вызваны в переходе.
 -   Server Actions предназначены для мутаций, которые обновляют состояние на стороне сервера; их не рекомендуется использовать для получения данных. Соответственно, фреймворки, реализующие Server Actions, обычно обрабатывают одно действие за раз и не имеют возможности кэшировать возвращаемое значение.
 
 ### Соображения безопасности {#security}
@@ -48,7 +48,7 @@ async function addToCart(data) {
 
     Чтобы предотвратить отправку конфиденциальных данных из серверного действия, существуют экспериментальные API для предотвращения передачи уникальных значений и объектов в клиентский код.
 
-    См. [`experimental_taintUniqueValue`](./experimental_taintUniqueValue.md) и [`experimental_taintObjectReference`](./experimental_taintObjectReference.md).
+    См. [`experimental_taintUniqueValue`](../react/experimental_taintUniqueValue.md) и [`experimental_taintObjectReference`](../react/experimental_taintObjectReference.md).
 
 ### Сериализуемые аргументы и возвращаемые значения {#serializable-parameters-and-return-values}
 
@@ -121,7 +121,7 @@ export default function App() {
 
 В форме запроса имени пользователя может возникнуть ситуация, когда имя пользователя недоступно. Функция `requestUsername` должна сообщать нам о том, не удалось выполнить запрос или нет.
 
-Чтобы обновить пользовательский интерфейс на основе результата действия сервера, поддерживая прогрессивное улучшение, используйте [`useFormState`](../react-dom/hooks/useFormState.md).
+Чтобы обновить пользовательский интерфейс на основе результата действия сервера, поддерживая прогрессивное улучшение, используйте [`useActionState`](../react/useActionState.md).
 
 ```js
 // requestUsername.js
@@ -143,11 +143,11 @@ export default async function requestUsername(formData) {
 // UsernameForm.js
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import requestUsername from './requestUsername';
 
 function UsernameForm() {
-    const [returnValue, action] = useFormState(
+    const [returnValue, action] = useActionState(
         requestUsername,
         'n/a'
     );
@@ -167,13 +167,13 @@ function UsernameForm() {
 }
 ```
 
-Обратите внимание, что, как и большинство хуков, `useFormState` может быть вызван только в [клиентском коде](./use-client.md).
+Обратите внимание, что, как и большинство хуков, `useActionState` может быть вызван только в [клиентском коде](./use-client.md).
 
 ### Вызов серверного действия вне `<form>` {#calling-a-server-action-outside-of-form}
 
 Действия сервера являются открытыми конечными точками сервера и могут быть вызваны в любом месте клиентского кода.
 
-При использовании действия сервера вне [формы](../react-dom/components/form.md) вызывайте его в [переходе](./useTransition.md), что позволит вам отображать индикатор загрузки, показывать [оптимистичные обновления состояния](./useOptimistic.md) и обрабатывать неожиданные ошибки. Формы автоматически оборачивают действия сервера в переходы.
+При использовании действия сервера вне [формы](../react-dom/components/form.md) вызывайте его в [переходе](../react/useTransition.md), что позволит вам отображать индикатор загрузки, показывать [оптимистичные обновления состояния](../react/useOptimistic.md) и обрабатывать неожиданные ошибки. Формы автоматически оборачивают действия сервера в переходы.
 
 ```js hl_lines="9-12"
 import incrementLike from './actions';
@@ -216,4 +216,4 @@ export default async function incrementLike() {
 
 Чтобы прочитать возвращаемое значение действия сервера, вам нужно `await` возвращаемого обещания.
 
-<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/use-server](https://react.dev/reference/react/use-server)</small>
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/rsc/use-server](https://react.dev/reference/rsc/use-server)</small>
