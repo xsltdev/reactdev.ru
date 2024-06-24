@@ -18,6 +18,9 @@
 [Redux Toolkit](redux-toolkit.md)
 : Пакет, облегчающий работу с Redux
 
+[Zustand](./zustand/getting-started/introduction.md)
+: Библиотека управления состоянием
+
 [React Query](react-query.md)
 : Библиотека для получения, кэширования, синхронизации и обновления "серверного" состояния в React-приложениях
 
