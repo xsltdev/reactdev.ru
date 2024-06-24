@@ -364,13 +364,13 @@ export default function Circle() {
 
 Эти библиотеки могут опираться на хуки компонентов или клиентские API. Сторонние компоненты, использующие любой из следующих API React, должны запускаться на клиенте:
 
--   [createContext](createContext.md)
--   [`react`](hooks.md) и `react-dom` Hooks, за исключением [`use`](use.md) и [`useId`](useId.md)
--   [forwardRef](forwardRef.md)
--   [memo](memo.md)
--   [startTransition](startTransition.md)
+-   [createContext](../react/createContext.md)
+-   [`react`](../react/hooks.md) и `react-dom` Hooks, за исключением [`use`](../react/use.md) и [`useId`](../react/useId.md)
+-   [forwardRef](../react/forwardRef.md)
+-   [memo](../react/memo.md)
+-   [startTransition](../react/startTransition.md)
 -   Если они используют клиентские API, например, вставку DOM или нативные представления платформы
 
 Если эти библиотеки были обновлены для совместимости с React Server Components, то они уже будут содержать собственные маркеры `'use client'`, что позволит вам использовать их непосредственно из ваших серверных компонентов. Если библиотека не была обновлена, или компоненту нужны такие параметры, как обработчики событий, которые могут быть указаны только на клиенте, вам может потребоваться добавить собственный файл клиентского компонента между сторонним клиентским компонентом и вашим серверным компонентом, где вы хотите его использовать.
 
-<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/use-client](https://react.dev/reference/react/use-client)</small>
+<small>:material-information-outline: Источник &mdash; [https://react.dev/reference/rsc/use-client](https://react.dev/reference/rsc/use-client)</small>

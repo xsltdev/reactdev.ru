@@ -14,15 +14,14 @@ description: На этой странице перечислены все хук
 
 Формы позволяют создавать интерактивные элементы управления для отправки информации. Для управления формами в ваших компонентах используйте один из этих хуков:
 
--   [`useFormStatus`](./useFormStatus.md) позволяет вносить обновления в пользовательский интерфейс на основе статуса формы.
--   [`useFormState`](./useFormState.md) позволяет управлять состоянием внутри формы.
+-   [`useFormStatus`](./useFormStatus.md) позволяет вносить обновления в пользовательский интерфейс в зависимости от статуса формы.
 
 ```js
 function Form({ action }) {
     async function increment(n) {
         return n + 1;
     }
-    const [count, incrementFormAction] = useFormState(
+    const [count, incrementFormAction] = useActionState(
         increment,
         0
     );
