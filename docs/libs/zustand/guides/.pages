@@ -1,0 +1,18 @@
+title: Гайды
+nav:
+    - updating-state.md
+    - immutable-state-and-merging.md
+    - flux-inspired-practice.md
+    - auto-generating-selectors.md
+    - practice-with-no-store-actions.md
+    - typescript.md
+    - testing.md
+    - event-handler-in-pre-react-18.md
+    - maps-and-sets-usage.md
+    - connect-to-state-with-url-hash.md
+    - how-to-reset-state.md
+    - initialize-state-with-props.md
+    - slices-pattern.md
+    - prevent-rerenders-with-use-shallow.md
+    - ssr-and-hydration.md
+    - nextjs.md

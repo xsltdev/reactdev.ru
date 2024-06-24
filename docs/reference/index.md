@@ -44,7 +44,7 @@ hide:
 
     Предоставляют инструкции для бандлеров, совместимых с React Server Components
 
-    [:octicons-arrow-right-24: Директивы](./react/directives.md)
+    [:octicons-arrow-right-24: Директивы](./rsc/directives.md)
 
 </div>
 
