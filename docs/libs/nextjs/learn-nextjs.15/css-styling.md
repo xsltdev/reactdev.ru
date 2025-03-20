@@ -96,17 +96,16 @@ Let's play with Tailwind! Copy the code below and paste it above the `<p>` eleme
 />
 ```
 
-<!-- QUIZ_ID: quiz2 -->
+<?quiz?>
 
-## Question 1
+question: What shape do you see when using the code snippet above?
+answer: A yellow star
+answer: A blue triangle
+answer-correct: A black triangle
+answer: A red circle
+content:
 
-What shape do you see when using the code snippet above?
-
--   [ ] A yellow star
--   [ ] A blue triangle
--   [x] A black triangle
--   [ ] A red circle
+<h2>Provide some additional content</h2>
+<?/quiz?>
 
 If you prefer writing traditional CSS rules or keeping your styles separate from your JSX - CSS Modules are a great alternative.
-
-<!-- QUIZ_ID: quiz1 -->
