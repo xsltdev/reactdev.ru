@@ -1,0 +1,184 @@
+{
+	"quizzes": {
+		"quiz1": {
+			"questions": [
+				{
+					"type": "multiple-choice",
+					"question": {
+						"en": "What is the capital of France?",
+						"fr": "Quelle est la capitale de la France?"
+					},
+					"media": {
+						"type": "image",
+						"src": "./static/images/paris.png",
+						"alt": {
+							"en": "Paris",
+							"fr": "Paris"
+						}
+					},
+					"options": [
+						{
+							"text": {
+								"en": "Berlin",
+								"fr": "Berlin"
+							},
+							"correct": false,
+							"indice": {
+								"en": "Berlin is the capital of Germany.",
+								"fr": "Berlin est la capitale de l'Allemagne."
+							}
+						},
+						{
+							"text": {
+								"en": "Madrid",
+								"fr": "Madrid"
+							},
+							"correct": false,
+							"indice": {
+								"en": "Madrid is the capital of Spain.",
+								"fr": "Madrid est la capitale de l'Espagne."
+							}
+						},
+						{
+							"text": {
+								"en": "Paris",
+								"fr": "Paris"
+							},
+							"correct": true,
+							"indice": {
+								"en": "Correct! Paris is known as the City of Light.",
+								"fr": "Correct! Paris est connue comme la Ville Lumière."
+							}
+						},
+						{
+							"text": {
+								"en": "Rome",
+								"fr": "Rome"
+							},
+							"correct": false,
+							"indice": {
+								"en": "Rome is the capital of Italy.",
+								"fr": "Rome est la capitale de l'Italie."
+							}
+						}
+					]
+				},
+				{
+					"type": "true-false",
+					"question": {
+						"en": "The Earth is flat.",
+						"fr": "La Terre est plate."
+					},
+					"media": {
+						"type": "video",
+						"src": "./static/videos/earth.mp4",
+						"alt": {
+							"en": "Earth",
+							"fr": "Terre"
+						}
+					},
+					"options": [
+						{
+							"text": {
+								"en": "True",
+								"fr": "Vrai"
+							},
+							"correct": false,
+							"indice": {
+								"en": "Incorrect. The Earth is round.",
+								"fr": "Incorrect. La Terre est ronde."
+							}
+						},
+						{
+							"text": {
+								"en": "False",
+								"fr": "Faux"
+							},
+							"correct": true,
+							"indice": {
+								"en": "Correct! The Earth is spherical.",
+								"fr": "Correct! La Terre est sphérique."
+							}
+						}
+					]
+				},
+				{
+					"type": "fill-in-the-blank",
+					"question": {
+						"en": "____ is the largest planet in our solar system.",
+						"fr": "____ est la plus grande planète de notre système solaire."
+					},
+					"media": {
+						"type": "audio",
+						"src": "./static/audios/jupiter.mp3",
+						"alt": {
+							"en": "Largest planet",
+							"fr": "Plus grande planète"
+						}
+					},
+					"answer": {
+						"en": "Jupiter",
+						"fr": "Jupiter"
+					},
+					"indice": {
+						"en": "Hint: It's a gas giant.",
+						"fr": "Indice: C'est une géante gazeuse."
+					}
+				},
+				{
+					"type": "multi-choice",
+					"question": {
+						"en": "Select the primary colors:",
+						"fr": "Sélectionnez les couleurs primaires :"
+					},
+					"options": [
+						{
+							"text": {
+								"en": "Red",
+								"fr": "Rouge"
+							},
+							"correct": true,
+							"indice": {
+								"en": "Red is a primary color.",
+								"fr": "Le rouge est une couleur primaire."
+							}
+						},
+						{
+							"text": {
+								"en": "Blue",
+								"fr": "Bleu"
+							},
+							"correct": true,
+							"indice": {
+								"en": "Blue is a primary color.",
+								"fr": "Le bleu est une couleur primaire."
+							}
+						},
+						{
+							"text": {
+								"en": "Green",
+								"fr": "Vert"
+							},
+							"correct": false,
+							"indice": {
+								"en": "Green is a secondary color.",
+								"fr": "Le vert est une couleur secondaire."
+							}
+						},
+						{
+							"text": {
+								"en": "Yellow",
+								"fr": "Jaune"
+							},
+							"correct": true,
+							"indice": {
+								"en": "Yellow is a primary color.",
+								"fr": "Le jaune est une couleur primaire."
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+}

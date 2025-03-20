@@ -96,6 +96,10 @@ Let's play with Tailwind! Copy the code below and paste it above the `<p>` eleme
 />
 ```
 
+<!-- QUIZ_ID: quiz2 -->
+
+## Question 1
+
 What shape do you see when using the code snippet above?
 
 -   [ ] A yellow star
@@ -104,3 +108,5 @@ What shape do you see when using the code snippet above?
 -   [ ] A red circle
 
 If you prefer writing traditional CSS rules or keeping your styles separate from your JSX - CSS Modules are a great alternative.
+
+<!-- QUIZ_ID: quiz1 -->
