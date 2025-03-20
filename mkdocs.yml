@@ -99,7 +99,8 @@ plugins:
           auto_caption: true
           skip_classes:
               - nolightbox
-
+    - quiz:
+          enable_feedback: true
 extra_css:
     - '/assets/stylesheets/styles.css?5'
 
