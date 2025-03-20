@@ -1,0 +1,8 @@
+<?quiz?>
+question: What shape do you see when using the code snippet above?
+answer: A yellow star
+answer: A blue triangle
+answer-correct: A black triangle
+answer: A red circle
+content:
+<?/quiz?>
