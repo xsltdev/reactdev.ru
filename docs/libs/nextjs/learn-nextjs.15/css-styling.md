@@ -1,15 +1,12 @@
 ---
 description: Currently, your home page doesn't have any styles. Let's look at the different ways you can style your Next.js application.
-subtitle: Chapter 2
 ---
 
 # CSS Styling
 
 Currently, your home page doesn't have any styles. Let's look at the different ways you can style your Next.js application.
 
-## In this chapter...
-
-Here are the topics we’ll cover
+!!!tip "Here are the topics we’ll cover"
 
 -   How to add a global CSS file to your application.
 -   Two different ways of styling: Tailwind and CSS modules.
@@ -103,8 +100,9 @@ answer: A yellow star
 answer: A blue triangle
 answer-correct: A black triangle
 answer: A red circle
-content:The border class names are used to create a triangle shape.
+content:
 
+<p>The border class names are used to create a triangle shape.</p>
 <?/quiz?>
 
 If you prefer writing traditional CSS rules or keeping your styles separate from your JSX - CSS Modules are a great alternative.
@@ -129,7 +127,7 @@ Inside `/app/ui`, create a new file called `home.module.css` and add the followi
 
 Then, inside your `/app/page.tsx` file import the styles and replace the Tailwind class names from the `<div>` you've added with `styles.shape`:
 
-```ts title="/app/page.tsx" hl_lines="4,9"
+```ts title="/app/page.tsx" hl_lines="4 9"
 import AcmeLogo from '@/app/ui/acme-logo';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -155,8 +153,9 @@ question: What is one benefit of using CSS modules?
 answer: Increase the global scope of CSS classes, making them easier to manage across different files.
 answer-correct: Provide a way to make CSS classes locally scoped to components by default, reducing the risk of styling conflicts.
 answer: Automatically compress and minify CSS files for faster page loading.
-content:CSS Modules create unique class names for each component, so you don't have to worry about style collisions.
+content:
 
+<p>CSS Modules create unique class names for each component, so you don't have to worry about style collisions.</p>
 <?/quiz?>
 
 ## Using the clsx library to toggle class names
@@ -202,8 +201,9 @@ question: Search for "clsx" in your code editor, what components use it to condi
 answer-correct: `status.tsx` and `pagination.tsx`
 answer: `table.tsx` and `status.tsx`
 answer: `nav-links.tsx` and `table.tsx`
-content: The `status.tsx` and `pagination.tsx` components use `clsx` to conditionally apply class names.
+content:
 
+<p>The <code>status.tsx</code> and <code>pagination.tsx</code> components use <code>clsx</code> to conditionally apply class names.</p>
 <?/quiz?>
 
 ## Other styling solutions
