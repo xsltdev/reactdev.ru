@@ -4,3 +4,7 @@ nav:
     - getting-started.md
     - css-styling.md
     - optimizing-fonts-images.md
+    - creating-layouts-and-pages.md
+    - navigating-between-pages.md
+    - setting-up-your-database.md
+    - fetching-data.md
