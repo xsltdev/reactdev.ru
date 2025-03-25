@@ -9,3 +9,4 @@ nav:
     - setting-up-your-database.md
     - fetching-data.md
     - static-and-dynamic-rendering.md
+    - streaming.md
