@@ -111,3 +111,360 @@ If you remember the slow data request, `fetchRevenue()`, this is the request tha
 To do so, you'll need to move the data fetch to the component, let's update the code to see what that'll look like:
 
 Delete all instances of `fetchRevenue()` and its data from `/dashboard/(overview)/page.tsx`:
+
+```ts title="/app/dashboard/(overview)/page.tsx" hl_lines="5-8 11"
+import { Card } from '@/app/ui/dashboard/cards';
+import RevenueChart from '@/app/ui/dashboard/revenue-chart';
+import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
+import { lusitana } from '@/app/ui/fonts';
+import {
+    fetchLatestInvoices,
+    fetchCardData,
+} from '@/app/lib/data'; // remove fetchRevenue
+
+export default async function Page() {
+    const revenue = await fetchRevenue(); // delete this line
+    const latestInvoices = await fetchLatestInvoices();
+    const {
+        numberOfInvoices,
+        numberOfCustomers,
+        totalPaidInvoices,
+        totalPendingInvoices,
+    } = await fetchCardData();
+
+    return (
+		/* ... */
+	);
+}
+```
+
+Then, import `<Suspense>` from React, and wrap it around `<RevenueChart />`. You can pass it a fallback component called `<RevenueChartSkeleton>`.
+
+```ts title="/app/dashboard/(overview)/page.tsx" hl_lines="9-10 51-55"
+import { Card } from '@/app/ui/dashboard/cards';
+import RevenueChart from '@/app/ui/dashboard/revenue-chart';
+import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
+import { lusitana } from '@/app/ui/fonts';
+import {
+    fetchLatestInvoices,
+    fetchCardData,
+} from '@/app/lib/data';
+import { Suspense } from 'react';
+import { RevenueChartSkeleton } from '@/app/ui/skeletons';
+
+export default async function Page() {
+    const latestInvoices = await fetchLatestInvoices();
+    const {
+        numberOfInvoices,
+        numberOfCustomers,
+        totalPaidInvoices,
+        totalPendingInvoices,
+    } = await fetchCardData();
+
+    return (
+        <main>
+            <h1
+                className={`${lusitana.className} mb-4 text-xl md:text-2xl`}
+            >
+                Dashboard
+            </h1>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <Card
+                    title="Collected"
+                    value={totalPaidInvoices}
+                    type="collected"
+                />
+                <Card
+                    title="Pending"
+                    value={totalPendingInvoices}
+                    type="pending"
+                />
+                <Card
+                    title="Total Invoices"
+                    value={numberOfInvoices}
+                    type="invoices"
+                />
+                <Card
+                    title="Total Customers"
+                    value={numberOfCustomers}
+                    type="customers"
+                />
+            </div>
+            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
+                <Suspense
+                    fallback={<RevenueChartSkeleton />}
+                >
+                    <RevenueChart />
+                </Suspense>
+                <LatestInvoices
+                    latestInvoices={latestInvoices}
+                />
+            </div>
+        </main>
+    );
+}
+```
+
+Finally, update the `<RevenueChart>` component to fetch its own data and remove the prop passed to it:
+
+```ts title="/app/ui/dashboard/revenue-chart.tsx" hl_lines="4 8-10"
+import { generateYAxis } from '@/app/lib/utils';
+import { CalendarIcon } from '@heroicons/react/24/outline';
+import { lusitana } from '@/app/ui/fonts';
+import { fetchRevenue } from '@/app/lib/data';
+
+// ...
+
+export default async function RevenueChart() {
+    // Make component async, remove the props
+    const revenue = await fetchRevenue(); // Fetch data inside the component
+
+    const chartHeight = 350;
+    const { yAxisLabels, topLabel } = generateYAxis(
+        revenue
+    );
+
+    if (!revenue || revenue.length === 0) {
+        return (
+            <p className="mt-4 text-gray-400">
+                No data available.
+            </p>
+        );
+    }
+
+    return (
+		// ...
+	);
+}
+```
+
+Now refresh the page, you should see the dashboard information almost immediately, while a fallback skeleton is shown for `<RevenueChart>`:
+
+![Dashboard page with revenue chart skeleton and loaded Card and Latest Invoices components](loading-revenue-chart.png)
+
+### Practice: Streaming `<LatestInvoices>`
+
+Now it's your turn! Practice what you've just learned by streaming the `<LatestInvoices>` component.
+
+Move `fetchLatestInvoices()` down from the page to the `<LatestInvoices>` component. Wrap the component in a `<Suspense>` boundary with a fallback called `<LatestInvoicesSkeleton>`.
+
+Once you're ready, expand the toggle to see the solution code:
+
+???info "Reveal the solution"
+
+Dashboard Page:
+
+```ts title="/app/dashboard/(overview)/page.tsx" hl_lines="5 9 56-60"
+import { Card } from '@/app/ui/dashboard/cards';
+import RevenueChart from '@/app/ui/dashboard/revenue-chart';
+import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
+import { lusitana } from '@/app/ui/fonts';
+import { fetchCardData } from '@/app/lib/data'; // Remove fetchLatestInvoices
+import { Suspense } from 'react';
+import {
+    RevenueChartSkeleton,
+    LatestInvoicesSkeleton,
+} from '@/app/ui/skeletons';
+
+export default async function Page() {
+    // Remove `const latestInvoices = await fetchLatestInvoices()`
+    const {
+        numberOfInvoices,
+        numberOfCustomers,
+        totalPaidInvoices,
+        totalPendingInvoices,
+    } = await fetchCardData();
+
+    return (
+        <main>
+            <h1
+                className={`${lusitana.className} mb-4 text-xl md:text-2xl`}
+            >
+                Dashboard
+            </h1>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <Card
+                    title="Collected"
+                    value={totalPaidInvoices}
+                    type="collected"
+                />
+                <Card
+                    title="Pending"
+                    value={totalPendingInvoices}
+                    type="pending"
+                />
+                <Card
+                    title="Total Invoices"
+                    value={numberOfInvoices}
+                    type="invoices"
+                />
+                <Card
+                    title="Total Customers"
+                    value={numberOfCustomers}
+                    type="customers"
+                />
+            </div>
+            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
+                <Suspense
+                    fallback={<RevenueChartSkeleton />}
+                >
+                    <RevenueChart />
+                </Suspense>
+                <Suspense
+                    fallback={<LatestInvoicesSkeleton />}
+                >
+                    <LatestInvoices />
+                </Suspense>
+            </div>
+        </main>
+    );
+}
+```
+
+`<LatestInvoices>` component. Remember to remove the props from the component:
+
+```ts title="/app/ui/dashboard/latest-invoices.tsx" hl_lines="5 7-9"
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
+import Image from 'next/image';
+import { lusitana } from '@/app/ui/fonts';
+import { fetchLatestInvoices } from '@/app/lib/data';
+
+export default async function LatestInvoices() {
+    // Remove props
+    const latestInvoices = await fetchLatestInvoices();
+
+    return (
+		// ...
+	);
+}
+```
+
+## Grouping components
+
+Great! You're almost there, now you need to wrap the `<Card>` components in Suspense. You can fetch data for each individual card, but this could lead to a _popping_ effect as the cards load in, this can be visually jarring for the user.
+
+So, how would you tackle this problem?
+
+To create more of a _staggered_ effect, you can group the cards using a wrapper component. This means the static `<SideNav/>` will be shown first, followed by the cards, etc.
+
+In your `page.tsx` file:
+
+1.  Delete your `<Card>` components.
+2.  Delete the `fetchCardData()` function.
+3.  Import a new **wrapper** component called `<CardWrapper />`.
+4.  Import a new **skeleton** component called `<CardsSkeleton />`.
+5.  Wrap `<CardWrapper />` in Suspense.
+
+```ts title="/app/dashboard/(overview)/page.tsx" hl_lines="1 6 18-20"
+import CardWrapper from '@/app/ui/dashboard/cards';
+// ...
+import {
+    RevenueChartSkeleton,
+    LatestInvoicesSkeleton,
+    CardsSkeleton,
+} from '@/app/ui/skeletons';
+
+export default async function Page() {
+    return (
+        <main>
+            <h1
+                className={`${lusitana.className} mb-4 text-xl md:text-2xl`}
+            >
+                Dashboard
+            </h1>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <Suspense fallback={<CardsSkeleton />}>
+                    <CardWrapper />
+                </Suspense>
+            </div>
+            // ...
+        </main>
+    );
+}
+```
+
+Then, move into the file `/app/ui/dashboard/cards.tsx`, import the `fetchCardData()` function, and invoke it inside the `<CardWrapper/>` component. Make sure to uncomment any necessary code in this component.
+
+```ts title="/app/ui/dashboard/cards.tsx" hl_lines="2 7-12"
+// ...
+import { fetchCardData } from '@/app/lib/data';
+
+// ...
+
+export default async function CardWrapper() {
+    const {
+        numberOfInvoices,
+        numberOfCustomers,
+        totalPaidInvoices,
+        totalPendingInvoices,
+    } = await fetchCardData();
+
+    return (
+        <>
+            <Card
+                title="Collected"
+                value={totalPaidInvoices}
+                type="collected"
+            />
+            <Card
+                title="Pending"
+                value={totalPendingInvoices}
+                type="pending"
+            />
+            <Card
+                title="Total Invoices"
+                value={numberOfInvoices}
+                type="invoices"
+            />
+            <Card
+                title="Total Customers"
+                value={numberOfCustomers}
+                type="customers"
+            />
+        </>
+    );
+}
+```
+
+Refresh the page, and you should see all the cards load in at the same time. You can use this pattern when you want multiple components to load in at the same time.
+
+## Deciding where to place your Suspense boundaries
+
+Where you place your Suspense boundaries will depend on a few things:
+
+1.  How you want the user to experience the page as it streams.
+2.  What content you want to prioritize.
+3.  If the components rely on data fetching.
+
+Take a look at your dashboard page, is there anything you would've done differently?
+
+Don't worry. There isn't a right answer.
+
+-   You could stream the **whole page** like we did with `loading.tsx`... but that may lead to a longer loading time if one of the components has a slow data fetch.
+-   You could stream **every component** individually... but that may lead to UI _popping_ into the screen as it becomes ready.
+-   You could also create a _staggered_ effect by streaming **page sections**. But you'll need to create wrapper components.
+
+Where you place your suspense boundaries will vary depending on your application. In general, it's good practice to move your data fetches down to the components that need it, and then wrap those components in Suspense. But there is nothing wrong with streaming the sections or the whole page if that's what your application needs.
+
+Don't be afraid to experiment with Suspense and see what works best, it's a powerful API that can help you create more delightful user experiences.
+
+<?quiz?>
+
+question: In general, what is considered good practice when working with Suspense and data fetching?
+answer: Move data fetches up to the parent component
+answer: Avoid using Suspense for data fetching
+answer-correct: Move data fetches down to the components that need it
+answer: Use Suspense only for error boundaries
+content:
+
+<p>By moving data fetching down to the components that need it, you can create more granular Suspense boundaries. This allows you to stream specific components and prevent the UI from blocking.</p>
+<?/quiz?>
+
+## Looking ahead
+
+Streaming and Server Components give us new ways to handle data fetching and loading states, ultimately with the goal of improving the end user experience.
+
+In the next chapter, you'll learn about Partial Prerendering, a new Next.js rendering model built with streaming in mind.
+
+<small>:material-information-outline: Источник &mdash; <https://nextjs.org/learn/dashboard-app/streaming></small>
