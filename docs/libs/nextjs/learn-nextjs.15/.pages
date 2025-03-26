@@ -10,3 +10,5 @@ nav:
     - fetching-data.md
     - static-and-dynamic-rendering.md
     - streaming.md
+    - adding-search-and-pagination.md
+    - mutating-data.md
