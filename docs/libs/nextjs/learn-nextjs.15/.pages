@@ -12,3 +12,5 @@ nav:
     - streaming.md
     - adding-search-and-pagination.md
     - mutating-data.md
+    - error-handling.md
+    - adding-authentication.md
