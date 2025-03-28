@@ -1,48 +1,48 @@
 ---
-description: In the previous chapter, you finished building the invoices routes by adding form validation and improving accessibility. In this chapter, you'll be adding authentication to your dashboard.
+description: В предыдущей главе вы завершили создание маршрутов счетов-фактур, добавив проверку формы и улучшив доступность. В этой главе вы добавите аутентификацию в дашборд.
 ---
 
-# Adding Authentication
+# Аутентификация
 
-In the previous chapter, you finished building the invoices routes by adding form validation and improving accessibility. In this chapter, you'll be adding authentication to your dashboard.
+В предыдущей главе вы завершили создание маршрутов счетов-фактур, добавив проверку формы и улучшив доступность. В этой главе вы добавите аутентификацию в дашборд.
 
-!!!tip "Here are the topics we’ll cover"
+!!!tip "Вот темы, которые мы рассмотрим"
 
-    -   What is authentication.
-    -   How to add authentication to your app using NextAuth.js.
-    -   How to use Middleware to redirect users and protect your routes.
-    -   How to use React's useActionState to handle pending states and form errors.
+    - Что такое аутентификация.
+    - Как добавить аутентификацию в приложение с помощью NextAuth.js.
+    - Как использовать Middleware для перенаправления пользователей и защиты маршрутов.
+    - Как использовать UseActionState в React для обработки отложенных состояний и ошибок формы.
 
-## What is authentication?
+## Что такое аутентификация?
 
-Authentication is a key part of many web applications today. It's how a system checks if the user is who they say they are.
+Аутентификация - ключевая часть многих современных веб-приложений. С ее помощью система проверяет, является ли пользователь тем, за кого себя выдает.
 
-A secure website often uses multiple ways to check a user's identity. For instance, after entering your username and password, the site may send a verification code to your device or use an external app like Google Authenticator. This 2-factor authentication (2FA) helps increase security. Even if someone learns your password, they can't access your account without your unique token.
+Безопасный веб-сайт часто использует несколько способов проверки личности пользователя. Например, после ввода имени пользователя и пароля сайт может отправить проверочный код на ваше устройство или использовать внешнее приложение, например Google Authenticator. Такая двухфакторная аутентификация (2FA) помогает повысить уровень безопасности. Даже если кто-то узнает ваш пароль, он не сможет получить доступ к вашей учетной записи без вашего уникального маркера.
 
-### Authentication vs. Authorization
+### Аутентификация и авторизация
 
-In web development, authentication and authorization serve different roles:
+В веб-разработке аутентификация и авторизация выполняют разные функции:
 
--   **Authentication** is about making sure the user is who they say they are. You're proving your identity with something you have like a username and password.
--   **Authorization** is the next step. Once a user's identity is confirmed, authorization decides what parts of the application they are allowed to use.
+-   **Аутентификация** - это проверка того, что пользователь является тем, за кого себя выдает. Вы подтверждаете свою личность с помощью чего-то, что у вас есть, например, имени пользователя и пароля.
+-   **Авторизация** - это следующий шаг. После того как личность пользователя подтверждена, авторизация определяет, какие части приложения ему разрешено использовать.
 
-So, authentication checks who you are, and authorization determines what you can do or access in the application.
+Итак, аутентификация проверяет, кто вы, а авторизация определяет, что вы можете делать или к чему можете получить доступ в приложении.
 
 <?quiz?>
 
-question: Which of the following best describes the difference between authentication and authorization?
-answer: Authentication determines what you can access. Authorization verifies your identity.
-answer: Authentication and authorization both decide what parts of the application a user can access.
-answer-correct: Authentication verifies your identity. Authorization determines what you can access.
-answer: There is no difference; both terms mean the same.
+question: Что из перечисленного ниже лучше всего описывает разницу между аутентификацией и авторизацией?
+answer: Аутентификация определяет, к чему вы можете получить доступ. Авторизация подтверждает вашу личность.
+answer: Аутентификация и авторизация определяют, к каким частям приложения пользователь может получить доступ.
+answer-correct: Аутентификация подтверждает вашу личность. Авторизация определяет, к чему вы можете получить доступ.
+answer: Разницы нет; оба термина означают одно и то же.
 content:
 
-<p>That's right! Although they sound similar, authentication verifies your identity while authorization determines what you can access.</p>
+<p>Именно так! Хотя эти понятия похожи, аутентификация подтверждает вашу личность, а авторизация определяет, к чему вы можете получить доступ.</p>
 <?/quiz?>
 
-## Creating the login route
+## Создание маршрута входа в систему
 
-Start by creating a new route in your application called `/login` and paste the following code:
+Начните с создания нового маршрута в вашем приложении под названием `/login` и вставьте следующий код:
 
 ```ts title="/app/login/page.tsx"
 import AcmeLogo from '@/app/ui/acme-logo';
@@ -67,23 +67,23 @@ export default function LoginPage() {
 }
 ```
 
-You'll notice the page imports `<LoginForm />`, which you'll update later in the chapter. This component is wrapped with React `<Suspense>` because it will access information from the incoming request (URL search params).
+Вы заметите, что страница импортирует `<LoginForm />`, который вы обновите позже в этой главе. Этот компонент обернут в React `<Suspense>`, потому что он будет получать доступ к информации из входящего запроса (параметры поиска URL).
 
 ## NextAuth.js
 
-We will be using [NextAuth.js](https://nextjs.authjs.dev/) to add authentication to your application. NextAuth.js abstracts away much of the complexity involved in managing sessions, sign-in and sign-out, and other aspects of authentication. While you can manually implement these features, the process can be time-consuming and error-prone. NextAuth.js simplifies the process, providing a unified solution for auth in Next.js applications.
+Мы будем использовать [NextAuth.js](https://nextjs.authjs.dev/) для добавления аутентификации в ваше приложение. NextAuth.js абстрагирует большую часть сложностей, связанных с управлением сессиями, входом и выходом из системы, а также другими аспектами аутентификации. Хотя вы можете реализовать эти функции вручную, этот процесс может занять много времени и привести к ошибкам. NextAuth.js упрощает этот процесс, предоставляя унифицированное решение для аутентификации в приложениях Next.js.
 
-## Setting up NextAuth.js
+## Установка NextAuth.js
 
-Install NextAuth.js by running the following command in your terminal:
+Установите NextAuth.js, выполнив следующую команду в терминале:
 
 ```sh title="Terminal"
 pnpm i next-auth@beta
 ```
 
-Here, you're installing the `beta` version of NextAuth.js, which is compatible with Next.js 14+.
+Здесь вы устанавливаете `beta` версию NextAuth.js, которая совместима с Next.js 14+.
 
-Next, generate a secret key for your application. This key is used to encrypt cookies, ensuring the security of user sessions. You can do this by running the following command in your terminal:
+Далее сгенерируйте секретный ключ для вашего приложения. Этот ключ используется для шифрования файлов cookie, обеспечивая безопасность пользовательских сессий. Для этого выполните следующую команду в терминале:
 
 ```sh title="Terminal"
 # macOS
@@ -91,17 +91,17 @@ openssl rand -base64 32
 # Windows can use https://generate-secret.vercel.app/32
 ```
 
-Then, in your `.env` file, add your generated key to the `AUTH_SECRET` variable:
+Затем в файле `.env` добавьте сгенерированный ключ в переменную `AUTH_SECRET`:
 
 ```sh title=".env" hl_lines="1"
 AUTH_SECRET=your-secret-key
 ```
 
-For auth to work in production, you'll need to update your environment variables in your Vercel project too. Check out this [guide](https://vercel.com/docs/environment-variables) on how to add environment variables on Vercel.
+Чтобы auth работал в продакшне, вам нужно будет обновить переменные окружения и в проекте Vercel. Посмотрите это [руководство](https://vercel.com/docs/environment-variables) о том, как добавить переменные окружения в Vercel.
 
-### Adding the pages option
+### Добавление опции pages
 
-Create an `auth.config.ts` file at the root of our project that exports an `authConfig` object. This object will contain the configuration options for NextAuth.js. For now, it will only contain the `pages` option:
+Создайте файл `auth.config.ts` в корне нашего проекта, который экспортирует объект `authConfig`. Этот объект будет содержать параметры конфигурации для NextAuth.js. Пока что он будет содержать только опцию `pages`:
 
 ```ts title="/auth.config.ts"
 import type { NextAuthConfig } from 'next-auth';
@@ -113,11 +113,11 @@ export const authConfig = {
 } satisfies NextAuthConfig;
 ```
 
-You can use the `pages` option to specify the route for custom sign-in, sign-out, and error pages. This is not required, but by adding `signIn: '/login'` into our `pages` option, the user will be redirected to our custom login page, rather than the NextAuth.js default page.
+Вы можете использовать опцию `pages`, чтобы указать маршрут для пользовательских страниц входа, выхода и ошибок. Это не обязательно, но если добавить `signIn: '/login'` в опцию `pages`, пользователь будет перенаправлен на нашу пользовательскую страницу входа, а не на страницу NextAuth.js по умолчанию.
 
-## Protecting your routes with Next.js Middleware
+## Защита маршрутов с помощью Next.js Middleware
 
-Next, add the logic to protect your routes. This will prevent users from accessing the dashboard pages unless they are logged in.
+Далее добавьте логику для защиты маршрутов. Это не позволит пользователям получить доступ к страницам дашборда, если они не вошли в систему.
 
 ```ts title="/auth.config.ts" hl_lines="7-19"
 import type { NextAuthConfig } from 'next-auth';
@@ -143,11 +143,11 @@ export const authConfig = {
 } satisfies NextAuthConfig;
 ```
 
-The `authorized` callback is used to verify if the request is authorized to access a page with [Next.js Middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware). It is called before a request is completed, and it receives an object with the `auth` and `request` properties. The `auth` property contains the user's session, and the `request` property contains the incoming request.
+Коллбэк `authorized` используется для проверки того, авторизован ли запрос для доступа к странице с помощью [Next.js Middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware). Он вызывается перед завершением запроса и получает объект со свойствами `auth` и `request`. Свойство `auth` содержит сессию пользователя, а свойство `request` - входящий запрос.
 
-The `providers` option is an array where you list different login options. For now, it's an empty array to satisfy NextAuth config. You'll learn more about it in the [Adding the Credentials provider](https://nextjs.org/learn/dashboard-app/adding-authentication#adding-the-credentials-provider) section.
+Параметр `providers` представляет собой массив, в котором перечисляются различные варианты входа в систему. На данный момент это пустой массив, чтобы удовлетворить конфигурацию NextAuth. Подробнее об этом вы узнаете в разделе [Добавление провайдера учетных данных](https://nextjs.org/learn/dashboard-app/adding-authentication#adding-the-credentials-provider).
 
-Next, you will need to import the `authConfig` object into a Middleware file. In the root of your project, create a file called `middleware.ts` and paste the following code:
+Далее вам нужно будет импортировать объект `authConfig` в файл Middleware. В корне вашего проекта создайте файл `middleware.ts` и вставьте в него следующий код:
 
 ```ts title="/middleware.ts"
 import NextAuth from 'next-auth';
@@ -163,17 +163,17 @@ export const config = {
 };
 ```
 
-Here you're initializing NextAuth.js with the `authConfig` object and exporting the `auth` property. You're also using the `matcher` option from Middleware to specify that it should run on specific paths.
+Здесь вы инициализируете NextAuth.js объектом `authConfig` и экспортируете свойство `auth`. Вы также используете опцию `matcher` из Middleware, чтобы указать, что он должен запускаться по определенным путям.
 
-The advantage of employing Middleware for this task is that the protected routes will not even start rendering until the Middleware verifies the authentication, enhancing both the security and performance of your application.
+Преимущество использования Middleware для этой задачи заключается в том, что защищенные маршруты не начнут отрисовываться, пока Middleware не проверит аутентификацию, что повышает как безопасность, так и производительность вашего приложения.
 
-### Password hashing
+### Хеширование паролей
 
-It's good practice to **hash** passwords before storing them in a database. Hashing converts a password into a fixed-length string of characters, which appears random, providing a layer of security even if the user's data is exposed.
+Хорошей практикой является **хеширование** паролей перед их хранением в базе данных. Хеширование преобразует пароль в строку символов фиксированной длины, которая выглядит случайной, обеспечивая уровень безопасности, даже если данные пользователя открыты.
 
-When seeding your database, you used a package called `bcrypt` to hash the user's password before storing it in the database. You will use it _again_ later in this chapter to compare that the password entered by the user matches the one in the database. However, you will need to create a separate file for the `bcrypt` package. This is because `bcrypt` relies on Node.js APIs not available in Next.js Middleware.
+При загрузке базы данных вы использовали пакет `bcrypt` для хэширования пароля пользователя перед его сохранением в базе данных. Позже в этой главе вы снова будете использовать его для проверки соответствия пароля, введенного пользователем, паролю в базе данных. Однако для пакета `bcrypt` вам придется создать отдельный файл. Это связано с тем, что `bcrypt` опирается на API Node.js, недоступные в Next.js Middleware.
 
-Create a new file called `auth.ts` that spreads your `authConfig` object:
+Создайте новый файл `auth.ts`, который будет содержать объект `authConfig`:
 
 ```ts title="/auth.ts"
 import NextAuth from 'next-auth';
@@ -184,11 +184,11 @@ export const { auth, signIn, signOut } = NextAuth({
 });
 ```
 
-### Adding the Credentials provider
+### Добавление провайдера учетных данных
 
-Next, you will need to add the `providers` option for NextAuth.js. `providers` is an array where you list different login options such as Google or GitHub. For this course, we will focus on using the [Credentials provider](https://authjs.dev/getting-started/providers/credentials-tutorial) only.
+Далее вам нужно будет добавить опцию `providers` для NextAuth.js. `providers` - это массив, в котором вы перечисляете различные варианты входа в систему, такие как Google или GitHub. В этом курсе мы сосредоточимся на использовании только [Credentials provider](https://authjs.dev/getting-started/providers/credentials-tutorial).
 
-The Credentials provider allows users to log in with a username and a password.
+Провайдер Credentials позволяет пользователям входить в систему с помощью имени пользователя и пароля.
 
 ```ts title="/auth.ts" hl_lines="3 7"
 import NextAuth from 'next-auth';
@@ -201,13 +201,13 @@ export const { auth, signIn, signOut } = NextAuth({
 });
 ```
 
-!!!info "Good to know"
+!!!info "Полезно знать"
 
-    There are other alternative providers such as [OAuth](https://authjs.dev/getting-started/providers/oauth-tutorial) or [email](https://authjs.dev/getting-started/providers/email-tutorial). See the [NextAuth.js docs](https://authjs.dev/getting-started/providers) for a full list of options.
+    Существуют и другие альтернативные провайдеры, такие как [OAuth](https://authjs.dev/getting-started/providers/oauth-tutorial) или [email](https://authjs.dev/getting-started/providers/email-tutorial). Полный список возможностей см. в [документации NextAuth.js](https://authjs.dev/getting-started/providers).
 
-### Adding the sign in functionality
+### Добавление функциональности авторизации
 
-You can use the `authorize` function to handle the authentication logic. Similarly to Server Actions, you can use `zod` to validate the email and password before checking if the user exists in the database:
+Вы можете использовать функцию `authorize` для обработки логики аутентификации. Аналогично Server Actions, вы можете использовать `zod` для проверки электронной почты и пароля перед тем, как проверить, существует ли пользователь в базе данных:
 
 ```ts title="/auth.ts" hl_lines="4 9-18"
 import NextAuth from 'next-auth';
@@ -232,7 +232,7 @@ export const { auth, signIn, signOut } = NextAuth({
 });
 ```
 
-After validating the credentials, create a new `getUser` function that queries the user from the database.
+После проверки учетных данных создайте новую функцию `getUser`, которая будет запрашивать пользователя из базы данных.
 
 ```ts title="/auth.ts" hl_lines="9-11 13-25 38-45"
 import NextAuth from 'next-auth';
@@ -289,7 +289,7 @@ export const { auth, signIn, signOut } = NextAuth({
 });
 ```
 
-Then, call `bcrypt.compare` to check if the passwords match:
+Затем вызовите `bcrypt.compare`, чтобы проверить, совпадают ли пароли:
 
 ```ts title="/auth.ts" title="9-11 28 34"
 import NextAuth from 'next-auth';
@@ -336,11 +336,11 @@ export const { auth, signIn, signOut } = NextAuth({
 });
 ```
 
-Finally, if the passwords match you want to return the user, otherwise, return `null` to prevent the user from logging in.
+Наконец, если пароли совпадают, вы хотите вернуть пользователя, в противном случае верните `null`, чтобы пользователь не смог войти в систему.
 
-### Updating the login form
+### Обновление формы входа
 
-Now you need to connect the auth logic with your login form. In your `actions.ts` file, create a new action called `authenticate`. This action should import the `signIn` function from `auth.ts`:
+Теперь вам нужно связать логику авторизации с формой входа. В файле `actions.ts` создайте новое действие под названием `authenticate`. Это действие должно импортировать функцию `signIn` из файла `auth.ts`:
 
 ```ts title="/app/lib/actions.ts"
 'use server';
@@ -370,9 +370,9 @@ export async function authenticate(
 }
 ```
 
-If there's a `'CredentialsSignin'` error, you want to show an appropriate error message. You can learn about NextAuth.js errors in [the documentation](https://errors.authjs.dev/).
+Если возникла ошибка `'CredentialsSignin'`, вы хотите вывести соответствующее сообщение об ошибке. Вы можете узнать об ошибках NextAuth.js в [документации](https://errors.authjs.dev/).
 
-Finally, in your `login-form.tsx` component, you can use React's `useActionState` to call the server action, handle form errors, and display the form's pending state:
+Наконец, в компоненте `login-form.tsx` вы можете использовать функцию React `useActionState` для вызова действия сервера, обработки ошибок формы и отображения ее состояния ожидания:
 
 ```ts title="app/ui/login-form.tsx" hl_lines="1 11-13 16-23 26 74-85 91-98"
 'use client';
@@ -480,9 +480,9 @@ export default function LoginForm() {
 }
 ```
 
-## Adding the logout functionality
+## Добавление функции выхода из системы
 
-To add the logout functionality to `<SideNav />`, call the `signOut` function from `auth.ts` in your `<form>` element:
+Чтобы добавить функцию выхода из системы в `<SideNav />`, вызовите функцию `signOut` из `auth.ts` в элементе `<form>`:
 
 ```ts title="/ui/dashboard/sidenav.tsx" hl_lines="5 15-18"
 import Link from 'next/link';
@@ -517,9 +517,9 @@ export default function SideNav() {
 }
 ```
 
-## Try it out
+## Попробуйте
 
-Now, try it out. You should be able to log in and out of your application using the following credentials:
+Теперь попробуйте. Вы должны иметь возможность входить и выходить из приложения, используя следующие учетные данные:
 
 -   Email: `user@nextmail.com`
 -   Password: `123456`

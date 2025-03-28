@@ -1,19 +1,19 @@
 ---
-description: learn how to add search and pagination
+description: В предыдущей главе вы улучшили производительность начальной загрузки дашборда с помощью потоковой передачи данных. Теперь давайте перейдем к странице invoices и узнаем, как добавить поиск и пагинацию
 ---
 
-# Adding Search and Pagination
+# Поиска и пагинации
 
-In the previous chapter, you improved your dashboard's initial loading performance with streaming. Now let's move on to the `/invoices` page, and learn how to add search and pagination.
+В предыдущей главе вы улучшили производительность начальной загрузки дашборда с помощью потоковой передачи данных. Теперь давайте перейдем к странице `/invoices` и узнаем, как добавить поиск и пагинацию.
 
-!!!tip "Here are the topics we’ll cover"
+!!!tip "Вот темы, которые мы рассмотрим"
 
--   Learn how to use the Next.js APIs: useSearchParams, usePathname, and useRouter.
--   Implement search and pagination using URL search params.
+    -   Научитесь использовать API Next.js: `useSearchParams`, `usePathname` и `useRouter`.
+    -   Внедрите поиск и пагинацию с помощью параметров поиска URL.
 
-## Starting code
+## Начальный код
 
-Inside your `/dashboard/invoices/page.tsx` file, paste the following code:
+Внутри файла `/dashboard/invoices/page.tsx` вставьте следующий код:
 
 ```ts title="/app/dashboard/invoices/page.tsx"
 import Pagination from '@/app/ui/invoices/pagination';
@@ -49,47 +49,47 @@ export default async function Page() {
 }
 ```
 
-Spend some time familiarizing yourself with the page and the components you'll be working with:
+Потратьте некоторое время на ознакомление со страницей и компонентами, с которыми вам предстоит работать:
 
--   `<Search/>` allows users to search for specific invoices.
--   `<Pagination/>` allows users to navigate between pages of invoices.
--   `<Table/>` displays the invoices.
+-   `<Search/>` позволяет пользователям искать конкретные счета-фактуры.
+-   `<Pagination/>` позволяет пользователям перемещаться между страницами счетов-фактур.
+-   `<Table/>` отображает счета-фактуры.
 
-Your search functionality will span the client and the server. When a user searches for an invoice on the client, the URL params will be updated, data will be fetched on the server, and the table will re-render on the server with the new data.
+Функциональность поиска будет охватывать клиент и сервер. Когда пользователь ищет счет-фактуру на клиенте, параметры URL обновляются, данные извлекаются на сервере, и таблица перерисовывается на сервере с новыми данными.
 
-## Why use URL search params?
+## Зачем использовать параметры поиска по URL?
 
-As mentioned above, you'll be using URL search params to manage the search state. This pattern may be new if you're used to doing it with client side state.
+Как было сказано выше, вы будете использовать параметры поиска URL для управления состоянием поиска. Этот паттерн может быть новым, если вы привыкли делать это с состоянием на стороне клиента.
 
-There are a couple of benefits of implementing search with URL params:
+Есть несколько преимуществ реализации поиска с помощью параметров URL:
 
--   **Bookmarkable and shareable URLs**: Since the search parameters are in the URL, users can bookmark the current state of the application, including their search queries and filters, for future reference or sharing.
--   **Server-side rendering**: URL parameters can be directly consumed on the server to render the initial state, making it easier to handle server rendering.
--   **Analytics and tracking**: Having search queries and filters directly in the URL makes it easier to track user behavior without requiring additional client-side logic.
+-   **URL, доступные для закладок и совместного использования**: Поскольку параметры поиска находятся в URL, пользователи могут сохранять текущее состояние приложения, включая поисковые запросы и фильтры, в закладках для последующего использования или обмена.
+-   **Серверный рендеринг**: Параметры URL можно напрямую использовать на сервере для рендеринга начального состояния, что упрощает работу с серверным рендерингом.
+-   **Аналитика и отслеживание**: Наличие поисковых запросов и фильтров непосредственно в URL упрощает отслеживание поведения пользователей, не требуя дополнительной логики на стороне клиента.
 
-## Adding the search functionality
+## Добавление функциональности поиска
 
-These are the Next.js client hooks that you'll use to implement the search functionality:
+Вот клиентские хуки Next.js, которые вы будете использовать для реализации функциональности поиска:
 
--   **`useSearchParams`**- Allows you to access the parameters of the current URL. For example, the search params for this URL `/dashboard/invoices?page=1&query=pending` would look like this: `{page: '1', query: 'pending'}`.
--   **`usePathname`** - Lets you read the current URL's pathname. For example, for the route `/dashboard/invoices`, `usePathname` would return `'/dashboard/invoices'`.
--   **`useRouter`** - Enables navigation between routes within client components programmatically. There are [multiple methods](https://nextjs.org/docs/app/api-reference/functions/use-router#userouter) you can use.
+-   **`useSearchParams`**- Позволяет получить доступ к параметрам текущего URL. Например, параметры поиска для этого URL `/dashboard/invoices?page=1&query=pending` будут выглядеть следующим образом: `{page: '1', query: 'pending'}`.
+-   **`usePathname`** - Позволяет прочитать имя пути текущего URL. Например, для маршрута `/dashboard/invoices`, `usePathname` вернет `'/dashboard/invoices'`.
+-   **`useRouter`** - Обеспечивает навигацию между маршрутами внутри клиентских компонентов программным способом. Существует [несколько методов](https://nextjs.org/docs/app/api-reference/functions/use-router#userouter), которые вы можете использовать.
 
-Here's a quick overview of the implementation steps:
+Вот краткий обзор шагов реализации:
 
-1.  Capture the user's input.
-2.  Update the URL with the search params.
-3.  Keep the URL in sync with the input field.
-4.  Update the table to reflect the search query.
+1.  Перехватить ввод пользователя.
+2.  Обновление URL с параметрами поиска.
+3.  Поддерживайте синхронизацию URL с полем ввода.
+4.  Обновите таблицу, чтобы отразить поисковый запрос.
 
-### 1. Capture the user's input
+### 1. Перехват пользовательского ввода
 
-Go into the `<Search>` Component (`/app/ui/search.tsx`), and you'll notice:
+Перейдите в компонент `<Search>` (`/app/ui/search.tsx`), и вы заметите:
 
--   `"use client"` - This is a Client Component, which means you can use event listeners and hooks.
--   `<input>` - This is the search input.
+-   `"use client"` - Это клиентский компонент, что означает, что вы можете использовать обработчики событий и хуки.
+-   `<input>` - поле ввода.
 
-Create a new `handleSearch` function, and add an `onChange` listener to the `<input>` element. `onChange` will invoke `handleSearch` whenever the input value changes.
+Создайте новую функцию `handleSearch` и добавьте обработчик `onChange` к элементу `<input>`. `onChange` будет вызывать `handleSearch` при каждом изменении значения ввода.
 
 ```ts title="/app/ui/search.tsx" hl_lines="10-12 22-24"
 'use client';
@@ -123,13 +123,13 @@ export default function Search({
 }
 ```
 
-Verify that it's working correctly by opening the console in your browser developer tools, then type into the search field. You should see the search term logged to the browser console.
+Убедитесь, что все работает правильно, открыв консоль в инструментах разработчика браузера, а затем наберите в поле поиска. Вы должны увидеть, как поисковый запрос записывается в консоль браузера.
 
-Great! You're capturing the user's search input. Now, you need to update the URL with the search term.
+Отлично! Вы перехватили поисковый ввод пользователя. Теперь вам нужно обновить URL, добавив в него поисковый запрос.
 
-### 2. Update the URL with the search params
+### 2. Обновление URL с параметрами поиска
 
-Import the `useSearchParams` hook from `next/navigation` and assign it to a variable:
+Импортируйте хук `useSearchParams` из `next/navigation` и присвойте его переменной:
 
 ```ts title="/app/ui/search.tsx" hl_lines="4 7"
 'use client';
@@ -147,7 +147,7 @@ export default function Search() {
 }
 ```
 
-Inside `handleSearch`, create a new [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) instance using your new `searchParams` variable.
+Внутри `handleSearch` создайте новый экземпляр [`URLSearchParams`](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams), используя новую переменную `searchParams`.
 
 ```ts title="/app/ui/search.tsx" hl_lines="10"
 'use client';
@@ -165,9 +165,9 @@ export default function Search() {
 }
 ```
 
-`URLSearchParams` is a Web API that provides utility methods for manipulating the URL query parameters. Instead of creating a complex string literal, you can use it to get the params string like `?page=1&query=a`.
+`URLSearchParams` - это веб-интерфейс, предоставляющий методы для манипулирования параметрами запроса URL. Вместо того чтобы создавать сложный строковый литерал, вы можете использовать его для получения строки params типа `?page=1&query=a`.
 
-Next, `set` the params string based on the user’s input. If the input is empty, you want to `delete` it:
+Затем `set` строку params, основанную на вводе данных пользователем. Если введенное значение пустое, его нужно `delete`:
 
 ```ts title="/app/ui/search.tsx" hl_lines="11-15"
 'use client';
@@ -190,9 +190,9 @@ export default function Search() {
 }
 ```
 
-Now that you have the query string. You can use Next.js's `useRouter` and `usePathname` hooks to update the URL.
+Теперь у вас есть строка запроса. Вы можете использовать хуки Next.js `useRouter` и `usePathname` для обновления URL.
 
-Import `useRouter` and `usePathname` from `'next/navigation'`, and use the `replace` method from `useRouter()` inside `handleSearch`:
+Импортируйте `useRouter` и `usePathname` из `'next/navigation'` и используйте метод `replace` из `useRouter()` внутри `handleSearch`:
 
 ```ts title="/app/ui/search.tsx" hl_lines="4-8 12-13 22"
 'use client';
@@ -221,16 +221,16 @@ export default function Search() {
 }
 ```
 
-Here's a breakdown of what's happening:
+Вот краткое описание происходящего:
 
--   `${pathname}` is the current path, in your case, `"/dashboard/invoices"`.
--   As the user types into the search bar, `params.toString()` translates this input into a URL-friendly format.
--   `replace(${pathname}?${params.toString()})` updates the URL with the user's search data. For example, `/dashboard/invoices?query=lee` if the user searches for "Lee".
--   The URL is updated without reloading the page, thanks to Next.js's client-side navigation (which you learned about in the chapter on [navigating between pages](navigating-between-pages.md).
+-   `${pathname}` - это текущий путь, в вашем случае `"/dashboard/invoices"`.
+-   Когда пользователь набирает текст в строке поиска, `params.toString()` преобразует его в формат, удобный для URL.
+-   `replace(${pathname}?${params.toString()})` обновляет URL с данными поиска пользователя. Например, `/dashboard/invoices?query=lee`, если пользователь ищет «Lee».
+-   URL обновляется без перезагрузки страницы, благодаря навигации на стороне клиента Next.js, о которой вы узнали в главе [навигация между страницами] (navigating-between-pages.md).
 
-### 3. Keeping the URL and input in sync
+### 3. Обеспечение синхронизации URL и поля ввода
 
-To ensure the input field is in sync with the URL and will be populated when sharing, you can pass a `defaultValue` to input by reading from `searchParams`:
+Чтобы убедиться, что поле ввода синхронизировано с URL и будет заполнено при совместном использовании, вы можете передать `defaultValue` в `input`, читая из `searchParams`:
 
 ```ts title="/app/ui/search.tsx" hl_lines="7"
 <input
@@ -243,19 +243,19 @@ To ensure the input field is in sync with the URL and will be populated when sha
 />
 ```
 
-!!!info "`defaultValue` vs. `value` / Controlled vs. Uncontrolled"
+!!!info "`defaultValue` vs. `value` / Контролируемые vs. Неконтролируемых"
 
-    If you're using state to manage the value of an input, you'd use the `value` attribute to make it a controlled component. This means React would manage the input's state.
+    Если вы используете состояние для управления значением ввода, вы используете атрибут `value`, чтобы сделать его управляемым компонентом. Это означает, что React будет управлять состоянием ввода.
 
-    However, since you're not using state, you can use `defaultValue`. This means the native input will manage its own state. This is okay since you're saving the search query to the URL instead of state.
+    Однако, поскольку вы не используете состояние, вы можете использовать `defaultValue`. Это означает, что нативный ввод будет управлять своим собственным состоянием. Это нормально, поскольку вы сохраняете поисковый запрос в URL вместо состояния.
 
-### 4. Updating the table
+### 4. Обновление таблицы
 
-Finally, you need to update the table component to reflect the search query.
+Наконец, вам нужно обновить компонент таблицы, чтобы отразить поисковый запрос.
 
-Navigate back to the invoices page.
+Перейдите обратно на страницу счетов-фактур.
 
-Page components [accept a prop called `searchParams`](https://nextjs.org/docs/app/api-reference/file-conventions/page), so you can pass the current URL params to the `<Table>` component.
+Компоненты страницы [принимают параметр `searchParams`](https://nextjs.org/docs/app/api-reference/file-conventions/page), поэтому вы можете передать текущие URL-параметры компоненту `<Table>`.
 
 ```ts title="/app/dashboard/invoices/page.tsx" hl_lines="9-17 32-40"
 import Pagination from '@/app/ui/invoices/pagination';
@@ -306,7 +306,7 @@ export default async function Page(props: {
 }
 ```
 
-If you navigate to the `<Table>` Component, you'll see that the two props, `query` and `currentPage`, are passed to the `fetchFilteredInvoices()` function which returns the invoices that match the query.
+Если вы перейдете к компоненту `<Table>`, то увидите, что два параметра, `query` и `currentPage`, передаются функции `fetchFilteredInvoices()`, которая возвращает счета-фактуры, соответствующие запросу.
 
 ```ts title="/app/ui/invoices/table.tsx"
 // ...
@@ -325,22 +325,22 @@ export default async function InvoicesTable({
 }
 ```
 
-With these changes in place, go ahead and test it out. If you search for a term, you'll update the URL, which will send a new request to the server, data will be fetched on the server, and only the invoices that match your query will be returned.
+Внеся эти изменения, приступайте к тестированию. При поиске термина вы обновите URL-адрес, который отправит новый запрос на сервер, данные будут получены на сервере, и будут возвращены только те счета, которые соответствуют вашему запросу.
 
-!!!note "When to use the `useSearchParams()` hook vs. the `searchParams` prop?"
+!!!note "Когда следует использовать хук `useSearchParams()`, а не свойство `searchParams`?"
 
-    You might have noticed you used two different ways to extract search params. Whether you use one or the other depends on whether you're working on the client or the server.
+    Вы могли заметить, что для извлечения параметров поиска используются два разных способа. Использование того или иного способа зависит от того, где вы работаете - на клиенте или на сервере.
 
-    -   `<Search>` is a Client Component, so you used the `useSearchParams()` hook to access the params from the client.
-    -   `<Table>` is a Server Component that fetches its own data, so you can pass the `searchParams` prop from the page to the component.
+    - `<Search>` - это клиентский компонент, поэтому вы использовали хук `useSearchParams()` для доступа к параметрам с клиента.
+    - `<Table>` - это серверный компонент, который получает свои собственные данные, поэтому вы можете передавать свойство `searchParams` со страницы в компонент.
 
-    As a general rule, if you want to read the params from the client, use the `useSearchParams()` hook as this avoids having to go back to the server.
+    Как правило, если вы хотите читать параметры с клиента, используйте хук `useSearchParams()`, так как это избавит вас от необходимости возвращаться на сервер.
 
-### Best practice: Debouncing
+### Лучшие практики: debouncing
 
-Congratulations! You've implemented search with Next.js! But there's something you can do to optimize it.
+Поздравляем! Вы реализовали поиск в Next.js! Но есть кое-что, что можно сделать для его оптимизации.
 
-Inside your `handleSearch` function, add the following `console.log`:
+Внутри функции `handleSearch` добавьте следующий `console.log`:
 
 ```ts title="/app/ui/search.tsx" hl_lines="2"
 function handleSearch(term: string) {
@@ -356,7 +356,7 @@ function handleSearch(term: string) {
 }
 ```
 
-Then type "Delba" into your search bar and check the console in dev tools. What is happening?
+Затем введите «Delba» в строку поиска и проверьте консоль в dev tools. Что происходит?
 
 ```sh title="Dev Tools Console"
 Searching... D
@@ -366,19 +366,19 @@ Searching... Delb
 Searching... Delba
 ```
 
-You're updating the URL on every keystroke, and therefore querying your database on every keystroke! This isn't a problem as our application is small, but imagine if your application had thousands of users, each sending a new request to your database on each keystroke.
+Вы обновляете URL при каждом нажатии клавиши, а значит, запрашиваете базу данных при каждом нажатии! Это не проблема, поскольку наше приложение небольшое, но представьте, если бы в вашем приложении были тысячи пользователей, каждый из которых отправлял бы новый запрос в вашу базу данных при каждом нажатии клавиши.
 
-**Debouncing** is a programming practice that limits the rate at which a function can fire. In our case, you only want to query the database when the user has stopped typing.
+**Дебаунсинг** - это практика программирования, которая ограничивает скорость выполнения функции. В нашем случае вы хотите запрашивать базу данных только тогда, когда пользователь перестал набирать текст.
 
-!!!note "How Debouncing Works:"
+!!!note "Как работает дебаунсинг:"
 
-    -   **Trigger Event**: When an event that should be debounced (like a keystroke in the search box) occurs, a timer starts.
-    -   **Wait**: If a new event occurs before the timer expires, the timer is reset.
-    -   **Execution**: If the timer reaches the end of its countdown, the debounced function is executed.
+    -   **Триггерное событие**: При наступлении события, которое должно быть отменено (например, нажатие клавиши в строке поиска), запускается таймер.
+    -   **Ожидание**: Если до истечения срока действия таймера произойдет новое событие, таймер будет сброшен.
+    -   **Исполнение**: Если таймер достигает конца обратного отсчета, выполняется функция дебаунсинга.
 
-You can implement debouncing in a few ways, including manually creating your own debounce function. To keep things simple, we'll use a library called [use-debounce](https://www.npmjs.com/package/use-debounce).
+Вы можете реализовать дебаггинг несколькими способами, в том числе вручную создать собственную функцию дебаггинга. Для простоты мы будем использовать библиотеку под названием [use-debounce](https://www.npmjs.com/package/use-debounce).
 
-Install `use-debounce`:
+Установите `use-debounce`:
 
 ```sh
 pnpm i use-debounce
