@@ -384,7 +384,7 @@ Searching... Delba
 pnpm i use-debounce
 ```
 
-In your `<Search>` Component, import a function called `useDebouncedCallback`:
+В компоненте `<Search>` импортируйте функцию `useDebouncedCallback`:
 
 ```ts title="/app/ui/search.tsx" hl_lines="2 5 15"
 // ...
@@ -404,37 +404,37 @@ const handleSearch = useDebouncedCallback((term) => {
 }, 300);
 ```
 
-This function will wrap the contents of `handleSearch`, and only run the code after a specific time once the user has stopped typing (300ms).
+Эта функция будет оборачивать содержимое `handleSearch` и запускать код только через определенное время после того, как пользователь перестанет набирать текст (300 мс).
 
-Now type in your search bar again, and open the console in dev tools. You should see the following:
+Теперь снова введите текст в строку поиска и откройте консоль в dev tools. Вы должны увидеть следующее:
 
 ```sh title="Dev Tools Console"
 Searching... Delba
 ```
 
-By debouncing, you can reduce the number of requests sent to your database, thus saving resources.
+Дебаунсинг позволяет сократить количество запросов к базе данных и тем самым сэкономить ресурсы.
 
 <?quiz?>
 
-question: What problem does debouncing solve in the search feature?
-answer: It speeds up database queries
-answer: It makes the URL bookmarkable
-answer-correct: It prevents a new database query on every keystroke
-answer: It helps in SEO optimization
+question: Какую проблему решает дебаунсинг в функции поиска?
+answer: Ускоряет запросы к базе данных
+answer: Это делает URL-адрес доступным для закладок
+answer-correct: Он предотвращает новый запрос к базе данных при каждом нажатии клавиши
+answer: Это помогает в SEO-оптимизации
 content:
 
-<p>That's right! Debouncing prevents a new database query on every keystroke, thus saving resources.</p>
+<p>Именно так! Дебаунсинг предотвращает новый запрос к базе данных при каждом нажатии клавиши, что позволяет экономить ресурсы.</p>
 <?/quiz?>
 
-## Adding pagination
+## Добавление пагинации
 
-After introducing the search feature, you'll notice the table displays only 6 invoices at a time. This is because the `fetchFilteredInvoices()` function in `data.ts` returns a maximum of 6 invoices per page.
+После внедрения функции поиска вы заметите, что в таблице отображается только 6 счетов за раз. Это связано с тем, что функция `fetchFilteredInvoices()` в `data.ts` возвращает максимум 6 счетов на страницу.
 
-Adding pagination allows users to navigate through the different pages to view all the invoices. Let's see how you can implement pagination using URL params, just like you did with search.
+Добавление пагинации позволяет пользователям перемещаться по различным страницам, чтобы просмотреть все счета. Давайте посмотрим, как можно реализовать пагинацию с помощью параметров URL, как это было сделано с поиском.
 
-Navigate to the `<Pagination/>` component and you'll notice that it's a Client Component. You don't want to fetch data on the client as this would expose your database secrets (remember, you're not using an API layer). Instead, you can fetch the data on the server, and pass it to the component as a prop.
+Перейдите к компоненту `<Pagination/>`, и вы заметите, что это клиентский компонент. Вы не хотите получать данные на клиенте, так как это приведет к раскрытию секретов вашей базы данных (помните, что вы не используете слой API). Вместо этого вы можете получить данные на сервере и передать их компоненту в качестве параметра.
 
-In `/dashboard/invoices/page.tsx`, import a new function called `fetchInvoicesPages` and pass the `query` from `searchParams` as an argument:
+В файле `/dashboard/invoices/page.tsx` импортируйте новую функцию `fetchInvoicesPages` и передайте в качестве аргумента `query` из `searchParams`:
 
 ```ts title="/app/dashboard/invoices/page.tsx" hl_lines="2 13"
 // ...
@@ -457,9 +457,9 @@ export default async function Page(props: {
 }
 ```
 
-`fetchInvoicesPages` returns the total number of pages based on the search query. For example, if there are 12 invoices that match the search query, and each page displays 6 invoices, then the total number of pages would be 2.
+Функция `fetchInvoicesPages` возвращает общее количество страниц по поисковому запросу. Например, если есть 12 счетов-фактур, соответствующих поисковому запросу, и на каждой странице отображается 6 счетов-фактур, то общее количество страниц будет равно 2.
 
-Next, pass the `totalPages` prop to the `<Pagination/>` component:
+Далее передайте параметр `totalPages` компоненту `<Pagination/>`:
 
 ```ts title="/app/dashboard/invoices/page.tsx" hl_lines="37"
 // ...
@@ -505,7 +505,7 @@ export default async function Page(props: {
 }
 ```
 
-Navigate to the `<Pagination/>` component and import the `usePathname` and `useSearchParams` hooks. We will use this to get the current page and set the new page. Make sure to also uncomment the code in this component. Your application will break temporarily as you haven't implemented the `<Pagination/>` logic yet. Let's do that now!
+Перейдите к компоненту `<Pagination/>` и импортируйте хуки `usePathname` и `useSearchParams`. Мы будем использовать их для получения текущей страницы и установки новой страницы. Не забудьте также откомментировать код в этом компоненте. Ваше приложение временно сломается, так как вы еще не реализовали логику `<Pagination/>`. Давайте сделаем это сейчас!
 
 ```ts title="/app/ui/invoices/pagination.tsx" hl_lines="10-13 20-23"
 'use client';
@@ -536,7 +536,7 @@ export default function Pagination({
 }
 ```
 
-Next, create a new function inside the `<Pagination>` Component called `createPageURL`. Similarly to the search, you'll use `URLSearchParams` to set the new page number, and `pathName` to create the URL string.
+Далее создайте новую функцию внутри компонента `<Pagination>` под названием `createPageURL`. Аналогично поиску, вы будете использовать `URLSearchParams` для задания номера новой страницы и `pathName` для создания строки URL.
 
 ```ts title="/app/ui/invoices/pagination.tsx" hl_lines="25-29"
 'use client';
@@ -573,15 +573,15 @@ export default function Pagination({
 }
 ```
 
-Here's a breakdown of what's happening:
+Вот краткое описание происходящего:
 
--   `createPageURL` creates an instance of the current search parameters.
--   Then, it updates the "page" parameter to the provided page number.
--   Finally, it constructs the full URL using the pathname and updated search parameters.
+-   `createPageURL` создает экземпляр текущих параметров поиска.
+-   Затем он обновляет параметр `page` до указанного номера страницы.
+-   Наконец, он создает полный URL, используя имя пути и обновленные параметры поиска.
 
-The rest of the `<Pagination>` component deals with styling and different states (first, last, active, disabled, etc). We won't go into detail for this course, but feel free to look through the code to see where `createPageURL` is being called.
+Остальная часть компонента `<Pagination>` занимается стилизацией и различными состояниями (первое, последнее, активное, отключенное и т. д.). Мы не будем вдаваться в подробности в рамках данного курса, но не стесняйтесь просмотреть код, чтобы увидеть, где вызывается `createPageURL`.
 
-Finally, when the user types a new search query, you want to reset the page number to 1. You can do this by updating the `handleSearch` function in your `<Search>` component:
+Наконец, когда пользователь набирает новый поисковый запрос, вы хотите сбросить номер страницы на `1`. Вы можете сделать это, обновив функцию `handleSearch` в компоненте `<Search>`:
 
 ```ts title="/app/ui/search.tsx" hl_lines="22"
 'use client';
@@ -616,16 +616,16 @@ export default function Search({
 }
 ```
 
-## Summary
+## Резюме
 
-Congratulations! You've just implemented search and pagination using URL search params and Next.js APIs.
+Поздравляем! Вы только что реализовали поиск и пагинацию с помощью параметров поиска URL и API Next.js.
 
-To summarize, in this chapter:
+Подводя итог, можно сказать, что в этой главе
 
--   You've handled search and pagination with URL search parameters instead of client state.
--   You've fetched data on the server.
--   You're using the `useRouter` router hook for smoother, client-side transitions.
+-   Вы реализовали поиск и пагинацию с помощью параметров поиска URL вместо состояния клиента.
+-   Вы получали данные на сервере.
+-   Вы используете крючок маршрутизатора `useRouter` для более плавных переходов на стороне клиента.
 
-These patterns are different from what you may be used to when working with client-side React, but hopefully, you now better understand the benefits of using URL search params and lifting this state to the server.
+Эти паттерны отличаются от тех, к которым вы привыкли при работе с React на стороне клиента, но, надеемся, теперь вы лучше понимаете преимущества использования параметров поиска по URL и передачи этого состояния на сервер.
 
 <small>:material-information-outline: Источник &mdash; <https://nextjs.org/learn/dashboard-app/adding-search-and-pagination></small>

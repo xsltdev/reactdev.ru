@@ -1,37 +1,37 @@
 ---
-description: So far, your application only has a home page. Let's learn how you can create more routes with layouts and pages.
+description: Пока что в вашем приложении есть только главная страница. Давайте узнаем, как можно создать больше маршрутов с помощью макетов и страниц.
 ---
 
-# Creating Layouts and Pages
+# Создание макетов и страниц
 
-So far, your application only has a home page. Let's learn how you can create more routes with layouts and pages.
+Пока что в вашем приложении есть только главная страница. Давайте узнаем, как можно создать больше маршрутов с помощью макетов и страниц.
 
-!!!tip "Here are the topics we’ll cover"
+!!!tip "Вот темы, которые мы рассмотрим"
 
-    -   Create the dashboard routes using file-system routing.
-    -   Understand the role of folders and files when creating new route segments.
-    -   Create a nested layout that can be shared between multiple dashboard pages.
-    -   Understand what colocation, partial rendering, and the root layout are.
+    -   Создание маршрутов дашборда с использованием маршрутизации файловой системы.
+    -   Поймите роль папок и файлов при создании новых сегментов маршрута.
+    -   Создайте вложенный макет, который можно использовать совместно для нескольких страниц дашборда.
+    -   Поймите, что такое размещение, частичный рендеринг и корневой макет.
 
-## Nested routing
+## Вложенная маршрутизация
 
-Next.js uses file-system routing where folders are used to create nested routes. Each folder represents a route segment that maps to a URL segment.
+Next.js использует маршрутизацию с помощью файловой системы, где папки используются для создания вложенных маршрутов. Каждая папка представляет собой сегмент маршрута, который сопоставляется с сегментом URL.
 
-![Diagram showing how folders map to URL segments](folders-to-url-segments.png)
+![Диаграмма, показывающая, как папки сопоставляются с сегментами URL](folders-to-url-segments.png)
 
-You can create separate UIs for each route using `layout.tsx` and `page.tsx` files.
+Вы можете создавать отдельные пользовательские интерфейсы для каждого маршрута с помощью файлов `layout.tsx` и `page.tsx`.
 
-`page.tsx` is a special Next.js file that exports a React component, and it's required for the route to be accessible. In your application, you already have a page file: `/app/page.tsx` - this is the home page associated with the route `/`.
+`page.tsx` - это специальный файл Next.js, который экспортирует компонент React, и он необходим для того, чтобы маршрут был доступен. В вашем приложении уже есть файл страницы: `/app/page.tsx` - это главная страница, связанная с маршрутом `/`.
 
-To create a nested route, you can nest folders inside each other and add `page.tsx` files inside them. For example:
+Чтобы создать вложенный маршрут, вы можете вложить папки друг в друга и добавить в них файлы `page.tsx`. Например:
 
-![Diagram showing how adding a folder called dashboard creates a new route '/dashboard'](dashboard-route.png)
+![Диаграмма, показывающая, как добавление папки с названием dashboard создает новый маршрут '/dashboard'](dashboard-route.png)
 
-`/app/dashboard/page.tsx` is associated with the `/dashboard` path. Let's create the page to see how it works!
+`/app/dashboard/page.tsx` ассоциируется с путем `/dashboard`. Давайте создадим страницу, чтобы посмотреть, как она работает!
 
-## Creating the dashboard page
+## Создание страницы дашборда
 
-Create a new folder called `dashboard` inside `/app`. Then, create a new `page.tsx` file inside the `dashboard` folder with the following content:
+Создайте новую папку `dashboard` внутри `/app`. Затем создайте новый файл `page.tsx` в папке `dashboard` со следующим содержимым:
 
 ```ts title="/app/dashboard/page.tsx"
 export default function Page() {
@@ -39,28 +39,28 @@ export default function Page() {
 }
 ```
 
-Now, make sure that the development server is running and visit <http://localhost:3000/dashboard>. You should see the "Dashboard Page" text.
+Теперь убедитесь, что сервер разработки запущен, и посетите <http://localhost:3000/dashboard>. Вы должны увидеть текст «Страница дашборда».
 
-This is how you can create different pages in Next.js: create a new route segment using a folder, and add a `page` file inside it.
+Вот как можно создавать различные страницы в Next.js: создайте новый сегмент маршрута, используя папку, и добавьте в него файл `page`.
 
-By having a special name for `page` files, Next.js allows you to [colocate](https://nextjs.org/docs/app/building-your-application/routing#colocation) UI components, test files, and other related code with your routes. Only the content inside the `page` file will be publicly accessible. For example, the `/ui` and `/lib` folders are _colocated_ inside the `/app` folder along with your routes.
+Благодаря специальному названию для файлов `page` Next.js позволяет [размещать](https://nextjs.org/docs/app/building-your-application/routing#colocation) компоненты пользовательского интерфейса, тестовые файлы и другой связанный код вместе с маршрутами. Только содержимое внутри файла `page` будет общедоступным. Например, папки `/ui` и `/lib` _размещаются_ внутри папки `/app` вместе с маршрутами.
 
-## Practice: Creating the dashboard pages
+## Практика: Создание страниц дашборда
 
-Let's practice creating more routes. In your dashboard, create two more pages:
+Давайте попрактикуемся в создании дополнительных маршрутов. В вашем дашборде создайте еще две страницы:
 
-1.  Customers Page: The page should be accessible on <http://localhost:3000/dashboard/customers>. For now, it should return a `<p>Customers Page</p>` element.
-2.  Invoices Page: The invoices page should be accessible on <http://localhost:3000/dashboard/invoices>. For now, also return a `<p>Invoices Page</p>` element.
+1.  Страница клиентов: Страница должна быть доступна по адресу <http://localhost:3000/dashboard/customers>. Пока что она должна возвращать элемент `<p>Customers Page</p>`.
+2.  Страница счетов: Страница счетов должна быть доступна по адресу <http://localhost:3000/dashboard/invoices>. Пока что она также должна возвращать элемент `<p>Invoices Page</p>`.
 
-Spend some time tackling this exercise, and when you're ready, expand the toggle below for the solution:
+Потратьте некоторое время на выполнение этого упражнения, а когда будете готовы, разверните тумблер ниже для получения решения:
 
-???info "Reveal the solution"
+???info "Откройте решение"
 
-    You should have the following folder structure:
+    У вас должна быть следующая структура папок:
 
-    ![Diagram showing how adding a folder called login creates a new route '/login'](routing-solution.png)
+    ![Диаграмма, показывающая, как добавление папки с именем login создает новый маршрут '/login'](routing-solution.png)
 
-    Customers Page:
+    Страница клиентов:
 
     ```ts title="/app/dashboard/customers/page.tsx"
     export default function Page() {
@@ -68,7 +68,7 @@ Spend some time tackling this exercise, and when you're ready, expand the toggle
     }
     ```
 
-    Invoices Page:
+    Страница «Счета-фактуры»:
 
     ```ts title="/app/dashboard/invoices/page.tsx"
     export default function Page() {
@@ -76,11 +76,11 @@ Spend some time tackling this exercise, and when you're ready, expand the toggle
     }
     ```
 
-## Creating the dashboard layout
+## Создание макета дашборда
 
-Dashboards have some sort of navigation that is shared across multiple pages. In Next.js, you can use a special `layout.tsx` file to create UI that is shared between multiple pages. Let's create a layout for the dashboard pages!
+Дашборды имеют некую навигацию, которая используется на нескольких страницах. В Next.js вы можете использовать специальный файл `layout.tsx` для создания пользовательского интерфейса, разделяемого между несколькими страницами. Давайте создадим макет для страниц дашборда!
 
-Inside the `/dashboard` folder, add a new file called `layout.tsx` and paste the following code:
+В папке `/dashboard` добавьте новый файл `layout.tsx` и вставьте в него следующий код:
 
 ```ts title="/app/dashboard/layout.tsx"
 import SideNav from '@/app/ui/dashboard/sidenav';
@@ -103,25 +103,25 @@ export default function Layout({
 }
 ```
 
-A few things are going on in this code, so let's break it down:
+В этом коде происходит несколько вещей, поэтому давайте разберем их по порядку:
 
-First, you're importing the `<SideNav />` component into your layout. Any components you import into this file will be part of the layout.
+Во-первых, вы импортируете компонент `<SideNav />` в ваш макет. Все компоненты, которые вы импортируете в этот файл, будут частью макета.
 
-The `<Layout />` component receives a `children` prop. This child can either be a page or another layout. In your case, the pages inside `/dashboard` will automatically be nested inside a `<Layout />` like so:
+Компонент `<Layout />` получает свойство `children`. Этим дочерним компонентом может быть либо страница, либо другой макет. В вашем случае страницы внутри `/dashboard` будут автоматически вложены в `<Layout />` следующим образом:
 
-![Folder structure with dashboard layout nesting the dashboard pages as children](shared-layout.png)
+![Структура папки с макетом дашборда, в котором страницы дашборда вложены как дочерние](shared-layout.png)
 
-Check that everything is working correctly by saving your changes and checking your localhost. You should see the following:
+Проверьте, что все работает правильно, сохранив изменения и проверив локальный хост. Вы должны увидеть следующее:
 
-![Dashboard page with a sidenav and a main content area](shared-layout-page.png)
+![Страница дашборда с сайднавом и областью основного контента](shared-layout-page.png)
 
-One benefit of using layouts in Next.js is that on navigation, only the page components update while the layout won't re-render. This is called [partial rendering](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#4-partial-rendering) which preserves client-side React state in the layout when transitioning between pages.
+Одним из преимуществ использования макетов в Next.js является то, что при навигации обновляются только компоненты страницы, а макет не перерисовывается. Это называется [частичным рендерингом](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#4-partial-rendering), который сохраняет состояние React на стороне клиента в макете при переходе между страницами.
 
-![Folder structure showing the dashboard layout nesting the dashboard pages, but only the pages UI swap on navigation](partial-rendering-dashboard.png)
+![Структура папки, показывающая макет дашборда, в котором вложены страницы дашборда, но при навигации меняются только страницы пользовательского интерфейса](partial-rendering-dashboard.png)
 
-## Root layout
+## Корневой макет
 
-In Chapter 3, you imported the `Inter` font into another layout: `/app/layout.tsx`. As a reminder:
+В главе 3 вы импортировали шрифт `Inter` в другой макет: `/app/layout.tsx`. Напоминаем:
 
 ```ts title="/app/layout.tsx"
 import '@/app/ui/global.css';
@@ -144,20 +144,20 @@ export default function RootLayout({
 }
 ```
 
-This is called a [root layout](https://nextjs.org/docs/app/api-reference/file-conventions/layout#root-layouts) and is required in every Next.js application. Any UI you add to the root layout will be shared across **all** pages in your application. You can use the root layout to modify your `<html>` and `<body>` tags, and add metadata (you'll learn more about metadata in [a later chapter](adding-metadata.md)).
+Это называется [корневой макет](https://nextjs.org/docs/app/api-reference/file-conventions/layout#root-layouts) и требуется в каждом приложении Next.js. Любой пользовательский интерфейс, который вы добавите в корневой макет, будет общим для **всех** страниц вашего приложения. Вы можете использовать корневой макет для изменения тегов `<html>` и `<body>`, а также для добавления метаданных (подробнее о метаданных вы узнаете в [следующей главе](adding-metadata.md)).
 
-Since the new layout you've just created (`/app/dashboard/layout.tsx`) is unique to the dashboard pages, you don't need to add any UI to the root layout above.
+Поскольку новый макет, который вы только что создали (`/app/dashboard/layout.tsx`), уникален для страниц дашборда, вам не нужно добавлять какой-либо пользовательский интерфейс в корневой макет выше.
 
 <?quiz?>
 
-question: What is the purpose of the layout file in Next.js?
-answer: To act as a global error handler
-answer: To fetch data and manage state across the entire application
-answer-correct: To share UI across multiple pages
-answer: To act as the entry point for the entire application
+question: Каково назначение файла layout в Next.js?
+answer: Чтобы действовать в качестве глобального обработчика ошибок
+answer: Для получения данных и управления состоянием всего приложения
+answer-correct: Чтобы разделить пользовательский интерфейс на нескольких страницах
+answer: Выступает в качестве точки входа для всего приложения
 content:
 
-<p>That's right, the layout file is the best way to create a shared layout that all pages in your application can use.</p>
+<p>Именно так, файл макета - это лучший способ создать общий макет, который могут использовать все страницы вашего приложения.</p>
 <?/quiz?>
 
 <small>:material-information-outline: Источник &mdash; <https://nextjs.org/learn/dashboard-app/creating-layouts-and-pages></small>
