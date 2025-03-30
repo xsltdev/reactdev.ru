@@ -1,24 +1,24 @@
 ---
-description: Currently, your home page doesn't have any styles. Let's look at the different ways you can style your Next.js application.
+description: В настоящее время у вашей домашней страницы нет никаких стилей. Давайте рассмотрим различные способы стилизации вашего приложения Next.js.
 ---
 
-# CSS Styling
+# Стилизация CSS
 
-Currently, your home page doesn't have any styles. Let's look at the different ways you can style your Next.js application.
+В настоящее время у вашей домашней страницы нет никаких стилей. Давайте рассмотрим различные способы стилизации вашего приложения Next.js.
 
-!!!tip "Here are the topics we’ll cover"
+!!!tip "Вот темы, которые мы рассмотрим"
 
--   How to add a global CSS file to your application.
--   Two different ways of styling: Tailwind and CSS modules.
--   How to conditionally add class names with the clsx utility package.
+    -   Как добавить глобальный CSS-файл в ваше приложение.
+    -   Два разных способа стилизации: Tailwind и CSS-модули.
+    -   Как условно добавлять имена классов с помощью пакета утилит `clsx`.
 
-## Global styles
+## Глобальные стили
 
-If you look inside the `/app/ui` folder, you'll see a file called `global.css`. You can use this file to add CSS rules to **all** the routes in your application - such as CSS reset rules, site-wide styles for HTML elements like links, and more.
+Если вы заглянете в папку `/app/ui`, то увидите файл под названием `global.css`. Вы можете использовать этот файл для добавления CSS-правил ко **всем** маршрутам в вашем приложении - например, правила сброса CSS, общие для сайта стили для HTML-элементов, таких как ссылки, и многое другое.
 
-You can import `global.css` in any component in your application, but it's usually good practice to add it to your top-level component. In Next.js, this is the [root layout](https://nextjs.org/docs/app/api-reference/file-conventions/layout#root-layouts) (more on this later).
+Вы можете импортировать `global.css` в любой компонент вашего приложения, но обычно рекомендуется добавлять его в компонент верхнего уровня. В Next.js это [корневой макет](https://nextjs.org/docs/app/api-reference/file-conventions/layout#root-layouts) (подробнее об этом позже).
 
-Add global styles to your application by navigating to `/app/layout.tsx` and importing the `global.css` file:
+Добавьте глобальные стили в приложение, перейдя в `/app/layout.tsx` и импортировав файл `global.css`:
 
 ```ts title="/app/layout.tsx" hl_lines="1"
 import '@/app/ui/global.css';
@@ -36,13 +36,13 @@ export default function RootLayout({
 }
 ```
 
-With the development server still running, save your changes and preview them in the browser. Your home page should now look like this:
+Если сервер разработки все еще работает, сохраните изменения и просмотрите их в браузере. Теперь ваша домашняя страница должна выглядеть следующим образом:
 
-![Styled page with the logo 'Acme', a description, and login link.](home-page-with-tailwind.png)
+![Стилизованная страница с логотипом 'Acme', описанием и ссылкой для входа](home-page-with-tailwind.png)
 
-But wait a second, you didn't add any CSS rules, where did the styles come from?
+Но подождите секунду, вы же не добавили никаких CSS-правил, откуда взялись стили?
 
-If you take a look inside `global.css`, you'll notice some `@tailwind` directives:
+Если вы заглянете в `global.css`, то заметите несколько директив `@tailwind`:
 
 ```css title="/app/ui/global.css"
 @tailwind base;
@@ -52,19 +52,19 @@ If you take a look inside `global.css`, you'll notice some `@tailwind` directive
 
 ## Tailwind
 
-[Tailwind](https://tailwindcss.com/) is a CSS framework that speeds up the development process by allowing you to quickly write [utility classes](https://tailwindcss.com/docs/utility-first) directly in your React code.
+[Tailwind](https://tailwindcss.com/) - это CSS-фреймворк, который ускоряет процесс разработки, позволяя вам быстро писать [полезные классы](https://tailwindcss.com/docs/utility-first) прямо в коде React.
 
-In Tailwind, you style elements by adding class names. For example, adding `"text-blue-500"` will turn the `<h1>` text blue:
+В Tailwind вы придаете стиль элементам, добавляя имена классов. Например, добавив `"text-blue-500"`, вы сделаете текст `<h1>` синим:
 
 ```html
 <h1 className="text-blue-500">I'm blue!</h1>
 ```
 
-Although the CSS styles are shared globally, each class is singularly applied to each element. This means if you add or delete an element, you don't have to worry about maintaining separate stylesheets, style collisions, or the size of your CSS bundle growing as your application scales.
+Хотя стили CSS используются глобально, каждый класс применяется к каждому элементу отдельно. Это означает, что если вы добавляете или удаляете элемент, вам не нужно беспокоиться о поддержании отдельных таблиц стилей, коллизии стилей или о том, что размер вашего пакета CSS будет расти по мере расширения приложения.
 
-When you use `create-next-app` to start a new project, Next.js will ask if you want to use Tailwind. If you select `yes`, Next.js will automatically install the necessary packages and configure Tailwind in your application.
+Когда вы используете `create-next-app` для начала нового проекта, Next.js спросит, хотите ли вы использовать Tailwind. Если вы выберете `да`, Next.js автоматически установит необходимые пакеты и настроит Tailwind в вашем приложении.
 
-If you look at `/app/page.tsx`, you'll see that we're using Tailwind classes in the example.
+Если вы посмотрите на `/app/page.tsx`, то увидите, что в примере мы используем классы Tailwind.
 
 ```ts title="/app/page.tsx"
 import AcmeLogo from '@/app/ui/acme-logo';
@@ -83,9 +83,9 @@ export default function Page() {
 }
 ```
 
-Don't worry if this is your first time using Tailwind. To save time, we've already styled all the components you'll be using.
+Не волнуйтесь, если вы впервые используете Tailwind. Чтобы сэкономить время, мы уже стилизовали все компоненты, которые вы будете использовать.
 
-Let's play with Tailwind! Copy the code below and paste it above the `<p>` element in `/app/page.tsx`:
+Давайте поиграем с Tailwind! Скопируйте приведенный ниже код и вставьте его над элементом `<p>` в файле `/app/page.tsx`:
 
 ```html title="/app/page.tsx"
 <div
@@ -95,25 +95,25 @@ Let's play with Tailwind! Copy the code below and paste it above the `<p>` eleme
 
 <?quiz?>
 
-question: What shape do you see when using the code snippet above?
-answer: A yellow star
-answer: A blue triangle
-answer-correct: A black triangle
-answer: A red circle
+question: Какую фигуру вы видите при использовании приведенного выше фрагмента кода?
+answer: Желтая звезда
+answer: Синий треугольник
+answer-correct: Черный треугольник
+answer: Красный круг
 content:
 
-<p>The border class names are used to create a triangle shape.</p>
+<p>Имена классов границ используются для создания формы треугольника.</p>
 <?/quiz?>
 
-If you prefer writing traditional CSS rules or keeping your styles separate from your JSX - CSS Modules are a great alternative.
+Если вы предпочитаете писать традиционные правила CSS или хранить стили отдельно от JSX - модули CSS являются отличной альтернативой.
 
-## CSS Modules
+## CSS модули
 
-[CSS Modules](https://nextjs.org/docs/basic-features/built-in-css-support) allow you to scope CSS to a component by automatically creating unique class names, so you don't have to worry about style collisions as well.
+[CSS модули](https://nextjs.org/docs/basic-features/built-in-css-support) позволяют привязать CSS к компоненту, автоматически создавая уникальные имена классов, так что вам не придется беспокоиться о коллизии стилей.
 
-We'll continue using Tailwind in this course, but let's take a moment to see how you can achieve the same results from the quiz above using CSS modules.
+Мы продолжим использовать Tailwind в этом курсе, но давайте посмотрим, как можно добиться тех же результатов, что и в приведенном выше тесте, используя модули CSS.
 
-Inside `/app/ui`, create a new file called `home.module.css` and add the following CSS rules:
+Внутри `/app/ui` создайте новый файл `home.module.css` и добавьте в него следующие CSS-правила:
 
 ```css title="/app/ui/home.module.css"
 .shape {
@@ -125,7 +125,7 @@ Inside `/app/ui`, create a new file called `home.module.css` and add the followi
 }
 ```
 
-Then, inside your `/app/page.tsx` file import the styles and replace the Tailwind class names from the `<div>` you've added with `styles.shape`:
+Затем в файле `/app/page.tsx` импортируйте стили и замените имена классов Tailwind из `<div>`, которые вы добавили, на `styles.shape`:
 
 ```ts title="/app/page.tsx" hl_lines="4 9"
 import AcmeLogo from '@/app/ui/acme-logo';
@@ -143,31 +143,31 @@ export default function Page() {
 }
 ```
 
-Save your changes and preview them in the browser. You should see the same shape as before.
+Сохраните изменения и просмотрите их в браузере. Вы должны увидеть ту же форму, что и раньше.
 
-Tailwind and CSS modules are the two most common ways of styling Next.js applications. Whether you use one or the other is a matter of preference - you can even use both in the same application!
+Tailwind и модули CSS - это два наиболее распространенных способа стилизации приложений Next.js. Использовать тот или иной способ - это вопрос предпочтений, вы даже можете использовать оба в одном приложении!
 
 <?quiz?>
 
-question: What is one benefit of using CSS modules?
-answer: Increase the global scope of CSS classes, making them easier to manage across different files.
-answer-correct: Provide a way to make CSS classes locally scoped to components by default, reducing the risk of styling conflicts.
-answer: Automatically compress and minify CSS files for faster page loading.
+question: В чем одно из преимуществ использования модулей CSS?
+answer: Увеличьте глобальную область видимости классов CSS, чтобы ими было проще управлять в разных файлах.
+answer-correct: Предоставьте возможность сделать классы CSS локально привязанными к компонентам по умолчанию, что снижает риск конфликтов стилей.
+answer: Автоматическое сжатие и минификация CSS-файлов для ускорения загрузки страниц.
 content:
 
-<p>CSS Modules create unique class names for each component, so you don't have to worry about style collisions.</p>
+<p>Модули CSS создают уникальные имена классов для каждого компонента, поэтому вам не придется беспокоиться о столкновении стилей.</p>
 <?/quiz?>
 
-## Using the clsx library to toggle class names
+## Использование библиотеки clsx для переключения имен классов
 
-There may be cases where you may need to conditionally style an element based on state or some other condition.
+Бывают случаи, когда необходимо условно стилизовать элемент, основываясь на состоянии или каком-то другом условии.
 
-[`clsx`](https://www.npmjs.com/package/clsx) is a library that lets you toggle class names easily. We recommend taking a look at [documentation](https://github.com/lukeed/clsx) for more details, but here's the basic usage:
+[`clsx`](https://www.npmjs.com/package/clsx) - это библиотека, позволяющая легко переключать имена классов. Для получения более подробной информации мы рекомендуем заглянуть в [documentation](https://github.com/lukeed/clsx), но вот основные способы использования:
 
-Suppose that you want to create an `InvoiceStatus` component which accepts `status`. The status can be `'pending'` or `'paid'`.
-If it's `'paid'`, you want the color to be green. If it's `'pending'`, you want the color to be gray.
+Предположим, вы хотите создать компонент `InvoiceStatus`, который принимает `status`. Статус может быть `'pending'` или `'paid'`.
+Если статус `'paid'`, то цвет должен быть зеленым. Если `'pending'`, то цвет должен быть серым.
 
-You can use `clsx` to conditionally apply the classes, like this:
+Вы можете использовать `clsx` для условного применения классов, например, так:
 
 ```ts title="/app/ui/invoices/status.tsx" hl_lines="13-16"
 import clsx from 'clsx';
@@ -197,22 +197,22 @@ export default function InvoiceStatus({
 
 <?quiz?>
 
-question: Search for "clsx" in your code editor, what components use it to conditionally apply class names?
-answer-correct: `status.tsx` and `pagination.tsx`
-answer: `table.tsx` and `status.tsx`
-answer: `nav-links.tsx` and `table.tsx`
+question: Найдите `clsx` в редакторе кода, какие компоненты используют его для условного применения имен классов?
+answer-correct: `status.tsx` и `pagination.tsx`
+answer: `table.tsx` и `status.tsx`
+answer: `nav-links.tsx` и `table.tsx`
 content:
 
-<p>The <code>status.tsx</code> and <code>pagination.tsx</code> components use <code>clsx</code> to conditionally apply class names.</p>
+<p><code>status.tsx</code> и <code>pagination.tsx</code> компоненты используют <code>clsx</code></p>
 <?/quiz?>
 
-## Other styling solutions
+## Другие решения для стилизации
 
-In addition to the approaches we've discussed, you can also style your Next.js application with:
+В дополнение к рассмотренным подходам, вы также можете стилизовать свое приложение Next.js с помощью:
 
--   Sass which allows you to import `.css` and `.scss` files.
--   CSS-in-JS libraries such as [styled-jsx](https://github.com/vercel/styled-jsx), [styled-components](https://github.com/vercel/next.js/tree/canary/examples/with-styled-components), and [emotion](https://github.com/vercel/next.js/tree/canary/examples/with-emotion).
+-   Sass, который позволяет импортировать файлы `.css` и `.scss`.
+-   Библиотеки CSS-in-JS, такие как [styled-jsx](https://github.com/vercel/styled-jsx), [styled-components](https://github.com/vercel/next.js/tree/canary/examples/with-styled-components) и [emotion](https://github.com/vercel/next.js/tree/canary/examples/with-emotion).
 
-Take a look at the [CSS documentation](https://nextjs.org/docs/app/building-your-application/styling) for more information.
+Для получения дополнительной информации посмотрите [CSS documentation](https://nextjs.org/docs/app/building-your-application/styling).
 
 <small>:material-information-outline: Источник &mdash; <https://nextjs.org/learn/dashboard-app/css-styling></small>

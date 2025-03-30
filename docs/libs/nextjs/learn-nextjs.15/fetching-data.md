@@ -1,37 +1,37 @@
 ---
-description: Now that you've created and seeded your database, let's discuss the different ways you can fetch data for your application, and build out your dashboard overview page.
+description: Теперь, когда вы создали и запустили свою базу данных, давайте обсудим различные способы получения данных для вашего приложения и создадим страницу обзора дашборда.
 ---
 
-# Fetching Data
+# Получение данных
 
-Now that you've created and seeded your database, let's discuss the different ways you can fetch data for your application, and build out your dashboard overview page.
+Теперь, когда вы создали и засеяли свою базу данных, давайте обсудим различные способы получения данных для вашего приложения и построим обзорную страницу дашборда.
 
-!!!tip "Here are the topics we’ll cover"
+!!!tip "Вот темы, которые мы рассмотрим"
 
-    -   Learn about some approaches to fetching data: APIs, ORMs, SQL, etc.
-    -   How Server Components can help you access back-end resources more securely.
-    -   What network waterfalls are.
-    -   How to implement parallel data fetching using a JavaScript Pattern.
+    -   Узнайте о некоторых подходах к получению данных: API, ORM, SQL и т. д.
+    - Как серверные компоненты могут помочь вам получить более безопасный доступ к внутренним ресурсам.
+    - Что такое сетевые водопады.
+    - Как реализовать параллельную выборку данных с помощью JavaScript-паттерна.
 
-## Choosing how to fetch data
+## Выбор способа получения данных.
 
-### API layer
+### Слой API
 
-APIs are an intermediary layer between your application code and database. There are a few cases where you might use an API:
+API - это промежуточный слой между кодом вашего приложения и базой данных. Есть несколько случаев, когда вы можете использовать API:
 
--   If you're using third-party services that provide an API.
--   If you're fetching data from the client, you want to have an API layer that runs on the server to avoid exposing your database secrets to the client.
+-   Если вы используете сторонние сервисы, которые предоставляют API.
+-   Если вы получаете данные от клиента, вам нужен слой API, работающий на сервере, чтобы не раскрывать клиенту секреты вашей базы данных.
 
-In Next.js, you can create API endpoints using [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers).
+В Next.js вы можете создавать конечные точки API с помощью [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers).
 
-### Database queries
+### Запросы к базе данных
 
-When you're creating a full-stack application, you'll also need to write logic to interact with your database. For [relational databases](https://aws.amazon.com/relational-database/) like Postgres, you can do this with SQL or with an [ORM](https://vercel.com/docs/storage/vercel-postgres/using-an-orm).
+При создании приложения полного стека вам также потребуется написать логику для взаимодействия с базой данных. Для [реляционных баз данных](https://aws.amazon.com/relational-database/), таких как Postgres, вы можете сделать это с помощью SQL или [ORM](https://vercel.com/docs/storage/vercel-postgres/using-an-orm).
 
-There are a few cases where you have to write database queries:
+Есть несколько случаев, когда вам придется писать запросы к базе данных:
 
--   When creating your API endpoints, you need to write logic to interact with your database.
--   If you are using React Server Components (fetching data on the server), you can skip the API layer, and query your database directly without risking exposing your database secrets to the client.
+-   При создании конечных точек API вам нужно написать логику для взаимодействия с базой данных.
+-   Если вы используете React Server Components (получение данных на сервере), вы можете пропустить слой API и запрашивать базу данных напрямую, не рискуя раскрыть секреты базы данных клиенту.
 
 <?quiz?>
 

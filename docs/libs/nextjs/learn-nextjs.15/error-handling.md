@@ -1,23 +1,23 @@
 ---
-description: In the previous chapter, you learned how to mutate data using Server Actions. Let's see how you can handle errors gracefully using JavaScript's try/catch statements and Next.js APIs for uncaught exceptions.
+description: В предыдущей главе вы узнали, как изменять данные с помощью Server Actions. Давайте посмотрим, как можно изящно обрабатывать ошибки, используя операторы try/catch JavaScript и API Next.js для не пойманных исключений.
 ---
 
-# Handling Errors
+# Обработка ошибок
 
-In the previous chapter, you learned how to mutate data using Server Actions. Let's see how you can handle errors _gracefully_ using JavaScript's `try/catch` statements and Next.js APIs for uncaught exceptions.
+В предыдущей главе вы узнали, как изменять данные с помощью Server Actions. Давайте посмотрим, как можно обрабатывать ошибки _грациозно_, используя операторы JavaScript `try/catch` и API Next.js для не пойманных исключений.
 
-!!!tip "Here are the topics we’ll cover"
+!!!tip "Вот темы, которые мы рассмотрим"
 
-    -   How to use the special `error.tsx` file to catch errors in your route segments, and show a fallback UI to the user.
-    -   How to use the `notFound` function and `not-found` file to handle 404 errors (for resources that don’t exist).
+    -   Как с помощью специального файла `error.tsx` отлавливать ошибки в сегментах маршрута и показывать пользователю резервный UI.
+    -   Как использовать функцию `notFound` и файл `not-found` для обработки 404 ошибки (для несуществующих ресурсов).
 
-## Adding `try/catch` to Server Actions
+## Добавление `try/catch` к действиям сервера
 
-First, let's add JavaScript's `try/catch` statements to your Server Actions to allow you to handle errors gracefully.
+Во-первых, давайте добавим операторы JavaScript `try/catch` в ваши действия сервера, чтобы вы могли изящно обрабатывать ошибки.
 
-If you know how to do this, spend a few minutes updating your Server Actions, or you can copy the code below:
+Если вы знаете, как это сделать, потратьте несколько минут на обновление своих действий сервера, или вы можете скопировать приведенный ниже код:
 
-???note "Reveal the solution"
+???note "Раскрыть решение"
 
     ```ts title="/app/lib/actions.ts"
     export async function createInvoice(formData: FormData) {
@@ -49,7 +49,7 @@ If you know how to do this, spend a few minutes updating your Server Actions, or
     }
     ```
 
-???note "Reveal the solution"
+???note "Раскрыть решение"
 
     ```ts title="/app/lib/actions.ts"
     export async function updateInvoice(
@@ -84,11 +84,11 @@ If you know how to do this, spend a few minutes updating your Server Actions, or
     }
     ```
 
-Note how `redirect` is being called outside of the `try/catch` block. This is because `redirect` works by throwing an error, which would be caught by the `catch` block. To avoid this, you can call `redirect` **after** `try/catch`. `redirect` would only be reachable if `try` is successful.
+Обратите внимание, что `redirect` вызывается вне блока `try/catch`. Это потому, что `redirect` работает, выбрасывая ошибку, которая будет поймана блоком `catch`. Чтобы избежать этого, вы можете вызвать `redirect` **после** `try/catch`. `redirect` будет доступен только в случае успешного завершения `try`.
 
-We're gracefully handling these errors by catching the database issue, and returning a helpful message from our Server Action.
+Мы изящно справляемся с этими ошибками, отлавливая проблему с базой данных и возвращая полезное сообщение от нашего Server Action.
 
-What happens if there is an uncaught exception in your action? We can simulate this by manually throwing an error. For example, in the `deleteInvoice` action, throw an error at the top of the function:
+Что произойдет, если в вашем действии возникнет не пойманное исключение? Мы можем смоделировать это, вручную выбросив ошибку. Например, в действии `deleteInvoice` бросьте ошибку в верхней части функции:
 
 ```ts title="/app/lib/actions.ts" hl_lines="2"
 export async function deleteInvoice(id: string) {
@@ -100,15 +100,15 @@ export async function deleteInvoice(id: string) {
 }
 ```
 
-When you try to delete an invoice, you should see the error on localhost. When going to production, you want to more gracefully show a message to the user when something unexpected happens.
+Когда вы пытаетесь удалить счет-фактуру, вы должны увидеть ошибку на localhost. При запуске в производство вы хотите более изящно показывать пользователю сообщение, когда происходит что-то непредвиденное.
 
-This is where Next.js [`error.tsx`](https://nextjs.org/docs/app/api-reference/file-conventions/error) file comes in. Ensure that you remove this manually added error after testing and before moving onto the next section.
+Здесь на помощь приходит файл Next.js [`error.tsx`](https://nextjs.org/docs/app/api-reference/file-conventions/error). Убедитесь, что вы удалили эту добавленную вручную ошибку после тестирования и перед переходом к следующему разделу.
 
-## Handling all errors with `error.tsx`
+## Обработка всех ошибок с помощью `error.tsx`
 
-The `error.tsx` file can be used to define a UI boundary for a route segment. It serves as a **catch-all** for unexpected errors and allows you to display a fallback UI to your users.
+Файл `error.tsx` можно использовать для определения границ пользовательского интерфейса для сегмента маршрута. Он служит в качестве **catch-all** для непредвиденных ошибок и позволяет отображать пользователям резервный пользовательский интерфейс.
 
-Inside your `/dashboard/invoices` folder, create a new file called `error.tsx` and paste the following code:
+В папке `/dashboard/invoices` создайте новый файл с именем `error.tsx` и вставьте в него следующий код:
 
 ```ts title="/dashboard/invoices/error.tsx"
 'use client';
@@ -146,30 +146,30 @@ export default function Error({
 }
 ```
 
-There are a few things you'll notice about the code above:
+В приведенном выше коде вы заметите несколько вещей:
 
--   **"use client"** - `error.tsx` needs to be a Client Component.
--   It accepts two props:
-    -   `error`: This object is an instance of JavaScript's native [`Error`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) object.
-    -   `reset`: This is a function to reset the error boundary. When executed, the function will try to re-render the route segment.
+-   **"use client"** - `error.tsx` должен быть клиентским компонентом.
+-   Он принимает два реквизита:
+    -   `error`: Этот объект является экземпляром родного объекта JavaScript [`Error`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error).
+    -   `reset`: Это функция для сброса границы ошибки. При выполнении функции будет предпринята попытка повторного отображения сегмента маршрута.
 
-When you try to delete an invoice again, you should see the following UI:
+При повторной попытке удалить счет-фактуру вы должны увидеть следующий пользовательский интерфейс:
 
-![The error.tsx file showing the props it accepts](error-page.png)
+![Файл error.tsx, показывающий принимаемые реквизиты](error-page.png)
 
-## Handling 404 errors with the `notFound` function
+## Обработка 404 ошибки с помощью функции `notFound`
 
-Another way you can handle errors gracefully is by using the `notFound` function. While `error.tsx` is useful for catching uncaught exceptions, `notFound` can be used when you try to fetch a resource that doesn't exist.
+Еще один способ изящной обработки ошибок - использование функции `notFound`. В то время как `error.tsx` полезна для перехвата не пойманных исключений, `notFound` можно использовать, когда вы пытаетесь получить несуществующий ресурс.
 
-For example, visit <http://localhost:3000/dashboard/invoices/2e94d1ed-d220-449f-9f11-f0bbceed9645/edit>.
+Например, посетите <http://localhost:3000/dashboard/invoices/2e94d1ed-d220-449f-9f11-f0bbceed9645/edit>.
 
-This is a fake UUID that doesn't exist in your database.
+Это поддельный UUID, который не существует в вашей базе данных.
 
-You'll immediately see `error.tsx` kicks in because this is a child route of `/invoices` where `error.tsx` is defined.
+Вы сразу увидите, как сработает `error.tsx`, потому что это дочерний маршрут `/invoices`, где определен `error.tsx`.
 
-However, if you want to be more specific, you can show a 404 error to tell the user the resource they're trying to access hasn't been found.
+Однако если вы хотите быть более конкретными, вы можете показать ошибку 404, чтобы сообщить пользователю, что ресурс, к которому он пытается получить доступ, не найден.
 
-You can confirm that the resource hasn't been found by going into your `fetchInvoiceById` function in `data.ts`, and console logging the returned `invoice`:
+Вы можете подтвердить, что ресурс не был найден, зайдя в функцию `fetchInvoiceById` в `data.ts` и записав в консольный лог возвращаемый `invoice`:
 
 ```ts title="/app/lib/data.ts" hl_lines="6"
 export async function fetchInvoiceById(id: string) {
@@ -185,9 +185,9 @@ export async function fetchInvoiceById(id: string) {
 }
 ```
 
-Now that you know the invoice doesn't exist in your database, let's use `notFound` to handle it. Navigate to `/dashboard/invoices/[id]/edit/page.tsx`, and import `{ notFound }` from `'next/navigation'`.
+Теперь, когда вы знаете, что счет-фактура не существует в вашей базе данных, давайте воспользуемся функцией `notFound` для его обработки. Перейдите в `/dashboard/invoices/[id]/edit/page.tsx` и импортируйте `{ notFound }` из `'next/navigation'`.
 
-Then, you can use a conditional to invoke `notFound` if the invoice doesn't exist:
+Затем вы можете использовать условие для вызова `notFound`, если счет-фактура не существует:
 
 ```ts title="/dashboard/invoices/[id]/edit/page.tsx" hl_lines="5 17-19"
 import {
@@ -214,11 +214,11 @@ export default async function Page(props: {
 }
 ```
 
-Then, to show error UI to the user, create a `not-found.tsx` file inside the `/edit` folder.
+Затем, чтобы показать пользователю UI ошибки, создайте файл `not-found.tsx` внутри папки `/edit`.
 
-![The not-found.tsx file inside the edit folder](not-found-file.png)
+![Файл not-found.tsx внутри папки edit](not-found-file.png)
 
-Inside the not-found.tsx file, paste the following the code:
+Внутри файла `not-found.tsx` вставьте следующий код:
 
 ```ts title="/dashboard/invoices/[id]/edit/not-found.tsx"
 import Link from 'next/link';
@@ -243,29 +243,29 @@ export default function NotFound() {
 }
 ```
 
-Refresh the route, and you should now see the following UI:
+Обновите маршрут, и теперь вы должны увидеть следующий пользовательский интерфейс:
 
 ![404 Not Found Page](404-not-found-page.png)
 
-That's something to keep in mind, `notFound` will take precedence over `error.tsx`, so you can reach out for it when you want to handle more specific errors!
+Имейте в виду, что `notFound` будет иметь приоритет над `error.tsx`, так что вы можете обратиться к нему, когда захотите обработать более специфические ошибки!
 
 <?quiz?>
 
-question: Which file in Next.js serves as a catch-all for unexpected errors in your route segments?
+question: Какой файл в файле Next.js служит для устранения непредвиденных ошибок в сегментах маршрута?
 answer: 404.tsx
 answer: not-found.tsx
 answer-correct: error.tsx
 answer: catch-all.tsx
 content:
 
-<p>The <code>error.tsx</code> file serves as a catch-all for unexpected errors and allows you to display a fallback UI to your users.</p>
+<p><code>error.tsx</code> файл служит в качестве резервной копии для непредвиденных ошибок и позволяет отображать резервный пользовательский интерфейс для ваших пользователей.</p>
 <?/quiz?>
 
-## Further reading
+## Дополнительное чтение
 
-To learn more about error handling in Next.js, check out the following documentation:
+Чтобы узнать больше об обработке ошибок в Next.js, ознакомьтесь со следующей документацией:
 
--   [Error Handling](https://nextjs.org/docs/app/building-your-application/routing/error-handling)
+-   [Обработка ошибок](https://nextjs.org/docs/app/building-your-application/routing/error-handling)
 -   [`error.js` API Reference](https://nextjs.org/docs/app/api-reference/file-conventions/error)
 -   [`notFound()` API Reference](https://nextjs.org/docs/app/api-reference/functions/not-found)
 -   [`not-found.js` API Reference](https://nextjs.org/docs/app/api-reference/file-conventions/not-found)
