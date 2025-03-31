@@ -1,15 +1,15 @@
 ---
-description: In the previous chapter, you created the dashboard layout and pages. Now, let's add some links to allow users to navigate between the dashboard routes.
+description: В предыдущей главе вы создали макет и страницы дашборда. Теперь давайте добавим несколько ссылок, чтобы пользователи могли перемещаться между маршрутами дашборда.
 ---
 
-# Navigating Between Pages
+# Навигация между страницами
 
-In the previous chapter, you created the dashboard layout and pages. Now, let's add some links to allow users to navigate between the dashboard routes.
+В предыдущей главе вы создали макет и страницы дашборда. Теперь давайте добавим несколько ссылок, чтобы пользователи могли перемещаться между маршрутами дашборда.
 
-!!!tip "Here are the topics we’ll cover"
+!!!tip "Вот темы, которые мы рассмотрим"
 
-    -   How to use the next/link component.
-    -   How to show an active link with the usePathname() hook.
+    -   How to use the `next/link` component.
+    -   How to show an active link with the `usePathname()` hook.
     -   How navigation works in Next.js.
 
 ## Why optimize navigation?

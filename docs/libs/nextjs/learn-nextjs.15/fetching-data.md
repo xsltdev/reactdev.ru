@@ -35,48 +35,48 @@ API - это промежуточный слой между кодом ваше�
 
 <?quiz?>
 
-question: In which of these scenarios should you not query your database directly?
-answer-correct: When you're fetching data on the client
-answer: When you're fetching data on the server
-answer: When you're creating your own API layer to interact with your database
+question: В каком из этих сценариев не следует напрямую запрашивать базу данных?
+answer-correct: Когда вы получаете данные на клиенте
+answer: Когда вы получаете данные на сервере
+answer: Когда вы создаете собственный слой API для взаимодействия с базой данных
 content:
 
-<p>That's right, you should not query your database directly when fetching data on the client as this would expose your database secrets.</p>
+<p>Именно так, вы не должны напрямую запрашивать базу данных при получении данных на клиенте, поскольку это может привести к раскрытию секретов базы данных.</p>
 <?/quiz?>
 
-Let's learn more about React Server Components.
+Давайте узнаем больше о серверных компонентах React.
 
-### Using Server Components to fetch data
+### Использование серверных компонентов для получения данных
 
-By default, Next.js applications use **React Server Components**. Fetching data with Server Components is a relatively new approach and there are a few benefits of using them:
+По умолчанию приложения Next.js используют **React Server Components**. Получение данных с помощью серверных компонентов - относительно новый подход, и у его использования есть несколько преимуществ:
 
--   Server Components support JavaScript Promises, providing a solution for asynchronous tasks like data fetching natively. You can use `async/await` syntax without needing `useEffect`, `useState` or other data fetching libraries.
--   Server Components run on the server, so you can keep expensive data fetches and logic on the server, only sending the result to the client.
--   Since Server Components run on the server, you can query the database directly without an additional API layer. This saves you from writing and maintaining additional code.
+-   Серверные компоненты поддерживают JavaScript Promises, предоставляя решение для асинхронных задач, таких как получение данных. Вы можете использовать синтаксис `async/await`, не нуждаясь в `useEffect`, `useState` или других библиотеках для получения данных.
+-   Серверные компоненты работают на сервере, поэтому вы можете хранить дорогостоящие операции по выборке данных и логику на сервере, отправляя клиенту только результат.
+-   Поскольку серверные компоненты работают на сервере, вы можете запрашивать базу данных напрямую, без дополнительного уровня API. Это избавляет вас от необходимости писать и поддерживать дополнительный код.
 
 <?quiz?>
 
-question: What's one advantage of using React Server Components to fetch data?
-answer: They automatically protect you from SQL injection.
-answer-correct: They allow you to query the database directly from the server without an additional API layer.
-answer: They require you to use an API layer and create endpoints.
+question: В чем одно из преимуществ использования компонентов React Server для получения данных?
+answer: Они автоматически защищают вас от SQL-инъекций.
+answer-correct: Они позволяют запрашивать базу данных непосредственно с сервера без дополнительного уровня API.
+answer: Они требуют использования уровня API и создания конечных точек.
 content:
 
-<p>Server components allow you fetch data directly from your database.</p>
+<p>Серверные компоненты позволяют получать данные непосредственно из базы данных.</p>
 <?/quiz?>
 
-## Using SQL
+## Использование SQL
 
-For your dashboard application, you'll write database queries using the [postgres.js](https://github.com/porsager/postgres) library and SQL. There are a few reasons why we'll be using SQL:
+Для вашего приложения дашборда вы будете писать запросы к базе данных с помощью библиотеки [postgres.js](https://github.com/porsager/postgres) и SQL. Есть несколько причин, по которым мы будем использовать SQL:
 
--   SQL is the industry standard for querying relational databases (e.g. ORMs generate SQL under the hood).
--   Having a basic understanding of SQL can help you understand the fundamentals of relational databases, allowing you to apply your knowledge to other tools.
--   SQL is versatile, allowing you to fetch and manipulate specific data.
--   The `postgres.js` library provides protection against [SQL injections](https://github.com/porsager/postgres?tab=readme-ov-file#query-parameters).
+-   SQL является промышленным стандартом для запросов к реляционным базам данных (например, ORM генерируют SQL под капотом).
+-   Базовое понимание SQL может помочь вам понять основы реляционных баз данных, что позволит вам применить свои знания в других инструментах.
+-   SQL универсален и позволяет получать конкретные данные и манипулировать ими.
+-   Библиотека `postgres.js` обеспечивает защиту от [SQL-инъекций](https://github.com/porsager/postgres?tab=readme-ov-file#query-parameters).
 
-Don't worry if you haven't used SQL before - we have provided the queries for you.
+Не волнуйтесь, если вы раньше не использовали SQL - мы подготовили для вас запросы.
 
-Go to `/app/lib/data.ts`. Here you'll see that we're using `postgres`. The `sql` [function](https://github.com/porsager/postgres) allows you to query your database:
+Перейдите к файлу `/app/lib/data.ts`. Здесь вы увидите, что мы используем `postgres`. Функция `sql` [function](https://github.com/porsager/postgres) позволяет запросить базу данных:
 
 ```ts title="/app/lib/data.ts"
 import postgres from 'postgres';
@@ -88,27 +88,27 @@ const sql = postgres(process.env.POSTGRES_URL!, {
 // ...
 ```
 
-You can call `sql` anywhere on the server, like a Server Component. But to allow you to navigate the components more easily, we've kept all the data queries in the `data.ts` file, and you can import them into the components.
+Вы можете вызвать `sql` в любом месте на сервере, как и серверный компонент. Но чтобы вам было проще ориентироваться в компонентах, мы сохранили все запросы к данным в файле `data.ts`, и вы можете импортировать их в компоненты.
 
 <?quiz?>
 
-question: What does SQL allow you to do in terms of fetching data?
-answer: Fetch all your data indiscriminately
-answer-correct: Fetch and manipulate specific data
-answer: Automatically cache data for better performance
-answer: Change the database schema on the fly
+question: Что позволяет делать SQL в плане получения данных?
+answer: Получение всех данных без разбора
+answer-correct: Получение и обработка определенных данных
+answer: Автоматическое кэширование данных для повышения производительности
+answer: Изменяйте схему базы данных на лету
 content:
 
-<p>SQL allows you to write targeted queries to fetch and manipulate specific data</p>
+<p>SQL позволяет писать целевые запросы для получения определенных данных и манипулирования ими.</p>
 <?/quiz?>
 
 !!!note ""
 
-    If you used your own database provider in Chapter 6, you'll need to update the database queries to work with your provider. You can find the queries in `/app/lib/data.ts`.
+    Если в главе 6 вы использовали собственный провайдер баз данных, вам нужно будет обновить запросы к базе данных, чтобы они работали с вашим провайдером. Запросы можно найти в файле `/app/lib/data.ts`.
 
-## Fetching data for the dashboard overview page
+## Получение данных для страницы обзора дашборда
 
-Now that you understand different ways of fetching data, let's fetch data for the dashboard overview page. Navigate to `/app/dashboard/page.tsx`, paste the following code, and spend some time exploring it:
+Теперь, когда вы поняли различные способы получения данных, давайте получим данные для страницы обзора дашборда. Перейдите в `/app/dashboard/page.tsx`, вставьте следующий код и потратьте некоторое время на его изучение:
 
 ```ts title="/app/dashboard/page.tsx"
 import { Card } from '@/app/ui/dashboard/cards';
@@ -143,14 +143,14 @@ export default async function Page() {
 }
 ```
 
-The code above is intentionally commented out. We will now begin to example each piece.
+Код выше намеренно закомментирован. Теперь мы начнем приводить примеры каждой части.
 
--   The `page` is an **async** server component. This allows you to use `await` to fetch data.
--   There are also 3 components which receive data: `<Card>`, `<RevenueChart>`, and `<LatestInvoices>`. They are currently commented out and not yet implemented.
+-   `page` - это серверный компонент **async**. Он позволяет использовать `await` для получения данных.
+-   Также есть 3 компонента, которые получают данные: `<Card>`, `<RevenueChart>` и `<LatestInvoices>`. В настоящее время они закомментированы и пока не реализованы.
 
-## Fetching data for `<RevenueChart/>`
+## Получение данных для `<RevenueChart/>`.
 
-To fetch data for the `<RevenueChart/>` component, import the `fetchRevenue` function from `data.ts` and call it inside your component:
+Чтобы получить данные для компонента `<RevenueChart/>`, импортируйте функцию `fetchRevenue` из `data.ts` и вызовите ее внутри вашего компонента:
 
 ```ts title="/app/dashboard/page.tsx" hl_lines="5 7-8"
 import { Card } from '@/app/ui/dashboard/cards';
@@ -165,23 +165,23 @@ export default async function Page() {
 }
 ```
 
-Next, let's do the following:
+Далее сделаем следующее:
 
--   Uncomment the `<RevenueChart/>` component.
--   Navigate to the component file (`/app/ui/dashboard/revenue-chart.tsx`) and uncomment the code inside it.
--   Check `localhost:3000` and you should see a chart that uses `revenue` data.
+-   Откомментируйте компонент `<RevenueChart/>`.
+-   Перейдите к файлу компонента (`/app/ui/dashboard/revenue-chart.tsx`) и откомментируйте код внутри него.
+-   Проверьте `localhost:3000` и вы должны увидеть график, использующий данные `revenue`.
 
-![Revenue chart showing the total revenue for the last 12 months](recent-revenue.png)
+![График выручки, показывающий общую выручку за последние 12 месяцев](recent-revenue.png)
 
-Let's continue importing more data and displaying it on the dashboard.
+Давайте продолжим импортировать больше данных и отображать их на дашборде.
 
-## Fetching data for `<LatestInvoices/>`
+## Получение данных для `<LatestInvoices/>`
 
-For the `<LatestInvoices />` component, we need to get the latest 5 invoices, sorted by date.
+Для компонента `<LatestInvoices />` нам нужно получить 5 последних счетов-фактур, отсортированных по дате.
 
-You could fetch all the invoices and sort through them using JavaScript. This isn't a problem as our data is small, but as your application grows, it can significantly increase the amount of data transferred on each request and the JavaScript required to sort through it.
+Вы можете получить все счета и отсортировать их с помощью JavaScript. Это не проблема, поскольку наши данные невелики, но по мере роста вашего приложения может значительно увеличиться объем данных, передаваемых при каждом запросе, и JavaScript, необходимый для их сортировки.
 
-Instead of sorting through the latest invoices in-memory, you can use an SQL query to fetch only the last 5 invoices. For example, this is the SQL query from your `data.ts` file:
+Вместо того чтобы сортировать последние счета в памяти, вы можете использовать SQL-запрос, чтобы получить только 5 последних счетов. Например, вот SQL-запрос из вашего файла `data.ts`:
 
 ```ts title="/app/lib/data.ts"
 // Fetch the last 5 invoices, sorted by date
@@ -193,7 +193,7 @@ const data = await sql<LatestInvoiceRaw[]>`
   LIMIT 5`;
 ```
 
-In your page, import the `fetchLatestInvoices` function:
+На своей странице импортируйте функцию `fetchLatestInvoices`:
 
 ```ts title="/app/dashboard/page.tsx" hl_lines="5-8 12"
 import { Card } from '@/app/ui/dashboard/cards';
@@ -212,45 +212,45 @@ export default async function Page() {
 }
 ```
 
-Then, uncomment the `<LatestInvoices />` component. You will also need to uncomment the relevant code in the `<LatestInvoices />` component itself, located at `/app/ui/dashboard/latest-invoices`.
+Затем откомментируйте компонент `<LatestInvoices />`. Вам также нужно будет откомментировать соответствующий код в самом компоненте `<LatestInvoices />`, расположенном по адресу `/app/ui/dashboard/latest-invoices`.
 
-If you visit your localhost, you should see that only the last 5 are returned from the database. Hopefully, you're beginning to see the advantages of querying your database directly!
+Если вы зайдете на свой `localhost`, то увидите, что из базы данных возвращаются только последние `5`. Надеюсь, вы начинаете понимать преимущества прямого запроса к базе данных!
 
-![Latest invoices component alongside the revenue chart](latest-invoices.png)
+![Компонент «Последние счета» рядом с графиком выручки](latest-invoices.png)
 
-## Practice: Fetch data for the `<Card>` components
+## Практика: Получение данных для компонентов `<Card>`
 
-Now it's your turn to fetch data for the `<Card>` components. The cards will display the following data:
+Теперь настала ваша очередь получить данные для компонентов `<Card>`. На карточках будут отображаться следующие данные:
 
--   Total amount of invoices collected.
--   Total amount of invoices pending.
--   Total number of invoices.
--   Total number of customers.
+-   Общая сумма собранных счетов.
+-   Общая сумма счетов, ожидающих оплаты.
+-   Общее количество счетов-фактур.
+-   Общее количество клиентов.
 
-Again, you might be tempted to fetch all the invoices and customers, and use JavaScript to manipulate the data. For example, you could use `Array.length` to get the total number of invoices and customers:
+Опять же, у вас может возникнуть соблазн получить все счета и клиентов и использовать JavaScript для работы с данными. Например, вы можете использовать `Array.length` для получения общего количества счетов и клиентов:
 
 ```ts
 const totalInvoices = allInvoices.length;
 const totalCustomers = allCustomers.length;
 ```
 
-But with SQL, you can fetch only the data you need. It's a little longer than using `Array.length`, but it means less data needs to be transferred during the request. This is the SQL alternative:
+Но с помощью SQL вы можете получить только те данные, которые вам нужны. Это немного дольше, чем использование `Array.length`, но это означает, что во время запроса нужно передать меньше данных. Это альтернатива SQL:
 
 ```ts title="/app/lib/data.ts"
 const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
 const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
 ```
 
-The function you will need to import is called `fetchCardData`. You will need to destructure the values returned from the function.
+Функция, которую вам нужно импортировать, называется `fetchCardData`. Вам нужно будет деструктурировать значения, возвращаемые функцией.
 
-!!!tip "Hint"
+!!!tip "Подсказка"
 
-    -   Check the card components to see what data they need.
-    -   Check the data.ts file to see what the function returns.
+    -   Проверьте компоненты карты, чтобы узнать, какие данные им нужны.
+    -   Проверьте файл `data.ts`, чтобы увидеть, что возвращает функция.
 
-Once you're ready, expand the toggle below for the final code:
+Когда все будет готово, разверните тумблер ниже, чтобы увидеть окончательный код:
 
-???note "Reveal the solution"
+???note "Раскрыть решение"
 
     ```ts title="/app/dashboard/page.tsx" hl_lines="8 14-19"
     import { Card } from '@/app/ui/dashboard/cards';
@@ -313,24 +313,24 @@ Once you're ready, expand the toggle below for the final code:
     }
     ```
 
-Great! You've now fetched all the data for the dashboard overview page. Your page should look like this:
+Отлично! Теперь вы получили все данные для страницы обзора дашборда. Ваша страница должна выглядеть следующим образом:
 
-![Dashboard page with all the data fetched](complete-dashboard.png)
+![Страница дашборда со всеми полученными данными](complete-dashboard.png)
 
-However... there are two things you need to be aware of:
+Однако... есть две вещи, о которых вы должны знать:
 
--   The data requests are unintentionally blocking each other, creating a **request waterfall**.
--   By default, Next.js **prerenders** routes to improve performance, this is called Static Rendering. So if your data changes, it won't be reflected in your dashboard.
+-   Запросы данных непреднамеренно блокируют друг друга, создавая **водопад запросов**.
+-   По умолчанию Next.js **предусматривает** маршруты для повышения производительности, это называется Static Rendering. Таким образом, если ваши данные изменятся, они не будут отражены в дашборде.
 
-Let's discuss number 1 in this chapter, then look into detail at number 2 in the next chapter.
+Давайте обсудим номер 1 в этой главе, а затем подробно рассмотрим номер 2 в следующей главе.
 
-## What are request waterfalls?
+## Что такое водопад запросов?
 
-A "waterfall" refers to a sequence of network requests that depend on the completion of previous requests. In the case of data fetching, each request can only begin once the previous request has returned data.
+Под «водопадом» понимается последовательность сетевых запросов, зависящих от завершения предыдущих запросов. В случае с получением данных каждый запрос может начаться только после того, как предыдущий запрос вернет данные.
 
-![Diagram showing time with sequential data fetching and parallel data fetching](sequential-parallel-data-fetching.png)
+![Диаграмма, показывающая время при последовательной выборке данных и параллельной выборке данных](sequential-parallel-data-fetching.png)
 
-For example, we need to wait for `fetchRevenue()` to execute before `fetchLatestInvoices()` can start running, and so on.
+Например, нам нужно дождаться выполнения `fetchRevenue()`, прежде чем `fetchLatestInvoices()` сможет начать работу, и так далее.
 
 ```ts title="/app/dashboard/page.tsx"
 const revenue = await fetchRevenue();
@@ -343,26 +343,26 @@ const {
 } = await fetchCardData(); // wait for fetchLatestInvoices() to finish
 ```
 
-This pattern is not necessarily bad. There may be cases where you want waterfalls because you want a condition to be satisfied before you make the next request. For example, you might want to fetch a user's ID and profile information first. Once you have the ID, you might then proceed to fetch their list of friends. In this case, each request is contingent on the data returned from the previous request.
+Такая схема не обязательно плоха. Бывают случаи, когда водопады нужны, потому что вы хотите, чтобы условие было выполнено до того, как вы сделаете следующий запрос. Например, сначала нужно получить идентификатор пользователя и информацию о его профиле. Получив идентификатор, можно перейти к получению списка его друзей. В этом случае каждый запрос зависит от данных, полученных от предыдущего запроса.
 
-However, this behavior can also be unintentional and impact performance.
+Однако такое поведение может быть непреднамеренным и влиять на производительность.
 
 <?quiz?>
 
-question: When might you want to use a waterfall pattern?
-answer-correct: To satisfy a condition before making the next request
-answer: To make all requests simultaneously
-answer: To reduce the server load by doing one fetch at a time
+question: Когда вам может понадобиться узор «водопад»?
+answer-correct: Чтобы выполнить условие перед выполнением следующего запроса
+answer: Выполнять все запросы одновременно
+answer: Чтобы снизить нагрузку на сервер, выполняйте по одной выборке за раз
 content:
 
-<p>For example, you might want to fetch a user's ID and profile information first. Once you have the ID, you might then proceed to fetch their list of friends.</p>
+<p>Например, сначала нужно получить идентификатор пользователя и информацию о его профиле. Получив идентификатор, можно перейти к получению списка друзей.</p>
 <?/quiz?>
 
-## Parallel data fetching
+## Параллельная выборка данных
 
-A common way to avoid waterfalls is to initiate all data requests at the same time - in parallel.
+Распространенный способ избежать водопада - инициировать все запросы данных одновременно - параллельно.
 
-In JavaScript, you can use the [`Promise.all()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) or [`Promise.allSettled()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled) functions to initiate all promises at the same time. For example, in `data.ts`, we're using `Promise.all()` in the `fetchCardData()` function:
+В JavaScript вы можете использовать функции [`Promise.all()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) или [`Promise.allSettled()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled) для одновременной инициации всех обещаний. Например, в файле `data.ts` мы используем функцию `Promise.all()` в функции `fetchCardData()`:
 
 ```ts title="/app/lib/data.ts" hl_lines="10-14"
 export async function fetchCardData() {
@@ -386,9 +386,11 @@ export async function fetchCardData() {
 }
 ```
 
-By using this pattern, you can:
+Используя этот паттерн, вы можете:
 
--   Start executing all data fetches at the same time, which is faster than waiting for each request to complete in a waterfall.
--   Use a native JavaScript pattern that can be applied to any library or framework.
+-   Начать выполнять все запросы на получение данных одновременно, что быстрее, чем ждать завершения каждого запроса в водопаде.
+-   Использовать собственный JavaScript-шаблон, который можно применить к любой библиотеке или фреймворку.
 
-However, there is one **disadvantage** of relying only on this JavaScript pattern: what happens if one data request is slower than all the others? Let's find out more in the next chapter.
+Однако есть один **недостаток** в том, чтобы полагаться только на этот JavaScript-шаблон: что произойдет, если один запрос данных будет выполняться медленнее, чем все остальные? Давайте узнаем об этом в следующей главе.
+
+<small>:material-information-outline: Источник &mdash; <https://nextjs.org/learn/dashboard-app/fetching-data></small>
