@@ -43,7 +43,7 @@
 
 В этом руководстве мы будем использовать несколько отдельных типов экшенов.
 
-## Синхронные генераторы экшенов
+## Синхронные генераторы экшенов {#synchronous-action-creators}
 
 Давайте начнем с объявления нескольких синхронных типов и генераторов экшенов, которые нам понадобятся в нашем приложении. Тут пользователь может выбрать subreddit для отображения:
 
@@ -55,10 +55,10 @@ export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT';
 
 //генератор экшена
 export function selectSubreddit(subreddit) {
-  return {
-    type: SELECT_SUBREDDIT,
-    subreddit,
-  };
+    return {
+        type: SELECT_SUBREDDIT,
+        subreddit,
+    };
 }
 ```
 
@@ -68,10 +68,10 @@ export function selectSubreddit(subreddit) {
 export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT';
 
 export function invalidateSubreddit(subreddit) {
-  return {
-    type: INVALIDATE_SUBREDDIT,
-    subreddit,
-  };
+    return {
+        type: INVALIDATE_SUBREDDIT,
+        subreddit,
+    };
 }
 ```
 
@@ -83,10 +83,10 @@ export function invalidateSubreddit(subreddit) {
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 
 function requestPosts(subreddit) {
-  return {
-    type: REQUEST_POSTS,
-    subreddit,
-  };
+    return {
+        type: REQUEST_POSTS,
+        subreddit,
+    };
 }
 ```
 
@@ -98,12 +98,14 @@ function requestPosts(subreddit) {
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
 function receivePosts(subreddit, json) {
-  return {
-    type: RECEIVE_POSTS,
-    subreddit,
-    posts: json.data.children.map((child) => child.data),
-    receivedAt: Date.now(),
-  };
+    return {
+        type: RECEIVE_POSTS,
+        subreddit,
+        posts: json.data.children.map(
+            (child) => child.data
+        ),
+        receivedAt: Date.now(),
+    };
 }
 ```
 
@@ -125,37 +127,37 @@ function receivePosts(subreddit, json) {
 
 ```json
 {
-  "selectedSubreddit": "frontend",
-  "postsBySubreddit": {
-    "frontend": {
-      "isFetching": true,
-      "didInvalidate": false,
-      "items": []
-    },
-    "reactjs": {
-      "isFetching": false,
-      "didInvalidate": false,
-      "lastUpdated": 1439478405547,
-      "items": [
-        {
-          "id": 42,
-          "title": "Confusion about Flux and Relay"
+    "selectedSubreddit": "frontend",
+    "postsBySubreddit": {
+        "frontend": {
+            "isFetching": true,
+            "didInvalidate": false,
+            "items": []
         },
-        {
-          "id": 500,
-          "title": "Creating a Simple Application Using React JS and Flux Architecture"
+        "reactjs": {
+            "isFetching": false,
+            "didInvalidate": false,
+            "lastUpdated": 1439478405547,
+            "items": [
+                {
+                    "id": 42,
+                    "title": "Confusion about Flux and Relay"
+                },
+                {
+                    "id": 500,
+                    "title": "Creating a Simple Application Using React JS and Flux Architecture"
+                }
+            ]
         }
-      ]
     }
-  }
 }
 ```
 
 тут есть несколько важных моментов:
 
-- Мы храним информацию о каждом subreddit’е отдельно, следовательно мы можем кешировать любой subreddit. Когда пользователь переключается между ними во второй раз, обновление UI будет мгновенным и мы сможем не перезагружать данные, если мы этого не хотим. Не переживайте о том, что все эти элементы (subreddit'ы, а их может быть очень много) будут находиться в памяти: Вам не понадобятся никакие чистки памяти, если только вы и ваш пользователь не имеете дело с десятками тысяч элементов и при этом пользователь очень редко закрывает вкладку браузера.
+-   Мы храним информацию о каждом subreddit’е отдельно, следовательно мы можем кешировать любой subreddit. Когда пользователь переключается между ними во второй раз, обновление UI будет мгновенным и мы сможем не перезагружать данные, если мы этого не хотим. Не переживайте о том, что все эти элементы (subreddit'ы, а их может быть очень много) будут находиться в памяти: Вам не понадобятся никакие чистки памяти, если только вы и ваш пользователь не имеете дело с десятками тысяч элементов и при этом пользователь очень редко закрывает вкладку браузера.
 
-- Для каждого списка элементов вы захотите хранить `isFetching` для показа спиннера, `didInvalidate`, который вы потом сможете изменить, если данные устареют, `lastUpdated` для того чтобы знать, когда данные были обновлены в последний раз, и собственно `items`. В реальном приложении вы также захотите хранить состояние страничной навигации: `fetchedPageCount` и `nextPageUrl`.
+-   Для каждого списка элементов вы захотите хранить `isFetching` для показа спиннера, `didInvalidate`, который вы потом сможете изменить, если данные устареют, `lastUpdated` для того чтобы знать, когда данные были обновлены в последний раз, и собственно `items`. В реальном приложении вы также захотите хранить состояние страничной навигации: `fetchedPageCount` и `nextPageUrl`.
 
 !!!note "Обратите внимание на вложенные сущности"
 
@@ -217,70 +219,70 @@ _reducers.js_
 ```js
 import { combineReducers } from 'redux';
 import {
-  SELECT_SUBREDDIT,
-  INVALIDATE_SUBREDDIT,
-  REQUEST_POSTS,
-  RECEIVE_POSTS,
+    SELECT_SUBREDDIT,
+    INVALIDATE_SUBREDDIT,
+    REQUEST_POSTS,
+    RECEIVE_POSTS,
 } from '../actions';
 
 function selectedSubreddit(state = 'reactjs', action) {
-  switch (action.type) {
-    case SELECT_SUBREDDIT:
-      return action.subreddit;
-    default:
-      return state;
-  }
+    switch (action.type) {
+        case SELECT_SUBREDDIT:
+            return action.subreddit;
+        default:
+            return state;
+    }
 }
 
 function posts(
-  state = {
-    isFetching: false,
-    didInvalidate: false,
-    items: [],
-  },
-  action
-) {
-  switch (action.type) {
-    case INVALIDATE_SUBREDDIT:
-      return Object.assign({}, state, {
-        didInvalidate: true,
-      });
-    case REQUEST_POSTS:
-      return Object.assign({}, state, {
-        isFetching: true,
-        didInvalidate: false,
-      });
-    case RECEIVE_POSTS:
-      return Object.assign({}, state, {
+    state = {
         isFetching: false,
         didInvalidate: false,
-        items: action.posts,
-        lastUpdated: action.receivedAt,
-      });
-    default:
-      return state;
-  }
+        items: [],
+    },
+    action
+) {
+    switch (action.type) {
+        case INVALIDATE_SUBREDDIT:
+            return Object.assign({}, state, {
+                didInvalidate: true,
+            });
+        case REQUEST_POSTS:
+            return Object.assign({}, state, {
+                isFetching: true,
+                didInvalidate: false,
+            });
+        case RECEIVE_POSTS:
+            return Object.assign({}, state, {
+                isFetching: false,
+                didInvalidate: false,
+                items: action.posts,
+                lastUpdated: action.receivedAt,
+            });
+        default:
+            return state;
+    }
 }
 
 function postsBySubreddit(state = {}, action) {
-  switch (action.type) {
-    case INVALIDATE_SUBREDDIT:
-    case RECEIVE_POSTS:
-    case REQUEST_POSTS:
-      return Object.assign({}, state, {
-        [action.subreddit]: posts(
-          state[action.subreddit],
-          action
-        ),
-      });
-    default:
-      return state;
-  }
+    switch (action.type) {
+        case INVALIDATE_SUBREDDIT:
+        case RECEIVE_POSTS:
+        case REQUEST_POSTS:
+            return Object.assign({}, state, {
+                [action.subreddit]: posts(
+                    state[action.subreddit],
+                    action
+                ),
+            });
+        default:
+            return state;
+    }
 }
 
 const rootReducer = combineReducers({
-  postsBySubreddit,
-  selectedSubreddit,
+    postsBySubreddit,
+    selectedSubreddit,
 });
 
 export default rootReducer;
@@ -288,14 +290,14 @@ export default rootReducer;
 
 Две части этого кода вызывают особый интерес:
 
-- Мы используем ES6-синтаксис вычисляемого свойства, т. е. мы можем обновить `state[action.subreddit]` с помощью `Object.assign()` с использованием меньшего количества строк кода. Вот это:
+-   Мы используем ES6-синтаксис вычисляемого свойства, т. е. мы можем обновить `state[action.subreddit]` с помощью `Object.assign()` с использованием меньшего количества строк кода. Вот это:
 
 ```js
 return Object.assign({}, state, {
-  [action.subreddit]: posts(
-    state[action.subreddit],
-    action
-  ),
+    [action.subreddit]: posts(
+        state[action.subreddit],
+        action
+    ),
 });
 ```
 
@@ -304,13 +306,13 @@ return Object.assign({}, state, {
 ```js
 let nextState = {};
 nextState[action.subreddit] = posts(
-  state[action.subreddit],
-  action
+    state[action.subreddit],
+    action
 );
 return Object.assign({}, state, nextState);
 ```
 
-- Мы извлекли `posts(state, action)`, который управляет состоянием конкретного списка постов. Это просто [композиция редьюсеров](../basics/Reducers.md#splitting-reducers)! Нам выбирать, как разбить/разделить редьюсер на более мелкие редьюсеры и в этом случае, мы доверяем обновление элементов внутри объекта функции-редьюсеру `posts`.
+-   Мы извлекли `posts(state, action)`, который управляет состоянием конкретного списка постов. Это просто [композиция редьюсеров](../basics/Reducers.md#splitting-reducers)! Нам выбирать, как разбить/разделить редьюсер на более мелкие редьюсеры и в этом случае, мы доверяем обновление элементов внутри объекта функции-редьюсеру `posts`.
 
 Помните, что редьюсеры — это всего лишь функции, т. е. вы можете использовать функциональную композицию (речь о функциональном подходе к программированию и композиции функций) и функции высшего порядка так часто, как вам это будет удобно.
 
@@ -329,28 +331,30 @@ import fetch from 'cross-fetch';
 
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 function requestPosts(subreddit) {
-  return {
-    type: REQUEST_POSTS,
-    subreddit,
-  };
+    return {
+        type: REQUEST_POSTS,
+        subreddit,
+    };
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 function receivePosts(subreddit, json) {
-  return {
-    type: RECEIVE_POSTS,
-    subreddit,
-    posts: json.data.children.map((child) => child.data),
-    receivedAt: Date.now(),
-  };
+    return {
+        type: RECEIVE_POSTS,
+        subreddit,
+        posts: json.data.children.map(
+            (child) => child.data
+        ),
+        receivedAt: Date.now(),
+    };
 }
 
 export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT';
 export function invalidateSubreddit(subreddit) {
-  return {
-    type: INVALIDATE_SUBREDDIT,
-    subreddit,
-  };
+    return {
+        type: INVALIDATE_SUBREDDIT,
+        subreddit,
+    };
 }
 
 // Тут мы встречаемся с нашим первым thunk-генератором экшена!
@@ -359,40 +363,41 @@ export function invalidateSubreddit(subreddit) {
 // store.dispatch(fetchPosts('reactjs'))
 
 export function fetchPosts(subreddit) {
-  // Thunk middleware знает, как обращаться с функциями.
-  // Он передает метод dispatch в качестве аргумента функции,
-  // т.к. это позволяет отправить экшен самостоятельно.
+    // Thunk middleware знает, как обращаться с функциями.
+    // Он передает метод dispatch в качестве аргумента функции,
+    // т.к. это позволяет отправить экшен самостоятельно.
 
-  return function (dispatch) {
-    // Первая отправка: состояние приложения обновлено,
-    // чтобы сообщить, что запускается вызов API.
+    return function (dispatch) {
+        // Первая отправка: состояние приложения обновлено,
+        // чтобы сообщить, что запускается вызов API.
 
-    dispatch(requestPosts(subreddit));
+        dispatch(requestPosts(subreddit));
 
-    // Функция, вызываемая Thunk middleware, может возвращать значение,
-    // которое передается как возвращаемое значение метода dispatch.
+        // Функция, вызываемая Thunk middleware, может возвращать значение,
+        // которое передается как возвращаемое значение метода dispatch.
 
-    // В этом случае мы возвращаем promise.
-    // Thunk middleware не требует этого, но это удобно для нас.
+        // В этом случае мы возвращаем promise.
+        // Thunk middleware не требует этого, но это удобно для нас.
 
-    return fetch(
-      `https://www.reddit.com/r/${subreddit}.json`
-    )
-      .then(
-        (response) => response.json(),
-        // Не используйте catch, потому что это также
-        // перехватит любые ошибки в диспетчеризации и
-        // в результате рендеринга, что приведет к
-        // циклу ошибок «Unexpected batch number».
-        // https://github.com/facebook/react/issues/6895
-        (error) => console.log('An error occurred.', error)
-      )
-      .then((json) =>
-        // Мы можем вызывать dispatch много раз!
-        // Здесь мы обновляем состояние приложения с результатами вызова API.
-        dispatch(receivePosts(subreddit, json))
-      );
-  };
+        return fetch(
+            `https://www.reddit.com/r/${subreddit}.json`
+        )
+            .then(
+                (response) => response.json(),
+                // Не используйте catch, потому что это также
+                // перехватит любые ошибки в диспетчеризации и
+                // в результате рендеринга, что приведет к
+                // циклу ошибок «Unexpected batch number».
+                // https://github.com/facebook/react/issues/6895
+                (error) =>
+                    console.log('An error occurred.', error)
+            )
+            .then((json) =>
+                // Мы можем вызывать dispatch много раз!
+                // Здесь мы обновляем состояние приложения с результатами вызова API.
+                dispatch(receivePosts(subreddit, json))
+            );
+    };
 }
 ```
 
@@ -409,10 +414,10 @@ export function fetchPosts(subreddit) {
 
     Помните, что любой полифил `fetch` предполагает, что полифил [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) уже присутствует. Самый простой способ убедиться, что вы подключили Promise-полифил — это подключить ES6-полифил Babel во входной точке, прежде чем любой другой код запустится:
 
-	```js
-	// Добавьте это в самом начале вашего приложения
-	import 'babel-core/polyfill';
-	```
+    ```js
+    // Добавьте это в самом начале вашего приложения
+    import 'babel-core/polyfill';
+    ```
 
 Как мы добавляем мидлвар Redux Thunk в механизм диспетчера? Для этого мы используем метод [`applyMiddleware()`](../api/applyMiddleware.md) из Redux, как показано ниже:
 
@@ -428,17 +433,17 @@ import rootReducer from './reducers';
 const loggerMiddleware = createLogger();
 
 const store = createStore(
-  rootReducer,
-  applyMiddleware(
-    thunkMiddleware, // позволяет нам отправлять функции
-    loggerMiddleware // аккуратно логируем экшены
-  )
+    rootReducer,
+    applyMiddleware(
+        thunkMiddleware, // позволяет нам отправлять функции
+        loggerMiddleware // аккуратно логируем экшены
+    )
 );
 
 store.dispatch(selectSubreddit('reactjs'));
 store
-  .dispatch(fetchPosts('reactjs'))
-  .then(() => console.log(store.getState()));
+    .dispatch(fetchPosts('reactjs'))
+    .then(() => console.log(store.getState()));
 ```
 
 Хорошая новость о преобразователях: они могут направлять результаты друг другу.
@@ -450,70 +455,72 @@ import fetch from 'cross-fetch';
 
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 function requestPosts(subreddit) {
-  return {
-    type: REQUEST_POSTS,
-    subreddit,
-  };
+    return {
+        type: REQUEST_POSTS,
+        subreddit,
+    };
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 function receivePosts(subreddit, json) {
-  return {
-    type: RECEIVE_POSTS,
-    subreddit,
-    posts: json.data.children.map((child) => child.data),
-    receivedAt: Date.now(),
-  };
+    return {
+        type: RECEIVE_POSTS,
+        subreddit,
+        posts: json.data.children.map(
+            (child) => child.data
+        ),
+        receivedAt: Date.now(),
+    };
 }
 
 export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT';
 export function invalidateSubreddit(subreddit) {
-  return {
-    type: INVALIDATE_SUBREDDIT,
-    subreddit,
-  };
+    return {
+        type: INVALIDATE_SUBREDDIT,
+        subreddit,
+    };
 }
 
 function fetchPosts(subreddit) {
-  return (dispatch) => {
-    dispatch(requestPosts(subreddit));
-    return fetch(
-      `https://www.reddit.com/r/${subreddit}.json`
-    )
-      .then((response) => response.json())
-      .then((json) =>
-        dispatch(receivePosts(subreddit, json))
-      );
-  };
+    return (dispatch) => {
+        dispatch(requestPosts(subreddit));
+        return fetch(
+            `https://www.reddit.com/r/${subreddit}.json`
+        )
+            .then((response) => response.json())
+            .then((json) =>
+                dispatch(receivePosts(subreddit, json))
+            );
+    };
 }
 
 function shouldFetchPosts(state, subreddit) {
-  const posts = state.postsBySubreddit[subreddit];
-  if (!posts) {
-    return true;
-  } else if (posts.isFetching) {
-    return false;
-  } else {
-    return posts.didInvalidate;
-  }
+    const posts = state.postsBySubreddit[subreddit];
+    if (!posts) {
+        return true;
+    } else if (posts.isFetching) {
+        return false;
+    } else {
+        return posts.didInvalidate;
+    }
 }
 
 export function fetchPostsIfNeeded(subreddit) {
-  // Помните, что функция также получает getState(),
-  // который позволяет вам выбрать, что отправить дальше.
+    // Помните, что функция также получает getState(),
+    // который позволяет вам выбрать, что отправить дальше.
 
-  // Это полезно для того, чтобы избежать сетевого запроса,
-  // если доступно закешированное значение.
+    // Это полезно для того, чтобы избежать сетевого запроса,
+    // если доступно закешированное значение.
 
-  return (dispatch, getState) => {
-    if (shouldFetchPosts(getState(), subreddit)) {
-      // Диспатчим thunk из thunk!
-      return dispatch(fetchPosts(subreddit));
-    } else {
-      // Дадим вызвавшему коду знать, что ждать нечего.
-      return Promise.resolve();
-    }
-  };
+    return (dispatch, getState) => {
+        if (shouldFetchPosts(getState(), subreddit)) {
+            // Диспатчим thunk из thunk!
+            return dispatch(fetchPosts(subreddit));
+        } else {
+            // Дадим вызвавшему коду знать, что ждать нечего.
+            return Promise.resolve();
+        }
+    };
 }
 ```
 
@@ -523,8 +530,8 @@ _index.js_
 
 ```js
 store
-  .dispatch(fetchPostsIfNeeded('reactjs'))
-  .then(() => console.log(store.getState()));
+    .dispatch(fetchPostsIfNeeded('reactjs'))
+    .then(() => console.log(store.getState()));
 ```
 
 !!!note "Примечание о серверном рендеринге"
@@ -533,11 +540,11 @@ store
 
 [Thunk middleware](https://github.com/gaearon/redux-thunk) — это не единственный путь управления асинхронными экшенами в Redux.
 
-- Вы можете использовать [redux-promise](https://github.com/acdlite/redux-promise) или [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) для отправки Promises вместо функций.
-- Вы можете использовать [redux-observable](https://github.com/redux-observable/redux-observable) для отправки Observables
-- Вы можете использовать мидлвар [redux-saga](https://github.com/yelouafi/redux-saga/) для создания более комплексных асинхронных экшенов
-- Вы можете использовать мидлвар [redux-pack](https://github.com/lelandrichardson/redux-pack) для отправки асинхронных экшенов, базирующихся на промисах
-- Вы даже можете писать собственные мидлвары, для описания вызовов вашего API.
+-   Вы можете использовать [redux-promise](https://github.com/acdlite/redux-promise) или [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) для отправки Promises вместо функций.
+-   Вы можете использовать [redux-observable](https://github.com/redux-observable/redux-observable) для отправки Observables
+-   Вы можете использовать мидлвар [redux-saga](https://github.com/yelouafi/redux-saga/) для создания более комплексных асинхронных экшенов
+-   Вы можете использовать мидлвар [redux-pack](https://github.com/lelandrichardson/redux-pack) для отправки асинхронных экшенов, базирующихся на промисах
+-   Вы даже можете писать собственные мидлвары, для описания вызовов вашего API.
 
 Решать вам, попробовать несколько вариантов, выбрать конвенции, которые вам нравятся и следовать им, будь то с использованием мидлвара или без него.
 

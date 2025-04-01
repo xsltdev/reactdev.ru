@@ -8,8 +8,8 @@
 
 Веские причины по использованию нескольких сторов в Redux должны включать:
 
-- Решение проблем с производительностью, связанные со слишком частыми обновлениями некоторых частей сторов во время длительного профилирования приложения.
-- Выделение Redux-приложения в компонент более крупного приложения. В этом случае Вам, возможно, потребуется стор для экземпляра главного компонента.
+-   Решение проблем с производительностью, связанные со слишком частыми обновлениями некоторых частей сторов во время длительного профилирования приложения.
+-   Выделение Redux-приложения в компонент более крупного приложения. В этом случае Вам, возможно, потребуется стор для экземпляра главного компонента.
 
 Однако, создание новых сторов не должно быть первым, что Вы будете делать, особенно если Вы пришли из Flux. Для начала, попробуйте композицию редьюсеров. Используйте несколько сторов только в том случае, если композиция не решила Вашей проблемы.
 
@@ -19,14 +19,14 @@
 
 **Документация**
 
-- [API: Store](../api/Store.md)
+-   [API: Store](../api/Store.md)
 
 **Обсуждения**
 
-- [#1346: Is it bad practice to just have a 'stores' directory?](https://github.com/reactjs/redux/issues/1436)
-- [Stack Overflow: Redux multiple stores, why not?](http://stackoverflow.com/questions/33619775/redux-multiple-stores-why-not)
-- [Stack Overflow: Accessing Redux state in an action creator](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator)
-- [Gist: Breaking out of Redux paradigm to isolate apps](https://gist.github.com/gaearon/eeee2f619620ab7b55673a4ee2bf8400)
+-   [#1346: Is it bad practice to just have a 'stores' directory?](https://github.com/reactjs/redux/issues/1436)
+-   [Stack Overflow: Redux multiple stores, why not?](http://stackoverflow.com/questions/33619775/redux-multiple-stores-why-not)
+-   [Stack Overflow: Accessing Redux state in an action creator](http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator)
+-   [Gist: Breaking out of Redux paradigm to isolate apps](https://gist.github.com/gaearon/eeee2f619620ab7b55673a4ee2bf8400)
 
 ## Нормально ли использовать более одного мидлвара в моем расширителе стора? В чем разница между next и dispatch в функции мидлвара?
 
@@ -36,14 +36,14 @@ Redux мидлвар ведет себя, как связанный список
 
 **Документация**
 
-- [Продвинутое использование: Middleware](../advanced/Middleware.md)
-- [API: applyMiddleware](../api/applyMiddleware.md)
+-   [Продвинутое использование: Middleware](../advanced/Middleware.md)
+-   [API: applyMiddleware](../api/applyMiddleware.md)
 
 **Обсуждения**
 
-- [#1051: Shortcomings of the current applyMiddleware and composing createStore](https://github.com/reactjs/redux/issues/1051)
-- [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a)
-- [Exploring Redux Middleware](http://blog.krawaller.se/posts/exploring-redux-middleware/)
+-   [#1051: Shortcomings of the current applyMiddleware and composing createStore](https://github.com/reactjs/redux/issues/1051)
+-   [Understanding Redux Middleware](https://medium.com/@meagle/understanding-87566abcfb7a)
+-   [Exploring Redux Middleware](http://blog.krawaller.se/posts/exploring-redux-middleware/)
 
 ## Как мне подписаться на получение только части стора? Могу ли я получить запущенный экшен, как часть подписки?
 
@@ -55,17 +55,17 @@ Redux предоставляет единственный метод `store.subs
 
 **Документация**
 
-- [Основы: Стор](../basics/Store.md)
-- [API: Store](../api/Store.md)
+-   [Основы: Стор](../basics/Store.md)
+-   [API: Store](../api/Store.md)
 
 **Обсуждения**
 
-- [#303: subscribe API with state as an argument](https://github.com/reactjs/redux/issues/303)
-- [#580: Is it possible to get action and state in store.subscribe?](https://github.com/reactjs/redux/issues/580)
-- [#922: Proposal: add subscribe to middleware API](https://github.com/reactjs/redux/issues/922)
-- [#1057: subscribe listener can get action param?](https://github.com/reactjs/redux/issues/1057)
-- [#1300: Redux is great but major feature is missing](https://github.com/reactjs/redux/issues/1300)
+-   [#303: subscribe API with state as an argument](https://github.com/reactjs/redux/issues/303)
+-   [#580: Is it possible to get action and state in store.subscribe?](https://github.com/reactjs/redux/issues/580)
+-   [#922: Proposal: add subscribe to middleware API](https://github.com/reactjs/redux/issues/922)
+-   [#1057: subscribe listener can get action param?](https://github.com/reactjs/redux/issues/1057)
+-   [#1300: Redux is great but major feature is missing](https://github.com/reactjs/redux/issues/1300)
 
 **Библиотеки**
 
-- [Redux Addons Catalog: Store Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)
+-   [Redux Addons Catalog: Store Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)

@@ -8,8 +8,8 @@
 
 `react-router-dom` доступно в npm. В этом руководстве преполагается использование версии `react-router-dom@^4.1.1`.
 
-```
-npm install --save react-router-dom`
+```bash
+npm install --save react-router-dom
 ```
 
 ## Настройка запасного URL
@@ -91,9 +91,7 @@ const Root = ({ store }) => (
 
 Полный код компонента
 
-_components/Root.js_
-
-```js
+```js title="components/Root.js"
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
@@ -120,9 +118,7 @@ export default Root;
 
 Нам также надо отрефакторить `index.js`, для того, чтобы рендерить `<Root />` компонент в DOM.
 
-_index.js_
-
-```js
+```js title="index.js"
 import React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
@@ -141,9 +137,7 @@ render(
 
 React Router поставляется с компонентом [`<Link />`](https://reacttraining.com/react-router/web/api/Link) который позволяет перемещаться по приложению. Если вы захотите добавить некоторые стили, `react-router-dom` предоставляет специальный`<Link />` называемый [`<NavLink />`](https://reacttraining.com/react-router/web/api/NavLink), который принимает параметры стилизации. Параметр `activeStyle` позволяет применить стиль активного состояния.
 
-_containers/FilterLink.js_
-
-```js
+```js title="containers/FilterLink.js"
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -163,9 +157,7 @@ const FilterLink = ({ filter, children }) => (
 export default FilterLink;
 ```
 
-_components/Footer.js_
-
-```js
+```js title="components/Footer.js"
 import React from 'react';
 import FilterLink from '../containers/FilterLink';
 import { VisibilityFilters } from '../actions';
@@ -198,9 +190,7 @@ export default Footer;
 
 Сейчас todo list не фильтруется после изменения URL. Это происходит потому, что фильтрация описана в функции `mapStateToProps()` компонента `<VisibleTodoList />`, которая в свою очередь связана с `состоянием`, а не с URL. `mapStateToProps` имеет второй необязательный аргумент `ownProps` — объект, содержащий все параметры, переданные в `<VisibleTodoList />`.
 
-_containers/VisibleTodoList.js_
-
-```js
+```js title="containers/VisibleTodoList.js"
 const mapStateToProps = (state, ownProps) => {
     return {
         todos: getVisibleTodos(
@@ -220,9 +210,7 @@ const mapStateToProps = (state, ownProps) => {
 
 Важно помнить, что мы используем [ES6-деструкцию](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) на параметрах, чтобы передать их в `params` в `<VisibleTodoList />`.
 
-_components/App.js_
-
-```js
+```js title="components/App.js"
 const App = ({ match: { params } }) => {
     return (
         <div>

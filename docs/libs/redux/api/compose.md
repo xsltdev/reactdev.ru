@@ -25,20 +25,20 @@ compose(...functions);
 
 ```js
 import {
-  createStore,
-  applyMiddleware,
-  compose,
+    createStore,
+    applyMiddleware,
+    compose,
 } from 'redux';
 import thunk from 'redux-thunk';
 import DevTools from './containers/DevTools';
 import reducer from '../reducers';
 
 const store = createStore(
-  reducer,
-  compose(applyMiddleware(thunk), DevTools.instrument())
+    reducer,
+    compose(applyMiddleware(thunk), DevTools.instrument())
 );
 ```
 
 ## Советы
 
-- `compose` позволяет вам писать глубоко вложенные функции преобразований без дрейфа вправо (rightward drift) в коде. Не предоставляйте ей слишком многого!
+-   `compose` позволяет вам писать глубоко вложенные функции преобразований без дрейфа вправо (rightward drift) в коде. Не предоставляйте ей слишком многого!

@@ -52,9 +52,9 @@ console.log('next state', store.getState());
 
 ```js
 function dispatchAndLog(store, action) {
-  console.log('dispatching', action);
-  store.dispatch(action);
-  console.log('next state', store.getState());
+    console.log('dispatching', action);
+    store.dispatch(action);
+    console.log('next state', store.getState());
 }
 ```
 
@@ -73,10 +73,10 @@ dispatchAndLog(store, addTodo('Use Redux'));
 ```js
 const next = store.dispatch;
 store.dispatch = function dispatchAndLog(action) {
-  console.log('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  return result;
+    console.log('dispatching', action);
+    let result = next(action);
+    console.log('next state', store.getState());
+    return result;
 };
 ```
 
@@ -96,33 +96,33 @@ store.dispatch = function dispatchAndLog(action) {
 
 ```js
 function patchStoreToAddLogging(store) {
-  const next = store.dispatch;
-  store.dispatch = function dispatchAndLog(action) {
-    console.log('dispatching', action);
-    let result = next(action);
-    console.log('next state', store.getState());
-    return result;
-  };
+    const next = store.dispatch;
+    store.dispatch = function dispatchAndLog(action) {
+        console.log('dispatching', action);
+        let result = next(action);
+        console.log('next state', store.getState());
+        return result;
+    };
 }
 
 function patchStoreToAddCrashReporting(store) {
-  const next = store.dispatch;
-  store.dispatch = function dispatchAndReportErrors(
-    action
-  ) {
-    try {
-      return next(action);
-    } catch (err) {
-      console.error('Caught an exception!', err);
-      Raven.captureException(err, {
-        extra: {
-          action,
-          state: store.getState(),
-        },
-      });
-      throw err;
-    }
-  };
+    const next = store.dispatch;
+    store.dispatch = function dispatchAndReportErrors(
+        action
+    ) {
+        try {
+            return next(action);
+        } catch (err) {
+            console.error('Caught an exception!', err);
+            Raven.captureException(err, {
+                extra: {
+                    action,
+                    state: store.getState(),
+                },
+            });
+            throw err;
+        }
+    };
 }
 ```
 
@@ -141,17 +141,17 @@ Monkeypatching — это хак. "Замените любой метод, ко�
 
 ```js
 function logger(store) {
-  let next = store.dispatch;
+    let next = store.dispatch;
 
-  // ранее было так:
-  // store.dispatch = function dispatchAndLog(action) {
+    // ранее было так:
+    // store.dispatch = function dispatchAndLog(action) {
 
-  return function dispatchAndLog(action) {
-    console.log('dispatching', action);
-    let result = next(action);
-    console.log('next state', store.getState());
-    return result;
-  };
+    return function dispatchAndLog(action) {
+        console.log('dispatching', action);
+        let result = next(action);
+        console.log('next state', store.getState());
+        return result;
+    };
 }
 ```
 
@@ -159,16 +159,16 @@ function logger(store) {
 
 ```js
 function applyMiddlewareByMonkeypatching(
-  store,
-  middlewares
+    store,
+    middlewares
 ) {
-  middlewares = middlewares.slice();
-  middlewares.reverse();
+    middlewares = middlewares.slice();
+    middlewares.reverse();
 
-  // Изменяем функцию dispatch каждым мидлваром.
-  middlewares.forEach(
-    (middleware) => (store.dispatch = middleware(store))
-  );
+    // Изменяем функцию dispatch каждым мидлваром.
+    middlewares.forEach(
+        (middleware) => (store.dispatch = middleware(store))
+    );
 }
 ```
 
@@ -176,8 +176,8 @@ function applyMiddlewareByMonkeypatching(
 
 ```js
 applyMiddlewareByMonkeypatching(store, [
-  logger,
-  crashReporter,
+    logger,
+    crashReporter,
 ]);
 ```
 
@@ -189,15 +189,15 @@ applyMiddlewareByMonkeypatching(store, [
 
 ```js
 function logger(store) {
-  // Обязательно нужно закешировать функцию, которую вернул предыдущий мидлвар:
-  let next = store.dispatch;
+    // Обязательно нужно закешировать функцию, которую вернул предыдущий мидлвар:
+    let next = store.dispatch;
 
-  return function dispatchAndLog(action) {
-    console.log('dispatching', action);
-    let result = next(action);
-    console.log('next state', store.getState());
-    return result;
-  };
+    return function dispatchAndLog(action) {
+        console.log('dispatching', action);
+        let result = next(action);
+        console.log('next state', store.getState());
+        return result;
+    };
 }
 ```
 
@@ -209,14 +209,14 @@ function logger(store) {
 
 ```js
 function logger(store) {
-  return function wrapDispatchToAddLogging(next) {
-    return function dispatchAndLog(action) {
-      console.log('dispatching', action);
-      let result = next(action);
-      console.log('next state', store.getState());
-      return result;
+    return function wrapDispatchToAddLogging(next) {
+        return function dispatchAndLog(action) {
+            console.log('dispatching', action);
+            let result = next(action);
+            console.log('next state', store.getState());
+            return result;
+        };
     };
-  };
 }
 ```
 
@@ -224,25 +224,25 @@ function logger(store) {
 
 ```js
 const logger = (store) => (next) => (action) => {
-  console.log('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  return result;
+    console.log('dispatching', action);
+    let result = next(action);
+    console.log('next state', store.getState());
+    return result;
 };
 
 const crashReporter = (store) => (next) => (action) => {
-  try {
-    return next(action);
-  } catch (err) {
-    console.error('Caught an exception!', err);
-    Raven.captureException(err, {
-      extra: {
-        action,
-        state: store.getState(),
-      },
-    });
-    throw err;
-  }
+    try {
+        return next(action);
+    } catch (err) {
+        console.error('Caught an exception!', err);
+        Raven.captureException(err, {
+            extra: {
+                action,
+                state: store.getState(),
+            },
+        });
+        throw err;
+    }
 };
 ```
 
@@ -258,23 +258,24 @@ const crashReporter = (store) => (next) => (action) => {
 // Осторожно: Простейшая имплементация!
 // Это *не* Redux API.
 function applyMiddleware(store, middlewares) {
-  middlewares = middlewares.slice();
-  middlewares.reverse();
-  let dispatch = store.dispatch;
-  middlewares.forEach(
-    (middleware) => (dispatch = middleware(store)(dispatch))
-  );
-  return Object.assign({}, store, { dispatch });
+    middlewares = middlewares.slice();
+    middlewares.reverse();
+    let dispatch = store.dispatch;
+    middlewares.forEach(
+        (middleware) =>
+            (dispatch = middleware(store)(dispatch))
+    );
+    return Object.assign({}, store, { dispatch });
 }
 ```
 
 Реализация [`applyMiddleware()`](../api/applyMiddleware.md), которая поставляется с Redux, похожа на эту, но **отличается тремя важными аспектами**:
 
-- Она предоставляет мидлвару только подмножество [API стора](../api/Store.md): методы [`dispatch(action)`](../api/Store.md#dispatch) и [`getState()`](../api/Store.md#getState).
+-   Она предоставляет мидлвару только подмножество [API стора](../api/Store.md): методы [`dispatch(action)`](../api/Store.md#dispatch) и [`getState()`](../api/Store.md#getState).
 
-- Она использует некоторые хитрости для того, чтобы убедиться, что, экшен снова пройдет через всю цепочку мидлваров, включая текущий, если вы вызываете `store.dispatch(action)` из вашего мидлвара вместо `next(action)`. Это полезно для асинхронных мидлваров, как мы [ранее](AsyncActions.md) видели.
+-   Она использует некоторые хитрости для того, чтобы убедиться, что, экшен снова пройдет через всю цепочку мидлваров, включая текущий, если вы вызываете `store.dispatch(action)` из вашего мидлвара вместо `next(action)`. Это полезно для асинхронных мидлваров, как мы [ранее](AsyncActions.md) видели.
 
-- Для того чтобы гарантировать, что вы можете применить мидлвар только один раз, она работает с `createStore()`, а не с самим `store`. Вместо `(store, middlewares) => store`, ее сигнатурой является `(...middlewares) => (createStore) => createStore`.
+-   Для того чтобы гарантировать, что вы можете применить мидлвар только один раз, она работает с `createStore()`, а не с самим `store`. Вместо `(store, middlewares) => store`, ее сигнатурой является `(...middlewares) => (createStore) => createStore`.
 
 !!!warning "Предостережение: отправка во время установки"
 
@@ -286,25 +287,25 @@ function applyMiddleware(store, middlewares) {
 
 ```js
 const logger = (store) => (next) => (action) => {
-  console.log('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  return result;
+    console.log('dispatching', action);
+    let result = next(action);
+    console.log('next state', store.getState());
+    return result;
 };
 
 const crashReporter = (store) => (next) => (action) => {
-  try {
-    return next(action);
-  } catch (err) {
-    console.error('Caught an exception!', err);
-    Raven.captureException(err, {
-      extra: {
-        action,
-        state: store.getState(),
-      },
-    });
-    throw err;
-  }
+    try {
+        return next(action);
+    } catch (err) {
+        console.error('Caught an exception!', err);
+        Raven.captureException(err, {
+            extra: {
+                action,
+                state: store.getState(),
+            },
+        });
+        throw err;
+    }
 };
 ```
 
@@ -312,16 +313,16 @@ const crashReporter = (store) => (next) => (action) => {
 
 ```js
 import {
-  createStore,
-  combineReducers,
-  applyMiddleware,
+    createStore,
+    combineReducers,
+    applyMiddleware,
 } from 'redux';
 
 const todoApp = combineReducers(reducers);
 const store = createStore(
-  todoApp,
-  // applyMiddleware() tells createStore() how to handle middleware
-  applyMiddleware(logger, crashReporter)
+    todoApp,
+    // applyMiddleware() tells createStore() how to handle middleware
+    applyMiddleware(logger, crashReporter)
 );
 ```
 
@@ -343,30 +344,30 @@ store.dispatch(addTodo('Use Redux'));
  * Логирует все экшены и состояния после того, как они будут отправлены.
  */
 const logger = (store) => (next) => (action) => {
-  console.group(action.type);
-  console.info('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  console.groupEnd(action.type);
-  return result;
+    console.group(action.type);
+    console.info('dispatching', action);
+    let result = next(action);
+    console.log('next state', store.getState());
+    console.groupEnd(action.type);
+    return result;
 };
 
 /**
  * Отправляет отчеты об ошибках когда обновляется состояние и уведомляются слушатели.
  */
 const crashReporter = (store) => (next) => (action) => {
-  try {
-    return next(action);
-  } catch (err) {
-    console.error('Caught an exception!', err);
-    Raven.captureException(err, {
-      extra: {
-        action,
-        state: store.getState(),
-      },
-    });
-    throw err;
-  }
+    try {
+        return next(action);
+    } catch (err) {
+        console.error('Caught an exception!', err);
+        Raven.captureException(err, {
+            extra: {
+                action,
+                state: store.getState(),
+            },
+        });
+        throw err;
+    }
 };
 
 /**
@@ -374,18 +375,18 @@ const crashReporter = (store) => (next) => (action) => {
  * Создает `dispatch`, возвращающий функцию, для отмены таймаута.
  */
 const timeoutScheduler = (store) => (next) => (action) => {
-  if (!action.meta || !action.meta.delay) {
-    return next(action);
-  }
+    if (!action.meta || !action.meta.delay) {
+        return next(action);
+    }
 
-  let timeoutId = setTimeout(
-    () => next(action),
-    action.meta.delay
-  );
+    let timeoutId = setTimeout(
+        () => next(action),
+        action.meta.delay
+    );
 
-  return function cancel() {
-    clearTimeout(timeoutId);
-  };
+    return function cancel() {
+        clearTimeout(timeoutId);
+    };
 };
 
 /**
@@ -394,40 +395,40 @@ const timeoutScheduler = (store) => (next) => (action) => {
  * экшена из очереди.
  */
 const rafScheduler = (store) => (next) => {
-  const queuedActions = [];
-  let frame = null;
+    const queuedActions = [];
+    let frame = null;
 
-  function loop() {
-    frame = null;
-    try {
-      if (queuedActions.length) {
-        next(queuedActions.shift());
-      }
-    } finally {
-      maybeRaf();
-    }
-  }
-
-  function maybeRaf() {
-    if (queuedActions.length && !frame) {
-      frame = requestAnimationFrame(loop);
-    }
-  }
-
-  return (action) => {
-    if (!action.meta || !action.meta.raf) {
-      return next(action);
+    function loop() {
+        frame = null;
+        try {
+            if (queuedActions.length) {
+                next(queuedActions.shift());
+            }
+        } finally {
+            maybeRaf();
+        }
     }
 
-    queuedActions.push(action);
-    maybeRaf();
+    function maybeRaf() {
+        if (queuedActions.length && !frame) {
+            frame = requestAnimationFrame(loop);
+        }
+    }
 
-    return function cancel() {
-      queuedActions = queuedActions.filter(
-        (a) => a !== action
-      );
+    return (action) => {
+        if (!action.meta || !action.meta.raf) {
+            return next(action);
+        }
+
+        queuedActions.push(action);
+        maybeRaf();
+
+        return function cancel() {
+            queuedActions = queuedActions.filter(
+                (a) => a !== action
+            );
+        };
     };
-  };
 };
 
 /**
@@ -437,11 +438,11 @@ const rafScheduler = (store) => (next) => {
  * обрабатывать отказ (rejection) промиса.
  */
 const vanillaPromise = (store) => (next) => (action) => {
-  if (typeof action.then !== 'function') {
-    return next(action);
-  }
+    if (typeof action.then !== 'function') {
+        return next(action);
+    }
 
-  return Promise.resolve(action).then(store.dispatch);
+    return Promise.resolve(action).then(store.dispatch);
 };
 
 /**
@@ -453,26 +454,26 @@ const vanillaPromise = (store) => (next) => (action) => {
  * может ожидать разрешения этого промиса.
  */
 const readyStatePromise = (store) => (next) => (action) => {
-  if (!action.promise) {
-    return next(action);
-  }
+    if (!action.promise) {
+        return next(action);
+    }
 
-  function makeAction(ready, data) {
-    const newAction = Object.assign(
-      {},
-      action,
-      { ready },
-      data
+    function makeAction(ready, data) {
+        const newAction = Object.assign(
+            {},
+            action,
+            { ready },
+            data
+        );
+        delete newAction.promise;
+        return newAction;
+    }
+
+    next(makeAction(false));
+    return action.promise.then(
+        (result) => next(makeAction(true, { result })),
+        (error) => next(makeAction(true, { error }))
     );
-    delete newAction.promise;
-    return newAction;
-  }
-
-  next(makeAction(false));
-  return action.promise.then(
-    (result) => next(makeAction(true, { result })),
-    (error) => next(makeAction(true, { error }))
-  );
 };
 
 /**
@@ -485,22 +486,22 @@ const readyStatePromise = (store) => (next) => (action) => {
  * `dispatch` будет возвращать значение отправляемой функции.
  */
 const thunk = (store) => (next) => (action) =>
-  typeof action === 'function'
-    ? action(store.dispatch, store.getState)
-    : next(action);
+    typeof action === 'function'
+        ? action(store.dispatch, store.getState)
+        : next(action);
 
 // Вы можете использовать их все! (Это не значит, что вы должны.)
 const todoApp = combineReducers(reducers);
 const store = createStore(
-  todoApp,
-  applyMiddleware(
-    rafScheduler,
-    timeoutScheduler,
-    thunk,
-    vanillaPromise,
-    readyStatePromise,
-    logger,
-    crashReporter
-  )
+    todoApp,
+    applyMiddleware(
+        rafScheduler,
+        timeoutScheduler,
+        thunk,
+        vanillaPromise,
+        readyStatePromise,
+        logger,
+        crashReporter
+    )
 );
 ```

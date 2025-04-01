@@ -27,27 +27,23 @@ bindActionCreators(actionCreators, dispatch);
 
 ## Пример
 
-_TodoActionCreators.js_
-
-```js
+```js title="TodoActionCreators.js"
 export function addTodo(text) {
-  return {
-    type: 'ADD_TODO',
-    text,
-  };
+    return {
+        type: 'ADD_TODO',
+        text,
+    };
 }
 
 export function removeTodo(id) {
-  return {
-    type: 'REMOVE_TODO',
-    id,
-  };
+    return {
+        type: 'REMOVE_TODO',
+        id,
+    };
 }
 ```
 
-_SomeComponent.js_
-
-```js
+```js title="SomeComponent.js"
 import { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -60,65 +56,67 @@ console.log(TodoActionCreators);
 // }
 
 class TodoListContainer extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    const { dispatch } = props; // позже передать их нашему потомку.
+        const { dispatch } = props; // позже передать их нашему потомку.
 
-    // Это хороший случай использования для bindActionCreators:
-    // Вы хотите, чтобы дочерний компонент, ничего не знал о Redux.
-    // Теперь мы создаем связанные версии этих функций, чтобы мы могли
-    this.boundActionCreators = bindActionCreators(
-      TodoActionCreators,
-      dispatch
-    );
-    console.log(this.boundActionCreators);
-    // {
-    //   addTodo: Function,
-    //   removeTodo: Function
-    // }
-  }
+        // Это хороший случай использования для bindActionCreators:
+        // Вы хотите, чтобы дочерний компонент, ничего не знал о Redux.
+        // Теперь мы создаем связанные версии этих функций, чтобы мы могли
+        this.boundActionCreators = bindActionCreators(
+            TodoActionCreators,
+            dispatch
+        );
+        console.log(this.boundActionCreators);
+        // {
+        //   addTodo: Function,
+        //   removeTodo: Function
+        // }
+    }
 
-  componentDidMount() {
-    // Injected by react-redux:
-    let { dispatch } = this.props;
+    componentDidMount() {
+        // Injected by react-redux:
+        let { dispatch } = this.props;
 
-    // Примечание: так не будет работать:
-    // TodoActionCreators.addTodo('Use Redux')
+        // Примечание: так не будет работать:
+        // TodoActionCreators.addTodo('Use Redux')
 
-    // Вы просто вызываете функцию, которая создает экшен.
-    // Вы также должны диспатчнуть экшен (action)!
+        // Вы просто вызываете функцию, которая создает экшен.
+        // Вы также должны диспатчнуть экшен (action)!
 
-    // Так будет работать:
-    let action = TodoActionCreators.addTodo('Use Redux');
-    dispatch(action);
-  }
+        // Так будет работать:
+        let action = TodoActionCreators.addTodo(
+            'Use Redux'
+        );
+        dispatch(action);
+    }
 
-  render() {
-    // Injected by react-redux:
-    let { todos } = this.props;
+    render() {
+        // Injected by react-redux:
+        let { todos } = this.props;
 
-    return (
-      <TodoList
-        todos={todos}
-        {...this.boundActionCreators}
-      />
-    );
+        return (
+            <TodoList
+                todos={todos}
+                {...this.boundActionCreators}
+            />
+        );
 
-    // Альтернативой для bindActionCreators может быть передача вниз
-    // только dispatch функции, но тогда ваш дочерний компонент
-    // должен импортировать генераторы экшенов и знать о них.
+        // Альтернативой для bindActionCreators может быть передача вниз
+        // только dispatch функции, но тогда ваш дочерний компонент
+        // должен импортировать генераторы экшенов и знать о них.
 
-    // return <TodoList todos={todos} dispatch={dispatch} />
-  }
+        // return <TodoList todos={todos} dispatch={dispatch} />
+    }
 }
 
 export default connect((state) => ({ todos: state.todos }))(
-  TodoListContainer
+    TodoListContainer
 );
 ```
 
 ## Советы
 
-- Вы можете спросить: почему мы не привязываем генераторы экшенов сразу к инстансу стора, как в классическом Flux? Проблема в том, что это не будет хорошо работать с универсальными приложениями, которые необходимо рендерить на сервере. Скорее всего, вы хотите иметь отдельный инстанс стора для каждого запроса, чтобы вы могли подготовить их с различными данными, но связывание генераторов экшенов во время их определения, означает, что вы привязаны к одному инстансу стора для всех запросов.
-- Если вы используете ES5, вместо синтаксиса `import * ` вы можете просто передать `require('./TodoActionCreators')` в `bindActionCreators` в качестве первого аргумента. Единственное, что его волнует, чтобы значения аргументов `actionCreators` были функциями. Модульная система не имеет значения.
+-   Вы можете спросить: почему мы не привязываем генераторы экшенов сразу к инстансу стора, как в классическом Flux? Проблема в том, что это не будет хорошо работать с универсальными приложениями, которые необходимо рендерить на сервере. Скорее всего, вы хотите иметь отдельный инстанс стора для каждого запроса, чтобы вы могли подготовить их с различными данными, но связывание генераторов экшенов во время их определения, означает, что вы привязаны к одному инстансу стора для всех запросов.
+-   Если вы используете ES5, вместо синтаксиса `import * ` вы можете просто передать `require('./TodoActionCreators')` в `bindActionCreators` в качестве первого аргумента. Единственное, что его волнует, чтобы значения аргументов `actionCreators` были функциями. Модульная система не имеет значения.

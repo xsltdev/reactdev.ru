@@ -4,5 +4,6 @@
 	"svn.ignoreMissingSvnWarning": true,
 	"editor.tabCompletion": "on",
 	"diffEditor.codeLens": true,
-	"editor.defaultFormatter": "esbenp.prettier-vscode"
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true
 }

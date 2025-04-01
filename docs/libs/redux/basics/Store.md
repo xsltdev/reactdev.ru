@@ -4,11 +4,11 @@
 
 **Стор** (Store) — это объект, который соединяет эти части вместе. Стор берет на себя следующие задачи:
 
-- Хранит состояние приложения (application state);
-- Предоставляет доступ к состоянию с помощью [`getState()`](../api/Store.md#getState);
-- Предоставляет возможность обновления состояния с помощью [`dispatch(action)`](../api/Store.md#dispatch);
-- Регистриурет слушателей с помощью функции [`subscribe(listener)`](../api/Store.md#subscribelistener);
-- Обрабатывает отмену регистрации слушателей с помощью функции, возвращаемой [`subscribe(listener)`](../api/Store.md#subscribelistener).
+-   Хранит состояние приложения (application state);
+-   Предоставляет доступ к состоянию с помощью [`getState()`](../api/Store.md#getState);
+-   Предоставляет возможность обновления состояния с помощью [`dispatch(action)`](../api/Store.md#dispatch);
+-   Регистриурет слушателей с помощью функции [`subscribe(listener)`](../api/Store.md#subscribelistener);
+-   Обрабатывает отмену регистрации слушателей с помощью функции, возвращаемой [`subscribe(listener)`](../api/Store.md#subscribelistener).
 
 Важно отметить, что у вас будет только один стор в Redux-приложении. Если Вы захотите разделить логику обработки данных, то нужно будет использовать [композицию редьюсеров (reducer composition)](Reducers.md#splitting-reducers) вместо использования множества сторов (stores).
 
@@ -24,8 +24,8 @@ let store = createStore(todoApp);
 
 ```js
 const store = createStore(
-  todoApp,
-  window.STATE_FROM_SERVER
+    todoApp,
+    window.STATE_FROM_SERVER
 );
 ```
 
@@ -35,10 +35,10 @@ const store = createStore(
 
 ```js
 import {
-  addTodo,
-  toggleTodo,
-  setVisibilityFilter,
-  VisibilityFilters,
+    addTodo,
+    toggleTodo,
+    setVisibilityFilter,
+    VisibilityFilters,
 } from './actions';
 
 // Выведем в консоль начальное состояние
@@ -47,7 +47,7 @@ console.log(store.getState());
 // Каждый раз при обновлении состояния - выводим его
 // Отметим, что subscribe() возвращает функцию для отмены регистрации слушателя
 const unsubscribe = store.subscribe(() =>
-  console.log(store.getState())
+    console.log(store.getState())
 );
 
 // Отправим несколько экшенов
@@ -57,7 +57,7 @@ store.dispatch(addTodo('Learn about store'));
 store.dispatch(toggleTodo(0));
 store.dispatch(toggleTodo(1));
 store.dispatch(
-  setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED)
+    setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED)
 );
 
 // Прекратим слушать обновление состояния

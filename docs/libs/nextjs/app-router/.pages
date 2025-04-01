@@ -1,0 +1,17 @@
+title: "Изучаем app router в Next.js"
+nav:
+    - index.md
+    - getting-started.md
+    - css-styling.md
+    - optimizing-fonts-images.md
+    - creating-layouts-and-pages.md
+    - navigating-between-pages.md
+    - setting-up-your-database.md
+    - fetching-data.md
+    - static-and-dynamic-rendering.md
+    - streaming.md
+    - adding-search-and-pagination.md
+    - mutating-data.md
+    - error-handling.md
+    - adding-authentication.md
+    - adding-metadata.md

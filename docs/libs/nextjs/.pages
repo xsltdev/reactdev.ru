@@ -1,11 +1,4 @@
 title: Next.js
 nav:
     - index.md
-    - basic
-    - routing
-    - api-routes
-    - prod.md
-    - auth.md
-    - advanced
-    - api.md
-    - next-config.md
+    - app-router

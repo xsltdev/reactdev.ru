@@ -55,10 +55,10 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 
 ```js
 function addTodo(text) {
-  return {
-    type: ADD_TODO,
-    text,
-  };
+    return {
+        type: ADD_TODO,
+        text,
+    };
 }
 ```
 
@@ -68,11 +68,11 @@ function addTodo(text) {
 
 ```js
 function addTodoWithDispatch(text) {
-  const action = {
-    type: ADD_TODO,
-    text,
-  };
-  dispatch(action);
+    const action = {
+        type: ADD_TODO,
+        text,
+    };
+    dispatch(action);
 }
 ```
 
@@ -89,7 +89,7 @@ dispatch(completeTodo(index));
 ```js
 const boundAddTodo = (text) => dispatch(addTodo(text));
 const boundCompleteTodo = (index) =>
-  dispatch(completeTodo(index));
+    dispatch(completeTodo(index));
 ```
 
 Теперь вы можете вызвать его напрямую:
@@ -105,39 +105,37 @@ boundCompleteTodo(index)
 
 ## Исходный код
 
-_actions.js_
-
-```js
+```js title="actions.js"
 /*
  * типы экшенов
  */
 export const ADD_TODO = 'ADD_TODO';
 export const TOGGLE_TODO = 'TOGGLE_TODO';
 export const SET_VISIBILITY_FILTER =
-  'SET_VISIBILITY_FILTER';
+    'SET_VISIBILITY_FILTER';
 
 /*
  * другие константы
  */
 export const VisibilityFilters = {
-  SHOW_ALL: 'SHOW_ALL',
-  SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE',
+    SHOW_ALL: 'SHOW_ALL',
+    SHOW_COMPLETED: 'SHOW_COMPLETED',
+    SHOW_ACTIVE: 'SHOW_ACTIVE',
 };
 
 /*
  * генераторы экшенов
  */
 export function addTodo(text) {
-  return { type: ADD_TODO, text };
+    return { type: ADD_TODO, text };
 }
 
 export function toggleTodo(index) {
-  return { type: TOGGLE_TODO, index };
+    return { type: TOGGLE_TODO, index };
 }
 
 export function setVisibilityFilter(filter) {
-  return { type: SET_VISIBILITY_FILTER, filter };
+    return { type: SET_VISIBILITY_FILTER, filter };
 }
 ```
 
