@@ -8,7 +8,7 @@ hide:
 
 Пройдите путь от новичка до эксперта, изучив основы Next.js и создав полнофункциональный демонстрационный сайт, использующий все новейшие возможности.
 
--   [Изучаем Next.js](./learn-nextjs.15/index.md): 16 глав, в которых вы пройдете путь от React до Next.js.
+-   [Изучаем app router в Next.js](./app-router/index.md): 16 глав, в которых вы пройдете путь от React до Next.js.
 -   Основы React: Новичок в React? Узнайте об основных концепциях, которые помогут вам перейти от JavaScript к React.
 -   Next.js Pages Router: Узнайте, как создать статический блог с помощью Pages Router.
 
@@ -29,61 +29,61 @@ hide:
 
 <div class="grid cards" markdown>
 
--   **[:octicons-info-16: Введение](./learn-nextjs.15/index.md)**
+-   **[:octicons-info-16: Введение](./app-router/index.md)**
 
     ***
 
     Узнайте, как создать веб-приложение full-stack с помощью бесплатного курса Next.js Foundations.
 
--   :fontawesome-solid-hourglass-start: Начало работы
+-   **[:fontawesome-solid-hourglass-start: Начало работы](./app-router/getting-started.md)**
 
     ***
 
     Создайте новое приложение Next.js с помощью стартового примера дашборда и изучите проект.
 
--   :simple-css3: Стилизация CSS
+-   **[:simple-css3: Стилизация CSS](./app-router/css-styling.md)**
 
     ***
 
     Оформите свое приложение Next.js с помощью модулей Tailwind и CSS.
 
--   :simple-googlefonts: Оптимизация шрифтов и изображений
+-   **[:simple-googlefonts: Оптимизация шрифтов и изображений](./app-router/optimizing-fonts-images.md)**
 
     ***
 
     Оптимизируйте шрифты и изображения с помощью встроенных компонентов Next.js.
 
--   :material-layers-outline: Создание макетов и страниц
+-   **[:material-layers-outline: Создание макетов и страниц](./app-router/creating-layouts-and-pages.md)**
 
     ***
 
     Создайте маршруты дашборда и общий макет, который можно использовать на нескольких страницах.
 
--   :material-navigation-variant-outline: Навигация между страницами
+-   **[:material-navigation-variant-outline: Навигация между страницами](./app-router/navigating-between-pages.md)**
 
     ***
 
     Узнайте, как использовать компонент `<Link>` для навигации между страницами.
 
--   :material-database: Настройка базы данных
+-   **[:material-database: Настройка базы данных](./app-router/setting-up-your-database.md)**
 
     ***
 
     Создайте базу данных для своего приложения и загрузите в нее исходные данные.
 
--   :material-database-sync: Получение данных
+-   **[:material-database-sync: Получение данных](./app-router/fetching-data.md)**
 
     ***
 
     Узнайте о различных способах получения данных в Next.js и получите данные для страницы приборной панели с помощью серверных компонентов.
 
--   :simple-render: Статический и динамический рендеринг
+-   **[:simple-render: Статический и динамический рендеринг](./app-router/static-and-dynamic-rendering.md)**
 
     ***
 
     Узнайте, как работает рендеринг в Next.js, и сделайте свое приложение для дашборда динамичным.
 
--   :simple-streamrunners: Потоковая передача
+-   **[:simple-streamrunners: Потоковая передача](./app-router/streaming.md)**
 
     ***
 
@@ -95,19 +95,19 @@ hide:
 
     Первый взгляд на Partial Prerendering и его работу.
 
--   :octicons-search-16: Добавление поиска и пагинации
+-   **[:octicons-search-16: Добавление поиска и пагинации](./app-router/adding-search-and-pagination.md)**
 
     ***
 
     Добавление поиска и пагинации в приложение дашборда с помощью API Next.js.
 
--   :material-account-reactivate-outline: Мутация данных
+-   **[:material-account-reactivate-outline: Мутация данных](./app-router/mutating-data.md)**
 
     ***
 
     Вносите изменения в данные с помощью React Server Actions и перепроверяйте кэш Next.js.
 
--   :material-mirror: Обработка ошибок
+-   **[:material-mirror: Обработка ошибок](./app-router/error-handling.md)**
 
     ***
 
@@ -119,13 +119,13 @@ hide:
 
     Реализуйте валидацию форм на стороне сервера и улучшите доступность ваших форм.
 
--   :simple-authy: Добавление аутентификации
+-   **[:simple-authy: Добавление аутентификации](./app-router/adding-authentication.md)**
 
     ***
 
     Добавьте аутентификацию для защиты маршрутов дашборда с помощью NextAuth.js, серверных действий и Middleware.
 
--   :simple-metrodeparis: Добавление метаданных
+-   **[:simple-metrodeparis: Добавление метаданных](./app-router/adding-metadata.md)**
 
     ***
 

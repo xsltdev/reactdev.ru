@@ -6,9 +6,9 @@
 
 Работа Redux как правило, делится на несколько частей:
 
-- обработка действие в мидлварах и редьюсерах (включая дублирование объекта для постоянных обновлений),
-- уведомление подписчиков после отправки действий,
-- обновление UI-компонентов на основе изменения состояния.
+-   обработка действие в мидлварах и редьюсерах (включая дублирование объекта для постоянных обновлений),
+-   уведомление подписчиков после отправки действий,
+-   обновление UI-компонентов на основе изменения состояния.
 
 Хотя, конечно, каждый из этих пунктов _может_ ухудшить производительность в достаточно сложных ситуациях, но в реализации нет Redux изначально нет ничего медлительного или неэффективного. По факту, React Redux сильно оптимизирован в части избавлениях от ненужных перерисовок, а React-Redux v5 показывает заметные улучшение по сравнению с более поздними версиями.
 
@@ -20,29 +20,29 @@ Redux может быть не так эффективен из коробки, 
 
 **Статьи**
 
-- [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/) (accompanying talk: [Scaling React Applications](https://vimeo.com/168648012))
-- [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
-- [Improving React and Redux Perf with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
-- [Encapsulating the Redux State Tree](http://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
-- [React/Redux Links: Performance - Redux](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md#redux-performance)
+-   [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/) (accompanying talk: [Scaling React Applications](https://vimeo.com/168648012))
+-   [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
+-   [Improving React and Redux Perf with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
+-   [Encapsulating the Redux State Tree](http://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
+-   [React/Redux Links: Performance - Redux](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md#redux-performance)
 
 **Обсуждения**
 
-- [#310: Who uses Redux?](https://github.com/reactjs/redux/issues/310)
-- [#1751: Performance issues with large collections](https://github.com/reactjs/redux/issues/1751)
-- [React Redux #269: Connect could be used with a custom subscribe method](https://github.com/reactjs/react-redux/issues/269)
-- [React Redux #407: Rewrite connect to offer an advanced API](https://github.com/reactjs/react-redux/issues/407)
-- [React Redux #416: Rewrite connect for better performance and extensibility](https://github.com/reactjs/react-redux/pull/416)
-- [Redux vs MobX TodoMVC Benchmark: #1](https://github.com/mweststrate/redux-todomvc/pull/1)
-- [Reddit: What's the best place to keep the initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)
-- [Reddit: Help designing Redux state for a single page app](https://www.reddit.com/r/reactjs/comments/48k852/help_designing_redux_state_for_a_single_page/)
-- [Reddit: Redux performance issues with a large state object?](https://www.reddit.com/r/reactjs/comments/41wdqn/redux_performance_issues_with_a_large_state_object/)
-- [Reddit: React/Redux for Ultra Large Scale apps](https://www.reddit.com/r/javascript/comments/49box8/reactredux_for_ultra_large_scale_apps/)
-- [Twitter: Redux scaling](https://twitter.com/NickPresta/status/684058236828266496)
-- [Twitter: Redux vs MobX benchmark graph - Redux state shape matters](https://twitter.com/dan_abramov/status/720219615041859584)
-- [Stack Overflow: How to optimize small updates to props of nested components?](http://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
-- [Chat log: React/Redux perf - updating a 10K-item Todo list](https://gist.github.com/markerikson/53735e4eb151bc228d6685eab00f5f85)
-- [Chat log: React/Redux perf - single connection vs many connections](https://gist.github.com/markerikson/6056565dd65d1232784bf42b65f8b2ad)
+-   [#310: Who uses Redux?](https://github.com/reactjs/redux/issues/310)
+-   [#1751: Performance issues with large collections](https://github.com/reactjs/redux/issues/1751)
+-   [React Redux #269: Connect could be used with a custom subscribe method](https://github.com/reactjs/react-redux/issues/269)
+-   [React Redux #407: Rewrite connect to offer an advanced API](https://github.com/reactjs/react-redux/issues/407)
+-   [React Redux #416: Rewrite connect for better performance and extensibility](https://github.com/reactjs/react-redux/pull/416)
+-   [Redux vs MobX TodoMVC Benchmark: #1](https://github.com/mweststrate/redux-todomvc/pull/1)
+-   [Reddit: What's the best place to keep the initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)
+-   [Reddit: Help designing Redux state for a single page app](https://www.reddit.com/r/reactjs/comments/48k852/help_designing_redux_state_for_a_single_page/)
+-   [Reddit: Redux performance issues with a large state object?](https://www.reddit.com/r/reactjs/comments/41wdqn/redux_performance_issues_with_a_large_state_object/)
+-   [Reddit: React/Redux for Ultra Large Scale apps](https://www.reddit.com/r/javascript/comments/49box8/reactredux_for_ultra_large_scale_apps/)
+-   [Twitter: Redux scaling](https://twitter.com/NickPresta/status/684058236828266496)
+-   [Twitter: Redux vs MobX benchmark graph - Redux state shape matters](https://twitter.com/dan_abramov/status/720219615041859584)
+-   [Stack Overflow: How to optimize small updates to props of nested components?](http://stackoverflow.com/questions/37264415/how-to-optimize-small-updates-to-props-of-nested-component-in-react-redux)
+-   [Chat log: React/Redux perf - updating a 10K-item Todo list](https://gist.github.com/markerikson/53735e4eb151bc228d6685eab00f5f85)
+-   [Chat log: React/Redux perf - single connection vs many connections](https://gist.github.com/markerikson/6056565dd65d1232784bf42b65f8b2ad)
 
 ## Не будет ли вызов “всех моих редьюсеров” для каждого действия медленным?
 
@@ -56,10 +56,10 @@ Redux может быть не так эффективен из коробки, 
 
 **Обсуждения**
 
-- [#912: Proposal: action filter utility](https://github.com/reactjs/redux/issues/912)
-- [#1303: Redux Performance with Large Store and frequent updates](https://github.com/reactjs/redux/issues/1303)
-- [Stack Overflow: State in Redux app has the name of the reducer](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer/35674297)
-- [Stack Overflow: How does Redux deal with deeply nested models?](http://stackoverflow.com/questions/34494866/how-does-redux-deals-with-deeply-nested-models/34495397)
+-   [#912: Proposal: action filter utility](https://github.com/reactjs/redux/issues/912)
+-   [#1303: Redux Performance with Large Store and frequent updates](https://github.com/reactjs/redux/issues/1303)
+-   [Stack Overflow: State in Redux app has the name of the reducer](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer/35674297)
+-   [Stack Overflow: How does Redux deal with deeply nested models?](http://stackoverflow.com/questions/34494866/how-does-redux-deals-with-deeply-nested-models/34495397)
 
 ## Должен ли я иметь полноценный клон моего состояния в редьюсере? Не будет ли копирование моего состояния медленным?
 
@@ -71,11 +71,11 @@ Redux может быть не так эффективен из коробки, 
 
 **Обсуждения**
 
-- [#454: Handling big states in reducer](https://github.com/reactjs/redux/issues/454)
-- [#758: Why can't state be mutated?](https://github.com/reactjs/redux/issues/758)
-- [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reactjs/redux/issues/994)
-- [Twitter: common misconception - deep cloning](https://twitter.com/dan_abramov/status/688087202312491008)
-- [Cloning Objects in JavaScript](http://www.zsoltnagy.eu/cloning-objects-in-javascript/)
+-   [#454: Handling big states in reducer](https://github.com/reactjs/redux/issues/454)
+-   [#758: Why can't state be mutated?](https://github.com/reactjs/redux/issues/758)
+-   [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reactjs/redux/issues/994)
+-   [Twitter: common misconception - deep cloning](https://twitter.com/dan_abramov/status/688087202312491008)
+-   [Cloning Objects in JavaScript](http://www.zsoltnagy.eu/cloning-objects-in-javascript/)
 
 ## Как мне уменьшить количество событий обновления стора?
 
@@ -83,21 +83,21 @@ Redux уведомляет подписчиков после каждой усп
 
 Если Вы используете React, помните, что Вы можете улучшить производительность нескольких синхронных отправок обертыванием их в `ReactDOM.unstable_batchedUpdates()`, но этот API экспериментален и может быть удален в любом выпуске React, поэтому не полагайтесь на это слишком сильно. Взгляните на аналоги:
 
-- [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — редьюсер высокого порядка, который позволяет Вам отправлять несколько действий так, будто это одно действие, и “распаковывать” их в редьюсере,
-- [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — расширитель стора, который позволяет Вам вызывать подписчиков для множественных отправок не чаще, чем раз в определенное время (debounce),
-- [redux-batch](https://github.com/manaflair/redux-batch) — расширитель стора, которых обрабатывает отправку набора экшенов с уведомлением одного подписчика.
+-   [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — редьюсер высокого порядка, который позволяет Вам отправлять несколько действий так, будто это одно действие, и “распаковывать” их в редьюсере,
+-   [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — расширитель стора, который позволяет Вам вызывать подписчиков для множественных отправок не чаще, чем раз в определенное время (debounce),
+-   [redux-batch](https://github.com/manaflair/redux-batch) — расширитель стора, которых обрабатывает отправку набора экшенов с уведомлением одного подписчика.
 
 **Обсуждения**
 
-- [#125: Strategy for avoiding cascading renders](https://github.com/reactjs/redux/issues/125)
-- [#542: Idea: batching actions](https://github.com/reactjs/redux/issues/542)
-- [#911: Batching actions](https://github.com/reactjs/redux/issues/911)
-- [#1813: Use a loop to support dispatching arrays](https://github.com/reactjs/redux/pull/1813)
-- [React Redux #263: Huge performance issue when dispatching hundreds of actions](https://github.com/reactjs/react-redux/issues/263)
+-   [#125: Strategy for avoiding cascading renders](https://github.com/reactjs/redux/issues/125)
+-   [#542: Idea: batching actions](https://github.com/reactjs/redux/issues/542)
+-   [#911: Batching actions](https://github.com/reactjs/redux/issues/911)
+-   [#1813: Use a loop to support dispatching arrays](https://github.com/reactjs/redux/pull/1813)
+-   [React Redux #263: Huge performance issue when dispatching hundreds of actions](https://github.com/reactjs/react-redux/issues/263)
 
 **Библиотеки**
 
-- [Redux Addons Catalog: Store - Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)
+-   [Redux Addons Catalog: Store - Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)
 
 ## Будут ли проблемы с памятью из-за использования “одного дерева состояния”? Будет ли вызов большого количества действий занимать память?
 
@@ -111,9 +111,9 @@ Redux сам не хранит историю действий. Однако, Re
 
 **Документация**
 
-- [Продвинутое использование: Асинхронные действия](../advanced/AsyncActions.md)
+-   [Продвинутое использование: Асинхронные действия](../advanced/AsyncActions.md)
 
 **Обсуждения**
 
-- [Stack Overflow: Is there any way to "commit" the state in Redux to free memory?](http://stackoverflow.com/questions/35627553/is-there-any-way-to-commit-the-state-in-redux-to-free-memory/35634004)
-- [Reddit: What's the best place to keep initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)
+-   [Stack Overflow: Is there any way to "commit" the state in Redux to free memory?](http://stackoverflow.com/questions/35627553/is-there-any-way-to-commit-the-state-in-redux-to-free-memory/35634004)
+-   [Reddit: What's the best place to keep initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)

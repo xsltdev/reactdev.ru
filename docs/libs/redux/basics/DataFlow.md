@@ -29,19 +29,19 @@
 ```js
 // Текущее состояние приложения (список дел и выбранный фильтр)
 let previousState = {
-  visibleTodoFilter: 'SHOW_ALL',
-  todos: [
-    {
-      text: 'Read the docs.',
-      complete: false,
-    },
-  ],
+    visibleTodoFilter: 'SHOW_ALL',
+    todos: [
+        {
+            text: 'Read the docs.',
+            complete: false,
+        },
+    ],
 };
 
 // Выполнение экшена (добавление дела)
 let action = {
-  type: 'ADD_TODO',
-  text: 'Understand the flow.',
+    type: 'ADD_TODO',
+    text: 'Understand the flow.',
 };
 
 // Ваш редьюсер возвращает следующее состояние приложения
@@ -58,18 +58,18 @@ let nextState = todoApp(previousState, action);
 
 ```js
 function todos(state = [], action) {
-  // как-то вычисляет nextState...
-  return nextState;
+    // как-то вычисляет nextState...
+    return nextState;
 }
 
 function visibleTodoFilter(state = 'SHOW_ALL', action) {
-  // как-то вычисляет nextState...
-  return nextState;
+    // как-то вычисляет nextState...
+    return nextState;
 }
 
 let todoApp = combineReducers({
-  todos,
-  visibleTodoFilter,
+    todos,
+    visibleTodoFilter,
 });
 ```
 
@@ -78,8 +78,8 @@ let todoApp = combineReducers({
 ```js
 let nextTodos = todos(state.todos, action);
 let nextVisibleTodoFilter = visibleTodoFilter(
-  state.visibleTodoFilter,
-  action
+    state.visibleTodoFilter,
+    action
 );
 ```
 
@@ -87,8 +87,8 @@ let nextVisibleTodoFilter = visibleTodoFilter(
 
 ```js
 return {
-  todos: nextTodos,
-  visibleTodoFilter: nextVisibleTodoFilter,
+    todos: nextTodos,
+    visibleTodoFilter: nextVisibleTodoFilter,
 };
 ```
 
