@@ -8,45 +8,45 @@ description: В предыдущей главе вы узнали о разли�
 
 !!!tip "Вот темы, которые мы рассмотрим"
 
-    -   What streaming is and when you might use it.
-    -   How to implement streaming with loading.tsx and Suspense.
-    -   What loading skeletons are.
-    -   What Next.js Route Groups are, and when you might use them.
-    -   Where to place React Suspense boundaries in your application.
+    -   Что такое потоковая передача и когда его можно использовать.
+    -   Как реализовать потоковую передачу с помощью `loading.tsx` и `Suspense`.
+    -   Что такое загрузочные скелетоны.
+    -   Что такое Next.js Route Groups и когда их можно использовать.
+    -   Где разместить границы React `Suspense` в вашем приложении.
 
-## What is streaming?
+## Что такое потоковая передача?
 
-Streaming is a data transfer technique that allows you to break down a route into smaller "chunks" and progressively stream them from the server to the client as they become ready.
+Потоковая передача - это техника передачи данных, которая позволяет разбить маршрут на более мелкие «куски» и постепенно передавать их с сервера на клиент по мере готовности.
 
-![Diagram showing time with sequential data fetching and parallel data fetching](server-rendering-with-streaming.png)
+![Диаграмма, показывающая время при последовательном и параллельном получении данных](server-rendering-with-streaming.png)
 
-By streaming, you can prevent slow data requests from blocking your whole page. This allows the user to see and interact with parts of the page without waiting for all the data to load before any UI can be shown to the user.
+Потоковая передача позволяет предотвратить блокировку всей страницы медленными запросами данных. Это позволяет пользователю видеть части страницы и взаимодействовать с ними, не дожидаясь загрузки всех данных, прежде чем пользователю будет показан любой пользовательский интерфейс.
 
-![Diagram showing time with sequential data fetching and parallel data fetching](server-rendering-with-streaming-chart.png)
+![Диаграмма, показывающая время при последовательной и параллельной выборке данных](server-rendering-with-streaming-chart.png)
 
-Streaming works well with React's component model, as each component can be considered a _chunk_.
+Потоковая передача хорошо работает с компонентной моделью React, так как каждый компонент можно рассматривать как _чанк_.
 
-There are two ways you implement streaming in Next.js:
+Существует два способа реализации потоковой передачи данных в Next.js:
 
-1.  At the page level, with the `loading.tsx` file (which creates `<Suspense>` for you).
-2.  At the component level, with `<Suspense>` for more granular control.
+1.  На уровне страницы, с помощью файла `loading.tsx` (который создает для вас `<Suspense>`).
+2.  На уровне компонентов, с помощью `<Suspense>` для более детального контроля.
 
-Let's see how this works.
+Давайте посмотрим, как это работает.
 
 <?quiz?>
 
-question: What is one advantage of streaming?
-answer: Data requests become more secure through chunk encryption
-answer: All chunks are rendered only after they are received in full
-answer-correct: Chunks are rendered in parallel, reducing the overall load time
+question: В чем одно из преимуществ потоковой передачи?
+answer: Запросы данных становятся более безопасными благодаря шифрованию чанков
+answer: Все чанки обрабатываются только после того, как они получены в полном объеме
+answer-correct: Чанки отображаются параллельно, что сокращает общее время загрузки.
 content:
 
-<p>One advantage of this approach is that you can significantly reduce your page's overall loading time.</p>
+<p>Преимущество такого подхода заключается в том, что вы можете значительно сократить общее время загрузки страницы.</p>
 <?/quiz?>
 
-## Streaming a whole page with `loading.tsx`
+## Потоковая передача всей страницы с помощью `loading.tsx`.
 
-In the `/app/dashboard` folder, create a new file called `loading.tsx`:
+В папке `/app/dashboard` создайте новый файл с именем `loading.tsx`:
 
 ```ts title="/app/dashboard/loading.tsx"
 export default function Loading() {
@@ -54,23 +54,23 @@ export default function Loading() {
 }
 ```
 
-Refresh <http://localhost:3000/dashboard>, and you should now see:
+Обновите <http://localhost:3000/dashboard>, и теперь вы должны увидеть:
 
-![Dashboard page with 'Loading...' text](loading-page.png)
+![Страница дашборда с текстом 'Loading...'](loading-page.png)
 
-A few things are happening here:
+Здесь происходит несколько вещей:
 
-1.  `loading.tsx` is a special Next.js file built on top of React Suspense. It allows you to create fallback UI to show as a replacement while page content loads.
-2.  Since `<SideNav>` is static, it's shown immediately. The user can interact with `<SideNav>` while the dynamic content is loading.
-3.  The user doesn't have to wait for the page to finish loading before navigating away (this is called interruptable navigation).
+1.  `loading.tsx` - это специальный файл Next.js, построенный поверх React Suspense. Он позволяет создавать резервный пользовательский интерфейс, который будет отображаться в качестве замены во время загрузки содержимого страницы.
+2.  Поскольку `<SideNav>` статичен, он показывается сразу. Пользователь может взаимодействовать с `<SideNav>`, пока загружается динамический контент.
+3.  Пользователю не нужно ждать окончания загрузки страницы, чтобы перейти на другую (это называется прерывистой навигацией).
 
-Congratulations! You've just implemented streaming. But we can do more to improve the user experience. Let's show a loading skeleton instead of the `Loading…` text.
+Поздравляем! Вы только что реализовали потоковую передачу. Но мы можем сделать еще больше для улучшения пользовательского опыта. Давайте покажем скелетон загрузки вместо текста `Loading...`.
 
-### Adding loading skeletons
+### Добавление скелетонов загрузки
 
-A loading skeleton is a simplified version of the UI. Many websites use them as a placeholder (or fallback) to indicate to users that the content is loading. Any UI you add in `loading.tsx` will be embedded as part of the static file, and sent first. Then, the rest of the dynamic content will be streamed from the server to the client.
+Загрузочный скелетон - это упрощенная версия пользовательского интерфейса. Многие веб-сайты используют их в качестве заполнителя (или запасного варианта), чтобы указать пользователям, что содержимое загружается. Любой пользовательский интерфейс, который вы добавите в `loading.tsx`, будет встроен как часть статического файла и отправлен первым. Затем остальной динамический контент будет передан с сервера на клиент.
 
-Inside your `loading.tsx` file, import a new component called `<DashboardSkeleton>`:
+Внутри файла `loading.tsx` импортируйте новый компонент под названием `<DashboardSkeleton>`:
 
 ```ts title="/app/dashboard/loading.tsx" hl_lines="1 4"
 import DashboardSkeleton from '@/app/ui/skeletons';
@@ -80,37 +80,37 @@ export default function Loading() {
 }
 ```
 
-Then, refresh <http://localhost:3000/dashboard>, and you should now see:
+Затем обновите <http://localhost:3000/dashboard>, и теперь вы должны увидеть:
 
-![Dashboard page with loading skeletons](loading-page-with-skeleton.png)
+![Дашборд со скелетами загрузки](loading-page-with-skeleton.png)
 
-### Fixing the loading skeleton bug with route groups
+### Исправление ошибки скелета загрузки с группами маршрутов
 
-Right now, your loading skeleton will apply to the invoices.
+Сейчас ваш загрузочный скелет будет применяться к счетам.
 
-Since `loading.tsx` is a level higher than `/invoices/page.tsx` and `/customers/page.tsx` in the file system, it's also applied to those pages.
+Поскольку `loading.tsx` находится на уровень выше, чем `/invoices/page.tsx` и `/customers/page.tsx` в файловой системе, он также применяется к этим страницам.
 
-We can change this with [Route Groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups). Create a new folder called `/(overview)` inside the dashboard folder. Then, move your `loading.tsx` and `page.tsx` files inside the folder:
+Мы можем изменить это с помощью [Route Groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups). Создайте новую папку `/(overview)` внутри папки дашборда. Затем переместите файлы `loading.tsx` и `page.tsx` в эту папку:
 
-![Folder structure showing how to create a route group using parentheses](route-group.png)
+![Структура папки, показывающая, как создать группу маршрутов с помощью круглых скобок](route-group.png)
 
-Now, the `loading.tsx` file will only apply to your dashboard overview page.
+Теперь файл `loading.tsx` будет применяться только к странице обзора дашборда.
 
-Route groups allow you to organize files into logical groups without affecting the URL path structure. When you create a new folder using parentheses `()`, the name won't be included in the URL path. So `/dashboard/(overview)/page.tsx` becomes `/dashboard`.
+Группы маршрутов позволяют организовывать файлы в логические группы, не затрагивая структуру URL-путей. Когда вы создаете новую папку, используя круглые скобки `()`, ее название не будет включено в путь URL. Таким образом, `/dashboard/(overview)/page.tsx` превращается в `/dashboard`.
 
-Here, you're using a route group to ensure `loading.tsx` only applies to your dashboard overview page. However, you can also use route groups to separate your application into sections (e.g. `(marketing)` routes and `(shop)` routes) or by teams for larger applications.
+Здесь вы используете группу маршрутов для того, чтобы `loading.tsx` применялся только к странице обзора дашборда. Однако вы также можете использовать группы маршрутов для разделения приложения на секции (например, маршруты `(маркетинг)` и маршруты `(магазин)`) или на команды для больших приложений.
 
-### Streaming a component
+### Потоковая передача компонента
 
-So far, you're streaming a whole page. But you can also be more granular and stream specific components using React Suspense.
+До сих пор вы передавали всю страницу. Но вы также можете быть более детализированными и передавать определенные компоненты с помощью React Suspense.
 
-Suspense allows you to defer rendering parts of your application until some condition is met (e.g. data is loaded). You can wrap your dynamic components in Suspense. Then, pass it a fallback component to show while the dynamic component loads.
+Suspense позволяет откладывать отрисовку частей приложения до тех пор, пока не будет выполнено какое-то условие (например, загружены данные). Вы можете обернуть свои динамические компоненты в Suspense. Затем передайте ему резервный компонент, который будет отображаться, пока динамический компонент загружается.
 
-If you remember the slow data request, `fetchRevenue()`, this is the request that is slowing down the whole page. Instead of blocking your whole page, you can use Suspense to stream only this component and immediately show the rest of the page's UI.
+Если вы помните медленный запрос данных, `fetchRevenue()`, то именно этот запрос замедляет работу всей страницы. Вместо того чтобы блокировать всю страницу, вы можете использовать Suspense для потоковой передачи только этого компонента и немедленного показа остальной части пользовательского интерфейса страницы.
 
-To do so, you'll need to move the data fetch to the component, let's update the code to see what that'll look like:
+Для этого вам нужно будет переместить выборку данных в компонент, давайте обновим код, чтобы увидеть, как это будет выглядеть:
 
-Delete all instances of `fetchRevenue()` and its data from `/dashboard/(overview)/page.tsx`:
+Удалите все экземпляры `fetchRevenue()` и его данные из `/dashboard/(overview)/page.tsx`:
 
 ```ts title="/app/dashboard/(overview)/page.tsx" hl_lines="5-8 11"
 import { Card } from '@/app/ui/dashboard/cards';
@@ -138,7 +138,7 @@ export default async function Page() {
 }
 ```
 
-Then, import `<Suspense>` from React, and wrap it around `<RevenueChart />`. You can pass it a fallback component called `<RevenueChartSkeleton>`.
+Затем импортируйте `<Suspense>` из React и оберните его вокруг `<RevenueChart />`. Вы можете передать ему компонент возврата под названием `<RevenueChartSkeleton>`.
 
 ```ts title="/app/dashboard/(overview)/page.tsx" hl_lines="9-10 51-55"
 import { Card } from '@/app/ui/dashboard/cards';
@@ -205,7 +205,7 @@ export default async function Page() {
 }
 ```
 
-Finally, update the `<RevenueChart>` component to fetch its own data and remove the prop passed to it:
+Наконец, обновите компонент `<RevenueChart>`, чтобы получить свои собственные данные и удалить переданный ему параметр:
 
 ```ts title="/app/ui/dashboard/revenue-chart.tsx" hl_lines="4 8-10"
 import { generateYAxis } from '@/app/lib/utils';
@@ -238,17 +238,17 @@ export default async function RevenueChart() {
 }
 ```
 
-Now refresh the page, you should see the dashboard information almost immediately, while a fallback skeleton is shown for `<RevenueChart>`:
+Теперь обновите страницу, вы должны увидеть информацию дашборда почти сразу, в то время как для `<RevenueChart>` будет показан скелет резервного копирования:
 
-![Dashboard page with revenue chart skeleton and loaded Card and Latest Invoices components](loading-revenue-chart.png)
+![Страница дашборда со скелетоном графика выручки и загруженными компонентами Card и Latest Invoices](loading-revenue-chart.png)
 
-### Practice: Streaming `<LatestInvoices>`
+### Практика: Потоковая передача `<LatestInvoices>`.
 
-Now it's your turn! Practice what you've just learned by streaming the `<LatestInvoices>` component.
+Теперь ваша очередь! Отработайте то, чему вы только что научились, выполнив потоковую передачу компонента `<LatestInvoices>`.
 
-Move `fetchLatestInvoices()` down from the page to the `<LatestInvoices>` component. Wrap the component in a `<Suspense>` boundary with a fallback called `<LatestInvoicesSkeleton>`.
+Переместите `fetchLatestInvoices()` вниз со страницы на компонент `<LatestInvoices>`. Заверните компонент в границу `<Suspense>` с фаллабетом `<LatestInvoicesSkeleton>`.
 
-Once you're ready, expand the toggle to see the solution code:
+Когда все будет готово, разверните тумблер, чтобы увидеть код решения:
 
 ???info "Reveal the solution"
 
@@ -340,21 +340,21 @@ Once you're ready, expand the toggle to see the solution code:
     }
     ```
 
-## Grouping components
+## Группировка компонентов
 
-Great! You're almost there, now you need to wrap the `<Card>` components in Suspense. You can fetch data for each individual card, but this could lead to a _popping_ effect as the cards load in, this can be visually jarring for the user.
+Отлично! Вы почти у цели, теперь вам нужно обернуть компоненты `<Card>` в Suspense. Вы можете получить данные для каждой отдельной карты, но это может привести к эффекту «выпрыгивания» при загрузке карт, что может визуально раздражать пользователя.
 
-So, how would you tackle this problem?
+Как же решить эту проблему?
 
-To create more of a _staggered_ effect, you can group the cards using a wrapper component. This means the static `<SideNav/>` will be shown first, followed by the cards, etc.
+Чтобы создать эффект «ступенчатости», вы можете сгруппировать карточки с помощью компонента-обертки. Это означает, что сначала будет показан статический `<SideNav/>`, затем карточки и т. д.
 
-In your `page.tsx` file:
+В файле `page.tsx`:
 
-1.  Delete your `<Card>` components.
-2.  Delete the `fetchCardData()` function.
-3.  Import a new **wrapper** component called `<CardWrapper />`.
-4.  Import a new **skeleton** component called `<CardsSkeleton />`.
-5.  Wrap `<CardWrapper />` in Suspense.
+1.  Удалите компоненты `<Card>`.
+2.  Удалите функцию `fetchCardData()`.
+3.  Импортируйте новый компонент **обертки** под названием `<CardWrapper />`.
+4.  Импортируйте новый **скелетон** компонента под названием `<CardsSkeleton />`.
+5.  Оберните `<CardWrapper />` в Suspense.
 
 ```ts title="/app/dashboard/(overview)/page.tsx" hl_lines="1 6 18-20"
 import CardWrapper from '@/app/ui/dashboard/cards';
@@ -384,7 +384,7 @@ export default async function Page() {
 }
 ```
 
-Then, move into the file `/app/ui/dashboard/cards.tsx`, import the `fetchCardData()` function, and invoke it inside the `<CardWrapper/>` component. Make sure to uncomment any necessary code in this component.
+Затем перейдите в файл `/app/ui/dashboard/cards.tsx`, импортируйте функцию `fetchCardData()` и вызовите ее внутри компонента `<CardWrapper/>`. Не забудьте откомментировать весь необходимый код в этом компоненте.
 
 ```ts title="/app/ui/dashboard/cards.tsx" hl_lines="2 7-12"
 // ...
@@ -427,44 +427,44 @@ export default async function CardWrapper() {
 }
 ```
 
-Refresh the page, and you should see all the cards load in at the same time. You can use this pattern when you want multiple components to load in at the same time.
+Обновите страницу, и вы увидите, что все карты загружаются одновременно. Вы можете использовать этот шаблон, когда хотите, чтобы несколько компонентов загружались одновременно.
 
-## Deciding where to place your Suspense boundaries
+## Решение о том, где расположить границы приостановки
 
-Where you place your Suspense boundaries will depend on a few things:
+Место расположения границ Suspense зависит от нескольких факторов:
 
-1.  How you want the user to experience the page as it streams.
-2.  What content you want to prioritize.
-3.  If the components rely on data fetching.
+1.  Как вы хотите, чтобы пользователь воспринимал страницу во время ее загрузки.
+2.  Какому контенту вы хотите отдать предпочтение.
+3.  Если компоненты зависят от получения данных.
 
-Take a look at your dashboard page, is there anything you would've done differently?
+Посмотрите на свою страницу дашборда, есть ли что-то, что вы сделали бы по-другому?
 
-Don't worry. There isn't a right answer.
+Не волнуйтесь. Здесь нет правильного ответа.
 
--   You could stream the **whole page** like we did with `loading.tsx`... but that may lead to a longer loading time if one of the components has a slow data fetch.
--   You could stream **every component** individually... but that may lead to UI _popping_ into the screen as it becomes ready.
--   You could also create a _staggered_ effect by streaming **page sections**. But you'll need to create wrapper components.
+-   Вы могли бы транслировать **всю страницу**, как мы сделали с `loading.tsx`... но это может привести к увеличению времени загрузки, если один из компонентов медленно получает данные.
+-   Можно транслировать **каждый компонент** по отдельности... но это может привести к тому, что пользовательский интерфейс будет «выскакивать» на экран по мере готовности.
+-   Можно также создать эффект _стаггирования_, передавая потоком **разделы страницы**. Но вам придется создавать компоненты-обертки.
 
-Where you place your suspense boundaries will vary depending on your application. In general, it's good practice to move your data fetches down to the components that need it, and then wrap those components in Suspense. But there is nothing wrong with streaming the sections or the whole page if that's what your application needs.
+Место, где вы разместите границы Suspense, зависит от вашего приложения. В целом, хорошей практикой является перемещение поиска данных вниз к компонентам, которым они нужны, а затем обертывание этих компонентов в Suspense. Но нет ничего плохого в потоковой передаче секций или всей страницы, если это необходимо вашему приложению.
 
-Don't be afraid to experiment with Suspense and see what works best, it's a powerful API that can help you create more delightful user experiences.
+Не бойтесь экспериментировать с Suspense и смотреть, что работает лучше, это мощный API, который поможет вам создать более восхитительный пользовательский опыт.
 
 <?quiz?>
 
-question: In general, what is considered good practice when working with Suspense and data fetching?
-answer: Move data fetches up to the parent component
-answer: Avoid using Suspense for data fetching
-answer-correct: Move data fetches down to the components that need it
-answer: Use Suspense only for error boundaries
+question: В целом, что считается хорошей практикой при работе с Suspense и получением данных?
+answer: Перемещайте получаемые данные в родительский компонент
+answer: Избегайте использования Suspense для получения данных
+answer-correct: Переместите запросы на получение данных в компоненты, которым они нужны
+answer: Используйте Suspense только для устранения ошибок
 content:
 
-<p>By moving data fetching down to the components that need it, you can create more granular Suspense boundaries. This allows you to stream specific components and prevent the UI from blocking.</p>
+<p>Перенося получение данных в компоненты, которым они необходимы, вы можете создавать более четкие границы Suspense. Это позволит вам передавать данные конкретным компонентам и предотвращать блокировку пользовательского интерфейса.</p>
 <?/quiz?>
 
-## Looking ahead
+## Заглядывая в будущее
 
-Streaming and Server Components give us new ways to handle data fetching and loading states, ultimately with the goal of improving the end user experience.
+Потоковая передача и серверные компоненты дают нам новые способы обработки состояний получения и загрузки данных, в конечном итоге направленные на улучшение качества работы конечного пользователя.
 
-In the next chapter, you'll learn about Partial Prerendering, a new Next.js rendering model built with streaming in mind.
+В следующей главе вы узнаете о Partial Prerendering, новой модели рендеринга Next.js, созданной с учетом потоковой обработки.
 
 <small>:material-information-outline: Источник &mdash; <https://nextjs.org/learn/dashboard-app/streaming></small>
