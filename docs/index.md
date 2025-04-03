@@ -40,7 +40,7 @@ hide:
 
     Фреймворки для старта нового проекта
 
-    [:octicons-arrow-right-24: Next.js](libs/nextjs/index.md) <small>v14+</small>
+    **[:octicons-arrow-right-24: Next.js](libs/nextjs/index.md)** <small>v14+</small>
 
     [:octicons-arrow-right-24: Create React App](libs/cra.md)
 
