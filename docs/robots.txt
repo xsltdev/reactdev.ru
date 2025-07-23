@@ -4,3 +4,5 @@ Clean-param: query
 
 Host: https://reactdev.ru/
 Sitemap: https://reactdev.ru/sitemap.xml
+
+# Algolia-Crawler-Verif: 99619CC5040B8D3E
