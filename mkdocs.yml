@@ -102,8 +102,10 @@ plugins:
     - mkdocs_quiz
 extra_css:
     - '/assets/stylesheets/styles.css?5'
+    - '/assets/stylesheets/algolia.css'
 
 extra_javascript:
     - '/assets/javascripts/mathjax.js'
+    - '/assets/javascripts/algolia.js'
     - https://polyfill.io/v3/polyfill.min.js?features=es6
     - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
