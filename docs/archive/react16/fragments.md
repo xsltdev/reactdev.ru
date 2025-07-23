@@ -4,13 +4,13 @@
 
 ```js
 render() {
-  return (
-    <React.Fragment>
-      <ChildA />
-      <ChildB />
-      <ChildC />
-    </React.Fragment>
-  );
+	return (
+		<React.Fragment>
+		<ChildA />
+		<ChildB />
+		<ChildC />
+		</React.Fragment>
+	);
 }
 ```
 
@@ -22,15 +22,15 @@ render() {
 
 ```js
 class Table extends React.Component {
-  render() {
-    return (
-      <table>
-        <tr>
-          <Columns />
-        </tr>
-      </table>
-    )
-  }
+    render() {
+        return (
+            <table>
+                <tr>
+                    <Columns />
+                </tr>
+            </table>
+        );
+    }
 }
 ```
 
@@ -38,14 +38,14 @@ class Table extends React.Component {
 
 ```js
 class Columns extends React.Component {
-  render() {
-    return (
-      <div>
-        <td>Привет</td>
-        <td>Мир</td>
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div>
+                <td>Привет</td>
+                <td>Мир</td>
+            </div>
+        );
+    }
 }
 ```
 
@@ -53,12 +53,12 @@ class Columns extends React.Component {
 
 ```js
 <table>
-  <tr>
-    <div>
-      <td>Привет</td>
-      <td>Мир</td>
-    </div>
-  </tr>
+    <tr>
+        <div>
+            <td>Привет</td>
+            <td>Мир</td>
+        </div>
+    </tr>
 </table>
 ```
 
@@ -68,14 +68,14 @@ class Columns extends React.Component {
 
 ```js
 class Columns extends React.Component {
-  render() {
-    return (
-      <React.Fragment>
-        <td>Привет</td>
-        <td>Мир</td>
-      </React.Fragment>
-    )
-  }
+    render() {
+        return (
+            <React.Fragment>
+                <td>Привет</td>
+                <td>Мир</td>
+            </React.Fragment>
+        );
+    }
 }
 ```
 
@@ -83,10 +83,10 @@ class Columns extends React.Component {
 
 ```js
 <table>
-  <tr>
-    <td>Привет</td>
-    <td>Мир</td>
-  </tr>
+    <tr>
+        <td>Привет</td>
+        <td>Мир</td>
+    </tr>
 </table>
 ```
 
@@ -96,14 +96,14 @@ class Columns extends React.Component {
 
 ```js
 class Columns extends React.Component {
-  render() {
-    return (
-      <>
-        <td>Привет</td>
-        <td>Мир</td>
-      </>
-    )
-  }
+    render() {
+        return (
+            <>
+                <td>Привет</td>
+                <td>Мир</td>
+            </>
+        );
+    }
 }
 ```
 
@@ -117,17 +117,18 @@ class Columns extends React.Component {
 
 ```js
 function Glossary(props) {
-  return (
-    <dl>
-      {props.items.map((item) => (
-        // Без указания атрибута `key`, React выдаст предупреждение об его отсутствии
-        <React.Fragment key={item.id}>
-          <dt>{item.term}</dt>
-          <dd>{item.description}</dd>
-        </React.Fragment>
-      ))}
-    </dl>
-  )
+    return (
+        <dl>
+            {props.items.map((item) => (
+                // Без указания атрибута `key`,
+                // React выдаст предупреждение об его отсутствии
+                <React.Fragment key={item.id}>
+                    <dt>{item.term}</dt>
+                    <dd>{item.description}</dd>
+                </React.Fragment>
+            ))}
+        </dl>
+    );
 }
 ```
 
