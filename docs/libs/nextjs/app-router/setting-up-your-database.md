@@ -74,18 +74,6 @@ description: Прежде чем продолжить работу над даш
 
 Убедитесь, что ваш локальный сервер разработки запущен с помощью `pnpm run dev` и перейдите по адресу <localhost:3000/seed> в браузере. После завершения вы увидите в браузере сообщение «Database seeded successfully». После завершения вы можете удалить этот файл.
 
-<?quiz?>
-
-question: Что такое «seeding» в контексте баз данных?
-answer: Удаление всех данных в базе данных
-answer: Импорт схемы базы данных
-answer-correct: Наполнение базы данных начальным набором данных
-answer: Создание отношений между таблицами в базе данных
-content:
-
-<p>Именно так! Seeding полезен, когда вы хотите иметь некоторые данные для работы с приложением.</p>
-<?/quiz?>
-
 !!!warning "Устранение неполадок:"
 
     -   Перед копированием в файл `.env` обязательно раскройте секреты вашей базы данных.
@@ -104,17 +92,5 @@ WHERE invoices.amount = 666;
 ```
 
 Откомментируйте файл, удалите блок `Response.json()` и перейдите по адресу <localhost:3000/query> в браузере. Вы должны увидеть, что возвращается счет `amount` и `name`.
-
-<?quiz?>
-
-question: Какому клиенту принадлежит этот счет?
-answer: Lee Robinson
-answer-correct: Evil Rabbit
-answer: Delba de Oliveira
-answer: Michael Novotny
-content:
-
-<p>Именно так!</p>
-<?/quiz?>
 
 <small>:material-information-outline: Источник &mdash; <https://nextjs.org/learn/dashboard-app/setting-up-your-database></small>

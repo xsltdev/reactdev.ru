@@ -14,5 +14,4 @@ mkdocs-material
 mkdocs-awesome-pages-plugin
 mkdocs-minify-plugin
 mkdocs-glightbox
-mkdocs_quiz
 mkdocs-video
