@@ -60,17 +60,7 @@ hide:
 
     [:octicons-arrow-right-24: Redux Toolkit](libs/redux-toolkit.md)
 
--   :simple-apollographql:{ .lg .middle } **Apollo**
-
-    ***
-
-    Библиотеки GraphQL API
-
     [:octicons-arrow-right-24: GraphQL](libs/graphql/index.md)
-
-    :octicons-arrow-right-24: React Apollo Client <small>v3</small>
-
-    :octicons-arrow-right-24: Apollo Server :octicons-link-external-16:
 
 -   :material-state-machine:{ .lg .middle } **Другие менеджеры**
 
