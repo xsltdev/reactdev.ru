@@ -68,7 +68,7 @@ hide:
 
     Библиотеки менеджеров состояния
 
-    **[:octicons-arrow-right-24: XState](libs/xstate/index.md)** <small>v5</small>
+    **[:octicons-arrow-right-24: XState](libs/xstate.5/index.md)** <small>v5</small>
 
     [:octicons-arrow-right-24: Zustand](./libs/zustand/getting-started/introduction.md) <small>v4</small>
 
