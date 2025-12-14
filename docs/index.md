@@ -68,11 +68,13 @@ hide:
 
     Библиотеки менеджеров состояния
 
+    **[:octicons-arrow-right-24: XState](libs/xstate/index.md)** <small>v5</small>
+
     [:octicons-arrow-right-24: Zustand](./libs/zustand/getting-started/introduction.md) <small>v4</small>
 
     [:octicons-arrow-right-24: React Query](libs/react-query.md)
 
-    [:octicons-arrow-right-24: XState](libs/xstate/index.md) <small>v4</small>
+    <small>[:octicons-arrow-right-24: XState](libs/xstate/index.md) v4</small>
 
 </div>
 

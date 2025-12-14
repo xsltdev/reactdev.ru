@@ -30,7 +30,10 @@
 [Styled Components](styled-components.md)
 : Шпаргалка по библиотеке стилизации
 
-[XState](xstate/index.md)
+**[XState](xstate.5/index.md)** <small>v5</small>
+: Библиотека для управления конечными автоматами
+
+[XState](xstate/index.md) <small>v4</small>
 : Библиотека для управления конечными автоматами
 
 [React Transition Group](react-transition-group/index.md)

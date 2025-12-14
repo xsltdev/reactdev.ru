@@ -1,0 +1,43 @@
+title: XState 5
+nav:
+    - index.md
+    - Основные концепции:
+        - state-machines-and-statecharts.md
+        - actor-model.md
+        - xstate.md
+    - Акторы:
+        - actors.md
+        - state-machine-actors.md
+        - promise-actors.md
+        - transition-actors.md
+        - callback-actors.md
+        - observable-actors.md
+        - invoke.md
+        - spawn.md
+        - system.md
+        - inspection.md
+    - Машины состояний:
+        - machines.md
+        - setup.md
+        - states.md
+        - context.md
+        - input.md
+        - output.md
+        - transitions.md
+        - pure-transitions.md
+        - eventless-transitions.md
+        - delayed-transitions.md
+        - actions.md
+        - guards.md
+        - initial-states.md
+        - finite-states.md
+        - parent-states.md
+        - parallel-states.md
+        - final-states.md
+        - history-states.md
+        - persistence.md
+        - tags.md
+        - event-emitter.md
+    - Руководства:
+        - testing.md
+        - typescript.md

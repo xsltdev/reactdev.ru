@@ -12,5 +12,6 @@ nav:
     - react-query.md
     - react-spring.md
     - styled-components.md
+    - xstate.5
     - xstate
     - react-transition-group
