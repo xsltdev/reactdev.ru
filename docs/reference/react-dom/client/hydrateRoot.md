@@ -25,7 +25,7 @@ const root = hydrateRoot(domNode, reactNode);
 
 React подключится к HTML, существующему внутри `domNode`, и возьмет на себя управление DOM внутри него. Приложение, полностью построенное на React, обычно имеет только один вызов `hydrateRoot` с корневым компонентом.
 
-**Параметры**
+#### Параметры {#parameters}
 
 -   `domNode`: [DOM-элемент](https://developer.mozilla.org/docs/Web/API/Element), который был отображен как корневой элемент на сервере.
 -   `reactNode`: "Узел React", используемый для рендеринга существующего HTML. Обычно это кусок JSX типа `<App />`, который был отрисован с помощью метода `ReactDOM Server`, такого как `renderToPipeableStream(<App />)`.

@@ -7,8 +7,8 @@
 -   Хранит состояние приложения (application state);
 -   Предоставляет доступ к состоянию с помощью [`getState()`](../api/Store.md#getState);
 -   Предоставляет возможность обновления состояния с помощью [`dispatch(action)`](../api/Store.md#dispatch);
--   Регистриурет слушателей с помощью функции [`subscribe(listener)`](../api/Store.md#subscribelistener);
--   Обрабатывает отмену регистрации слушателей с помощью функции, возвращаемой [`subscribe(listener)`](../api/Store.md#subscribelistener).
+-   Регистриурет слушателей с помощью функции [`subscribe(listener)`](../api/Store.md#subscribe);
+-   Обрабатывает отмену регистрации слушателей с помощью функции, возвращаемой [`subscribe(listener)`](../api/Store.md#subscribe).
 
 Важно отметить, что у вас будет только один стор в Redux-приложении. Если Вы захотите разделить логику обработки данных, то нужно будет использовать [композицию редьюсеров (reducer composition)](Reducers.md#splitting-reducers) вместо использования множества сторов (stores).
 

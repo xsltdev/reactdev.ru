@@ -6,7 +6,7 @@ Redux — это не монолитный фреймворк, а набор с�
 
 ## Мигрирование с Flux
 
-[Редьюсеры](../Glossary.md#редьюсер-reducer) несут в себе “суть” Flux-сторов, так что возможно постепенно перенести существующий Flux-проект на Redux. При этом не важно, используете ли вы [Flummox](http://github.com/acdlite/flummox), [Alt](http://github.com/goatslacker/alt), [стандартный Flux](https://github.com/facebook/flux) или любую другую Flux-библиотеку.
+[Редьюсеры](../Glossary.md#reducer) несут в себе “суть” Flux-сторов, так что возможно постепенно перенести существующий Flux-проект на Redux. При этом не важно, используете ли вы [Flummox](http://github.com/acdlite/flummox), [Alt](http://github.com/goatslacker/alt), [стандартный Flux](https://github.com/facebook/flux) или любую другую Flux-библиотеку.
 
 Также это позволяет делать обратное: мигрировать с Redux на любую из этих библиотек с использованием тех же шагов.
 

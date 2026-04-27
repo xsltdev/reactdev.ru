@@ -160,7 +160,7 @@ actor.start();
 // every second
 ```
 
-[Подробнее о наблюдаемых актерах](actors.md#fromobservable).
+[Подробнее о наблюдаемых актерах](actors.md#fromObservable).
 
 ## Создание логики обратного вызова
 

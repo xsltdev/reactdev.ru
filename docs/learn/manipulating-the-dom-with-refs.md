@@ -165,6 +165,8 @@ myRef.current.scrollIntoView();
 
     <iframe src="https://codesandbox.io/embed/2q5lwj?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="react.dev" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
 
+### Управление списком ссылок через callback ref {#how-to-manage-a-list-of-refs-using-a-ref-callback}
+
 !!!note "Как управлять списком ссылок с помощью обратного вызова"
 
     В приведенных выше примерах существует предопределенное количество ссылок. Однако иногда вам может понадобиться ссылка на каждый элемент списка, и вы не знаете, сколько их будет. Что-то вроде этого **не будет работать**:

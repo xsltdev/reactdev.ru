@@ -208,7 +208,7 @@ actor.subscribe({
 -   [Логика конечного автомата (`createMachine`)](actors.md#createmachine)
 -   [Логика промиса (`fromPromise`)](actors.md#frompromise), где invoke выполнит переход `onDone` при `resolve` или переход `onError` при `reject`
 -   [Логика функции перехода (`fromTransition`)](actors.md#fromtransition), которая следует паттерну редьюсера
--   [Логика Observable (`fromObservable`)](actors.md#fromobservable), которая может отправлять события родительскому автомату, и где invoke выполнит переход `onDone` при завершении
+-   [Логика Observable (`fromObservable`)](actors.md#fromObservable), которая может отправлять события родительскому автомату, и где invoke выполнит переход `onDone` при завершении
 -   [Логика Event Observable (`fromEventObservable`)](actors.md#fromeventobservable), как логика Observable, но для потоков объектов событий
 -   [Логика колбэка (`fromCallback`)](actors.md#fromcallback), которая может отправлять события родительскому автомату и получать от него
 

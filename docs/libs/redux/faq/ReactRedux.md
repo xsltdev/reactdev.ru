@@ -104,7 +104,7 @@ const mapStateToProps = (state) => {
 -   [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reactjs/react-redux/issues/255)
 -   [Stack Overflow: How to get simple dispatch from this.props using connect w/ Redux?](http://stackoverflow.com/questions/34458261/how-to-get-simple-dispatch-from-this-props-using-connect-w-redux/34458710])
 
-## Должен ли я подключать (connect) только мой корневой компонент или я могу подключить несколько компонентов в моем дереве?
+## Должен ли я подключать (connect) только мой корневой компонент или я могу подключить несколько компонентов в моем дереве? {#react-multiple-components}
 
 Раньше документация Redux советовала Вам иметь несколько подключаемых компонентов рядом с корневым. Однако, время и опыт показали, что это, как правильно, требует от нескольких компонентов знать слишком много о требованиях к данным всех их потомков, и заставляет их передавать запутывающее количество параметров.
 

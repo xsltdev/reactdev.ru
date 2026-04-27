@@ -25,7 +25,7 @@ title: 'Акторы'
 
 [Подробнее о модели акторов](actor-model.md)
 
-## Логика актора
+## Логика актора {#actor-logic}
 
 Логика актора — это логическая «модель» актора (мозг, чертёж, ДНК и т.д.). Она описывает, как актор должен изменять поведение при получении события. Вы можете создавать логику актора с помощью **[создателей логики актора](#actor-logic-creators)**.
 
@@ -63,7 +63,7 @@ actor.send({ type: 'someEvent' });
 actor.stop();
 ```
 
-### Вызов и порождение акторов
+### Вызов и порождение акторов {#invoking-and-spawning-actors}
 
 Вызванный актор представляет актор на основе состояния, поэтому он останавливается при выходе из вызывающего состояния. Вызванные акторы используются для конечного/известного количества акторов.
 
@@ -74,7 +74,7 @@ actor.stop();
 -   [Подробнее о вызове акторов](invoke.md)
 -   [Подробнее о порождении акторов](spawn.md)
 
-## Снимки актора
+## Снимки актора {#actor-snapshots}
 
 Когда актор получает событие, его внутреннее состояние может измениться. Актор может генерировать **снимок** при переходе состояния. Вы можете синхронно прочитать снимок актора через `actor.getSnapshot()` или подписаться на снимки через `actor.subscribe(observer)`.
 
@@ -232,7 +232,7 @@ actor.start();
 -   [Логика конечного автомата (`createMachine(...)`)](#createmachine)
 -   [Логика промиса (`fromPromise(...)`)](#frompromise)
 -   [Логика функции перехода (`fromTransition(...)`)](#fromtransition)
--   [Логика Observable (`fromObservable(...)`)](#fromobservable)
+-   [Логика Observable (`fromObservable(...)`)](#fromObservable)
 -   [Логика Event Observable (`fromEventObservable(...)`)](#fromeventobservable)
 -   [Логика колбэка (`fromCallback(...)`)](#fromcallback)
 
@@ -368,7 +368,7 @@ transitionActor.send({ type: 'increment' });
 
 Узнайте больше о [transition-акторах](transition-actors.md).
 
-### Логика Observable (`fromObservable(...)`) {#fromobservable}
+### Логика Observable (`fromObservable(...)`) {#fromObservable}
 
 Логика observable-актора описывается [потоком наблюдаемых значений](#fromObservable). Акторы, созданные из логики observable («observable-акторы»), могут:
 

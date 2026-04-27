@@ -274,7 +274,7 @@ dynamicDelayService.send({
 // => 'done!'
 ```
 
-## Интерпретация
+## Интерпретация {#interpretation}
 
 С [интерпретатором](interpretation.md) XState для отложенных действий будут использоваться собственные функции `setTimeout` и `clearTimeout`:
 

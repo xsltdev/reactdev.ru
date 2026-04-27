@@ -541,7 +541,7 @@ const stateValueStrings = getStateValueStrings(stateValue);
 
 Создатель действия `send(...)` удален. Вместо этого используйте `raise(...)` для отправки событий себе или `sendTo(...)` для отправки событий другим актерам.
 
-Прочтите документацию по действию [`sendTo`](actions.mdx#send-to-action) и [действию `raise`](actions.mdx#raise-action) для получения дополнительной информации.
+Прочтите документацию по действию [`sendTo`](actions.md#send-to-action) и [действию `raise`](actions.md#raise-action) для получения дополнительной информации.
 
 === "XState v5"
 
@@ -2070,14 +2070,14 @@ const stateValueStrings = getStateValueStrings(stateValue);
 ## Новые возможности
 
 -   [Создать системы актеров](system.md)
--   [Новые создатели логики актеров](/docs/actors#actor-logic-creators)
+-   [Новые создатели логики актеров](./actors.md#actor-logic-creators)
 -   [Глубокое сохранение для вызванных и порожденных актеров](persistence.md)
 -   [Предоставить входные данные конечным автоматам и актерам](input.md)
 -   [Укажите выходные данные «готово» для актеров](output.md)
--   [Частичные дескрипторы событий (частичные подстановочные знаки)](/docs/transitions#partial-wildcard-transitions)
--   [Действия постановки в очередь](/docs/actions#enqueue-actions)
--   [Охранники более высокого уровня](/docs/guards#higher-level-guards)
--   [API настройки для указания типов и строго типизированных значений состояния](/docs/machines#providing-implementations)
+-   [Частичные дескрипторы событий (частичные подстановочные знаки)](./transitions.md#partial-wildcard-transitions)
+-   [Действия постановки в очередь](./actions.md#enqueue-actions)
+-   [Охранники более высокого уровня](./guards.md#higher-level-guards)
+-   [API настройки для указания типов и строго типизированных значений состояния](./machines.md#providing-implementations)
 -   [Проверить API](inspection.md)
 
 ## Часто задаваемые вопросы

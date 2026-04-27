@@ -20,7 +20,7 @@ description: Встроенный компонент браузера input по
 <input name="myInput" />
 ```
 
-**Свойства**
+### Свойства {#props}
 
 `input` поддерживает все [общие пропсы элементов](./common.md#props).
 

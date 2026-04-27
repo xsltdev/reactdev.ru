@@ -426,7 +426,7 @@ function ProfilePage() {
 }
 ```
 
-Если ошибка произойдет в компоненте `Posts` или где-то внутри него, React [попытается восстановиться после нее:](../../react/Suspense.md#providing-a-fallback-for-server-errors-and-server-only-content)
+Если ошибка произойдет в компоненте `Posts` или где-то внутри него, React [попытается восстановиться после нее:](../../react/Suspense.md#providing-a-fallback-for-server-errors-and-client-only-content)
 
 1.  Выдаст в HTML фаллбэк загрузки для ближайшей границы `<Suspense>` (`PostsGlimmer`).
 2.  Он "откажется" от попыток рендеринга содержимого `Posts` на сервере.

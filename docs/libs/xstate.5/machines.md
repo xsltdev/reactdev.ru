@@ -73,9 +73,9 @@ feedbackActor.start();
 // выводит 'question'
 ```
 
-Вы также можете создать актора [из других типов логики](actors.md#actor-logic), таких как [функции](actors.md#fromtransition), [промисы](actors.md#frompromise) и [observables](actors.md#fromobservable).
+Вы также можете создать актора [из других типов логики](actors.md#actor-logic), таких как [функции](actors.md#fromtransition), [промисы](actors.md#frompromise) и [observables](actors.md#fromObservable).
 
-## Предоставление реализаций
+## Предоставление реализаций {#providing-implementations}
 
 Реализации автомата — это код на конкретном языке программирования, который выполняется, но не связан напрямую с логикой конечного автомата (состояния и переходы). Это включает:
 

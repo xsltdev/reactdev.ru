@@ -390,7 +390,7 @@ const useBearStore = create<
 }), { name: 'bearStore' }))
 ```
 
-### Slices паттерн
+### Slices паттерн {#slices-pattern}
 
 ```ts
 import { create, StateCreator } from 'zustand';

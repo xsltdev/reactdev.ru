@@ -76,7 +76,7 @@ app.use('/', (request, response) => {
 
 Вы можете продолжать использовать `renderToString`, если ваше серверное окружение не поддерживает потоки.
 
-### Удаление `renderToString` из кода клиента
+### Удаление `renderToString` из кода клиента {#removing-rendertostring-from-the-client-code}
 
 Иногда `renderToString` используется на клиенте для преобразования какого-либо компонента в HTML.
 
