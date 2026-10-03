@@ -4,6 +4,7 @@ nav:
     - components
     - API:
         - index.md
+        - browser.md
         - createPortal.md
         - flushSync.md
         - findDOMNode.md
@@ -18,3 +19,4 @@ nav:
         - unmountComponentAtNode.md
     - client
     - server
+    - static

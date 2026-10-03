@@ -26,20 +26,26 @@ description: Пакет react-dom содержит методы, которые 
 -   [`preinit`](./preinit.md) позволяет получить и оценить внешний скрипт или получить и вставить таблицу стилей.
 -   [`preinitModule`](./preinitModule.md) позволяет получить и оценить ESM-модуль.
 
+## API серверного рендеринга {#server-rendering-apis}
+
+Этот API управляет тем, как компоненты рендерятся на сервере:
+
+-   [`browser`](./browser.md) позволяет пометить компонент как доступный только в браузере во время серверного рендеринга.
+
 ## Точки входа {#entry-points}
 
-Пакет `react-dom` предоставляет две дополнительные точки входа:
+Пакет `react-dom` предоставляет дополнительные точки входа:
 
 -   [`react-dom/client`](./client/index.md) содержит API для рендеринга компонентов React на клиенте (в браузере).
 -   [`react-dom/server`](./server/index.md) содержит API для рендеринга React-компонентов на сервере.
+-   [`react-dom/static`](./static/index.md) содержит API для генерации статического HTML.
 
-## Утратившие актуальность API {#deprecated-apis}
+## Удалённые API {#removed-apis}
 
-!!!danger ""
-
-    Эти API будут удалены в будущей основной версии React.
+Эти API удалены в React 19. Описания ниже оставлены в справочнике:
 
 -   [`findDOMNode`](./findDOMNode.md) находит ближайший узел DOM, соответствующий экземпляру компонента класса.
--   [`hydrate`](./hydrate.md) монтирует дерево в DOM, созданное из серверного HTML. Утратил силу в пользу [`hydrateRoot`](./client/hydrateRoot.md).
--   [`render`](./render.md) монтирует дерево в DOM. Утратил силу в пользу [`createRoot`](./client/createRoot.md).
--   [`unmountComponentAtNode`](./unmountComponentAtNode.md) размонтирует дерево из DOM. Утратил силу в пользу [`root.unmount()`](./client/createRoot.md#root-unmount).
+-   [`hydrate`](./hydrate.md) монтирует дерево в DOM, созданное из серверного HTML. Заменён на [`hydrateRoot`](./client/hydrateRoot.md).
+-   [`render`](./render.md) монтирует дерево в DOM. Заменён на [`createRoot`](./client/createRoot.md).
+-   [`unmountComponentAtNode`](./unmountComponentAtNode.md) размонтирует дерево из DOM. Заменён на [`root.unmount()`](./client/createRoot.md#root-unmount).
+-   [`renderToNodeStream`](./server/renderToNodeStream.md) и [`renderToStaticNodeStream`](./server/renderToStaticNodeStream.md) заменены потоковыми API из [`react-dom/server`](./server/index.md).

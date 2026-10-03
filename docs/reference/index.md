@@ -8,7 +8,7 @@ hide:
 
 <big>В этом разделе представлена подробная справочная документация по работе с React. Для ознакомления с React посетите раздел [Обучения](../learn/index.md).</big>
 
-## React <small>v18</small> {#react}
+## React <small>19</small> {#react}
 
 Программные возможности React:
 
@@ -48,7 +48,7 @@ hide:
 
 </div>
 
-## React DOM <small>v18</small> {#react-dom}
+## React DOM <small>19</small> {#react-dom}
 
 React DOM содержит функции, которые поддерживаются только для веб-приложений (которые работают в среде DOM браузера). Этот раздел разбит на следующие части:
 
@@ -93,6 +93,68 @@ React DOM содержит функции, которые поддерживаю
     API `react-dom/server` позволяют рендерить компоненты React в HTML на сервере
 
     [:octicons-arrow-right-24: Серверные API](./react-dom/server/index.md)
+
+-   :material-file-code-outline:{ .lg .middle } **Статические API**
+
+    ***
+
+    API `react-dom/static` генерируют статический HTML для компонентов React
+
+    [:octicons-arrow-right-24: Статические API](./react-dom/static/index.md)
+
+</div>
+
+## React Compiler {#react-compiler}
+
+Компилятор React — это инструмент оптимизации на этапе сборки, который автоматически мемоизирует компоненты и значения:
+
+<div class="grid cards" style="margin-top: 1.6em" markdown>
+
+-   :material-cog:{ .lg .middle } **Конфигурация**
+
+    ***
+
+    Параметры компилятора, включая совместимость с версией React
+
+    [:octicons-arrow-right-24: Конфигурация](./react-compiler/configuration.md)
+
+-   :material-code-tags:{ .lg .middle } **Директивы**
+
+    ***
+
+    Директивы уровня функции, которые управляют компиляцией
+
+    [:octicons-arrow-right-24: Директивы](./react-compiler/directives/index.md)
+
+-   :material-package-variant:{ .lg .middle } **Компиляция библиотек**
+
+    ***
+
+    Как поставлять заранее скомпилированный код библиотеки
+
+    [:octicons-arrow-right-24: Компиляция библиотек](./react-compiler/compiling-libraries.md)
+
+</div>
+
+## Инструменты {#tools}
+
+<div class="grid cards" style="margin-top: 1.6em" markdown>
+
+-   :material-shield-check:{ .lg .middle } **eslint-plugin-react-hooks**
+
+    ***
+
+    Правила ESLint, которые проверяют правила React и диагностики компилятора
+
+    [:octicons-arrow-right-24: Линты](./eslint-plugin-react-hooks/index.md)
+
+-   :material-chart-bar:{ .lg .middle } **Дорожки производительности**
+
+    ***
+
+    Как читать дорожки производительности React в DevTools
+
+    [:octicons-arrow-right-24: Дорожки производительности](./dev-tools/react-performance-tracks.md)
 
 </div>
 

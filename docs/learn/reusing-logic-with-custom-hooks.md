@@ -1105,7 +1105,7 @@ export function useChatRoom({
 
     ```js
     import { useEffect } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
     import { createConnection } from './chat.js';
 
     export function useChatRoom({
@@ -1808,7 +1808,7 @@ function SaveButton() {
 
     ```js
     import { useState, useEffect } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
 
     export function useFadeIn(ref, duration) {
     	const [isRunning, setIsRunning] = useState(true);
@@ -2385,7 +2385,7 @@ useEffect(() => {
 
     ```js
     import { useEffect } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
 
     export function useInterval(onTick, delay) {
     	useEffect(() => {
@@ -2452,7 +2452,7 @@ useEffect(() => {
 
     	```js
     	import { useEffect } from 'react';
-    	import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    	import { useEffectEvent } from 'react';
 
     	export function useInterval(callback, delay) {
     		const onTick = useEffectEvent(callback);

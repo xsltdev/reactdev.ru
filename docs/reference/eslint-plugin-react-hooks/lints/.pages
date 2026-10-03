@@ -1,0 +1,19 @@
+title: Правила
+nav:
+    - exhaustive-deps.md
+    - rules-of-hooks.md
+    - component-hook-factories.md
+    - config.md
+    - error-boundaries.md
+    - gating.md
+    - globals.md
+    - immutability.md
+    - incompatible-library.md
+    - preserve-manual-memoization.md
+    - purity.md
+    - refs.md
+    - set-state-in-effect.md
+    - set-state-in-render.md
+    - static-components.md
+    - unsupported-syntax.md
+    - use-memo.md

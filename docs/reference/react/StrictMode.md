@@ -34,6 +34,7 @@ root.render(
 
 -   Ваши компоненты будут перерендериваться дополнительно для поиска ошибок, вызванных нечистым рендерингом.
 -   Ваши компоненты будут перезапускать эффекты дополнительно, чтобы найти ошибки, вызванные отсутствием очистки эффектов.
+-   Ваши компоненты будут [повторно вызывать ref-колбэки](#fixing-bugs-found-by-re-running-ref-callbacks-in-development), чтобы найти ошибки из-за отсутствующей очистки рефа.
 -   Ваши компоненты будут проверяться на использование устаревших API.
 
 #### Пропсы {#props}
@@ -74,6 +75,7 @@ root.render(
 
     -   Ваши компоненты будут перерендериваться дополнительно для поиска ошибок, вызванных нечистым рендерингом.
     -   Ваши компоненты будут перезапускать эффекты дополнительно, чтобы найти ошибки, вызванные отсутствием очистки эффектов.
+    -   Ваши компоненты будут [повторно вызывать ref-колбэки](#fixing-bugs-found-by-re-running-ref-callbacks-in-development), чтобы найти ошибки из-за отсутствующей очистки рефа.
     -   Ваши компоненты будут проверяться на использование устаревших API.
 
     **Все эти проверки предназначены только для разработки и не влияют на производственную сборку.**
@@ -102,6 +104,10 @@ function App() {
 ```
 
 В этом примере проверки строгого режима не будут выполняться для компонентов `Header` и `Footer`. Однако они будут выполняться для `Sidebar` и `Content`, а также для всех компонентов внутри них, независимо от их глубины.
+
+!!!note "Строгий режим для части приложения"
+
+    Если `StrictMode` включён только для части приложения, React включает лишь то поведение, которое возможно в продакшене. Например, если `<StrictMode>` не стоит в корне приложения, эффекты не будут [запускаться ещё раз](#fixing-bugs-found-by-re-running-effects-in-development) при первом монтировании: иначе дочерние эффекты сработали бы дважды без родительских, а в продакшене так не бывает.
 
 ### Исправление ошибок, найденных при двойном рендеринге в разработке {#fixing-bugs-found-by-double-rendering-in-development}
 
@@ -412,7 +418,7 @@ export default function StoryTray({ stories }) {
 
     Если у вас установлен [React DevTools](../../learn/react-developer-tools.md), все вызовы `console.log` во время второго вызова рендеринга будут выглядеть слегка затемненными. React DevTools также предлагает настройку (по умолчанию выключена) для их полного подавления.
 
-### Исправление ошибок, найденных при повторном запуске эффектов в разработке
+### Исправление ошибок, найденных при повторном запуске эффектов в разработке {#fixing-bugs-found-by-re-running-effects-in-development}
 
 Строгий режим также может помочь найти ошибки в [Эффектах](../../learn/synchronizing-with-effects.md).
 
@@ -813,7 +819,429 @@ useEffect(() => {
 
 Подробнее о реализации [очистки эффектов](../../learn/synchronizing-with-effects.md)
 
-### Исправление предупреждений об устаревании, включенных в строгом режиме
+### Исправление ошибок, найденных повторным вызовом ref-колбэков в разработке {#fixing-bugs-found-by-re-running-ref-callbacks-in-development}
+
+Строгий режим также помогает найти ошибки в [ref-колбэках](../../learn/manipulating-the-dom-with-refs.md).
+
+У каждого колбэка `ref` есть код настройки и может быть код очистки. Обычно React вызывает настройку, когда элемент *создаётся* (добавляется в DOM), и очистку, когда элемент *удаляется* (убирается из DOM).
+
+Когда строгий режим включён, в разработке React также выполняет **один дополнительный цикл настройки и очистки для каждого колбэка `ref`.** Это может удивить, но помогает выявить тонкие ошибки, которые трудно поймать вручную.
+
+В этом примере можно выбрать животное и прокрутить к одному из них. Обратите внимание: при переключении с «Cats» на «Dogs» в консоли число животных в списке продолжает расти, а кнопки «Scroll to» перестают работать:
+
+=== "index.js"
+
+    ```js
+
+    import { createRoot } from 'react-dom/client';
+    import './styles.css';
+
+    import App from './App';
+
+    const root = createRoot(document.getElementById("root"));
+    // ❌ Not using StrictMode.
+    root.render(<App />);
+    ```
+
+=== "App.js"
+
+    ```js
+
+    import { useRef, useState } from "react";
+
+    export default function CatFriends() {
+        const itemsRef = useRef([]);
+        const [catList, setCatList] = useState(setupCatList);
+        const [cat, setCat] = useState('neo');
+
+        function scrollToCat(index) {
+            const list = itemsRef.current;
+            const {node} = list[index];
+            node.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "center",
+            });
+        }
+
+        const cats = catList.filter(c => c.type === cat)
+
+        return (
+            <>
+                <nav>
+                    <button onClick={() => setCat('neo')}>Neo</button>
+                    <button onClick={() => setCat('millie')}>Millie</button>
+                </nav>
+                <hr />
+                <nav>
+                    <span>Scroll to:</span>{cats.map((cat, index) => (
+                        <button key={cat.src} onClick={() => scrollToCat(index)}>
+                            {index}
+                        </button>
+                    ))}
+                </nav>
+                <div>
+                    <ul>
+                        {cats.map((cat) => (
+                            <li
+                                key={cat.src}
+                                ref={(node) => {
+                                    const list = itemsRef.current;
+                                    const item = {cat: cat, node};
+                                    list.push(item);
+                                    console.log(`✅ Adding cat to the map. Total cats: ${list.length}`);
+                                    if (list.length > 10) {
+                                        console.log('❌ Too many cats in the list!');
+                                    }
+                                    return () => {
+                                        // 🚩 No cleanup, this is a bug!
+                                    }
+                                }}
+                            >
+                                <img src={cat.src} />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </>
+        );
+    }
+
+    function setupCatList() {
+        const catList = [];
+        for (let i = 0; i < 10; i++) {
+            catList.push({type: 'neo', src: "https://placecats.com/neo/320/240?" + i});
+        }
+        for (let i = 0; i < 10; i++) {
+            catList.push({type: 'millie', src: "https://placecats.com/millie/320/240?" + i});
+        }
+
+        return catList;
+    }
+
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    div {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    nav {
+      text-align: center;
+    }
+
+    button {
+      margin: .25rem;
+    }
+
+    ul,
+    li {
+      list-style: none;
+      white-space: nowrap;
+    }
+
+    li {
+      display: inline;
+      padding: 0.5rem;
+    }
+    ```
+
+**Это ошибка продакшена!** Колбэк рефа не удаляет животных из списка при очистке, поэтому список всё растёт. Это утечка памяти, которая в настоящем приложении бьёт по производительности и ломает поведение.
+
+Проблема в том, что колбэк рефа не очищает за собой:
+
+```js hl_lines="6-8"
+<li
+  ref={node => {
+    const list = itemsRef.current;
+    const item = {animal, node};
+    list.push(item);
+    return () => {
+      // 🚩 No cleanup, this is a bug!
+    }
+  }}
+</li>
+```
+
+Теперь обернём исходный (ошибочный) код в `<StrictMode>`:
+
+=== "index.js"
+
+    ```js
+
+    import { createRoot } from 'react-dom/client';
+    import {StrictMode} from 'react';
+    import './styles.css';
+
+    import App from './App';
+
+    const root = createRoot(document.getElementById("root"));
+    // ✅ Using StrictMode.
+    root.render(
+        <StrictMode>
+            <App />
+        </StrictMode>
+    );
+    ```
+
+=== "App.js"
+
+    ```js
+
+    import { useRef, useState } from "react";
+
+    export default function CatFriends() {
+        const itemsRef = useRef([]);
+        const [catList, setCatList] = useState(setupCatList);
+        const [cat, setCat] = useState('neo');
+
+        function scrollToCat(index) {
+            const list = itemsRef.current;
+            const {node} = list[index];
+            node.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "center",
+            });
+        }
+
+        const cats = catList.filter(c => c.type === cat)
+
+        return (
+            <>
+                <nav>
+                    <button onClick={() => setCat('neo')}>Neo</button>
+                    <button onClick={() => setCat('millie')}>Millie</button>
+                </nav>
+                <hr />
+                <nav>
+                    <span>Scroll to:</span>{cats.map((cat, index) => (
+                        <button key={cat.src} onClick={() => scrollToCat(index)}>
+                            {index}
+                        </button>
+                    ))}
+                </nav>
+                <div>
+                    <ul>
+                        {cats.map((cat) => (
+                            <li
+                                key={cat.src}
+                                ref={(node) => {
+                                    const list = itemsRef.current;
+                                    const item = {cat: cat, node};
+                                    list.push(item);
+                                    console.log(`✅ Adding cat to the map. Total cats: ${list.length}`);
+                                    if (list.length > 10) {
+                                        console.log('❌ Too many cats in the list!');
+                                    }
+                                    return () => {
+                                        // 🚩 No cleanup, this is a bug!
+                                    }
+                                }}
+                            >
+                                <img src={cat.src} />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </>
+        );
+    }
+
+    function setupCatList() {
+        const catList = [];
+        for (let i = 0; i < 10; i++) {
+            catList.push({type: 'neo', src: "https://placecats.com/neo/320/240?" + i});
+        }
+        for (let i = 0; i < 10; i++) {
+            catList.push({type: 'millie', src: "https://placecats.com/millie/320/240?" + i});
+        }
+
+        return catList;
+    }
+
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    div {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    nav {
+      text-align: center;
+    }
+
+    button {
+      margin: .25rem;
+    }
+
+    ul,
+    li {
+      list-style: none;
+      white-space: nowrap;
+    }
+
+    li {
+      display: inline;
+      padding: 0.5rem;
+    }
+    ```
+
+**В строгом режиме проблема видна сразу.** Строгий режим выполняет дополнительный цикл настройки и очистки для каждого ref-колбэка. У этого колбэка нет логики очистки, поэтому он добавляет рефы и не удаляет их. Это подсказка, что не хватает функции очистки.
+
+Строгий режим позволяет рано находить ошибки в ref-колбэках. Когда вы исправляете колбэк, добавляя очистку в строгом режиме, вы *заодно* исправляете многие будущие ошибки продакшена, как ошибку «Scroll to» выше:
+
+=== "index.js"
+
+    ```js
+
+    import { createRoot } from 'react-dom/client';
+    import {StrictMode} from 'react';
+    import './styles.css';
+
+    import App from './App';
+
+    const root = createRoot(document.getElementById("root"));
+    // ✅ Using StrictMode.
+    root.render(
+        <StrictMode>
+            <App />
+        </StrictMode>
+    );
+    ```
+
+=== "App.js"
+
+    ```js
+
+    import { useRef, useState } from "react";
+
+    export default function CatFriends() {
+        const itemsRef = useRef([]);
+        const [catList, setCatList] = useState(setupCatList);
+        const [cat, setCat] = useState('neo');
+
+        function scrollToCat(index) {
+            const list = itemsRef.current;
+            const {node} = list[index];
+            node.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "center",
+            });
+        }
+
+        const cats = catList.filter(c => c.type === cat)
+
+        return (
+            <>
+                <nav>
+                    <button onClick={() => setCat('neo')}>Neo</button>
+                    <button onClick={() => setCat('millie')}>Millie</button>
+                </nav>
+                <hr />
+                <nav>
+                    <span>Scroll to:</span>{cats.map((cat, index) => (
+                        <button key={cat.src} onClick={() => scrollToCat(index)}>
+                            {index}
+                        </button>
+                    ))}
+                </nav>
+                <div>
+                    <ul>
+                        {cats.map((cat) => (
+                            <li
+                                key={cat.src}
+                                ref={(node) => {
+                                    const list = itemsRef.current;
+                                    const item = {cat: cat, node};
+                                    list.push(item);
+                                    console.log(`✅ Adding cat to the map. Total cats: ${list.length}`);
+                                    if (list.length > 10) {
+                                        console.log('❌ Too many cats in the list!');
+                                    }
+                                    return () => {
+                                        list.splice(list.indexOf(item), 1);
+                                        console.log(`❌ Removing cat from the map. Total cats: ${itemsRef.current.length}`);
+                                    }
+                                }}
+                            >
+                                <img src={cat.src} />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </>
+        );
+    }
+
+    function setupCatList() {
+        const catList = [];
+        for (let i = 0; i < 10; i++) {
+            catList.push({type: 'neo', src: "https://placecats.com/neo/320/240?" + i});
+        }
+        for (let i = 0; i < 10; i++) {
+            catList.push({type: 'millie', src: "https://placecats.com/millie/320/240?" + i});
+        }
+
+        return catList;
+    }
+
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    div {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    nav {
+      text-align: center;
+    }
+
+    button {
+      margin: .25rem;
+    }
+
+    ul,
+    li {
+      list-style: none;
+      white-space: nowrap;
+    }
+
+    li {
+      display: inline;
+      padding: 0.5rem;
+    }
+    ```
+
+Теперь при первом монтировании в StrictMode ref-колбэки настраиваются, очищаются и настраиваются снова:
+
+```
+...
+✅ Adding animal to the map. Total animals: 10
+...
+❌ Removing animal from the map. Total animals: 0
+...
+✅ Adding animal to the map. Total animals: 10
+```
+
+**Так и должно быть.** Строгий режим проверяет, что ref-колбэки очищаются правильно, поэтому размер не растёт выше ожидаемого. После исправления нет утечек памяти, и все возможности работают как надо.
+
+Без строгого режима ошибку легко пропустить, пока не пощёлкаешь по приложению и не заметишь сломанные возможности. Строгий режим показывает ошибки сразу, до того как вы отправите их в продакшен.
+
+### Исправление предупреждений об устаревании, включенных в строгом режиме {#fixing-deprecation-warnings-enabled-by-strict-mode}
 
 React предупреждает, если какой-то компонент в любом месте дерева `<StrictMode>` использует один из этих устаревших API:
 

@@ -54,6 +54,32 @@ function TabContainer() {
 }
 ```
 
+<a id="functions-called-in-starttransition-are-called-actions"></a>
+
+!!!note "Функции, вызываемые в `startTransition`, называются действиями"
+
+    Функция, переданная в `startTransition`, называется «действием». По соглашению любой колбэк, который вызывают внутри `startTransition` (например, колбэк в пропсах), стоит называть `action` или добавлять суффикс `Action`:
+
+    ```js hl_lines="1 9"
+    function SubmitButton({ submitAction }) {
+      const [isPending, startTransition] = useTransition();
+
+      return (
+        <button
+          disabled={isPending}
+          onClick={() => {
+            startTransition(async () => {
+              await submitAction();
+            });
+          }}
+        >
+          Submit
+        </button>
+      );
+    }
+
+    ```
+
 #### Параметры {#starttransition-parameters}
 
 -   `scope`: Функция, которая обновляет некоторое состояние, вызывая одну или несколько функций [`set`](useState.md). React немедленно вызывает `scope` без параметров и помечает все обновления состояния, запланированные синхронно во время вызова функции `scope`, как переходы. Они будут неблокирующими и не будут отображать нежелательные индикаторы загрузки.
@@ -77,6 +103,849 @@ function TabContainer() {
 -   При наличии нескольких текущих переходов React в настоящее время собирает их вместе. Это ограничение, которое, вероятно, будет устранено в будущем выпуске.
 
 ## Использование {#usage}
+
+### Неблокирующие обновления с помощью действий {#perform-non-blocking-updates-with-actions}
+
+Вызовите `useTransition` в начале компонента, чтобы создавать действия и читать состояние ожидания:
+
+```js hl_lines="4"
+import {useState, useTransition} from 'react';
+
+function CheckoutForm() {
+  const [isPending, startTransition] = useTransition();
+  // ...
+}
+```
+
+`useTransition` возвращает массив ровно из двух элементов:
+
+1. Флаг `isPending`, который сообщает, есть ли ожидающий переход.
+2. Функция `startTransition`, которая позволяет создать действие.
+
+Чтобы начать переход, передайте функцию в `startTransition` так:
+
+```js
+import {useState, useTransition} from 'react';
+import {updateQuantity} from './api';
+
+function CheckoutForm() {
+  const [isPending, startTransition] = useTransition();
+  const [quantity, setQuantity] = useState(1);
+
+  function onSubmit(newQuantity) {
+    startTransition(async function () {
+      const savedQuantity = await updateQuantity(newQuantity);
+      startTransition(() => {
+        setQuantity(savedQuantity);
+      });
+    });
+  }
+  // ...
+}
+```
+
+Функция, переданная в `startTransition`, называется «действием» (Action). Внутри действия можно обновлять состояние и (необязательно) выполнять побочные эффекты, и эта работа пойдёт в фоне, не блокируя действия пользователя на странице. В переход может входить несколько действий, и пока переход идёт, интерфейс остаётся отзывчивым. Например, если пользователь нажал вкладку, а потом передумал и нажал другую, второй клик обработается сразу, не дожидаясь окончания первого обновления.
+
+Чтобы показать пользователю, что переход ещё идёт, состояние `isPending` становится `true` при первом вызове `startTransition` и остаётся `true`, пока не завершатся все действия и пользователю не покажут итоговое состояние. Переходы дожидаются побочных эффектов в действиях, чтобы [не показывать нежелательные индикаторы загрузки](#preventing-unwanted-loading-indicators), а немедленную обратную связь во время перехода можно дать через `useOptimistic`.
+
+## Примеры {#recipes}
+
+#### Обновление количества в действии {#updating-the-quantity-in-an-action}
+
+В этом примере функция `updateQuantity` имитирует запрос к серверу, чтобы обновить количество товара в корзине. Функция *искусственно замедлена*, чтобы запрос занимал не меньше секунды.
+
+Быстро измените количество несколько раз. Обратите внимание: состояние ожидания у «Total» видно, пока идут любые запросы, а «Total» обновляется только после последнего запроса. Поскольку обновление внутри действия, «quantity» можно продолжать менять, пока запрос ещё выполняется.
+
+=== "package.js"
+
+    ```json
+
+    {
+      "dependencies": {
+        "react": "beta",
+        "react-dom": "beta"
+      },
+      "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject"
+      }
+    }
+    ```
+
+=== "App.js"
+
+    ```js
+
+    import { useState, useTransition } from "react";
+    import { updateQuantity } from "./api";
+    import Item from "./Item";
+    import Total from "./Total";
+
+    export default function App({}) {
+        const [quantity, setQuantity] = useState(1);
+        const [isPending, startTransition] = useTransition();
+
+        const updateQuantityAction = async newQuantity => {
+            // To access the pending state of a transition,
+            // call startTransition again.
+            startTransition(async () => {
+                const savedQuantity = await updateQuantity(newQuantity);
+                startTransition(() => {
+                    setQuantity(savedQuantity);
+                });
+            });
+        };
+
+        return (
+            <div>
+                <h1>Checkout</h1>
+                <Item action={updateQuantityAction}/>
+                <hr />
+                <Total quantity={quantity} isPending={isPending} />
+            </div>
+        );
+    }
+    ```
+
+=== "Item.js"
+
+    ```js
+
+    import { startTransition } from "react";
+
+    export default function Item({action}) {
+        function handleChange(event) {
+            // To expose an action prop, await the callback in startTransition.
+            startTransition(async () => {
+                await action(event.target.value);
+            })
+        }
+        return (
+            <div className="item">
+                <span>Eras Tour Tickets</span>
+                <label htmlFor="name">Quantity: </label>
+                <input
+                    type="number"
+                    onChange={handleChange}
+                    defaultValue={1}
+                    min={1}
+                />
+            </div>
+        )
+    }
+    ```
+
+=== "Total.js"
+
+    ```js
+
+    const intl = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+    });
+
+    export default function Total({quantity, isPending}) {
+        return (
+            <div className="total">
+                <span>Total:</span>
+                <span>
+                    {isPending ? "🌀 Updating..." : `${intl.format(quantity * 9999)}`}
+                </span>
+            </div>
+        )
+    }
+    ```
+
+=== "api.js"
+
+    ```js
+
+    export async function updateQuantity(newQuantity) {
+        return new Promise((resolve, reject) => {
+            // Simulate a slow network request.
+            setTimeout(() => {
+                resolve(newQuantity);
+            }, 2000);
+        });
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+    }
+
+    .item label {
+      flex: 1;
+      text-align: right;
+    }
+
+    .item input {
+      margin-left: 4px;
+      width: 60px;
+      padding: 4px;
+    }
+
+    .total {
+      height: 50px;
+      line-height: 25px;
+      display: flex;
+      align-content: center;
+      justify-content: space-between;
+    }
+    ```
+
+Это базовый пример того, как работают действия, но он не обрабатывает запросы, которые завершаются не по порядку. Если быстро менять количество несколько раз, предыдущие запросы могут закончиться после более поздних, и количество обновится не в том порядке. Это известное ограничение, которое исправят в будущем (см. [Устранение неполадок](#my-state-updates-in-transitions-are-out-of-order) ниже).
+
+Для обычных случаев React даёт готовые абстракции:
+- [`useActionState`](useActionState.md)
+- [действия `<form>`](../react-dom/components/form.md)
+- [серверные функции](../rsc/server-functions.md)
+
+Они сами следят за порядком запросов. Если на переходах вы строите свои хуки или библиотеки для асинхронных переходов состояния, контроля больше, но порядок нужно обрабатывать самим.
+
+??? success "Решение"
+
+    В этом примере `updateQuantity` тоже имитирует запрос к серверу, чтобы обновить количество товара в корзине. Функция *искусственно замедлена*, чтобы запрос занимал не меньше секунды.
+
+    Быстро измените количество несколько раз. Обратите внимание: состояние ожидания у «Total» видно, пока идёт любой запрос, но «Total» обновляется несколько раз — по одному на каждый клик по «quantity»:
+
+    === "package.js"
+
+        ```json
+
+        {
+          "dependencies": {
+            "react": "beta",
+            "react-dom": "beta"
+          },
+          "scripts": {
+            "start": "react-scripts start",
+            "build": "react-scripts build",
+            "test": "react-scripts test --env=jsdom",
+            "eject": "react-scripts eject"
+          }
+        }
+        ```
+
+    === "App.js"
+
+        ```js
+
+        import { useState } from "react";
+        import { updateQuantity } from "./api";
+        import Item from "./Item";
+        import Total from "./Total";
+
+        export default function App({}) {
+            const [quantity, setQuantity] = useState(1);
+            const [isPending, setIsPending] = useState(false);
+
+            const onUpdateQuantity = async newQuantity => {
+                // Manually set the isPending State.
+                setIsPending(true);
+                const savedQuantity = await updateQuantity(newQuantity);
+                setIsPending(false);
+                setQuantity(savedQuantity);
+            };
+
+            return (
+                <div>
+                    <h1>Checkout</h1>
+                    <Item onUpdateQuantity={onUpdateQuantity}/>
+                    <hr />
+                    <Total quantity={quantity} isPending={isPending} />
+                </div>
+            );
+        }
+
+        ```
+
+    === "Item.js"
+
+        ```js
+
+        export default function Item({onUpdateQuantity}) {
+            function handleChange(event) {
+                onUpdateQuantity(event.target.value);
+            }
+            return (
+                <div className="item">
+                    <span>Eras Tour Tickets</span>
+                    <label htmlFor="name">Quantity: </label>
+                    <input
+                        type="number"
+                        onChange={handleChange}
+                        defaultValue={1}
+                        min={1}
+                    />
+                </div>
+            )
+        }
+        ```
+
+    === "Total.js"
+
+        ```js
+
+        const intl = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD"
+        });
+
+        export default function Total({quantity, isPending}) {
+            return (
+                <div className="total">
+                    <span>Total:</span>
+                    <span>
+                        {isPending ? "🌀 Updating..." : `${intl.format(quantity * 9999)}`}
+                    </span>
+                </div>
+            )
+        }
+        ```
+
+    === "api.js"
+
+        ```js
+
+        export async function updateQuantity(newQuantity) {
+            return new Promise((resolve, reject) => {
+                // Simulate a slow network request.
+                setTimeout(() => {
+                    resolve(newQuantity);
+                }, 2000);
+            });
+        }
+        ```
+
+    === "styles.css"
+
+        ```css
+
+        .item {
+          display: flex;
+          align-items: center;
+          justify-content: start;
+        }
+
+        .item label {
+          flex: 1;
+          text-align: right;
+        }
+
+        .item input {
+          margin-left: 4px;
+          width: 60px;
+          padding: 4px;
+        }
+
+        .total {
+          height: 50px;
+          line-height: 25px;
+          display: flex;
+          align-content: center;
+          justify-content: space-between;
+        }
+        ```
+
+    Обычное решение этой проблемы — не давать пользователю менять значение, пока количество обновляется:
+
+    === "package.js"
+
+        ```json
+
+        {
+          "dependencies": {
+            "react": "beta",
+            "react-dom": "beta"
+          },
+          "scripts": {
+            "start": "react-scripts start",
+            "build": "react-scripts build",
+            "test": "react-scripts test --env=jsdom",
+            "eject": "react-scripts eject"
+          }
+        }
+        ```
+
+    === "App.js"
+
+        ```js
+
+        import { useState, useTransition } from "react";
+        import { updateQuantity } from "./api";
+        import Item from "./Item";
+        import Total from "./Total";
+
+        export default function App({}) {
+            const [quantity, setQuantity] = useState(1);
+            const [isPending, setIsPending] = useState(false);
+
+            const onUpdateQuantity = async event => {
+                const newQuantity = event.target.value;
+                // Manually set the isPending state.
+                setIsPending(true);
+                const savedQuantity = await updateQuantity(newQuantity);
+                setIsPending(false);
+                setQuantity(savedQuantity);
+            };
+
+            return (
+                <div>
+                    <h1>Checkout</h1>
+                    <Item isPending={isPending} onUpdateQuantity={onUpdateQuantity}/>
+                    <hr />
+                    <Total quantity={quantity} isPending={isPending} />
+                </div>
+            );
+        }
+
+        ```
+
+    === "Item.js"
+
+        ```js
+
+        export default function Item({isPending, onUpdateQuantity}) {
+            return (
+                <div className="item">
+                    <span>Eras Tour Tickets</span>
+                    <label htmlFor="name">Quantity: </label>
+                    <input
+                        type="number"
+                        disabled={isPending}
+                        onChange={onUpdateQuantity}
+                        defaultValue={1}
+                        min={1}
+                    />
+                </div>
+            )
+        }
+        ```
+
+    === "Total.js"
+
+        ```js
+
+        const intl = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD"
+        });
+
+        export default function Total({quantity, isPending}) {
+            return (
+                <div className="total">
+                    <span>Total:</span>
+                    <span>
+                        {isPending ? "🌀 Updating..." : `${intl.format(quantity * 9999)}`}
+                    </span>
+                </div>
+            )
+        }
+        ```
+
+    === "api.js"
+
+        ```js
+
+        export async function updateQuantity(newQuantity) {
+            return new Promise((resolve, reject) => {
+                // Simulate a slow network request.
+                setTimeout(() => {
+                    resolve(newQuantity);
+                }, 2000);
+            });
+        }
+        ```
+
+    === "styles.css"
+
+        ```css
+
+        .item {
+          display: flex;
+          align-items: center;
+          justify-content: start;
+        }
+
+        .item label {
+          flex: 1;
+          text-align: right;
+        }
+
+        .item input {
+          margin-left: 4px;
+          width: 60px;
+          padding: 4px;
+        }
+
+        .total {
+          height: 50px;
+          line-height: 25px;
+          display: flex;
+          align-content: center;
+          justify-content: space-between;
+        }
+        ```
+
+    Так приложение кажется медленным: пользователю приходится ждать при каждом изменении количества. Более сложную обработку можно написать вручную, чтобы интерфейс оставался отзывчивым, но действия закрывают этот случай простым встроенным API.
+
+    ??? success "Решение"
+
+### Проп `action` у компонентов {#exposing-action-props-from-components}
+
+Компонент может отдать наружу проп `action`, чтобы родитель вызвал действие.
+
+Например, этот `TabButton` оборачивает логику `onClick` в проп `action`:
+
+```js hl_lines="8-12"
+export default function TabButton({ action, children, isActive }) {
+  const [isPending, startTransition] = useTransition();
+  if (isActive) {
+    return <b>{children}</b>
+  }
+  return (
+    <button onClick={() => {
+      startTransition(async () => {
+        // await the action that's passed in.
+        // This allows it to be either sync or async.
+        await action();
+      });
+    }}>
+      {children}
+    </button>
+  );
+}
+```
+
+Поскольку родитель обновляет своё состояние внутри `action`, это обновление помечается как переход. Можно нажать «Posts», а сразу затем «Contact», и это не заблокирует действия пользователя:
+
+=== "js"
+
+    ```js
+
+    import { useState } from 'react';
+    import TabButton from './TabButton.js';
+    import AboutTab from './AboutTab.js';
+    import PostsTab from './PostsTab.js';
+    import ContactTab from './ContactTab.js';
+
+    export default function TabContainer() {
+        const [tab, setTab] = useState('about');
+        return (
+            <>
+                <TabButton
+                    isActive={tab === 'about'}
+                    action={() => setTab('about')}
+                >
+                    About
+                </TabButton>
+                <TabButton
+                    isActive={tab === 'posts'}
+                    action={() => setTab('posts')}
+                >
+                    Posts (slow)
+                </TabButton>
+                <TabButton
+                    isActive={tab === 'contact'}
+                    action={() => setTab('contact')}
+                >
+                    Contact
+                </TabButton>
+                <hr />
+                {tab === 'about' && <AboutTab />}
+                {tab === 'posts' && <PostsTab />}
+                {tab === 'contact' && <ContactTab />}
+            </>
+        );
+    }
+    ```
+
+=== "TabButton.js"
+
+    ```js
+
+    import { useTransition } from 'react';
+
+    export default function TabButton({ action, children, isActive }) {
+        const [isPending, startTransition] = useTransition();
+        if (isActive) {
+            return <b>{children}</b>
+        }
+        if (isPending) {
+            return <b className="pending">{children}</b>;
+        }
+        return (
+            <button onClick={async () => {
+                startTransition(async () => {
+                    // await the action that's passed in.
+                    // This allows it to be either sync or async.
+                    await action();
+                });
+            }}>
+                {children}
+            </button>
+        );
+    }
+    ```
+
+=== "AboutTab.js"
+
+    ```js
+
+    export default function AboutTab() {
+        return (
+            <p>Welcome to my profile!</p>
+        );
+    }
+    ```
+
+=== "PostsTab.js"
+
+    ```js hl_lines="19 20"
+
+    import { memo } from 'react';
+
+    const PostsTab = memo(function PostsTab() {
+        // Log once. The actual slowdown is inside SlowPost.
+        console.log('[ARTIFICIALLY SLOW] Rendering 500 <SlowPost />');
+
+        let items = [];
+        for (let i = 0; i < 500; i++) {
+            items.push(<SlowPost key={i} index={i} />);
+        }
+        return (
+            <ul className="items">
+                {items}
+            </ul>
+        );
+    });
+
+    function SlowPost({ index }) {
+        let startTime = performance.now();
+        while (performance.now() - startTime < 1) {
+            // Do nothing for 1 ms per item to emulate extremely slow code
+        }
+
+        return (
+            <li className="item">
+                Post #{index + 1}
+            </li>
+        );
+    }
+
+    export default PostsTab;
+    ```
+
+=== "ContactTab.js"
+
+    ```js
+
+    export default function ContactTab() {
+        return (
+            <>
+                <p>
+                    You can find me online here:
+                </p>
+                <ul>
+                    <li>admin@mysite.com</li>
+                    <li>+123456789</li>
+                </ul>
+            </>
+        );
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    button { margin-right: 10px }
+    b { display: inline-block; margin-right: 10px; }
+    .pending { color: #777; }
+    .items {
+      max-height: 300px;
+      overflow: auto;
+    }
+    ```
+
+!!!note "Примечание"
+
+    Если компонент отдаёт наружу проп `action`, его нужно `await`-ить внутри перехода.
+
+    Тогда колбэк `action` может быть и синхронным, и асинхронным, и не нужен ещё один `startTransition`, чтобы обернуть `await` в действии.
+
+### Отображение визуального состояния ожидания {#displaying-a-pending-visual-state}
+
+Булево значение `isPending`, которое возвращает `useTransition`, показывает пользователю, что переход ещё идёт. Например, у кнопки вкладки может быть особое визуальное состояние «pending»:
+
+```js hl_lines="4-6"
+function TabButton({ action, children, isActive }) {
+  const [isPending, startTransition] = useTransition();
+  // ...
+  if (isPending) {
+    return <b className="pending">{children}</b>;
+  }
+  // ...
+```
+
+Обратите внимание: клик по «Posts» теперь ощущается отзывчивее, потому что сама кнопка вкладки обновляется сразу:
+
+=== "js"
+
+    ```js
+
+    import { useState } from 'react';
+    import TabButton from './TabButton.js';
+    import AboutTab from './AboutTab.js';
+    import PostsTab from './PostsTab.js';
+    import ContactTab from './ContactTab.js';
+
+    export default function TabContainer() {
+        const [tab, setTab] = useState('about');
+        return (
+            <>
+                <TabButton
+                    isActive={tab === 'about'}
+                    action={() => setTab('about')}
+                >
+                    About
+                </TabButton>
+                <TabButton
+                    isActive={tab === 'posts'}
+                    action={() => setTab('posts')}
+                >
+                    Posts (slow)
+                </TabButton>
+                <TabButton
+                    isActive={tab === 'contact'}
+                    action={() => setTab('contact')}
+                >
+                    Contact
+                </TabButton>
+                <hr />
+                {tab === 'about' && <AboutTab />}
+                {tab === 'posts' && <PostsTab />}
+                {tab === 'contact' && <ContactTab />}
+            </>
+        );
+    }
+    ```
+
+=== "TabButton.js"
+
+    ```js
+
+    import { useTransition } from 'react';
+
+    export default function TabButton({ action, children, isActive }) {
+        const [isPending, startTransition] = useTransition();
+        if (isActive) {
+            return <b>{children}</b>
+        }
+        if (isPending) {
+            return <b className="pending">{children}</b>;
+        }
+        return (
+            <button onClick={() => {
+                startTransition(async () => {
+                    await action();
+                });
+            }}>
+                {children}
+            </button>
+        );
+    }
+    ```
+
+=== "AboutTab.js"
+
+    ```js
+
+    export default function AboutTab() {
+        return (
+            <p>Welcome to my profile!</p>
+        );
+    }
+    ```
+
+=== "PostsTab.js"
+
+    ```js hl_lines="19 20"
+
+    import { memo } from 'react';
+
+    const PostsTab = memo(function PostsTab() {
+        // Log once. The actual slowdown is inside SlowPost.
+        console.log('[ARTIFICIALLY SLOW] Rendering 500 <SlowPost />');
+
+        let items = [];
+        for (let i = 0; i < 500; i++) {
+            items.push(<SlowPost key={i} index={i} />);
+        }
+        return (
+            <ul className="items">
+                {items}
+            </ul>
+        );
+    });
+
+    function SlowPost({ index }) {
+        let startTime = performance.now();
+        while (performance.now() - startTime < 1) {
+            // Do nothing for 1 ms per item to emulate extremely slow code
+        }
+
+        return (
+            <li className="item">
+                Post #{index + 1}
+            </li>
+        );
+    }
+
+    export default PostsTab;
+    ```
+
+=== "ContactTab.js"
+
+    ```js
+
+    export default function ContactTab() {
+        return (
+            <>
+                <p>
+                    You can find me online here:
+                </p>
+                <ul>
+                    <li>admin@mysite.com</li>
+                    <li>+123456789</li>
+                </ul>
+            </>
+        );
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    button { margin-right: 10px }
+    b { display: inline-block; margin-right: 10px; }
+    .pending { color: #777; }
+    .items {
+      max-height: 300px;
+      overflow: auto;
+    }
+    ```
+
 
 ### Пометка обновления состояния как неблокирующего перехода {#marking-a-state-update-as-a-non-blocking-transition}
 
@@ -847,7 +1716,7 @@ function TabButton({ children, isActive, onClick }) {
 
     Переходы будут "ждать" только достаточно долго, чтобы избежать скрытия _уже раскрытого_ содержимого (например, контейнера вкладки). Если вкладка Posts имеет [вложенную границу `<Suspense>`](Suspense.md), переход не будет "ждать" ее.
 
-### Создание маршрутизатора с поддержкой `Suspense`
+### Создание маршрутизатора с поддержкой `Suspense` {#building-a-suspense-enabled-router}
 
 Если вы создаете фреймворк React или маршрутизатор, мы рекомендуем помечать переходы по страницам как переходы.
 
@@ -994,10 +1863,6 @@ function Router() {
 
 ### Отображение ошибки для пользователей с границей ошибки {#displaying-an-error-to-users-with-error-boundary}
 
-!!!example "Canary"
-
-    Граница ошибки для `useTransition` в настоящее время доступна только в канале React canary и экспериментальном канале.
-
 Если функция, переданная в `startTransition`, выкидывает ошибку, вы можете отобразить ее пользователю с помощью [границы ошибки](Component.md#catching-rendering-errors-with-an-error-boundary). Чтобы использовать границу ошибки, оберните компонент, в котором вызывается `useTransition`, в границу ошибки. После того как функция, переданная в `startTransition`, ошибется, будет отображена обратная связь для границы ошибки.
 
 === "AddCommentContainer.js"
@@ -1128,6 +1993,32 @@ startTransition(() => {
 });
 ```
 
+### React не считает обновление состояния после `await` переходом {#react-doesnt-treat-my-state-update-after-await-as-a-transition}
+
+Если внутри функции `startTransition` есть `await`, обновления состояния после `await` не помечаются как переходы. Каждое обновление состояния после `await` нужно обернуть в вызов `startTransition`:
+
+```js
+startTransition(async () => {
+  await someAsyncFunction();
+  // ❌ Not using startTransition after await
+  setPage('/about');
+});
+```
+
+А вот так это работает:
+
+```js
+startTransition(async () => {
+  await someAsyncFunction();
+  // ✅ Using startTransition *after* await
+  startTransition(() => {
+    setPage('/about');
+  });
+});
+```
+
+Это ограничение JavaScript: React теряет область асинхронного контекста. В будущем, когда появится [AsyncContext](https://github.com/tc39/proposal-async-context), ограничение уберут.
+
 ### Я хочу вызвать `useTransition` извне компонента {#i-want-to-call-usetransition-from-outside-a-component}
 
 Вы не можете вызвать `useTransition` вне компонента, потому что это Hook. В этом случае вместо него используйте отдельный метод [`startTransition`](startTransition.md). Он работает так же, но не предоставляет индикатор `isPending`.
@@ -1166,5 +2057,370 @@ function setState() {
     }
 }
 ```
+
+### Обновления состояния в переходах идут не по порядку {#my-state-updates-in-transitions-are-out-of-order}
+
+Если сделать `await` внутри `startTransition`, обновления могут прийти не по порядку.
+
+В этом примере `updateQuantity` имитирует запрос к серверу, чтобы обновить количество товара в корзине. Функция *искусственно возвращает каждый второй запрос позже предыдущего*, чтобы смоделировать гонки сетевых запросов.
+
+Попробуйте обновить количество один раз, а затем быстро несколько раз. Можно увидеть неверную сумму:
+
+=== "package.js"
+
+    ```json
+
+    {
+      "dependencies": {
+        "react": "beta",
+        "react-dom": "beta"
+      },
+      "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject"
+      }
+    }
+    ```
+
+=== "App.js"
+
+    ```js
+
+    import { useState, useTransition } from "react";
+    import { updateQuantity } from "./api";
+    import Item from "./Item";
+    import Total from "./Total";
+
+    export default function App({}) {
+        const [quantity, setQuantity] = useState(1);
+        const [isPending, startTransition] = useTransition();
+        // Store the actual quantity in separate state to show the mismatch.
+        const [clientQuantity, setClientQuantity] = useState(1);
+
+        const updateQuantityAction = newQuantity => {
+            setClientQuantity(newQuantity);
+
+            // Access the pending state of the transition,
+            // by wrapping in startTransition again.
+            startTransition(async () => {
+                const savedQuantity = await updateQuantity(newQuantity);
+                startTransition(() => {
+                    setQuantity(savedQuantity);
+                });
+            });
+        };
+
+        return (
+            <div>
+                <h1>Checkout</h1>
+                <Item action={updateQuantityAction}/>
+                <hr />
+                <Total clientQuantity={clientQuantity} savedQuantity={quantity} isPending={isPending} />
+            </div>
+        );
+    }
+
+    ```
+
+=== "Item.js"
+
+    ```js
+
+    import {startTransition} from 'react';
+
+    export default function Item({action}) {
+        function handleChange(e) {
+            // Update the quantity in an Action.
+            startTransition(async () => {
+                await action(e.target.value);
+            });
+        }
+        return (
+            <div className="item">
+                <span>Eras Tour Tickets</span>
+                <label htmlFor="name">Quantity: </label>
+                <input
+                    type="number"
+                    onChange={handleChange}
+                    defaultValue={1}
+                    min={1}
+                />
+            </div>
+        )
+    }
+    ```
+
+=== "Total.js"
+
+    ```js
+
+    const intl = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+    });
+
+    export default function Total({ clientQuantity, savedQuantity, isPending }) {
+        return (
+            <div className="total">
+                <span>Total:</span>
+                <div>
+                    <div>
+                        {isPending
+                            ? "🌀 Updating..."
+                            : `${intl.format(savedQuantity * 9999)}`}
+                    </div>
+                    <div className="error">
+                        {!isPending &&
+                            clientQuantity !== savedQuantity &&
+                            `Wrong total, expected: ${intl.format(clientQuantity * 9999)}`}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    ```
+
+=== "api.js"
+
+    ```js
+
+    let firstRequest = true;
+    export async function updateQuantity(newName) {
+        return new Promise((resolve, reject) => {
+            if (firstRequest === true) {
+                firstRequest = false;
+                setTimeout(() => {
+                    firstRequest = true;
+                    resolve(newName);
+                    // Simulate every other request being slower
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    resolve(newName);
+                }, 50);
+            }
+        });
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+    }
+
+    .item label {
+      flex: 1;
+      text-align: right;
+    }
+
+    .item input {
+      margin-left: 4px;
+      width: 60px;
+      padding: 4px;
+    }
+
+    .total {
+      height: 50px;
+      line-height: 25px;
+      display: flex;
+      align-content: center;
+      justify-content: space-between;
+    }
+
+    .total div {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .error {
+      color: red;
+    }
+    ```
+
+Если кликать несколько раз, предыдущие запросы могут закончиться после более поздних. Сейчас React не знает, какой порядок был задуман. Обновления планируются асинхронно, и за асинхронной границей React теряет контекст порядка.
+
+Так и задумано: действия внутри перехода не гарантируют порядок выполнения. Для обычных случаев React даёт абстракции уровнем выше, например [`useActionState`](useActionState.md) и [действия `<form>`](../react-dom/components/form.md), которые следят за порядком. В сложных случаях свою очередь и отмену нужно реализовать самим.
+
+Пример того, как `useActionState` сохраняет порядок выполнения:
+
+=== "package.js"
+
+    ```json
+
+    {
+      "dependencies": {
+        "react": "beta",
+        "react-dom": "beta"
+      },
+      "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject"
+      }
+    }
+    ```
+
+=== "App.js"
+
+    ```js
+
+    import { useState, useActionState } from "react";
+    import { updateQuantity } from "./api";
+    import Item from "./Item";
+    import Total from "./Total";
+
+    export default function App({}) {
+        // Store the actual quantity in separate state to show the mismatch.
+        const [clientQuantity, setClientQuantity] = useState(1);
+        const [quantity, updateQuantityAction, isPending] = useActionState(
+            async (prevState, payload) => {
+                setClientQuantity(payload);
+                const savedQuantity = await updateQuantity(payload);
+                return savedQuantity; // Return the new quantity to update the state
+            },
+            1 // Initial quantity
+        );
+
+        return (
+            <div>
+                <h1>Checkout</h1>
+                <Item action={updateQuantityAction}/>
+                <hr />
+                <Total clientQuantity={clientQuantity} savedQuantity={quantity} isPending={isPending} />
+            </div>
+        );
+    }
+
+    ```
+
+=== "Item.js"
+
+    ```js
+
+    import {startTransition} from 'react';
+
+    export default function Item({action}) {
+        function handleChange(e) {
+            // Update the quantity in an Action.
+            startTransition(() => {
+                action(e.target.value);
+            });
+        }
+        return (
+            <div className="item">
+                <span>Eras Tour Tickets</span>
+                <label htmlFor="name">Quantity: </label>
+                <input
+                    type="number"
+                    onChange={handleChange}
+                    defaultValue={1}
+                    min={1}
+                />
+            </div>
+        )
+    }
+    ```
+
+=== "Total.js"
+
+    ```js
+
+    const intl = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+    });
+
+    export default function Total({ clientQuantity, savedQuantity, isPending }) {
+        return (
+            <div className="total">
+                <span>Total:</span>
+                <div>
+                    <div>
+                        {isPending
+                            ? "🌀 Updating..."
+                            : `${intl.format(savedQuantity * 9999)}`}
+                    </div>
+                    <div className="error">
+                        {!isPending &&
+                            clientQuantity !== savedQuantity &&
+                            `Wrong total, expected: ${intl.format(clientQuantity * 9999)}`}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    ```
+
+=== "api.js"
+
+    ```js
+
+    let firstRequest = true;
+    export async function updateQuantity(newName) {
+        return new Promise((resolve, reject) => {
+            if (firstRequest === true) {
+                firstRequest = false;
+                setTimeout(() => {
+                    firstRequest = true;
+                    resolve(newName);
+                    // Simulate every other request being slower
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    resolve(newName);
+                }, 50);
+            }
+        });
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+    }
+
+    .item label {
+      flex: 1;
+      text-align: right;
+    }
+
+    .item input {
+      margin-left: 4px;
+      width: 60px;
+      padding: 4px;
+    }
+
+    .total {
+      height: 50px;
+      line-height: 25px;
+      display: flex;
+      align-content: center;
+      justify-content: space-between;
+    }
+
+    .total div {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .error {
+      color: red;
+    }
+    ```
 
 <small>:material-information-outline: Источник &mdash; [https://react.dev/reference/react/useTransition](https://react.dev/reference/react/useTransition)</small>

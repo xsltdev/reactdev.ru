@@ -1,0 +1,7 @@
+title: React Compiler
+nav:
+    - index.md
+    - introduction.md
+    - installation.md
+    - incremental-adoption.md
+    - debugging.md

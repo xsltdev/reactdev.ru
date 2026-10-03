@@ -450,7 +450,7 @@ React предоставляет правило linter для проверки �
 
     ```js
     import { useState, useEffect } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
     import { createConnection, sendMessage } from './chat.js';
     import { showNotification } from './notifications.js';
 
