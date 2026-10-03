@@ -1,13 +1,8 @@
 ---
-status: experimental
 description: Компонент встроенный в браузер form позволяет создавать интерактивные элементы управления для отправки информации
 ---
 
 # &lt;form&gt;
-
-!!!example "Canary"
-
-    Расширения для `<form>` в React в настоящее время доступны только в канале React canary и экспериментальном канале. В стабильных релизах React `<form>` работает только как [встроенный в браузер HTML-компонент](./index.md#all-html-components). Подробнее о [каналах выпуска React здесь](https://react.dev/community/versioning-policy#all-release-channels).
 
 <big>Компонент [встроенный в браузер `<form>`](https://hcdev.ru/html/form/) позволяет создавать интерактивные элементы управления для отправки информации.</big>
 
@@ -37,90 +32,114 @@ description: Компонент встроенный в браузер form по
 
 [`action`](https://hcdev.ru/html/form#action): URL или функция. Когда в `action` передается URL, форма будет вести себя как компонент HTML-формы. Когда в `action` передается функция, она будет обрабатывать отправку формы. Функция, переданная в `action`, может быть асинхронной и будет вызвана с единственным аргументом, содержащим [данные формы](https://developer.mozilla.org/en-US/docs/Web/API/FormData) отправленной формы. Свойство `action` может быть переопределено атрибутом `formAction` компонента `<button>`, `<input type="submit">` или `<input type="image">`.
 
-**Ограничения**
+#### Ограничения {#caveats}
 
 -   Когда функция передается в `action` или `formAction`, метод HTTP будет POST, независимо от значения параметра `method`.
 
 ## Использование {#usage}
 
-### Обработка отправки формы на клиенте {#handle-form-submission-on-the-client}
+### Обработка отправки формы через обработчик события {#handle-form-submission-with-an-event-handler}
 
-Передайте функцию в свойство `action` формы для запуска функции при отправке формы. [`formData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) будет передан в функцию в качестве аргумента, чтобы вы могли получить доступ к данным, отправленным формой. Это отличается от обычного [HTML action](https://hcdev.ru/html/form/#action), который принимает только URL.
+Передайте функцию в обработчик события `onSubmit`, чтобы выполнить код при отправке формы. По умолчанию браузер отправляет данные формы на текущий URL и обновляет страницу, поэтому вызовите [`e.preventDefault()`](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault), чтобы отменить это поведение.
 
-=== "App.js"
-
-    ```js
-    export default function Search() {
-    	function search(formData) {
-    		const query = formData.get('query');
-    		alert(`You searched for '${query}'`);
-    	}
-    	return (
-    		<form action={search}>
-    			<input name="query" />
-    			<button type="submit">Search</button>
-    		</form>
-    	);
-    }
-    ```
-
-=== "CodeSandbox"
-
-    <iframe src="https://codesandbox.io/embed/6pyqcx?view=Editor+%2B+Preview&module=%2Fsrc%2FApp.js" style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;" title="prod-fog-6pyqcx" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
-
-### Обработка отправки формы с помощью серверного действия {#handle-form-submission-with-a-server-action}
-
-Отображение `<form>` с вводом и кнопкой отправки. Передайте серверное действие (функцию, помеченную [`'use server'`](../../rsc/use-server.md)) в свойство `action` формы, чтобы запустить функцию при отправке формы.
-
-Передача серверного действия в `<form action>` позволяет пользователям отправлять формы без включенного JavaScript или до загрузки кода. Это полезно для пользователей, у которых медленное соединение, устройство или отключен JavaScript, и похоже на то, как работают формы, когда в свойство `action` передается URL.
-
-Вы можете использовать скрытые поля формы для предоставления данных действию `<form>`. Серверное действие будет вызвано с данными скрытого поля формы в виде экземпляра [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData).
+В примере отправленные значения читаются через [`new FormData(e.target)`](https://developer.mozilla.org/en-US/docs/Web/API/FormData): собираются все поля по их `name`. Так поля остаются [неконтролируемыми](input.md#reading-the-input-values-when-submitting-a-form). Если вместо этого [поле контролируется состоянием](input.md#controlling-an-input-with-a-state-variable), при отправке читайте это состояние, а не `FormData`.
 
 ```js
-import { updateCart } from './lib.js';
+export default function Search() {
+    function handleSubmit(e) {
+        // Prevent the browser from reloading the page
+        e.preventDefault();
 
-function AddToCart({ productId }) {
-    async function addToCart(formData) {
-        'use server';
-        const productId = formData.get('productId');
-        await updateCart(productId);
+        // Read the form data
+        const form = e.target;
+        const formData = new FormData(form);
+        const query = formData.get("query");
+        alert(`You searched for '${query}'`);
     }
+
     return (
-        <form action={addToCart}>
-            <input
-                type="hidden"
-                name="productId"
-                value={productId}
-            />
-            <button type="submit">Add to Cart</button>
+        <form onSubmit={handleSubmit}>
+            <input name="query" />
+            <button type="submit">Search</button>
         </form>
     );
 }
 ```
 
-Вместо того чтобы использовать скрытые поля формы для передачи данных в действие `<form>`, вы можете вызвать метод `bind`, чтобы снабдить его дополнительными аргументами. Это приведет к привязке к функции нового аргумента (`productId`) в дополнение к `formData`, который передается в качестве аргумента функции.
+!!!note "Примечание"
+
+    Чтение данных формы через `onSubmit` работает в любой версии React и даёт прямой доступ к [событию отправки](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event), поэтому можно вызвать `e.preventDefault()` и прочитать данные самостоятельно. Если передать функцию в проп `action`, отправка идёт в [переходе](../../react/useTransition.md). Тогда React отслеживает состояние ожидания, отправляет выброшенные ошибки в ближайшую границу ошибки и позволяет форме работать с [`useActionState`](../../react/useActionState.md) и [`useOptimistic`](../../react/useOptimistic.md). `action` также может быть [серверной функцией](../../rsc/server-functions.md), а `onSubmit` это не поддерживает.
+
+<a id="handle-form-submission-on-the-client"></a>
+
+### Обработка отправки формы через проп action {#handle-form-submission-with-an-action-prop}
+
+Передайте функцию в проп `action` формы, чтобы выполнить её при отправке. В функцию аргументом придёт [`formData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData), и можно прочитать данные, которые отправила форма. Это отличается от обычного [HTML action](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#action), который принимает только URL. В отличие от `onSubmit`, `action` выполняется в [переходе](../../react/useTransition.md), и `e.preventDefault()` не нужен. После успешного завершения функции `action` все неконтролируемые поля формы сбрасываются.
 
 ```js
-import { updateCart } from './lib.js';
-
-function AddToCart({ productId }) {
-    async function addToCart(productId, formData) {
-        'use server';
-        await updateCart(productId);
+export default function Search() {
+    function search(formData) {
+        const query = formData.get("query");
+        alert(`You searched for '${query}'`);
     }
-    const addProductToCart = addToCart.bind(
-        null,
-        productId
-    );
     return (
-        <form action={addProductToCart}>
-            <button type="submit">Add to Cart</button>
+        <form action={search}>
+            <input name="query" />
+            <button type="submit">Search</button>
         </form>
     );
 }
 ```
 
-Когда `<form>` отображается [Серверным компонентом](../../rsc/use-client.md), а в параметр `action` формы `<form>` передается [Серверное действие](../../rsc/use-server.md), форма [прогрессивно улучшается](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement).
+<a id="handle-form-submission-with-a-server-action"></a>
+
+### Обработка отправки формы серверной функцией {#handle-form-submission-with-a-server-function}
+
+Отрендерите `<form>` с полем и кнопкой отправки. Передайте серверную функцию (функцию с пометкой [`'use server'`](../../rsc/use-server.md)) в проп `action` формы, чтобы выполнить её при отправке.
+
+Серверная функция в `<form action>` позволяет отправлять форму без включённого JavaScript или до загрузки кода. Это полезно при медленном соединении, слабом устройстве или отключённом JavaScript и похоже на то, как формы работают, когда в `action` передан URL.
+
+Скрытыми полями формы можно передать данные в `action` у `<form>`. Серверная функция будет вызвана с данными скрытых полей как с экземпляром [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData).
+
+```jsx
+import { updateCart } from './lib.js';
+
+function AddToCart({productId}) {
+  async function addToCart(formData) {
+    'use server'
+    const productId = formData.get('productId')
+    await updateCart(productId)
+  }
+  return (
+    <form action={addToCart}>
+        <input type="hidden" name="productId" value={productId} />
+        <button type="submit">Add to Cart</button>
+    </form>
+
+  );
+}
+```
+
+Вместо скрытых полей можно вызвать метод `bind` и передать дополнительные аргументы. Так к функции привяжется новый аргумент (`productId`) вдобавок к `formData`, который функция и так получает аргументом.
+
+```jsx hl_lines="8 4"
+import { updateCart } from './lib.js';
+
+function AddToCart({productId}) {
+  async function addToCart(productId, formData) {
+    "use server";
+    await updateCart(productId)
+  }
+  const addProductToCart = addToCart.bind(null, productId);
+  return (
+    <form action={addProductToCart}>
+      <button type="submit">Add to Cart</button>
+    </form>
+  );
+}
+```
+
+Когда `<form>` рендерит [серверный компонент](../../rsc/use-client.md) и в проп `action` передана [серверная функция](../../rsc/server-functions.md), форма [прогрессивно улучшается](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement).
 
 ### Отображение состояния ожидания во время отправки формы {#display-a-pending-state-during-form-submission}
 

@@ -10,6 +10,10 @@ description: memo позволяет пропустить повторное о�
 const MemoizedComponent = memo(SomeComponent, arePropsEqual?)
 ```
 
+!!!note "React Compiler"
+
+    [React Compiler](../../learn/react-compiler/index.md) автоматически применяет эквивалент `memo` ко всем компонентам и уменьшает потребность в ручной мемоизации. Компилятор может выполнять мемоизацию компонентов автоматически.
+
 ## Описание {#reference}
 
 ### `memo(Component, arePropsEqual?)` {#memo}
@@ -24,13 +28,14 @@ const SomeComponent = memo(function SomeComponent(props) {
 });
 ```
 
-**Параметры**
+#### Параметры {#parameters}
 
 -   `Component`: Компонент, который вы хотите мемоизировать. Функция `memo` не изменяет этот компонент, а возвращает новый, мемоизированный компонент. Принимается любой допустимый компонент React, включая функции и компоненты [`forwardRef`](./forwardRef.md).
 
 -   **опциональная** `arePropsEqual`: Функция, принимающая два аргумента: предыдущий пропс компонента и его новый пропс. Она должна возвращать `true`, если старые и новые пропсы равны: то есть, если компонент будет выводить тот же результат и вести себя так же с новыми пропсами, как и со старыми. В противном случае он должен вернуть `false`. Обычно вы не указываете эту функцию. По умолчанию React будет сравнивать каждый пропс с [`Object.is`.](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is).
 
-**Возвращает**
+#### Возвращаемое значение {#returns}
+
 
 `memo` возвращает новый компонент React. Он ведет себя так же, как и компонент, переданный в `memo`, за исключением того, что React не будет всегда перерисовывать его, когда перерисовывается его родитель, если его пропсы не изменились.
 
@@ -354,6 +359,83 @@ function arePropsEqual(oldProps, newProps) {
     Если вы предоставляете пользовательскую реализацию `arePropsEqual`, **вы должны сравнивать каждый пропс, включая функции.** Функции часто [перекрывают](https://developer.mozilla.org/docs/Web/JavaScript/Closures) пропсы и состояние родительских компонентов. Если вы вернете `true`, когда `oldProps.onClick !== newProps.onClick`, ваш компонент будет продолжать "видеть" пропсы и состояние из предыдущего рендера в своем обработчике `onClick`, что приведет к очень запутанным ошибкам.
 
     Избегайте глубоких проверок равенства внутри `arePropsEqual`, если вы не уверены на 100%, что структура данных, с которой вы работаете, имеет известную ограниченную глубину. **Глубокие проверки равенства могут стать невероятно медленными** и могут заморозить ваше приложение на много секунд, если кто-то позже изменит структуру данных.
+
+### Нужен ли ещё React.memo, если я использую React Compiler? {#react-compiler-memo}
+
+Когда включён [React Compiler](../../learn/react-compiler/index.md), `React.memo` обычно больше не нужен. Компилятор сам оптимизирует повторный рендеринг компонентов.
+
+Вот как это работает:
+
+**Без React Compiler** нужен `React.memo`, чтобы не было лишних повторных рендеров:
+
+```js
+// Parent re-renders every second
+function Parent() {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds(s => s + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <>
+      <h1>Seconds: {seconds}</h1>
+      <ExpensiveChild name="John" />
+    </>
+  );
+}
+
+// Without memo, this re-renders every second even though props don't change
+const ExpensiveChild = memo(function ExpensiveChild({ name }) {
+  console.log('ExpensiveChild rendered');
+  return <div>Hello, {name}!</div>;
+});
+```
+
+**С включённым React Compiler** та же оптимизация происходит автоматически:
+
+```js
+// No memo needed - compiler prevents re-renders automatically
+function ExpensiveChild({ name }) {
+  console.log('ExpensiveChild rendered');
+  return <div>Hello, {name}!</div>;
+}
+```
+
+Вот ключевая часть того, что генерирует React Compiler:
+
+```js hl_lines="6-12"
+function Parent() {
+  const $ = _c(7);
+  const [seconds, setSeconds] = useState(0);
+  // ... other code ...
+
+  let t3;
+  if ($[4] === Symbol.for("react.memo_cache_sentinel")) {
+    t3 = <ExpensiveChild name="John" />;
+    $[4] = t3;
+  } else {
+    t3 = $[4];
+  }
+  // ... return statement ...
+}
+```
+
+Обратите внимание на выделенные строки: компилятор оборачивает `<ExpensiveChild name="John" />` в проверку кэша. Поскольку проп `name` всегда равен `"John"`, этот JSX создаётся один раз и переиспользуется при каждом повторном рендере родителя. Именно это делает `React.memo`: он не даёт дочернему компоненту перерендериться, если его пропсы не изменились.
+
+React Compiler автоматически:
+1. Отслеживает, что проп `name`, переданный в `ExpensiveChild`, не изменился
+2. Переиспользует ранее созданный JSX для `<ExpensiveChild name="John" />`
+3. Полностью пропускает повторный рендеринг `ExpensiveChild`
+
+Это значит, что **`React.memo` можно спокойно убрать из компонентов, если используется React Compiler**. Компилятор даёт ту же оптимизацию автоматически, и код становится чище и проще в поддержке.
+
+!!!note "Примечание"
+
+    Оптимизация компилятора на самом деле шире, чем `React.memo`. Он также мемоизирует промежуточные значения и дорогие вычисления внутри компонентов, примерно как сочетание `React.memo` и `useMemo` по всему дереву компонентов.
 
 ## Устранение неполадок {#troubleshooting}
 

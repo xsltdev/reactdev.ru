@@ -10,6 +10,10 @@ description: useMemo - это хук React, позволяющий кэширо�
 const cachedValue = useMemo(calculateValue, dependencies);
 ```
 
+!!!note "React Compiler"
+
+    [React Compiler](../../learn/react-compiler/index.md) автоматически мемоизирует значения и функции и уменьшает потребность в ручных вызовах `useMemo`. Компилятор может выполнять мемоизацию автоматически.
+
 ## Описание {#reference}
 
 ### `useMemo(calculateValue, dependencies)` {#usememo}
@@ -98,6 +102,8 @@ function TodoList({ todos, tab, theme }) {
 
     **Вы должны полагаться на `useMemo` только в качестве оптимизации производительности.** Если ваш код не работает без него, найдите основную проблему и сначала устраните ее. Затем вы можете добавить `useMemo` для улучшения производительности.
 
+<a id="how-to-tell-if-a-calculation-is-expensive"></a>
+
 !!!note "Как определить, является ли вычисление дорогим?"
 
     В общем, если вы не создаете тысячи объектов или не перебираете их в цикле, то, скорее всего, это не дорого. Если вы хотите получить больше уверенности, вы можете добавить консольный журнал, чтобы измерить время, затраченное на часть кода:
@@ -146,9 +152,11 @@ function TodoList({ todos, tab, theme }) {
 
     Если конкретное взаимодействие все еще кажется нестабильным, [используйте профилировщик React Developer Tools](https://legacy.reactjs.org/blog/2018/09/10/introducing-the-react-profiler.html), чтобы увидеть, какие компоненты больше всего выиграют от мемоизации, и добавьте мемоизацию там, где это необходимо. Эти принципы облегчают отладку и понимание ваших компонентов, поэтому следовать им полезно в любом случае. В долгосрочной перспективе мы изучаем [автоматическое выполнение гранулярной мемоизации](https://www.youtube.com/watch?v=lGEMwh32soc), чтобы решить эту проблему раз и навсегда.
 
+## Примеры {#recipes}
+
 ### Разница между useMemo и вычислением значения напрямую {#examples-recalculation}
 
-**1. Пропуск пересчета с `useMemo`**
+#### Пропуск пересчёта с `useMemo` {#skipping-recalculation-with-usememo}
 
 В этом примере реализация `filterTodos` **искусственно замедлена**, чтобы вы могли увидеть, что происходит, когда какая-то функция JavaScript, вызываемая вами во время рендеринга, действительно медленная. Попробуйте переключить вкладки и переключить тему.
 
@@ -614,7 +622,7 @@ export default function TodoList({ todos, tab, theme }) {
 
 ### Разница между пропуском рендеринга и постоянным рендерингом {#examples-rerendering}
 
-**1. Пропуск повторного рендеринга с `useMemo` и `memo`**
+#### Пропуск повторного рендеринга с `useMemo` и `memo` {#skipping-re-rendering-with-usememo-and-memo}
 
 В этом примере компонент `List` **искусственно замедлен**, чтобы вы могли увидеть, что происходит, когда рендеринг компонента React действительно медленный. Попробуйте переключить вкладки и переключить тему.
 
@@ -1020,6 +1028,80 @@ export default function TodoList({ todos, tab, theme }) {
 Довольно часто код без мемоизации работает нормально. Если ваши взаимодействия достаточно быстрые, мемоизация не нужна.
 
 Помните, что вам нужно запустить React в производственном режиме, отключить [React Developer Tools](../../learn/react-developer-tools.md) и использовать устройства, похожие на те, которые есть у пользователей вашего приложения, чтобы получить реальное представление о том, что на самом деле замедляет работу вашего приложения.
+
+### Как не запускать эффект слишком часто {#preventing-an-effect-from-firing-too-often}
+
+Иногда значение нужно использовать внутри [эффекта](../../learn/synchronizing-with-effects.md):
+
+```js hl_lines="4-7 10"
+function ChatRoom({ roomId }) {
+  const [message, setMessage] = useState('');
+
+  const options = {
+    serverUrl: 'https://localhost:1234',
+    roomId: roomId
+  }
+
+  useEffect(() => {
+    const connection = createConnection(options);
+    connection.connect();
+    // ...
+```
+
+Так появляется проблема. [Каждое реактивное значение нужно объявить зависимостью эффекта.](../../learn/lifecycle-of-reactive-effects.md#react-verifies-that-you-specified-every-reactive-value-as-a-dependency) Но если объявить `options` зависимостью, эффект будет постоянно переподключаться к чату:
+
+```js hl_lines="5"
+  useEffect(() => {
+    const connection = createConnection(options);
+    connection.connect();
+    return () => connection.disconnect();
+  }, [options]); // 🔴 Problem: This dependency changes on every render
+  // ...
+```
+
+Чтобы это исправить, объект, который вызывается из эффекта, можно обернуть в `useMemo`:
+
+```js hl_lines="4-9 16"
+function ChatRoom({ roomId }) {
+  const [message, setMessage] = useState('');
+
+  const options = useMemo(() => {
+    return {
+      serverUrl: 'https://localhost:1234',
+      roomId: roomId
+    };
+  }, [roomId]); // ✅ Only changes when roomId changes
+
+  useEffect(() => {
+    const connection = createConnection(options);
+    connection.connect();
+    return () => connection.disconnect();
+  }, [options]); // ✅ Only changes when options changes
+  // ...
+```
+
+Тогда объект `options` остаётся тем же между повторными рендерами, если `useMemo` возвращает закэшированный объект.
+
+Но `useMemo` — это оптимизация производительности, а не семантическая гарантия, и React может выбросить кэш, если [для этого есть причина](#caveats). Тогда эффект тоже сработает снова, **поэтому ещё лучше убрать зависимость от функции**, перенеся объект *внутрь* эффекта:
+
+```js hl_lines="5-8 13"
+function ChatRoom({ roomId }) {
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    const options = { // ✅ No need for useMemo or object dependencies!
+      serverUrl: 'https://localhost:1234',
+      roomId: roomId
+    }
+
+    const connection = createConnection(options);
+    connection.connect();
+    return () => connection.disconnect();
+  }, [roomId]); // ✅ Only changes when roomId changes
+  // ...
+```
+
+Теперь код проще и `useMemo` не нужен. [Подробнее об удалении зависимостей эффекта.](../../learn/removing-effect-dependencies.md#move-dynamic-objects-and-functions-inside-your-effect)
 
 ### Мемоизация зависимости от другого хука {#memoizing-a-dependency-of-another-hook}
 

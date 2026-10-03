@@ -1043,7 +1043,7 @@ function ChatRoom() {
 
 Поскольку `createOptions` объявляется вне вашего компонента, это не реактивное значение. Поэтому его не нужно указывать в зависимостях вашего Эффекта, и поэтому он никогда не заставит ваш Эффект пересинхронизироваться.
 
-**Перемещение динамических объектов и функций внутри вашего Эффекта**
+#### Перемещение динамических объектов и функций внутрь эффекта {#move-dynamic-objects-and-functions-inside-your-effect}
 
 Если ваш объект зависит от какого-то реактивного значения, которое может измениться в результате повторного рендеринга, например, параметр `roomId`, вы не можете переместить его _внутрь_ вашего компонента. Однако вы можете переместить его создание _внутрь_ кода вашего Эффекта:
 
@@ -1381,7 +1381,7 @@ function ChatRoom({ getOptions }) {
 
     ```js
     import { useState, useEffect, useRef } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
     import { FadeInAnimation } from './animation.js';
 
     function Welcome({ duration }) {
@@ -1507,7 +1507,7 @@ function ChatRoom({ getOptions }) {
     	```js
     	import { useState, useEffect, useRef } from 'react';
     	import { FadeInAnimation } from './animation.js';
-    	import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    	import { useEffectEvent } from 'react';
 
     	function Welcome({ duration }) {
     		const ref = useRef(null);
@@ -2073,7 +2073,7 @@ function ChatRoom({ getOptions }) {
 
     ```js
     import { useState, useEffect } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
 
     export default function ChatRoom({
     	roomId,
@@ -2432,7 +2432,7 @@ function ChatRoom({ getOptions }) {
 
     	```js
     	import { useState, useEffect } from 'react';
-    	import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    	import { useEffectEvent } from 'react';
     	import {
     		createEncryptedConnection,
     		createUnencryptedConnection,

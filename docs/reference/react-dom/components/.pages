@@ -8,6 +8,7 @@ nav:
     - progress.md
     - select.md
     - textarea.md
+    - img.md
     - link.md
     - meta.md
     - script.md

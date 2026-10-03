@@ -377,4 +377,147 @@ hydrateRoot(document, <App />);
 
 Вызывать `root.render` на гидратированном корне - редкость. Обычно вместо этого вы вызываете [обновление состояния](../../react/useState.md) внутри одного из компонентов.
 
+### Журналирование ошибок в продакшене {#error-logging-in-production}
+
+По умолчанию React пишет все ошибки в консоль. Чтобы отправлять собственные отчёты, передайте необязательные обработчики корня `onUncaughtError`, `onCaughtError` и `onRecoverableError`:
+
+```js hl_lines="7 11"
+import { hydrateRoot } from "react-dom/client";
+import App from "./App.js";
+import { reportCaughtError } from "./reportError";
+
+const container = document.getElementById("root");
+const root = hydrateRoot(container, <App />, {
+  onCaughtError: (error, errorInfo) => {
+    if (error.message !== "Known error") {
+      reportCaughtError({
+        error,
+        componentStack: errorInfo.componentStack,
+      });
+    }
+  },
+});
+```
+
+Опция `onCaughtError` — это функция с двумя аргументами:
+
+1. Ошибка, которая была выброшена.
+2. Объект `errorInfo` со стеком компонентов `componentStack`.
+
+Вместе с `onUncaughtError` и `onRecoverableError` из них собирается собственная система отчётов:
+
+=== "reportError.js"
+
+    ```js
+    function reportError({ type, error, errorInfo }) {
+        // The specific implementation is up to you.
+        // `console.error()` is only used for demonstration purposes.
+        console.error(type, error, "Component Stack: ");
+        console.error("Component Stack: ", errorInfo.componentStack);
+    }
+
+    export function onCaughtErrorProd(error, errorInfo) {
+        if (error.message !== "Known error") {
+            reportError({ type: "Caught", error, errorInfo });
+        }
+    }
+
+    export function onUncaughtErrorProd(error, errorInfo) {
+        reportError({ type: "Uncaught", error, errorInfo });
+    }
+
+    export function onRecoverableErrorProd(error, errorInfo) {
+        reportError({ type: "Recoverable", error, errorInfo });
+    }
+    ```
+
+=== "index.js"
+
+    ```js
+    import { hydrateRoot } from "react-dom/client";
+    import App from "./App.js";
+    import {
+        onCaughtErrorProd,
+        onRecoverableErrorProd,
+        onUncaughtErrorProd,
+    } from "./reportError";
+
+    const container = document.getElementById("root");
+    hydrateRoot(container, <App />, {
+        // Keep in mind to remove these options in development to leverage
+        // React's default handlers or implement your own overlay for development.
+        // The handlers are only specfied unconditionally here for demonstration purposes.
+        onCaughtError: onCaughtErrorProd,
+        onRecoverableError: onRecoverableErrorProd,
+        onUncaughtError: onUncaughtErrorProd,
+    });
+    ```
+
+=== "App.js"
+
+    ```js
+    import { Component, useState } from "react";
+
+    function Boom() {
+        foo.bar = "baz";
+    }
+
+    class ErrorBoundary extends Component {
+        state = { hasError: false };
+
+        static getDerivedStateFromError(error) {
+            return { hasError: true };
+        }
+
+        render() {
+            if (this.state.hasError) {
+                return <h1>Something went wrong.</h1>;
+            }
+            return this.props.children;
+        }
+    }
+
+    export default function App() {
+        const [triggerUncaughtError, settriggerUncaughtError] = useState(false);
+        const [triggerCaughtError, setTriggerCaughtError] = useState(false);
+
+        return (
+            <>
+                <button onClick={() => settriggerUncaughtError(true)}>
+                    Trigger uncaught error
+                </button>
+                {triggerUncaughtError && <Boom />}
+                <button onClick={() => setTriggerCaughtError(true)}>
+                    Trigger caught error
+                </button>
+                {triggerCaughtError && (
+                    <ErrorBoundary>
+                        <Boom />
+                    </ErrorBoundary>
+                )}
+            </>
+        );
+    }
+    ```
+
+## Устранение неполадок {#troubleshooting}
+
+### Я получаю ошибку: «You passed a second argument to root.render» {#im-getting-an-error-you-passed-a-second-argument-to-root-render}
+
+Частая ошибка — передать опции `hydrateRoot` в `root.render(...)`:
+
+```text linenums="0"
+Warning: You passed a second argument to root.render(...) but it only accepts one argument.
+```
+
+Чтобы исправить, передавайте опции корня в `hydrateRoot(...)`, а не в `root.render(...)`:
+
+```js hl_lines="2 5"
+// 🚩 Wrong: root.render only takes one argument.
+root.render(App, {onUncaughtError});
+
+// ✅ Correct: pass options to hydrateRoot.
+const root = hydrateRoot(container, <App />, {onUncaughtError});
+```
+
 <small>:material-information-outline: Источник &mdash; <https://react.dev/reference/react-dom/client/hydrateRoot></small>

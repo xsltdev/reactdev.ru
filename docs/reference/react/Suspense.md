@@ -28,6 +28,26 @@ description: Suspense позволяет отображать фалбэк до 
 -   Если React необходимо скрыть уже видимый контент из-за повторного приостановления, он очистит [layout Effects](useLayoutEffect.md) в дереве контента. Когда контент снова будет готов к показу, React снова запустит Эффекты компоновки. Это гарантирует, что Эффекты, измеряющие макет DOM, не попытаются сделать это, пока содержимое скрыто.
 -   React включает в себя такие "подкапотные" оптимизации, как _Streaming Server Rendering_ и _Selective Hydration_, которые интегрированы в `Suspense`. Чтобы узнать больше, прочитайте [архитектурный обзор](https://github.com/reactwg/react-18/discussions/37) и посмотрите [технический доклад](https://www.youtube.com/watch?v=pj5N-Khihgc).
 
+### Что активирует границу Suspense {#what-activates-a-suspense-boundary}
+
+Граница Suspense ждёт, пока содержимое будет готово, и только потом показывает его. Граница не раскрывает содержимое, пока происходит что-то из этого списка:
+
+-   Ленивая загрузка кода компонента через [`lazy`](lazy.md).
+-   Чтение промиса через [`use`](use.md), включая данные, которые приходят потоком из [серверных компонентов](../rsc/server-components.md) или загружаются через [фреймворк с поддержкой Suspense](#suspense-enabled-frameworks).
+-   Загрузка таблицы стилей, отрисованной через [`<link rel="stylesheet">` с пропом `precedence`](../react-dom/components/link.md#special-rendering-behavior). React удерживает границу, пока таблица стилей не загрузится, но не дольше тайм-аута. [Пример ниже.](#waiting-for-a-stylesheet-to-load)
+-   Ожидание HTML большой границы при потоковом серверном рендеринге. Передача HTML занимает время, поэтому граница с достаточным объёмом содержимого активируется, даже если внутри ничего не приостанавливается. React показывает содержимое по мере поступления HTML.
+-   Загрузка шрифтов. По умолчанию Suspense не ждёт шрифты, но обновление [`<ViewTransition>`](ViewTransition.md) ждёт загрузки новых шрифтов до тайм-аута, чтобы текст не мигал запасным шрифтом. [Пример ниже.](#waiting-for-a-font-to-load)
+-   Загрузка изображений. По умолчанию Suspense не ждёт изображения, но во время обновления [`<ViewTransition>`](ViewTransition.md) React удерживает границу, пока изображение не загрузится, до тайм-аута. Обработчик `onLoad` исключает конкретное изображение из этого ожидания. [Пример ниже.](#waiting-for-an-image-to-load)
+-   Вычисления, которые занимают процессор, внутри границы [`<Suspense defer>`](#props).
+
+<a id="suspense-enabled-frameworks"></a>
+
+!!!note "Фреймворки с поддержкой Suspense"
+
+    _Фреймворк с поддержкой Suspense_ даёт способ читать данные в компоненте так, чтобы активировалась ближайшая граница Suspense. Точный способ загрузки зависит от фреймворка и описан в его документации. Под капотом такой фреймворк хранит кэш промисов и вызывает [`use`](use.md), чтобы приостановиться на промисе.
+
+    Без фреймворка промис можно читать через `use` напрямую, если промис [закэширован и один и тот же экземпляр переиспользуется между рендерами.](use.md#caching-promises-for-client-components)
+
 ## Использование {#usage}
 
 ### Отображение фолбэка во время загрузки контента {#displaying-a-fallback-while-content-is-loading}
@@ -760,6 +780,1046 @@ function Chat() {
 ```
 
 HTML сервера будет включать индикатор загрузки. На клиенте он будет заменен компонентом `Chat`.
+
+### Фолбэк для содержимого только в браузере {#providing-a-fallback-for-browser-only-content}
+
+Граница приостановки может показать фолбэк для компонента, который нужен только в браузере. Оберните компонент в `<Suspense>` и вызовите внутри [`use(browser())`](use.md#use-browser).
+
+Нажмите **Reload**, чтобы увидеть фолбэк загрузки в исходном HTML. После гидратации React показывает черновик, загруженный из `localStorage`.
+
+=== "App.js"
+
+    ```js
+
+    import { Suspense, use, useState } from 'react';
+    import { browser } from 'react-dom';
+
+    function SavedDraft() {
+        use(browser('The draft is stored in localStorage.'));
+        const [draft, setDraft] = useState(
+            () => localStorage.getItem('draft') ?? ''
+        );
+
+        function handleChange(event) {
+            const nextDraft = event.target.value;
+            setDraft(nextDraft);
+            localStorage.setItem('draft', nextDraft);
+        }
+
+        return (
+            <label>
+                Draft:
+                <textarea
+                    value={draft}
+                    onChange={handleChange}
+                    rows={4}
+                    cols={30}
+                />
+            </label>
+        );
+    }
+
+    export default function App() {
+        return (
+            <>
+                <h1>Saved draft</h1>
+                <Suspense fallback={<p>Loading draft...</p>}>
+                    <SavedDraft />
+                </Suspense>
+            </>
+        );
+    }
+    ```
+
+=== "Document.js"
+
+    ```js
+
+    import App from './App.js';
+
+    export default function Document() {
+        return (
+            <html lang="en">
+                <head>
+                    <title>Saved draft</title>
+                    <style>{`
+                        h1 { font-size: 24px; margin-top: 0; }
+                        label, textarea { display: block; }
+                        textarea { margin-top: 5px; }
+                    `}</style>
+                </head>
+                <body>
+                    <App />
+                </body>
+            </html>
+        );
+    }
+    ```
+
+=== "demo-helpers.js"
+
+    ```js
+
+    export async function flushReadableStreamToFrame(readable, frame) {
+        const doc = frame.contentWindow.document;
+        const decoder = new TextDecoder();
+        const reader = readable.getReader();
+
+        while (true) {
+            const {done, value} = await reader.read();
+            if (done) {
+                break;
+            }
+            doc.write(decoder.decode(value, {stream: true}));
+        }
+
+        doc.write(decoder.decode());
+        doc.close();
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    iframe {
+      width: 100%;
+      height: 160px;
+      border: 0;
+    }
+    ```
+
+=== "package.js"
+
+    ```json
+
+    {
+      "dependencies": {
+        "react": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-dom": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-scripts": "latest"
+      },
+      "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject"
+      }
+    }
+    ```
+
+Во время серверного рендеринга React включает фолбэк границы приостановки в HTML. В браузере React заменяет фолбэк сохранённым черновиком.
+
+### Ожидание загрузки таблицы стилей {#waiting-for-a-stylesheet-to-load}
+
+Таблица стилей, отрендеренная через [`<link rel="stylesheet">` и проп `precedence`](../react-dom/components/link.md#special-rendering-behavior), блокирует границу приостановки, пока таблица стилей не загрузится, но не дольше таймаута, чтобы содержимое не появилось без стилей.
+
+В примере ниже компонент `Card` рендерит таблицу стилей с `precedence`. Нажмите «Show card»: React показывает фолбэк, пока таблица стилей не загрузится, а затем раскрывает карточку уже со стилями.
+
+Для сравнения вторая кнопка выполняет то же обновление без React, в отдельном документе. Ничто не ждёт таблицу стилей, поэтому текст карточки сначала появляется запасным шрифтом, а потом переключается:
+
+=== "js"
+
+    ```js
+
+    import { Suspense, useState, startTransition } from 'react';
+    import { freshStylesheetUrl } from './styles.js';
+    import VanillaCard from './VanillaCard.js';
+
+    function Card({ href }) {
+        return (
+            <>
+                <link rel="stylesheet" href={href} precedence="default" />
+                <div className="fancy-card">This card uses a font from the stylesheet.</div>
+            </>
+        );
+    }
+
+    export default function App() {
+        const [href, setHref] = useState(null);
+        return (
+            <>
+                <button
+                    onClick={() => {
+                        startTransition(() => {
+                            setHref(freshStylesheetUrl());
+                        });
+                    }}>
+                    Show card
+                </button>
+                {href && (
+                    <Suspense fallback={<p>⌛ Loading styles...</p>}>
+                        <Card href={href} />
+                    </Suspense>
+                )}
+                <hr />
+                <VanillaCard />
+            </>
+        );
+    }
+    ```
+
+=== "VanillaCard.js"
+
+    ```js
+
+    import { useRef } from 'react';
+    import { freshStylesheetUrl } from './styles.js';
+
+    export default function VanillaCard() {
+        const ref = useRef(null);
+        function show() {
+            const doc = ref.current.contentWindow.document;
+            doc.open();
+            doc.write(`
+                <style>
+                    body { margin: 0; }
+                    .fancy-card {
+                        padding: 20px;
+                        border-radius: 8px;
+                        color: white;
+                        font-family: 'Caveat', sans-serif;
+                        font-size: 24px;
+                        background: linear-gradient(135deg, #087ea4, #2b3491);
+                    }
+                </style>
+                <div class="fancy-card">This card uses a font from the stylesheet.</div>
+                <link rel="stylesheet" href="${freshStylesheetUrl()}">
+            `);
+            doc.close();
+        }
+        return (
+            <>
+                <button onClick={show}>Show card (without React)</button>
+                <iframe ref={ref} title="Vanilla card" className="vanilla-frame" />
+            </>
+        );
+    }
+    ```
+
+=== "styles.js"
+
+    ```js
+
+    // Add a unique parameter so the stylesheet isn't cached,
+    // and every run shows the loading state.
+    export function freshStylesheetUrl() {
+        return (
+            'https://fonts.googleapis.com/css2?family=Caveat&display=swap' +
+            '&t=' +
+            Date.now()
+        );
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    #root {
+      min-height: 300px;
+    }
+    button {
+      margin-right: 8px;
+    }
+    hr {
+      margin: 16px 0;
+    }
+    .fancy-card {
+      margin-top: 1em;
+      padding: 20px;
+      border-radius: 8px;
+      color: white;
+      font-family: 'Caveat', sans-serif;
+      font-size: 24px;
+      background: linear-gradient(135deg, #087ea4, #2b3491);
+    }
+    .vanilla-frame {
+      display: block;
+      margin-top: 1em;
+      border: none;
+      width: 100%;
+      height: 90px;
+    }
+    ```
+
+### Анимация от содержимого Suspense {#animating-from-suspense-content}
+
+Suspense сочетается с [`<ViewTransition>`](ViewTransition.md), чтобы анимировать смену фолбэка на содержимое. Оберните границу в `<ViewTransition>`, и React воспримет эту смену как обновление и по умолчанию сделает перекрёстное затухание между фолбэком и содержимым:
+
+=== "Video.js"
+
+    ```js
+
+    function Thumbnail({video, children}) {
+        return (
+            <div
+                aria-hidden="true"
+                tabIndex={-1}
+                className={`thumbnail ${video.image}`}
+            />
+        );
+    }
+
+    export function Video({video}) {
+        return (
+            <div className="video">
+                <div className="link">
+                    <Thumbnail video={video}></Thumbnail>
+                    <div className="info">
+                        <div className="video-title">{video.title}</div>
+                        <div className="video-description">{video.description}</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    export function VideoPlaceholder() {
+        const video = {image: 'loading'};
+        return (
+            <div className="video">
+                <div className="link">
+                    <Thumbnail video={video}></Thumbnail>
+                    <div className="info">
+                        <div className="video-title loading" />
+                        <div className="video-description loading" />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    ```
+
+=== "js"
+
+    ```js
+
+    import {ViewTransition, useState, startTransition, Suspense} from 'react';
+    import {Video, VideoPlaceholder} from './Video';
+    import {useLazyVideoData} from './data';
+
+    function LazyVideo() {
+        const video = useLazyVideoData();
+        return <Video video={video} />;
+    }
+
+    export default function Component() {
+        const [showItem, setShowItem] = useState(false);
+        return (
+            <>
+                <button
+                    onClick={() => {
+                        startTransition(() => {
+                            setShowItem((prev) => !prev);
+                        });
+                    }}>
+                    {showItem ? '➖' : '➕'}
+                </button>
+                {showItem ? (
+                    <ViewTransition>
+                        <Suspense fallback={<VideoPlaceholder />}>
+                            <LazyVideo />
+                        </Suspense>
+                    </ViewTransition>
+                ) : null}
+            </>
+        );
+    }
+    ```
+
+=== "data.js"
+
+    ```js
+
+    import {use} from 'react';
+
+    let cache = null;
+
+    function fetchVideo() {
+        if (!cache) {
+            cache = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        id: '1',
+                        title: 'First video',
+                        description: 'Video description',
+                        image: 'blue',
+                    });
+                }, 1000);
+            });
+        }
+        return cache;
+    }
+
+    export function useLazyVideoData() {
+        return use(fetchVideo());
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    #root {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 200px;
+    }
+    button {
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f8ff;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s, border 0.3s;
+    }
+    button:hover {
+      border: 2px solid #ccc;
+      background-color: #e0e8ff;
+    }
+    .thumbnail {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      overflow: hidden;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 0.5rem;
+      outline-offset: 2px;
+      width: 8rem;
+      vertical-align: middle;
+      background-color: #ffffff;
+      background-size: cover;
+      user-select: none;
+    }
+    .thumbnail.blue {
+      background-image: conic-gradient(at top right, #c76a15, #087ea4, #2b3491);
+    }
+    .loading {
+      background-image: linear-gradient(
+        90deg,
+        rgba(173, 216, 230, 0.3) 25%,
+        rgba(135, 206, 250, 0.5) 50%,
+        rgba(173, 216, 230, 0.3) 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+    .video {
+      display: flex;
+      flex-direction: row;
+      gap: 0.75rem;
+      align-items: center;
+      margin-top: 1em;
+    }
+    .video .link {
+      display: flex;
+      flex-direction: row;
+      flex: 1 1 0;
+      gap: 0.125rem;
+      outline-offset: 4px;
+      cursor: pointer;
+    }
+    .video .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 8px;
+      gap: 0.125rem;
+    }
+    .video .info:hover {
+      text-decoration: underline;
+    }
+    .video-title {
+      font-size: 15px;
+      line-height: 1.25;
+      font-weight: 700;
+      color: #23272f;
+    }
+    .video-title.loading {
+      height: 20px;
+      width: 80px;
+      border-radius: 0.5rem;
+    }
+    .video-description {
+      color: #5e687e;
+      font-size: 13px;
+      border-radius: 0.5rem;
+    }
+    .video-description.loading {
+      height: 15px;
+      width: 100px;
+    }
+    ```
+
+=== "package.js"
+
+    ```json
+
+    {
+      "dependencies": {
+        "react": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-dom": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-scripts": "latest"
+      }
+    }
+    ```
+
+!!!note "Примечание"
+
+    От того, где `<ViewTransition>` стоит относительно границы, зависит, будет ли фолбэк и содержимое перекрёстно затухать как одно обновление или анимироваться как отдельные анимации выхода и входа. Анимацию также можно [настроить](ViewTransition.md#customizing-animations) классами View Transition.
+
+    [Подробнее об анимации от содержимого Suspense.](ViewTransition.md#animating-from-suspense-content)
+
+### Ожидание загрузки шрифта {#waiting-for-a-font-to-load}
+
+Когда [`<ViewTransition>`](ViewTransition.md) анимирует раскрытие границы приостановки, React ждёт новые шрифты, которые вводит содержимое, но не дольше таймаута, чтобы текст не мигал запасным шрифтом. Это происходит только во время обновления `<ViewTransition>`.
+
+В примере ниже граница приостановки обёрнута в `<ViewTransition>`, а компонент `Quote` приостанавливается, пока загружаются его данные. Рендер цитаты запускает загрузку шрифта. React держит фолбэк видимым, пока шрифт не загрузится, поэтому цитата появляется уже своим шрифтом.
+
+Для сравнения вторая кнопка выполняет то же обновление без React. Ничто не ждёт шрифт, поэтому текст сначала появляется запасным шрифтом, а потом переключается:
+
+=== "js"
+
+    ```js
+
+    import { ViewTransition, Suspense, use, useState, startTransition } from 'react';
+    import { fetchQuote } from './data.js';
+    import { freshFontUrl } from './font.js';
+    import VanillaQuote from './VanillaQuote.js';
+
+    function Quote({ fontSrc }) {
+        const quote = use(fetchQuote());
+        return (
+            <>
+                <style href={fontSrc} precedence="default">
+                    {`@font-face {
+                        font-family: 'Fancy';
+                        src: url(${fontSrc}) format('truetype');
+                        font-display: swap;
+                    }`}
+                </style>
+                <p className="quote fancy">{quote}</p>
+            </>
+        );
+    }
+
+    export default function App() {
+        const [fontSrc, setFontSrc] = useState(null);
+        return (
+            <>
+                <button
+                    onClick={() => {
+                        startTransition(() => {
+                            setFontSrc(freshFontUrl());
+                        });
+                    }}>
+                    Show quote
+                </button>
+                {fontSrc && (
+                    <ViewTransition>
+                        <Suspense fallback={<p className="quote">⌛ Loading quote...</p>}>
+                            <Quote fontSrc={fontSrc} />
+                        </Suspense>
+                    </ViewTransition>
+                )}
+                <hr />
+                <VanillaQuote />
+            </>
+        );
+    }
+    ```
+
+=== "VanillaQuote.js"
+
+    ```js
+
+    import { useRef } from 'react';
+    import { freshFontUrl } from './font.js';
+
+    export default function VanillaQuote() {
+        const ref = useRef(null);
+        function show() {
+            const style = document.createElement('style');
+            style.textContent = `@font-face {
+                font-family: 'VanillaFancy';
+                src: url(${freshFontUrl()}) format('truetype');
+                font-display: swap;
+            }`;
+            document.head.appendChild(style);
+            ref.current.innerHTML = `<p class="quote vanilla-fancy">The best way to predict the future is to invent it.</p>`;
+        }
+        return (
+            <>
+                <button onClick={show}>Show quote (without React)</button>
+                <div ref={ref} />
+            </>
+        );
+    }
+    ```
+
+=== "font.js"
+
+    ```js
+
+    // Add a unique parameter so the font isn't cached,
+    // and every run shows the loading state.
+    export function freshFontUrl() {
+        return (
+            'https://raw.githubusercontent.com/google/fonts/main/ofl/caveat/Caveat%5Bwght%5D.ttf' +
+            '?t=' +
+            Date.now()
+        );
+    }
+    ```
+
+=== "data.js"
+
+    ```js
+
+    // Note: the way you would do data fetching depends on
+    // the framework that you use together with Suspense.
+    // Normally, the caching logic would be inside a framework.
+
+    let cache = null;
+
+    export function fetchQuote() {
+        if (!cache) {
+            cache = new Promise((resolve) => {
+                // Add a fake delay to make waiting noticeable.
+                setTimeout(() => {
+                    resolve(
+                        'The best way to predict the future is to invent it.'
+                    );
+                }, 500);
+            });
+        }
+        return cache;
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    #root {
+      min-height: 260px;
+    }
+    .quote {
+      font-size: 20px;
+      margin-top: 1em;
+    }
+    .fancy {
+      font-family: 'Fancy', sans-serif;
+    }
+    .vanilla-fancy {
+      font-family: 'VanillaFancy', sans-serif;
+    }
+    hr {
+      margin: 16px 0;
+    }
+    ```
+
+=== "package.js"
+
+    ```json
+
+    {
+      "dependencies": {
+        "react": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-dom": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-scripts": "latest"
+      }
+    }
+    ```
+
+### Ожидание загрузки изображения {#waiting-for-an-image-to-load}
+
+Когда [`<ViewTransition>`](ViewTransition.md) анимирует раскрытие границы приостановки, React ждёт загрузки видимых изображений, но не дольше таймаута, чтобы анимация не началась с наполовину загруженной картинки. Это происходит только во время обновления `<ViewTransition>`. Обработчик `onLoad` исключает конкретное изображение из ожидания, даже внутри `<ViewTransition>`.
+
+В примере ниже граница приостановки обёрнута в `<ViewTransition>` и показывает скелет профиля, пока не загрузится портрет.
+
+Для сравнения вторая кнопка выполняет то же обновление без React. Ничто не ждёт изображение, поэтому карточка появляется сразу, а картинка всплывает, когда загрузится:
+
+=== "js"
+
+    ```js
+
+    import { ViewTransition, Suspense, useState, startTransition } from 'react';
+    import { freshImageUrl } from './image.js';
+    import VanillaProfile from './VanillaProfile.js';
+
+    function Profile({ src }) {
+        return (
+            <div className="card">
+                <img src={src} alt="Jack Pope" width={80} height={80} />
+                <p>Jack Pope</p>
+            </div>
+        );
+    }
+
+    function ProfilePlaceholder() {
+        return (
+            <div className="card">
+                <div className="avatar-placeholder" />
+                <p className="name-placeholder">&nbsp;</p>
+            </div>
+        );
+    }
+
+    export default function App() {
+        const [src, setSrc] = useState(null);
+        return (
+            <>
+                <button
+                    onClick={() => {
+                        startTransition(() => {
+                            setSrc(freshImageUrl());
+                        });
+                    }}>
+                    Show profile
+                </button>
+                {src && (
+                    <ViewTransition>
+                        <Suspense fallback={<ProfilePlaceholder />}>
+                            <Profile src={src} />
+                        </Suspense>
+                    </ViewTransition>
+                )}
+                <hr />
+                <VanillaProfile />
+            </>
+        );
+    }
+    ```
+
+=== "VanillaProfile.js"
+
+    ```js
+
+    import { useRef } from 'react';
+    import { freshImageUrl } from './image.js';
+
+    export default function VanillaProfile() {
+        const ref = useRef(null);
+        function show() {
+            ref.current.innerHTML = `<div class="card">
+                <img src="${freshImageUrl()}" alt="Jack Pope" width="80" height="80" />
+                <p>Jack Pope</p>
+            </div>`;
+        }
+        return (
+            <>
+                <button onClick={show}>Show profile (without React)</button>
+                <div ref={ref} />
+            </>
+        );
+    }
+    ```
+
+=== "image.js"
+
+    ```js
+
+    // Add a unique parameter so the image isn't cached,
+    // and every run shows the loading state.
+    export function freshImageUrl() {
+        return 'https://react.dev/images/team/jack-pope.jpg?t=' + Date.now();
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    #root {
+      min-height: 390px;
+    }
+    .card {
+      margin-top: 1em;
+    }
+    .card img {
+      display: block;
+      border-radius: 50%;
+      background: #dfe3e9;
+    }
+    .card p {
+      font-weight: bold;
+    }
+    .avatar-placeholder {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #dfe3e9;
+    }
+    .name-placeholder {
+      width: 90px;
+      border-radius: 4px;
+      background: #dfe3e9;
+    }
+    hr {
+      margin: 16px 0;
+    }
+    ```
+
+=== "package.js"
+
+    ```json
+
+    {
+      "dependencies": {
+        "react": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-dom": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-scripts": "latest"
+      }
+    }
+    ```
+
+### Согласование шрифтов, изображений и таблиц стилей {#coordinating-fonts-images-and-stylesheets}
+
+Граница приостановки может одновременно ждать данные, таблицы стилей, шрифты и изображения. Ожидание шрифтов и изображений бывает только во время обновления [`<ViewTransition>`](ViewTransition.md). В примере ниже компонент `ProfileCard` приостанавливается, пока загружаются его данные, и рендерит таблицу стилей с `precedence`, текст новым шрифтом и портрет. React держит скелет видимым, пока загружаются данные и таблица стилей. Затем раскрытие `<ViewTransition>` ждёт шрифт и изображение, чтобы карточка появилась целиком.
+
+Для сравнения версия без React загружает те же данные и показывает, как каждый ресурс приходит по своему расписанию:
+
+=== "js"
+
+    ```js
+
+    import { ViewTransition, Suspense, use, useState, startTransition } from 'react';
+    import { fetchQuote } from './data.js';
+    import { freshStylesheetUrl, freshImageUrl } from './resources.js';
+    import VanillaProfileCard from './VanillaProfileCard.js';
+
+    function ProfileCard({ resources }) {
+        const quote = use(resources.quotePromise);
+        return (
+            <>
+                <link rel="stylesheet" href={resources.stylesheet} precedence="default" />
+                <div className="profile-card">
+                    <img src={resources.image} alt="Jack Pope" width={80} height={80} />
+                    <div>
+                        <p className="name">Jack Pope</p>
+                        <p className="bio">{quote}</p>
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    function ProfileCardPlaceholder() {
+        return (
+            <div className="profile-card">
+                <div className="avatar-placeholder" />
+                <div>
+                    <p className="name name-placeholder">&nbsp;</p>
+                    <p className="bio bio-placeholder">&nbsp;</p>
+                </div>
+            </div>
+        );
+    }
+
+    export default function App() {
+        const [resources, setResources] = useState(null);
+        return (
+            <>
+                <button
+                    onClick={() => {
+                        startTransition(() => {
+                            setResources({
+                                quotePromise: fetchQuote(),
+                                stylesheet: freshStylesheetUrl(),
+                                image: freshImageUrl(),
+                            });
+                        });
+                    }}>
+                    Show profile
+                </button>
+                {resources && (
+                    <ViewTransition>
+                        <Suspense fallback={<ProfileCardPlaceholder />}>
+                            <ProfileCard resources={resources} />
+                        </Suspense>
+                    </ViewTransition>
+                )}
+                <hr />
+                <VanillaProfileCard />
+            </>
+        );
+    }
+    ```
+
+=== "VanillaProfileCard.js"
+
+    ```js
+
+    import { useRef } from 'react';
+    import { fetchQuote } from './data.js';
+    import { freshStylesheetUrl, freshImageUrl } from './resources.js';
+
+    export default function VanillaProfileCard() {
+        const ref = useRef(null);
+        async function show() {
+            const quote = await fetchQuote();
+            const doc = ref.current.contentWindow.document;
+            doc.open();
+            doc.write(`
+                <style>
+                    body { margin: 0; font-family: sans-serif; }
+                    .profile-card { display: flex; gap: 12px; align-items: center; }
+                    .profile-card img { border-radius: 50%; background: #dfe3e9; }
+                    .name { margin: 0 0 4px; font-family: 'Caveat', sans-serif; font-size: 22px; line-height: 28px; font-weight: bold; }
+                    .bio { margin: 0; font-family: 'Caveat', sans-serif; font-size: 20px; line-height: 26px; }
+                </style>
+                <div class="profile-card">
+                    <img src="${freshImageUrl()}" alt="Jack Pope" width="80" height="80" />
+                    <div>
+                        <p class="name">Jack Pope</p>
+                        <p class="bio">${quote}</p>
+                    </div>
+                </div>
+                <link rel="stylesheet" href="${freshStylesheetUrl()}">
+            `);
+            doc.close();
+        }
+        return (
+            <>
+                <button onClick={show}>Show profile (without React)</button>
+                <iframe ref={ref} title="Vanilla profile card" className="vanilla-frame" />
+            </>
+        );
+    }
+    ```
+
+=== "resources.js"
+
+    ```js
+
+    // Add a unique parameter so the resources aren't cached,
+    // and every run shows the loading state.
+    export function freshStylesheetUrl() {
+        return (
+            'https://fonts.googleapis.com/css2?family=Caveat&display=swap' +
+            '&t=' +
+            Date.now()
+        );
+    }
+
+    export function freshImageUrl() {
+        return 'https://react.dev/images/team/jack-pope.jpg?t=' + Date.now();
+    }
+    ```
+
+=== "data.js"
+
+    ```js
+
+    // Note: the way you would do data fetching depends on
+    // the framework that you use together with Suspense.
+
+    export async function fetchQuote() {
+        // Add a fake delay to make waiting noticeable.
+        await new Promise((resolve) => {
+            setTimeout(resolve, 1000);
+        });
+        return 'The best way to predict the future is to invent it.';
+    }
+    ```
+
+=== "styles.css"
+
+    ```css
+
+    #root {
+      min-height: 320px;
+    }
+    button {
+      margin-right: 8px;
+    }
+    hr {
+      margin: 16px 0;
+    }
+    .profile-card {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 1em;
+    }
+    .profile-card img {
+      border-radius: 50%;
+      background: #dfe3e9;
+    }
+    .name {
+      margin: 0 0 4px;
+      font-family: 'Caveat', sans-serif;
+      font-size: 22px;
+      line-height: 28px;
+      font-weight: bold;
+    }
+    .bio {
+      margin: 0;
+      font-family: 'Caveat', sans-serif;
+      font-size: 20px;
+      line-height: 26px;
+    }
+    .profile-card img {
+      display: block;
+    }
+    .avatar-placeholder {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #dfe3e9;
+    }
+    .name-placeholder,
+    .bio-placeholder {
+      border-radius: 4px;
+      background: #dfe3e9;
+      color: transparent;
+    }
+    .name-placeholder {
+      width: 90px;
+    }
+    .bio-placeholder {
+      width: 220px;
+    }
+    .vanilla-frame {
+      display: block;
+      margin-top: 1em;
+      border: none;
+      width: 100%;
+      height: 110px;
+    }
+    ```
+
+=== "package.js"
+
+    ```json
+
+    {
+      "dependencies": {
+        "react": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-dom": "19.3.0-canary-f1f7ed2a-20260904",
+        "react-scripts": "latest"
+      }
+    }
+    ```
 
 ## Устранение неполадок {#troubleshooting}
 

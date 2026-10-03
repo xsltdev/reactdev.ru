@@ -1,0 +1,10 @@
+title: React Compiler
+nav:
+    - configuration.md
+    - compilationMode.md
+    - gating.md
+    - logger.md
+    - panicThreshold.md
+    - target.md
+    - directives
+    - compiling-libraries.md

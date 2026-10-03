@@ -1,0 +1,7 @@
+title: Static API
+nav:
+    - index.md
+    - prerender.md
+    - prerenderToNodeStream.md
+    - resumeAndPrerender.md
+    - resumeAndPrerenderToNodeStream.md

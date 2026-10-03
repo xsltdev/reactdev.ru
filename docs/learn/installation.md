@@ -8,10 +8,12 @@ description: React с самого начала был разработан дл
 
 !!!tip "В этом разделе"
 
-    -   [Как начать новый проект React](start-a-new-react-project.md)
+    -   [Как создать приложение React](start-a-new-react-project.md)
+    -   [Как собрать приложение React с нуля](build-a-react-app-from-scratch.md)
     -   [Как добавить React в существующий проект](add-react-to-an-existing-project.md)
     -   [Как настроить редактор](editor-setup.md)
     -   [Как установить React Developer Tools](react-developer-tools.md)
+    -   [Как подключить React Compiler](react-compiler/index.md)
 
 ## Попробуйте React {#try-react}
 
@@ -27,13 +29,21 @@ description: React с самого начала был разработан дл
 
 Чтобы попробовать React локально на своем компьютере, [скачайте эту HTML-страницу](https://gist.githubusercontent.com/gaearon/0275b1e1518599bbeafcde4722e79ed1/raw/db72dcbf3384ee1708c4a07d3be79860db04bff0/example.html). Откройте ее в редакторе и в браузере!
 
-## Начните новый проект React {#start-a-new-react-project}
+## Создание приложения React {#creating-a-react-app}
 
-Если вы хотите создать приложение или сайт полностью на React, [начните новый проект React](start-a-new-react-project.md).
+Если вы хотите начать новое приложение React, [создайте его](start-a-new-react-project.md) с помощью рекомендуемого фреймворка.
+
+## Сборка приложения React с нуля {#build-a-react-app-from-scratch}
+
+Если фреймворк не подходит вашему проекту, вы хотите собрать собственный фреймворк или просто разобраться в основах приложения React, [соберите приложение React с нуля](build-a-react-app-from-scratch.md).
 
 ## Добавить React в существующий проект {#add-react-to-an-existing-project}
 
 Если вы хотите попробовать использовать React в существующем приложении или сайте, [добавьте React в существующий проект](add-react-to-an-existing-project.md).
+
+!!!note "Стоит ли использовать Create React App?"
+
+    Нет. Create React App устарел. Подробнее в заметке [Sunsetting Create React App](https://react.dev/blog/2025/02/14/sunsetting-create-react-app).
 
 ## Следующие шаги {#next-steps}
 

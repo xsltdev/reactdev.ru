@@ -7,11 +7,14 @@ nav:
     - "Установка":
         - installation.md
         - start-a-new-react-project.md
+        - build-a-react-app-from-scratch.md
         - add-react-to-an-existing-project.md
+    - "Настройка":
+        - setup.md
         - editor-setup.md
         - typescript.md
         - react-developer-tools.md
-        - react-compiler.md
+    - "React Compiler": react-compiler
     - "Разработка UI":
         - describing-the-ui.md
         - your-first-component.md

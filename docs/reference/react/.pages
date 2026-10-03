@@ -9,22 +9,29 @@ nav:
         - Profiler.md
         - StrictMode.md
         - Suspense.md
+        - Activity.md
+        - ViewTransition.md
     - API:
         - apis.md
+        - act.md
+        - addTransitionType.md
         - cache.md
+        - cacheSignal.md
+        - captureOwnerStack.md
         - createContext.md
-        - forwardRef.md
         - lazy.md
         - memo.md
         - startTransition.md
         - experimental_taintObjectReference.md
         - experimental_taintUniqueValue.md
     - Устаревшие API:
+        - legacy.md
         - Children.md
         - cloneElement.md
         - Component.md
         - createElement.md
         - createFactory.md
         - createRef.md
+        - forwardRef.md
         - isValidElement.md
         - PureComponent.md

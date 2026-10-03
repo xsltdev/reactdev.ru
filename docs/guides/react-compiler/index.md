@@ -294,7 +294,7 @@ export default defineConfig({
 
 Вот и все. Вы завершили настройку React Compiler с вашей кодовой базой для использования его возможностей. Отныне React Compiler будет просматривать каждый компонент и хук в вашем проекте, пытаясь применить к ним оптимизации.
 
-Если вы хотите настроить React Compiler с Next.js, Remix, Webpack и так далее, вы можете [следовать этому руководству](https://react.dev/learn/react-compiler#installation).
+Если вы хотите настроить React Compiler с Next.js, Remix, Webpack и так далее, вы можете [следовать этому руководству](../../learn/react-compiler/installation.md).
 
 ### Оптимизированное React приложение с React Compiler
 
@@ -464,7 +464,7 @@ It is recommended to use the React compiler with React 19 as there are required 
 
 To learn further,
 
--   Check out the official documentation of React Compiler [from here](https://react.dev/learn/react-compiler).
+-   Документация React Compiler в этом справочнике: [введение](../../learn/react-compiler/introduction.md) и [установка](../../learn/react-compiler/installation.md).
 -   Check out the [discussions](https://github.com/reactwg/react-compiler/discussions) in the Working Group.
 
 Up next, if you are willing to learn React and its ecosystem-like Next.js with both fundamental concepts and projects, I have great news for you: you can check out this [playlist](https://www.youtube.com/watch?v=VSB2h7mVhPg&list=PLIJrr73KDmRwz_7QUvQ9Az82aDM9I8L_8) on my YouTube channel with 22+ video tutorials and 12+ hours of engaging content so far, for free. I hope you like them as well.

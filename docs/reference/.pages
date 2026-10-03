@@ -3,5 +3,8 @@ nav:
     - index.md
     - react
     - react-dom
+    - react-compiler
+    - eslint-plugin-react-hooks
+    - dev-tools
     - rules
     - rsc

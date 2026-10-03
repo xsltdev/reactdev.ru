@@ -431,7 +431,7 @@ showNotification('Connected!', theme);
 
     Этот раздел описывает **экспериментальный API, который еще не был выпущен** в стабильной версии React.
 
-Используйте специальный хук под названием [`useEffectEvent`](../reference/react/experimental_useEffectEvent.md), чтобы извлечь эту нереактивную логику из вашего Эффекта:
+Используйте специальный хук под названием [`useEffectEvent`](../reference/react/useEffectEvent.md), чтобы извлечь эту нереактивную логику из вашего Эффекта:
 
 ```js hl_lines="1 4-6"
 import { useEffect, useEffectEvent } from 'react';
@@ -477,7 +477,7 @@ function ChatRoom({ roomId, theme }) {
 
     ```js
     import { useState, useEffect } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
     import { createConnection, sendMessage } from './chat.js';
     import { showNotification } from './notifications.js';
 
@@ -809,7 +809,7 @@ function Page({ url }) {
 
     	```js
     	import { useState, useEffect } from 'react';
-    	import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    	import { useEffectEvent } from 'react';
 
     	export default function App() {
     		const [position, setPosition] = useState({
@@ -1091,7 +1091,7 @@ function useTimer(callback, delay) {
 
     ```js
     import { useState, useEffect } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
 
     export default function Timer() {
     	const [count, setCount] = useState(0);
@@ -1157,7 +1157,7 @@ function useTimer(callback, delay) {
 
     	```js
     	import { useState, useEffect } from 'react';
-    	import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    	import { useEffectEvent } from 'react';
 
     	export default function Timer() {
     		const [count, setCount] = useState(0);
@@ -1223,7 +1223,7 @@ function useTimer(callback, delay) {
 
     ```js
     import { useState, useEffect } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
 
     export default function Timer() {
     	const [count, setCount] = useState(0);
@@ -1315,7 +1315,7 @@ function useTimer(callback, delay) {
 
     	```js
     	import { useState, useEffect } from 'react';
-    	import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    	import { useEffectEvent } from 'react';
 
     	export default function Timer() {
     		const [count, setCount] = useState(0);
@@ -1405,7 +1405,7 @@ function useTimer(callback, delay) {
 
     ```js
     import { useState, useEffect } from 'react';
-    import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    import { useEffectEvent } from 'react';
     import { createConnection, sendMessage } from './chat.js';
     import { showNotification } from './notifications.js';
 
@@ -1526,7 +1526,7 @@ function useTimer(callback, delay) {
 
     	```js
     	import { useState, useEffect } from 'react';
-    	import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    	import { useEffectEvent } from 'react';
     	import { createConnection, sendMessage } from './chat.js';
     	import { showNotification } from './notifications.js';
 
@@ -1644,7 +1644,7 @@ function useTimer(callback, delay) {
 
     	```js
     	import { useState, useEffect } from 'react';
-    	import { experimental_useEffectEvent as useEffectEvent } from 'react';
+    	import { useEffectEvent } from 'react';
     	import { createConnection, sendMessage } from './chat.js';
     	import { showNotification } from './notifications.js';
 
